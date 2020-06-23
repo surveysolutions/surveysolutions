@@ -79,6 +79,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
+      <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
+      <Name>WB.Core.BoundedContexts.Interviewer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>

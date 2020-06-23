@@ -55,7 +55,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/areaEditor_No_Maps_Text"
+                        android:id="@+id/areaEditor_Map_Name"
                         android:textColor="@color/text_color_light"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -154,16 +154,5 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="left|start"
                         android:fitsSystemWindows="true">
-
-        <ImageButton
-            style="@style/Area_ZoomMapInButton"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/area_editor_zoom_in_margin_bottom"
-            android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="test"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

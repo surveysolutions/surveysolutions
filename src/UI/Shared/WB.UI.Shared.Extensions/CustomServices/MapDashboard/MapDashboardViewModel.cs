@@ -20,6 +20,9 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using System.Drawing;
 using Esri.ArcGISRuntime.Data;
+using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using MapView = Esri.ArcGISRuntime.UI.Controls.MapView;
 
 namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 {
@@ -80,22 +83,19 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.Map.Loaded += async delegate (object sender, EventArgs e)
             {
                 await UpdateBaseMap().ConfigureAwait(false);
-
                 await RefereshMarkersAsync();
             };
-
-            graphicsOverlay = new GraphicsOverlay();
-            MapView.GraphicsOverlays.Add(graphicsOverlay);
-            MapView.GeoViewTapped += OnMapViewTapped;
         }
 
-        private GraphicsOverlay graphicsOverlay;
+        private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
         public IMvxCommand RefreshMarkersCommand =>
             new MvxAsyncCommand(async () => await RefereshMarkersAsync());
 
         private async Task RefereshMarkersAsync()
         {
+            MapView.GraphicsOverlays.Add(graphicsOverlay);
+
             string questionnaireId = null;
 
             var assignments = this.assignmentsRepository
@@ -108,46 +108,62 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             var markers = new List<Graphic>();
             foreach (var assignment in assignments)
             {
-                MapPoint point = new MapPoint(
-                    assignment.LocationLatitude.Value, 
-                    assignment.LocationLongitude.Value, 
-                    SpatialReference.Create(4326));
+                var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
+                var title = string.Format(EnumeratorUIResources.DashboardItem_Title, assignment.Title, questionnaireIdentity.Version);
+
+                var interviewsByAssignmentCount = assignment.CreatedInterviewsCount ?? 0;
+                var interviewsLeftByAssignmentCount = assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
+
+                string subTitle = "";
+
+                if (assignment.Quantity.HasValue)
+                {
+                    if (interviewsLeftByAssignmentCount == 1)
+                    {
+                        subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
+                    }
+                    else
+                    {
+                        subTitle = string.Format(EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat,
+                            interviewsLeftByAssignmentCount, assignment.Quantity);
+                    }
+                }
+                else
+                {
+                    subTitle = string.Format(EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat,
+                        assignment.Quantity.GetValueOrDefault());
+                }
+
+                bool canCreateInterview = !assignment.Quantity.HasValue || Math.Max(val1: 0, val2: interviewsLeftByAssignmentCount) > 0;
+
+                MapPoint point = 
+                    (MapPoint)GeometryEngine.Project(
+                        new MapPoint(assignment.LocationLatitude.Value, 
+                            assignment.LocationLongitude.Value, 
+                            SpatialReferences.Wgs84),
+                        MapView.SpatialReference);
                 
                 Graphic pointGraphic = new Graphic(
                     point, 
                     new []
                     {
                         new KeyValuePair<string, object>("id", assignment.Id),
-                        new KeyValuePair<string, object>("title", assignment.Title),
+                        new KeyValuePair<string, object>("title", title),
+                        new KeyValuePair<string, object>("sub_title", subTitle),
+                        new KeyValuePair<string, object>("can_create", canCreateInterview)
+
                     }, 
-                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Red, 25));
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Red, 20));
                 
                 markers.Add(pointGraphic);
             }
 
-            if(markers.Count > 0)
+            if (markers.Count > 0)
+            {
                 graphicsOverlay.Graphics.AddRange(markers);
-        }
+                MapView.GeoViewTapped += OnMapViewTapped;
+            }
 
-        private void MapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
-        {
-            // Get the user-tapped location
-            MapPoint mapLocation = e.Location;
-
-            // Project the user-tapped map point location to a geometry
-            Geometry myGeometry = GeometryEngine.Project(mapLocation, SpatialReferences.Wgs84);
-
-            // Convert to geometry to a traditional Lat/Long map point
-            MapPoint projectedLocation = (MapPoint)myGeometry;
-
-            // Format the display callout string based upon the projected map point (example: "Lat: 100.123, Long: 100.234")
-            string mapLocationDescription = $"Lat: {projectedLocation.Y:F3} Long:{projectedLocation.X:F3}";
-
-            // Create a new callout definition using the formatted string
-            CalloutDefinition myCalloutDefinition = new CalloutDefinition("Location:", mapLocationDescription);
-
-            // Display the callout
-            MapView.ShowCalloutAt(mapLocation, myCalloutDefinition);
         }
 
         private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
@@ -173,33 +189,47 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                     {
                         string id = identifyResults.Graphics[0].Attributes["id"].ToString();
                         string title = identifyResults.Graphics[0].Attributes["title"] as string;
-                        
-                        CalloutDefinition myCalloutDefinition = new CalloutDefinition($"Assignment: { id }", title);
-                        myCalloutDefinition.ButtonImage = await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25).CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
-                        myCalloutDefinition.OnButtonClick += OnButtonClick;
+                        string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
+                        bool canCreate = (bool)identifyResults.Graphics[0].Attributes["can_create"];
+
+                        CalloutDefinition myCalloutDefinition = new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
+                        if (canCreate)
+                        {
+                            myCalloutDefinition.ButtonImage =
+                                await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
+                                    .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
+                            myCalloutDefinition.OnButtonClick += OnButtonClick;
+                            myCalloutDefinition.Tag = id;
+                        }
 
                         MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
                     }
-
-                    // Make sure that the UI changes are done in the UI thread
-                    /*RunOnUiThread(() =>
-                    {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                        alert.SetMessage("Tapped on graphic");
-                        alert.Show();
-                    });*/
+                }
+                else
+                {
+                    MapView.DismissCallout();
                 }
             }
             catch (Exception ex)
             {
                 this.logger.Error("Error on ", ex);
-                //new AlertDialog.Builder(this).SetMessage(ex.ToString()).SetTitle("Error").Show();
             }
         }
 
-        private void OnButtonClick(object obj)
+        private void OnButtonClick(object calloutTag)
         {
-            //create interview
+            if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
+            {
+
+
+                viewModelNavigationService
+                    .NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
+                        new CreateInterviewViewModelArg()
+                        {
+                            AssignmentId = assignmentId,
+                            InterviewId = Guid.NewGuid()
+                        });
+            }
         }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
@@ -408,9 +438,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             protected set => this.RaiseAndSetIfChanged(ref this.availableMaps, value);
         }
 
-        
         public IMvxCommand NavigateToDashboardCommand => 
             new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
+        
+        public void Dispose()
+        {
+            if(this.MapView?.LocationDisplay!= null )
+                this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
+
+            if(MapView != null)
+                MapView.GeoViewTapped -= OnMapViewTapped;
+        }
 
     }
 }

@@ -85,8 +85,8 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 return mapList;
 
-            return
-                this.mapFilesToSearch
+            
+            var localMaps = this.mapFilesToSearch
                 .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
                 .OrderBy(x => x)
                 .Select(x => new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
@@ -97,6 +97,8 @@ namespace WB.UI.Shared.Enumerator.Services
                     CreationDate = this.fileSystemAccessor.GetCreationTime(x)
 
                 }).ToList();
+
+            return mapList.Union(localMaps).ToList();
         }
 
         public bool DoesMapExist(string mapName)

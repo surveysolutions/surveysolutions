@@ -58,8 +58,6 @@ namespace WB.UI.Shared.Extensions.CustomServices
             await this.permissions.AssureHasPermission(Permission.Storage);
 
             await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel>().ConfigureAwait(false);
-            
-            return ;
         }
 
         private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
