@@ -30,7 +30,8 @@
                     description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
-                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser
+                            && !($scope.activeQuestion.parentIsCover && !$scope.questionnaire.isCoverPageSupported)) {
                             if ($scope.questionForm.$dirty) {
                                 $scope.saveQuestion();
                                 $scope.questionForm.$setPristine();
