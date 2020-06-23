@@ -15,7 +15,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
         public Task OpenMapDashboardAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
+            //throw new NotImplementedException();
         }
     }
 }
