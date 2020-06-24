@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using System.Drawing;
 using Esri.ArcGISRuntime.Data;
-using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using MapView = Esri.ArcGISRuntime.UI.Controls.MapView;
 
@@ -90,7 +89,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
         public IMvxCommand RefreshMarkersCommand =>
-            new MvxCommand(() => RefreshMarkers());
+            new MvxCommand(RefreshMarkers);
 
         private void RefreshMarkers()
         {
@@ -220,15 +219,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         {
             if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
             {
-
-
-                viewModelNavigationService
-                    .NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
-                        new CreateInterviewViewModelArg()
-                        {
-                            AssignmentId = assignmentId,
-                            InterviewId = Guid.NewGuid()
-                        });
+                //create interview from assignment
+                viewModelNavigationService.NavigateToCreateAndLoadInterview(assignmentId);
             }
         }
 

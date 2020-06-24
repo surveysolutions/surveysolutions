@@ -71,6 +71,11 @@ namespace WB.UI.Tester.Implementation.Services
                 NavigationIdentity = navigationIdentity
             });
 
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
