@@ -14,7 +14,8 @@
                     description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
-                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser
+                            && !($scope.activeGroup.isCoverPage && !$scope.questionnaire.isCoverPageSupported)) {
                             if ($scope.groupForm.$dirty) {
                                 $scope.saveGroup();
                                 $scope.groupForm.$setPristine();
