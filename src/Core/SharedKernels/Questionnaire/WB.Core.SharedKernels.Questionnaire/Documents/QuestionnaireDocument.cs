@@ -14,6 +14,8 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
+        public Guid CoverPageSectionId { get; set; } = Guid.NewGuid();
+
         //is used for deserialization
         public QuestionnaireDocument(List<IComposite>? children = null)
         {
@@ -152,6 +154,20 @@ namespace Main.Core.Documents
 
         public bool CustomRosterTitle => false;
         public string? DefaultLanguageName { get; set; }
+        private bool? isCoverPageSupported = null;
+        public bool IsCoverPageSupported
+        {
+            get
+            {
+                if (isCoverPageSupported.HasValue)
+                    return isCoverPageSupported.Value;
+                
+                isCoverPageSupported = this.Children.Any(c => c.PublicKey == CoverPageSectionId);
+                return isCoverPageSupported.Value;
+            }
+        }
+
+        public bool IsCoverPage(Guid publicKey) => publicKey == CoverPageSectionId;
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {

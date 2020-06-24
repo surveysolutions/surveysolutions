@@ -1,19 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -25,6 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
+        private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
         public CoverStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
@@ -36,7 +44,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
-            IDynamicTextViewModelFactory dynamicTextViewModelFactory)
+            IDynamicTextViewModelFactory dynamicTextViewModelFactory,
+            IInterviewViewModelFactory interviewViewModelFactory,
+            ICompositeCollectionInflationService compositeCollectionInflationService)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -47,6 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewRepository = interviewRepository;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
+            this.interviewViewModelFactory = interviewViewModelFactory;
+            this.compositeCollectionInflationService = compositeCollectionInflationService;
         }
 
         public string InterviewKey { get; set; }
@@ -57,9 +69,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public string SupervisorNote { get; set; }
 
-        public IEnumerable<CoverPrefilledQuestion> PrefilledQuestions { get; set; }
+        public bool HasPrefilledEntities { get; set; }
 
-        public bool HasPrefilledQuestions { get; set; }
+        public bool IsEditMode { get; set; }
+        
+        public IReadOnlyCollection<CoverPrefilledEntity> PrefilledReadOnlyEntities { get; set; }
+
+        private CompositeCollection<ICompositeEntity> prefilledEditableEntities;
+        public CompositeCollection<ICompositeEntity> PrefilledEditableEntities
+        {
+            get => this.prefilledEditableEntities;
+            set { this.prefilledEditableEntities = value; this.RaisePropertyChanged(); }
+        }
 
         public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
 
@@ -75,30 +96,41 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.interviewId = Guid.Parse(interviewId);
 
-            this.InterviewState.Init(interviewId, null);
-            this.Name.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
-
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            this.firstSectionIdentity = new Identity(questionnaire.GetAllSections().First(), RosterVector.Empty);
+            if (questionnaire.IsCoverPageSupported)
+                this.Name.Init(interviewId, new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty));
+            else
+                this.Name.InitAsStatic(UIResources.Interview_Cover_Screen_Title);
+            
+            this.InterviewState.Init(interviewId, null);
+
+            var firstSectionId = questionnaire.GetAllSections().First(id => !questionnaire.IsCoverPage(id));
+            this.firstSectionIdentity = new Identity(firstSectionId, RosterVector.Empty);
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire
-                .GetPrefilledQuestions()
-                .Where(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates)
-                .Select(questionId => new CoverPrefilledQuestion
-                {
-                    Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty)),
-                    Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty), CultureInfo.CurrentCulture)
-                })
-                .ToList();
+            
+            var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();
+            IsEditMode = interview.HasEditableIdentifyingQuestions;
+
+            if (IsEditMode)
+            {
+                this.PrefilledReadOnlyEntities = new CoverPrefilledEntity[0];
+                this.PrefilledEditableEntities = GetEditablePrefilledData(interviewId, navigationState);
+            }
+            else
+            {
+                this.PrefilledReadOnlyEntities = GetReadOnlyPrefilledData(interviewId, navigationState, prefilledEntitiesFromQuestionnaire, questionnaire, interview);
+                this.PrefilledEditableEntities = new CompositeCollection<ICompositeEntity>();
+            }
+
+            this.HasPrefilledEntities = this.PrefilledReadOnlyEntities.Any() || this.PrefilledEditableEntities.Any();
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : string.Format(UIResources.InterviewKey, interviewKey);
+            
             var assignmentId = interview.GetAssignmentId();
             this.AssignmentId = !assignmentId.HasValue ? null : string.Format(UIResources.AssignmentN, assignmentId);
-           
-            this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 
             this.CountOfCommentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Count();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
@@ -114,12 +146,48 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SupervisorNote = interview.GetLastSupervisorComment();
         }
 
-        private DynamicTextViewModel CreateQuestionTitle(string interviewId, Identity entityIdentity)
+        private CompositeCollection<ICompositeEntity> GetEditablePrefilledData(string interviewId, NavigationState navigationState)
+        {
+            var prefilledEntities = this.interviewViewModelFactory.GetPrefilledEntities(interviewId, navigationState).ToList();
+            return this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
+        }
+        
+        private List<CoverPrefilledEntity> GetReadOnlyPrefilledData(string interviewId, NavigationState navigationState, ReadOnlyCollection<Guid> prefilledEntitiesFromQuestionnaire, IQuestionnaire questionnaire, IStatefulInterview interview)
+        {
+            return prefilledEntitiesFromQuestionnaire
+                .Select(entityId => new
+                {
+                    EntityId = entityId,
+                    IsStaticText = questionnaire.IsStaticText(entityId),
+                    QuestionType = questionnaire.IsQuestion(entityId) 
+                        ? questionnaire.GetQuestionType(entityId)
+                        : (QuestionType?)null,
+                })
+                .Where(entity => entity.IsStaticText || 
+                                 (entity.QuestionType.HasValue
+                                  && entity.QuestionType.Value != QuestionType.GpsCoordinates))
+                .Select(entity =>
+                {
+                    var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
+                    var attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
+                    attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
+
+                    return new CoverPrefilledEntity
+                    {
+                        Title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity),
+                        Answer = entity.QuestionType.HasValue
+                            ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
+                            : string.Empty,
+                        Attachment = attachmentViewModel
+                    };
+                })
+                .ToList();
+        }
+
+        private DynamicTextViewModel CreatePrefilledTitle(IQuestionnaire questionnaire, string interviewId, Identity entityIdentity)
         {
             var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-
             title.Init(interviewId, entityIdentity);
-
             return title;
         }
 
@@ -135,7 +203,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            var prefilledQuestionsLocal = PrefilledQuestions;
+            var prefilledQuestionsLocal = PrefilledReadOnlyEntities;
             foreach (var prefilledQuestion in prefilledQuestionsLocal)
             {
                 prefilledQuestion.Dispose();

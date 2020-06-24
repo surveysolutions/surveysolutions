@@ -88,12 +88,16 @@ namespace WB.UI.WebTester.Controllers
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
 
-            return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+            var interview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
+            if (interview?.Questionnaire.IsCoverPageSupported ?? false)
+                return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{interview?.Questionnaire.CoverPageSectionId.FormatGuid()}");
+            else
+                return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
         [Route("Interview/{id}")]
-        [Route("Interview/{id}/Section/{url}")]
         [Route("Interview/{id}/Cover")]
+        [Route("Interview/{id}/Section/{url}")]
         public IActionResult Interview(string id)
         {
             try
@@ -133,6 +137,7 @@ namespace WB.UI.WebTester.Controllers
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
+                CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : String.Empty,
                 Title = $"{questionnaire.Title} | Web Tester",
                 GoogleMapsKey = testerConfig.Value.GoogleMapApiKey,
                 ReloadQuestionnaireUrl = reloadQuestionnaireUrl
@@ -166,6 +171,7 @@ namespace WB.UI.WebTester.Controllers
         public string? Title { get; set; }
         public string? GoogleMapsKey { get; set; }
         public string? Id { get; set; }
+        public string? CoverPageId { get; set; }
         public string? ReloadQuestionnaireUrl { get; set; }
         public string? OriginalInterviewId { get; set; }
         public string? SaveScenarioUrl { get; set; }
