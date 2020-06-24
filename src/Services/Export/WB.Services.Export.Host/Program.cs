@@ -132,7 +132,8 @@ namespace WB.Services.Export.Host
                     {
                         c.AddIniFile("appsettings.ini", false, true);
 
-                        c.AddIniFile($"appsettings.DEF_DEFAULTS.ini", true);
+                        c.AddIniFile($"appsettings.DEV_DEFAULTS.ini", true);
+
 
                         c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                         c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
