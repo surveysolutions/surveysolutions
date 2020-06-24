@@ -712,4 +712,7 @@
   <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
     <value>На предыдущий ответ</value>
   </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Опросники</value>
+  </data>
 </root>
