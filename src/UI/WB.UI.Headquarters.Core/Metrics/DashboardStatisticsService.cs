@@ -95,6 +95,11 @@ namespace WB.UI.Headquarters.Metrics
                 "Events", $"{eventsSize} of {"event".ToQuantity(eventsCount, "N0")} for {"interview".ToQuantity(interviews, "N0")}", 
                 eventsCount));
 
+            result.Add(new MetricState(
+                "Database", BrokenPackagesStatsCollector.DatabaseSize.Value.Bytes().Humanize("0.000"),
+                BrokenPackagesStatsCollector.DatabaseSize.Value
+            ));
+
             // web interview
             var connections = CommonMetrics.WebInterviewConnection.GetDiffForLabels(OpenConnectionsLabel, ClosedConnectionsLabel);
             result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0"), connections));
