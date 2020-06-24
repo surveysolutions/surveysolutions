@@ -83,16 +83,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.Map.Loaded += async delegate (object sender, EventArgs e)
             {
                 await UpdateBaseMap().ConfigureAwait(false);
-                await RefereshMarkersAsync();
+                RefreshMarkers();
             };
         }
 
         private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
         public IMvxCommand RefreshMarkersCommand =>
-            new MvxAsyncCommand(async () => await RefereshMarkersAsync());
+            new MvxCommand(() => RefreshMarkers());
 
-        private async Task RefereshMarkersAsync()
+        private void RefreshMarkers()
         {
             MapView.GraphicsOverlays.Add(graphicsOverlay);
 
