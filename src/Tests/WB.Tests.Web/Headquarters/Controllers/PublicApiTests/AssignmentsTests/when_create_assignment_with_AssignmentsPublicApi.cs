@@ -218,6 +218,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         [TestCase(QuestionType.Audio, "test")]
         [TestCase(QuestionType.Area, "test")]
         [TestCase(QuestionType.SingleOption, "test", true)]
+        [TestCase(QuestionType.MultyOption, "test", true)]
         public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue, bool linked = false)
         {
             var variableName = "testQuestion";
