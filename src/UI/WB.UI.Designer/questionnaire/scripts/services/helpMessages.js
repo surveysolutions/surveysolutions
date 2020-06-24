@@ -30,6 +30,7 @@
                 HelpOptionValue: $i18next.t('HelpOptionValue'),
                 HelpOptionTitle: $i18next.t('HelpOptionTitle'),
                 questionnaireDefaultLanguageName: $i18next.t('HelpQuestionnaireDefaultLanguageName'),
+                coverPage: $i18next.t('HelpCoverPage'),
             };
 
             helpService.getHelpMessage = function(key) {

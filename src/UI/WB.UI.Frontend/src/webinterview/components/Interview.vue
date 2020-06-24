@@ -55,9 +55,10 @@ export default {
             this.$store.dispatch('getLanguageInfo')
             const lastVisitedSection = new localStorage().getItem(`${this.interviewId}_lastSection`)
 
-            if(lastVisitedSection) {
+            if(lastVisitedSection && lastVisitedSection != this.$route.params.sectionId) {
+                const coverPageId = this.$config.coverPageId != undefined ? this.$config.coverPageId : this.$config.model.coverPageId
                 this.$router.push({
-                    name: 'section',
+                    name: coverPageId == lastVisitedSection ? 'cover' : 'section',
                     params: {
                         sectionId: lastVisitedSection,
                         interviewId: this.interviewId,

@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             string questionnaireId, string questionnaireRevision, 
             bool hideIfDisabled,
             bool isPublic,
+            bool isCoverPageSupported,
             string? title = null, 
             string? variable = null)
         {
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             HideIfDisabled = hideIfDisabled;
             IsPublic = isPublic;
             Countries = countries;
+            IsCoverPageSupported = isCoverPageSupported;
         }
 
         public string QuestionnaireId { get; set; }
@@ -75,5 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         
         public int? PreviewRevision { get; set; }
         public string? DefaultLanguageName { get; set; }
+
+        public bool IsCoverPageSupported { get; set; }
     }
 }

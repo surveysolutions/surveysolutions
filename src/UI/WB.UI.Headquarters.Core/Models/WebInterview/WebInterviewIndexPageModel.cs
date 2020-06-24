@@ -8,5 +8,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Id { get; set; }
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
         public string AskForEmail { get; set; }
+        public string CoverPageId { get; set; }
     }
 }
