@@ -96,7 +96,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         {
             MapView.GraphicsOverlays.Add(graphicsOverlay);
 
-            string questionnaireId = null;
+            //string questionnaireId = null;
 
             var assignments = this.assignmentsRepository
                 //.Query(x=>x.QuestionnaireId == questionnaireId)
@@ -164,7 +164,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 graphicsOverlay.Graphics.AddRange(markers);
                 MapView.GeoViewTapped += OnMapViewTapped;
             }
-
         }
 
         private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
