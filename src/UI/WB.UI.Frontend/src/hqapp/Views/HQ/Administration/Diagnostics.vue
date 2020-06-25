@@ -54,6 +54,7 @@
 <script>
 
 import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     data() {
@@ -92,7 +93,7 @@ export default {
 
             this.$hq.ControlPanel.getMetricsState().then(response => {
                 self.metrics = response.data.metrics
-                self.lastUpdate =  moment(response.data.lastUpdateTime).format('MMMM Do YYYY, h:mm:ss a')
+                self.lastUpdate =  moment(response.data.lastUpdateTime).format(DateFormats.dateTime)
             })
         },
 
