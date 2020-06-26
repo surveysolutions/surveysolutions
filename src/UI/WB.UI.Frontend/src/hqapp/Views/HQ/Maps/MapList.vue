@@ -56,7 +56,7 @@ import {DateFormats, humanFileSize} from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query maps($order: MapsSort, $skip: Int, $take: Int, $where: MapsFilter) {
+const query = gql`query MapsList($order: MapsSort, $skip: Int, $take: Int, $where: MapsFilter) {
   maps(order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
