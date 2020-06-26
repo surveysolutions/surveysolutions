@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
@@ -51,7 +50,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentsRepository = assignmentsRepository;
             this.interviewViewRepository = interviewViewRepository;
+        }
 
+        private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
+        public GraphicsOverlayCollection GraphicsOverlays
+        {
+            get => this.graphicsOverlays;
+            set => this.RaiseAndSetIfChanged(ref this.graphicsOverlays, value);
         }
 
         private Map map;
@@ -73,26 +78,28 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         public override async Task Initialize()
         {
             await base.Initialize();
+            try
+            {
+                var localMaps = this.mapService.GetAvailableMaps(true);
+                var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+                localMaps.Add(defaultMap);
+                this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
+                this.SelectedMap = defaultMap.MapName;
 
-            var localMaps = this.mapService.GetAvailableMaps(true);
-            var defaultMap = this.mapService.PrepareAndGetDefaultMap();
-            localMaps.Add(defaultMap);
+                Basemap baseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false);
+                this.Map = new Map(baseMap);
 
-            this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
-
-            this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
-            this.SelectedMap = defaultMap.MapName;
-
-            Basemap baseMap = await GetBaseMap(defaultMap).ConfigureAwait(false);
-            this.Map = new Map(baseMap);
-
+                this.GraphicsOverlays.Add(graphicsOverlay);
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on map initialization", e);
+                throw;
+            }
+            
             this.Map.Loaded += async delegate (object sender, EventArgs e)
             {
                 await UpdateBaseMap().ConfigureAwait(false);
-                
-                MapView.GraphicsOverlays.Add(graphicsOverlay);
-                MapView.GeoViewTapped += OnMapViewTapped;
-
                 RefreshMarkers();
             };
         }
@@ -154,20 +161,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         break;
                 }
 
-
-                Graphic pointGraphic = new Graphic(
+                markers.Add(new Graphic(
                     point,
                     new[]
                     {
+                        new KeyValuePair<string, object>("id", ""),
                         new KeyValuePair<string, object>("interviewId", interview.Id),
                         new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
                         new KeyValuePair<string, object>("title", title),
                         new KeyValuePair<string, object>("sub_title", "")
-
                     },
-                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, markerColor, 20));
-
-                markers.Add(pointGraphic);
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, markerColor, 20)));
             }
 
             return markers;
@@ -239,7 +243,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             return markers;
         }
 
-        private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
+        public async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
         {
             double tolerance = 10d; // Use larger tolerance for touch
             int maximumResults = 1; // Only return one graphic  
@@ -261,29 +265,29 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
                         string id = identifyResults.Graphics[0].Attributes["id"].ToString();
-                        string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
-                        string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
-                        
                         string title = identifyResults.Graphics[0].Attributes["title"] as string;
                         string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
-                        bool canCreate = (bool)identifyResults.Graphics[0].Attributes["can_create"];
 
-
-                        if (!string.IsNullOrEmpty(interviewKey))
+                        if (string.IsNullOrEmpty(id))
                         {
+                            string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
+                            string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
+
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition(interviewKey, $"{title}\r\n{subTitle}");
-                            if (canCreate)
-                            {
-                                myCalloutDefinition.ButtonImage =
-                                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Green, 25)
-                                        .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
-                                myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
-                                myCalloutDefinition.Tag = interviewId;
-                            }
+                            
+                            myCalloutDefinition.ButtonImage =
+                                await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Green, 25)
+                                    .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
+                            myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
+                            myCalloutDefinition.Tag = interviewId;
+                            
+                            MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
                         }
                         else
                         {
+                            bool canCreate = (bool)identifyResults.Graphics[0].Attributes["can_create"];
+
                             CalloutDefinition myCalloutDefinition =
                                 new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
                             if (canCreate)
@@ -347,86 +351,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
 
-        public async Task<Basemap> GetBaseMap(MapDescription existingMap)
-        {
-            if (existingMap == null) return null;
-
-            switch (existingMap.MapType)
-            {
-                case MapType.OnlineImagery:
-                    return Basemap.CreateImagery();
-                case MapType.OnlineImageryWithLabels:
-                    return Basemap.CreateImageryWithLabels();
-                case MapType.OnlineOpenStreetMap:
-                    return Basemap.CreateOpenStreetMap();
-                case MapType.LocalFile:
-                    return await GetLocalMap(existingMap);
-                default:
-                    return null;
-            }
-        }
-
-        private async Task<Basemap> GetLocalMap(MapDescription existingMap)
-        {
-            var mapFileExtention = this.fileSystemAccessor.GetFileExtension(existingMap.MapFullPath);
-
-            switch (mapFileExtention)
-            {
-                case ".mmpk":
-                    {
-                        MobileMapPackage package = await MobileMapPackage.OpenAsync(existingMap.MapFullPath).ConfigureAwait(false);
-                        if (package.Maps.Count > 0)
-                        {
-                            {
-                                var basemap = package.Maps.First().Basemap.Clone();
-                                return basemap;
-                            }
-                        }
-                        break;
-                    }
-                case ".tpk":
-                    {
-                        TileCache titleCache = new TileCache(existingMap.MapFullPath);
-                        var layer = new ArcGISTiledLayer(titleCache)
-                        {
-                            //zoom to any level
-                            //if area is out of the map
-                            // should be available to navigate
-
-                            MinScale = 100000000,
-                            MaxScale = 1
-                        };
-
-                        await layer.LoadAsync().ConfigureAwait(false);
-                        return new Basemap(layer);
-
-                    }
-                case ".tif":
-                    {
-                        Raster raster = new Raster(existingMap.MapFullPath);
-                        RasterLayer newRasterLayer = new RasterLayer(raster);
-                        await newRasterLayer.LoadAsync().ConfigureAwait(false);
-
-                        //add error display
-                        //
-                        if (newRasterLayer.SpatialReference.IsProjected)
-                        {
-                            return new Basemap(newRasterLayer);
-                        }
-                        break;
-                    }
-            }
-
-            return null;
-        }
-
         public async Task UpdateBaseMap()
         {
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == this.SelectedMap);
 
             if (existingMap != null)
             {
-                var basemap = await GetBaseMap(existingMap);
+                var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
 
                 this.Map.Basemap = basemap;
 
@@ -440,13 +371,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         {
             get => this.selectedMap;
             set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
-        }
-
-        private List<string> mapsList = new List<string>();
-        public List<string> MapsList
-        {
-            get => this.mapsList;
-            set => this.RaiseAndSetIfChanged(ref this.mapsList, value);
         }
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
@@ -532,6 +456,5 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             if(MapView != null)
                 MapView.GeoViewTapped -= OnMapViewTapped;
         }
-
     }
 }

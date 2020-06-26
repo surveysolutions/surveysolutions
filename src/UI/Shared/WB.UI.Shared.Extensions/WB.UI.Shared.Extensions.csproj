@@ -63,6 +63,7 @@
     <Compile Include="CustomServices\MapInteractionService.cs" />
     <Compile Include="CustomServices\MapDashboard\MapDashboardActivity.cs" />
     <Compile Include="CustomServices\MapDashboard\MapDashboardViewModel.cs" />
+    <Compile Include="CustomServices\MapUtilityService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
