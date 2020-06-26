@@ -57,6 +57,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             };
 
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
+            this.ViewModel.MapView.GeoViewTapped += this.ViewModel.OnMapViewTapped;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
