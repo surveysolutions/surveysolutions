@@ -80,7 +80,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 this.SelectedMap = defaultMap.MapName;
             }
 
-            var basemap = await GetBaseMap(defaultMap).ConfigureAwait(false);
+            var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false);
             this.Map = new Map(basemap);
 
             this.Map.Loaded += async delegate (object sender, EventArgs e)
@@ -118,87 +118,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
         }
 
-
-        public async Task<Basemap> GetBaseMap(MapDescription existingMap)
-        {
-            if (existingMap == null) return null;
-            
-            switch (existingMap.MapType)
-            {
-                case MapType.OnlineImagery:
-                    return Basemap.CreateImagery();
-                case MapType.OnlineImageryWithLabels:
-                    return Basemap.CreateImageryWithLabels();
-                case MapType.OnlineOpenStreetMap:
-                    return Basemap.CreateOpenStreetMap();
-                case MapType.LocalFile:
-                    return await GetLocalMap(existingMap);
-                default:
-                    return null;
-            }
-        }
-
-        private async Task<Basemap> GetLocalMap(MapDescription existingMap)
-        {
-            var mapFileExtention = this.fileSystemAccessor.GetFileExtension(existingMap.MapFullPath);
-
-            switch (mapFileExtention)
-            {
-                case ".mmpk":
-                {
-                    MobileMapPackage package = await MobileMapPackage.OpenAsync(existingMap.MapFullPath).ConfigureAwait(false);
-                    if (package.Maps.Count > 0)
-                    {
-                        {
-                            var basemap = package.Maps.First().Basemap.Clone();
-                            return basemap;
-                        }
-                    }
-                    break;
-                }
-                case ".tpk":
-                {
-                    TileCache titleCache = new TileCache(existingMap.MapFullPath);
-                    var layer = new ArcGISTiledLayer(titleCache)
-                    {
-                        //zoom to any level
-                        //if area is out of the map
-                        // should be available to navigate
-
-                        MinScale = 100000000,
-                        MaxScale = 1
-                    };
-
-                    await layer.LoadAsync().ConfigureAwait(false);
-                    return new Basemap(layer);
-
-                }
-                case ".tif":
-                {
-                    Raster raster = new Raster(existingMap.MapFullPath);
-                    RasterLayer newRasterLayer = new RasterLayer(raster);
-                    await newRasterLayer.LoadAsync().ConfigureAwait(false);
-
-                    //add error display
-                    //
-                    if (newRasterLayer.SpatialReference.IsProjected)
-                    {
-                        return new Basemap(newRasterLayer);
-                    }
-                    break;
-                }
-            }
-
-            return null;
-        }
-
         public async Task UpdateBaseMap()
         {
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == this.SelectedMap);
 
             if (existingMap != null)
             {
-                var basemap = await GetBaseMap(existingMap);
+                var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
 
                 this.Map.Basemap = basemap;
 
