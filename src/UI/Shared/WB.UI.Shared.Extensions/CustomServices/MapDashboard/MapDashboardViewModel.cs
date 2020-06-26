@@ -21,16 +21,20 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using System.Drawing;
 using Esri.ArcGISRuntime.Data;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using MapView = Esri.ArcGISRuntime.UI.Controls.MapView;
 
 namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 {
     public class MapDashboardViewModel: BaseViewModel
     {
-        readonly ILogger logger;
+        private readonly ILogger logger;
         private readonly IUserInteractionService userInteractionService;
-
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         public MapDashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
@@ -38,6 +42,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             IMapService mapService,
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentDocumentsStorage assignmentsRepository,
+            IPlainStorage<InterviewView> interviewViewRepository,
             ILogger logger) : base(principal, viewModelNavigationService)
         {
             this.logger = logger;
@@ -45,6 +50,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.mapService = mapService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentsRepository = assignmentsRepository;
+            this.interviewViewRepository = interviewViewRepository;
+
         }
 
         private Map map;
@@ -82,6 +89,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.Map.Loaded += async delegate (object sender, EventArgs e)
             {
                 await UpdateBaseMap().ConfigureAwait(false);
+                
+                MapView.GraphicsOverlays.Add(graphicsOverlay);
+                MapView.GeoViewTapped += OnMapViewTapped;
+
                 RefreshMarkers();
             };
         }
@@ -93,22 +104,89 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
         private void RefreshMarkers()
         {
-            MapView.GraphicsOverlays.Add(graphicsOverlay);
-
-            //string questionnaireId = null;
-
-            var assignments = this.assignmentsRepository
-                //.Query(x=>x.QuestionnaireId == questionnaireId)
-                .LoadAll()
-                .Where(x => x.LocationLatitude != null).ToList();
+            var interviewsMarkers = GetInterviewsMarkers();
+            var assignmentsMarkers = GetAssignmentsMarkers();
 
             graphicsOverlay.Graphics.Clear();
+            if (assignmentsMarkers.Count > 0 || interviewsMarkers.Count > 0)
+            {
+                graphicsOverlay.Graphics.AddRange(assignmentsMarkers);
+                graphicsOverlay.Graphics.AddRange(interviewsMarkers);
+            }
+        }
+
+        private List<Graphic> GetInterviewsMarkers()
+        {
+            var interviews = this.interviewViewRepository
+                .Where(x => x.LocationLatitude != null).ToList();
+
+            var markers = new List<Graphic>();
+
+            foreach (var interview in interviews)
+            {
+                var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
+                var title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle,
+                    questionnaireIdentity.Version);
+
+                MapPoint point =
+                    (MapPoint) GeometryEngine.Project(
+                        new MapPoint(
+                            interview.LocationLongitude.Value,
+                            interview.LocationLatitude.Value,
+                            SpatialReferences.Wgs84),
+                        Map.SpatialReference);
+
+                Color markerColor;
+
+                switch (interview.Status)
+                {
+                    case InterviewStatus.Created:
+                        markerColor = Color.Blue;
+                        break;
+                    case InterviewStatus.Completed:
+                        markerColor = Color.Green;
+                        break;
+                    case InterviewStatus.RejectedBySupervisor:
+                        markerColor = Color.Red;
+                        break;
+                    default:
+                        markerColor = Color.White;
+                        break;
+                }
+
+
+                Graphic pointGraphic = new Graphic(
+                    point,
+                    new[]
+                    {
+                        new KeyValuePair<string, object>("interviewId", interview.Id),
+                        new KeyValuePair<string, object>("interviewKey", interview.InterviewKey),
+                        new KeyValuePair<string, object>("title", title),
+                        new KeyValuePair<string, object>("sub_title", "")
+
+                    },
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, markerColor, 20));
+
+                markers.Add(pointGraphic);
+            }
+
+            return markers;
+        }
+
+        private List<Graphic> GetAssignmentsMarkers()
+        {
+            var assignments = this.assignmentsRepository
+                //.Query(x => x.LocationLatitude != null)
+                .LoadAll()
+                .Where(x => x.LocationLatitude != null)
+                .ToList();
 
             var markers = new List<Graphic>();
             foreach (var assignment in assignments)
             {
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-                var title = string.Format(EnumeratorUIResources.DashboardItem_Title, assignment.Title, questionnaireIdentity.Version);
+                var title = string.Format(EnumeratorUIResources.DashboardItem_Title, assignment.Title,
+                    questionnaireIdentity.Version);
 
                 var interviewsByAssignmentCount = assignment.CreatedInterviewsCount ?? 0;
                 var interviewsLeftByAssignmentCount = assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
@@ -133,36 +211,32 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         assignment.Quantity.GetValueOrDefault());
                 }
 
-                bool canCreateInterview = !assignment.Quantity.HasValue || Math.Max(val1: 0, val2: interviewsLeftByAssignmentCount) > 0;
+                bool canCreateInterview =
+                    !assignment.Quantity.HasValue || Math.Max(val1: 0, val2: interviewsLeftByAssignmentCount) > 0;
 
-                MapPoint point = 
-                    (MapPoint)GeometryEngine.Project(
+                MapPoint point =
+                    (MapPoint) GeometryEngine.Project(
                         new MapPoint(
                             assignment.LocationLongitude.Value,
                             assignment.LocationLatitude.Value,
                             SpatialReferences.Wgs84),
                         Map.SpatialReference);
-                
+
                 Graphic pointGraphic = new Graphic(
-                    point, 
-                    new []
+                    point,
+                    new[]
                     {
                         new KeyValuePair<string, object>("id", assignment.Id),
                         new KeyValuePair<string, object>("title", title),
                         new KeyValuePair<string, object>("sub_title", subTitle),
                         new KeyValuePair<string, object>("can_create", canCreateInterview)
+                    },
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, Color.Gold, 20));
 
-                    }, 
-                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Red, 20));
-                
                 markers.Add(pointGraphic);
             }
 
-            if (markers.Count > 0)
-            {
-                graphicsOverlay.Graphics.AddRange(markers);
-                MapView.GeoViewTapped += OnMapViewTapped;
-            }
+            return markers;
         }
 
         private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
@@ -187,21 +261,42 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                     if (identifyResults.Graphics[0].Geometry is MapPoint projectedLocation)
                     {
                         string id = identifyResults.Graphics[0].Attributes["id"].ToString();
+                        string interviewId = identifyResults.Graphics[0].Attributes["interviewId"].ToString();
+                        string interviewKey = identifyResults.Graphics[0].Attributes["interviewKey"].ToString();
+                        
                         string title = identifyResults.Graphics[0].Attributes["title"] as string;
                         string subTitle = identifyResults.Graphics[0].Attributes["sub_title"] as string;
                         bool canCreate = (bool)identifyResults.Graphics[0].Attributes["can_create"];
 
-                        CalloutDefinition myCalloutDefinition = new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
-                        if (canCreate)
-                        {
-                            myCalloutDefinition.ButtonImage =
-                                await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
-                                    .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
-                            myCalloutDefinition.OnButtonClick += OnButtonClick;
-                            myCalloutDefinition.Tag = id;
-                        }
 
-                        MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
+                        if (!string.IsNullOrEmpty(interviewKey))
+                        {
+                            CalloutDefinition myCalloutDefinition =
+                                new CalloutDefinition(interviewKey, $"{title}\r\n{subTitle}");
+                            if (canCreate)
+                            {
+                                myCalloutDefinition.ButtonImage =
+                                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Green, 25)
+                                        .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
+                                myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
+                                myCalloutDefinition.Tag = interviewId;
+                            }
+                        }
+                        else
+                        {
+                            CalloutDefinition myCalloutDefinition =
+                                new CalloutDefinition("#" + id, $"{title}\r\n{subTitle}");
+                            if (canCreate)
+                            {
+                                myCalloutDefinition.ButtonImage =
+                                    await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
+                                        .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
+                                myCalloutDefinition.OnButtonClick += OnAssignmentButtonClick;
+                                myCalloutDefinition.Tag = id;
+                            }
+
+                            MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
+                        }
                     }
                 }
                 else
@@ -215,7 +310,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             }
         }
 
-        private void OnButtonClick(object calloutTag)
+        private async void OnInterviewButtonClick(object calloutTag)
+        {
+            if (calloutTag is string tt)
+            {
+                await viewModelNavigationService.NavigateToInterviewAsync(tt, null);
+            }
+        }
+
+        private void OnAssignmentButtonClick(object calloutTag)
         {
             if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
             {
@@ -229,19 +332,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             this.SelectedMap = mapDescription.MapName;
             IsPanelVisible = false;
 
-            var geometry = this.MapView.SketchEditor.Geometry;
             await this.UpdateBaseMap();
-
-            //update internal structures
-            //SpatialReferense of new map could differ from initial
-            if (geometry != null)
-            {
-                if (this.MapView != null && geometry != null && !this.MapView.SpatialReference.IsEqual(geometry.SpatialReference))
-                    geometry = GeometryEngine.Project(geometry, this.MapView.SpatialReference);
-
-                this.MapView?.SketchEditor.ClearGeometry();
-                this.MapView?.SketchEditor.ReplaceGeometry(geometry);
-            }
         });
 
         public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
@@ -422,7 +513,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         }
 
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
-        private IFileSystemAccessor fileSystemAccessor;
+
 
         public MvxObservableCollection<MapDescription> AvailableMaps
         {
