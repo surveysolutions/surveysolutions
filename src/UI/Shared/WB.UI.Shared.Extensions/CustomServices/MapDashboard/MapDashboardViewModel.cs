@@ -193,13 +193,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             await RefreshMarkers();
         }
 
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ShowInterviews) ||
                 e.PropertyName == nameof(ShowAssignments))
             {
                 this.CollectQuestionnaires();
-                this.RefreshMarkers();
+                await this.RefreshMarkers();
             }
         }
 
