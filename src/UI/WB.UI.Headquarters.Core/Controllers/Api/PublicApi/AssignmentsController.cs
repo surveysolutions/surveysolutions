@@ -689,12 +689,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             public Identity QuestionIdentity { get; set; }
             public string Variable { get; set; }
 
-            public QuestionType QuestionType { get; set; }
+            public QuestionType? QuestionType { get; set; }
         }
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
         {
-            var answer = new AssignmentAnswer {Source = item};
+            var answer = new AssignmentAnswer {Source = item, QuestionType = null};
 
             if (!string.IsNullOrEmpty(item.Identity) && Identity.TryParse(item.Identity, out Identity identity))
             {
