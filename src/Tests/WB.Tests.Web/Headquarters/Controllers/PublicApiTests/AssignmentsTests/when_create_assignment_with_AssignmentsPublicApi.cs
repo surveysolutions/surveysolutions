@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
@@ -219,7 +220,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         [TestCase(QuestionType.Audio, "test")]
         [TestCase(QuestionType.Area, "test")]
         [TestCase(QuestionType.SingleOption, "test", true)]
-        [TestCase(QuestionType.MultyOption, "test", true)]
+        [TestCase(QuestionType.MultyOption, "['test']", true)]
         public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue, bool linked = false)
         {
             var variableName = "testQuestion";
