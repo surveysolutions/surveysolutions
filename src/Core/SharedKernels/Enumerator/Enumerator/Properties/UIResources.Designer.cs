@@ -1341,6 +1341,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string MapDashboard_Assignments {
+            get {
+                return ResourceManager.GetString("MapDashboard_Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shown only items with coordinates.
+        /// </summary>
+        public static string MapDashboard_Disclaimer {
+            get {
+                return ResourceManager.GetString("MapDashboard_Disclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string MapDashboard_Interviews {
+            get {
+                return ResourceManager.GetString("MapDashboard_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit Map Editor.
         /// </summary>
         public static string MenuItem_Title_AreaCancel {
