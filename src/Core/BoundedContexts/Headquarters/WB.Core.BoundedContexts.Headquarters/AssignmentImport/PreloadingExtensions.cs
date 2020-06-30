@@ -37,7 +37,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         return new AssignmentAnswers()
                         {
                             VariableName = compositeValue.VariableOrCodeOrPropertyName, 
-                            Values = compositeValue.Values.Select(x => new AssignmentAnswer(){Value = x.Value} ).ToArray()
+                            Values = compositeValue.Values.Select(x => new AssignmentAnswer()
+                            {
+                                Value = x.Value,
+                                Column = x.Column
+                            } ).ToArray(),
                         };
                     }
                 }
