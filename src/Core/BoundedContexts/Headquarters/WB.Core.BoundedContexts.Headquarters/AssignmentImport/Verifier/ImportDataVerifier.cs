@@ -360,10 +360,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 yield return new PanelImportVerificationError(
                     "PL0063",
                     string.Format(messages.PL0063_NoPermittedQuestion, answer.VariableName),
-                    (value is AssignmentValue assignmentValue)
-                        ? new InterviewImportReference(assignmentValue.Column, row.Row, PreloadedDataVerificationReferenceType.Cell,
-                        assignmentValue.Value, row.FileName)
-                        :null
+                    (value is AssignmentAnswers assignmentValue)
+                        ? new InterviewImportReference(assignmentValue.Values[0].Column, row.Row, PreloadedDataVerificationReferenceType.Cell, assignmentValue.Values[0].Value, row.FileName)
+                        : null
                 );
         }
 
