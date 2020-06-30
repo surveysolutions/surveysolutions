@@ -741,9 +741,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var optionCode = compositeColumn[1].Replace("n", "-");
 
-            return questionnaire.GetQuestionType(questionId.Value) == QuestionType.MultyOption && 
-                   !questionnaire.IsQuestionLinked(questionId.Value) && !questionnaire.IsQuestionLinkedToRoster(questionId.Value) &&
-                   questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null).All(x => x.Value.ToString() != optionCode);
+            return questionnaire.GetQuestionType(questionId.Value) == QuestionType.MultyOption 
+                   && !questionnaire.IsQuestionLinked(questionId.Value) 
+                   && !questionnaire.IsQuestionLinkedToRoster(questionId.Value) 
+                   && questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null)
+                       .All(x => x.Value.ToString() != optionCode);
         }
 
         private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)
