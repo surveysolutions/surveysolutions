@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
             registry.BindInPerLifetimeScope<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
-
+            
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
             if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
@@ -309,6 +309,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITokenGenerator, TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+            registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
