@@ -229,6 +229,7 @@
                                             if (confirmResult === 'ok') {
                                                 $scope.activeQuestion.options = selectedClassification.categories;
                                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                                markFormAsChanged();
                                             }
                                         });
                                     } else {
@@ -240,6 +241,7 @@
                                         $scope.activeQuestion.isFilteredCombobox = true;
                                         $scope.activeQuestion.options = selectedClassification.categories;
                                         $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                        markFormAsChanged();
                                     }
                                 } else {
                                     if ($scope.activeQuestion.isFilteredCombobox) {
@@ -250,7 +252,7 @@
                                     }
                                     $scope.activeQuestion.options = selectedClassification.categories;
                                     $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
-
+                                    markFormAsChanged();
                                 }
                             };
 
