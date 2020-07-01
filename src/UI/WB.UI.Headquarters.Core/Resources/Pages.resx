@@ -869,6 +869,9 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Show Password</value>
+  </data>
   <data name="AuthenticatorCode" xml:space="preserve">
     <value>Authenticator code</value>
   </data>
