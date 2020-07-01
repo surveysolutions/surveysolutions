@@ -171,6 +171,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     {
         public AssignmentDetails Assignment { get; set; }
         public ImportDataVerificationState VerificationStatus { get; set; }
+        public string? WebInterviewLink { get; set; }
     }
 
     public class CreateAssignmentApiRequest

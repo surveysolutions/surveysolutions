@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -63,7 +64,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.userViewFactory.Object,
                 Create.Service.AssignmentsImportService(assignmentFactory: assignmentFactory,
                     verifier: Create.Service.ImportDataVerifier(userViewFactory: userViewFactory.Object)),
-                Create.Service.NewtonJsonSerializer());
+                Create.Service.NewtonJsonSerializer(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IWebInterviewLinkProvider>());
         }
 
         private void PrepareMocks()
