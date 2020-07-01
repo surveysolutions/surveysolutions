@@ -128,7 +128,9 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IUnitOfWork>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 assignmentsImportService ?? Mock.Of<IAssignmentsImportService>(),
-                serializer ?? Mock.Of<ISerializer>());
+                serializer ?? Mock.Of<ISerializer>(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IWebInterviewLinkProvider>());
 
             return result;
         }
