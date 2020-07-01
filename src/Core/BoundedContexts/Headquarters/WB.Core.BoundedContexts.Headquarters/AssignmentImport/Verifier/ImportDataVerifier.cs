@@ -355,14 +355,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var questionType = questionnaire.GetQuestionType(questionId.Value);
 
+            var assignmentValue = value as AssignmentAnswers;
+
             if (new [] {QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio}.Contains(questionType) 
                 || ((questionType==QuestionType.MultyOption || questionType == QuestionType.SingleOption) && (questionnaire.IsQuestionLinked(questionId.Value) || questionnaire.IsQuestionLinkedToRoster(questionId.Value))))
                 yield return new PanelImportVerificationError(
                     "PL0063",
                     string.Format(messages.PL0063_NoPermittedQuestion, answer.VariableName),
-                    (value is AssignmentAnswers assignmentValue)
-                        ? new InterviewImportReference(assignmentValue.Values[0].Column, row.Row, PreloadedDataVerificationReferenceType.Cell, assignmentValue.Values[0].Value, row.FileName)
-                        : null
+
+                    new InterviewImportReference(
+                        assignmentValue != null ? assignmentValue.Values[0].Column : "", 
+                        row.Row, 
+                        PreloadedDataVerificationReferenceType.Cell,
+                        assignmentValue != null ? assignmentValue.Values[0].Value : "", 
+                        row.FileName)
                 );
         }
 
