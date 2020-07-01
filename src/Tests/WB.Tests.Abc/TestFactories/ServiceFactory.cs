@@ -1113,7 +1113,8 @@ namespace WB.Tests.Abc.TestFactories
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
                 Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() == 
                                                                               invService)),
-                Options.Create(new HeadquartersConfig{BaseUrl = "http://localhost"}));
+                new WebInterviewLinkProvider(Options.Create(
+                    new HeadquartersConfig{BaseUrl = "http://localhost"})));
         }
 
         public SendInvitationsJob SendInvitationsJob(
