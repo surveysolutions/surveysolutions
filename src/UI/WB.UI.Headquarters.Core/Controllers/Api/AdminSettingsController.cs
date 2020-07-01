@@ -1,20 +1,31 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Resources;
+using WebInterviewSettings = WB.Core.BoundedContexts.Headquarters.DataExport.Security.WebInterviewSettings;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -60,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IEmailService emailService;
         private readonly ISystemLog auditLog;
         private readonly IWebInterviewEmailRenderer emailRenderer;
+        private readonly IExportFactory exportFactory;
 
         public AdminSettingsController(
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
@@ -70,7 +82,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IEmailService emailService, 
             ISystemLog auditLog, 
             ISystemLogViewFactory systemLogViewFactory,
-            IWebInterviewEmailRenderer emailRenderer)
+            IWebInterviewEmailRenderer emailRenderer,
+            IExportFactory exportFactory)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
@@ -83,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.emailService = emailService;
             this.auditLog = auditLog;
             this.emailRenderer = emailRenderer;
-            
+            this.exportFactory = exportFactory;
         }
 
         [HttpGet]
@@ -236,8 +249,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public DataTableResponse<SystemLogItem> GetSystemLog(DataTableRequest request)
+        public IActionResult GetSystemLog(DataTableRequest request, [FromQuery] string exportType)
         {
+            if (!string.IsNullOrEmpty(exportType))
+                return GetAllSystemLogFile(exportType);
+
             var systemLogFilter = new SystemLogFilter
             {
                 PageIndex = request.PageIndex,
@@ -246,13 +262,39 @@ namespace WB.UI.Headquarters.Controllers.Api
             };
             var systemLog = this.systemLogViewFactory.GetLog(systemLogFilter);
             
-            return new DataTableResponse<SystemLogItem>
+            return new JsonResult(new DataTableResponse<SystemLogItem>
             {
                 Data = systemLog.Items,
                 Draw = request.Draw + 1,
                 RecordsFiltered = systemLog.TotalCount,
                 RecordsTotal = systemLog.TotalCount
+            });
+        }
+        
+        [HttpGet]
+        public IActionResult GetAllSystemLogFile([FromQuery] string exportType)
+        {
+            Enum.TryParse(exportType, true, out ExportFileType type);
+
+            var systemLogFilter = new SystemLogFilter
+            {
+                PageIndex = 1,
+                PageSize = int.MaxValue,
+                SortOrder = new[] { new OrderRequestItem() { Field = nameof(SystemLogItem.LogDate), Direction = OrderDirection.Desc },  }
             };
+            var records = this.systemLogViewFactory.GetLog(systemLogFilter);
+            var report = new ReportView()
+            {
+                Headers = new []{ "Log date", "User", "Event type", "Log"},
+                Data = records.Items.Select(i => new object[] { i.LogDate, i.UserName, i.Type, i.Log }).ToArray(),
+                TotalCount = records.TotalCount
+            };
+
+            var exportFile = this.exportFactory.CreateExportFile(type);
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
+            var fileNameStar = $@"audit_log{exportFile.FileExtension}";
+            var result = File(exportFileStream, exportFile.MimeType, fileNameStar);
+            return result;
         }
     }
 }
