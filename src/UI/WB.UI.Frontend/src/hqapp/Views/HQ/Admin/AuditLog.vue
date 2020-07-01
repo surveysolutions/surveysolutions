@@ -1,8 +1,11 @@
 <template>
     <HqLayout :hasFilter="false"
         :title="$t('AuditLog.PageTitle')" >
-        <DataTables :tableOptions="tableOptions"
-            noSearch></DataTables>
+        <DataTables
+            :tableOptions="tableOptions"
+            noSearch
+            exportable>
+        </DataTables>
     </HqLayout>
 </template>
 
