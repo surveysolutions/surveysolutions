@@ -7,19 +7,21 @@ using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Domain;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
     public class ExportServiceConnectivityCheck : IHealthCheck
     {
-        private readonly IExportServiceApi exportServiceApi;
+        private readonly IInScopeExecutor scope;
         private readonly IOptions<DataExportOptions> exportOptions;
 
-        public ExportServiceConnectivityCheck(IExportServiceApi exportServiceApi, IOptions<DataExportOptions> exportOptions)
+        public ExportServiceConnectivityCheck(
+            IOptions<DataExportOptions> exportOptions, IInScopeExecutor scope)
         {
-            this.exportServiceApi = exportServiceApi;
             this.exportOptions = exportOptions;
+            this.scope = scope;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
@@ -28,8 +30,15 @@ namespace WB.UI.Headquarters.HealthChecks
 
             try
             {
-                var status = await this.exportServiceApi.GetConnectivityStatus();
-                return HealthCheckResult.Healthy(Diagnostics.export_service_connectivity_check_Healthy.FormatString(uri, status));
+                return await scope.ExecuteAsync(async sl =>
+                {
+                    var api = sl.GetInstance<IExportServiceApi>();
+                    var status = await api.GetConnectivityStatus();
+
+                    return HealthCheckResult.Healthy(
+                        Diagnostics.export_service_connectivity_check_Healthy
+                            .FormatString(uri, status));
+                });
             }
             catch (ApiException apiException)
             {

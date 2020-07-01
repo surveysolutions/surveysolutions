@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
@@ -7,9 +9,15 @@ namespace WB.UI.Headquarters.HealthChecks
         public static void AddHeadquartersHealthCheck(this IServiceCollection services)
         {
             services.AddHostedService<AmazonS3CheckService>();
-            
-            services.AddHealthChecks()
-                .AddCheck<HeadquartersUrlBindingCheck>("hq_baseurl_check")
+
+            var checks = services.AddHealthChecks();
+
+            if (!Environment.GetEnvironmentVariable("NO_HQ_BASEURL_CHECK").ToBool(false))
+            {
+                checks.AddCheck<HeadquartersUrlBindingCheck>("hq_baseurl_check");
+            }
+
+            checks
                 .AddCheck<HeadquartersStartupCheck>("under_construction_check", tags: new[] { "ready" })
                 .AddCheck<ExportServiceVersionCheck>("export_service_check")
                 .AddCheck<ExportServiceConnectivityCheck>("export_service_connectivity_check")
