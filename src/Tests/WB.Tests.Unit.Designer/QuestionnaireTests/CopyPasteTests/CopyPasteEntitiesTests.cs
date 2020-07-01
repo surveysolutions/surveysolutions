@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTests
@@ -130,5 +131,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             Assert.That(cover.Children.Count(e => e is IQuestion), Is.EqualTo(1));
             Assert.That(cover.Children.OfType<IQuestion>().Single().Featured, Is.True);
         }
+        
+        [Test]
+        public void when_clone_static_text()
+        {
+            var staticTextId = Guid.Parse("FCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            IEnumerable<ValidationCondition> validationConditions = new ValidationCondition[]
+            {
+                Create.ValidationCondition("num > 5", "num more then 5")
+            };
+            var staticText = Create.StaticText(staticTextId, text: "static text", validationConditions: validationConditions);
+
+            var copy = (StaticText)staticText.Clone();
+
+            Assert.That(copy, Is.Not.Null);
+            Assert.That(copy.Text, Is.EqualTo(staticText.Text));
+            Assert.That(copy.ValidationConditions[0].Expression, Is.EqualTo(staticText.ValidationConditions[0].Expression));
+            Assert.That(copy.ValidationConditions[0].Message, Is.EqualTo(staticText.ValidationConditions[0].Message));
+            Assert.That(copy.ValidationConditions[0].Severity, Is.EqualTo(staticText.ValidationConditions[0].Severity));
+            
+            Assert.That(object.ReferenceEquals(copy, staticText), Is.False);
+            Assert.That(object.ReferenceEquals(copy.ValidationConditions, staticText.ValidationConditions), Is.False);
+            Assert.That(object.ReferenceEquals(copy.ValidationConditions[0], staticText.ValidationConditions[0]), Is.False);
+        }
+        
     }
 }
