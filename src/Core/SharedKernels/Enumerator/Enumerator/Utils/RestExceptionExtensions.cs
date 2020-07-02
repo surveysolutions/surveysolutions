@@ -87,34 +87,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion;
                             break;
                         case HttpStatusCode.UpgradeRequired:
+                            var exception = new SynchronizationException(
+                                SynchronizationExceptionType.UpgradeRequired,
+                                EnumeratorUIResources.UpgradeRequired);
                             if (restException.Data.Contains("target-version"))
-                            {
-                                var exception = new SynchronizationException(
-                                    SynchronizationExceptionType.UpgradeRequired,
-                                    EnumeratorUIResources.UpgradeRequired);
                                 exception.Data["target-version"] = restException.Data["target-version"];
-                                return exception;
-                            }
-                            /*
-                            if (restException.Message?.Contains("version") ?? false)
-                            {
-                                using var stringReader = new StringReader(restException.Message);
-                                using var jsonTextReader = new JsonTextReader(stringReader);
-                                var productVersionInfo = JsonSerializer.Create().Deserialize<ProductVersionInfo>(jsonTextReader);
-
-                                if (productVersionInfo != null)
-                                {
-                                    var exception = new SynchronizationException(SynchronizationExceptionType.UpgradeRequired,
-                                        EnumeratorUIResources.UpgradeRequired);
-                                    exception.Data["target-version"] = productVersionInfo.Version;
-                                    return exception;
-                                }
-                            }
-                            */
-
-                            exceptionMessage = EnumeratorUIResources.UpgradeRequired;
-                            exceptionType = SynchronizationExceptionType.UpgradeRequired;
-                            break;
+                            return exception;
                         case HttpStatusCode.Conflict:
                             exceptionType = SynchronizationExceptionType.UserLinkedToAnotherServer;
                             break;

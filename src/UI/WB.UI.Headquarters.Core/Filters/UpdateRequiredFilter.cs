@@ -23,21 +23,6 @@ namespace WB.UI.Headquarters.Filters
             {
                 var version = productVersion.ToString();
                 context.HttpContext.Response.Headers.Add("version", version);
-                
-                /*if (context.Result is JsonResult jsonResult && jsonResult.Value != null)
-                    return;
-                if (context.Result is ObjectResult objectResult && objectResult.Value != null)
-                    return;
-                
-                var version = productVersion.ToString();
-                var versionInfo = new ProductVersionInfo()
-                {
-                    Version = version
-                };
-                context.Result = new JsonResult(versionInfo)
-                {
-                    StatusCode = StatusCodes.Status426UpgradeRequired
-                };*/
             }
         }
 
