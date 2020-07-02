@@ -65,7 +65,7 @@ namespace WB.Services.Scheduler.Model
         [NotMapped]
         public long FailedTimes
         {
-            get => (long)(this["failedTimes"] ?? 0l);
+            get => (long)(this["failedTimes"] ?? 0L);
             set => this["failedTimes"] = value;
         }
 
@@ -84,7 +84,7 @@ namespace WB.Services.Scheduler.Model
         [NotMapped]
         public long MaxRetryAttempts
         {
-            get => (long) this["maxRetry"];
+            get => (long) (this["maxRetry"] ?? 3L);
             set => this["maxRetry"] = value;
         } 
 
