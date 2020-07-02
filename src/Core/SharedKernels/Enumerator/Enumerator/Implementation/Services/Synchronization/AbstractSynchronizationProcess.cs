@@ -407,9 +407,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         break;
 
                     case SynchronizationExceptionType.UpgradeRequired:
+                        var message = EnumeratorUIResources.UpgradeRequired;
+
+                        var targetVersionObj = ex.Data["target-version"];
+                        if (targetVersionObj != null && targetVersionObj is string targetVersion)
+                        {
+                            var appVersionName = deviceInformationService.GetApplicationVersionName();
+                            message += Environment.NewLine + "HQ version: " + targetVersion 
+                                     + Environment.NewLine + "App version: " + appVersionName;
+                        }
+
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = EnumeratorUIResources.UpgradeRequired,
+                            Title = message,
                             Status = SynchronizationStatus.Fail,
                             IsApplicationUpdateRequired = true,
                             Statistics = statistics,

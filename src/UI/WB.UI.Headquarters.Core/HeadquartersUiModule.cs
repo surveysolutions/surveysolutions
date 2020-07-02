@@ -16,6 +16,7 @@ using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
@@ -51,6 +52,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
+            registry.Bind<UpdateRequiredFilter>();
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
