@@ -413,8 +413,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         if (targetVersionObj != null && targetVersionObj is string targetVersion)
                         {
                             var appVersionName = deviceInformationService.GetApplicationVersionName();
-                            message += Environment.NewLine + "HQ version: " + targetVersion 
-                                     + Environment.NewLine + "App version: " + appVersionName;
+                            message = GetRequiredUpdate(targetVersion, appVersionName);
                         }
 
                         progress.Report(new SyncProgressInfo
@@ -515,6 +514,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
 
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
+
+        protected abstract string GetRequiredUpdate(string targetVersion, string appVersion);
 
         protected virtual Task<string> GetNewPasswordAsync()
         {
