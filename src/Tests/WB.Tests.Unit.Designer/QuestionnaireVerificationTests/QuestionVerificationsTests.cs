@@ -573,5 +573,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Question(questionType: questionType),
                 })
                 .ExpectError("WB0308");
+        
+        [Test]
+        public void when_question_in_matrix_roster()
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Roster(displayMode: RosterDisplayMode.Matrix, children: new[]
+                    {
+                        Create.Question()
+                    }),
+                })
+                .ExpectNoWarning("WB0203");
+
     }
 }
