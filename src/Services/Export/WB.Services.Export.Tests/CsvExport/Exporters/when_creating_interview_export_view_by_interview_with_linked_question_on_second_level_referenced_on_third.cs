@@ -42,7 +42,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                     }));
 
             var interview = CreateInterviewData();
-            var rosterLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, null, new int[] { 0 });
+            var rosterLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, new int[] { 0 });
             interview.Levels.Add("0", rosterLevel);
 
             if (!rosterLevel.QuestionsSearchCache.ContainsKey(linkedQuestionId))

@@ -74,7 +74,6 @@ namespace WB.UI.Interviewer
                 {typeof(InterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
                 {typeof(SearchViewModel), typeof(InterviewerSearchActivity)}

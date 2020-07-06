@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -6,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -51,6 +53,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             this.supervisorsPlainStorage.Store(localSupervisor);
             this.principal.SignIn(localSupervisor.Name, credentials.Password, true);
+        }
+
+        protected override string GetRequiredUpdate(string targetVersion, string appVersion)
+        {
+            return EnumeratorUIResources.UpgradeRequired 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.HeadquartersVersion, targetVersion) 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.SupervisorVersion, appVersion);
+
         }
     }
 }

@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             }
         }
 
-        public LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
+        public LookupTableContent? GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
         {
             var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null)
@@ -79,8 +79,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             var lookupTableStorageId = this.GetLookupTableStorageId(questionnaire.PublicKey, lookupTableId);
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
-            if (lookupTableContent == null)
-                throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, questionnaireId));
+            /*if (lookupTableContent == null)
+                throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, questionnaireId));*/
 
             return lookupTableContent;
         }
@@ -116,6 +116,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId)
         {
             var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
+            if (content == null)
+                throw new InvalidOperationException("Lookup table is empty.");
 
             var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
 
@@ -185,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need excute all Reads
+                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need execute all Reads
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
@@ -266,7 +268,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     rows.Add(row);
                     if (rows.Count > MAX_ROWS_COUNT)
                     {
-                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows, MAX_ROWS_COUNT));
+                        int rowsCount = rows.Count;
+                        do
+                        {
+                            rowsCount++;
+                        } while (csvReader.Read());
+
+                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows,
+                            $"{MAX_ROWS_COUNT:n0}",
+                            $"{rowsCount - 1:n0}"));
                     }
                 } while (csvReader.Read());
 

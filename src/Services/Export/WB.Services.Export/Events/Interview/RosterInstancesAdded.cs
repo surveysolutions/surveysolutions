@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class RosterInstancesAdded : InterviewPassiveEvent
     {
-        public AddedRosterInstance[] Instances { get; set; }
+        public AddedRosterInstance[] Instances { get; set; } = new AddedRosterInstance[0];
     }
 }

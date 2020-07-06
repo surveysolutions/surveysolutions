@@ -8,7 +8,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
     {
         private readonly IMemoryCache memoryCache;
         private readonly ITenantContext tenantContext;
-        private string keyPart;
+        private string? keyPart;
 
         public QuestionnaireStorageCache(
             IMemoryCache memoryCache,
@@ -20,11 +20,11 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         private string Key(QuestionnaireId id, Guid? translation)
         {
-            if (keyPart == null) keyPart = nameof(QuestionnaireStorageCache) + ":" + tenantContext.Tenant.Id + ":";
+            keyPart ??= nameof(QuestionnaireStorageCache) + ":" + tenantContext.Tenant.Id + ":";
             return keyPart + id + (translation != null ? $":{translation}" : string.Empty);
         }
 
-        public bool TryGetValue(QuestionnaireId id, Guid? translation, out QuestionnaireDocument document)
+        public bool TryGetValue(QuestionnaireId id, Guid? translation, out QuestionnaireDocument? document)
         {
             if (memoryCache.TryGetValue(Key(id, translation), out var res))
             {

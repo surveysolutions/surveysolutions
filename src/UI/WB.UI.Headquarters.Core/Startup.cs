@@ -255,6 +255,7 @@ namespace WB.UI.Headquarters
                 mvc.Filters.AddService<InstallationFilter>(100);
                 mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                 mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
+                mvc.Filters.AddService<UpdateRequiredFilter>(400);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
                 mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();

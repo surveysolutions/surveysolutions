@@ -296,17 +296,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
-            => this.Children.OfType<InterviewTreeQuestion>()
-                .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
+        {
+            if (!this.Tree.Questionnaire.IsCoverPageSupported)
+                return this.Children.OfType<InterviewTreeQuestion>()
+                    .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
+            
+            return this.Children.OfType<InterviewTreeQuestion>()
+                .Where(x => x.IsInterviewer && !x.IsDisabled() && !x.IsReadonly);
+        }
 
         private IEnumerable<InterviewTreeStaticText> GetEnabledStaticTexts()
             => this.Children.OfType<InterviewTreeStaticText>()
                 .Where(x => !x.IsDisabled());
 
         private IEnumerable<InterviewTreeQuestion> GetAllNestedEnabledInterviewerQuestions()
-            => this.TreeToEnumerableDepthFirst<IInterviewTreeNode>(s => s.Children)
+        {
+            if (!this.Tree.Questionnaire.IsCoverPageSupported)
+                return this.TreeToEnumerableDepthFirst<IInterviewTreeNode>(s => s.Children)
+                    .OfType<InterviewTreeQuestion>()
+                    .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
+
+            return this.TreeToEnumerableDepthFirst<IInterviewTreeNode>(s => s.Children)
                 .OfType<InterviewTreeQuestion>()
-                .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
+                .Where(x => x.IsInterviewer && !x.IsDisabled() && !x.IsReadonly);
+        }
 
         public int CountNestedEnabledQuestions() => this.GetAllNestedEnabledInterviewerQuestions().Count();
 
