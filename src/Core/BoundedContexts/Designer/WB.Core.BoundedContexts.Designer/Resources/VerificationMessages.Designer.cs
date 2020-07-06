@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class VerificationMessages {
@@ -2128,6 +2128,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0306_DuplicatedCategoryParentIdText {
             get {
                 return ResourceManager.GetString("WB0306_DuplicatedCategoryParentIdText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        /// </summary>
+        public static string WB0307_IdentityQuestionsMustHaveVariableLabel {
+            get {
+                return ResourceManager.GetString("WB0307_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption).
+        /// </summary>
+        public static string WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes {
+            get {
+                return ResourceManager.GetString("WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes", resourceCulture);
             }
         }
     }

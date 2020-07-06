@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,7 +16,7 @@ namespace WB.UI.Headquarters.Metrics
     public class DashboardStatisticsService : BackgroundService, IDashboardStatisticsService
     {
         private readonly MemoryCache memoryCache;
-        private List<MetricState> state;
+        private ServerStatusResponse state;
         private DateTime lastQuery = DateTime.UtcNow;
         private ManualResetEventSlim gate = new ManualResetEventSlim(false);
 
@@ -49,14 +48,14 @@ namespace WB.UI.Headquarters.Metrics
             });
         }
 
-        public List<MetricState> GetState()
+        public ServerStatusResponse GetState()
         {
             lastQuery = DateTime.UtcNow;
             gate.Set();
             return state;
         }
 
-        async Task<List<MetricState>> CollectMetrics()
+        async Task<ServerStatusResponse> CollectMetrics()
         {
             await MetricsRegistry.Update();
             var result = new List<MetricState>();
@@ -75,11 +74,7 @@ namespace WB.UI.Headquarters.Metrics
             var cacheItemsDiff = RegisterCounter(() => memoryCache?.Count ?? 0);
 
             // request counter change over time per second
-            var requests = RegisterCounter(() =>
-            {
-                var duration = HeadquartersHttpMetricsMiddleware.HttpRequestsDuration;
-                return duration.GetAllLabelValues().Sum(l => duration.WithLabels(l).Count);
-            });
+            var requests = RegisterCounter(() => HeadquartersHttpMetricsMiddleware.HttpRequestsTotal.Value);
 
             // collect all registered counters change over time
             await CollectMetricsDiff(TimeSpan.FromSeconds(2));
@@ -87,49 +82,66 @@ namespace WB.UI.Headquarters.Metrics
             var cpuUsage = await cpuDiff;
             result.Add(new MetricState("CPU Usage", $"{cpuUsage.ToStr("0.##%")} on " +
                     $"{"vCPU".ToQuantity(Environment.ProcessorCount)} " +
-                    $"({(cpuUsage / Environment.ProcessorCount).ToStr("0.##%")} of total)"));
+                    $"({(cpuUsage / Environment.ProcessorCount).ToStr("0.##%")} of total)", 
+                        cpuUsage / Environment.ProcessorCount));
 
-            result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.000")));
+            result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.000"),
+                Process.GetCurrentProcess().WorkingSet64));
 
             var eventsCount = BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("events").Value;
             var eventsSize = BrokenPackagesStatsCollector.DatabaseTableSize.Labels("events").Value.Bytes().Humanize("0.00");
             var interviews = BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("interviewsummaries").Value;
-            result.Add(new MetricState("Events", $"{eventsSize} of {"event".ToQuantity(eventsCount, "N0")} for {"interview".ToQuantity(interviews, "N0")}"));
+            result.Add(new MetricState(
+                "Events", $"{eventsSize} of {"event".ToQuantity(eventsCount, "N0")} for {"interview".ToQuantity(interviews, "N0")}", 
+                eventsCount));
+
+            result.Add(new MetricState(
+                "Database", BrokenPackagesStatsCollector.DatabaseSize.Value.Bytes().Humanize("0.000"),
+                BrokenPackagesStatsCollector.DatabaseSize.Value
+            ));
 
             // web interview
             var connections = CommonMetrics.WebInterviewConnection.GetDiffForLabels(OpenConnectionsLabel, ClosedConnectionsLabel);
-            result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0")));
+            result.Add(new MetricState("Web interview connections", "connection".ToQuantity(connections, "N0"), connections));
 
             // statefull interviews
             var statefulInterviews = (CoreMetrics.StatefullInterviewsCached as Counter).GetDiffForLabels(CacheAddedLabel, CacheRemovedLabel);
 
             result.Add(new MetricState("Statefull interviews in cache", "interview".ToQuantity(statefulInterviews, "N0")
-                    + $" (cached {await interviewsCached:N2} / evicted {await interviewsEvicted:N2} per second)"));
+                    + $" (cached {await interviewsCached:N2} / evicted {await interviewsEvicted:N2} per second)", statefulInterviews));
 
             // exceptions
-            result.Add(new MetricState("Exceptions count", "exception".ToQuantity(CommonMetrics.ExceptionsOccur.Value)));
+            result.Add(new MetricState("Exceptions count", "exception".ToQuantity(CommonMetrics.ExceptionsOccur.Value), CommonMetrics.ExceptionsOccur.Value));
 
             // npgsql
             var idle = CommonMetrics.NpgsqlConnections.GetSummForLabels(IdleDbConnectionsLabel);
             var busy = CommonMetrics.NpgsqlConnections.GetSummForLabels(BusyDbConnectionsLabel);
 
-            result.Add(new MetricState("Database connections", $"Busy: {busy}, Idle: {idle}"));
+            result.Add(new MetricState("Database connections", $"Busy: {busy}, Idle: {idle}", busy));
 
+            
             // ReSharper disable once UseStringInterpolation
+            var readRate = await dataTransferRead;
+            var writeRate = await dataTransferWrite;
+
             result.Add(new MetricState("Database Network usage", string.Format("Read: {0} ({2}), Write: {1} ({3})",
                 CommonMetrics.NpgsqlDataCounter.GetSummForLabels(ReadDbdataLabel).Bytes().Humanize("0.00"),
                 CommonMetrics.NpgsqlDataCounter.GetSummForLabels(WriteDbdataLabel).Bytes().Humanize("0.00"),
-                (await dataTransferRead).Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00"),
-                (await dataTransferWrite).Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00")
-            )));
+                readRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00"),
+                writeRate.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00")
+            ), readRate + writeRate));
 
-            result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s"));
+            result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s", await requests));
 
             await cacheItemsDiff;
 
-            result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)"));
+            result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)", memoryCache.Count));
 
-            return result;
+            return new ServerStatusResponse
+            {
+                LastUpdateTime = DateTime.UtcNow,
+                Metrics = result
+            };
         }
 
         private static readonly string[] OpenConnectionsLabel = { "open" };

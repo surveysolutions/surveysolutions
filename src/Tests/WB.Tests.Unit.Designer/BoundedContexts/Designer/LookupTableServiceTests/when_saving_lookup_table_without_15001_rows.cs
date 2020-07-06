@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
         public void should_throw_ArgumentException()
         {
             fileContent = $"no{_}rowcode{_}column{_end}";
-            for (int i = 0; i < 15001; i++)
+            for (int i = 0; i < 15004; i++)
             {
                 fileContent += $"1{_}2{_}3{_end}";
             }
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             exception = Assert.Throws<ArgumentException>(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
-            exception.Message.Should().Be(string.Format(ExceptionMessages.LookupTables_too_many_rows, 15000));
+            exception.Message.Should().Be(string.Format(ExceptionMessages.LookupTables_too_many_rows, $"{15000:n0}", $"{15004:n0}"));
         }
 
         private static Exception exception;

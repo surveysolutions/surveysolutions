@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -9,10 +11,12 @@ namespace WB.Tests.Integration.SupervisorResourcesTests
         [Test]
         public void should_return_only_dimensions_xmls_from_values_folders()
         {
-            var resources = GetXmlResourcesHavingHardcodedDimensions(@"UI\Supervisor\WB.UI.Supervisor\Resources").ToArray();
+            var resourcesRelativePath = Path.Combine("UI", "Supervisor", "WB.UI.Supervisor", "Resources");
+            var resources = GetXmlResourcesHavingHardcodedDimensions(resourcesRelativePath).ToArray();
 
             resources.Should().OnlyContain(resource =>
-                resource.ToLower().StartsWith("values") && resource.ToLower().Contains("dimensions"));
+                resource.StartsWith("values", StringComparison.OrdinalIgnoreCase) && 
+                resource.Contains("dimensions", StringComparison.CurrentCultureIgnoreCase));
         }
 
 

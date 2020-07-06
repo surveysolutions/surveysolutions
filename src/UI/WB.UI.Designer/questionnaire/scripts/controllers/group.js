@@ -14,7 +14,8 @@
                     description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
-                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser
+                            && !($scope.activeGroup.isCoverPage && !$scope.questionnaire.isCoverPageSupported)) {
                             if ($scope.groupForm.$dirty) {
                                 $scope.saveGroup();
                                 $scope.groupForm.$setPristine();
@@ -31,6 +32,10 @@
                 $scope.activeGroup.isChapter = ($state.params.itemId === $state.params.chapterId);
                 $scope.activeGroup.itemId = $state.params.itemId;
                 $scope.activeGroup.variableName = group.variableName;
+
+                $scope.activeGroup.isCoverPage = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $state.params.itemId, isCover: true }) != null
+                    : false;
 
                 if (!_.isNull($scope.groupForm) && !_.isUndefined($scope.groupForm)) {
                     $scope.groupForm.$setPristine();

@@ -156,18 +156,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return interviewEntityViewModels;
         }
 
-        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId)
+        public IEnumerable<IInterviewEntityViewModel> GetPrefilledEntities(string interviewId, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var tasks = questionnaire
-                .GetPrefilledQuestions()
+                .GetPrefilledEntities()
                 .Select(questionId => this.CreateInterviewEntityViewModel(
                     identity: new Identity(questionId, RosterVector.Empty),
                     entityModelType: GetEntityModelType(new Identity(questionId, RosterVector.Empty), questionnaire, interview),
                     interviewId: interviewId,
-                    navigationState: null));
+                    navigationState: navigationState));
 
             return tasks;
         }

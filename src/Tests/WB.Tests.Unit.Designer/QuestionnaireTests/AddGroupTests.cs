@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void NewAddGroup_When_parent_group_is_not_roster_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
         {
             // arrange
-            var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111112");
             Guid responsibleId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);

@@ -3,7 +3,6 @@ const TabletInfos = () => import( /*  webpackChunkName: "controlpanel" */ './Tab
 const AppUpdates = () => import( /*  webpackChunkName: "controlpanel" */ './AppUpdates')
 const InterviewPackages = () => import( /*  webpackChunkName: "controlpanel" */ './InterviewPackages')
 const ReevaluateInterview = () => import( /*  webpackChunkName: "controlpanel" */ './ReevaluateInterview')
-const Dashboard = () => import( /*  webpackChunkName: "controlpanel" */ './Dashboard')
 
 export default class MapComponent {
     get routes() {
@@ -34,7 +33,7 @@ export default class MapComponent {
                     },
                     {
                         path: '',
-                        component: Dashboard,
+                        component: InterviewPackages,
                     },
                 ],
             },

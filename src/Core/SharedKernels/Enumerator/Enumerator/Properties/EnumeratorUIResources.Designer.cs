@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class EnumeratorUIResources {
@@ -975,6 +975,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headquarters version: {0}.
+        /// </summary>
+        public static string HeadquartersVersion {
+            get {
+                return ResourceManager.GetString("HeadquartersVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No internet access to your server. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
@@ -1044,6 +1053,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string InterviewerFromDifferentTeam {
             get {
                 return ResourceManager.GetString("InterviewerFromDifferentTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer version: {0}.
+        /// </summary>
+        public static string InterviewerVersion {
+            get {
+                return ResourceManager.GetString("InterviewerVersion", resourceCulture);
             }
         }
         
@@ -1597,6 +1615,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Share_to_Title {
             get {
                 return ResourceManager.GetString("Share_to_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor version: {0}.
+        /// </summary>
+        public static string SupervisorVersion {
+            get {
+                return ResourceManager.GetString("SupervisorVersion", resourceCulture);
             }
         }
         

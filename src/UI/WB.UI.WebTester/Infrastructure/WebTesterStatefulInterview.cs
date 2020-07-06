@@ -1,4 +1,5 @@
 ﻿using System;
+using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -18,12 +19,14 @@ namespace WB.UI.WebTester.Infrastructure
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             IInterviewTreeBuilder treeBuilder,
             IQuestionOptionsRepository optionsRepository,
-            IQuestionnaireStorage questionnaireStorage
+            IQuestionnaireStorage questionnaireStorage,
+            IClock clock
             ) 
             : base(
                 substitutionTextFactory, 
                 treeBuilder,
-                optionsRepository
+                optionsRepository,
+                clock
                 )
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;

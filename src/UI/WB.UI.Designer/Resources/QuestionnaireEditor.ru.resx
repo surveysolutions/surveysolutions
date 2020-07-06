@@ -736,6 +736,9 @@
   <data name="HelpAttachmentName" xml:space="preserve">
     <value>Имя файла вложения, которое будет отображено в тексте.</value>
   </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>Секция с индентифицирующими вопросами которые так же отображаются на досках супервизора и интервьюера.</value>
+  </data>
   <data name="HelpTitles" xml:space="preserve">
     <value>Имена строк.</value>
   </data>

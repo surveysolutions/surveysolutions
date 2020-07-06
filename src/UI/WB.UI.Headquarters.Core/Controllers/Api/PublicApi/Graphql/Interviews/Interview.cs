@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<NonNullType<BooleanType>>();
             descriptor.Field(x => x.SupervisorNameLowerCase)
                 .Description("Lowercased version of supervisor login who is responsible for interview")
-                .Type<NonNullType<StringType>>();
+                .Type<StringType>();
 
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
                   .Description("Identifier for the assignment to which this interview belongs");

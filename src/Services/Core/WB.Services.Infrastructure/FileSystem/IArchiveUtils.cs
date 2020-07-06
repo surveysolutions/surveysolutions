@@ -23,13 +23,13 @@ namespace WB.Services.Infrastructure.FileSystem
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
-        IZipArchive CreateArchive(Stream outputStream, string password, System.IO.Compression.CompressionLevel compressionLevel);
+        IZipArchive CreateArchive(Stream outputStream, string? password, System.IO.Compression.CompressionLevel compressionLevel);
         void ZipDirectory(string exportTempDirectoryPath, string archiveName, string archivePassword, IProgress<int> exportProgress);
 
         Task ZipDirectoryAsync(string exportTempDirectoryPath, string archiveName,
-            string archivePassword,
+            string? archivePassword,
             IProgress<int> exportProgress,
             CancellationToken token = default);
-        void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = null);
+        void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = "");
     }
 }

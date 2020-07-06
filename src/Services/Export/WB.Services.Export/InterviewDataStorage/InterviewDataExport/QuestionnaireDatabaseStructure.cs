@@ -106,14 +106,17 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
             foreach (var @group in allGroups)
             {
-                Group currentLevel = @group;
-                while (true)
+                Group? currentLevel = @group;
+                while (currentLevel != null)
                 {
                     if (currentLevel is Group roster && roster.IsRoster || currentLevel is QuestionnaireDocument)
                         break;
 
                     currentLevel = currentLevel.GetParent() as Group;
                 }
+
+                if(currentLevel == null)
+                    throw new InvalidOperationException("Invalid structure. Parent was not found.");
 
                 if (!databaseTableMap.ContainsKey(currentLevel.PublicKey))
                 {

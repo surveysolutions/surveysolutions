@@ -46,10 +46,11 @@ namespace WB.UI.Supervisor.Services.Implementation
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
         {
             this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
-            return this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(
+            return this.navigationService.Navigate<SupervisorInterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
-                    InterviewId = interviewId
+                    InterviewId = interviewId,
+                    NavigationIdentity = NavigationIdentity.CreateForCoverScreen()
                 });
         }
 
