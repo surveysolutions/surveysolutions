@@ -165,6 +165,9 @@ export default {
     methods: {
         reload: debounce(function() {
             if (this.table != null) {
+                if (this.selectable) {
+                    $('#check-all').prop('checked', false)
+                }
                 this.table.rows().deselect()
                 this.table.draw()
             }
