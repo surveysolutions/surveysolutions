@@ -141,6 +141,7 @@ namespace WB.Services.Export.Host
                         c.AddJsonFile($"appsettings.Cloud.json", true);
                         c.AddIniFile($"appsettings.Cloud.ini", true);
 
+                        c.AddIniFile($"appsettings.Development.ini", true);
                         c.AddJsonFile($"appsettings.Production.json", true);
                         c.AddIniFile($"appsettings.Production.ini", true);
 

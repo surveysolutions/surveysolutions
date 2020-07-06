@@ -394,6 +394,15 @@ for further instructions</value>
   <data name="UpgradeRequired" xml:space="preserve">
     <value>New version of application was released. Please, update the application</value>
   </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Headquarters version: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Supervisor version: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Interviewer version: {0}</value>
+  </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
     <value>User authentication error</value>
   </data>

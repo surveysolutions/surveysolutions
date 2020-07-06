@@ -313,7 +313,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 switch (response.Reason)
                 {
                     case SyncDeclineReason.UnexpectedClientVersion :
-                        throw new SynchronizationException(SynchronizationExceptionType.UpgradeRequired);
+                        var exception = new SynchronizationException(SynchronizationExceptionType.UpgradeRequired);
+                        exception.Data["target-version"] = response.SupervisorVersion;
+                        throw exception;
                     case SyncDeclineReason.NotATeamMember :
                         throw new SynchronizationException(SynchronizationExceptionType.InterviewerFromDifferentTeam);
                     case SyncDeclineReason.InvalidPassword:

@@ -376,6 +376,15 @@
   <data name="UpgradeRequired" xml:space="preserve">
     <value>Выпущена новая версия приложения. Обновите приложение, пожалуйста</value>
   </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Версия хедквотера: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Версия супервизора: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Версия интервьювера: {0}</value>
+  </data>
   <data name="UnexpectedException" xml:space="preserve">
     <value>Неизвестная ошибка</value>
   </data>

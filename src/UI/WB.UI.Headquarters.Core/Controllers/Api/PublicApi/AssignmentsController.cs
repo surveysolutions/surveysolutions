@@ -14,7 +14,8 @@ using Microsoft.AspNetCore.Mvc;
  using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
  using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Services;
+ using WB.Core.BoundedContexts.Headquarters.Invitations;
+ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users;
  using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -56,6 +57,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IInvitationService invitationService;
+        private readonly IWebInterviewLinkProvider interviewLinkProvider;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -70,7 +73,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IUnitOfWork unitOfWork,
             IUserViewFactory userViewFactory,
             IAssignmentsImportService assignmentsImportService,
-            ISerializer serializer)
+            ISerializer serializer, IInvitationService invitationService, IWebInterviewLinkProvider interviewLinkProvider)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -85,6 +88,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.userViewFactory = userViewFactory;
             this.assignmentsImportService = assignmentsImportService;
             this.serializer = serializer;
+            this.invitationService = invitationService;
+            this.interviewLinkProvider = interviewLinkProvider;
         }
 
         /// <summary>
@@ -190,7 +195,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
         //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public ActionResult<CreateAssignmentResult> Create([FromBody] CreateAssignmentApiRequest createItem)
+        public ActionResult<CreateAssignmentResult> Create(
+            [FromBody] CreateAssignmentApiRequest createItem)
         {
             if (createItem == null) return StatusCode(StatusCodes.Status400BadRequest, "Bad assignment info");
             
@@ -255,10 +261,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             
             var assignment = this.assignmentsStorage.GetAssignment(assignmentId);
 
-            return new CreateAssignmentResult
+            var result = new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment)
             };
+
+            if (assignment?.WebMode == true)
+            {
+                var invitation = this.invitationService.GetInvitationByAssignmentId(assignment.Id);
+
+                if (invitation != null)
+                {
+                    result.WebInterviewLink = this.interviewLinkProvider.WebInterviewStartLink(invitation);
+                }
+            }
+
+            return result;
         }
 
         public QuestionType[] NotPermittedQuestionTypes { get; set; } = { QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio };
@@ -689,12 +707,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             public Identity QuestionIdentity { get; set; }
             public string Variable { get; set; }
 
-            public QuestionType QuestionType { get; set; }
+            public QuestionType? QuestionType { get; set; }
         }
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
         {
-            var answer = new AssignmentAnswer {Source = item};
+            var answer = new AssignmentAnswer {Source = item, QuestionType = null};
 
             if (!string.IsNullOrEmpty(item.Identity) && Identity.TryParse(item.Identity, out Identity identity))
             {

@@ -6,20 +6,21 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Domain;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
     public class ExportServiceVersionCheck : IHealthCheck
     {
-        private readonly IExportServiceApi exportServiceApi;
         private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IInScopeExecutor scope;
 
-        public ExportServiceVersionCheck(IOptions<DataExportOptions> exportOptions,
-            IExportServiceApi exportServiceApi)
+        public ExportServiceVersionCheck(
+            IOptions<DataExportOptions> exportOptions, IInScopeExecutor scope)
         {
             this.exportOptions = exportOptions;
-            this.exportServiceApi = exportServiceApi;
+            this.scope = scope;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
@@ -27,8 +28,12 @@ namespace WB.UI.Headquarters.HealthChecks
             var uri = this.exportOptions.Value.ExportServiceUrl + "/.version";
             try
             {
-                var version = await this.exportServiceApi.Version();
-                return HealthCheckResult.Healthy(Diagnostics.export_service_check_Healthy.FormatString(uri, version));
+                return await scope.ExecuteAsync(async sl =>
+                {
+                    var api = sl.GetInstance<IExportServiceApi>();
+                    var version = await api.Version();
+                    return HealthCheckResult.Healthy(Diagnostics.export_service_check_Healthy.FormatString(uri, version));
+                });
             }
             catch (Exception e)
             {

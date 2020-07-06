@@ -106,6 +106,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                         sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(IsSectionVisible);
+                        sidebarPanel.IsDisabled = g.IsDisabled();
                     });
                 }
             }
