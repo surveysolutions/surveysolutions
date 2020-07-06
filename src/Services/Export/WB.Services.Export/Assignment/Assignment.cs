@@ -10,7 +10,7 @@ namespace WB.Services.Export.Assignment
         public int? Quantity { get; set; }
         public bool AudioRecording { get; set; }
         public bool? WebMode { get; set; }
-        public string Comment { get; set; }
-        public string QuestionnaireId { get; set; }
+        public string? Comment { get; set; }
+        public string? QuestionnaireId { get; set; }
     }
 }

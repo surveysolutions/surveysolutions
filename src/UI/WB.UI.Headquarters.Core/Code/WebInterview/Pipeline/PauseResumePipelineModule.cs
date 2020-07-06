@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 
@@ -10,45 +11,45 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
 {
     public class PauseResumePipelineModule : IPipelineModule
     {
-        private readonly IPauseResumeQueue pauseResumeQueue;
+        private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
 
-        public PauseResumePipelineModule(IPauseResumeQueue pauseResumeQueue, IAuthorizedUser authorizedUser)
+        public PauseResumePipelineModule(ICommandService commandService, IAuthorizedUser authorizedUser)
         {
-            this.pauseResumeQueue = pauseResumeQueue;
+            this.commandService = commandService;
             this.authorizedUser = authorizedUser;
         }
 
-        public Task OnConnected(Hub hub)
+        public async Task OnConnected(Hub hub)
         {
             var interviewId = hub.GetInterviewId();
 
             if (authorizedUser.IsInterviewer)
             {
-                pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id));
+                await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id))
+                    .ConfigureAwait(false);
             }
             else if (authorizedUser.IsSupervisor)
             {
-                pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id));
+                await commandService.ExecuteAsync(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id))
+                    .ConfigureAwait(false);
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task OnDisconnected(Hub hub, Exception exception)
+        public async Task OnDisconnected(Hub hub, Exception exception)
         {
             var interviewId = hub.GetInterviewId();
 
             if (authorizedUser.IsInterviewer)
             {
-                pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(interviewId, this.authorizedUser.Id));
+                await commandService.ExecuteAsync(new PauseInterviewCommand(interviewId, this.authorizedUser.Id))
+                    .ConfigureAwait(false);
             }
             else if (authorizedUser.IsSupervisor)
             {
-                pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id));
+                await commandService.ExecuteAsync(new CloseInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id))
+                    .ConfigureAwait(false);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

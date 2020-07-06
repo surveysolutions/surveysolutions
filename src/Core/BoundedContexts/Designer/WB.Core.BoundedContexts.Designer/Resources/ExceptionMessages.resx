@@ -145,7 +145,7 @@
     <value>Too many columns in uploaded file. Max columns count is {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Max rows count limit ({0} rows) was exceeded.</value>
+    <value>Lookup table contains {1} rows, which exceeds the limit on the number of rows in a lookup table ({0} rows).</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Macro with such is is already exist.</value>
@@ -206,6 +206,19 @@
   </data>
   <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
     <value>Last existing section can not be removed from questionnaire</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Cover section can not be removed from questionnaire</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Cover section must be first section in questionnaire</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
+    <value>Cover section can contain only questions and static texts</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>It is readonly Cover section. You can not edit or re-order questions in it.</value>
+
   </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>Couldn't remove user, because it doesn't exist in share list</value>

@@ -971,6 +971,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HelpAttachmentName" xml:space="preserve">
     <value>The name of attachment file that will be displayed.</value>
   </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.</value>
+  </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
   </data>

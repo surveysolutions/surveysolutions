@@ -4,15 +4,19 @@
         <div class="panel-heading"
             role="tab">
             <h3 class="panel-title"
-                :class="titleCss">
+                :class="titleCss"
+                :disabled="isDisabled">
                 <button class="btn btn-link btn-plus"
                     v-if="hasChild"
                     :class="{collapsed: isCollapsed}"
+                    :disabled="isDisabled"
                     type="button"
                     @click="toggle">
                     <span></span>
                 </button>
                 <router-link :to="to"
+                    :disabled="isDisabled"
+                    :class="{'disabled':isDisabled}"
                     v-if="this.panel"
                     v-html="title"></router-link>
             </h3>
@@ -70,10 +74,18 @@ export default {
                 return this.panel.to
             }
 
+            var coverPageId = this.$config.coverPageId != undefined ? this.$config.coverPageId : this.$config.model.coverPageId
+            if (coverPageId && this.panel.id == coverPageId) {
+                return { name: 'cover', params: { sectionId: this.panel.id } }
+            }
+
             return { name: 'section', params: { sectionId: this.panel.id } }
         },
         isCollapsed() {
             return this.panel.collapsed
+        },
+        isDisabled() {
+            return this.panel.isDisabled
         },
         hasChild() {
             return this.panel.hasChildren
@@ -90,6 +102,7 @@ export default {
         },
         titleCss() {
             return [{
+                disabled:this.panel.isDisabled,
                 current: this.panel.current,
                 active: this.isActive,
                 complete: this.panel.status === GroupStatus.Completed && !this.hasError ,

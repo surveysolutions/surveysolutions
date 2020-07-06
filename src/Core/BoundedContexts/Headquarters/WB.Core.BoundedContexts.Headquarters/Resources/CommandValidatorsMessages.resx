@@ -126,4 +126,7 @@
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Only the responsible supervisor for this assignment can answer its supervisor's questions</value>
   </data>
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>An assignment for web interview must have an interviewer as responsible</value>
+  </data>
 </root>

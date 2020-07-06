@@ -30,7 +30,8 @@
                     description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
-                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser
+                            && !($scope.activeQuestion.parentIsCover && !$scope.questionnaire.isCoverPageSupported)) {
                             if ($scope.questionForm.$dirty) {
                                 $scope.saveQuestion();
                                 $scope.questionForm.$setPristine();
@@ -90,7 +91,7 @@
                 $scope.activeQuestion.defaultDate = question.defaultDate;
                 $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
 
-                var options = question.options || [];
+                var options = question.options || [];  
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
                 });
@@ -122,6 +123,14 @@
 
                 $scope.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
                 $scope.activeQuestion.categoriesId = question.categoriesId;
+
+                $scope.activeQuestion.parentIsCover = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
+                    : false;
+                $scope.activeQuestion.isReadOnly = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isReadOnly: true }) != null
+                    : false;
+
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
@@ -220,6 +229,7 @@
                                             if (confirmResult === 'ok') {
                                                 $scope.activeQuestion.options = selectedClassification.categories;
                                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                                markFormAsChanged();
                                             }
                                         });
                                     } else {
@@ -231,6 +241,7 @@
                                         $scope.activeQuestion.isFilteredCombobox = true;
                                         $scope.activeQuestion.options = selectedClassification.categories;
                                         $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                        markFormAsChanged();
                                     }
                                 } else {
                                     if ($scope.activeQuestion.isFilteredCombobox) {
@@ -241,7 +252,7 @@
                                     }
                                     $scope.activeQuestion.options = selectedClassification.categories;
                                     $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
-
+                                    markFormAsChanged();
                                 }
                             };
 
@@ -804,8 +815,10 @@
             };
 
             $scope.doesQuestionSupportEnablementConditions = function () {
-                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
-                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
+                return $scope.activeQuestion
+                    && ($scope.activeQuestion.questionScope != 'Identifying')
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId)
+                    && !$scope.activeQuestion.parentIsCover;
             };
 
             $scope.isIntegerChange = function () {

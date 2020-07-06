@@ -62,10 +62,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
-
             var assignmentRows = new List<PreloadingAssignmentRow>();
+            var assignmentsRows = this.assignmentsImportFileConverter.GetAssignmentRows(file, questionnaire);
 
-            foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(file, questionnaire))
+            foreach (var assignmentRow in assignmentsRows)
             {
                 foreach (var answerError in this.verifier.VerifyRowValues(assignmentRow, questionnaire))
                 {

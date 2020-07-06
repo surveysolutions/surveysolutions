@@ -229,7 +229,7 @@
     <value>Skedari i ngarkuar ka shumë kolona. Numri maksimal i kolonave është {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Kufiri i numrit maksimal të rreshtave prej ({0} rreshtash) u tejkalua.</value>
+    <value>Numri i linjave: {1}.Kufiri i numrit maksimal të rreshtave prej ({0} rreshtash) u tejkalua.</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Makroja me këtë is is ekziston tashmë.</value>

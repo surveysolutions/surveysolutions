@@ -64,6 +64,16 @@
 					a{
 						color: $green;
 					}
+                }
+                &.disabled {
+					.btn-plus, a{
+						&:before, &:after{
+							background-color: $gray_text;
+						}
+					}
+					a{
+						color: $gray_text;
+					}
 				}
 			} 
 			.active, &:hover, &:focus{ 

@@ -33,6 +33,10 @@ namespace WB.Services.Export.Services.Processing
         {
             var questionnaireId = settings.QuestionnaireId;
             var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
+
+            if (questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
+
             var variableName = questionnaire.VariableName ?? questionnaire.Id;
 
             if (TryParseQuestionnaireVersion(questionnaireId, out var version))
@@ -53,11 +57,11 @@ namespace WB.Services.Export.Services.Processing
                 return true;
             }
 
-            version = null;
+            version = string.Empty;
             return false;
         }
 
-        public async Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string withQuestionnaireName = null)
+        public async Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string withQuestionnaireName = "")
         {
             var statusSuffix = exportSettings.Status == null ? "All" : exportSettings.Status.ToString();
 
@@ -71,6 +75,8 @@ namespace WB.Services.Export.Services.Processing
             {
                 var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(exportSettings.QuestionnaireId,
                         exportSettings.Translation);
+                if (questionnaire == null)
+                    throw new InvalidOperationException("questionnaire must be not null.");
                 var translation = questionnaire.Translations.First(x => x.Id == exportSettings.Translation);
                 translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
             }

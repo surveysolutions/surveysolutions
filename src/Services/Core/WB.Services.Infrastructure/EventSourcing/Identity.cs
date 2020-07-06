@@ -31,7 +31,9 @@ namespace WB.Services.Infrastructure.EventSourcing
         public RosterVector RosterVector { get; private set; }
 
         // ReSharper disable once UnusedMember.Local # used by NHibernate
+#pragma warning disable 8618
         public Identity() { }
+#pragma warning restore 8618
 
         public Identity(Guid id, RosterVector rosterVector)
         {
@@ -54,12 +56,12 @@ namespace WB.Services.Infrastructure.EventSourcing
 
         public bool Equals(Guid id, RosterVector rosterVector, int length) => id == this.Id && this.RosterVector.Identical(rosterVector, length);
 
-        public static bool operator ==(Identity a, Identity b)
+        public static bool operator ==(Identity? a, Identity? b)
         {
             if (ReferenceEquals(a, b))
                 return true;
 
-            if (((object)a == null) || ((object)b == null))
+            if (((object?)a == null) || ((object?)b == null))
                 return false;
 
             return a.Equals(b);

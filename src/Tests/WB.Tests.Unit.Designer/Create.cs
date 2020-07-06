@@ -753,6 +753,15 @@ namespace WB.Tests.Unit.Designer
 
             return result;
         }
+        
+        public static QuestionnaireDocument QuestionnaireDocumentWithCoverPage(Guid? questionnaireId = null, Attachment[] attachments = null, 
+            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
+        {
+            var coverId = Guid.NewGuid();
+            var document = QuestionnaireDocumentWithOneChapter(questionnaireId, coverId, attachments, translations, macros, children);
+            document.CoverPageSectionId = coverId;
+            return document;
+        }
 
         public static QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(
             IMacrosSubstitutionService macrosSubstitutionService = null,

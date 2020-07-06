@@ -23,6 +23,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -39,6 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
 
+        private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string TempFolderName = "TempMapsData";
         private const string MapsFolderName = "MapsData";
         private readonly string path;
@@ -194,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     unzippedFile = this.archiveUtils.GetFileFromArchive(tempFile, $"{mapName}.mmap");
                                     jsonObject = this.serializer.Deserialize<dynamic>(Encoding.UTF8.GetString(unzippedFile.Bytes));
 
-                                    item.Wkid = jsonObject.map.spatialReference.wkid;
+                                    item.Wkid = WGS84Wkid;
 
                                     var extent = jsonObject.item.extent;
 
@@ -208,8 +210,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                     {
                                         var layer = layers[0];
 
-                                        item.MaxScale = layer.maxScale;
-                                        item.MinScale = layer.minScale;
+                                        item.MaxScale = layer.maxScale ?? 0;
+                                        item.MinScale = layer.minScale ?? 0;
                                     }
 
                                 }
@@ -226,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
                             this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
                                 fullPath, valueGdalHome);
-                            var startInfo = Command.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, "gdalinfo")
+                            var startInfo = ConsoleCommand.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, "gdalinfo")
                                 , $"{fullPath} -json");
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
