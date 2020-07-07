@@ -588,7 +588,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Interviews</value>
   </data>
   <data name="MapDashboard_Disclaimer" xml:space="preserve">
-    <value>Shown only items with coordinates</value>
+    <value>only items with known coordinates are shown</value>
   </data>
   <data name="AreaMap_Close" xml:space="preserve">
     <value>Close</value>
