@@ -175,7 +175,7 @@
           android:textSize="30dp"
           local:MvxItemTemplate="@layout/item_spinner"
           local:MvxDropDownItemTemplate="@layout/item_spinnerdropdown"
-          local:MvxBind="ItemsSource Questionnaires; SelectedItem SelectedQuestionnaire; HandleItemSelected QuestionnaireSelectedCommand"/>
+          local:MvxBind="ItemsSource Questionnaires; SelectedItem SelectedQuestionnaire; HandleItemSelected QuestionnaireSelectedCommand; Enabled Or(ShowAssignments, ShowInterviews)"/>
 
         <Space
             android:layout_width="0dp"
