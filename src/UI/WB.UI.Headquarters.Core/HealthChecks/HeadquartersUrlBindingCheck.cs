@@ -28,7 +28,8 @@ namespace WB.UI.Headquarters.HealthChecks
 
             if (requestUrl.StartsWith(baseUrl))
             {
-                return Task.FromResult(HealthCheckResult.Healthy(Diagnostics.hq_baseurl_check_Healthy));
+                return Task.FromResult(HealthCheckResult.Healthy(
+                    Diagnostics.hq_baseurl_check_Healthy.FormatString(baseUrl)));
             }
 
             return Task.FromResult(HealthCheckResult.Degraded(
