@@ -147,7 +147,7 @@ export default {
             return this.info.validity && this.info.validity.isValid === false
         },
         coverStatusClass() {
-            if (this.info) {
+            if (this.$config.coverPageId) {
                 return [
                     {
                         'complete-section'  : !this.hasBrokenPackage && this.info.status == GroupStatus.Completed && !this.hasError,

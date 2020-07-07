@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
@@ -26,11 +28,12 @@ namespace WB.UI.Headquarters.HealthChecks
             if (unexpected > 0)
             {
                 return Task.FromResult(
-                    HealthCheckResult.Degraded($"There is {unexpected} Unexpected broken packages detected", data: new Dictionary<string, object>
-                    {
-                        ["url"] = linkGenerator.GetPathByAction(this.contextAccessor.HttpContext, 
-                            "InterviewPackages", "ControlPanel")
-                    }));
+                    HealthCheckResult.Degraded(Diagnostics.UnexpectedBrokenPackages.FormatString(unexpected),
+                        data: new Dictionary<string, object>
+                        {
+                            ["url"] = linkGenerator.GetPathByAction(this.contextAccessor.HttpContext,
+                                "InterviewPackages", "ControlPanel")
+                        }));
             }
 
             return Task.FromResult(HealthCheckResult.Healthy("There is no Unexpected packages detected"));

@@ -869,6 +869,9 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Show Password</value>
+  </data>
   <data name="AuthenticatorCode" xml:space="preserve">
     <value>Authenticator code</value>
   </data>
@@ -1414,6 +1417,9 @@
   </data>
   <data name="Configuration" xml:space="preserve">
     <value>Configuration</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
   </data>
   <data name="AppUpdates" xml:space="preserve">
     <value>Apk infos</value>

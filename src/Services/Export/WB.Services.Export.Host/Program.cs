@@ -12,8 +12,6 @@ using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using Serilog.Exceptions;
-using Serilog.Formatting.Compact;
 using WB.Infrastructure.AspNetCore;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Infrastructure.Logging;
@@ -64,6 +62,7 @@ namespace WB.Services.Export.Host
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             var connectionString = GetConnectionString(configuration);
+
             if(string.IsNullOrWhiteSpace(connectionString))
                 throw new InvalidOperationException("Connection string was not found.");
 
@@ -71,7 +70,7 @@ namespace WB.Services.Export.Host
                 .ReadFrom.Configuration(configuration)
                 .ConfigureSurveySolutionsLogging(Directory.GetCurrentDirectory(), "export-service")
                 .Enrich.WithProperty("workerId", "root")
-                .WriteTo.Postgres(connectionString, LogEventLevel.Error);
+                .WriteTo.Postgres(connectionString);
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
             if (!string.IsNullOrWhiteSpace(hook))
@@ -132,12 +131,17 @@ namespace WB.Services.Export.Host
                     web.ConfigureAppConfiguration(c =>
                     {
                         c.AddIniFile("appsettings.ini", false, true);
+
+                        c.AddIniFile($"appsettings.DEV_DEFAULTS.ini", true);
+
+
                         c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                         c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
 
                         c.AddJsonFile($"appsettings.Cloud.json", true);
                         c.AddIniFile($"appsettings.Cloud.ini", true);
 
+                        c.AddIniFile($"appsettings.Development.ini", true);
                         c.AddJsonFile($"appsettings.Production.json", true);
                         c.AddIniFile($"appsettings.Production.ini", true);
 

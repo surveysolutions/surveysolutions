@@ -308,6 +308,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool Current { get; set; }
         public bool IsRoster { get; set; }
         public bool HasCustomRosterTitle { get; set; }
+        public bool IsDisabled { get; set; }
     }
 
     public class DropdownItem

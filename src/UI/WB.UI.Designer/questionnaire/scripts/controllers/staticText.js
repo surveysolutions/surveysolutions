@@ -44,10 +44,6 @@
                 $scope.activeStaticText.hideIfDisabled = result.hideIfDisabled;
                 $scope.activeStaticText.validationConditions = result.validationConditions;
 
-                $scope.activeStaticText.parentIsCover = $scope.questionnaire
-                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
-                    : false;
-
                 if (!_.isNull($scope.staticTextForm) && !_.isUndefined($scope.staticTextForm)) {
                     $scope.staticTextForm.$setPristine();
                 }
@@ -138,6 +134,17 @@
             $scope.cancelStaticText = function () {
                 var temp = angular.copy($scope.initialStaticText);
                 dataBind(temp);
+            };
+
+            $scope.doesQuestionSupportEnablementConditions = function () {
+                return $scope.activeStaticText
+                    && $scope.parentIsCover() === false;
+            };
+            
+            $scope.parentIsCover = function () {
+                return $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
+                    : null;
             };
 
             $scope.loadStaticText();

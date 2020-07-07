@@ -95,6 +95,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Diagnostics.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Diagnostics.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\FieldsAndValidations.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
@@ -110,6 +114,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Diagnostics.resx">
+      <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
       <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
     </EmbeddedResource>

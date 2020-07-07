@@ -32,6 +32,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                             compositeValue.Values.ForEach(x => x.VariableOrCodeOrPropertyName = x.VariableOrCodeOrPropertyName.Replace("n", "-"));
                             return ToAssignmentCategoricalMultiAnswer(compositeValue);
                         }
+                    case AnswerType.RosterVectorArray:
+                    {
+                        return new AssignmentAnswers()
+                        {
+                            VariableName = compositeValue.VariableOrCodeOrPropertyName, 
+                            Values = compositeValue.Values.Select(x => new AssignmentAnswer()
+                            {
+                                Value = x.Value,
+                                Column = x.Column
+                            } ).ToArray(),
+                        };
+                    }
                 }
             }
 
