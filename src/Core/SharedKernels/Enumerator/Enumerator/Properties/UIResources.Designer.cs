@@ -1350,7 +1350,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shown only items with coordinates.
+        ///   Looks up a localized string similar to only items with known coordinates are shown.
         /// </summary>
         public static string MapDashboard_Disclaimer {
             get {

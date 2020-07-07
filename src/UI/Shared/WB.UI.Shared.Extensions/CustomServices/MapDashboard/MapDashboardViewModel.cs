@@ -93,19 +93,32 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
         public MapView MapView { get; set; }
 
+        private static string LastMap;
+
         public override async Task Initialize()
         {
             await base.Initialize();
+
             try
             {
                 var localMaps = this.mapService.GetAvailableMaps(true);
                 var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+
+                this.Map = new Map(await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false));
+
+                MapDescription firstLocal = null;
+                if (!string.IsNullOrEmpty(LastMap))
+                {
+                    firstLocal = localMaps.FirstOrDefault(x => x.MapName == LastMap);
+                }
+
+                firstLocal ??= localMaps.FirstOrDefault(x => x.MapType == MapType.LocalFile);
+                
+                var firstMap = firstLocal ?? defaultMap;
+
                 localMaps.Add(defaultMap);
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
-                this.SelectedMap = defaultMap.MapName;
-
-                Basemap baseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false);
-                this.Map = new Map(baseMap);
+                this.SelectedMap = firstMap.MapName;
 
                 this.GraphicsOverlays.Add(graphicsOverlay);
             }
@@ -125,18 +138,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
             this.Map.Loaded += async delegate (object sender, EventArgs e)
             {
+                CollectQuestionnaires();
                 await UpdateBaseMap().ConfigureAwait(false);
                 await RefreshMarkers();
             };
 
             PropertyChanged += OnPropertyChanged;
-
-            CollectQuestionnaires();
         }
 
         private void CollectQuestionnaires()
         {
-            SelectedQuestionnaire = null;
+            SelectedQuestionnaire = AllQuestionnaireDefault;
 
             List<QuestionnaireItem> result = new List<QuestionnaireItem>();
 
@@ -162,14 +174,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 );
             }
 
-            Questionnaires = new MvxObservableCollection<QuestionnaireItem>(
+            var questionnairesList = 
                 result
                     .GroupBy(p => p.Title)
                     .Select(g => g.First())
                     .OrderBy(s => s.Title)
-                    .ToList());
+                    .ToList();
+
+            questionnairesList.Add(AllQuestionnaireDefault);
+            Questionnaires = new MvxObservableCollection<QuestionnaireItem>(questionnairesList);
         }
 
+        private static readonly QuestionnaireItem AllQuestionnaireDefault = new QuestionnaireItem("", "All");
 
         public MvxObservableCollection<QuestionnaireItem> questionnaires = new MvxObservableCollection<QuestionnaireItem>();
         public MvxObservableCollection<QuestionnaireItem> Questionnaires
@@ -178,7 +194,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             set => this.RaiseAndSetIfChanged(ref this.questionnaires, value);
         }
 
-        private QuestionnaireItem selectedQuestionnaire;
+        private QuestionnaireItem selectedQuestionnaire = AllQuestionnaireDefault;
         public QuestionnaireItem SelectedQuestionnaire
         {
             get => this.selectedQuestionnaire;
@@ -203,38 +219,58 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             }
         }
 
-        private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+        private readonly GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
         public IMvxCommand RefreshMarkersCommand => new MvxAsyncCommand(async() => await RefreshMarkers());
 
+        private readonly object graphicsOverlayLock = new object ();
         private async Task RefreshMarkers()
         {
-            graphicsOverlay.Graphics.Clear();
-
-            //MapView.DismissCallout();
             await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 MapView.DismissCallout();
             });
 
+            Envelope graphicExtent = null;
+
+            lock (graphicsOverlayLock)
+            {
+                graphicsOverlay.Graphics.Clear();
+
                 if (ShowAssignments)
-            {
-                var assignmentsMarkers = GetAssignmentsMarkers();
-                if (assignmentsMarkers.Count > 0)
                 {
-                    graphicsOverlay.Graphics.AddRange(assignmentsMarkers);
+                    var assignmentsMarkers = GetAssignmentsMarkers();
+                    if (assignmentsMarkers.Count > 0)
+                    {
+                        graphicsOverlay.Graphics.AddRange(assignmentsMarkers);
+                    }
                 }
 
+                if (ShowInterviews)
+                {
+                    var interviewsMarkers = GetInterviewsMarkers();
+                    if (interviewsMarkers.Count > 0)
+                    {
+                        graphicsOverlay.Graphics.AddRange(interviewsMarkers);
+                    }
+                }
+
+                if(graphicsOverlay.Graphics.Count > 0)
+                    graphicExtent = GeometryEngine.CombineExtents(graphicsOverlay.Graphics.Select(graphic => graphic.Geometry));
+
+                if (Map?.Basemap?.BaseLayers[0]?.FullExtent != null && graphicExtent != null)
+                    graphicExtent = GeometryEngine.CombineExtents(Map.Basemap.BaseLayers[0].FullExtent, graphicExtent);
             }
 
-            if (ShowInterviews)
-            {
-                var interviewsMarkers = GetInterviewsMarkers();
-                if (interviewsMarkers.Count > 0)
-                {
-                    graphicsOverlay.Graphics.AddRange(interviewsMarkers);
-                }
-            }
+            //MapView.Map.MinScale = 591657527.591555;
+            //MapView.Map.MaxScale = 0;
+
+            if (MapView.Map?.Basemap?.BaseLayers[0]?.FullExtent != null && graphicExtent != null)
+                await MapView.SetViewpointAsync(
+                    new Viewpoint(MapView.Map.Basemap.BaseLayers.First().FullExtent));
+
+            /*if (graphicExtent != null)
+                await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(3));*/
         }
 
         private List<Graphic> GetInterviewsMarkers()
@@ -242,10 +278,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             var markers = new List<Graphic>();
 
             var filteredInterviews =
-                SelectedQuestionnaire != null
+                !string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId)
                     ? Interviews.Where(x => x.QuestionnaireId == SelectedQuestionnaire.QuestionnaireId)
                         .ToList()
-                : Interviews;
+                    : Interviews;
 
             foreach (var interview in filteredInterviews)
             {
@@ -266,6 +302,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 switch (interview.Status)
                 {
                     case InterviewStatus.Created:
+                    case InterviewStatus.InterviewerAssigned:
                         markerColor = Color.Blue;
                         break;
                     case InterviewStatus.Completed:
@@ -275,9 +312,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         markerColor = Color.Red;
                         break;
                     default:
-                        markerColor = Color.White;
+                        markerColor = Color.Yellow;
                         break;
                 }
+
+                //for contrast
+                markers.Add(new Graphic(point, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22)));
 
                 markers.Add(new Graphic(
                     point,
@@ -289,7 +329,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         new KeyValuePair<string, object>("title", title),
                         new KeyValuePair<string, object>("sub_title", "")
                     },
-                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, markerColor, 20)));
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 18)));
             }
 
             return markers;
@@ -304,7 +344,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             var markers = new List<Graphic>();
 
             var filteredAssignments =
-                SelectedQuestionnaire != null 
+                !string.IsNullOrEmpty(SelectedQuestionnaire?.QuestionnaireId)  
                 ? Assignments.Where(x => x.QuestionnaireId == SelectedQuestionnaire.QuestionnaireId)
                     .ToList()
                 : Assignments;
@@ -349,7 +389,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                             SpatialReferences.Wgs84),
                         Map.SpatialReference);
 
-                Graphic pointGraphic = new Graphic(
+                //contrast
+                markers.Add(new Graphic(point,
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22)));
+
+                markers.Add(new Graphic(
                     point,
                     new[]
                     {
@@ -358,9 +402,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                         new KeyValuePair<string, object>("sub_title", subTitle),
                         new KeyValuePair<string, object>("can_create", canCreateInterview)
                     },
-                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, Color.Gray, 20));
-
-                markers.Add(pointGraphic);
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Blue, 18)));
             }
 
             return markers;
@@ -398,8 +440,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                                 new CalloutDefinition(interviewKey, $"{title}\r\n{subTitle}");
                             
                             myCalloutDefinition.ButtonImage =
-                                await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Green, 25)
-                                    .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
+                                await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Blue, 25)
+                                    .CreateSwatchAsync(30, 30, 96, Color.FromArgb(246,250,251));
                             myCalloutDefinition.OnButtonClick += OnInterviewButtonClick;
                             myCalloutDefinition.Tag = interviewId;
                             
@@ -415,7 +457,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                             {
                                 myCalloutDefinition.ButtonImage =
                                     await new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Blue, 25)
-                                        .CreateSwatchAsync(30, 30, 96, System.Drawing.Color.White);
+                                        .CreateSwatchAsync(30, 30, 96, Color.FromArgb(246, 250, 251));
                                 myCalloutDefinition.OnButtonClick += OnAssignmentButtonClick;
                                 myCalloutDefinition.Tag = id;
                             }
@@ -491,7 +533,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         public string SelectedMap
         {
             get => this.selectedMap;
-            set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
+            set
+            {
+                LastMap = value;
+                this.RaiseAndSetIfChanged(ref this.selectedMap, value);
+            }
         }
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
