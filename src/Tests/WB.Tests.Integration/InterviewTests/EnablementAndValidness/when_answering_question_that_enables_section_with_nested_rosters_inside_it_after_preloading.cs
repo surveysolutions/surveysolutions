@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             {
                 SetUp.MockedServiceLocator();
 
-                var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId, null,
                     Create.Entity.Group(children: new IComposite[]
                     {
                         Create.Entity.NumericIntegerQuestion(numId, variable: "x1")

@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IAccountListViewFactory, AccountListViewFactory>();
             registry.Bind<IQuestionnaireCompilationVersionService, QuestionnaireCompilationVersionService>();
             registry.Bind<ITranslationsService, TranslationsService>();
+            registry.Bind<IDesignerTranslationService, TranslationsService>();
             registry.Bind<ICategoriesVerifier, CategoriesVerifier>();
             registry.Bind<ICategoriesExtractFactory, CategoriesExtractFactory>();
             registry.Bind<ICategoriesService, CategoriesService>();

@@ -116,6 +116,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
@@ -1231,6 +1232,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
+
+        public QuestionnaireTranslator QuestionnaireTranslator()
+            => new QuestionnaireTranslator();
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler

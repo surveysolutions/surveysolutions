@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
             var questionnaire = Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.Group(children: new IComposite[] 
+                children: Create.Entity.Group(children: new IComposite[] 
                 {
                     Create.Entity.TextListQuestion(questionId: questionId, variable: "list"),
                     Create.Entity.Roster(rosterId: rosterAId,
