@@ -547,6 +547,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (aggregate.QuestionnaireDocument.IsCoverPage(targetParentId))
             {
                 var coverGroup = aggregate.QuestionnaireDocument.Find<IGroup>(targetParentId)!;
+                if (coverGroup == null)
+                    throw new InvalidOperationException($"Entity was not found ({targetParentId}).");
+                
                 foreach (var composite in coverGroup.Children)
                 {
                     if (composite is IQuestion question)
