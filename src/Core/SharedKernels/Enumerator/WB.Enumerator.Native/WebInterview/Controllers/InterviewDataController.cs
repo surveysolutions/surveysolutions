@@ -81,7 +81,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
 
-            var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
+            var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
 
             return new InterviewInfo
             {

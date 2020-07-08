@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -8,10 +9,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [Route("translations")]
     public class TranslationsController : Controller
     {
-        private readonly ITranslationsService translationsService;
+        private readonly IDesignerTranslationService translationsService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public TranslationsController(ITranslationsService translationsService,
+        public TranslationsController(IDesignerTranslationService translationsService,
             IFileSystemAccessor fileSystemAccessor)
         {
             this.translationsService = translationsService;

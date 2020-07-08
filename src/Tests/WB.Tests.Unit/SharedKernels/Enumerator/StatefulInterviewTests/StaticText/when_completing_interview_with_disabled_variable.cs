@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.Group(children: new List<IComposite>()
+                children: Create.Entity.Group(children: new List<IComposite>()
                 {
                     Create.Entity.Variable(variableIdentity.Id)
                 })));
