@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             Guid prefilledQ4 = Guid.Parse("44444444444444444444444444444444");
 
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(questionnaireId, 
-                Create.Entity.Group(children: new IComposite[]
+                children: Create.Entity.Group(children: new IComposite[]
                 {
                     Create.Entity.TextQuestion(questionId: prefilledQ1, preFilled: true),
                     Create.Entity.TextQuestion(questionId: prefilledQ2, preFilled: true),

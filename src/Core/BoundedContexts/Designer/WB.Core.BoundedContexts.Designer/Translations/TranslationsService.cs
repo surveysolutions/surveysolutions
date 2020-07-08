@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
-    internal class TranslationsService : ITranslationsService
+    internal class TranslationsService : IDesignerTranslationService
     {
         private class TranslationRow
         {
@@ -82,6 +82,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public TranslationFile GetTemplateAsExcelFile(Guid questionnaireId) =>
             this.GetTranslationFile(questionnaireId);
 
+        public bool HasTranslatedTitle(QuestionnaireDocument questionnaire)
+        {
+            var allTranslationIds = questionnaire.Translations.Select(x => x.Id).ToList();
+
+            var hasTranslatedTitle = this.dbContext.TranslationInstances.Any(x => allTranslationIds.Contains(x.TranslationId) &&
+                                                                                  x.QuestionnaireEntityId == questionnaire.PublicKey);
+            return hasTranslatedTitle;
+        }
+
         private TranslationFile GetTranslationFile(Guid questionnaireId, Guid? translationId = null)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
@@ -126,9 +135,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     throw new InvalidFileException(ExceptionMessages.TranslationWorksheetIsMissing);
 
                 var translationsWithHeaderMap = sheetsWithTranslation.Select(CreateHeaderMap).ToList();
-                var idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
+                Dictionary<Guid, bool> idsOfAllQuestionnaireEntities = questionnaire.Children.TreeToEnumerable(x => x.Children)
                     .ToDictionary(composite => composite.PublicKey, x => x is Group);
-
+                idsOfAllQuestionnaireEntities[questionnaireId] = true;
+                
                 var translationInstances = new List<TranslationInstance>();
                 foreach (var translationWithHeaderMap in translationsWithHeaderMap)
                 {

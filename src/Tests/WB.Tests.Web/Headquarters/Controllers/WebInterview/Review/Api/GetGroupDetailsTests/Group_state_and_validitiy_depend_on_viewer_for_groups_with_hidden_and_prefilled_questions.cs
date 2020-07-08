@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
 
         protected override QuestionnaireDocument GetDocument()
         {
-            return Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
+            return Create.Entity.QuestionnaireDocument(Guid.NewGuid(), null,
                 Create.Entity.Group(SectionA.Id, "Section A", "SecA", children: new IComposite[]
                 {
                     Create.Entity.TextQuestion(QuestionInterviewer.Id,

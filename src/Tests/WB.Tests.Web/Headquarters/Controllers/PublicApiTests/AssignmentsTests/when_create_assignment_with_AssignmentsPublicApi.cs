@@ -89,7 +89,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             var hqUser = Abc.Create.Entity.HqUser();
             
             this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
             {
                 Abc.Create.Entity.TextQuestion(),
                 Abc.Create.Entity.NumericRoster(children: new []
@@ -178,7 +178,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             var hqUser = Abc.Create.Entity.HqUser();
             
             this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
             {
                 Abc.Create.Entity.NumericQuestion(variableName: "dbl"),
                 Abc.Create.Entity.NumericQuestion(variableName: "int", isInteger: true),
@@ -230,7 +230,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
             this.SetupResponsibleUser(hqUser);
             
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
             {
                 GetQuestionByType(questionType, variableName, linked? Guid.NewGuid(): (Guid?) null)
             }));
