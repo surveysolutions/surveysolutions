@@ -46,8 +46,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             BecauseOf();
 
             
-            cells.Cell(3, originalTextColumn).GetString().Should().Be("В скобках символ без графического отобажения ()");
-            cells.Cell(3, translactionColumn).GetString().Should().Be("Here is non-printable char ()");
+            cells.Cell(4, originalTextColumn).GetString().Should().Be("В скобках символ без графического отобажения ()");
+            cells.Cell(4, translactionColumn).GetString().Should().Be("Here is non-printable char ()");
         }
 
         private void BecauseOf()
