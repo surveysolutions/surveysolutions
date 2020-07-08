@@ -58,13 +58,13 @@ namespace WB.Infrastructure.Native.Questionnaire
 
                     IXLWorksheet worksheet = excelPackage.Worksheets.Add(workSheetName);
 
-                    worksheet.Cell("A1").Value = TranslationExcelOptions.EntityIdColumnName;
-                    worksheet.Cell("B1").Value = "Variable";
-                    worksheet.Cell("C1").Value = TranslationExcelOptions.TranslationTypeColumnName;
-                    worksheet.Cell("D1").Value = TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName;
-                    worksheet.Cell("E1").Value = "Original text";
-                    worksheet.Cell("F1").Value = TranslationExcelOptions.TranslationTextColumnName;
-
+                    worksheet.Cell("A1").SetValue(TranslationExcelOptions.EntityIdColumnName);
+                    worksheet.Cell("B1").SetValue("Variable");
+                    worksheet.Cell("C1").SetValue(TranslationExcelOptions.TranslationTypeColumnName);
+                    worksheet.Cell("D1").SetValue(TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName);
+                    worksheet.Cell("E1").SetValue("Original text");
+                    worksheet.Cell("F1").SetValue(TranslationExcelOptions.TranslationTextColumnName);
+                    
                     void FormatCell(string address)
                     {
                         var cell = worksheet.Cell(address);
@@ -85,28 +85,18 @@ namespace WB.Infrastructure.Native.Questionnaire
                         if (string.IsNullOrWhiteSpace(translationRow.OriginalText)) continue;
 
                         currentRowNumber++;
-
-                        worksheet.Cell($"A{currentRowNumber}").Value = translationRow.EntityId;
-                        worksheet.Cell($"A{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Cell($"B{currentRowNumber}").Value = translationRow.Variable;
-                        worksheet.Cell($"B{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Cell($"C{currentRowNumber}").Value = translationRow.Type;
-                        worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Cell($"D{currentRowNumber}").Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
-                        worksheet.Cell($"D{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Cell($"E{currentRowNumber}").Value = CleanUpString(translationRow.OriginalText);
-                        worksheet.Cell($"E{currentRowNumber}").Style.Alignment.WrapText = true;
-                        worksheet.Cell($"F{currentRowNumber}").Value = CleanUpString(translationRow.Translation);
-                        worksheet.Cell($"F{currentRowNumber}").Style.Alignment.WrapText = true;
+                        worksheet.Cell($"A{currentRowNumber}").SetValue(translationRow.EntityId);
+                        worksheet.Cell($"B{currentRowNumber}").SetValue(translationRow.Variable);
+                        worksheet.Cell($"C{currentRowNumber}").SetValue(translationRow.Type);
+                        worksheet.Cell($"D{currentRowNumber}").SetValue(translationRow.OptionValueOrValidationIndexOrFixedRosterId);
+                        worksheet.Cell($"E{currentRowNumber}").SetValue(CleanUpString(translationRow.OriginalText));
+                        worksheet.Cell($"F{currentRowNumber}").SetValue(CleanUpString(translationRow.Translation));
                     }
 
                     for (int i = 1; i <= 5; i++)
                     {
                         LockAndAutofitColumn(worksheet, i);
                     }
-
-                    worksheet.Columns().AdjustToContents();
-                    worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
                 }
 
                 if (excelPackage.Worksheets.Count == 0)
@@ -142,22 +132,24 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private static void LockAndAutofitColumn(IXLWorksheet worksheet, int i)
         {
-            worksheet.Column(i).Style.Protection.Locked = true;
-            worksheet.Column(i).Style.Alignment.WrapText = true;
-            worksheet.Column(i).AdjustToContents();
+            var xlColumn = worksheet.Column(i);
+            xlColumn.Style.Protection.Locked = true;
+            xlColumn.Style.Alignment.WrapText = true;
+            xlColumn.AdjustToContents();
         }
 
         private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
+            yield return GetTranslatedTitle(questionnaire, translation);
+            
             foreach (var entity in questionnaire.Children.TreeToEnumerable(x => x.Children))
             {
                 yield return GetTranslatedTitle(entity, translation);
 
                 var group = entity as IGroup;
                 var question = entity as IQuestion;
-                var validatable = entity as IValidatable;
 
-                if (validatable != null)
+                if (entity is IValidatable validatable)
                     foreach (var translatedValidationMessage in GetTranslatedValidationMessages(validatable, translation))
                         yield return translatedValidationMessage;
 
