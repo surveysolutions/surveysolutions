@@ -89,7 +89,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             var hqUser = Abc.Create.Entity.HqUser();
             
             this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, string.Empty,
+                children: new IComposite[]
             {
                 Abc.Create.Entity.TextQuestion(),
                 Abc.Create.Entity.NumericRoster(children: new []
