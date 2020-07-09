@@ -536,6 +536,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Your location is out of boundaries of the map</value>
   </data>
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Loaded map is outside of visible boundaries</value>
+  </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
   </data>
@@ -589,6 +592,18 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="MapDashboard_Disclaimer" xml:space="preserve">
     <value>only items with known coordinates are shown</value>
+  </data>
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>All questionnaires</value>
+  </data>
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Filters</value>
   </data>
   <data name="AreaMap_Close" xml:space="preserve">
     <value>Close</value>
