@@ -563,6 +563,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
                 /*if (basemap?.BaseLayers[0]?.FullExtent != null)
                     await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
+
+                LastMap = this.SelectedMap;
             }
         }
 
@@ -572,7 +574,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             get => this.selectedMap;
             set
             {
-                LastMap = value;
                 this.RaiseAndSetIfChanged(ref this.selectedMap, value);
             }
         }
