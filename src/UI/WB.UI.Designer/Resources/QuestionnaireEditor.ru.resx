@@ -559,6 +559,9 @@
   <data name="AddSubsection" xml:space="preserve">
     <value>Добавить подсекцию</value>
   </data>
+  <data name="VirtualCoverPage" xml:space="preserve">
+    <value>Виртуальная страница обложки</value>
+  </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Добавить переменную</value>
   </data>
@@ -738,6 +741,11 @@
   </data>
   <data name="HelpCoverPage" xml:space="preserve">
     <value>Секция с индентифицирующими вопросами которые так же отображаются на досках супервизора и интервьюера.</value>
+  </data>
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+    <value>Виртуальная секция с индентифицирующими вопросами из опросника.
+      Вопросы не могут быть изменены в этой секции.
+    </value>
   </data>
   <data name="HelpTitles" xml:space="preserve">
     <value>Имена строк.</value>
