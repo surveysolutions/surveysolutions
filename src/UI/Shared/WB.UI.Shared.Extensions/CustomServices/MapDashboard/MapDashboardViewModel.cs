@@ -555,9 +555,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
                 this.Map.Basemap = basemap;
 
-                if (basemap?.BaseLayers[0]?.FullExtent != null && !GeometryEngine.Intersects(basemap.BaseLayers[0].FullExtent, this.MapView.VisibleArea))
+                if (basemap?.BaseLayers[0]?.FullExtent != null)
                 {
-                    this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
+                    if(!GeometryEngine.Intersects(basemap.BaseLayers[0].FullExtent, GeometryEngine.Project(this.MapView.VisibleArea, basemap.BaseLayers[0].SpatialReference)))
+                        this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
                 }
 
                 /*if (basemap?.BaseLayers[0]?.FullExtent != null)
