@@ -228,7 +228,7 @@
     <div class="form-buttons-holder">
         <div class="pull-left">
             <button type="submit" ng-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" id="edit-chapter-save-button" class="btn btn-lg " ng-class="{ 'btn-primary': questionForm.$dirty }" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid" ng-i18next>Save</button>
-            <button type="button" ng-show="currentChapter.isReadOnly && currentChapter.isCover" id="jump-to-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="navigateToQuestion()" ng-i18next>JumpToEdit</button>
+            <button type="button" ng-show="currentChapter.isReadOnly && currentChapter.isCover" id="jump-to-button" class="btn btn-lg btn-link" unsaved-warning-clear ui-sref="questionnaire.chapter.question({itemId: activeQuestion.itemId, chapterId: activeQuestion.chapterId })" ng-i18next>JumpToEdit</button>
             <button type="reset"  id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
