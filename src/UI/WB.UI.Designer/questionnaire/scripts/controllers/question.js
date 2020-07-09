@@ -831,13 +831,6 @@
                 $scope.activeQuestion.showAsListThreshold = null;
             };
             
-            $scope.navigateToQuestion = function() {
-                $state.go('questionnaire.chapter.question', {
-                    itemId: $scope.activeQuestion.itemId, 
-                    chapterId: $scope.activeQuestion.chapterId 
-                });
-            };
-
             $scope.loadQuestion();
         }
     );
