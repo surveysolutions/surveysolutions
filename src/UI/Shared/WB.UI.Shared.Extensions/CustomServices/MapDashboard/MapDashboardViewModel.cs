@@ -113,15 +113,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
                 this.Map = new Map(await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false));
 
-                MapDescription mapToload = null;
+                MapDescription mapToLoad = null;
                 if (!string.IsNullOrEmpty(LastMap))
                 {
-                    mapToload = localMaps.FirstOrDefault(x => x.MapName == LastMap);
+                    mapToLoad = localMaps.FirstOrDefault(x => x.MapName == LastMap);
                 }
 
-                mapToload ??= localMaps.FirstOrDefault(x => x.MapType == MapType.LocalFile);
+                mapToLoad ??= localMaps.FirstOrDefault(x => x.MapType == MapType.LocalFile);
                 
-                var firstMap = mapToload ?? defaultMap;
+                var firstMap = mapToLoad ?? defaultMap;
 
                 localMaps.Add(defaultMap);
                 this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
@@ -243,7 +243,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             {
                 await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
 
-                Envelope graphicExtent = null;
                 try
                 {
                     lock (graphicsOverlayLock)
@@ -267,29 +266,34 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                                 graphicsOverlay.Graphics.AddRange(interviewsMarkers);
                             }
                         }
-
-                        if (graphicsOverlay.Graphics.Count > 0)
-                        {
-                            EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(
-                                graphicsOverlay.Graphics.Select(graphic => graphic.Geometry)));
-                            eb.Expand(1.1);
-                            graphicExtent = eb.Extent;
-                        }
                     }
 
                     //MapView.Map.MinScale = 591657527.591555;
                     //MapView.Map.MaxScale = 0;
-
-                    if (graphicExtent != null)
-                    {
-                        await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
-                    }
+                    await SetViewExtentToItems();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                     throw;
                 }
+            }
+        }
+
+        private async Task SetViewExtentToItems()
+        {
+            Envelope graphicExtent = null;
+            if (graphicsOverlay.Graphics.Count > 0)
+            {
+                EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(
+                    graphicsOverlay.Graphics.Select(graphic => graphic.Geometry)));
+                eb.Expand(1.1);
+                graphicExtent = eb.Extent;
+            }
+
+            if (graphicExtent != null)
+            {
+                await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
             }
         }
 
@@ -595,6 +599,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             get => this.isLocationServiceSwitchEnabled;
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
+
+        public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
+        {
+            if (this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
+                await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+        });
+
+        public IMvxAsyncCommand ShowAllItemsCommand => new MvxAsyncCommand(async () =>
+        {
+            await SetViewExtentToItems();
+        });
+
 
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
         {
