@@ -1145,6 +1145,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cover is virtual section that shows all identifying questions.
+        ///    Questions cannot be changed under this section.
+        /// </summary>
+        public static string HelpVirtualCoverPage {
+            get {
+                return ResourceManager.GetString("HelpVirtualCoverPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide if disabled.
         /// </summary>
         public static string HideIfDisabled {
@@ -3886,6 +3896,15 @@ namespace WB.UI.Designer.Resources {
         public static string ViewResolvedCommentsCounter_plural {
             get {
                 return ResourceManager.GetString("ViewResolvedCommentsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Virtual cover page.
+        /// </summary>
+        public static string VirtualCoverPage {
+            get {
+                return ResourceManager.GetString("VirtualCoverPage", resourceCulture);
             }
         }
         
