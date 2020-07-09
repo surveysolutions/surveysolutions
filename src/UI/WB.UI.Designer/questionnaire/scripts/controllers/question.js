@@ -206,7 +206,7 @@
                         windowClass: "add-classification-modal dragAndDrop",
                         controller: 'addClassificationCtrl',
                         resolve: {
-                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly || false,
                             hasOptions: $scope.activeQuestion.optionsCount > 0
                         }
                     });
@@ -437,7 +437,7 @@
                         title: $i18next.t('QuestionOpenEditorConfirm'),
                         okButtonTitle: $i18next.t('Save'),
                         cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -446,7 +446,7 @@
                                 var alertInstance = alertService.open({
                                     title: $i18next.t('QuestionOpenEditorSaved'),
                                     okButtonTitle: $i18next.t('Ok'),
-                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                                 });
 
                                 alertInstance.result.then(function(confirmResult) {
@@ -467,7 +467,7 @@
                         title: $i18next.t('QuestionOpenEditorConfirm'),
                         okButtonTitle: $i18next.t('Save'),
                         cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -476,7 +476,7 @@
                                 var alertInstance = alertService.open({
                                     title: $i18next.t('QuestionOpenEditorSaved'),
                                     okButtonTitle: $i18next.t('Ok'),
-                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                                 });
 
                                 alertInstance.result.then(function (confirmResult) {
