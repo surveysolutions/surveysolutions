@@ -13,7 +13,6 @@
                     ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
             <span class="roster-marker" ng-show="item.isRoster" ng-i18next="TreeRoster"></span>
             <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
-            <help key="coverPage" ng-if="currentChapter.isCover" />
         </div>
         <div class="qname-block">
             <div class="conditions-block">
