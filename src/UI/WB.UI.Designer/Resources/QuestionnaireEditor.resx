@@ -1223,6 +1223,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="EditorAddComment" xml:space="preserve">
     <value>Add comment</value>
   </data>
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>Jump to edit</value>
+  </data>
   <data name="CommentEditorResolve" xml:space="preserve">
     <value>Resolve</value>
   </data>
