@@ -539,6 +539,18 @@
   <data name="MapDashboard_Disclaimer" xml:space="preserve">
     <value>Показаны только элементы с координатами</value>
   </data>
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>Все опросники</value>
+  </data>
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Тип</value>
+  </data>
   <data name="AreaMap_Close" xml:space="preserve">
     <value>Закрыть</value>
   </data>
@@ -547,6 +559,9 @@
   </data>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Ваше местоположение вне границ карты</value>
+  </data>
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Загруженая карта расположена вне границ видимой зоны</value>
   </data>
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Выйти из редактора</value>

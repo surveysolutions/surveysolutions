@@ -62,9 +62,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            this.MenuInflater.Inflate(Resource.Menu.map_dashboard, menu);
-
-            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, UIResources.MenuItem_Title_Dashboard);
+            //this.MenuInflater.Inflate(Resource.Menu.map_dashboard, menu);
+            //menu.LocalizeMenuItem(Resource.Id.menu_dashboard, UIResources.MenuItem_Title_Dashboard);
 
             return base.OnCreateOptionsMenu(menu);
         }

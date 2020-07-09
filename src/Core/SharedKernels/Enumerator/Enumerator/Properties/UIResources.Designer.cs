@@ -160,6 +160,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loaded map is outside of visible boundaries.
+        /// </summary>
+        public static string AreaMap_MapIsOutOfVisibleBoundaries {
+            get {
+                return ResourceManager.GetString("AreaMap_MapIsOutOfVisibleBoundaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map.
         /// </summary>
         public static string AreaMap_MapTitle {
@@ -1341,6 +1350,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All questionnaires.
+        /// </summary>
+        public static string MapDashboard_AllQuestionnaires {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string MapDashboard_Assignments {
@@ -1359,11 +1377,38 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string MapDashboard_FiltersTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_FiltersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviews.
         /// </summary>
         public static string MapDashboard_Interviews {
             get {
                 return ResourceManager.GetString("MapDashboard_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string MapDashboard_QuestionnaireTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_QuestionnaireTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string MapDashboard_TypeTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_TypeTitle", resourceCulture);
             }
         }
         
