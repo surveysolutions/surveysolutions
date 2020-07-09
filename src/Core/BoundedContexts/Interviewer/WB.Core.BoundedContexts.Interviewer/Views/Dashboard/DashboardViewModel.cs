@@ -346,6 +346,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         #region Offline synchronization
 
         public IMvxCommand StartOfflineSyncCommand => new MvxCommand(this.StartOfflineSynchronization);
+        public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
+
         public Action OnOfflineSynchronizationStarted;
         private IMapInteractionService mapInteractionService;
 

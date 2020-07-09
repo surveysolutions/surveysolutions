@@ -8,5 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         Task<AreaEditResult> EditAreaAsync(Area area, GeometryType? geometryType);
         Task OpenMapDashboardAsync();
+
+        bool DoesSupportMaps { get; }
     }
 }
