@@ -64,6 +64,8 @@
 
                 $scope.activeQuestion.itemId = $state.params.itemId;
 
+                $scope.activeQuestion.chapterId = question.chapterId;
+
                 $scope.activeQuestion.variable = question.variableName || question.variable;
                 $scope.activeQuestion.variableLabel = question.variableLabel;
                 $scope.activeQuestion.mask = question.mask;
@@ -827,6 +829,13 @@
 
             $scope.showAsListChange = function () {
                 $scope.activeQuestion.showAsListThreshold = null;
+            };
+            
+            $scope.navigateToQuestion = function() {
+                $state.go('questionnaire.chapter.question', {
+                    itemId: $scope.activeQuestion.itemId, 
+                    chapterId: $scope.activeQuestion.chapterId 
+                });
             };
 
             $scope.loadQuestion();

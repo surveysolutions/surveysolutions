@@ -344,6 +344,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 result.QuestionTypeOptions = GetQuestionTypeOptions(document, question);
                 result.AllQuestionScopeOptions = GetQuestionScopeOptions(document);
                 result.GeometryTypeOptions = GeometryTypeOptions;
+                result.ChapterId = questionnaire.GetParentGroupsIds(question).LastOrDefault();
 
                 this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
             }
