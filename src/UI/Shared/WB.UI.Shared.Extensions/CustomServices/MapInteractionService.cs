@@ -60,6 +60,8 @@ namespace WB.UI.Shared.Extensions.CustomServices
             await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel>().ConfigureAwait(false);
         }
 
+        public bool DoesSupportMaps => true;
+
         private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
             bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(

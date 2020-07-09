@@ -11,7 +11,7 @@
         local:showAsAction="ifRoom" />
 
     <item android:id="@+id/menu_map_dashboard"
-          local:showAsAction="never" />
+          local:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_search"
         local:showAsAction="ifRoom" />

@@ -18,5 +18,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             return Task.CompletedTask;
             //throw new NotImplementedException();
         }
+
+        public bool DoesSupportMaps => false;
     }
 }

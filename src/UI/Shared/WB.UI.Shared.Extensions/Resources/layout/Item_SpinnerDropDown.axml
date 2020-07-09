@@ -4,5 +4,8 @@
     android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:ellipsize="marquee"
+    android:ellipsize="end"
+    android:textSize="18dp"
+    android:paddingRight="18dp"
+    android:paddingLeft="18dp"
     local:MvxBind="Text Title;" />
