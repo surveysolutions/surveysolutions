@@ -979,7 +979,8 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Cover is virtual section that shows all identifying questions.
-    Questions cannot be changed under this section</value>
+    Questions cannot be changed in this section</value>
+
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
