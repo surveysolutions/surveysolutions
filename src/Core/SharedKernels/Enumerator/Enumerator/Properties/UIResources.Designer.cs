@@ -151,6 +151,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting.
+        /// </summary>
+        public static string AreaMap_LocationDataSourceFailed {
+            get {
+                return ResourceManager.GetString("AreaMap_LocationDataSourceFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your location is out of boundaries of the map.
         /// </summary>
         public static string AreaMap_LocationOutOfBoundaries {

@@ -536,6 +536,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Your location is out of boundaries of the map</value>
   </data>
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting</value>
+  </data>
   <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
     <value>Loaded map is outside of visible boundaries</value>
   </data>
