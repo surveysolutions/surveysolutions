@@ -563,6 +563,9 @@
   <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
     <value>Загруженая карта расположена вне границ видимой зоны</value>
   </data>
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Не удается получить ваше расположение. Выйдите на открытое пространство, включите GPS или увеличте значение таймаута в настройках.</value>
+  </data>
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Выйти из редактора</value>
   </data>
