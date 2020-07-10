@@ -218,6 +218,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
         private async void OnQuestionnaireSelectedCommand(QuestionnaireItem questionnaire)
         {
+            SelectedQuestionnaire = questionnaire;
             await RefreshMarkers();
         }
 
@@ -483,7 +484,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                                 myCalloutDefinition.OnButtonClick += OnAssignmentButtonClick;
                                 myCalloutDefinition.Tag = id;
                             }
-
                             MapView.ShowCalloutAt(projectedLocation, myCalloutDefinition);
                         }
                     }
@@ -556,19 +556,22 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
             if (existingMap != null)
             {
-                var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
-                this.Map.Basemap = basemap;
-
-                if (basemap?.BaseLayers[0]?.FullExtent != null)
+                var baseMap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
+                if (baseMap != null)
                 {
-                    if(!GeometryEngine.Intersects(basemap.BaseLayers[0].FullExtent, GeometryEngine.Project(this.MapView.VisibleArea, basemap.BaseLayers[0].SpatialReference)))
-                        this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
+                    this.Map.Basemap = baseMap;
+
+                    if (baseMap?.BaseLayers[0]?.FullExtent != null)
+                    {
+                        if (!GeometryEngine.Intersects(baseMap.BaseLayers[0].FullExtent, GeometryEngine.Project(this.MapView.VisibleArea, baseMap.BaseLayers[0].SpatialReference)))
+                            this.userInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries);
+                    }
+
+                    /*if (basemap?.BaseLayers[0]?.FullExtent != null)
+                        await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
+
+                    LastMap = this.SelectedMap;
                 }
-
-                /*if (basemap?.BaseLayers[0]?.FullExtent != null)
-                    await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);*/
-
-                LastMap = this.SelectedMap;
             }
         }
 
@@ -629,6 +632,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 //try to stop service first to avoid crash
                 await this.MapView.LocationDisplay.DataSource.StopAsync();
 
+                this.MapView.LocationDisplay.DataSource.StatusChanged += DataSourceOnStatusChanged; 
+
                 await this.MapView.LocationDisplay.DataSource.StartAsync();
                 this.MapView.LocationDisplay.IsEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
@@ -638,6 +643,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 logger.Error("Error occurred on map location start.", exc);
             }
         });
+
+        private void DataSourceOnStatusChanged(object sender, LocationDataSourceStatus e)
+        {
+            if(e == LocationDataSourceStatus.FailedToStart)
+                this.userInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
+        }
 
         private void LocationDisplayOnLocationChanged(object sender, Location e)
         {
@@ -674,8 +685,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         {
             if(this.MapView?.LocationDisplay!= null )
                 this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
+            
+            if (this.MapView?.LocationDisplay?.DataSource != null)
+                this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
 
-            if(MapView != null)
+            if (MapView != null)
                 MapView.GeoViewTapped -= OnMapViewTapped;
         }
     }

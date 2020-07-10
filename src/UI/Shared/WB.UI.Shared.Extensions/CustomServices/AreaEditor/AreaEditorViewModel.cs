@@ -125,11 +125,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             if (existingMap != null)
             {
                 var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
+                if (basemap != null)
+                {
+                    this.Map.Basemap = basemap;
 
-                this.Map.Basemap = basemap;
-
-                if (basemap?.BaseLayers[0]?.FullExtent != null)
-                    await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
+                    if (basemap?.BaseLayers[0]?.FullExtent != null)
+                        await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
+                }
             }
         }
 

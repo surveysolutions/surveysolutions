@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
@@ -9,13 +10,13 @@ namespace WB.UI.Shared.Extensions.CustomServices
 {
     public class MapUtilityService
     {
-        public static async Task<Basemap> GetLocalMap(IFileSystemAccessor fileSystemAccessor, MapDescription existingMap)
+        private static async Task<Basemap> GetLocalMap(IFileSystemAccessor fileSystemAccessor, MapDescription existingMap)
         {
-            var mapFileExtention = fileSystemAccessor.GetFileExtension(existingMap.MapFullPath);
-
-            switch (mapFileExtention)
+            try
             {
-                case ".mmpk":
+                switch (fileSystemAccessor.GetFileExtension(existingMap.MapFullPath))
+                {
+                    case ".mmpk":
                     {
                         MobileMapPackage package = await MobileMapPackage.OpenAsync(existingMap.MapFullPath).ConfigureAwait(false);
                         if (package.Maps.Count > 0)
@@ -27,7 +28,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
                         }
                         break;
                     }
-                case ".tpk":
+                    case ".tpk":
                     {
                         TileCache titleCache = new TileCache(existingMap.MapFullPath);
                         var layer = new ArcGISTiledLayer(titleCache)
@@ -44,7 +45,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
                         return new Basemap(layer);
 
                     }
-                case ".tif":
+                    case ".tif":
                     {
                         Raster raster = new Raster(existingMap.MapFullPath);
                         RasterLayer newRasterLayer = new RasterLayer(raster);
@@ -58,6 +59,10 @@ namespace WB.UI.Shared.Extensions.CustomServices
                         }
                         break;
                     }
+                }
+            }
+            catch (Exception)
+            {
             }
 
             return null;
@@ -76,7 +81,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
                 case MapType.OnlineOpenStreetMap:
                     return Basemap.CreateOpenStreetMap();
                 case MapType.LocalFile:
-                    return await MapUtilityService.GetLocalMap(fileSystemAccessor, existingMap);
+                    return await GetLocalMap(fileSystemAccessor, existingMap);
                 default:
                     return null;
             }
