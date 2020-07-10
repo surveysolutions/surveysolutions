@@ -14,7 +14,7 @@
             <a id="group-{{currentChapter.itemId}}" class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
                 <span ng-bind-html="currentChapter.title | escape"></span>
                 <span ng-if="currentChapter.isCover && currentChapter.isReadOnly" class="warning-message" ng-i18next>VirtualCoverPage</span>
-                <help ng-if="currentChapter.isCover && currentChapter.isReadOnly" class="warning-message" key="virtualCoverPage" />
+                <help ng-if="currentChapter.isCover && currentChapter.isReadOnly" key="virtualCoverPage" />
             </a>
             <ul class="controls-right">
                 <li>
