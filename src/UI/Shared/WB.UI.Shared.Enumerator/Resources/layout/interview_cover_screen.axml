@@ -74,7 +74,7 @@
                 style="@style/Interview_Complete_Screen_Button"
                 local:MvxBind="HideKeyboardOnClick .; 
                 Click StartInterviewCommand; 
-                Text Localization('PrefilledQuestions_StartInterview'); "/>
+                Text FirstSectionTitle; "/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
