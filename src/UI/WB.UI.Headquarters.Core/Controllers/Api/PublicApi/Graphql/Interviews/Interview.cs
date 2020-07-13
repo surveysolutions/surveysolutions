@@ -52,8 +52,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Utc creation date");
 
             descriptor.Field(x => x.Key).Type<NonNullType<StringType>>()  
-                .Description("Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer.");
-            
+                .Description("Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer");
+
+            descriptor.Field(x => x.ClientKey).Type<NonNullType<StringType>>()  
+                .Description("Key that was generated on interviewer tablet when interview was created for the first time");
+
             descriptor.Field(x => x.UpdateDate)
                 .Type<NonNullType<DateTimeType>>()
                 .Description("Represents date (UTC) when interview was changed last time");
@@ -63,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Indicator for whether the interview is on the interviewer’s tablet now");
             
             descriptor.Field(x => x.ErrorsCount)
-                .Description("Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1.")
+                .Description("Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1")
                 .Type<NonNullType<IntType>>();
 
             descriptor.Field(x => x.QuestionnaireId).Type<NonNullType<UuidType>>();
