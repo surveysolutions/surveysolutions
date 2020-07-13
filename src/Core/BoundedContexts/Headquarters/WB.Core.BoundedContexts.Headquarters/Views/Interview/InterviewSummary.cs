@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
-        public virtual bool ReceivedByInterviewer { get; set; }
+        public virtual DateTime? ReceivedByInterviewerTabletAtUtc { get; set; }
         public virtual bool IsAssignedToInterviewer { get; set; }
 
         public virtual int? AssignmentId { get; set; }

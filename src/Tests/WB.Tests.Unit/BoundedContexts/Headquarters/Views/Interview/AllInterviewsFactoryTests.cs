@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
         public void when_interview_received_by_interviewer_should_not_allow_to_delete_it()
         {
             var interviewSummaryStorage = Create.Storage.InMemoryReadSideStorage<InterviewSummary>();
-            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, receivedByInterviewer: true), Id.g1);
+            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, receivedByInterviewerAtUtc: DateTime.UtcNow.AddDays(-10)), Id.g1);
 
             AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
 

@@ -400,7 +400,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       errorsCount
       assignmentId
       updateDate
-      receivedByInterviewer
+      receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
       identifyingQuestions {
@@ -603,11 +603,14 @@ export default {
                     width: '100px',
                 },
                 {
-                    data: 'receivedByInterviewer',
-                    name: 'ReceivedByInterviewer',
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
                     title: this.$t('Common.ReceivedByInterviewer'),
                     render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                        return moment
+                            .utc(data)
+                            .local()
+                            .format(DateFormats.dateTimeInList)
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
@@ -858,7 +861,7 @@ export default {
         },
         CountReceivedByInterviewerItems() {
             return this.getFilteredItems(function(item) {
-                return item.receivedByInterviewer === true
+                return item.receivedByInterviewerAtUtc != null
             }).length
         },
         questionnaireSelected(newValue) {
@@ -904,7 +907,7 @@ export default {
 
             if (!this.isReassignReceivedByInterviewer) {
                 filteredItems = this.arrayFilter(filteredItems, function(item) {
-                    return item.receivedByInterviewer === false
+                    return item.receivedByInterviewerAtUtc === null
                 })
             }
 
