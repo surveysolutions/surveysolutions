@@ -56,7 +56,7 @@ export default {
             const lastVisitedSection = new localStorage().getItem(`${this.interviewId}_lastSection`)
 
             if(lastVisitedSection && lastVisitedSection != this.$route.params.sectionId) {
-                const coverPageId = this.$config.coverPageId || this.$config.model.coverPageId
+                const coverPageId = this.$config.coverPageId == undefined ? this.$config.model.coverPageId : this.$config.coverPageId
                 this.$router.push({
                     name: coverPageId == lastVisitedSection ? 'cover' : 'section',
                     params: {
