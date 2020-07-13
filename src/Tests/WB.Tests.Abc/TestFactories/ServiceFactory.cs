@@ -1064,11 +1064,15 @@ namespace WB.Tests.Abc.TestFactories
             return new EnumeratorGroupGroupStateCalculationStrategy();
         }
 
-        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        public IInvitationService InvitationService(
+            IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null,
+            IAggregateRootPrototypePromoterService promoter = null
+            )
         {
             var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
                 invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
+                promoter ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
                 Create.Service.TokenGenerator());
             return service;
         }
@@ -1082,7 +1086,9 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             var service = new InvitationService(accessor,
-                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
+                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(),
+                Mock.Of<IAggregateRootPrototypePromoterService>(),
+                Mock.Of<ITokenGenerator>());
             return service;
         }
 
