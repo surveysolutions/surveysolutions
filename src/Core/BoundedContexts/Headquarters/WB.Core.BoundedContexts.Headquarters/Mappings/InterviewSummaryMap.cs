@@ -55,10 +55,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
             Property(x => x.AssignmentId);
 
-            Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
+            Property(x => x.ReceivedByInterviewerTabletAtUtc, pm => pm.Column(cm =>
             {
-                cm.Default(false);
-                cm.NotNullable(true);
+                cm.Default(null);
+                cm.NotNullable(false);
             }));
             Property(x => x.IsAssignedToInterviewer, pm => pm.Column(cm =>
             {
