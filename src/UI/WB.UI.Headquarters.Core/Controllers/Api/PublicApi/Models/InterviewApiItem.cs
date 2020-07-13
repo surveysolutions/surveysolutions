@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             InterviewStatus status, 
             DateTime lastEntryDate, 
             IEnumerable<InterviewFeaturedQuestion> featuredQuestions,
-            bool receivedByDevice)
+            DateTime? receivedByDeviceAtUtc)
         {
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
@@ -34,7 +34,8 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.Status = status;
             this.LastEntryDate = lastEntryDate;
             this.FeaturedQuestions = featuredQuestions.Select(q => q);
-            this.ReceivedByDevice = receivedByDevice;
+            this.ReceivedByDevice = receivedByDeviceAtUtc.HasValue;
+            this.ReceivedByDeviceAtUtc = receivedByDeviceAtUtc;
         }
 
         [DataMember]
@@ -78,6 +79,8 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         public bool ReceivedByDevice { get; set; }
-        
+
+        [DataMember]
+        public DateTime? ReceivedByDeviceAtUtc { get; set; }
     }
 }

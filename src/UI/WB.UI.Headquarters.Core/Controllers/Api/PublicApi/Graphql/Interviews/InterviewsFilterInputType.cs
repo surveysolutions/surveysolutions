@@ -76,7 +76,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .And().AllowNotLowerThan()
                 .And().AllowNotLowerThanOrEquals();
             
-            descriptor.Filter(x => x.ReceivedByInterviewer).BindFiltersExplicitly().AllowEquals();
+            descriptor.Filter(x => x.ReceivedByInterviewerTabletAtUtc).BindFiltersExplicitly()
+                .AllowEquals().And().AllowGreaterThan().And().AllowLowerThan();
+            
             descriptor.Filter(x => x.ErrorsCount).BindFiltersExplicitly()
                 .AllowEquals().And().AllowGreaterThan();
             
