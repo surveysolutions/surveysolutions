@@ -162,7 +162,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             // File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
 
             cfg.SessionFactory().GenerateStatistics();
-
+            cfg.SessionFactory().DefaultFlushMode(FlushMode.Commit);
+            
             var sessionFactory = cfg.BuildSessionFactory();
 
             return sessionFactory;

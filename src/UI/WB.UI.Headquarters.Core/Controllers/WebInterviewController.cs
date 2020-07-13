@@ -426,10 +426,16 @@ namespace WB.UI.Headquarters.Controllers
 
             var requestInterviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
             string stringValues = Request.Form["resume"];
+
             if (stringValues != null && Guid.TryParse(requestInterviewIdCookie, out Guid pendingInterviewId))
             {
-                RememberCapchaFilled(invitation.InterviewId);
-                return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
+                //interview could be deleted
+                //if no answers were given
+                if (this.statefulInterviewRepository.Get(pendingInterviewId.FormatGuid()) != null)
+                {
+                    RememberCapchaFilled(invitation.InterviewId);
+                    return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
+                }
             }
 
             if (assignment.IsCompleted)
