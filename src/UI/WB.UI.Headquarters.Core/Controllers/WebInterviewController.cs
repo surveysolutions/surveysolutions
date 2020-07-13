@@ -386,6 +386,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
             Invitation invitation = this.invitationService.GetInvitationByToken(invitationId);
+            password ??= string.Empty;
             if (invitation == null)
                 return NotFound();
             
