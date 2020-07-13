@@ -78,14 +78,16 @@ type Interview {
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
   assignmentId: Int
+  "Key that was generated on interviewer tablet when interview was created for the first time"
+  clientKey: String!
   "Utc creation date"
   createdDate: DateTime!
-  "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1."
+  "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1"
   errorsCount: Int!
   id: ID!
   "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer."
   identifyingQuestions: [QuestionAnswer]
-  "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer."
+  "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer"
   key: String!
   questionnaireId: Uuid!
   questionnaireVariable: String!
@@ -189,6 +191,10 @@ input InterviewFilter {
   assignmentId: Int
   assignmentId_in: [Int]
   assignmentId_not: Int
+  clientKey: String
+  clientKey_contains: String
+  clientKey_in: [String]
+  clientKey_starts_with: String
   createdDate_gt: DateTime
   createdDate_gte: DateTime
   createdDate_lt: DateTime
