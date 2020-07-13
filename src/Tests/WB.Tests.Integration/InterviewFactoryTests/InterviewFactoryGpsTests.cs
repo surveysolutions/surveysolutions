@@ -494,7 +494,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
                     SupervisorId = gpsAnswer.TeamLeadId ?? Guid.Empty,
                     InterviewId = gpsAnswer.InterviewId,
-                    ReceivedByInterviewer = false,
+                    ReceivedByInterviewerTabletAtUtc = null,
                     QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
                     QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
                     QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
