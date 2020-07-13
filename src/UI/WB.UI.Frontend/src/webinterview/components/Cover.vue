@@ -147,7 +147,7 @@ export default {
             return this.info.validity && this.info.validity.isValid === false
         },
         coverStatusClass() {
-            const coverPageId = this.$config.coverPageId || this.$config.model.coverPageId
+            const coverPageId = this.$config.coverPageId == undefined ? this.$config.model.coverPageId : this.$config.coverPageId
             if (coverPageId) {
                 return [
                     {
