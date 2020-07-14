@@ -11,12 +11,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         public void should_mark_summary_as_received_by_interviewer ()
         {
             var viewModel = Create.Entity.InterviewSummary();
-            viewModel.ReceivedByInterviewerTabletAtUtc = DateTime.UtcNow.AddDays(-10);
+            viewModel.ReceivedByInterviewerAtUtc = DateTime.UtcNow.AddDays(-10);
             var denormalizer = CreateDenormalizer();
 
             var updatedModel = denormalizer.Update(viewModel, Create.Event.InterviewReceivedBySupervisor().ToPublishedEvent());
         
-            updatedModel.ReceivedByInterviewerTabletAtUtc.Should().BeNull();
+            updatedModel.ReceivedByInterviewerAtUtc.Should().BeNull();
         }
     }
 }
