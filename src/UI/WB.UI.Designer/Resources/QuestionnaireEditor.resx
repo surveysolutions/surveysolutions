@@ -181,6 +181,9 @@
   <data name="ReadOnly" xml:space="preserve">
     <value>Read Only</value>
   </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>It is readonly question. You can not edit it.</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
