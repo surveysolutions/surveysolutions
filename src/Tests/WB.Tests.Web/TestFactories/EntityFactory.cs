@@ -76,7 +76,7 @@ namespace WB.Tests.Web.TestFactories
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
-                ReceivedByInterviewerTabletAtUtc = receivedByInterviewerAtUtc,
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAtUtc,
                 AssignmentId = assignmentId,
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,

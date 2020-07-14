@@ -607,10 +607,12 @@ export default {
                     name: 'ReceivedByInterviewerAtUtc',
                     title: this.$t('Common.ReceivedByInterviewer'),
                     render(data) {
-                        return moment
-                            .utc(data)
-                            .local()
-                            .format(DateFormats.dateTimeInList)
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
