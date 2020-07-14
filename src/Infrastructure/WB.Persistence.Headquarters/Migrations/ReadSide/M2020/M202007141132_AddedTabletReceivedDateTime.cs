@@ -7,12 +7,12 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Create.Column("receivedbyinterviewertabletatutc").OnTable("InterviewSummaries")
+            Create.Column("receivedbyintervieweratutc").OnTable("interviewsummaries")
                 .AsDateTime()
                 .Nullable();
             
-            Execute.Sql(@"update readside.interviewsummaries isum
-                set isum.receivedbyinterviewertabletatutc = (
+            Execute.Sql(@"update readside.interviewsummaries as isum
+                set receivedbyintervieweratutc = (
 		        select e.""timestamp"" 
                     from events.events e 
                         where isum.interviewid = e.eventsourceid and e.eventtype = 'InterviewReceivedByInterviewer'
@@ -21,7 +21,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                         ) 
                 where isum.receivedbyinterviewer = true;");
             
-            Delete.Column("receivedbyinterviewer").FromTable("InterviewSummaries");
+            Delete.Column("receivedbyinterviewer").FromTable("interviewsummaries");
         }
 
         public override void Down()

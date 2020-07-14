@@ -59,13 +59,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Represents date (UTC) when interview was changed last time");
             
             /*descriptor
-                .Field(x => x.ReceivedByInterviewerTabletAtUtc.HasValue)
+                .Field(x => x.ReceivedByInterviewerAtUtc.HasValue)
                 .Type<NonNullType<BooleanType>>()
                 .Name("receivedByInterviewer")
                 .Description("Indicator for whether the interview is on the interviewer’s tablet now");
                 */
 
-            descriptor.Field(x => x.ReceivedByInterviewerTabletAtUtc)
+            descriptor.Field(x => x.ReceivedByInterviewerAtUtc)
                 .Type<DateTimeType>()
                 .Description("Represents date (UTC) when the interview was received by the interviewer’s tablet.");
             
