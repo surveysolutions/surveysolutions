@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
                         || x.Status == InterviewStatus.SentToCapi) &&
-                        !x.ReceivedByInterviewerTabletAtUtc.HasValue && !x.WasCompleted,
+                        !x.ReceivedByInterviewerAtUtc.HasValue && !x.WasCompleted,
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanReject = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     AssignmentId = x.AssignmentId,
-                    ReceivedByInterviewerAtUtc = x.ReceivedByInterviewerTabletAtUtc,
+                    ReceivedByInterviewerAtUtc = x.ReceivedByInterviewerAtUtc,
                     TeamLeadName = x.SupervisorName,
                     Key = x.Key,
                     ClientKey = x.ClientKey

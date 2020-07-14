@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var sInterviewId = interviewId.ToString("N");
             var interview = this.sessionProvider.Session.Query<InterviewSummary>()
                 .Where(x => x.SummaryId == sInterviewId)
-                .Select(x => new { ReceivedByInterviewer = x.ReceivedByInterviewerTabletAtUtc.HasValue, x.Status})
+                .Select(x => new { ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue, x.Status})
                 .FirstOrDefault();
 
             if (interview == null)
