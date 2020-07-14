@@ -507,7 +507,12 @@ export default {
                     title: this.$t('Assignments.ReceivedByTablet'),
                     searchable: false,
                     render(data) {
-                        return data != null ? self.$t('Common.Yes') : self.$t('Common.No')
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
                     },
                 },
                 {
