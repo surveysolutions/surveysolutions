@@ -6,16 +6,8 @@ namespace WB.UI.Shared.Web.UnderConstruction
 {
     public static class UnderConstructionExtensions
     {
-        public static IServiceCollection AddUnderConstruction(this IServiceCollection services, 
-            UnderConstructionInfo underConstructionInfo)
-        {
-            services.AddSingleton(underConstructionInfo);
-            return services;
-        }
-
         public static IServiceCollection AddUnderConstruction(this IServiceCollection services)
         {
-            services.AddUnderConstruction(new UnderConstructionInfo());
             return services;
         }
 
