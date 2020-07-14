@@ -58,18 +58,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<NonNullType<DateTimeType>>()
                 .Description("Represents date (UTC) when interview was changed last time");
             
-            descriptor.Field(x => x.ReceivedByInterviewerTabletAtUtc.HasValue)
-                .Name("ReceivedByInterviewer")
+            /*descriptor
+                .Field(x => x.ReceivedByInterviewerTabletAtUtc.HasValue)
                 .Type<NonNullType<BooleanType>>()
+                .Name("receivedByInterviewer")
                 .Description("Indicator for whether the interview is on the interviewer’s tablet now");
+                */
 
             descriptor.Field(x => x.ReceivedByInterviewerTabletAtUtc)
                 .Type<DateTimeType>()
                 .Description("Represents date (UTC) when the interview was received by the interviewer’s tablet.");
-            
-            descriptor.Field(x => x.ReceivedByInterviewerTabletAtUtc)
-                .Type<DateTimeType>()
-                .Description("Represents date (UTC) when the interview was received by the interviewer’s tablet. ");
             
             descriptor.Field(x => x.ErrorsCount)
                 .Description("Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1.")
