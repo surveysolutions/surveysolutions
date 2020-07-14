@@ -34,16 +34,13 @@ namespace WB.Tests.Integration.EventHandler
             // arrange
             var @event = Create.PublishedEvent.GeoLocationQuestionAnswered();
 
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionString,
-                new List<Type> {typeof(InterviewGpsMap)}, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+            var denormalizer = InterviewGeoLocationAnswersDenormalizer();
 
-            var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
-            var denormalizer = InterviewGeoLocationAnswersDenormalizer(sessionProvider: unitOfWork);
-
-            denormalizer.Update(null, @event);
+            var interviewSummary = Create.Entity.InterviewSummary();
+            denormalizer.Update(interviewSummary, @event);
             // act 
             // assert
-            Assert.DoesNotThrow(() => denormalizer.Update(null, @event));
+            Assert.DoesNotThrow(() => denormalizer.Update(interviewSummary, @event));
         }
 
         [Test]
@@ -52,21 +49,16 @@ namespace WB.Tests.Integration.EventHandler
             // arrange
             var @event = Create.PublishedEvent.GeoLocationQuestionAnswered(timestamp: DateTimeOffset.MinValue);
 
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionString,
-                new List<Type> { typeof(InterviewGpsMap) }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+            var denormalizer = InterviewGeoLocationAnswersDenormalizer();
 
-            var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
-            var denormalizer = InterviewGeoLocationAnswersDenormalizer(sessionProvider: unitOfWork);
-
-            denormalizer.Update(null, @event);
+            var interviewSummary = Create.Entity.InterviewSummary();
+            denormalizer.Update(interviewSummary, @event);
             // act 
             // assert
-            Assert.DoesNotThrow(() => denormalizer.Update(null, @event));
+            Assert.DoesNotThrow(() => denormalizer.Update(interviewSummary, @event));
         }
 
-        private static InterviewGeoLocationAnswersDenormalizer InterviewGeoLocationAnswersDenormalizer(
-            IUnitOfWork sessionProvider = null, IQuestionnaireStorage questionnaireStorage = null)
-            => new InterviewGeoLocationAnswersDenormalizer(sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+        private static InterviewGeoLocationAnswersDenormalizer InterviewGeoLocationAnswersDenormalizer(IQuestionnaireStorage questionnaireStorage = null)
+            => new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
     }
 }
