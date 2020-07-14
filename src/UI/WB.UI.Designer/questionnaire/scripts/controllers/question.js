@@ -491,6 +491,16 @@
             };
 
             var openOptionsEditor = function () {
+                if ($scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly)
+                {
+                    confirmService.open({
+                        title: $i18next.t('ReadOnlyQuestion'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
+                        isReadOnly: true
+                    }).result;
+                    return;
+                }
+                
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
@@ -498,6 +508,16 @@
             };
 
             var openCascadeOptionsEditor = function () {
+                if ($scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly)
+                {
+                    confirmService.open({
+                        title: $i18next.t('ReadOnlyQuestion'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
+                        isReadOnly: true
+                    }).result;
+                    return;
+                }
+
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
