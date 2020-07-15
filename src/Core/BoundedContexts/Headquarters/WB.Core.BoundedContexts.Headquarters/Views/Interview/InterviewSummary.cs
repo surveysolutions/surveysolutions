@@ -100,6 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual bool WasCreatedOnClient { get; set; }
         public virtual DateTime? ReceivedByInterviewerAtUtc { get; set; }
+        public virtual bool ReceivedByInterviewer => ReceivedByInterviewerAtUtc.HasValue;
         public virtual bool IsAssignedToInterviewer { get; set; }
 
         public virtual int? AssignmentId { get; set; }
