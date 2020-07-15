@@ -92,6 +92,8 @@ type Interview {
   questionnaireVersion: Long!
   "Indicator for whether the interview is on the interviewer’s tablet now"
   receivedByInterviewer: Boolean!
+  "Represents date (UTC) when the interview was received by the interviewer’s tablet."
+  receivedByInterviewerAtUtc: DateTime
   responsibleId: Uuid!
   "Login of current responsible user"
   responsibleName: String!
@@ -208,7 +210,9 @@ input InterviewFilter {
   questionnaireId: Uuid
   questionnaireVariable: String
   questionnaireVersion: Long
-  receivedByInterviewer: Boolean
+  receivedByInterviewerAtUtc: DateTime
+  receivedByInterviewerAtUtc_gt: DateTime
+  receivedByInterviewerAtUtc_lt: DateTime
   responsibleName: String
   responsibleNameLowerCase: String
   responsibleNameLowerCase_in: [String]
@@ -243,7 +247,7 @@ input InterviewSort {
   key: SortOperationKind
   questionnaireId: SortOperationKind
   questionnaireVersion: SortOperationKind
-  receivedByInterviewer: SortOperationKind
+  receivedByInterviewerAtUtc: SortOperationKind
   responsibleName: SortOperationKind
   responsibleRole: SortOperationKind
   status: SortOperationKind
