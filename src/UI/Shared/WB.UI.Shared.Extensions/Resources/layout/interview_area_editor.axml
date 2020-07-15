@@ -21,7 +21,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#AA575757"
+                android:background="#99575757"
                 local:MvxBind="Click SwitchPanelCommand;">
                 <LinearLayout
                     android:id="@+id/area_map_view_title"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
-        android:background="#AA575757"
+        android:background="#99575757"
         local:MvxBind="Visibility Visibility(IsPanelVisible);">
         <ProgressBar
             style="@style/Progress_Indicator"

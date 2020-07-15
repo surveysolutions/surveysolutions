@@ -35,7 +35,7 @@
               android:id="@+id/toolbar"
               android:layout_width="match_parent"
               android:layout_height="?attr/actionBarSize"
-              android:background="#AA575757"
+              android:background="#99575757"
               android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
               local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
               local:MvxBind="Click SwitchPanelCommand;">
@@ -81,7 +81,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:layout_marginTop="?attr/actionBarSize"
-          android:background="#AA575757"
+          android:background="#99575757"
           local:MvxBind="Visibility Visibility(IsPanelVisible);">
         <ProgressBar
             style="@style/Progress_Indicator"

@@ -288,7 +288,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             {
                 EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(
                     graphicsOverlay.Graphics.Select(graphic => graphic.Geometry)));
-                eb.Expand(1.1);
+                eb.Expand(1.2);
                 graphicExtent = eb.Extent;
             }
 
