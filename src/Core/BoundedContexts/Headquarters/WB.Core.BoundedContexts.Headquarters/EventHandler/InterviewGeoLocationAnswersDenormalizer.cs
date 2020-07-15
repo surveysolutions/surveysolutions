@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Refit;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -62,9 +62,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
         {
             var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
-            if (!gpsQuestionIdentities.Any()) return state;
+            if (gpsQuestionIdentities.Count == 0) return state;
 
-            var questionIdentities = @event.Payload.Questions
+            var questionIdentities = gpsQuestionIdentities
                 .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
@@ -79,10 +79,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsEnabled> @event)
         {
-            Identity[] gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
-            if (gpsQuestionIdentities.Length == 0) return state;
+            var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
+            if (gpsQuestionIdentities.Count == 0) return state;
 
-            var questionIdentities = @event.Payload.Questions
+            var questionIdentities = gpsQuestionIdentities
                 .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
@@ -103,9 +103,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsDisabled> @event)
         {
             var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
-            if (!gpsQuestionIdentities.Any()) return state;
+            if (gpsQuestionIdentities.Count == 0) return state;
 
-            var questionIdentities = @event.Payload.Questions
+            var questionIdentities = gpsQuestionIdentities
                 .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var removedRosterInstances = @event.Payload.Instances
                 .Select(x => $"{x.GroupId}{NormalizeRosterVector(x.GetIdentity().RosterVector)}")
-                .ToArray();
+                .ToList();
 
             var questionsInRosters = state.GpsAnswers.Where(x => !string.IsNullOrEmpty(x.RosterVector))
                 .ToList();
@@ -156,13 +156,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return state;
         }
 
-        private Identity[] GetGpsIdentities(InterviewSummary interview, Identity[] allQuestionIdentities)
+        private List<Identity> GetGpsIdentities(InterviewSummary interview, Identity[] allQuestionIdentities)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity), null);
-
+            
             return allQuestionIdentities
                 .Where(x => questionnaire.GetQuestionType(x.Id) == QuestionType.GpsCoordinates)
-                .ToArray();
+                .ToList();
         }
 
     }
