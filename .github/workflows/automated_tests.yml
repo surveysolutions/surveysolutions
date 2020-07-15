@@ -88,7 +88,7 @@ jobs:
     - name: Tests ${{ matrix.project }}
       run: dotnet test Regression/${{ matrix.project }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
       env:
-        SELENIUM_GRID_URI: http://localhost:4444/wd/hub
+        # SELENIUM_GRID_URI: http://localhost:4444/wd/hub
         AUTOMATION_QUIET: true
 
     - name: Cleanup
