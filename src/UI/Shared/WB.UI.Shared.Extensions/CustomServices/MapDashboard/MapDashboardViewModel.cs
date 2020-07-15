@@ -137,7 +137,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
             Assignments = this.assignmentsRepository
                 .LoadAll()
-                .Where(x => x.LocationLatitude != null)
+                .Where(x => x.LocationLatitude != null && (!x.Quantity.HasValue || (x.Quantity - (x.CreatedInterviewsCount ?? 0) > 0)))
                 .ToList();
 
             Interviews = this.interviewViewRepository
