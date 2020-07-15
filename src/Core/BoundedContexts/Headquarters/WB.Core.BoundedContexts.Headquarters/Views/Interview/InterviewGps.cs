@@ -4,9 +4,8 @@ using System.Diagnostics;
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewGps
+    public class InterviewGps : EntityWithTypedId<int>
     {
-        public virtual int Id { get; set; }
         public virtual InterviewSummary InterviewSummary { get; set; }
         public virtual Guid QuestionId { get; set; }
         public virtual string RosterVector { get; set; }
@@ -14,10 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual double Longitude { get; set; }
         public virtual DateTimeOffset Timestamp { get; set; }
         public virtual bool IsEnabled { get; set; }
-
-        public override bool Equals(object obj) => obj is InterviewGps gps && Id == gps.Id;
-
-        public override int GetHashCode() => Id;
 
         public override string ToString() =>
             $"[{Latitude}, {Longitude}] q: {QuestionId}${RosterVector}";
