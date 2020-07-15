@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.InterviewCommentedStatuses = new List<InterviewCommentedStatus>();
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
             this.Comments = new HashSet<InterviewComment>();
+            this.GpsAnswers = new HashSet<InterviewGps>();
         }
 
         public InterviewSummary(IQuestionnaire questionnaire) : this()
@@ -114,6 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
+        public virtual ISet<InterviewGps> GpsAnswers { get; protected set; }
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
 
         public virtual ISet<InterviewComment> Comments { get; protected set; }
