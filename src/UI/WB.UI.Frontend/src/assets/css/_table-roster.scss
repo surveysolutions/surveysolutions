@@ -165,7 +165,7 @@
                 }
             } 
         }
-        &.roster-matrix{
+        &.roster-matrix{		
             .cell-bordered{
                 &:not(.ag-header-cell-label){
                     height: 100%;
@@ -175,6 +175,10 @@
                     border-right-width: 1.5px;
                 }
             }
+			.ag-header-cell-label{
+				justify-content:center;
+				text-align:center;
+			}			
             .ag-cell{
                 .tooltip-wrapper{
                     top: 0;
