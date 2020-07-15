@@ -36,13 +36,12 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                     join readside.interviewsummaries s on iga.interviewid = s.summaryid
                     order by iga.id;");
             Execute.Sql(@"
-                    alter table readside.interview_geo_answers rename to interview_geo_answers_backup;
+                    drop table readside.interview_geo_answers;
                     alter table readside.__interview_geo_answers rename to interview_geo_answers;");
         }
 
         public override void Down()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
