@@ -187,7 +187,8 @@
 		}
 	}
 	&.instruction{
-		color: $blue;
+        color: $blue;
+        padding-bottom: 15px;
 		p{
             white-space: pre-wrap;
         }
