@@ -84,7 +84,7 @@
             }
             td{
                 &:hover, &:focus, &:active{
-                    a, a:hover, a:focus, a:active{
+                    a:hover, a:focus, a:active{
                         color: $gray_text !important;
                     }
                 }
@@ -149,7 +149,7 @@
                     
                 }
                 &:hover, &:focus, &:active{
-                    a, a:hover, a:focus, a:active{
+                    a:hover, a:focus, a:active{
                         color: $blue !important;
                         text-decoration: none;
                     }
@@ -177,7 +177,7 @@
                     text-align: right;
                 }
                 &:hover, &:focus, &:active{
-                    a, a:hover, a:focus, a:active{
+                    a:hover, a:focus, a:active{
                         color: $blue !important;
                         text-decoration: none;
                     }
