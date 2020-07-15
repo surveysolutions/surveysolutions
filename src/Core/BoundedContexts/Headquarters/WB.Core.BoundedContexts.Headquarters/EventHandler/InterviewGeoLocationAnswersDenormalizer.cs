@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             var questionId = @event.Payload.QuestionId;
-            var rosterVector = RosterVector.Convert(@event.Payload.RosterVector).ToString().Trim('_');
+            var rosterVector = NormalizeRosterVector(RosterVector.Convert(@event.Payload.RosterVector));
 
             var answer = state.GpsAnswers.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
                 
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (!gpsQuestionIdentities.Any()) return state;
 
             var questionIdentities = @event.Payload.Questions
-                .Select(x => (x.Id, x.RosterVector.ToString().Trim('_')))
+                .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
             var toRemove = state.GpsAnswers.Where(g => questionIdentities.Contains((g.QuestionId, g.RosterVector))).ToList();
@@ -79,11 +79,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsEnabled> @event)
         {
-            var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
-            if (!gpsQuestionIdentities.Any()) return state;
+            Identity[] gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
+            if (gpsQuestionIdentities.Length == 0) return state;
 
             var questionIdentities = @event.Payload.Questions
-                .Select(x => (x.Id, x.RosterVector.ToString().Trim('_')))
+                .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
             foreach (var answer in state.GpsAnswers.Where(g =>
@@ -95,13 +95,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return state;
         }
 
+        private string NormalizeRosterVector(RosterVector rosterVector)
+        {
+            return rosterVector.ToString().Trim('_');
+        }
+        
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsDisabled> @event)
         {
             var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
             if (!gpsQuestionIdentities.Any()) return state;
 
             var questionIdentities = @event.Payload.Questions
-                .Select(x => (x.Id, x.RosterVector.ToString().Trim('_')))
+                .Select(x => (x.Id, NormalizeRosterVector(x.RosterVector)))
                 .ToHashSet();
 
             foreach (var answer in state.GpsAnswers.Where(g =>
@@ -116,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
             var removedRosterInstances = @event.Payload.Instances
-                .Select(x => $"{x.GroupId}{x.GetIdentity().RosterVector.ToString().Trim('_')}")
+                .Select(x => $"{x.GroupId}{NormalizeRosterVector(x.GetIdentity().RosterVector)}")
                 .ToArray();
 
             var questionsInRosters = state.GpsAnswers.Where(x => !string.IsNullOrEmpty(x.RosterVector))
@@ -132,7 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 var storedAnswersInRosters = questionsInRosters.Select(x => new
                     {
                         entity = x,
-                        identityToRemove = $"{questionnaire.GetParentGroup(x.QuestionId)}{x.RosterVector}"
+                        identityToRemove = $"{questionnaire.GetRostersFromTopToSpecifiedQuestion(x.QuestionId).Last()}{x.RosterVector}"
                     })
                     .ToList();
 
