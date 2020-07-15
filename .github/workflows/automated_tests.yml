@@ -65,6 +65,8 @@ jobs:
     needs: [ prepare-images ] 
 
     strategy:
+      fail-fast: false
+      max-parallel: 3
       matrix:
         project: ['UI.Headquarters', 'UI.Web.Interview', 'UI.Web.Interviewer']
 
@@ -75,7 +77,7 @@ jobs:
     - uses: actions/checkout@v2
       with: 
         repository: surveysolutions/automatedtesting
-        token: ${{secrets.PAT_AUTOMATION}}
+        token: ${{ secrets.PAT_AUTOMATION }}
 
     - name: Build ${{ matrix.project }}
       run: dotnet build Regression/${{ matrix.project }} -v q
