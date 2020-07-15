@@ -975,7 +975,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters version: {0}.
+        ///   Looks up a localized string similar to Headquarters supported version: {0}.
         /// </summary>
         public static string HeadquartersVersion {
             get {
