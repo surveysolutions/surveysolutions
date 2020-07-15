@@ -1,4 +1,4 @@
-name: Automated tests
+name: Smoke Test
 
 on:
   pull_request:
@@ -14,7 +14,6 @@ env:
   TEAMCITY_PROJECT_NAME: automation
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  COMPOSE_PROJECT_NAME: github_actions
   TC_ARTIFACTS: $GITHUB_WORKSPACE/.run_artifacts
   
   TEST_CATEGORIES: "Web&TestCategory!=Preload&(TestCategory=Smoke|TestCategory=High)"
@@ -41,6 +40,7 @@ jobs:
       #run: throw
 
   prepare-images:
+
     runs-on: kharkov
 
     needs: [ wait-for-build ] 
@@ -51,11 +51,11 @@ jobs:
         repository: surveysolutions/automatedtesting
         token: ${{secrets.PAT_AUTOMATION}}
 
-    - name: Cache artifacts
-      uses: actions/cache@v2
-      with:
-          path: ${{ env.TEAMCITY_CACHE }}
-          key: downloaded-artifacts-${{ runner.os }}
+    # - name: Cache artifacts
+    #   uses: actions/cache@v2
+    #   with:
+    #       path: ${{ env.TEAMCITY_CACHE }}
+    #       key: downloaded-artifacts-${{ runner.os }}
 
     - name: Build and push images
       run: pwsh ./build-and-push-images.ps1 -branch ${{ github.head_ref }} -skipApk
@@ -64,8 +64,12 @@ jobs:
     runs-on: kharkov
     needs: [ prepare-images ] 
 
+    strategy:
+      matrix:
+        project: ['UI.Headquarters', 'UI.Web.Interview', 'UI.Web.Interviewer']
+
     env:
-      PROJECT_NAME: UI.Headquarters
+      COMPOSE_PROJECT_NAME: github_actions_${{ matrix.project }}_${{ github.run_id }}
 
     steps:
     - uses: actions/checkout@v2
@@ -73,21 +77,21 @@ jobs:
         repository: surveysolutions/automatedtesting
         token: ${{secrets.PAT_AUTOMATION}}
 
-    # - uses: actions/setup-dotnet@v1
-    #   with:
-    #     dotnet-version: '3.1.x'
-
-    - name: Build ${{ env.PROJECT_NAME }}
-      run: dotnet build Regression/${{ env.PROJECT_NAME }} -v q
+    - name: Build ${{ matrix.project }}
+      run: dotnet build Regression/${{ matrix.project }} -v q
 
     - name: Run env
-      run: pwsh ./run_env.ps1 -branch ${{ github.head_ref }}
+      run: pwsh ./compose.ps1 -branch ${{ github.head_ref }}
 
-    - name: Tests ${{ env.PROJECT_NAME }}
-      run: dotnet test Regression/${{ env.PROJECT_NAME }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
+    - name: Tests ${{ matrix.project }}
+      run: dotnet test Regression/${{ matrix.project }} --no-build -v d --filter TestCategory="${{ env.TEST_CATEGORIES }}" -- NUnit.NumberOfTestWorkers=6
       env:
         SELENIUM_GRID_URI: http://localhost:4444/wd/hub
         AUTOMATION_QUIET: true
+
+    - name: Cleanup
+      if: ${{ always() }}
+      run: pwsh ./compose.ps1 -down
 
     - name: Collect container logs
       uses: actions/upload-artifact@v1
@@ -102,7 +106,7 @@ jobs:
       if: ${{ always() }}
       continue-on-error: true
       with:
-        name: ${{ env.PROJECT_NAME }}-logs
+        name: ${{ matrix.project }}-logs
         path: ${{ env.TC_ARTIFACTS }}
 
  
