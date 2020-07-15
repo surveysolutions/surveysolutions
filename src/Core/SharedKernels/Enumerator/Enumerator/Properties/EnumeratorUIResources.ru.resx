@@ -374,7 +374,7 @@
     <value>Выпущена новая версия приложения. Обновите приложение, пожалуйста</value>
   </data>
   <data name="HeadquartersVersion" xml:space="preserve">
-    <value>Версия хедквотера: {0}</value>
+    <value>Версия поддерживаемая хедквотером: {0}</value>
   </data>
   <data name="SupervisorVersion" xml:space="preserve">
     <value>Версия супервизора: {0}</value>
