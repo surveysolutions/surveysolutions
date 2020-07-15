@@ -58,7 +58,7 @@ jobs:
     #       key: downloaded-artifacts-${{ runner.os }}
 
     - name: Build and push images
-      run: pwsh ./compose.ps1 -branch ${{ github.head_ref }} -skipApk -donotrun
+      run: pwsh ./compose.ps1 -branch ${{ github.head_ref }}  -skipApk -donotrun
 
   run-hq-tests:
     runs-on: kharkov
