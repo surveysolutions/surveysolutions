@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var result = gpsQuery.Select(x => new InterviewGpsAnswer
             {
-                InterviewId = Guid.Parse(x.Answer.InterviewId),
+                InterviewId = x.InterviewSummary.InterviewId,
                 RosterVector = x.Answer.RosterVector,
                 Latitude = x.Answer.Latitude,
                 Longitude = x.Answer.Longitude
@@ -130,8 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return this.sessionProvider.Session
                 .Query<InterviewGps>()
                 .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
-                    gps => gps.InterviewId,
-                    interview => interview.SummaryId,
+                    gps => gps.InterviewSummary.Id,
+                    interview => interview.Id,
                     (gps, interview) => new  { gps, interview})
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
                     interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
