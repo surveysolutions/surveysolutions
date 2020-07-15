@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -31,9 +32,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
             IUserInteractionService userInteractionService,
-            IAuditLogService auditLogService) 
+            IAuditLogService auditLogService,
+            IDeviceInformationService deviceInformationService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
-                logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService)
+                logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService,
+                deviceInformationService)
         {
             this.passwordHasher = passwordHasher;
             this.supervisorsPlainStorage = interviewersPlainStorage;
@@ -48,6 +51,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.UserName = "sup";
             this.Password = "1";
 #endif
+        }
+
+        protected override string GetRequiredUpdateMessage(string targetVersion, string appVersion)
+        {
+            return EnumeratorUIResources.UpgradeRequired 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.HeadquartersVersion, targetVersion) 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.SupervisorVersion, appVersion);
         }
 
         protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token) => throw new NotImplementedException();
