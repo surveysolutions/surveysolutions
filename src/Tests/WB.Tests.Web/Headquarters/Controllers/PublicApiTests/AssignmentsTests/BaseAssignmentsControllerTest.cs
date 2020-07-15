@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var assignmentFactory = Create.Service.AssignmentFactory(commandService.Object, assignmentsService);
 
 
-            var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsService);
+            var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsStorage.Object);
             var scopeExecutor = Create.Service.InScopeExecutor(sl);
             
             this.controller = new AssignmentsController(
