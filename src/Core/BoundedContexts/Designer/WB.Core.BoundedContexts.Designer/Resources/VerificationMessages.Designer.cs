@@ -1449,5 +1449,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0390_OnlyStringVariableAllowedAsAttachmentName", resourceCulture);
             }
         }
+        
+        public static string WB0391 {
+            get {
+                return ResourceManager.GetString("WB0391", resourceCulture);
+            }
+        }
     }
 }

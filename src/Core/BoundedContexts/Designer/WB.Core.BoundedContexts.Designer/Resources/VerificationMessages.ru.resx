@@ -837,4 +837,7 @@
   <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
     <value>Только строковая переменная может быть использована как источник имени вложения</value>
   </data>
+    <data name="WB0391" xml:space="preserve">
+    <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
+  </data>
 </root>
