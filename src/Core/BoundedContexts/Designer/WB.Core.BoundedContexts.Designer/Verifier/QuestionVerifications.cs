@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<ICategoricalQuestion>("WB0129", CategoricalQuestionHasOptionsWithLongTexts, string.Format(VerificationMessages.WB0129_AnswerTitleIsTooLong, 1, MaxOptionLength)),
             Error<ICategoricalQuestion>("WB0073", OptionValuesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Error<ICategoricalQuestion>("WB0076", CategoricalOptionsCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200, MaxOptionsCountInCategoricalOptionQuestion)),
-            Error<ICategoricalQuestion>("WB0307", QuestionMustHaveLinkOnExistedReusableCategories, VerificationMessages.WB0307_QuestionReferancedToIncorrectCategories),
+            Error<ICategoricalQuestion>("WB0307", QuestionMustHaveLinkToExistedReusableCategories, VerificationMessages.WB0307_QuestionReferancedToIncorrectCategories),
             Error<IMultyOptionsQuestion>("WB0007", MultiOptionQuestionYesNoQuestionCantBeLinked, VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
             Error<IMultyOptionsQuestion>("WB0061", CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, string.Format(VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, MinOptionsCount)),
             Error<IMultyOptionsQuestion>("WB0021", CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
@@ -747,7 +747,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
 
-        private bool QuestionMustHaveLinkOnExistedReusableCategories(ICategoricalQuestion question,
+        private bool QuestionMustHaveLinkToExistedReusableCategories(ICategoricalQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CategoriesId.HasValue) return false;
