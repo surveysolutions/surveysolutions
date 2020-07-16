@@ -975,7 +975,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters version: {0}.
+        ///   Looks up a localized string similar to Headquarters supported version: {0}.
         /// </summary>
         public static string HeadquartersVersion {
             get {
@@ -1236,6 +1236,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MenuItem_Title_Login {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Map_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Map_Dashboard", resourceCulture);
             }
         }
         

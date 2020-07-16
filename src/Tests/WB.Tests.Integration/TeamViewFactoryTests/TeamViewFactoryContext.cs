@@ -54,6 +54,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                 new List<Type>
                 {
                     typeof(InterviewSummaryMap),
+                    typeof(InterviewGpsMap),
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
                     typeof(InterviewStatisticsReportRowMap),

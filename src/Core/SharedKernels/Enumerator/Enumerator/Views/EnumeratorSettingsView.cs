@@ -22,5 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool? LastSyncSucceeded { get; set; }
 
         public bool? DashboardViewsUpdated { get; set; }
+
+        public string LastOpenedMapName { get; set; }
     }
 }
