@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is virtual Cover section in old questionnaire. You can&apos;t edit order of questions.
+        ///   Looks up a localized string similar to It is readonly Cover section. You can not edit or re-order questions in it..
         /// </summary>
         public static string CantEditCoverPageInOldQuestionnaire {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cover section can contains only questions and static texts.
+        ///   Looks up a localized string similar to Cover section can contain only questions and static texts.
         /// </summary>
         public static string CoverPageCanContainsOnlyQuestionsAndStaticTexts {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}.
+        ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesn&apos;t exist in document {2}.
         /// </summary>
         public static string FailedToAddGroup {
             get {
@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster value is required.
+        ///   Looks up a localized string similar to Non empty values for fixed roster titles are required.
         /// </summary>
         public static string InvalidValueOfFixedTitle {
             get {
@@ -538,7 +538,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with such is is already exist..
+        ///   Looks up a localized string similar to Macro already exists..
         /// </summary>
         public static string MacroAlreadyExist {
             get {
@@ -547,7 +547,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with such is is absent..
+        ///   Looks up a localized string similar to Macro is absent..
         /// </summary>
         public static string MacroIsAbsent {
             get {
@@ -655,7 +655,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnire {0} of version {1} can&apos;t be found.
+        ///   Looks up a localized string similar to Questionnaire {0} of version {1} can&apos;t be found.
         /// </summary>
         public static string QuestionnaireRevisionCantBeFound {
             get {

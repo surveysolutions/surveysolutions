@@ -184,7 +184,7 @@
     <value>Fixed set of items roster cannot have roster title question.</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
-    <value>Roster where roster size source is question has invalid roster title question.</value>
+    <value>Roster with a question roster source has invalid source question for names of rows.</value>
   </data>
   <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
     <value>Roster where roster size question is categorical multi answers or list question could not have roster title question.</value>
