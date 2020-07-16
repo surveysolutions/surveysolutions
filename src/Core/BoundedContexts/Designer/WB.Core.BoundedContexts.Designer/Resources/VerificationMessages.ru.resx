@@ -826,6 +826,7 @@
     <value>Категории должны содержать уникальную пару ParentId, Text</value>
   </data>
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
-    <value>Воспрос ссылается на некоректную категорию.</value>
+    <value>Вопрос ссылается на не существующую категорию.</value>
+
   </data>
 </root>
