@@ -321,5 +321,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsCoverPage(Guid identityId);
         bool IsCoverPageSupported { get; }
         Guid CoverPageSectionId { get; }
+        string GetAttachmentName(Guid entityId);
     }
 }
