@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Map.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorActivity.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorResult.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorViewModel.cs" />
