@@ -148,10 +148,10 @@
     <value>Lookup table contains {1} rows, which exceeds the limit on the number of rows in a lookup table ({0} rows).</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
-    <value>Macro with such is is already exist.</value>
+    <value>Macro already exists.</value>
   </data>
   <data name="MacroIsAbsent" xml:space="preserve">
-    <value>Macro with such is is absent.</value>
+    <value>Macro is absent.</value>
   </data>
   <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
     <value>Headers with the same name are not allowed</value>
@@ -224,7 +224,7 @@
     <value>Couldn't remove user, because it doesn't exist in share list</value>
   </data>
   <data name="FailedToAddGroup" xml:space="preserve">
-    <value>Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}</value>
+    <value>Fail attempt to add group {0} into group {1}. But group {1} doesn't exist in document {2}</value>
   </data>
   <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
     <value>Trying to import template of deleted questionnaire</value>
@@ -233,13 +233,13 @@
     <value>Invalid title list</value>
   </data>
   <data name="InvalidValueOfFixedTitle" xml:space="preserve">
-    <value>Fixed set of items roster value is required</value>
+    <value>Non empty values for fixed roster titles are required</value>
   </data>
   <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
     <value>Only QuestionnaireDocuments are supported for now</value>
   </data>
   <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
-    <value>Questionnire {0} of version {1} can't be found</value>
+    <value>Questionnaire {0} of version {1} can't be found</value>
   </data>
   <data name="QuestionTypeIsNotSupported" xml:space="preserve">
     <value>Question type is not supported: {0}</value>
