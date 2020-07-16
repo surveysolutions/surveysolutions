@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -201,5 +202,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsAnswerProtected(Identity questionIdentity, decimal value);
 
         bool? GetIsAudioRecordingEnabled();
+
+        Guid? GetAttachmentForEntity(Identity entityId);
     }
 }

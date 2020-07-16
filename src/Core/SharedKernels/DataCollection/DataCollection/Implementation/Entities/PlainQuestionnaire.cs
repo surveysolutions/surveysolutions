@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
         private HashSet<string> questionVariableNamesCache = null;
         private HashSet<string> rosterVariableNamesCache = null;
-        private HashSet<string> variableNamesCache = null;
+        private Dictionary<string, IVariable> variableNamesCache = null;
 
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -106,12 +106,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.variablesCache ?? (this.variablesCache
-                    = this.innerDocument
-                        .Find<IVariable>(_ => true)
-                        .ToDictionary(
-                            variable => variable.PublicKey,
-                            variable => variable));
+                return this.variablesCache ??= this.innerDocument
+                    .Find<IVariable>(_ => true)
+                    .ToDictionary(
+                        variable => variable.PublicKey,
+                        variable => variable);
             }
         }
 
@@ -119,12 +118,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.staticTextsCache ?? (this.staticTextsCache
-                    = this.innerDocument
-                        .Find<IStaticText>(_ => true)
-                        .ToDictionary(
-                            staticText => staticText.PublicKey,
-                            staticText => staticText));
+                return this.staticTextsCache ??= this.innerDocument
+                    .Find<IStaticText>(_ => true)
+                    .ToDictionary(
+                        staticText => staticText.PublicKey,
+                        staticText => staticText);
             }
         }
 
@@ -179,9 +177,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.questionVariableNamesCache
                ?? (this.questionVariableNamesCache = this.GetQuestionVariableNamesCache());
 
-        private HashSet<string> VariableNamesCache
-            => this.variableNamesCache
-               ?? (this.variableNamesCache = this.GetVariableNamesCache());
+        private Dictionary<string, IVariable> VariableNamesCache
+            => this.variableNamesCache ??= this.GetVariableNamesCache();
 
         private HashSet<string> RosterVariableNamesCache
             => this.rosterVariableNamesCache
@@ -328,7 +325,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid GetVariableIdByVariableName(string variableName)
         {
-            return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
+            return this.VariableNamesCache[variableName].PublicKey;
         }
 
         public Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false)
@@ -361,8 +358,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return attachment;
         }
 
-        public Guid? GetAttachmentIdByName(string name) 
-            => this.innerDocument.Attachments.Find(x => x.Name.ToLower() == name.ToLower())?.AttachmentId;
+        public Guid? GetAttachmentIdByName(string name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return this.innerDocument.Attachments.Find(x => x.Name.ToLower() == name.ToLower())?.AttachmentId;
+        }
 
         public Attachment GetAttachmentById(Guid attachmentId)
             => this.innerDocument.Attachments.Find(x => x.AttachmentId == attachmentId);
@@ -1176,7 +1176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasVariable(string variableName)
         {
-            return this.VariableNamesCache.Contains(variableName);
+            return this.VariableNamesCache.ContainsKey(variableName);
         }
 
         public bool HasQuestion(string variableName)
@@ -1464,9 +1464,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private HashSet<string> GetQuestionVariableNamesCache() 
             => this.AllQuestions.Select(x => x.StataExportCaption.ToLower()).ToHashSet();
 
-        private HashSet<string> GetVariableNamesCache()
+        private Dictionary<string, IVariable> GetVariableNamesCache()
         {
-            return this.AllVariables.Select(x => x.Name).ToHashSet();
+            return this.AllVariables.ToDictionary(x => x.Name, x => x);
         }
 
         private HashSet<string> GetRosterNamesCache() =>
@@ -1949,5 +1949,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);
         public bool IsCoverPageSupported => innerDocument.IsCoverPageSupported;
         public Guid CoverPageSectionId => innerDocument.CoverPageSectionId;
+        public string GetAttachmentName(Guid entityId)
+        {
+            return this.GetStaticTextImpl(entityId).AttachmentName;
+        }
+
+        public bool IsVariable(string variableName)
+        {
+            return this.VariablesCache.Any(x => x.Value.VariableName == variableName);
+        }
     }
 }
