@@ -9,7 +9,7 @@ namespace WB.Services.Export.Interview
     {
         private readonly Dictionary<string, VariableValueLabel> variableValueLabels;
 
-        public DoExportFileHeader(string title, string description, ExportValueType valueType, VariableValueLabel[] variableValueLabels = null)
+        public DoExportFileHeader(string title, string description, ExportValueType valueType, VariableValueLabel[]? variableValueLabels = null)
         {
             Title = title;
             Description = description;

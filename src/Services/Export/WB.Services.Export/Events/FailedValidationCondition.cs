@@ -13,7 +13,7 @@
 
         public int FailedConditionIndex { get; set; }
 
-        public bool Equals(FailedValidationCondition other)
+        public bool Equals(FailedValidationCondition? other)
         {
             if (other == null)
                 return false;
@@ -21,16 +21,16 @@
             return this.FailedConditionIndex == other.FailedConditionIndex;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            FailedValidationCondition other = obj as FailedValidationCondition;
+            FailedValidationCondition? other = obj as FailedValidationCondition;
             if (other == null)
                 return false;
 
             return this.FailedConditionIndex == other.FailedConditionIndex;
         }
 
-        public static bool operator ==(FailedValidationCondition left, FailedValidationCondition right)
+        public static bool operator ==(FailedValidationCondition? left, FailedValidationCondition? right)
         {
             if (ReferenceEquals(left, null))
             {

@@ -27,11 +27,13 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -1118,7 +1120,8 @@ namespace WB.Tests.Abc.TestFactories
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
                 Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() == 
                                                                               invService)),
-                Options.Create(new HeadquartersConfig{BaseUrl = "http://localhost"}));
+                new WebInterviewLinkProvider(Options.Create(
+                    new HeadquartersConfig{BaseUrl = "http://localhost"})));
         }
 
         public SendInvitationsJob SendInvitationsJob(
@@ -1137,9 +1140,13 @@ namespace WB.Tests.Abc.TestFactories
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
         }
 
-        public TokenGenerator TokenGenerator(int tokenLength = 8, IPlainStorageAccessor<Invitation> invitationStorage = null)
+        public TokenGenerator TokenGenerator(int tokenLength = 8, 
+            IPlainStorageAccessor<Invitation> invitationStorage = null,
+            IPlainKeyValueStorage<TenantSettings> tenantSettingsStorage = null)
         {
-            return new TokenGenerator(invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>())
+            return new TokenGenerator(
+                invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>(),
+                tenantSettingsStorage ?? new InMemoryPlainStorageAccessor<TenantSettings>())
             {
                 tokenLength = tokenLength
             };
@@ -1229,6 +1236,11 @@ namespace WB.Tests.Abc.TestFactories
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
              Mock.Of<ILogger<MapFileStorageService>>()); 
+        }
+
+        public WebModeResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)
+        {
+            return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
     }
 

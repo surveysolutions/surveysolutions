@@ -2,9 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:local="http://schemas.android.com/apk/res-auto"
             style="@style/Interview_Complete_Screen_Scroll">
+    <android.support.v4.widget.NestedScrollView
+        style="@style/VerticalFullWidthWrappingLayout"
+        local:MvxBind="HideKeyboardOnClick .">
     <LinearLayout
         style="@style/Interview_QuestionWithDivider"
-        local:MvxBind="HideKeyboardOnClick .">
+        local:MvxBind="HideKeyboardOnClick ."
+        android:orientation="vertical" >
 
         <TextView
           style="@style/Interview_Cover_Main_First_Header"
@@ -44,14 +48,25 @@
         <View style="@style/Interview_Entity_Divider" />
       
         <LinearLayout style="@style/Interview_Cover_Prefilled_Answers_Block" android:orientation="vertical"
-                      local:MvxBind="Visible HasPrefilledQuestions">
+                      local:MvxBind="Visible And(HasPrefilledEntities, Not(IsEditMode))">
             <MvxLinearLayout
                       android:orientation="vertical"
                       style="@style/Interview_Cover_Prefilled_Answers"
-                      local:MvxBind="ItemsSource PrefilledQuestions"
+                      local:MvxBind="ItemsSource PrefilledReadOnlyEntities"
                       local:MvxItemTemplate="@layout/interview_cover_prefilled_question_template" />
         </LinearLayout>
-      
+        
+        <MvxRecyclerView
+                style="@style/PrefilledQuestions_List"
+                android:id="@+id/interviewEntitiesList"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:animateLayoutChanges="false"
+                android:nestedScrollingEnabled="false"
+                local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
+                local:MvxBind="ItemsSource PrefilledEditableEntities; Visible And(HasPrefilledEntities, IsEditMode)" />
+
+
         <View style="@style/Interview_Entity_Divider" />
       
         <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
@@ -60,7 +75,8 @@
                 style="@style/Interview_Complete_Screen_Button"
                 local:MvxBind="HideKeyboardOnClick .; 
                 Click StartInterviewCommand; 
-                Text Localization('PrefilledQuestions_StartInterview'); "/>
+                Text FirstSectionTitle; "/>
         </LinearLayout>
     </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </ScrollView>

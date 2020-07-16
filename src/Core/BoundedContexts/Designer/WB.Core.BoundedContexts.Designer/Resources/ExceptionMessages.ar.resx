@@ -202,7 +202,7 @@
     <value>هناك عدد كبير من الأعمدة في الملف الذي تم تحميله. الحد الأقصى لعدد الأعمدة هو {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>تم تجاوز الحد الأقصى لعدد الصفوف ({0} صفوف).</value>
+    <value>يحتوي جدول البحث على {1} من الصفوف ، التي تتجاوز الحد الأقصى لعدد الصفوف في جدول البحث ({0} من الصفوف).</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>الاستدعاء بهذا المعرف مجود بالفعل</value>

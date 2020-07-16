@@ -333,5 +333,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return true;
         }
+
+        public bool IsCoverPage(Guid publicKey) => Questionnaire.IsCoverPage(publicKey);
+        public bool IsCoverPageSupported => Questionnaire.IsCoverPageSupported;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -50,6 +51,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
         }
 
+        [Test]
+        public void when_web_assignment_assigned_to_supervisor_Should_return_0062_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var responsibleName = "john doe";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneQuestion());
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                Create.Entity.AssignmentResponsible(responsibleName, new UserToVerify {SupervisorId = Id.gA}),
+                assignmentWebMode: Create.Entity.AssignmentWebMode(true),
+                quantity: Create.Entity.AssignmentQuantity(parsedQuantity: 5)
+            );
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0062"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(responsibleName));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+        
         [Test]
         public void when_verify_answers_and_responsible_is_locked_should_return_PL0027_error()
         {

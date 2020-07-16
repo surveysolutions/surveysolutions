@@ -2134,9 +2134,26 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question referenced to incorrect reusable category..
         /// </summary>
-        public static string WB0307_QuestionReferancedToIncorrectCategories {
+        public static string WB0391_QuestionReferancedToIncorrectCategories {
             get {
                 return ResourceManager.GetString("WB0307_QuestionReferancedToIncorrectCategories", resourceCulture);
+            }
+        }
+
+        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        /// </summary>
+        public static string WB0307_IdentityQuestionsMustHaveVariableLabel {
+            get {
+                return ResourceManager.GetString("WB0307_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption).
+        /// </summary>
+        public static string WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes {
+            get {
+                return ResourceManager.GetString("WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes", resourceCulture);
             }
         }
     }

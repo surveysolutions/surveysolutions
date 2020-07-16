@@ -81,5 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         [Get("/.version")]
         Task<string> Version();
+
+        [Get("/.connectivity")]
+        Task<string> GetConnectivityStatus();
     }
 }

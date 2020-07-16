@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
@@ -62,7 +61,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.AvailableShapefiles =
                 new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
-            var localMaps = this.mapService.GetAvailableMaps();
+            var localMaps = this.mapService.GetAvailableMaps(true);
             var defaultMap = this.mapService.PrepareAndGetDefaultMap();
             localMaps.Add(defaultMap);
 
@@ -78,10 +77,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
             else
             {
-                this.SelectedMap = this.MapsList.FirstOrDefault();
+                this.SelectedMap = defaultMap.MapName;
             }
 
-            Basemap basemap = await GetBaseMap(defaultMap).ConfigureAwait(false);
+            var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, defaultMap).ConfigureAwait(false);
             this.Map = new Map(basemap);
 
             this.Map.Loaded += async delegate (object sender, EventArgs e)
@@ -119,75 +118,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
         }
 
-
-        public async Task<Basemap> GetBaseMap(MapDescription existingMap)
-        {
-            if (existingMap != null)
-            {
-                var mapFileExtention = this.fileSystemAccessor.GetFileExtension(existingMap.MapFullPath);
-
-                switch (mapFileExtention)
-                {
-                    case ".mmpk":
-                        {
-                            MobileMapPackage package = await MobileMapPackage.OpenAsync(existingMap.MapFullPath).ConfigureAwait(false);
-                            if (package.Maps.Count > 0)
-                            {
-                                {
-                                    var basemap = package.Maps.First().Basemap.Clone();
-                                    return basemap;
-                                }
-                            }
-                            break;
-                        }
-                    case ".tpk":
-                        {
-                            TileCache titleCache = new TileCache(existingMap.MapFullPath);
-                            var layer = new ArcGISTiledLayer(titleCache)
-                            {
-                                //zoom to any level
-                                //if area is out of the map
-                                // should be available to navigate
-
-                                MinScale = 100000000,
-                                MaxScale = 1
-                            };
-
-                            await layer.LoadAsync().ConfigureAwait(false);
-                            return new Basemap(layer);
-                            
-                        }
-                    case ".tif":
-                        {
-                            Raster raster = new Raster(existingMap.MapFullPath);
-                            RasterLayer newRasterLayer = new RasterLayer(raster);
-                            await newRasterLayer.LoadAsync().ConfigureAwait(false);
-
-                            //add error display
-                            //
-                            if (newRasterLayer.SpatialReference.IsProjected)
-                            {
-                                return new Basemap(newRasterLayer);
-                            }
-                            break;
-                        }
-                }
-            }
-            return null;
-        }
-
         public async Task UpdateBaseMap()
         {
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == this.SelectedMap);
 
             if (existingMap != null)
             {
-                var basemap = await GetBaseMap(existingMap);
+                var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
+                if (basemap != null)
+                {
+                    this.Map.Basemap = basemap;
 
-                this.Map.Basemap = basemap;
-
-                if (basemap?.BaseLayers[0]?.FullExtent != null)
-                    await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
+                    if (basemap?.BaseLayers[0]?.FullExtent != null)
+                        await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
+                }
             }
         }
 
@@ -227,7 +171,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             await this.UpdateBaseMap();
 
             //update internal structures
-            //Spatialreferense of new map could differ from initial
+            //SpatialReferense of new map could differ from initial
             if (geometry != null)
             {
                 if (this.MapView != null && geometry != null && !this.MapView.SpatialReference.IsEqual(geometry.SpatialReference))
@@ -425,12 +369,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 var result = await GetGeometry(this.requestedGeometryType, this.Geometry).ConfigureAwait(false);
 
-                var position = this.MapView.LocationDisplay.Location.Position;
-                double? dist = null;
+                var position = this.MapView?.LocationDisplay?.Location?.Position;
+                double? distanceToEditor = null;
                 if (position != null)
                 {
                     var point = GeometryEngine.Project(position, this.MapView.SpatialReference);
-                    dist = GeometryEngine.Distance(result, point);
+                    distanceToEditor = GeometryEngine.Distance(result, point);
                 }
 
                 //project to geocoordinates
@@ -465,7 +409,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Coordinates = coordinates,
                     Area = GetGeometryArea(result),
                     Length = GetGeometryLength(result),
-                    DistanceToEditor = dist,
+                    DistanceToEditor = distanceToEditor,
                     NumberOfPoints = GetGeometryPointsCount(result)
                 };
 

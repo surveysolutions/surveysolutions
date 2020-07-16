@@ -26,7 +26,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         {
             return InsertInterviews
                 .Where(kv => kv.Value.Any())
-                .Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value});
+                .Select(kv => new InterviewTableInfo(tableName : kv.Key, interviewIds : kv.Value));
         }
 
         public void RemoveInterviewFromTable(string tableName, Guid interviewId)
@@ -51,7 +51,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         {
             return RemoveInterviews
                 .Where(kv => kv.Value.Any())
-                .Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value });
+                .Select(kv => new InterviewTableInfo(tableName : kv.Key, interviewIds : kv.Value ));
         }
 
         public void InsertRosterInTable(string tableName, Guid interviewId, RosterVector rosterVector)
@@ -106,7 +106,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 .Select(r => new RosterLevelTableInfo() { TableName = r.Key, RosterLevelInfo = r.Value });
         }
 
-        public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object value, NpgsqlDbType valueType)
+        public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object? value, NpgsqlDbType valueType)
         {
             if (!UpdateValues.ContainsKey(tableName))
                 UpdateValues.Add(tableName, new Dictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>());
@@ -124,12 +124,11 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             {
                 foreach (var groupedByInterviewAndRoster in updateValueInfo.Value)
                 {
-                    yield return new UpdateValueForTableRowInfo()
-                    {
-                        TableName = updateValueInfo.Key,
-                        RosterLevelTableKey = groupedByInterviewAndRoster.Key,
-                        UpdateValuesInfo = groupedByInterviewAndRoster.Value.Select(v => v.Value)
-                    };
+                    yield return new UpdateValueForTableRowInfo(
+                        tableName : updateValueInfo.Key,
+                        rosterLevelTableKey : groupedByInterviewAndRoster.Key,
+                        updateValuesInfo : groupedByInterviewAndRoster.Value.Select(v => v.Value)
+                    );
                 }
             }
         }

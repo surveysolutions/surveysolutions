@@ -3,12 +3,12 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
+namespace WB.Infrastructure.Native.Utils
 {
    /// <summary>
     /// Contains methods for running commands and reading standard output (stdout).
     /// </summary>
-    public static class Command
+    public static class ConsoleCommand
     {
         /// <summary>
         /// Runs a command.
@@ -16,11 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         /// </summary>
         /// <param name="name">The name of the command. This can be a path to an executable file.</param>
         /// <param name="args">The arguments to pass to the command.</param>
-        /// <exception cref="CommandException">The command exited with non-zero exit code.</exception>
-        /// <remarks>
-        /// By default, the resulting command line and the working directory (if specified) are echoed to standard error (stderr).
-        /// To suppress this behavior, provide the <paramref name="noEcho"/> parameter with a value of <c>true</c>.
-        /// </remarks>
+        /// <exception cref="NonZeroExitCodeException">The command exited with non-zero exit code.</exception>
         public static void Run(string name, string args = null, Action<string> outputDataReceived = null)
         {
             using var process = new Process();
@@ -34,19 +30,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new NonZeroExitCodeException(process.ExitCode);
             }
         }
-        
-        
+
+
         /// <summary>
         /// Runs a command and reads standard output (stdout).
         /// By default, the command line is echoed to standard error (stderr).
         /// </summary>
         /// <param name="name">The name of the command. This can be a path to an executable file.</param>
         /// <param name="args">The arguments to pass to the command.</param>
+        /// <param name="workingDirectory"></param>
         /// <returns>A <see cref="string"/> representing the contents of standard output (stdout).</returns>
-        /// <remarks>
-        /// By default, the resulting command line and the working directory (if specified) are echoed to standard error (stderr).
-        /// To suppress this behavior, provide the <paramref name="noEcho"/> parameter with a value of <c>true</c>.
-        /// </remarks>
         public static string Read(string name, string args = null, string workingDirectory = null, Action<string> outputDataReceived = null)
         {
             using var process = new Process();
@@ -60,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var runProcess = process.RunAsync(true);
             var readOutput = process.StandardOutput.ReadToEndAsync();
+            var readError = process.StandardError.ReadToEndAsync();
 
             Task.WaitAll(runProcess, readOutput);
 
@@ -70,7 +64,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new NonZeroExitCodeException(process.ExitCode);
             }
 
-            return readOutput.Result;
+            string result = readOutput.Result;
+            if(string.IsNullOrEmpty(result))
+            {
+                return readError.Result;
+            }
+
+            return string.Empty;
         }
         
         public static Task RunAsync(this Process process, bool noEcho, CancellationToken cancellationToken = default)

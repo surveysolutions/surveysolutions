@@ -82,6 +82,8 @@ html, body {
             }
 
             .nav-tabs {
+                white-space: nowrap;
+                display: flex;
                 width: 100%;
                 border: none;
                 border-left: 13px solid #bcc3c8;
@@ -90,7 +92,7 @@ html, body {
                     margin-top: @header-height - @nav-tab-height;
 
                     &:first-child {
-                        margin-left: 300px;
+                        margin-left: 280px;
                     }
 
                     & > a {
@@ -166,7 +168,7 @@ html, body {
                 }
 
                 .disabled a {
-                    color: @error-text;
+                    color: @gray-lighter;
                 }
             }
         }
@@ -436,6 +438,11 @@ table.table-content {
     position: relative;
     display: inline-block;
     margin-left: 30px;
+
+    .input-group {
+        width: calc(100% - 35px);
+        float: left;
+    }
 
     .btn {
         border: 1px solid #dbdfe2;
