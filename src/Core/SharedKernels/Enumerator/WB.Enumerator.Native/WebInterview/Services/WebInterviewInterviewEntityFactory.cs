@@ -336,9 +336,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
 
-                var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
-                result.AttachmentContent = attachment?.ContentId;
-
+                var attachment = callerInterview.GetAttachmentForEntity(identity);
+                if(attachment != null)
+                {
+                    var attachmentById = questionnaire.GetAttachmentById(attachment.Value);
+                    result.AttachmentContent = attachmentById?.ContentId;
+                }
+                
                 result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
 
                 this.ApplyDisablement(result, identity, questionnaire);
