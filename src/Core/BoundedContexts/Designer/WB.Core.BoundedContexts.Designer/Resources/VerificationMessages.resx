@@ -808,7 +808,8 @@
     <value>Reusable category cannot have row with same ParentId and Text values</value>
   </data>
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
-    <value>Question referenced to incorrect reusable category.</value>
+    <value>Question references non-existent reusable category.</value>
+
   </data>
 
 </root>
