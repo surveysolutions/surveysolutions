@@ -10,7 +10,7 @@ env:
   DOCKER_NETWORK: automation_network
   TEAMCITY_PASSWORD: ${{secrets.TEAMCITY_PASSWORD}}
   TEAMCITY_USER:  ${{secrets.TEAMCITY_USER}}
-  TEAMCITY_CACHE: /var/automation/cache
+  TEAMCITY_CACHE: $HOME/cache
   TEAMCITY_PROJECT_NAME: automation
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
