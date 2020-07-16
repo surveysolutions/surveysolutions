@@ -825,4 +825,7 @@
   <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
     <value>Категории должны содержать уникальную пару ParentId, Text</value>
   </data>
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>Воспрос ссылается на некоректную категорию.</value>
+  </data>
 </root>
