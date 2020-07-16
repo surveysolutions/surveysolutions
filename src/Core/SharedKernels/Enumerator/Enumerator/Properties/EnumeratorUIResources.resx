@@ -395,7 +395,7 @@ for further instructions</value>
     <value>New version of application was released. Please, update the application</value>
   </data>
   <data name="HeadquartersVersion" xml:space="preserve">
-    <value>Headquarters version: {0}</value>
+    <value>Headquarters supported version: {0}</value>
   </data>
   <data name="SupervisorVersion" xml:space="preserve">
     <value>Supervisor version: {0}</value>
@@ -477,6 +477,9 @@ for further instructions</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Map dashboard</value>
   </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Language</value>

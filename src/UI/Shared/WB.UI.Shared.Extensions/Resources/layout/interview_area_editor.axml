@@ -21,7 +21,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#AA575757"
+                android:background="@color/toolbar_background_color"
                 local:MvxBind="Click SwitchPanelCommand;">
                 <LinearLayout
                     android:id="@+id/area_map_view_title"
@@ -29,20 +29,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                  <TextView
+                      style="@style/Area_MapNameTitle"
+                      android:id="@+id/areaEditor_No_Maps_Text"
+                      local:MvxBind="Text Localization('AreaMap_Active_Map_Title');" />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/areaEditor_No_Maps_Text"
-                        android:textColor="@color/text_color_light"
-                        android:textSize="16sp"
-                        local:MvxBind="Text Localization('AreaMap_Active_Map_Title');" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/areaEditor_No_Maps_Text"
-                        android:textColor="@color/text_color_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        style="@style/Area_MapNameTitle"
+                        android:id="@+id/areaEditor_Map_Name"
                         local:MvxBind="Text SelectedMap;" />
                 </LinearLayout>
                 <Button
@@ -59,7 +52,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
-        android:background="#AA575757"
+        android:background="@color/toolbar_background_color"
         local:MvxBind="Visibility Visibility(IsPanelVisible);">
         <ProgressBar
             style="@style/Progress_Indicator"
@@ -201,7 +194,7 @@
                 style="@style/Area_Screen_Button"
                 android:id="@+id/areaEditor_Cancel"
                 android:background="@color/text_color_light"
-                android:textColor="#000000"
+                android:textColor="@color/dark_text_color"
                 android:layout_marginRight="@dimen/area_editor_cancel_margin_right"
                 local:MvxBind="Click CancelCommand;Text Localization('AreaMap_Cancel');" />
             <Button
