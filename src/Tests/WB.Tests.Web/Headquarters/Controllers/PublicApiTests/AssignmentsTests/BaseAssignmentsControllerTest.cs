@@ -15,8 +15,10 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -50,6 +52,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
             var assignmentFactory = Create.Service.AssignmentFactory(commandService.Object, assignmentsService);
 
+
+            var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsStorage.Object);
+            var scopeExecutor = Create.Service.InScopeExecutor(sl);
+            
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
                 this.assignmentsStorage.Object,
@@ -66,7 +72,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                     verifier: Create.Service.ImportDataVerifier(userViewFactory: userViewFactory.Object)),
                 Create.Service.NewtonJsonSerializer(),
                 Mock.Of<IInvitationService>(),
-                Mock.Of<IWebInterviewLinkProvider>());
+                Mock.Of<IWebInterviewLinkProvider>(),
+                scopeExecutor);
         }
 
         private void PrepareMocks()
