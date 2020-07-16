@@ -1146,7 +1146,7 @@ namespace WB.UI.Designer.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Cover is virtual section that shows all identifying questions.
-        ///    Questions cannot be changed under this section.
+        ///    Questions cannot be changed in this section.
         /// </summary>
         public static string HelpVirtualCoverPage {
             get {
@@ -2069,6 +2069,15 @@ namespace WB.UI.Designer.Resources {
         public static string ReadOnly {
             get {
                 return ResourceManager.GetString("ReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is readonly question. You can not edit it..
+        /// </summary>
+        public static string ReadOnlyQuestion {
+            get {
+                return ResourceManager.GetString("ReadOnlyQuestion", resourceCulture);
             }
         }
         

@@ -172,6 +172,9 @@
   <data name="ReadOnly" xml:space="preserve">
     <value>Только чтение</value>
   </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>Вопрос в режиме для чтения. Вы не можете редактировать его.</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
   </data>
