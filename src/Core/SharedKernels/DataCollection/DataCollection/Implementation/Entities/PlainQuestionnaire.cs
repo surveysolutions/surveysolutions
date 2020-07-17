@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -1953,10 +1954,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.GetStaticTextImpl(entityId).AttachmentName;
         }
-
-        public bool IsVariable(string variableName)
+        
+        public IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId)
         {
-            return this.VariablesCache.Any(x => x.Value.VariableName == variableName);
+            foreach (var staticText in StaticTextCache.Values.Where(x => !string.IsNullOrWhiteSpace(x.AttachmentName)))
+            {
+                IVariable variable = VariableNamesCache.GetOrNull(staticText.AttachmentName);
+                if (variable?.PublicKey == variableId)
+                {
+                    yield return staticText.PublicKey;
+                }
+            }
         }
     }
 }

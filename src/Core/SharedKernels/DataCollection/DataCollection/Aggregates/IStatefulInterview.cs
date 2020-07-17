@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
+        
+        InterviewTreeVariable GetVariable(Identity identity);
 
         InterviewTreeGpsQuestion GetGpsQuestion(Identity identity);
 

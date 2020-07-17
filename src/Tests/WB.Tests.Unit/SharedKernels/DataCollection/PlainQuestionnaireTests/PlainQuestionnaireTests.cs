@@ -1,6 +1,7 @@
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
@@ -13,8 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         {
             // arrange
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new decimal[] { 1, 2 }, variable: "q1"),
-                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1, answerCodes: new decimal[] { 1, 2, 3, 4 }, parentCodes: new decimal[] { 1, 1, 2, 2 }, variable: "q2", showAsListThreshold: 3));
+                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new decimal[] {1, 2},
+                    variable: "q1"),
+                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1,
+                    answerCodes: new decimal[] {1, 2, 3, 4}, parentCodes: new decimal[] {1, 1, 2, 2}, variable: "q2",
+                    showAsListThreshold: 3));
 
 
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 0);
@@ -31,8 +35,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         {
             // arrange
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new decimal[] { 1, 2 }, variable: "q1"),
-                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1, answerCodes: new decimal[] { 1, 2, 3, 4 }, parentCodes: new decimal[] { 1, 1, 2, 2 }, variable: "q2", showAsListThreshold: 3));
+                Create.Entity.SingleOptionQuestion(questionId: Id.g1, answerCodes: new decimal[] {1, 2},
+                    variable: "q1"),
+                Create.Entity.SingleOptionQuestion(questionId: Id.g2, cascadeFromQuestionId: Id.g1,
+                    answerCodes: new decimal[] {1, 2, 3, 4}, parentCodes: new decimal[] {1, 1, 2, 2}, variable: "q2",
+                    showAsListThreshold: 3));
 
 
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 0);
@@ -109,6 +116,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
             // Assert
             Assert.That(hasAnyMultimediaQuestion);
+        }
+
+        [Test]
+        public void when_getting_static_texts_affected_by_assignments_Should_return_list()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Entity.Variable(Id.g1, VariableType.String, "v1"),
+                    Create.Entity.StaticText(Id.g3, attachmentName: "v1")
+                }
+            );
+
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+            var staticTextsThatUseVariableAsAttachment = plainQuestionnaire.GetStaticTextsThatUseVariableAsAttachment(Id.g1);
+
+            Assert.That(staticTextsThatUseVariableAsAttachment, Is.EquivalentTo(new []{Id.g3}));
         }
     }
 }
