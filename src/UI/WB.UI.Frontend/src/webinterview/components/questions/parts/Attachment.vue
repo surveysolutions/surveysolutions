@@ -118,6 +118,11 @@ export default {
     mounted() {
         return this.fetchContentType()
     },
+    watch: {
+        contentId(){
+            this.fetchContentType()
+        },
+    },
     computed: {
         contentUrl() {
             return `${this.$config.imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`

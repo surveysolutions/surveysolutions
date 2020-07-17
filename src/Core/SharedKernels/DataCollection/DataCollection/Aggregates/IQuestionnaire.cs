@@ -322,5 +322,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsCoverPageSupported { get; }
         Guid CoverPageSectionId { get; }
         string GetAttachmentName(Guid entityId);
+        IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
     }
 }
