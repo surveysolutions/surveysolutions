@@ -490,4 +490,7 @@ Contact support for assistance.</value>
   <data name="PickLocation" xml:space="preserve">
     <value>Pick from map</value>
   </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
 </root>

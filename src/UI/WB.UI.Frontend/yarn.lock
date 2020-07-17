@@ -940,10 +940,10 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
-"@microsoft/signalr@^3.1.0":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@microsoft/signalr/-/signalr-3.1.3.tgz#250df3fcabe9e637a61e696edcd97f93a96bbcd3"
-  integrity sha512-jcjzvPDP3VbtmUoTDwgKEjaQ1m4FgSiS00zvybcF8UweAkdWUAYsaMXTISEk7E5nD0jrxyMMdSuPGgw9AcG46w==
+"@microsoft/signalr@^3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@microsoft/signalr/-/signalr-3.1.6.tgz#c4d7e3abf634ee817e501f65c0517f966ff2bade"
+  integrity sha512-beVfxZW7RQ+p0t88TCBbfnvOe1e05f3/BsB8MqXl8k7AecuoNP9ocu6ZhaXOm8eJva096QBoWOPfMomG8L6zLA==
   dependencies:
     eventsource "^1.0.7"
     request "^2.88.0"

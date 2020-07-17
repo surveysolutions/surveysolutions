@@ -485,7 +485,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == Mock.Of<IQuestionnaire>(y =>
                     y.GetQuestionType(It.IsAny<Guid>()) == QuestionType.GpsCoordinates));
 
-            var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(UnitOfWork, questionnaireStorage);
+            var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage);
 
             foreach (var gpsAnswer in answers)
             {
@@ -494,13 +494,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
                     SupervisorId = gpsAnswer.TeamLeadId ?? Guid.Empty,
                     InterviewId = gpsAnswer.InterviewId,
-                    ReceivedByInterviewer = false,
+                    ReceivedByInterviewerAtUtc = null,
                     QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
                     QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
                     QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
                     ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid(),
                     QuestionnaireVariable = "automation"
                 };
+
                 interviewSummaryRepositoryLocal.Store(interviewSummary, gpsAnswer.InterviewId.FormatGuid());
 
                 geolocationDenormalizer.Update(interviewSummary, new PublishedEvent<GeoLocationQuestionAnswered>(

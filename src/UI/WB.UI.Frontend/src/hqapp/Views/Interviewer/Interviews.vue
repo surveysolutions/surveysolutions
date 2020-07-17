@@ -89,7 +89,7 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       assignmentId
       updateDate
       status
-      receivedByInterviewer
+      receivedByInterviewerAtUtc
       actionFlags
       identifyingQuestions {
         question {
