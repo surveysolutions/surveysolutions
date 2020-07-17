@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         [Test]
         public void should_mark_question_as_invalid_with_message () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Entered value can not be parsed as integer value"), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Entered value cannot be parsed as integer value"), Times.Once);
 
         [Test]
         public void  should_not_send_answer_command () =>
