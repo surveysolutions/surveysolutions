@@ -106,7 +106,7 @@ namespace WB.UI.Supervisor.ServiceLocation
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
 #if !EXCLUDEEXTENSIONS
-            MapInteractionService.RegisterLicense();
+            WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
 #endif
             CommandRegistry
                 .Setup<StatefulInterview>()
