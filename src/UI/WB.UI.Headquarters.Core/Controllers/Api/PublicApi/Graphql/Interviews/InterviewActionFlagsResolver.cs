@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                          || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                          || interviewSummary.Status == InterviewStatus.InterviewerAssigned
                          || interviewSummary.Status == InterviewStatus.SentToCapi) &&
-                        !interviewSummary.ReceivedByInterviewer && !interviewSummary.WasCompleted)
+                        !interviewSummary.ReceivedByInterviewerAtUtc.HasValue && !interviewSummary.WasCompleted)
                     {
                         yield return InterviewActionFlags.CanBeDeleted;
                     }
@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                      || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                      || interviewSummary.Status == InterviewStatus.InterviewerAssigned
                      || interviewSummary.Status == InterviewStatus.SentToCapi) &&
-                    !interviewSummary.ReceivedByInterviewer && !interviewSummary.WasCompleted)
+                    !interviewSummary.ReceivedByInterviewerAtUtc.HasValue && !interviewSummary.WasCompleted)
                     yield return InterviewActionFlags.CanBeDeleted;
 
                 if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)

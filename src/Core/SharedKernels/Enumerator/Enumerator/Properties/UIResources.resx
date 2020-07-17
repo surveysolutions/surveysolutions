@@ -536,6 +536,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Your location is outside the boundaries of the map.</value>
   </data>
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting</value>
+  </data>
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Loaded map is outside of visible boundaries</value>
+  </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
   </data>
@@ -581,6 +587,27 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>MAPS AVAILABLE ON DEVICE</value>
   </data>
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>Assignments</value>
+  </data>
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>Interviews</value>
+  </data>
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>only items with known coordinates are shown</value>
+  </data>
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>All questionnaires</value>
+  </data>
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Filters</value>
+  </data>
   <data name="AreaMap_Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -592,6 +619,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
     <value>Clear all</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Interview Key: {0}</value>

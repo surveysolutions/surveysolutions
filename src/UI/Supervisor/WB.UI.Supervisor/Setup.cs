@@ -74,6 +74,7 @@ namespace WB.UI.Supervisor
                 {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
 #if !EXCLUDEEXTENSIONS
                 , {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                ,{typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel), typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardActivity)}
 #endif
             };
 

@@ -5,6 +5,16 @@ namespace WB.Core.Infrastructure.Modularity
 {
     public class UnderConstructionInfo
     {
+        private static bool isOneInstanceCreated = false;
+        
+        public UnderConstructionInfo()
+        {
+            if (isOneInstanceCreated)
+                throw new ArgumentException("Allow to create only one instance of UnderConstructionInfo");
+
+            isOneInstanceCreated = true;
+        }
+
         public void Run()
         {
            Status = UnderConstructionStatus.Running;
@@ -29,7 +39,8 @@ namespace WB.Core.Infrastructure.Modularity
 
         public void ClearMessage()
         {
-            Message = null;
+            if (Status != UnderConstructionStatus.Error)
+                Message = null;
         }
     }
 
