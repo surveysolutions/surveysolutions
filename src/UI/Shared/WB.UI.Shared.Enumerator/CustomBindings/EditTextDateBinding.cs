@@ -25,9 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             var dialog = new DatePickerDialogFragment(parsedDate, this.OnDateSet);
-            var activity = Target.GetActivity();
-            var fragmentActivity = (Android.Support.V4.App.FragmentActivity) activity;
-            dialog.Show(fragmentActivity.SupportFragmentManager, "date");
+            dialog.Show(Target.GetActivity().FragmentManager, "date");
         }
 
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
