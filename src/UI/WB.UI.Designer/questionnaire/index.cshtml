@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="~/css/markup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-4feee32528.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-c670b4e825.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-4feee32528.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-c670b4e825.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-34a77d6dee.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-cad35af7d5.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-34a77d6dee.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-cad35af7d5.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
     <!-- endinject -->
     @{
         var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
@@ -83,6 +83,10 @@
     <script defer src="~/js/app/directives/itemBreadcrumbs.js"></script>  
     <script defer src="~/js/app/directives/matchOptionsPattern.js"></script>  
     <script defer src="~/js/app/filters/escapeFilter.js"></script>  
+    <script defer src="~/js/app/modules/ng-context-menu.js"></script>  
+    <script defer src="~/js/app/modules/perfect_scrollbar.js"></script>  
+    <script defer src="~/js/app/modules/positionCalculator.js"></script>  
+    <script defer src="~/js/app/modules/ui-ace.js"></script>  
     <script defer src="~/js/app/services/alertService.js"></script>  
     <script defer src="~/js/app/services/authorizationinterceptor.js"></script>  
     <script defer src="~/js/app/services/commandService.js"></script>  
@@ -99,10 +103,6 @@
     <script defer src="~/js/app/services/utilityService.js"></script>  
     <script defer src="~/js/app/services/verificationService.js"></script>  
     <script defer src="~/js/app/services/webTesterService.js"></script>  
-    <script defer src="~/js/app/modules/ng-context-menu.js"></script>  
-    <script defer src="~/js/app/modules/perfect_scrollbar.js"></script>  
-    <script defer src="~/js/app/modules/positionCalculator.js"></script>  
-    <script defer src="~/js/app/modules/ui-ace.js"></script>  
     <script defer src="~/js/app/extensions/ace/mode-csharp-extended.js"></script>  
     <script defer src="~/js/app/extensions/ace/mode-text-extended.js"></script>  
     <script defer src="~/js/app/extensions/ace/theme-github-extended.js"></script>  

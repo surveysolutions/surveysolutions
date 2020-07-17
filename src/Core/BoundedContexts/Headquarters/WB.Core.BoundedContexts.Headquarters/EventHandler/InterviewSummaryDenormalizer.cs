@@ -226,7 +226,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.SupervisorId = @event.Payload.SupervisorId;
                 interview.SupervisorName = supervisorName;
                 interview.IsAssignedToInterviewer = false;
-                interview.ReceivedByInterviewer = false;
+                interview.ReceivedByInterviewerAtUtc = null;
 
                 if (interview.FirstSupervisorId == null)
                 {
@@ -319,7 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.ResponsibleRole = UserRoles.Interviewer;
                     interview.IsAssignedToInterviewer = true;
 
-                    interview.ReceivedByInterviewer = false;
+                    interview.ReceivedByInterviewerAtUtc = null;
 
                     if (interview.FirstInterviewerId == null)
                     {
@@ -337,7 +337,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.ResponsibleName = interview.SupervisorName;
                     interview.ResponsibleRole = UserRoles.Supervisor;
                     interview.IsAssignedToInterviewer = false;
-                    interview.ReceivedByInterviewer = false;
+                    interview.ReceivedByInterviewerAtUtc = null;
 
                     if (interview.FirstSupervisorId == null)
                     {
@@ -412,7 +412,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                interview.ReceivedByInterviewer = true;
+                interview.ReceivedByInterviewerAtUtc = @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp;
             });
         }
 
@@ -420,7 +420,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                interview.ReceivedByInterviewer = false;
+                interview.ReceivedByInterviewerAtUtc = null;
             });
         }
 

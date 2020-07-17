@@ -87,6 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool DoesShowCommentsBlock { get; set; }
         public string CommentedEntitiesDescription { get; set; }
         public int CountOfCommentedQuestions { get; set; }
+        
+        public string FirstSectionTitle { get; set; }
 
         protected Guid interviewId;
         protected NavigationState navigationState;
@@ -108,6 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var firstSectionId = questionnaire.GetAllSections().First(id => !questionnaire.IsCoverPage(id));
             this.firstSectionIdentity = new Identity(firstSectionId, RosterVector.Empty);
+            this.FirstSectionTitle = interview.GetBrowserReadyTitleHtml(this.firstSectionIdentity);
             this.QuestionnaireTitle = questionnaire.Title;
             
             var prefilledEntitiesFromQuestionnaire = questionnaire.GetPrefilledEntities();

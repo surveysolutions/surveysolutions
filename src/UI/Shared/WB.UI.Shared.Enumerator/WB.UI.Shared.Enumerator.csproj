@@ -169,7 +169,7 @@
     <Compile Include="CustomControls\NumericEditText.cs" />
     <Compile Include="CustomBindings\SignatureBindging.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
-    <Compile Include="CustomServices\AreaEditor\DummyAreaEditService.cs" />
+    <Compile Include="CustomServices\AreaEditor\DummyMapInteractionService.cs" />
     <Compile Include="CustomServices\AudioDialog.cs" />
     <Compile Include="CustomServices\AudioService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
@@ -2467,6 +2467,9 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\map_icon.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

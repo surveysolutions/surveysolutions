@@ -1737,7 +1737,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (targetIsCoverPage)
             {
-                foreach (var entity in elementsToCopy)
+                foreach (var entity in elementsToCopy.Reverse())
                 {
                     this.innerDocument.Insert(targetIndex, entity, targetToPasteIn.PublicKey);
                 }
