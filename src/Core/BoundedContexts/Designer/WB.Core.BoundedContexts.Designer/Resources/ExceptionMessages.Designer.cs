@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last existing section can not be removed from questionnaire.
+        ///   Looks up a localized string similar to Last existing section cannot be removed from questionnaire.
         /// </summary>
         public static string CantRemoveLastSectionInQuestionnaire {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories in cascading question can not have empty ParentValue column..
+        ///   Looks up a localized string similar to Categories in cascading question cannot have empty ParentValue column..
         /// </summary>
         public static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories in cascading question can not have not numeric value in ParentValue column..
+        ///   Looks up a localized string similar to Categories in cascading question cannot have not numeric value in ParentValue column..
         /// </summary>
         public static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesn&apos;t exist in document {2}.
+        ///   Looks up a localized string similar to Failed attempt to add group {0} into group {1}. But group {1} doesn&apos;t exist in document {2}.
         /// </summary>
         public static string FailedToAddGroup {
             get {
@@ -457,7 +457,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File with no data can not be loaded.
+        ///   Looks up a localized string similar to File with no data cannot be loaded.
         /// </summary>
         public static string LookupTables_cant_has_empty_content {
             get {
@@ -466,7 +466,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value {0} can not be parsed as decimal number. Column {1}, row {2}..
+        ///   Looks up a localized string similar to Value {0} cannot be parsed as decimal number. Column {1}, row {2}..
         /// </summary>
         public static string LookupTables_data_value_cannot_be_parsed {
             get {
@@ -502,7 +502,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value {0} can not be parsed as long integer number. Column {1}, row {2}..
+        ///   Looks up a localized string similar to Value {0} cannot be parsed as long integer number. Column {1}, row {2}..
         /// </summary>
         public static string LookupTables_rowcode_value_cannot_be_parsed {
             get {
@@ -610,7 +610,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Category value should have only number characters.
+        ///   Looks up a localized string similar to Category value should only have numeric characters.
         /// </summary>
         public static string OptionValuesShouldBeNumbers {
             get {
@@ -664,7 +664,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire&apos;s title can not be empty or contains whitespace only..
+        ///   Looks up a localized string similar to Questionnaire&apos;s title cannot be empty or contain whitespace only..
         /// </summary>
         public static string QuestionnaireTitleIsEmpty {
             get {
@@ -835,7 +835,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster value should have only number characters.
+        ///   Looks up a localized string similar to Fixed set of items roster value should only have numeric characters.
         /// </summary>
         public static string ValueOfFixedTitleCantBeParsed {
             get {
