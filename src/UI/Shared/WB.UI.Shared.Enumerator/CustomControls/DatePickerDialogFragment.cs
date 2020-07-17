@@ -4,7 +4,7 @@ using Android.OS;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
-    public class DatePickerDialogFragment : DialogFragment
+    public class DatePickerDialogFragment : Android.Support.V4.App.DialogFragment
     {
         private DateTime date;
         private readonly EventHandler<DatePickerDialog.DateSetEventArgs> handler;
