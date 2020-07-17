@@ -224,6 +224,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
        
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
+        public InterviewTreeVariable GetVariable(Identity identity) => this.Tree.GetVariable(identity);
 
         public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeGpsQuestion();
         public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeDateTimeQuestion();
