@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only the responsible supervisor for this assignment can answer its supervisor&apos;s questions.
+        ///   Looks up a localized string similar to Only the supervisor responsible for this assignment can answer the supervisor questions.
         /// </summary>
         public static string UserDontHavePermissionsToAnswer {
             get {
