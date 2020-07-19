@@ -1,6 +1,5 @@
 using System;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -38,10 +37,6 @@ namespace WB.UI.WebTester
             Host.CreateDefaultBuilder(args)
                 .ConfigureSurveySolutionsLogging(@"webtester")
                 .ConfigureSurveySolutionsAppConfiguration<Startup>(@"WEBTESTER_", args)
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

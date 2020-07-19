@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -34,6 +35,7 @@ namespace WB.Infrastructure.AspNetCore
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("AppType", projectName)
                 .MinimumLevel.Verbose()
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error)
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
                 .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
@@ -60,7 +62,7 @@ namespace WB.Infrastructure.AspNetCore
                 {
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                    loggerConfig.WriteTo.Console();
+                    loggerConfig.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}");
                 }
             });
         }
@@ -70,7 +72,8 @@ namespace WB.Infrastructure.AspNetCore
         public static IHostBuilder ConfigureSurveySolutionsAppConfiguration<TStartup>(this IHostBuilder hostBuilder, 
             string envPrefix, string [] args, Action<HostBuilderContext, IConfigurationBuilder>? configure = null) where TStartup : class
         {
-            return hostBuilder.ConfigureAppConfiguration((hostingContext, c) =>
+            return hostBuilder
+                .ConfigureAppConfiguration((hostingContext, c) =>
             {
                 c.AddIniFile("appsettings.ini", false, true);
                 c.AddIniFile("appsettings.DEV_DEFAULTS.ini", true, true);
@@ -80,14 +83,12 @@ namespace WB.Infrastructure.AspNetCore
 
                 configure?.Invoke(hostingContext, c);
 
-
                 c.AddEnvironmentVariables(envPrefix);
                 c.AddCommandLine(args);
-
-                //if (hostingContext.HostingEnvironment.IsDevelopment() )
-                //{
-                //    c.AddUserSecrets<TStartup>();
-                //}
+            })
+                .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<TStartup>();
             });
         }
     }
