@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Masking.Serilog;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.WindowsServices;
@@ -66,16 +65,6 @@ namespace WB.Services.Export.Host
                     c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                     c.AddJsonFile($"appsettings.Cloud.json", true);
                     c.AddJsonFile($"appsettings.Production.json", true);
-                })
-                .ConfigureWebHostDefaults(web =>
-                {
-                    if (!args.Contains("--kestrel"))
-                    {
-                        web.UseHttpSys();
-                    }
-
-                    web.UseStartup<Startup>();
-                   // web.UseSerilog();
                 });
         }
     }

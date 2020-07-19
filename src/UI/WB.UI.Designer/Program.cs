@@ -48,11 +48,7 @@ namespace WB.UI.Designer
                         loggerConfig.MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning);
                     }
                 })
-                .ConfigureSurveySolutionsAppConfiguration<Startup>("DESIGNER_", args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureSurveySolutionsAppConfiguration<Startup>("DESIGNER_", args);
         }
     }
 }
