@@ -38,10 +38,6 @@ namespace WB.UI.Headquarters
                     logger.MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
                 })
                 .ConfigureSurveySolutionsAppConfiguration<Startup>("HQ_", args)
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }
