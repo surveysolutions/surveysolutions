@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0002] N/A.
+        ///   Looks up a localized string similar to [PL0002] N/A. Contact the support team at support@mysurvey.solutions.
         /// </summary>
         public static string PL0002_MoreThenOneLevel {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided question value not allowed..
+        ///   Looks up a localized string similar to Question value not allowed..
         /// </summary>
         public static string PL0014_ParsedValueIsNotAllowed {
             get {
@@ -349,7 +349,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable has type that does not support protection..
+        ///   Looks up a localized string similar to Variable type cannot be protected..
         /// </summary>
         public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
             get {
@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster by list question should have column for text list answers.
+        ///   Looks up a localized string similar to List roster should have a column for text list answers.
         /// </summary>
         public static string PL0052_ColumnByTextListRosterSizeAnswerNotFound {
             get {

@@ -142,10 +142,10 @@
     <value>Questionnaire with id {0} and version {1} cannot be found.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
-    <value>Questionnaire '{0}' was successfully cloned.</value>
+    <value>Questionnaire '{0}' was successfully copied.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>Questionnaire '{0}' was successfully cloned with a new title '{1}'.</value>
+    <value>Questionnaire '{0}' was successfully copied with a new title '{1}'.</value>
   </data>
   <data name="ObserverCreatedFormat" xml:space="preserve">
     <value>Observer user &lt;b&gt;{0}&lt;/b&gt; was successfully created.</value>

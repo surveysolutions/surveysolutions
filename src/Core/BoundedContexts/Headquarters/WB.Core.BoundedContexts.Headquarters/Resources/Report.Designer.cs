@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NEVER UPLOADED.
+        ///   Looks up a localized string similar to NEVER SENT.
         /// </summary>
         public static string COLUMN_NEVER_UPLOADED {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NO ASSIGNMENTS RECEIVED.
+        ///   Looks up a localized string similar to NEVER RECEIVED.
         /// </summary>
         public static string COLUMN_NO_ASSIGNMENTS_RECEIVED {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OLD VERSION.
+        ///   Looks up a localized string similar to OLD INTERVIEWER APP.
         /// </summary>
         public static string COLUMN_OLD_VERSION {
             get {
