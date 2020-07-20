@@ -392,6 +392,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
     nodes {
       id
       key
+      clientKey
       status
       questionnaireId
       responsibleId
@@ -520,8 +521,9 @@ export default {
                     responsivePriority: 2,
                     className: 'interview-id title-row',
                     render(data, type, row) {
-                        var result =
-                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.id + '\'>' + data + '</a>'
+                        const append = data === row.clientKey ? '' : ` <span class="text-muted">(${row.clientKey})</span>`
+                        const result =
+                            `<a href="${self.config.interviewReviewUrl}/${row.id}">${data}${append}</a>`
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -672,6 +674,7 @@ export default {
                     if(search && search != '') {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
+                            { clientKey_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {

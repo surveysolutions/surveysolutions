@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [NUnit.Framework.Test] public void should_not_allow_delete_last_remaining_root_section () 
         {
             exception.Should().NotBeNull();
-            exception.Message.Should().Be("Last existing section can not be removed from questionnaire");
+            exception.Message.Should().Be("Last existing section cannot be removed from questionnaire");
         }
 
         static Questionnaire questionnaire;

@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error when parse question answer.
+        ///   Looks up a localized string similar to Cannot parse the question&apos;s response.
         /// </summary>
         public static string CommandTransformator_ParseQuestionError {
             get {
