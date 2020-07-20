@@ -69,6 +69,7 @@ namespace WB.UI.Designer
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+                options.Cookie.Name = "Designer";
             });
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
