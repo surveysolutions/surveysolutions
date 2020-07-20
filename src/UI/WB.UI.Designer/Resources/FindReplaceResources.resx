@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SearchForRegexNotValid" xml:space="preserve">
-    <value>Serch regular expression is malformed</value>
+    <value>Problem with find and replace. Regular expression specified in "Find what" is invalid. Please revise the expression.</value>
   </data>
   <data name="SearchForTooLong" xml:space="preserve">
     <value>Search for field is not allowed to have more than {0} symbols</value>

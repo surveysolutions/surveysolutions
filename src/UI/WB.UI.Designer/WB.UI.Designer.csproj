@@ -62,17 +62,49 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Resources\ErrorMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ErrorMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\FindReplaceResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FindReplaceResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\QuestionnaireController.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionnaireController.resx</DependentUpon>
+      </Compile>
       <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
       </Compile>
+      <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Update="Resources\ErrorMessages.resx">
+        <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\FindReplaceResources.resx">
+        <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\QuestionnaireController.resx">
+        <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
+        <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
