@@ -57,6 +57,9 @@ namespace WB.Infrastructure.AspNetCore
                     .ConfigureSurveySolutionsLogging(host, projectName);
 
                 loggerConfigurationOverride?.Invoke(host, loggerConfig);
+                var console = host.Configuration["console"];
+
+                if (console == "false") return;
 
                 if (host.HostingEnvironment.IsDevelopment() || InDocker || host.Configuration["console"] != null)
                 {
@@ -64,7 +67,7 @@ namespace WB.Infrastructure.AspNetCore
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
                     loggerConfig.WriteTo.Console(
                         //outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                        );
+                    );
                 }
             });
         }
