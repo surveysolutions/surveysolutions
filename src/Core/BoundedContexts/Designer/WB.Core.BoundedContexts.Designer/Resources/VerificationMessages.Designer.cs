@@ -2132,11 +2132,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        ///   Looks up a localized string similar to Question references non-existent reusable category..
         /// </summary>
-        public static string WB0307_IdentityQuestionsMustHaveVariableLabel {
+        public static string WB0307_QuestionReferancedToIncorrectCategories {
             get {
-                return ResourceManager.GetString("WB0307_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+                return ResourceManager.GetString("WB0307_QuestionReferancedToIncorrectCategories", resourceCulture);
             }
         }
         
@@ -2146,6 +2146,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes {
             get {
                 return ResourceManager.GetString("WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        /// </summary>
+        public static string WB0309_IdentityQuestionsMustHaveVariableLabel {
+            get {
+                return ResourceManager.GetString("WB0309_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
             }
         }
     }

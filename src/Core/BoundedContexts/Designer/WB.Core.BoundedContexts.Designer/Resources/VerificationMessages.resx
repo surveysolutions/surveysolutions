@@ -750,7 +750,7 @@
   <data name="WB0287_TableRosterDoesntContainsQuestionWithSubstitutions" xml:space="preserve">
     <value>Questions in a table roster may not contain any substitutions in text.</value>
   </data>
-  <data name="WB0307_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Questions in Сover section must have variable label.</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
@@ -813,4 +813,9 @@
   <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
     <value>Reusable category cannot have row with same ParentId and Text values</value>
   </data>
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>Question references non-existent reusable category.</value>
+
+  </data>
+
 </root>

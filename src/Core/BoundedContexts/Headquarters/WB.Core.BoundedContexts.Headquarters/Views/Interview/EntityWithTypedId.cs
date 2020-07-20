@@ -3,18 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
+    // based on implementation from https://github.com/sharparchitecture/Sharp-Architecture/blob/master/Src/SharpArch.Domain/DomainModel/EntityWithTypedId.cs
     public abstract class EntityWithTypedId<TId>
         where TId : IEquatable<TId>
     {
-        /// <summary>
-        ///     To help ensure hash code uniqueness, a carefully selected random number multiplier
-        ///     is used within the calculation.  Goodrich and Tamassia's Data Structures and
-        ///     Algorithms in Java asserts that 31, 33, 37, 39 and 41 will produce the fewest number
-        ///     of collisions.  See http://computinglife.wordpress.com/2008/11/20/why-do-hash-functions-use-prime-numbers/
-        ///     for more information.
-        /// </summary>
-        private const int HashMultiplier = 31;
-
         private int? cachedHashcode;
         
         public virtual TId Id { get; protected set; }
@@ -30,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool IsTransient()
         {
             if (!(Id is object)) return true;
-            return Id.Equals(default(TId));
+            return Id.Equals(default);
         }
 
         /// <summary>
@@ -88,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     // identically valued properties, even if they're of two different types, 
                     // so we include the object's type in the hash calculation
                     int hashCode = GetType().GetHashCode();
-                    cachedHashcode = (hashCode * HashMultiplier) ^ Id.GetHashCode();
+                    cachedHashcode = HashCode.Combine(hashCode, Id);
                 }
             }
 
