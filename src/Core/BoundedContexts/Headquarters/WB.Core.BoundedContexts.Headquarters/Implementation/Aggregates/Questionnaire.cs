@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IReusableCategoriesStorage categoriesStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -39,7 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations,
-            IReusableCategoriesStorage categoriesStorage)
+            IReusableCategoriesStorage categoriesStorage,
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
@@ -47,6 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
             this.categoriesStorage = categoriesStorage;
+            this.pdfStorage = pdfStorage;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -87,8 +91,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             sourceQuestionnaireClone.Title = command.NewTitle;
 
             CloneTranslations(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
-            CloneCategories(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion,
-                command.NewQuestionnaireVersion);
+            CloneCategories(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
+            ClonePdfs(sourceQuestionnaireClone, sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
                 sourceQuestionnaireClone,
@@ -101,6 +105,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 comment: command.Comment,
                 userId: command.UserId,
                 questionnaireBrowseItem.IsAudioRecordingEnabled);
+        }
+
+        private void ClonePdfs(QuestionnaireDocument questionnaire, Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, sourceQuestionnaireVersion);
+            var clonnedQuestionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, newQuestionnaireVersion);
+
+            var mainPdfFile = this.pdfStorage.HasNotEmptyValue(questionnaireIdentity.ToString());
+            if (mainPdfFile)
+            {
+                var pdf = this.pdfStorage.GetById(questionnaireIdentity.ToString());
+                if(pdf!= null)
+                    this.pdfStorage.Store(pdf, clonnedQuestionnaireIdentity.ToString());
+            }
+
+            foreach (var translation in questionnaire.Translations)
+            {
+                if (this.pdfStorage.HasNotEmptyValue($"{translation.Id:N}_{questionnaireIdentity}"))
+                {
+                    var pdf = this.pdfStorage.GetById($"{translation.Id:N}_{questionnaireIdentity}");
+                    if (pdf != null)
+                        this.pdfStorage.Store(pdf, $"{translation.Id:N}_{clonnedQuestionnaireIdentity}");
+                }
+            }
         }
 
         private void CloneCategories(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion) =>

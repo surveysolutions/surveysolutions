@@ -13,7 +13,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         public static int ApiUser => 5;
         public static int UnknownRole => 0;
 
-        public static string NoRole => null;
+        public static string NoRole => string.Empty;
 
         public static Dictionary<int, string> RolesMap= new Dictionary<int, string>()
         {

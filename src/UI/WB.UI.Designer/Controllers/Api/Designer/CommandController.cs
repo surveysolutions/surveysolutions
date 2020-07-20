@@ -261,6 +261,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     return actionResult;
                 }
             }
+            catch (InvalidOperationException exc)
+            {
+                this.logger.LogError(exc, $"Error on command of type ({model.Type}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
+            }
             catch (Exception e)
             {
                 this.logger.LogError(e, $"Error on command of type ({model.Type}) handling ");

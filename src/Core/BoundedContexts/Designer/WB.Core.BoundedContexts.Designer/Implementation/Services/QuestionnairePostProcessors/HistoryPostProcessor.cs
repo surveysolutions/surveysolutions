@@ -528,20 +528,49 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         #region Paste
         public void Process(Questionnaire aggregate, PasteAfter command)
-            => this.CloneEntity(aggregate, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId);
+        {
+            var parentId = aggregate.QuestionnaireDocument.Find<IComposite>(command.ItemToPasteAfterId)!.GetParent()!.PublicKey;
+            this.CloneEntity(aggregate, command.QuestionnaireId, command.EntityId, command.SourceItemId,
+                command.ResponsibleId, parentId);
+        }
 
         public void Process(Questionnaire aggregate, PasteInto command)
-            => this.CloneEntity(aggregate, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId);
+            => this.CloneEntity(aggregate, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId, command.ParentId);
 
-        private void CloneEntity(Questionnaire aggregate, Guid questionnaireId, Guid targetEntityId, Guid sourceEntityId, Guid responsibleId)
+        private void CloneEntity(Questionnaire aggregate, Guid questionnaireId, Guid targetEntityId, Guid sourceEntityId, Guid responsibleId, Guid targetParentId)
         {
             QuestionnaireItemType entityType = (QuestionnaireItemType)(-1);
             string? entityTitle = "";
 
             var entities = new List<IComposite>();
 
+            if (aggregate.QuestionnaireDocument.IsCoverPage(targetParentId))
+            {
+                var coverGroup = aggregate.QuestionnaireDocument.Find<IGroup>(targetParentId);
+                if (coverGroup == null)
+                    throw new InvalidOperationException($"Entity was not found ({targetParentId}).");
+                
+                foreach (var composite in coverGroup.Children)
+                {
+                    if (composite is IQuestion question)
+                        this.AddOrUpdateQuestionState(questionnaireId, question.PublicKey, question.QuestionText, targetParentId);
+                    else if (composite is IStaticText staticText)
+                        this.AddOrUpdateStaticTextState(questionnaireId, staticText.PublicKey, staticText.Text, targetParentId);
+                    else
+                        throw new ArgumentException("Unsupported type of entity on cover:" + composite.GetType());
+                }
+
+                entityType = QuestionnaireItemType.Section;
+                entityTitle = coverGroup.Title;
+                    
+                var linkToCover = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
+                this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Clone, entityType,
+                    targetEntityId, entityTitle, aggregate.QuestionnaireDocument, linkToCover);
+                return;
+            }
+
             var pasteEntity = aggregate.QuestionnaireDocument.Find<IComposite>(targetEntityId);
-            if(pasteEntity==null)
+            if (pasteEntity == null)
                 throw new InvalidOperationException($"Entity was not found ({targetEntityId}).");
 
             if (pasteEntity is IGroup)
@@ -552,7 +581,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             {
                 entities.Add(pasteEntity);
             }
-
+        
             foreach (var entity in entities)
             {
                 var parentId = entity.GetParent()?.PublicKey;
