@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class EnumeratorUIResources {
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account doesn&apos;t have Interviewer role.
+        ///   Looks up a localized string similar to Your account does not have an interviewer role.
         /// </summary>
         public static string AccountIsNotAnInterviewer {
             get {
@@ -325,8 +325,8 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews which have been rejected by supervisor
-        ///You need to resolve issues noted on cover.
+        ///   Looks up a localized string similar to Interviews rejected by supervisor
+        ///Please resolve issues noted on the cover page and send them back to the supervisor..
         /// </summary>
         public static string Dashboard_RejectedTabText {
             get {
@@ -687,7 +687,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We will check for the newer version on HQ server.
+        ///   Looks up a localized string similar to We will check for a newer version of the Interviewer application on the server.
         /// </summary>
         public static string Diagnostics_CheckVersion_Description {
             get {
@@ -795,7 +795,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collect and send to HQ all tablet information.
+        ///   Looks up a localized string similar to Send all tablet information to Headquarters for troubleshooting..
         /// </summary>
         public static string Diagnostics_Send_Title {
             get {
@@ -885,7 +885,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We will test connection with our server and its speed.
+        ///   Looks up a localized string similar to Test the quality and speed of the connection with the server..
         /// </summary>
         public static string Diagnostics_TestConnection_Description {
             get {
@@ -948,7 +948,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview is in invalid state and cannot be open. Please contact support or try to synchronize to get correct state..
+        ///   Looks up a localized string similar to Interview case is invalid and cannot be opened. Please contact support or try to synchronize to refresh the cases..
         /// </summary>
         public static string FailedToLoadInterviewDescription {
             get {
@@ -1048,7 +1048,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer belongs to a different team. Please, sync with Headquarters website.
+        ///   Looks up a localized string similar to Interviewer is part of another team. Please synchronize with Headquarters..
         /// </summary>
         public static string InterviewerFromDifferentTeam {
             get {
@@ -1066,7 +1066,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
+        ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered the correct URL address..
         /// </summary>
         public static string InvalidEndpoint {
             get {
@@ -1084,7 +1084,8 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed.
+        ///   Looks up a localized string similar to This tablet has not been setup yet. 
+        ///You need internet connection to proceed with setting up the user and domain..
         /// </summary>
         public static string Login_FinishInstallation_Message {
             get {
@@ -1167,7 +1168,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map sync error.
+        ///   Looks up a localized string similar to Map synchronization error.
         /// </summary>
         public static string MapSyncProvider_SyncronizeMapsAsync_Map_sync_error {
             get {
@@ -1384,7 +1385,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website.
+        ///   Looks up a localized string similar to You have an incompatible version of the Interviewer application. Please, uninstall and install it again from your Survey Solutions Headquarters website.
         /// </summary>
         public static string NotSupportedServerSyncProtocolVersion {
             get {
@@ -1483,7 +1484,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How many events could be read with one query.
+        ///   Looks up a localized string similar to How many events can be read with one query.
         /// </summary>
         public static string Prefs_EventChunkSizeSummary {
             get {
@@ -2105,7 +2106,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is no longer belongs to Supervisor team. Please contact Your Headquarters for details..
+        ///   Looks up a localized string similar to User no longer belongs to this Supervisor team. Please contact your Headquarters for details..
         /// </summary>
         public static string Synchronization_UserDoNotBelongToTeam {
             get {
@@ -2204,7 +2205,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Information package is successfully sent.
+        ///   Looks up a localized string similar to Information package was successfully sent.
         /// </summary>
         public static string Troubleshooting_InformationPackageIsSuccessfullySent {
             get {
@@ -2222,7 +2223,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        ///   Looks up a localized string similar to New application version exists. Would you like to download and update the application?.
         /// </summary>
         public static string Troubleshooting_NewVerisonExist {
             get {
@@ -2294,7 +2295,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sending of information package is cancelled. Reason: {0}.
+        ///   Looks up a localized string similar to Sending the information package was cancelled. Reason: {0}.
         /// </summary>
         public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceled {
             get {
@@ -2312,7 +2313,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Something went wrong and tabled failed to be restored.
+        ///   Looks up a localized string similar to Something went wrong and tablet failed to be restored.
         /// </summary>
         public static string Troubleshooting_RestorationErrorMessage {
             get {
@@ -2330,7 +2331,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is present at {0}.
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restored data is present at {0}.
         /// </summary>
         public static string Troubleshooting_RestoreConfirmation {
             get {
@@ -2357,7 +2358,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sending of information package is failed.
+        ///   Looks up a localized string similar to Failed to send information package..
         /// </summary>
         public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
             get {
@@ -2393,7 +2394,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has current date and time.
+        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has correct current date and time.
         /// </summary>
         public static string UnacceptableSSLCertificate {
             get {

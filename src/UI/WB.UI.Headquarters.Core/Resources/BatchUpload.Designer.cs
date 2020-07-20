@@ -416,7 +416,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If usernames are not specified you will need to assign a supervisor to all assignments in a later step..
+        ///   Looks up a localized string similar to If usernames are not specified in the &quot;_responsible&quot; column,  you will need to assign a supervisor to all assignments in a later step..
         /// </summary>
         public static string EmptySupervisorDescription {
             get {
@@ -470,7 +470,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file size can not exceed 300MB..
+        ///   Looks up a localized string similar to The file size cannot exceed 300MB..
         /// </summary>
         public static string FileSizeLimit {
             get {

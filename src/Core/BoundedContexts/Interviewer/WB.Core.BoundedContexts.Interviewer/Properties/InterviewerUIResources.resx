@@ -127,7 +127,7 @@
     <value>Moving all completed interviews to '{0}'</value>
   </data>
   <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Check that supervisor's device has wifi and bluetooth turned on and you are within couple of meters from it</value>
+    <value>Check that supervisor's device has WiFi and Bluetooth turned on and you are within close proximity</value>
   </data>
   <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
     <value>Transfer in progress</value>
@@ -146,7 +146,7 @@
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
     <value>Transfer has not been started.
-Supervisor's device can not be located</value>
+Supervisor's device cannot be located"</value>
   </data>
   <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
     <value>Transfer was aborted on second device.</value>
@@ -173,6 +173,6 @@ Supervisor's device can not be located</value>
     <value>Retry</value>
   </data>
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Bluetooth state cannot be determined by the application. Please reboot both Interviewer and Supervisor devices and try synchronization again</value>
+    <value>The Interviewer application cannot determine Bluetooth's state (e.g., on/off, connected/disconnected). First, reboot both Interviewer and Supervisor devices. Then try synchronization again.</value>
   </data>
 </root>
