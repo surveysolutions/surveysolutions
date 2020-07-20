@@ -17,7 +17,7 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const locales = {
     hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
-        "Details", "DevicesInterviewers", "Interviews", "MainMenu", "MapReport",
+        "Details", "DevicesInterviewers", "Diagnostics", "Interviews", "MainMenu", "MapReport",
         "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",

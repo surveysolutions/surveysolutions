@@ -213,6 +213,9 @@
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Опросники</value>
   </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Карта заданий</value>
+  </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Язык</value>
   </data>
@@ -372,6 +375,15 @@
   </data>
   <data name="UpgradeRequired" xml:space="preserve">
     <value>Выпущена новая версия приложения. Обновите приложение, пожалуйста</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Версия поддерживаемая хедквотером: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Версия супервизора: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Версия интервьювера: {0}</value>
   </data>
   <data name="UnexpectedException" xml:space="preserve">
     <value>Неизвестная ошибка</value>

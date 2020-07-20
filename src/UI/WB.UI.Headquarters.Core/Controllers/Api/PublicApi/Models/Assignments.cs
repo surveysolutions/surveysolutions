@@ -23,7 +23,8 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     {
         /// <summary>
         /// Question identity
-        /// Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster). For example: 11111111111111111111111111111111_0-1 should be used for question on the second level
+        /// Expected format: GuidWithoutDashes_Int1-Int2, where _Int1-Int2 - codes of parent rosters (empty if question is not inside any roster).
+        /// For example: 11111111111111111111111111111111_0-1 should be used for question on the second level
         /// </summary>
         [DataMember]
         public string Identity { get; set; }
@@ -170,6 +171,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     {
         public AssignmentDetails Assignment { get; set; }
         public ImportDataVerificationState VerificationStatus { get; set; }
+        public string? WebInterviewLink { get; set; }
     }
 
     public class CreateAssignmentApiRequest

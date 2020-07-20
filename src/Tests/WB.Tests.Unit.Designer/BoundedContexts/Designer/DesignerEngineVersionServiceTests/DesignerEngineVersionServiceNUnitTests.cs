@@ -188,5 +188,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             Assert.That(contentVersion, Is.EqualTo(29));
         }
 
+        [Test]
+        public void should_return_30_when_cover_page_used()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithCoverPage();
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(30));
+        }
+
     }
 }

@@ -10,7 +10,7 @@
                         <input
                             type="text"
                             autocomplete="off"
-                            inputmode="numeric"
+                            inputmode="decimal"
                             class="field-to-fill"
                             ref="inputDouble"
                             :placeholder="noAnswerWatermark"

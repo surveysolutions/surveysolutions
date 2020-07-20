@@ -193,7 +193,7 @@
     <value>Trop de colonnes dans le fichier chargé. Le nombre maximal de colonnes est {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>La limite de nombre de lignes maximum ({0} lignes) a été dépassée.</value>
+    <value>Nombre de lignes: {1}.La limite de nombre de lignes maximum ({0} lignes) a été dépassée.</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Macro avec tel est déjà existant.</value>

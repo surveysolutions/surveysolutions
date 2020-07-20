@@ -47,12 +47,12 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.3.106.11" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.107.6" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.57" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.137" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.160" />
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.15" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
@@ -67,7 +67,7 @@
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="refit" Version="5.1.67" />
-    <PackageReference Include="Sendgrid" Version="9.14.0" />
+    <PackageReference Include="Sendgrid" Version="9.15.1" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
   </ItemGroup>
 
@@ -78,6 +78,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\DataExport.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -87,6 +92,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\PreloadingVerificationMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Report.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -111,12 +121,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\CommandValidatorsMessages.resx">
+      <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\DataExport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PreloadingVerificationMessages.resx">
+      <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Report.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

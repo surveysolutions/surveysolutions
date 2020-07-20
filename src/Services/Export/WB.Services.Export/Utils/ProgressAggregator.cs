@@ -8,7 +8,7 @@ namespace WB.Services.Export
     {
         private readonly Dictionary<ExportProgress, WeightedProgress> progresses = new Dictionary<ExportProgress, WeightedProgress>();
 
-        public event EventHandler<ProgressState> ProgressChanged;
+        public event EventHandler<ProgressState>? ProgressChanged;
         private readonly ProgressState state = new ProgressState();
 
         public void Add(ExportProgress progress, double weight)

@@ -1582,7 +1582,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_answer_on_linked_to_question_categorical_multi_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_answer_on_linked_to_question_categorical_multi_question_should_produce_error()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -1621,16 +1621,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Is.Not.Null);
+            Assert.That(errors.Select(x => x.Code),
+                Is.EquivalentTo(new[] { "PL0063" }));
         }
 
         [Test]
-        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_answer_on_linked_to_roster_categorical_multi_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_answer_on_linked_to_roster_categorical_multi_question_should_produce_error()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -1669,16 +1666,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Is.Not.Null);
+            Assert.That(errors.Select(x => x.Code),
+                Is.EquivalentTo(new[] { "PL0063" }));
         }
 
         [Test]
-        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_answer_on_linked_to_question_categorical_signle_question_should_be_saved_assignemnt_with_0_answers()
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_answer_on_linked_to_question_categorical_signle_question_should_produce_error()
         {
             //arrange 
             var questionId = Guid.Parse("10101010101010101010101010101010");
@@ -1716,12 +1710,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Has.One.Items);
         }
 
         [Test]
@@ -1763,12 +1752,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
             //assert
-            Assert.That(errors, Is.Empty);
-
-            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
-
-            Assert.That(savedAssignments, Has.One.Items);
-            Assert.That(savedAssignments[0].Answers, Is.Empty);
+            Assert.That(errors, Has.One.Items);
         }
 
         [Test]

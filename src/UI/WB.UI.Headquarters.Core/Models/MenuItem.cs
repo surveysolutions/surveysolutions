@@ -47,6 +47,7 @@
         Administration_CreateAdmin = 43,
         Administration_ChangePassword = 44,
         Administration_ReevaluateInterview = 45,
-        ChangePassword = 46
+        ChangePassword = 46,
+        Administration_Diagnostics = 40,
     }
 }

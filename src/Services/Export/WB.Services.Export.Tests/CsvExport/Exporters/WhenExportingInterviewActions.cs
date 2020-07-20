@@ -207,7 +207,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             await actionsExporter.ExportAsync(tenant, questionnaireIdentity, new List<Guid> { interviewId }, "", new ExportProgress());
 
             Assert.That(fileData[13], Is.EqualTo(new[] { InterviewKey, "22222222222222222222222222222222", "2017-12-31", "14:45:30", "6",
-                "hq", "3", "", null }));
+                "hq", "3", "", "" }));
         }
 
         [Test]

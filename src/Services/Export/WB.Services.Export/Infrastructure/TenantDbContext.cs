@@ -34,12 +34,12 @@ namespace WB.Services.Export.Infrastructure
         private const long ContextSchemaVersion = 4;
 
         private readonly IOptions<DbConnectionSettings> connectionSettings;
-        private readonly ILogger<TenantDbContext> logger;
+        private readonly ILogger<TenantDbContext>? logger;
 
         public TenantDbContext(ITenantContext tenantContext,
             IOptions<DbConnectionSettings> connectionSettings,
             DbContextOptions options,
-            ILogger<TenantDbContext> logger = null) : base(options)
+            ILogger<TenantDbContext>? logger = null) : base(options)
         {
             this.TenantContext = tenantContext;
             this.connectionSettings = connectionSettings;
@@ -68,11 +68,11 @@ namespace WB.Services.Export.Infrastructure
 
         private static readonly ConcurrentDictionary<string, string> connectionStringCache = new ConcurrentDictionary<string, string>();
 
-        public DbSet<InterviewReference> InterviewReferences { get; set; }
-        public DbSet<Metadata> MetadataSet { get; set; }
-        public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; }
-        public DbSet<AssignmentAction> AssignmentActions { get; set; }
-        public DbSet<Assignment.Assignment> Assignments { get; set; }
+        public DbSet<InterviewReference> InterviewReferences { get; set; } = null!;
+        public DbSet<Metadata> MetadataSet { get; set; } = null!;
+        public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; } = null!;
+        public DbSet<AssignmentAction> AssignmentActions { get; set; } = null!;
+        public DbSet<Assignment.Assignment> Assignments { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -159,7 +159,7 @@ namespace WB.Services.Export.Infrastructure
             base.OnModelCreating(modelBuilder);
             modelBuilder.UseSnakeCaseNaming();
 
-            string schema = null;
+            string? schema = null;
             if (!this.TenantContext.Tenant.Id.Equals(TenantId.None))
             {
                 modelBuilder.HasDefaultSchema(TenantContext.Tenant.SchemaName());
