@@ -30,7 +30,6 @@ using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Settings;
-using WB.UI.Shared.Extensions.CustomServices;
 using WB.UI.Supervisor.Services.Implementation;
 
 namespace WB.UI.Supervisor.ServiceLocation
@@ -84,7 +83,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
-            registry.Bind<IMapInteractionService, MapInteractionService>();
+            registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
 #endif
 
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
@@ -107,7 +106,7 @@ namespace WB.UI.Supervisor.ServiceLocation
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
 #if !EXCLUDEEXTENSIONS
-            MapInteractionService.RegisterLicense();
+            WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
 #endif
             CommandRegistry
                 .Setup<StatefulInterview>()

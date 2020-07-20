@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Android.App;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -52,6 +53,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
             this.navigationService = navigationService;
+
+            this.MapView = new MapView(Application.Context);
         }
 
         public override async Task Initialize()
@@ -125,7 +128,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             if (existingMap != null)
             {
                 var basemap = await MapUtilityService.GetBaseMap(this.fileSystemAccessor, existingMap);
-                if (basemap != null)
+                if (basemap != null && MapView != null)
                 {
                     this.Map.Basemap = basemap;
 
@@ -365,8 +368,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
-
-
                 var result = await GetGeometry(this.requestedGeometryType, this.Geometry).ConfigureAwait(false);
 
                 var position = this.MapView?.LocationDisplay?.Location?.Position;
@@ -420,7 +421,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             finally
             {
                 this.IsEditing = false;
-                this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
+                if(this.MapView?.LocationDisplay != null)
+                    this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
+                
                 await this.navigationService.Close(this);
             }
         }
