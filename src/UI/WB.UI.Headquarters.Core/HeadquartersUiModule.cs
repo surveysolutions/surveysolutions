@@ -1,13 +1,11 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -15,11 +13,10 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
-using WB.UI.Headquarters.Controllers.Services;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
@@ -55,6 +52,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
+            registry.Bind<UpdateRequiredFilter>();
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

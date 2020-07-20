@@ -479,4 +479,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="CommentOnPreviousAnswer" xml:space="preserve">
     <value>На предыдущий ответ</value>
   </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введите пароль</value>
+  </data>
 </root>

@@ -219,4 +219,8 @@
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
     <value>Замеряет время на обработку условий, проверок и изменение размеров ростеров. Время получения GPS координат или фотосъемки не учитывается.</value>
   </data>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Введите имя</value>
+  </data>
+
 </root>

@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cover.
+        /// </summary>
+        public static string CoverPageSection {
+            get {
+                return ResourceManager.GetString("CoverPageSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Section.
         /// </summary>
         public static string NewSection {

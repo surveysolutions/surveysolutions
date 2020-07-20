@@ -22,7 +22,7 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/ddi")]
         public async Task<FileStreamResult> GetDdiFile(
             string questionnaireId,
-            string archivePassword,
+            string? archivePassword,
             TenantInfo tenant)
         {
             var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant,

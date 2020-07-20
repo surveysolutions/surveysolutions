@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Resources;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCommandTests
@@ -32,9 +34,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCom
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_CreatedBy () =>
             questionnaire.QuestionnaireDocument.CreatedBy.Should().Be(createdBy);
 
-        [NUnit.Framework.Test] public void should_raise_new_group_added_event () 
+        [NUnit.Framework.Test] public void should_add_cover_section () 
         {
-            var group = (IGroup)questionnaire.QuestionnaireDocument.Children.Single();
+            var group = (IGroup)questionnaire.QuestionnaireDocument.Children.First();
+            group.GetParent().Should().Be(questionnaire.QuestionnaireDocument);
+            group.PublicKey.Should().Be(questionnaire.QuestionnaireDocument.CoverPageSectionId);
+            group.Title.Should().Be(QuestionnaireEditor.CoverPageSection);
+        }
+
+        [NUnit.Framework.Test] public void should_add_new_section () 
+        {
+            var group = (IGroup)questionnaire.QuestionnaireDocument.Children[1];
             group.GetParent().Should().Be(questionnaire.QuestionnaireDocument);
             group.Title.Should().Be("New Section");
         }

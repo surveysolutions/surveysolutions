@@ -36,6 +36,8 @@ namespace WB.Services.Export.Jobs
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
                 var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
+                if(items == null) return;
+
                 logger.LogInformation("Deleting export archives for tenant: {tenant} - there is {count} files", tenant, items.Count);
 
                 foreach (var file in items)
@@ -53,7 +55,7 @@ namespace WB.Services.Export.Jobs
             }
         }
 
-        public async Task<DataExportArchive> DownloadArchiveAsync(ExportSettings settings, string archiveName)
+        public async Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string archiveName)
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {

@@ -217,7 +217,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(translationInstance.QuestionnaireId, Is.EqualTo(questionnaireId));
         }
 
-
         [Test]
         public void when_verifying_translations_from_excel_file_without_entity_id_column()
         {

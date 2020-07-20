@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -40,6 +41,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.synchronizationService = synchronizationService;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
+        }
+
+        protected override string GetRequiredUpdate(string targetVersion, string appVersion)
+        {
+            return EnumeratorUIResources.UpgradeRequired 
+                      + Environment.NewLine + string.Format(EnumeratorUIResources.SupervisorVersion, targetVersion) 
+                      + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
         protected override Task<string> GetNewPasswordAsync() => Task.FromResult((string)null);

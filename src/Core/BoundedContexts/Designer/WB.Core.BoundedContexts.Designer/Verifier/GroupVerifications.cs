@@ -160,6 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
+               && rosterGroup.DisplayMode != RosterDisplayMode.Matrix
                && rosterGroup.Children.Count == 1
                && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
 

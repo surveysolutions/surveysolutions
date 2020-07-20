@@ -293,9 +293,13 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        public List<MetricState> GetMetricsState(CancellationToken token)
+        public ServerStatusResponse GetMetricsState()
         {
-            return dashboardStatisticsService.GetState() ?? new List<MetricState>();
+            return dashboardStatisticsService.GetState() ?? new ServerStatusResponse()
+            {
+                LastUpdateTime = DateTime.UtcNow,
+                Metrics = new List<MetricState>()
+            };
         }
 
         public class ReprocessSelectedBrokenPackagesRequestView

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -71,6 +72,8 @@ namespace Main.Core.Entities.SubEntities
             if (staticText == null)
                 throw new InvalidOperationException($"Cloned object is not {nameof(IStaticText)}");
             staticText.SetParent(null);
+            
+            staticText.ValidationConditions = new List<ValidationCondition>(this.ValidationConditions.Select(x => x.Clone()));
 
             return staticText;
         }

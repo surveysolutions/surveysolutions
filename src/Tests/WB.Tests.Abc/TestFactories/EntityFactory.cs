@@ -1403,6 +1403,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
+        public QuestionnairePdf QuestionnairePdf()
+        {
+            return new QuestionnairePdf
+            {
+                Content = new byte[]{4,4,4}
+            };
+        }
+
         public WB.Core.SharedKernels.Enumerator.Views.TranslationInstance TranslationInstance_Enumetaror(string value = null,
             Guid? tranlationId = null,
             string questionnaireId = null,
@@ -1928,11 +1936,11 @@ namespace WB.Tests.Abc.TestFactories
             return exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
-        public AudioQuestion AudioQuestion(Guid qId, string variable)
+        public AudioQuestion AudioQuestion(Guid? qId = null, string variable = "audio_question")
         {
             return new AudioQuestion
             {
-                PublicKey = qId,
+                PublicKey = qId?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 QuestionScope = QuestionScope.Interviewer,
                 QuestionType = QuestionType.Audio
@@ -2076,7 +2084,8 @@ namespace WB.Tests.Abc.TestFactories
         };
 
         public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName,
-            AssignmentResponsible responsible = null, AssignmentQuantity quantity = null,
+            AssignmentResponsible responsible = null, 
+            AssignmentQuantity quantity = null,
             AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
             AssignmentInterviewId interviewId = null,
             string questionnaireOrRosterName = null,

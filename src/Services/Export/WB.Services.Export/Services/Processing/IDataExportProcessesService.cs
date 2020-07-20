@@ -13,7 +13,7 @@ namespace WB.Services.Export.Services.Processing
         void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default);
         void DeleteDataExport(long processId, string reason);
         void ChangeStatusType(long processId, DataExportStatus status);
-        Task<DataExportProcessArgs> GetProcessAsync(long processId);
+        Task<DataExportProcessArgs?> GetProcessAsync(long processId);
         Task<List<DataExportProcessArgs>> GetProcessesAsync(long[] processIds);
     }
 }

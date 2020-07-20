@@ -754,6 +754,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Diagnostics {
+            get {
+                return ResourceManager.GetString("Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable 2FA.
         /// </summary>
         public static string Disable2fa {
@@ -2509,6 +2518,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you&apos;ve already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER..
+        /// </summary>
+        public static string Interviewers_MoveWebAssigment {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveWebAssigment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Moving users completed.
         /// </summary>
         public static string Interviewers_MovingCompleted {
@@ -3702,6 +3720,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ShowFilter {
             get {
                 return ResourceManager.GetString("ShowFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Password.
+        /// </summary>
+        public static string ShowPassword {
+            get {
+                return ResourceManager.GetString("ShowPassword", resourceCulture);
             }
         }
         

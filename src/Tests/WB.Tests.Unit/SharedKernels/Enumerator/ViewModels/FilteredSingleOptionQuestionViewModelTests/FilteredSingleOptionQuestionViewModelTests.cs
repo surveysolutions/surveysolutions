@@ -89,14 +89,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         [Test]
         public async Task when_setting_text_existing_option()
         {
-            FilteredSingleOptionQuestionViewModel viewModel;
-            Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
             string interviewId = "interviewId";
             Guid userId = Guid.NewGuid();
-            string answerValue = "é";
+            string answerValue = "e";
 
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
-            var option = new CategoricalOption() { Value = 1, Title = "dfdf" + answerValue };
+            var option = new CategoricalOption() { Value = 1, Title = $"dfdf{answerValue}"};
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
@@ -108,12 +106,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
-            questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
+            var questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
+            var answerViewModel = Create.ViewModel.AnsweringViewModel();
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel();
 
-            viewModel = CreateFilteredSingleOptionQuestionViewModel(
+            var viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
                 answering: answerViewModel,
                 principal: principal,
@@ -123,10 +121,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
 
-            var autocomplete = viewModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
+            CategoricalComboboxAutocompleteViewModel autocomplete = (CategoricalComboboxAutocompleteViewModel) viewModel.Children[1];
 
             //act
-            autocomplete.FilterCommand.Execute(answerValue);
+            await autocomplete.FilterCommand.ExecuteAsync(answerValue);
             
             //assert
             autocomplete.FilterText.Should().Be(answerValue);

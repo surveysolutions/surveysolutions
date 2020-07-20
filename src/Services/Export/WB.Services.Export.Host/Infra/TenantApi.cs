@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -20,31 +19,21 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Host.Infra
 {
-    public class TenantApi<T> : ITenantApi<T>, IDisposable
+    public class TenantApi<T> : ITenantApi<T>
     {
         private readonly ILogger<TenantApi<T>> logger;
-
-        [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
-        private static long _counter = 0;
-
-        private readonly long id;
 
         public TenantApi(ILogger<TenantApi<T>> logger)
         {
             this.logger = logger;
-            id = Interlocked.Increment(ref _counter);
-            // logger.LogTrace("Creating new TenantApi<{name}> #{id}", typeof(T).Name, id);
         }
-
-        public void Dispose()
-        {
-            //logger.LogTrace("Disposing TenantApi<{name}> #{id}", typeof(T).Name, id);
-        }
-
+        
         readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
 
-        public T For(TenantInfo tenant)
+        public T For(TenantInfo? tenant)
         {
+            if (tenant == null) throw new InvalidOperationException("Tenant must be not null."); 
+
             return cache.GetOrAdd(tenant, id =>
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
@@ -53,7 +42,7 @@ namespace WB.Services.Export.Host.Infra
 
                 return RestService.For<T>(httpClient, new RefitSettings
                 {
-                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings()
+                    ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
                     {
                         SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
                         TypeNameHandling = TypeNameHandling.Auto
@@ -77,7 +66,7 @@ namespace WB.Services.Export.Host.Infra
                     .HandleResult<HttpResponseMessage>(
                         message => message.RequestMessage.Method == HttpMethod.Get
                                    && !message.IsSuccessStatusCode && message.StatusCode != HttpStatusCode.NotFound)
-                    .WaitAndRetryAsync(6,
+                    .WaitAndRetryAsync(4,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         (response, timeSpan, retryCount, context) =>
                             {
@@ -123,14 +112,15 @@ namespace WB.Services.Export.Host.Infra
                 }
             }
 
-            private static readonly ConcurrentDictionary<Type, FieldInfo> Cache = new ConcurrentDictionary<Type, FieldInfo>();
+            // ReSharper disable once StaticMemberInGenericType
+            private static readonly ConcurrentDictionary<Type, FieldInfo?> Cache = new ConcurrentDictionary<Type, FieldInfo?>();
 
             private static long? GetRawSizeUsingReflection(HttpResponseMessage result)
             {
                 var field = Cache.GetOrAdd(result.Content.GetType(), type =>
                 {
                     var bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-                    return type.BaseType.GetField("_originalContent", bindFlags);
+                    return type.BaseType?.GetField("_originalContent", bindFlags);
                 });
 
                 var val = field?.GetValue(result.Content) as HttpContent;

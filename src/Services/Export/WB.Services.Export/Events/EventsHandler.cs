@@ -72,7 +72,7 @@ namespace WB.Services.Export.Events
                         await handler.SaveStateAsync(token);
                         eventHandlerStopwatch.Stop();
 
-                        Monitoring.TrackEventsProcessingLatency(this.tenantContext?.Tenant?.Name,
+                        Monitoring.TrackEventsProcessingLatency(this.tenantContext?.Tenant?.Name ?? "",
                             eventsToPublish.Count,
                             eventHandlerStopwatch.Elapsed);
                     }

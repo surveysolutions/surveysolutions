@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Controllers.Services.Export;
 using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Filters
@@ -24,9 +25,14 @@ namespace WB.UI.Headquarters.Filters
         {
             if (Installed) return;
 
-            if (filterContext.Controller is ControlPanelController) return;
+            switch (filterContext.Controller)
+            {
+                case ControlPanelController _:
+                case UnderConstructionController _:
+                case EventsApiController _: // export service connectivity check
+                    return;
+            }
 
-            if (filterContext.Controller is UnderConstructionController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
             var adminRole = UserRoles.Administrator.ToUserId();
