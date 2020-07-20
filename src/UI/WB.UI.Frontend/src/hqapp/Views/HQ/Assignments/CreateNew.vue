@@ -32,6 +32,7 @@
                                     <div class="field"
                                         :class="{answered: newResponsibleId != null}">
                                         <Typeahead
+                                            v-validate="responsibleValidations"
                                             control-id="newResponsibleId"
                                             :placeholder="$t('Common.Responsible')"
                                             :value="newResponsibleId"
@@ -41,6 +42,10 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="information-block text-danger"
+                            v-if="!assignToQuestion.validity.isValid">
+                            <p v-for="error in errors.collect('newResponsibleId')">{{ error }}</p>
                         </div>
                     </wb-question>
 
@@ -251,8 +256,19 @@ import Vue from 'vue'
 import { Validator } from 'vee-validate'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
+import {RoleNames} from '~/shared/constants'
 
 import '@/assets/css/markup-web-interview.scss'
+
+const validationTranslations = {
+    custom: {
+        newResponsibleId: {
+            required: () => Vue.$t('Assignments.ResponsibleRequired'),
+        },
+    },
+}
+
+Validator.localize('en', validationTranslations)
 
 const emailOrPasswordRequired = {
     getMessage() {
@@ -276,6 +292,19 @@ const emailShouldBeEmpty = {
 
 Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
 Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
+
+Validator.extend('responsibleShouldBeInterviewer', {
+    getMessage() {
+        return Vue.$t('Assignments.WebModeNonInterviewer')
+    },
+    validate(value, [webMode]) {
+        if (!webMode) return true
+
+        return value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
+    },
+})
+
+
 
 export default {
     data() {
@@ -364,6 +393,12 @@ export default {
 
             return validations
         },
+        responsibleValidations(){
+            return {
+                required: true,
+                responsibleShouldBeInterviewer: [ this.webMode.answer],
+            }
+        },
         passwordValidations() {
             return {
                 regex: /^([0-9A-Z]{6,})$|^(\?)$/,
@@ -406,11 +441,9 @@ export default {
             this.sizeQuestion.validity.isValid = !this.errors.has('size')
             this.emailQuestion.validity.isValid = !this.errors.has('email')
             this.passwordQuestion.validity.isValid = !this.errors.has('password')
-            if (this.newResponsibleId == null) {
-                this.assignToQuestion.validity.isValid = false
-            }
+            this.assignToQuestion.validity.isValid = !this.errors.has('newResponsibleId')
 
-            const submitAllowed = validationResult && this.newResponsibleId != null
+            const submitAllowed = validationResult
             if (submitAllowed) {
                 this.$http
                     .post(this.config.createNewAssignmentUrl, {

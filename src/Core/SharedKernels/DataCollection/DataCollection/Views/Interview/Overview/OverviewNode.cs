@@ -5,6 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
     public abstract class OverviewNode : IDisposable
     {
+        protected OverviewNode() { }
         protected OverviewNode(IInterviewTreeNode treeNode)
         {
             this.Id = treeNode.Identity.ToString();

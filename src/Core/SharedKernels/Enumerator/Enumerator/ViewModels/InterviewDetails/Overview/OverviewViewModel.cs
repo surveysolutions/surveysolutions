@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IUserInteractionService userInteractionService;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly DynamicTextViewModel nameViewModel;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
             IImageFileStorage fileStorage,
@@ -32,7 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IAudioFileStorage audioFileStorage,
             IUserInteractionService userInteractionService,
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
-            DynamicTextViewModel nameViewModel)
+            DynamicTextViewModel nameViewModel,
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.interviewRepository = interviewRepository;
             this.fileStorage = fileStorage;
@@ -42,19 +44,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.userInteractionService = userInteractionService;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.nameViewModel = nameViewModel;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public void Configure(string interviewId, NavigationState navigationState)
         {
             this.InterviewId = interviewId;
             var interview = interviewRepository.Get(interviewId);
-            var sections = interview.GetEnabledSections().Select(x => x.Identity).ToImmutableHashSet();
+            var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var sections = interview.GetEnabledSections()
+                .Select(x => x.Identity)
+                .ToImmutableHashSet();
 
-            var interviewEntities = interview.GetUnderlyingInterviewerEntities();
+            var identifyedEntities = questionnaire.GetPrefilledEntities()
+                .Select(id => new Identity(id, RosterVector.Empty));
+            var interviewEntities = identifyedEntities.Concat(interview.GetUnderlyingInterviewerEntities());
 
             this.Name = nameViewModel;
             this.Name.InitAsStatic(UIResources.Interview_Overview_Name);
-            this.Items = interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)).ToList();
+
+            var coverIdentity = new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty);
+            var coverSectionItem = questionnaire.IsCoverPageSupported
+                ? new OverviewSection(interview.GetGroup(coverIdentity))
+                : OverviewSection.Empty(UIResources.Interview_Cover_Screen_Title);
+
+            this.Items = new List<OverviewNode>() { coverSectionItem }
+                .Concat(interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)))
+                .ToList();
         }
 
         public string InterviewId { get; set; }

@@ -89,7 +89,7 @@ namespace WB.UI.Shared.Enumerator.Services
             AndroidVersion = this.TryGetAndroidVersion(),
             AndroidSdkVersion = this.TryGetAndroidSdkVersion(),
             AndroidSdkVersionName = TryGetAndroidSdkVersionName(),
-            AppVersion = this.TryGetApplicationVersionName(),
+            AppVersion = this.GetApplicationVersionName(),
             AppBuildVersion = this.TryGetApplicationVersionCode(),
             LastAppUpdatedDate = this.TryGetLastAppUpdatedDate(),
             AppOrientation = this.TryGetAppOrientation(),
@@ -104,7 +104,7 @@ namespace WB.UI.Shared.Enumerator.Services
             RAMInfo = this.TryGetRamInfo(),
             StorageInfo = this.TryGetStorageInfo()
         };
-
+        
         private string TryGetDeviceType()
         {
             try
@@ -274,7 +274,7 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
-        private string TryGetApplicationVersionName()
+        public string GetApplicationVersionName()
         {
             try
             {

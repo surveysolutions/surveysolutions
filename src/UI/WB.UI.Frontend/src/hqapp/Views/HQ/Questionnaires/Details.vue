@@ -124,6 +124,7 @@
                 <button
                     type="button"
                     class="btn btn-danger"
+                    v-bind:disabled="model.isObserving"
                     @click="recordAudioSend">{{ $t("Common.Ok") }}</button>
                 <button
                     type="button"

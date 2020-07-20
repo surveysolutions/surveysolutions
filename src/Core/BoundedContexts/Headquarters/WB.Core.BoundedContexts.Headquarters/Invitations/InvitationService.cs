@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
                 else
                 {
-                    var token = tokenGenerator.Generate(assignment.QuestionnaireId.GetHashCode());
+                    var token = tokenGenerator.Generate(assignment.QuestionnaireId);
                     invitation.SetToken(token, TokenKind.AssignmentResolvedByPassword);
                 }
             }

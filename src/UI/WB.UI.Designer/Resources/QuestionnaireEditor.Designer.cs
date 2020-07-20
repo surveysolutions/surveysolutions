@@ -925,6 +925,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The first section of every questionnaire contains identifying questions that are also displayed at the interviewers&apos; and supervisors&apos; dashboards..
+        /// </summary>
+        public static string HelpCoverPage {
+            get {
+                return ResourceManager.GetString("HelpCoverPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allows to override template for roster button and provide custom text for %rostertitle%.
         /// </summary>
         public static string HelpCustomTitle {
@@ -1132,6 +1141,16 @@ namespace WB.UI.Designer.Resources {
         public static string HelpVariableName {
             get {
                 return ResourceManager.GetString("HelpVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cover is virtual section that shows all identifying questions.
+        ///    Questions cannot be changed in this section.
+        /// </summary>
+        public static string HelpVirtualCoverPage {
+            get {
+                return ResourceManager.GetString("HelpVirtualCoverPage", resourceCulture);
             }
         }
         
@@ -1357,6 +1376,15 @@ namespace WB.UI.Designer.Resources {
         public static string IsWarning {
             get {
                 return ResourceManager.GetString("IsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jump to edit.
+        /// </summary>
+        public static string JumpToEdit {
+            get {
+                return ResourceManager.GetString("JumpToEdit", resourceCulture);
             }
         }
         
@@ -2041,6 +2069,15 @@ namespace WB.UI.Designer.Resources {
         public static string ReadOnly {
             get {
                 return ResourceManager.GetString("ReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is readonly question. You can not edit it..
+        /// </summary>
+        public static string ReadOnlyQuestion {
+            get {
+                return ResourceManager.GetString("ReadOnlyQuestion", resourceCulture);
             }
         }
         
@@ -3868,6 +3905,15 @@ namespace WB.UI.Designer.Resources {
         public static string ViewResolvedCommentsCounter_plural {
             get {
                 return ResourceManager.GetString("ViewResolvedCommentsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Virtual cover page.
+        /// </summary>
+        public static string VirtualCoverPage {
+            get {
+                return ResourceManager.GetString("VirtualCoverPage", resourceCulture);
             }
         }
         

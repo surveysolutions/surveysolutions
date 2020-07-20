@@ -5,7 +5,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     public interface IExportQuestionService
     {
-        string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header);
-        string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled);
+        string[] GetExportedQuestion(InterviewEntity? question, ExportedQuestionHeaderItem header);
+        string[] GetExportedVariable(object? variable, ExportedVariableHeaderItem header, bool isDisabled);
     }
 }

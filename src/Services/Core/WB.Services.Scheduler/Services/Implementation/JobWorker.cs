@@ -15,7 +15,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         private readonly ILogger<JobWorker> logger;
         private static long instanceCounter = 0;
         public long Id { get; set; }
-        public Task Task { get; set; }
+        public Task? Task { get; set; }
 
         public JobWorker(IServiceProvider serviceProvider,
             ILogger<JobWorker> logger)
@@ -42,8 +42,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                     {
                         var jobService = scope.ServiceProvider.GetService<IJobService>();
 
-                        JobItem job = await jobService.GetFreeJobAsync(token);
-
+                        JobItem? job = await jobService.GetFreeJobAsync(token);
                         if (job != null)
                         {
                             var executor = scope.ServiceProvider.GetService<IJobExecutor>();

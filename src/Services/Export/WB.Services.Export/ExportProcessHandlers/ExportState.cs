@@ -1,4 +1,5 @@
-﻿using WB.Services.Export.Models;
+﻿using System;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
@@ -20,13 +21,13 @@ namespace WB.Services.Export.ExportProcessHandlers
         public ExternalStorageType? StorageType => ProcessArgs.StorageType;
         public ExportProgress Progress { get;  }
 
-        public string ExportTempFolder { get; set; }
-        public string ArchiveFilePath { get; set; }
+        public string ExportTempFolder { get; set; } = String.Empty;
+        public string ArchiveFilePath { get; set; } = String.Empty;
         public bool RequireCompression { get; set; } = true;
         public bool RequirePublishToArtifactStorage { get; set; } = true;
         public bool RequirePublishToExternalStorage { get; set; }
         public long ProcessId => ProcessArgs.ProcessId;
         public bool? ShouldDeleteResultExportFile { get; set; }
-        public string QuestionnaireName { get; set; }
+        public string QuestionnaireName { get; set; } = String.Empty;
     }
 }

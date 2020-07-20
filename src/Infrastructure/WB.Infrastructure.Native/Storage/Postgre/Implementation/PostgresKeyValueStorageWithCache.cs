@@ -29,8 +29,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             return memoryCache.GetOrCreate(CachePrefix + id, cache =>
             {
-                cache.SlidingExpiration = TimeSpan.FromSeconds(10);
-                return base.GetById(id);
+                lock (CachePrefix)
+                {
+                    cache.SlidingExpiration = TimeSpan.FromSeconds(10);
+                    return base.GetById(id);
+                }
             });
         }
 

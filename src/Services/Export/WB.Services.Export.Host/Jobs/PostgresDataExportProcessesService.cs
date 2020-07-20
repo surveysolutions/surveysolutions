@@ -49,7 +49,7 @@ namespace WB.Services.Export.Host.Jobs
                 {
                     MaxRetryAttempts = this.jobSettings.Value.MaxRetryAttempts,
                     Tenant = args.ExportSettings.Tenant.ToString(),
-                    TenantName = args.ExportSettings.Tenant.Name,
+                    TenantName = args.ExportSettings.Tenant.Name ?? String.Empty,
                     Args = JsonConvert.SerializeObject(args),
                     Tag = args.NaturalId,
                     Type = ExportJobRunner.Name,
@@ -74,11 +74,12 @@ namespace WB.Services.Export.Host.Jobs
             return AsDataExportProcesses(jobItems).ToList();
         }
 
-        private HashSet<string> deletedQuestionnaires;
-        private HashSet<string> DeletedQuestionnaires => deletedQuestionnaires ??= this.tenantDbContext.GeneratedQuestionnaires
-            .Where(q => q.DeletedAt != null)
-            .Select(q => q.Id)
-            .ToHashSet();
+        private HashSet<string>? deletedQuestionnaires;
+        private HashSet<string> DeletedQuestionnaires => deletedQuestionnaires ??= 
+            this.tenantDbContext.GeneratedQuestionnaires
+                .Where(q => q.DeletedAt != null)
+                .Select(q => q.Id)
+                .ToHashSet();
 
         private IEnumerable<DataExportProcessArgs> AsDataExportProcesses(IEnumerable<JobItem> jobItems)
         {
@@ -87,7 +88,7 @@ namespace WB.Services.Export.Host.Jobs
                 .ToArray();
         }
 
-        public async Task<DataExportProcessArgs> GetProcessAsync(long processId)
+        public async Task<DataExportProcessArgs?> GetProcessAsync(long processId)
         {
             var job = await this.jobService.GetJobAsync(processId);
             if (job == null || job.Tenant != this.tenantContext.Tenant.Id.Id) return null;
@@ -100,7 +101,8 @@ namespace WB.Services.Export.Host.Jobs
             var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
 
             var eta = job.GetData<string>(EtaField);
-            var status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField));
+            var statusValue = job.GetData<string>(StatusField);
+            var status = statusValue == null ? DataExportStatus.Unknown : Enum.Parse<DataExportStatus>(statusValue);
             var hasError = /*job.Status == JobStatus.Canceled ||*/ job.Status == JobStatus.Fail;
 
             args.Status = new DataExportProcessStatus
@@ -118,7 +120,7 @@ namespace WB.Services.Export.Host.Jobs
                     {
                         Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField) ??
                                                            DataExportError.Unexpected.ToString()),
-                        Message = job.GetData<string>(ErrorField)
+                        Message = job.GetData<string>(ErrorField) ?? String.Empty
                     }
                     : null
             };

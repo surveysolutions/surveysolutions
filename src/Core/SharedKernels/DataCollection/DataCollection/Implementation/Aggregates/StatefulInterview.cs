@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Ncqrs;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -16,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -26,8 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public StatefulInterview(
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository optionsRepository)
-            : base(substitutionTextFactory, treeBuilder, optionsRepository)
+            IQuestionOptionsRepository optionsRepository,
+            IClock clock)
+            : base(substitutionTextFactory, treeBuilder, optionsRepository, clock)
         {
         }
 
@@ -162,22 +166,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.IsCompleted = true;
         }
 
-        private void Apply(InterviewPaused @event)
-        {
-        }
-
-        private void Apply(InterviewResumed @event)
-        {
-        }
-
-        private void Apply(InterviewOpenedBySupervisor @event)
-        {
-        }
-
-        private void Apply(InterviewClosedBySupervisor @event)
-        {
-        }
-
         protected override void Apply(InterviewRejected @event)
         {
             base.Apply(@event);
@@ -219,6 +207,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var question = this.Tree.GetQuestion(questionIdentity);
             return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
+        }
+
+        protected override void OnEventApplied(UncommittedEvent appliedEvent)
+        {
+            base.OnEventApplied(appliedEvent);
+            if (appliedEvent.Payload is QuestionAnswered questionAnswered)
+            {
+                this.properties.LastAnswerDate = questionAnswered.OriginDate;
+            }
         }
 
         public bool HasErrors { get; private set; }
@@ -280,6 +277,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewCompleted(userId, originDate, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, previousStatus: this.properties.Status, originDate: originDate));
+            this.ApplyEvent(new InterviewPaused(userId, originDate));
 
             var becomesValid = !(this.HasInvalidAnswers() || this.HasInvalidStaticTexts);
             if (this.properties.IsValid != becomesValid)
@@ -630,8 +628,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.Tree.GetAllNodesInEnumeratorOrder();
         }
 
-        public InterviewTreeSection FirstSection => this.Tree.Sections.First();
-
         public Guid CurrentResponsibleId
         {
             get
@@ -957,30 +953,124 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return childNode != null && childNode.Parents.Select(x => x.Identity).Any(x => x.Equals(parentIdentity));
         }
 
-        public void Pause(PauseInterviewCommand command)
-        {
-            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
-            {
-                ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
-            }
-        }
-
+        /// <summary>
+        /// Timespan within which two pause/resume sessions should be merged as a single one
+        /// </summary>
+        private readonly TimeSpan pauseResumeQuiteWindow = TimeSpan.FromMinutes(1);
+        
         public void Resume(ResumeInterviewCommand command)
         {
-            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
+            DateTimeOffset? lastResume = this.properties.LastResumed;
+            if (lastResume.HasValue)
             {
-                ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
+                if (command.OriginDate - lastResume < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+                
+                DateTimeOffset closePreviousNonClosedSessionDate = 
+                    lastResume.Value.AddMinutes(15);
+
+                if (command.OriginDate < closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = command.OriginDate;
+                }
+                
+                if (this.properties.LastAnswerDate > closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = this.properties.LastAnswerDate.Value;
+                }
+                
+                ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
             }
+            
+            ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
         }
 
-        public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)
+        public void Pause(PauseInterviewCommand command)
         {
+            DateTimeOffset? lastOpen = this.properties.LastResumed;
+            if (lastOpen.HasValue)
+            {
+                TimeSpan? afterLastResumeEvent = command.OriginDate - lastOpen;
+                if (afterLastResumeEvent < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+            
+            ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
+        }
+
+        public void CloseBySupervisor(CloseInterviewBySupervisorCommand command)
+        {
+            DateTimeOffset? lastResume = this.properties.LastOpenedBySupervisor;
+            if (lastResume.HasValue)
+            {
+                TimeSpan? afterLastResumeEvent = command.OriginDate - lastResume;
+                if (afterLastResumeEvent < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+            
             ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.OriginDate));
         }
 
-        public void OpenBySupevisor(OpenInterviewBySupervisorCommand command)
+        public void OpenBySupervisor(OpenInterviewBySupervisorCommand command)
         {
+            DateTimeOffset? lastOpenDate = this.properties.LastOpenedBySupervisor;
+            if (lastOpenDate.HasValue)
+            {
+                if (command.OriginDate - lastOpenDate < pauseResumeQuiteWindow)
+                {
+                    return;
+                }
+                
+                DateTimeOffset closePreviousNonClosedSessionDate = 
+                    lastOpenDate.Value.AddMinutes(15);
+
+                if (command.OriginDate < closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = command.OriginDate;
+                }
+                
+                ApplyEvent(new InterviewClosedBySupervisor(command.UserId, closePreviousNonClosedSessionDate));
+            }
+            
             ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
+        }
+        
+        private void Apply(InterviewPaused @event)
+        {
+            this.properties.LastPaused = @event.OriginDate;
+            this.properties.LastResumed = null;
+        }
+
+        private void Apply(InterviewResumed @event)
+        {
+            this.properties.LastResumed = @event.OriginDate;
+            this.properties.LastPaused = null;
+        }
+
+        private void Apply(InterviewOpenedBySupervisor @event)
+        {
+            this.properties.LastOpenedBySupervisor = @event.OriginDate;
+            this.properties.LastClosedBySupervisor = null;
+        }
+
+        private void Apply(InterviewClosedBySupervisor @event)
+        {
+            this.properties.LastClosedBySupervisor = @event.OriginDate;
+            this.properties.LastOpenedBySupervisor = null;
         }
     }
 }

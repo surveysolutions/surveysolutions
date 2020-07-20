@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
         private readonly IAuditLogService auditLogService;
+        private readonly IDeviceInformationService deviceInformationService;
         private const string StateKey = "identity";
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly ISerializer serializer;
@@ -38,13 +39,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
             IUserInteractionService userInteractionService,
-            IAuditLogService auditLogService) : base(principal, viewModelNavigationService)
+            IAuditLogService auditLogService,
+            IDeviceInformationService deviceInformationService) : base(principal, viewModelNavigationService)
         {
             this.deviceSettings = deviceSettings;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
             this.auditLogService = auditLogService;
+            this.deviceInformationService = deviceInformationService;
 
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.serializer = serializer;
@@ -221,6 +224,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (SynchronizationException ex)
             {
+                this.ErrorMessage = ex.Message;
+
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.HostUnreachable:
@@ -237,8 +242,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
                         break;
+                    
+                    case SynchronizationExceptionType.UpgradeRequired:
+                        var targetVersionObj = ex.Data["target-version"];
+                        if (targetVersionObj != null && targetVersionObj is string targetVersion)
+                        {
+                            var appVersionName = deviceInformationService.GetApplicationVersionName();
+                            ErrorMessage = GetRequiredUpdateMessage(targetVersion, appVersionName);
+                        }
+                        break;
                 }
-                this.ErrorMessage = ex.Message;
             }
             catch (Exception ex)
             {
@@ -252,6 +265,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
+        protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
 

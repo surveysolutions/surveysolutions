@@ -455,5 +455,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0061_DuplicatePasswordWithQuantity1", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All assignments for web interviews must be made to an interviewer.
+        /// </summary>
+        public static string PL0062_WebModeOnlyForInterviewer {
+            get {
+                return ResourceManager.GetString("PL0062_WebModeOnlyForInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer to question with variable name {0} can&apos;t be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version..
+        /// </summary>
+        public static string PL0063_NoPermittedQuestion {
+            get {
+                return ResourceManager.GetString("PL0063_NoPermittedQuestion", resourceCulture);
+            }
+        }
     }
 }

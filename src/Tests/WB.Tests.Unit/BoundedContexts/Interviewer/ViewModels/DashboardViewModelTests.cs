@@ -77,7 +77,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     restService: Mock.Of<IRestService>(), 
                     syncClient: Mock.Of<IOfflineSyncClient>(),
                     userInteractionService: Mock.Of<IUserInteractionService>(),
-                    googleApiService: Mock.Of<IGoogleApiService>());
+                    googleApiService: Mock.Of<IGoogleApiService>(),
+                    mapInteractionService: Mock.Of<IMapInteractionService>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
