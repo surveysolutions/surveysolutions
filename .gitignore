@@ -50,6 +50,7 @@ src/UI/Headquarters/WB.UI.Headquarters/App_Data/
 src/UI/Designer/WB.UI.Designer/App_Data/ReadSide/Esent
 
 Thumbs.db
+.DS_Store
 
 src/Core/Infrastructure/WB.Core.Infrastructure.Android/Resources/Resource.Designer.cs
 src/Core/Infrastructure/WB.Core.Infrastructure.Files.Android/Resources/Resource.Designer.cs

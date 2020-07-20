@@ -78,6 +78,9 @@ namespace WB.Services.Export.Questionnaire
 
                     var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId), token: cancellationToken);
 
+                    if (questionnaire == null)
+                        throw new InvalidOperationException("questionnaire must be not null.");
+
                     if (!questionnaire.IsDeleted)
                     {
                         result.Add(@event);
@@ -98,6 +101,9 @@ namespace WB.Services.Export.Questionnaire
             foreach (var questionnaireId in questionnaireIds)
             {
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
+                if (questionnaire == null)
+                    throw new InvalidOperationException("questionnaire must be not null.");
+
                 databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 

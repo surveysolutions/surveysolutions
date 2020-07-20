@@ -25,7 +25,7 @@
 import {map, join, uniqBy, filter, some, orderBy} from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query maps {
+const query = gql`query UserMaps {
   maps {
     totalCount,
     filteredCount,

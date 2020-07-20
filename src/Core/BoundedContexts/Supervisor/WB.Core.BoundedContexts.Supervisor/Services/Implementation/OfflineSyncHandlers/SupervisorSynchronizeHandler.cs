@@ -87,7 +87,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 return new CanSynchronizeResponse
                 {
                     CanSyncronize = false,
-                    Reason = SyncDeclineReason.UnexpectedClientVersion
+                    Reason = SyncDeclineReason.UnexpectedClientVersion,
+                    SupervisorVersion = this.settings.GetApplicationVersionName()
                 };
             }
 
@@ -100,7 +101,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     return new CanSynchronizeResponse
                     {
                         CanSyncronize = false,
-                        Reason = SyncDeclineReason.UnexpectedClientVersion
+                        Reason = SyncDeclineReason.UnexpectedClientVersion,
+                        SupervisorVersion = this.settings.GetApplicationVersionName()
                     };
                 }
             }

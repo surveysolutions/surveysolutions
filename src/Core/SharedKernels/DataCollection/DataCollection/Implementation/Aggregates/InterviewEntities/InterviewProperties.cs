@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public int? AssignmentId { get; set; }
 
         private Guid? supervisorId;
+
         public Guid? SupervisorId
         {
             get => this.supervisorId;
@@ -43,5 +44,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool? IsAudioRecordingEnabled { get; set; }
         public bool WasCreated { get; set; }
+
+        public DateTimeOffset? LastPaused { get; set; }
+
+        public DateTimeOffset? LastResumed { get; set; }
+
+        public DateTimeOffset? LastOpenedBySupervisor { get; set; }
+
+        public DateTimeOffset? LastClosedBySupervisor { get; set; }
+
+        public DateTimeOffset? LastAnswerDate { get; set; }
     }
 }

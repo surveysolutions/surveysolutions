@@ -1,20 +1,19 @@
-﻿namespace WB.Services.Infrastructure.Tenant
+﻿using Newtonsoft.Json;
+
+namespace WB.Services.Infrastructure.Tenant
 {
     public class TenantInfo
     {
-        public TenantInfo(string baseUrl, TenantId id, string name = null)
+        [JsonConstructor]
+        public TenantInfo(string baseUrl, TenantId id, string name)
         {
             BaseUrl = baseUrl;
             Id = id;
             Name = name;
         }
 
-        public TenantInfo()
-        {
-
-        }
-
-        public TenantInfo(string baseUrl, string tenantId, string name = null) : this(baseUrl, new TenantId(tenantId), name)
+        public TenantInfo(string baseUrl, string tenantId, string name = "") 
+            : this(baseUrl, new TenantId(tenantId), name)
         {
         }
 

@@ -52,12 +52,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             for (int i = 0; i < levelCount; i++)
             {
                 var vector = new int[1] { i };
-                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterId },  vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
                 for (int j = 0; j < levelCount; j++)
                 {
                     var nestedVector = new int[] { i, j };
-                    var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId }, null, nestedVector);
+                    var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId },  nestedVector);
                     interview.Levels.Add(string.Join(",", nestedVector), nestedLevel);
 
                     if (!nestedLevel.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))

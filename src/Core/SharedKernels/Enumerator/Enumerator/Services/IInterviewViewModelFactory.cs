@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IInterviewViewModelFactory
     {
         List<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState);
-        IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId);
+        IEnumerable<IInterviewEntityViewModel> GetPrefilledEntities(string interviewId, NavigationState navigationState);
         T GetNew<T>() where T : class;
         IDashboardItem GetDashboardAssignment(AssignmentDocument assignment);
         IDashboardItem GetDashboardInterview(InterviewView interviewView, List<PrefilledQuestion> details);

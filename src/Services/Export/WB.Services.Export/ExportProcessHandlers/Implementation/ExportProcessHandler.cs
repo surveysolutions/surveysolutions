@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Runtime.Internal.Util;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;

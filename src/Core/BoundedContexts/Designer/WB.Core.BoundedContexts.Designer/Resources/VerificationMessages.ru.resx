@@ -827,6 +827,11 @@
   </data>
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
     <value>Вопрос ссылается на не существующую категорию.</value>
-
+  </data>
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>Вопросы в секции "Обложка" должны иметь тег переменной</value>
+  </data>
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>Идентификационные вопросы могут иметь только разрешенные типы (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного).</value>
   </data>
 </root>

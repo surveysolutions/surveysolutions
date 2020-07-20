@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
@@ -35,17 +33,17 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
 #if EXCLUDEEXTENSIONS
-            registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
+            registry.Bind<IMapInteractionService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyMapInteractionService>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
-            registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
+            registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
 #endif
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo info)
         {
 #if !EXCLUDEEXTENSIONS
-            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicense();
+            WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
 #endif
             return Task.CompletedTask;
         }

@@ -284,7 +284,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var stataExportCaption = questionnaire.GetQuestionVariableName(questionId.Value);
             var variableLabel = questionnaire.GetQuestionExportDescription(questionId.Value);
 
-            report.Name = $"[ {stataExportCaption} ] {variableLabel ?? string.Empty}";
+            report.Name = $"{stataExportCaption} {(string.IsNullOrWhiteSpace(variableLabel) ? "" : " | " + variableLabel)}";
 
             stopwatch.Stop();
             var reportTimeToMonitor = questionnaire.GetQuestionType(questionId.Value) + (conditionalQuestionId != null ? @"_filtered" : "");

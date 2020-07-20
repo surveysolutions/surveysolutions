@@ -12,10 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models.Users;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {

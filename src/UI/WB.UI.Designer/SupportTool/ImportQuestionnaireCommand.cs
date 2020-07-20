@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -17,9 +18,9 @@ namespace WB.UI.Designer.SupportTool
 {
     public class ImportQuestionnaireCommand : Command
     {
-        private readonly IWebHost host;
+        private readonly IHost host;
 
-        public ImportQuestionnaireCommand(IWebHost host) : base("import", "Migrate database to latest version")
+        public ImportQuestionnaireCommand(IHost host) : base("import", "Import questionnaire")
         {
             this.host = host;
 

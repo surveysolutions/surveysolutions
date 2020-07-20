@@ -250,4 +250,10 @@
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
     <value>Password is not unique. Password by assignment for web mode with quantity 1 should be unique</value>
   </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>All assignments for web interviews must be made to an interviewer</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
+  </data>
 </root>

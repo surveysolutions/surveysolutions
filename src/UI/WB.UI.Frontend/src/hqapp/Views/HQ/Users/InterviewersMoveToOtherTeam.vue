@@ -57,6 +57,11 @@
                             v-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>`})"></span>
                     </label>
                 </div>
+
+                <span class="text-warning"
+                    v-if="showWebModeReassignWarning">
+                    {{$t('Pages.Interviewers_MoveWebAssigment')}}
+                </span>
             </div>
         </Confirm>
 
@@ -106,6 +111,21 @@
 
 <script>
 import {map, isUndefined, isEmpty, filter} from 'lodash'
+import gql from 'graphql-tag'
+
+const query = gql`query ($responsibleIds: [Uuid!]) {
+  assignments(
+    where: {
+          responsibleId_in: $responsibleIds,
+          webMode: true,
+          archived: false
+      },
+    take: 1
+    ) 
+  {
+    filteredCount
+  }
+}`
 
 export default {
     data() {
@@ -114,6 +134,7 @@ export default {
             supervisor: null,
             progressInterviewers: [],
             movingDialogTitle: '',
+            showWebModeReassignWarning: false,
         }
     },
     props: {
@@ -252,6 +273,25 @@ export default {
         },
         countInterviewersToMove() {
             return this.interviewersToMove().length
+        },
+    },
+    watch: {
+        async whatToDoWithAssignments(newValue) {
+            const self = this
+            if(newValue === 'ReassignToOriginalSupervisor'){
+                const interviewersArray = map(self.interviewersToMove, (i) => i.userId)
+                const response = await self.$apollo.query({
+                    query,
+                    variables: {
+                        responsibleIds: interviewersArray,
+                    },
+                    fetchPolicy: 'network-only',
+                })
+
+                self.showWebModeReassignWarning = response.data.assignments.filteredCount > 0
+            } else {
+                self.showWebModeReassignWarning = false
+            }
         },
     },
 }

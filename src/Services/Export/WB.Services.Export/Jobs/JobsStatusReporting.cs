@@ -51,9 +51,9 @@ namespace WB.Services.Export.Jobs
 
         private TenantInfo Tenant => this.tenantContext.Tenant;
 
-        public async Task<DataExportProcessView> GetDataExportStatusAsync(long processId)
+        public async Task<DataExportProcessView?> GetDataExportStatusAsync(long processId)
         {
-            DataExportProcessArgs process = await this.dataExportProcessesService.GetProcessAsync(processId);
+            DataExportProcessArgs? process = await this.dataExportProcessesService.GetProcessAsync(processId);
             if (process == null) return null;
 
             if(!Tenant.Id.Equals(process.ExportSettings.Tenant.Id)) throw new ArgumentException("Cannot found process #" + processId, nameof(processId));
@@ -134,14 +134,15 @@ namespace WB.Services.Export.Jobs
             foreach (var supportedDataExport in this.supportedDataExports)
             {
                 var exportSettings = new ExportSettings
-                {
-                    Tenant = Tenant,
-                    QuestionnaireId = questionnaireIdentity,
-                    ExportFormat = supportedDataExport.format,
-                    Status = status,
-                    FromDate = fromDate,
-                    ToDate = toDate,
-                };
+                (
+                    tenant : Tenant,
+                    questionnaireId : questionnaireIdentity,
+                    exportFormat : supportedDataExport.format,
+                    status : status,
+                    fromDate : fromDate,
+                    toDate : toDate,
+                    translation: null
+                );
                 var dataExportView = await this.CreateDataExportView(exportSettings,
                     supportedDataExport.exportType, allProcesses);
                 
@@ -210,15 +211,15 @@ namespace WB.Services.Export.Jobs
             var questionnaireId = new QuestionnaireId(dataExportProcessView.QuestionnaireId);
 
             var exportSettings = new ExportSettings
-            {
-                Tenant = Tenant,
-                QuestionnaireId = questionnaireId,
-                ExportFormat = dataExportProcessView.Format,
-                Status = dataExportProcessView.InterviewStatus,
-                FromDate = dataExportProcessView.FromDate,
-                ToDate = dataExportProcessView.ToDate,
-                Translation = dataExportProcessView.TranslationId
-            };
+            (
+                tenant : Tenant,
+                questionnaireId : questionnaireId,
+                exportFormat : dataExportProcessView.Format,
+                status : dataExportProcessView.InterviewStatus,
+                fromDate : dataExportProcessView.FromDate,
+                toDate : dataExportProcessView.ToDate,
+                translation : dataExportProcessView.TranslationId
+            );
 
             dataExportProcessView.HasFile = false;
 
@@ -237,7 +238,10 @@ namespace WB.Services.Export.Jobs
         {
             var status = dataExportProcessDetails.Status ?? new DataExportProcessStatus();
             var error = status.Error;
-            var settings = dataExportProcessDetails.ExportSettings ?? new ExportSettings();
+            var settings = dataExportProcessDetails.ExportSettings 
+                           ?? new ExportSettings(exportFormat:DataExportFormat.Tabular, 
+                               questionnaireId: new QuestionnaireId(Guid.Empty.ToString()), 
+                               new TenantInfo("",""));
 
             return new DataExportProcessView
             {
@@ -264,8 +268,8 @@ namespace WB.Services.Export.Jobs
                     ? null
                     : new DataExportErrorView
                     {
-                        Type = status.Error.Type,
-                        Message = status.Error.Message
+                        Type = status.Error?.Type ?? DataExportError.Unknown,
+                        Message = status.Error?.Message ?? ""
                     }
             };
         }

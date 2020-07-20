@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelTests
 {
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
     internal class LoadingViewModelNUnitTests : MvxTestFixture
     {
         [Test]
-        public async Task LoadingViewModel_when_interview_is_created_on_client_should_open_prefilled_questions_section()
+        public async Task LoadingViewModel_when_interview_is_created_on_client_should_open_interview_on_prefilled_questions_section()
         {
             var interview = Substitute.For<IStatefulInterview>();
             interview.HasEditableIdentifyingQuestions.Returns(true);
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(interview.Id.FormatGuid());
         }
 
         [Test]
@@ -124,7 +125,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 commandService ?? Substitute.For<ICommandService>(),
                 logger: Mock.Of<ILogger>(),
                 interactionService: Mock.Of<IUserInteractionService>(),
-                interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
+                interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                new JsonAllTypesSerializer());
 
             return loadingViewModel;
         }

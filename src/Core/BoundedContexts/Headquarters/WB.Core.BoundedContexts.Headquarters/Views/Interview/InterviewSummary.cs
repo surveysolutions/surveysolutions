@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewSummary : InterviewBrief
     {
         private string responsibleName;
+        private string supervisorName;
 
         public InterviewSummary()
         {
@@ -78,7 +79,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public virtual Guid SupervisorId { get; set; }
-        public virtual string SupervisorName { get; set; }
+
+        public virtual string SupervisorName
+        {
+            get => supervisorName;
+            set
+            {
+                supervisorName = value;
+                SupervisorNameLowerCase = value?.ToLower();
+            }
+        }
+
         public virtual string SupervisorNameLowerCase { get; set; }
 
         public virtual UserRoles ResponsibleRole { get; set; }

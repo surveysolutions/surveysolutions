@@ -304,7 +304,7 @@ export default {
             urlParams['userRole'] = userRole
 
             if (this.questionnaireId != undefined) {
-                var questionnaireId = this.questionnaireId.key
+                var questionnaireId = this.questionnaireId.value
                 var questionnaireVersion = (this.questionnaireVersion || {}).key
                 urlParams['questionnaireId'] = questionnaireId
                 urlParams['version'] = questionnaireVersion

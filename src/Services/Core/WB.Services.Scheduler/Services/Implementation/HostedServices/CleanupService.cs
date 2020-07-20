@@ -13,7 +13,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         private readonly IServiceProvider serviceProvider;
         private readonly IOptions<JobSettings> options;
         private readonly ILogger<CleanupService> logger;
-        private Task task;
+        private Task? task;
 
         public CleanupService(IServiceProvider serviceProvider, IOptions<JobSettings> options, ILogger<CleanupService> logger)
         {
@@ -60,7 +60,10 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            try { await task;} catch { /* om om om: we just need to wait for task to complete */}
+            try
+            {
+                if (task != null) await task;
+            } catch { /* om om om: we just need to wait for task to complete */}
         }
     }
 }

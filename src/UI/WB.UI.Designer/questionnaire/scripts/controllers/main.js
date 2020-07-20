@@ -129,7 +129,7 @@ angular.module('designerApp')
                         windowClass: "findReplaceModal dragAndDrop",
                         controller: 'findReplaceCtrl',
                         resolve: {
-                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || $scope.questionnaire.isReadOnly || false
                         }
                     });
                     searchBoxOpened = true;
@@ -254,13 +254,14 @@ angular.module('designerApp')
 
             $scope.chaptersTree = {
                 accept: function (sourceNodeScope) {
-                    return _.isEmpty(sourceNodeScope.item);
+                    return _.isEmpty(sourceNodeScope.item) && !sourceNodeScope.chapter.isCover;
                 },
                 dragStart: function () {
                     $scope.chaptersTree.isDragging = true;
                 },
                 beforeDrop: function (event) {
                     $scope.chaptersTree.isDragging = false;
+                    return event.dest.index != 0;
                 },
                 dropped: function (event) {
                     var rollback = function (item, targetIndex) {
@@ -268,11 +269,23 @@ angular.module('designerApp')
                         $scope.questionnaire.chapters.splice(targetIndex, 0, item);
                     };
 
-                    if (event.dest.index !== event.source.index) {
-                        var group = event.source.nodeScope.chapter;
-                        questionnaireService.moveGroup(group.itemId, event.dest.index, null, $state.params.questionnaireId)
+                    var sourceChapter = event.source.nodeScope.chapter;
+                    var destIndex = event.dest.index;
+
+                    if (sourceChapter.isCover || destIndex == 0) { // try to insert before Cover
+                        rollback(sourceChapter, event.source.index);
+                        return;
+                    }
+
+                    if (destIndex !== event.source.index) {
+                        var cover = $scope.questionnaire.chapters[0];
+                        if (cover.isCover && cover.isReadOnly) { // old version of questionnaire
+                            destIndex--;  
+                        }
+                        
+                        questionnaireService.moveGroup(sourceChapter.itemId, destIndex, null, $state.params.questionnaireId)
                             .error(function () {
-                                rollback(group, event.source.index);
+                                rollback(sourceChapter, event.source.index);
                             });
                     }
                 }
