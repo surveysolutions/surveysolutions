@@ -44,11 +44,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test] public void should_store_4_entities () =>
             plainStorageAccessor.TranslationInstances.Count().Should().Be(4);
 
-        private static TranslationsService service;
-        private static DesignerDbContext plainStorageAccessor;
-        private static byte[] fileStream;
-        private static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        private static Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        TranslationsService service;
+        DesignerDbContext plainStorageAccessor;
+        byte[] fileStream;
+        Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        Guid entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     }
 }
