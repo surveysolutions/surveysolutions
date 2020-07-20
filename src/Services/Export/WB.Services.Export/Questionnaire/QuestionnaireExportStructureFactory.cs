@@ -222,16 +222,16 @@ namespace WB.Services.Export.Questionnaire
             exportedHeaderItem.Labels = new List<LabelItem>();
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
+                var categories = questionnaire.Categories.FirstOrDefault(c => c.Id == categoricalQuestion.CategoriesId.Value);
                 var isMultiWithoutPredefineCategories = question is MultyOptionsQuestion multyOptionsQuestion
                                                         && multyOptionsQuestion.IsFilteredCombobox != true;
 
-                if (!isMultiWithoutPredefineCategories)
+                if (categories != null && !isMultiWithoutPredefineCategories)
                 {
                     exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
 
                     if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
                     {
-                        var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
                         headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
                             new ReusableLabels
                             (
