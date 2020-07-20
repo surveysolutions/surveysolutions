@@ -24,7 +24,7 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
         private readonly ITenantContext tenantContext;
-        
+
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
@@ -39,25 +39,27 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpPut]
         [Route("api/v1/job/regenerate")]
-        public async Task<DataExportUpdateRequestResult> RequestUpdate(
+        public async Task<DataExportUpdateRequestResult?> RequestUpdate(
             long processId,
-            string archivePassword,
-            string accessToken,
-            string refreshToken)
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken)
         {
             var process = await this.exportProcessesService.GetProcessAsync(processId);
-            var args = new DataExportProcessArgs
+
+            if (process == null) return null;
+
+            var args = new DataExportProcessArgs(new ExportSettings
+                (
+                    tenant: tenantContext.Tenant,
+                    questionnaireId: process.ExportSettings.QuestionnaireId,
+                    exportFormat: process.ExportSettings.ExportFormat,
+                    fromDate: process.ExportSettings.FromDate,
+                    toDate: process.ExportSettings.ToDate,
+                    status: process.ExportSettings.Status,
+                    translation: process.ExportSettings.Translation
+                ))
             {
-                ExportSettings = new ExportSettings
-                {
-                    Tenant = tenantContext.Tenant,
-                    QuestionnaireId = process.ExportSettings.QuestionnaireId,
-                    ExportFormat = process.ExportSettings.ExportFormat,
-                    FromDate = process.ExportSettings.FromDate,
-                    ToDate = process.ExportSettings.ToDate,
-                    Status = process.ExportSettings.Status,
-                    Translation = process.ExportSettings.Translation
-                },
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -80,24 +82,23 @@ namespace WB.Services.Export.Host.Controllers
             InterviewStatus? status,
             DateTime? from,
             DateTime? to,
-            string archivePassword,
-            string accessToken,
-            string refreshToken,
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken,
             Guid? translationId,
             ExternalStorageType? storageType)
         {
-            var args = new DataExportProcessArgs
+            var args = new DataExportProcessArgs(new ExportSettings
+            (
+                tenant: tenantContext.Tenant,
+                questionnaireId: new QuestionnaireId(questionnaireId),
+                exportFormat: format,
+                fromDate: from,
+                toDate: to,
+                translation: translationId,
+                status: status
+            ))
             {
-                ExportSettings = new ExportSettings
-                {
-                    Tenant = tenantContext.Tenant,
-                    QuestionnaireId = new QuestionnaireId(questionnaireId),
-                    ExportFormat = format,
-                    FromDate = from,
-                    ToDate = to,
-                    Translation = translationId,
-                    Status = status
-                },
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -138,15 +139,15 @@ namespace WB.Services.Export.Host.Controllers
             Guid? translationId)
         {
             var exportSettings = new ExportSettings
-            {
-                QuestionnaireId = new QuestionnaireId(questionnaireId),
-                ExportFormat = format,
-                Status = status,
-                Tenant = tenantContext.Tenant,
-                FromDate = fromDate,
-                ToDate = toDate,
-                Translation = translationId
-            };
+            (
+                questionnaireId: new QuestionnaireId(questionnaireId),
+                exportFormat: format,
+                status: status,
+                tenant: tenantContext.Tenant,
+                fromDate: fromDate,
+                toDate: toDate,
+                translation: translationId
+            );
 
             var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);
 
@@ -155,7 +156,7 @@ namespace WB.Services.Export.Host.Controllers
                 return NotFound();
             }
 
-            if (result.Redirect != null)
+            if (!string.IsNullOrEmpty(result.Redirect))
             {
                 Response.Headers.Add("NewLocation", result.Redirect);
                 return Ok();
@@ -184,7 +185,7 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [Route("api/v1/job")]
-        public async Task<DataExportProcessView> GetDataExportStatus(long processId)
+        public async Task<DataExportProcessView?> GetDataExportStatus(long processId)
         {
             return await this.jobsStatusReporting.GetDataExportStatusAsync(processId);
         }
@@ -201,7 +202,7 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<ActionResult> DeleteDataExportProcess(string processId)
         {
             var job = await jobService.GetJobAsync(tenantContext.Tenant, processId);
-            
+
             if (job != null && (job.Status == JobStatus.Running || job.Status != JobStatus.Created))
             {
                 this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
@@ -239,7 +240,7 @@ namespace WB.Services.Export.Host.Controllers
         [HttpGet]
         [Route("api/v1/job/byQuery")]
         public async Task<IEnumerable<DataExportProcessView>> GetJobsByQuery(DataExportFormat? exportType,
-            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, 
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus,
             bool? hasFile, int? limit, int? offset)
             => await this.jobsStatusReporting.GetDataExportStatusesAsync(exportType, interviewStatus,
                 questionnaireIdentity, exportStatus, hasFile, limit, offset);

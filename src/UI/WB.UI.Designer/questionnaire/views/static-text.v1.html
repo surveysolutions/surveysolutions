@@ -15,7 +15,7 @@
             <input id="edit-static-attachment-name" type="text" class="form-control" ng-model="activeStaticText.attachmentName" spellcheck="false" maxlength="32" />
         </div>
 
-        <div class="form-group enabling-group">
+        <div class="form-group enabling-group" ng-if="doesQuestionSupportEnablementConditions()">
             <div class="enabling-group-marker"></div>
             <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 

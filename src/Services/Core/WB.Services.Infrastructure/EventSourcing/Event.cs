@@ -8,7 +8,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     [JsonConverter(typeof(FeedEventConverter))]
     public class Event
     {
-        public string EventTypeName { get; set; }
+        public string EventTypeName { get; set; } = String.Empty;
 
         public int Sequence { get; set; }
 
@@ -16,15 +16,19 @@ namespace WB.Services.Infrastructure.EventSourcing
 
         public long GlobalSequence { get; set; }
 
-        public IEvent Payload { get; set; }
+        public IEvent? Payload { get; set; }
         public DateTime EventTimeStamp { get; set; }
 
-        private object publishedEvent;
+        private object? publishedEvent;
         public object AsPublishedEvent()
         {
             if (publishedEvent != null) return publishedEvent;
 
             var ev = this;
+
+            if(ev.Payload == null)
+                throw new ArgumentException(
+                    $"Cannot convert to PublishedEvent. Payload is null");
 
             var eventType = ev.Payload.GetType();
             var genericEventType = typeof(PublishedEvent<>).MakeGenericType(eventType);

@@ -78,6 +78,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
             ErrorForTranslation<IComposite>("WB0287", TableRosterDoesntContainsQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
             ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel,
+            Error<IQuestion>("WB0309", IdentityQuestionsMustHaveVariableLabel, VerificationMessages.WB0309_IdentityQuestionsMustHaveVariableLabel),
+            Error<IQuestion>("WB0308", IdentifyingQuestionsMustHaveOnlyAllowQuestionTypes, VerificationMessages.WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
@@ -116,6 +118,47 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
             return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
 
+        }
+
+        private bool IdentityQuestionsMustHaveVariableLabel(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var parent = question.GetParent();
+            if (parent != null && questionnaire.Questionnaire.IsCoverPage(parent.PublicKey))
+            {
+                return string.IsNullOrWhiteSpace(question.VariableLabel);
+            }
+
+            return false;
+        }
+
+        private bool IdentifyingQuestionsMustHaveOnlyAllowQuestionTypes(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!questionnaire.Questionnaire.IsCoverPageSupported)
+                return false;
+
+            var isIdentifying = questionnaire.Questionnaire.IsCoverPageSupported &&
+                                questionnaire.Questionnaire.IsCoverPage(question.GetParent()!.PublicKey);
+            if (!isIdentifying)
+                return false;
+
+            switch (question.QuestionType)
+            {
+                case QuestionType.Text:
+                case QuestionType.Numeric:
+                case QuestionType.DateTime:
+                case QuestionType.GpsCoordinates:
+                case QuestionType.SingleOption:
+                    return false;
+                
+                case QuestionType.Audio:
+                case QuestionType.Area:
+                case QuestionType.QRBarcode:
+                case QuestionType.TextList:
+                case QuestionType.Multimedia:
+                case QuestionType.MultyOption:
+                default:
+                    return true;
+            }
         }
 
         private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)

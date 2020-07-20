@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
-        LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
+        LookupTableContent? GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
         LookupTableContentFile? GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId);
         void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId);

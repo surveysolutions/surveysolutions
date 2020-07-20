@@ -52,9 +52,10 @@ namespace WB.UI.Tester.Implementation.Services
         }
 
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
-            this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
-                InterviewId = interviewId
+                InterviewId = interviewId,
+                NavigationIdentity = NavigationIdentity.CreateForCoverScreen()
             });
 
         public override Task NavigateToFinishInstallationAsync()
@@ -69,6 +70,11 @@ namespace WB.UI.Tester.Implementation.Services
                 InterviewId = interviewId,
                 NavigationIdentity = navigationIdentity
             });
+
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        {
+            throw new NotImplementedException();
+        }
 
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();

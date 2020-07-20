@@ -4,5 +4,6 @@
     {
         Undefined,
         AssignmentDeleted,
+        InvalidResponsible,
    }
 }

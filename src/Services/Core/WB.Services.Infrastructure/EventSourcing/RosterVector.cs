@@ -33,7 +33,7 @@ namespace WB.Services.Infrastructure.EventSourcing
             return Coordinates.GetEnumerator();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -125,11 +125,11 @@ namespace WB.Services.Infrastructure.EventSourcing
             return this.cachedHashCode.Value;
         }
 
-        public static bool operator ==(RosterVector a, RosterVector b)
+        public static bool operator ==(RosterVector? a, RosterVector? b)
             => ReferenceEquals(a, b)
                 || (a?.Equals(b) ?? false);
 
-        public static bool operator !=(RosterVector a, RosterVector b)
+        public static bool operator !=(RosterVector? a, RosterVector? b)
             => !(a == b);
 
         public override string ToString()
@@ -159,7 +159,7 @@ namespace WB.Services.Infrastructure.EventSourcing
             return this.coordinates.SequenceEqual(other.coordinates);
         }
 
-        public bool Identical(RosterVector other, int otherLength)
+        public bool Identical(RosterVector? other, int otherLength)
         {
             if (other == null) return false;
 

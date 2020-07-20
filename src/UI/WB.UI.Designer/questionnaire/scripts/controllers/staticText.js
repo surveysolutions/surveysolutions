@@ -136,6 +136,17 @@
                 dataBind(temp);
             };
 
+            $scope.doesQuestionSupportEnablementConditions = function () {
+                return $scope.activeStaticText
+                    && $scope.parentIsCover() === false;
+            };
+            
+            $scope.parentIsCover = function () {
+                return $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
+                    : null;
+            };
+
             $scope.loadStaticText();
         }
     );

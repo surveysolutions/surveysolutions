@@ -17,7 +17,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 {
     internal class when_getting_translation_file_for_questionnaire_with_2_comboboxes_with_same_variable_names_in_first_30_chars : TranslationsServiceTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             var storedTranslations = new List<TranslationInstance>
             {
                 Create.TranslationInstance(type: TranslationType.OptionTitle,
@@ -53,21 +55,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf() => translationFile = service.GetAsExcelFile(questionnaireId, translationId);
 
-        
-        [NUnit.Framework.Test] public void should_exported_excel_file_has_3_specified_worksheets () 
+
+        [NUnit.Framework.Test]
+        public void should_exported_excel_file_has_3_specified_worksheets()
         {
-            var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile));
-            var worksheetNames = excelWorkbook.Worksheets.Select(x=>x.Name).ToList();
+            using var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile));
+            var worksheetNames = excelWorkbook.Worksheets.Select(x => x.Name).ToList();
 
             worksheetNames.Should().BeEquivalentTo("Translations", "@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_03");
         }
 
-        static TranslationFile translationFile;
-        static TranslationsService service;
-        static readonly Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-        private static readonly Guid comboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        private static readonly Guid cascadingQustionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static readonly string questionName = "singlequestionwithdiffinlastcha";
+        TranslationFile translationFile;
+        TranslationsService service;
+        readonly Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        readonly Guid comboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        readonly Guid cascadingQustionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        readonly string questionName = "singlequestionwithdiffinlastcha";
     }
 }

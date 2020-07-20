@@ -21,22 +21,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public BrokenPackagesStatsCollector(IServiceLocator serviceLocator, ILogger<BrokenPackagesStatsCollector> logger)
         {
-
             this.serviceLocator = serviceLocator;
             this.logger = logger;
-            throttle.Start();
         }
 
-        public void RegisterMetrics()
-        {
-            throttle.Start();
-        }
+        public void RegisterMetrics() { }
 
         public void UpdateMetrics()
         {
             lock (throttle)
             {
-                if (throttle.Elapsed <= TimeSpan.FromSeconds(30)) return;
+                if (throttle.IsRunning && throttle.Elapsed <= TimeSpan.FromSeconds(30)) return;
                 throttle.Restart();
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
 
@@ -62,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var packages = from bip in session.Query<BrokenInterviewPackage>()
                                group bip by bip.ExceptionType into g
                                select new { Type = g.Key, Count = g.Count() };
+
                 cancellationToken.ThrowIfCancellationRequested();
 
                 foreach (var type in Enum.GetValues(typeof(InterviewDomainExceptionType)))
@@ -87,6 +83,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     DatabaseTableRowsCount.Labels(data.name).Set(data.rows);
                     DatabaseTableSize.Labels(data.name).Set(data.size);
                 }
+
+                var dbSize = session.Connection.QuerySingle<long>(@"SELECT pg_database_size(current_database())");
+                DatabaseSize.Set(dbSize);
             }
             catch (Exception e)
             {
@@ -105,5 +104,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public static readonly Gauge DatabaseTableSize = new Gauge(
             "wb_table_estimated_size_bytes",
             "Size of the table in bytes", "table");
+
+        public static readonly Gauge DatabaseSize = new Gauge(
+            "wb_database_size_bytes",
+            "Size of DB in bytes");
     }
 }

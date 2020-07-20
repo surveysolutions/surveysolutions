@@ -686,12 +686,10 @@
                 var newId = utilityService.guid();
 
                 commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, itemToCopy.questionnaireId, itemToCopy.itemId, newId).then(function () {
-
                     $scope.refreshTree();
-
                     $rootScope.$emit('itemPasted');
-                    $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
-                    
+                    if (!parent.isCover)
+                        $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
                 });
             };
 
@@ -705,11 +703,10 @@
                 var newId = utilityService.guid();
 
                 commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId).then(function () {
-
                     $scope.refreshTree();
-
                     $rootScope.$emit('itemPasted');
-                    $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+                    if (!$scope.currentChapter.isCover)
+                        $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
                 });
             };
 
@@ -734,6 +731,8 @@
                         var data = result.data;
                         $scope.items = data.chapter.items;
                         $scope.currentChapter = data.chapter;
+                        $scope.currentChapter.isCover = data.isCover;
+                        $scope.currentChapter.isReadOnly = data.isReadOnly;
                         $rootScope.updateVariableNames(data.variableNames);
                         connectTree();
                     });
