@@ -219,6 +219,7 @@ namespace WB.UI.Headquarters
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.Name = "hq";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });

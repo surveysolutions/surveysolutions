@@ -232,7 +232,7 @@
     <value>Invalid property</value>
   </data>
   <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Error when parse question answer</value>
+    <value>Cannot parse the question's response</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
     <value>Status set by Survey Solutions support team</value>

@@ -217,6 +217,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_offline_synchronization, Resource.Drawable.synchronize_offline_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_map_dashboard, Resource.Drawable.map_icon);
 
             if (ViewModel.SynchronizationWithHqEnabled)
             {
@@ -227,11 +228,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 menu.FindItem(Resource.Id.menu_synchronization).SetVisible(false);
             }
 
+            if (!ViewModel.DoesSupportMaps)
+            {
+                menu.FindItem(Resource.Id.menu_map_dashboard).SetVisible(false);
+            }
+
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
+            //menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -245,6 +252,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
+                    break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
                     break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();
