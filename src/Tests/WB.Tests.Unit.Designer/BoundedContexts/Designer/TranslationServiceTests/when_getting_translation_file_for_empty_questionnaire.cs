@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
         }
 
-        static TranslationsService service;
-        static Guid questionnaireId;
-        static Exception exception;
+        TranslationsService service;
+        Guid questionnaireId;
+        Exception exception;
     }
 }
