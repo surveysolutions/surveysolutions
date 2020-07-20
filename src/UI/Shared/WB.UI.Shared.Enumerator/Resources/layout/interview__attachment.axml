@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_QuestionWithDivider"
-    android:layout_width="match_parent"
-    local:MvxBind="HideKeyboardOnClick .">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto">
 
     <include layout="@layout/interview__attachment_multimedia" />
 
@@ -12,4 +9,4 @@
                      Click Attachment.ShowPdf; 
                      Visible Attachment.IsPdf;
                      Tag Format('Show_Pdf_{0}', Identity)"/>
-</LinearLayout>
+</merge>
