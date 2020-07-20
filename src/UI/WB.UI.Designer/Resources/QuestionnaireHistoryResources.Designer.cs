@@ -718,7 +718,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable {0} cloned from variable {1}.
+        ///   Looks up a localized string similar to Variable {0} copied from variable {1}.
         /// </summary>
         public static string Variable_Clone {
             get {
