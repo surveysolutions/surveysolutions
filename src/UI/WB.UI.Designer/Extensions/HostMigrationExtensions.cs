@@ -1,7 +1,7 @@
 ﻿using System;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Extensions
 {
     public static class HostMigrationExtensions
     {
-        public static IWebHost RunMigrations(this IWebHost host, Type firstMigration, string schemaName = "plainstore")
+        public static IHost RunMigrations(this IHost host, Type firstMigration, string schemaName = "plainstore")
         {
             var connectionString = host.Services.GetService<IConfiguration>()["ConnectionStrings:DefaultConnection"];
 

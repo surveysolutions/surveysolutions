@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
@@ -14,7 +15,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 {
     internal class when_storing_transation_for_different_questionnaire : TranslationsServiceTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp]
+        public void context()
+        {
             var questionnaire = Create.QuestionnaireDocument(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
             {
                 Create.Group(groupId: Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"))
@@ -44,11 +47,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf() => service.Store(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), translationId, fileStream);
 
-        [NUnit.Framework.Test] public void should_not_store_entities_from_other_questionnare () => plainStorageAccessor.TranslationInstances.Count().Should().Be(0);
+        [Test] 
+        public void should_not_store_entities_from_other_questionnare() 
+            => plainStorageAccessor.TranslationInstances.Count().Should().Be(0);
 
-        static byte[] fileStream;
-        static DesignerDbContext plainStorageAccessor;
-        static TranslationsService service;
-        static Guid translationId;
+        byte[] fileStream;
+        DesignerDbContext plainStorageAccessor;
+        TranslationsService service;
+        Guid translationId;
     }
 }

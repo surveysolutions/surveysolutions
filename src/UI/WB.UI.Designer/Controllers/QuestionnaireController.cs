@@ -351,13 +351,15 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public IActionResult GetLanguages(QuestionnaireRevision id)
         {
-            var questionnaire = this.questionnaireViewFactory.Load(id);
+            QuestionnaireView? questionnaire = this.questionnaireViewFactory.Load(id);
             if (questionnaire == null) return NotFound();
 
             var comboBoxItems =
                 new ComboItem
                 {
-                    Name = QuestionnaireHistoryResources.Translation_Original,
+                    Name = !string.IsNullOrEmpty(questionnaire.Source.DefaultLanguageName) ?
+                        questionnaire.Source.DefaultLanguageName :
+                        QuestionnaireHistoryResources.Translation_Original,
                     Value = null
                 }.ToEnumerable()
                 .Concat(

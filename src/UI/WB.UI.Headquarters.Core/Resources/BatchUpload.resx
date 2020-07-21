@@ -265,7 +265,7 @@
     <value>Select</value>
   </data>
   <data name="FileSizeLimit" xml:space="preserve">
-    <value>The file size can not exceed 300MB.</value>
+    <value>The file size cannot exceed 300MB.</value>
   </data>
   <data name="ImportSample" xml:space="preserve">
     <value>Import sample</value>
@@ -357,7 +357,7 @@ _comment - comments for the assignment</value>
     <value>Creating multiple assignments</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>If usernames are not specified you will need to assign a supervisor to all assignments in a later step.</value>
+    <value>If usernames are not specified in the "_responsible" column,  you will need to assign a supervisor to all assignments in a later step.</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
       <value>You can create individual assignments by entering all required data in {{url}}</value>

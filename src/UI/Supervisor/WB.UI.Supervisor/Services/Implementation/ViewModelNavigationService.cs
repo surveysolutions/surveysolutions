@@ -70,6 +70,12 @@ namespace WB.UI.Supervisor.Services.Implementation
             });
         }
 
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        {
+            return Task.CompletedTask;
+            //throw new NotImplementedException();
+        }
+
         public override Task NavigateToLoginAsync()
         {
             this.log.Trace("Navigating to LoginViewModel");
