@@ -143,7 +143,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         }
 
         [Test]
-        public async Task when_assignment_has_no_audio_recording_user_should_be_able_synchronize()
+        public void when_assignment_has_no_audio_recording_user_should_be_able_synchronize()
         {
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.10.0.23853 (build 23853)");
             var interviewerVersionReader = Mock.Of<IInterviewerVersionReader>(x => x.InterviewerBuildNumber == 23853);

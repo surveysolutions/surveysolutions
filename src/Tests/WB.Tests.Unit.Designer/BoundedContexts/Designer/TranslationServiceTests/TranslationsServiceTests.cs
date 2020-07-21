@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
     [TestOf(typeof(TranslationsService))]
     internal class TranslationsServiceTests : TranslationsServiceTestsContext
     {
-        [Test][Retry(3)]
+        [Test]
         public void when_storing_translations_with_html_from_excel_file()
         {
             //assert
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("Текст секции"));
         }
 
-        [Test][Retry(3)]
+        [Test]
         public void when_storing_translations_with_permitted_tags_from_excel_file()
         {
             //assert
@@ -146,7 +146,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_storing_translations_from_excel_file_without_variable_column()
         {
             //assert
@@ -183,7 +182,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_storing_translations_from_excel_file_with_columns_in_random_order()
         {
             //assert
@@ -220,7 +218,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_verifying_translations_from_excel_file_without_entity_id_column()
         {
             //assert
@@ -256,7 +253,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_verifying_translations_from_excel_file_with_categories_and_without_translation_column()
         {
             //assert
@@ -300,7 +296,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_verifying_translations_from_excel_file_with_categories_and_without_index_column()
         {
             //assert
@@ -344,7 +339,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_verifying_translations_from_excel_file_with_categories_and_index_cell_is_empty()
         {
             //assert
@@ -388,7 +382,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_storing_translations_from_excel_file_with_categories()
         {
             //assert
@@ -433,7 +426,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_storing_translations_from_excel_file_with_not_existing_categories_then_should_not_throw_InvalidFileException()
         {
             //assert
@@ -486,7 +478,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         }
 
         [Test]
-        [Retry(3)]
         public void when_storing_translations_from_excel_file_with_existing_categories_but_in_different_cases_then_should_not_throw_Exception()
         {
             //assert

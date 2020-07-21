@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class VerificationMessages {
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title or instructions substitution cannot be marked as identifying..
+        ///   Looks up a localized string similar to Question with title or instruction substitution cannot be marked as identifying..
         /// </summary>
         public static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s categories..
+        ///   Looks up a localized string similar to Max number of answers is greater than number of answer options..
         /// </summary>
         public static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories filter expression has length more than {0} characters..
+        ///   Looks up a localized string similar to The filter expression is more than {0} characters long..
         /// </summary>
         public static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with categories filter expression cannot be identifying..
+        ///   Looks up a localized string similar to Question with answer option filter cannot be identifying..
         /// </summary>
         public static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster where roster size source is question could not have fixed set of items..
+        ///   Looks up a localized string similar to Roster with a source question cannot have fixed set of items..
         /// </summary>
         public static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
             get {
@@ -341,7 +341,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster size question..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster source question..
         /// </summary>
         public static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
             get {
@@ -359,7 +359,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster where roster size source is question has invalid roster title question..
+        ///   Looks up a localized string similar to Roster with a question roster source has invalid source question for names of rows..
         /// </summary>
         public static string WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion {
             get {
@@ -368,7 +368,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster where roster size question is categorical multi answers or list question could not have roster title question..
+        ///   Looks up a localized string similar to Roster cannot have a roster title question when the roster source question is a categorical multi-select or list question..
         /// </summary>
         public static string WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion {
             get {
@@ -449,7 +449,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has categories with empty value..
+        ///   Looks up a localized string similar to Question has categories with empty values..
         /// </summary>
         public static string WB0045_QuestionHasOptionsWithEmptyValue {
             get {
@@ -773,7 +773,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size multi-select question should have limit.
+        ///   Looks up a localized string similar to Multi-select roster source question should have a maximum number of answers set..
         /// </summary>
         public static string WB0082_RosterSizeMultiOptionQuestionShouldBeLimited {
             get {
@@ -782,7 +782,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with current type can not be used as roster title..
+        ///   Looks up a localized string similar to Question with current type cannot be used as roster title..
         /// </summary>
         public static string WB0083_QuestionCannotBeUsedAsRosterTitle {
             get {
@@ -809,7 +809,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question references missing or unsupported type question..
+        ///   Looks up a localized string similar to Cascading combo box question references missing or unsupported question type..
         /// </summary>
         public static string WB0086_ParentCascadingQuestionShouldExist {
             get {
@@ -872,7 +872,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size text list question should have limit.
+        ///   Looks up a localized string similar to Roster source list question should have a maximum number of elements set..
         /// </summary>
         public static string WB0093_RosterSizeListOptionQuestionShouldBeLimit {
             get {
@@ -998,7 +998,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question filter expression has length more than {0} characters..
+        ///   Looks up a localized string similar to Linked question filter expression is longer than {0} characters..
         /// </summary>
         public static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -1007,7 +1007,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The question cannot be used in is it own filter expression..
+        ///   Looks up a localized string similar to The question cannot be used in its own filter expression..
         /// </summary>
         public static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
             get {
@@ -1061,7 +1061,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix roster supports only integer title values.
+        ///   Looks up a localized string similar to Fixed rosters only support integer values..
         /// </summary>
         public static string WB0115_FixRosterSupportsOnlyIntegerTitleValues {
             get {
@@ -1106,7 +1106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The titles of sections and sub-sections can not be empty or contain whitespace only..
+        ///   Looks up a localized string similar to The titles of sections and sub-sections cannot be empty or contain whitespace only..
         /// </summary>
         public static string WB0120_GroupTitleIsEmpty {
             get {
@@ -1727,7 +1727,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First section can not have enabling condition..
+        ///   Looks up a localized string similar to First section cannot have enabling condition..
         /// </summary>
         public static string WB0263_FirstChapterHasEnablingCondition {
             get {
@@ -1871,7 +1871,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode doesn&apos;t allow to use nested rosters..
+        ///   Looks up a localized string similar to Plain mode doesn&apos;t allow the use of nested rosters..
         /// </summary>
         public static string WB0279_PlainModeGroupContainsNestedGroup {
             get {
@@ -2132,11 +2132,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        ///   Looks up a localized string similar to Question references non-existent reusable category..
         /// </summary>
-        public static string WB0307_IdentityQuestionsMustHaveVariableLabel {
+        public static string WB0307_QuestionReferancedToIncorrectCategories {
             get {
-                return ResourceManager.GetString("WB0307_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
+                return ResourceManager.GetString("WB0307_QuestionReferancedToIncorrectCategories", resourceCulture);
             }
         }
         
@@ -2146,6 +2146,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes {
             get {
                 return ResourceManager.GetString("WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        /// </summary>
+        public static string WB0309_IdentityQuestionsMustHaveVariableLabel {
+            get {
+                return ResourceManager.GetString("WB0309_IdentityQuestionsMustHaveVariableLabel", resourceCulture);
             }
         }
     }

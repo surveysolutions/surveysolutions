@@ -385,14 +385,13 @@ namespace WB.Tests.Integration
             if (executeSchemaUpdate)
             {
                 var update = new SchemaUpdate(cfg);
-                update.Execute(true, true);
+                update.Execute(false, true);
             }
             if (schemaName != null)
             {
                 cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             }
-
-            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultFlushMode, FlushMode.Always.ToString());
+            
             return cfg.BuildSessionFactory();
         }
 

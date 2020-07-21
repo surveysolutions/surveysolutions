@@ -1,8 +1,5 @@
 using System;
-using System.IO;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -38,29 +35,8 @@ namespace WB.UI.WebTester
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog((host, loggerConfig) =>
-                {
-                    loggerConfig
-                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "webTester");
-                        
-                    if (host.HostingEnvironment.IsDevelopment())
-                    {
-                        // To debug logitems source add {SourceContext} to output template
-                        // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                        loggerConfig.WriteTo.Console();
-                    }
-                })
-                .ConfigureAppConfiguration(c =>
-                {
-                    c.AddIniFile("appsettings.ini", false, true);
-                    c.AddIniFile("appsettings.cloud.ini", true, true);
-                    c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
-                    c.AddIniFile("appsettings.Production.ini", true);
-                })
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureSurveySolutionsLogging(@"webtester")
+                .ConfigureSurveySolutionsAppConfiguration<Startup>(@"WEBTESTER_", args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

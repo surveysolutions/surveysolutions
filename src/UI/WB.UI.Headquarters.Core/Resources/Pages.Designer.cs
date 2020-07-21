@@ -1537,7 +1537,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server..
+        ///   Looks up a localized string similar to Locked interviewers cannot connect their tablets with the server and send interviews..
         /// </summary>
         public static string Interviewer_LockWarning {
             get {
@@ -2086,7 +2086,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total number of success synchronizations.
+        ///   Looks up a localized string similar to Total number of successful synchronizations.
         /// </summary>
         public static string InterviewerProfile_NumberOfSuccessSynchronizations {
             get {
@@ -2230,7 +2230,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recent synchronizations activity.
+        ///   Looks up a localized string similar to Recent synchronization activity.
         /// </summary>
         public static string InterviewerProfile_Sync_Activity_Title {
             get {
@@ -2662,7 +2662,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Devices/Interviewer report shows number of interviewer accounts on this server affected by each issue.
+        ///   Looks up a localized string similar to Issues for each interviewer.
         /// </summary>
         public static string InterviewersAndDevicesSubtitle {
             get {
@@ -3157,7 +3157,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload zip archive containing maps..
+        ///   Looks up a localized string similar to Upload a zip archive containing maps..
         /// </summary>
         public static string MapList_UploadDescription {
             get {
@@ -3166,7 +3166,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Files with same name will be overridden..
+        ///   Looks up a localized string similar to Note: Files with same name will be overwritten..
         /// </summary>
         public static string MapList_UploadDescriptionExtra {
             get {
@@ -3941,7 +3941,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Surveys and Statuses report shows number of interviews in each status by surveys.
+        ///   Looks up a localized string similar to Shows the number of interviews in each status (columns) for each survey instrument (rows).
         /// </summary>
         public static string SurveysAndStatuses_HeadquartersDescription {
             get {
