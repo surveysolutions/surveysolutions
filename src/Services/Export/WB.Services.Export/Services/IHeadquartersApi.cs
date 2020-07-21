@@ -63,5 +63,8 @@ namespace WB.Services.Export.Services
         Task<User.User> GetUserAsync(Guid userId);
         [Post("/api/export/v1/externalstorages/refreshtoken")]
         Task<string> GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken);
+
+        [Get("/api/export/v1/questionnaire/{id}/backup")]
+        Task<HttpContent> GetBackupAsync([AliasAs("id")] QuestionnaireId questionnaireId);
     }
 }

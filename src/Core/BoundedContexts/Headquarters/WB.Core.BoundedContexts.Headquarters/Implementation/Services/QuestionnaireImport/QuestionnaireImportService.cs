@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.QuestionnaireImport;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -37,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly ITranslationManagementService translationManagementService;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ISystemLog auditLog;
@@ -60,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IDesignerUserCredentials designerUserCredentials,
             IDesignerApiFactory designerApiFactory,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
-            IAssignmentsUpgradeService assignmentsUpgradeService)
+            IAssignmentsUpgradeService assignmentsUpgradeService, IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -79,6 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.designerApiFactory = designerApiFactory;
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
+            this.questionnaireBackupStorage = questionnaireBackupStorage;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -150,6 +153,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
                 new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
                 new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
+                new QuestionnaireBackupImportStep(questionnaireIdentity, designerApi, questionnaireBackupStorage, logger)
             };
 
             if (includePdf)
