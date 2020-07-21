@@ -234,6 +234,9 @@
   <data name="CloseLabel" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Approve</value>
   </data>
