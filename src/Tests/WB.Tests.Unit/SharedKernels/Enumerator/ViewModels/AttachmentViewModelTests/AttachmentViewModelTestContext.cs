@@ -19,9 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             return Create.ViewModel.AttachmentViewModel(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
-                enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
-                externalAppLauncher ?? Mock.Of<IExternalAppLauncher>());
+                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>());
         }
     }
 }
