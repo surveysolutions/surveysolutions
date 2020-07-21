@@ -286,6 +286,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     "i_name",
                     "i_id",
                     "i_supervisorName",
+                    "i_fullName",
+                    "i_email",
+                    "i_phone",
                     "s_appVersion",
                     "s_updateAvailable",
                     "s_linkedDate",
@@ -330,13 +333,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     x.InterviewerName,
                     x.InterviewerId,
                     x.SupervisorName,
+                    x.FullName,
+                    x.Email,
+                    x.Phone,
                     x.InterviewerAppVersion,
                     x.HasUpdateForInterviewerApp,
-                    x.DeviceAssignmentDate,
+                    x.DeviceAssignmentDate?.ToString("yyyy-MM-dd"),
                     x.TotalNumberOfSuccessSynchronizations,
                     x.TotalNumberOfFailedSynchronizations,
                     x.AverageSyncSpeedBytesPerSecond,
-                    x.LastCommunicationDate,
+                    x.LastCommunicationDate?.ToString("s", CultureInfo.InvariantCulture) ?? "",
                     x.DeviceId,
                     x.DeviceSerialNumber,
                     x.DeviceType,
@@ -346,7 +352,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     x.TrafficUsed,
                     x.DeviceLanguage,
                     x.AndroidVersion,
-                    x.LastSurveySolutionsUpdatedDate,
+                    x.LastSurveySolutionsUpdatedDate?.ToString("s", CultureInfo.InvariantCulture) ?? "",
                     x.DeviceLocationOrLastKnownLocationLat,
                     x.DeviceLocationOrLastKnownLocationLon,
                     x.DeviceOrientation,
@@ -358,8 +364,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     x.RamFreeInBytes,
                     x.RamTotalInBytes,
                     x.DatabaseSizeInBytes,
-                    x.ServerTimeAtTheBeginningOfSync,
-                    x.TabletTimeAtTeBeginningOfSync,
+                    x.ServerTimeAtTheBeginningOfSync?.ToString("s", CultureInfo.InvariantCulture) ?? "",
+                    x.TabletTimeAtTeBeginningOfSync?.ToString("s", CultureInfo.InvariantCulture) ?? "",
                     x.ConnectionType,
                     x.ConnectionSubType,
                     x.QuestionnairesReceived,
@@ -435,7 +441,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             var totalFailedSynchronizationCount =
                 this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(interviewerId);
 
-            var lastSyncronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(interviewerId);
+            var lastSynchronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(interviewerId);
             var averageSyncSpeedBytesPerSecond =
                 this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(interviewerId);
 
@@ -479,7 +485,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                 TotalDownloadedBytes = lastFailedDeviceInfo?.Statistics?.TotalDownloadedBytes ?? 0,
             };
 
-            profile.LastCommunicationDate = lastSyncronizationDate;
+            profile.LastCommunicationDate = lastSynchronizationDate;
             profile.HasDeviceInfo = lastSuccessDeviceInfo != null;
             if (lastSuccessDeviceInfo == null)
                 return profile;
@@ -518,6 +524,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             profile.RejectedInterviewsOnDevice = lastSuccessDeviceInfo.Statistics?.RejectedInterviewsOnDeviceCount ?? 0;
 
             profile.TrafficUsed = trafficUsed;
+
+            profile.LastLoginDate = interviewer.LastLoginDate;
 
             return profile;
         }
