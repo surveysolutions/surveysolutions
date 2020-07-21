@@ -283,6 +283,19 @@ export default {
                         return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                     },
                 },
+                {
+                    data: 'lastLoginDate',
+                    name: 'LastLoginDate',
+                    className: 'changed-recently',
+                    title: this.$t('Pages.Interviewers_LastLoginDateTitle'),
+                    tooltip: this.$t('Pages.Interviewers_LastLoginDateTooltip'),
+                    render: function(data, type, row) {
+                        if(data == null)
+                            return ''
+                        var localDate = moment.utc(data).local()
+                        return localDate.format(DateFormats.dateTimeInList)
+                    },
+                },
             ]
 
             if (this.model.showSupervisorColumn) {

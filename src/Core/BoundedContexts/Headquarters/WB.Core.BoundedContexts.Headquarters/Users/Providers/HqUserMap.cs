@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             });
 
             this.Property(x => x.SecurityStamp);
+            this.Property(x => x.LastLoginDate);
 
             this.Bag(x => x.Claims, map =>
             {

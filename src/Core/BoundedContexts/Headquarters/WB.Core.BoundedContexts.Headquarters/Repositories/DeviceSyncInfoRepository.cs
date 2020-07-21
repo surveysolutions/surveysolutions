@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .Where(d => d.InterviewerId == interviewerId && d.Statistics != null)
                 .Take(5).ToList());
 
-            return list.Count > 0 ? list.Average(info => info.Statistics.TotalConnectionSpeed) : 0;
+            return list.Count > 0 ? list.Average(info => info.Statistics.TotalConnectionSpeed) : (double?)null;
         }
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)

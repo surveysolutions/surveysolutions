@@ -87,5 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
         public double? DeviceLocationOrLastKnownLocationLat { get; set; }
         public double? DeviceLocationOrLastKnownLocationLon { get; set; }
         public long TrafficUsed { get; set; }
+        public DateTime? LastLoginDate { get; set; }
     }
 }

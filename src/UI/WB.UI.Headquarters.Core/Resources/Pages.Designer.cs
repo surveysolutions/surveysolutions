@@ -2491,6 +2491,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last log in.
+        /// </summary>
+        public static string Interviewers_LastLoginDateTitle {
+            get {
+                return ResourceManager.GetString("Interviewers_LastLoginDateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date when the interviewer loged in last time.
+        /// </summary>
+        public static string Interviewers_LastLoginDateTooltip {
+            get {
+                return ResourceManager.GetString("Interviewers_LastLoginDateTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {{supervisor}}..
         /// </summary>
         public static string Interviewers_MoveAllToNewTeam {

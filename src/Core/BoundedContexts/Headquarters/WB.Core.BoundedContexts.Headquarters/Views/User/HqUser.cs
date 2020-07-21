@@ -72,6 +72,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual DateTime CreationDate { get; set; }
         public virtual string PasswordHashSha1 { get; set; }
 
+        public virtual DateTime? LastLoginDate { get; set; }
+
         public virtual bool IsInRole(UserRoles role)
         {
             return this.Roles.Any(r => r.Id.ToUserRole() == role);

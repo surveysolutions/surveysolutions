@@ -243,6 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsArchived = x.IsArchived,
                 EnumeratorVersion = x.Profile.DeviceAppVersion,
                 EnumeratorBuild = x.Profile.DeviceAppBuildVersion,
+                LastLoginDate = x.LastLoginDate
             });
             
 
@@ -294,7 +295,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
                 interviewers = AppySupervisorFilter(supervisorId, interviewers);
 
-                return interviewers.Select(x => x.Id);
+                return interviewers
+                    .OrderBy(x => x.UserName)
+                    .Select(x => x.Id);
             };
 
             return query.Invoke(repository.Users).ToArray();
