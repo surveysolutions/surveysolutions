@@ -90,7 +90,7 @@ namespace WB.Services.Export
             services.AddTransient<IDatabaseSchemaCommandBuilder, DatabaseSchemaCommandBuilder>();
             services.AddTransient<IUserStorage, UserStorage>();
             services.AddTransient<IPdfExporter, PdfExporter>();
-            services.AddTransient<IJsonExporter, JsonExporter>();
+            services.AddTransient<IQuestionnaireBackupExporter, QuestionnaireBackupExporter>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
