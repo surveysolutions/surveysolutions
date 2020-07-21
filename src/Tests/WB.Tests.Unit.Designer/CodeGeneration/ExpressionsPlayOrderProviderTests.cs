@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -13,6 +13,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.Designer.CodeGeneration
 {
     [TestFixture]
+    [TestOf(typeof(ExpressionsPlayOrderProvider))]
     public class ExpressionsPlayOrderProviderTests
     {
         [Test]
@@ -276,7 +277,26 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             CollectionAssert.AreEqual(dependencies, new[] { Id.g7, Id.g2, Id.g3, Id.g4});
         }
 
+        [Test]
+        public void when_static_text_depends_on_variable_Should_add_such_dependency_in_graph()
+        {
+            Guid questionnaireId = Id.g9;
+            Guid v1Id = Id.g1;
+            Guid s2Id = Id.g2;
+            Guid q3Id = Id.g3;
+            
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            {
+                Create.TextQuestion(q3Id, variable: "txt"),
+                Create.Variable(v1Id, VariableType.String, "variable1"),
+                Create.StaticText(s2Id, attachmentName: "variable1"),
+            });
 
+            var dependensies = GetDependensies(questionnaireDocument, s2Id);
+
+            Assert.That(dependensies, Is.EquivalentTo(new[] { s2Id, v1Id }));
+        }
+        
 
         private static List<Guid> GetDependensies(QuestionnaireDocument questionnaireDocument, Guid entityId)
         {
