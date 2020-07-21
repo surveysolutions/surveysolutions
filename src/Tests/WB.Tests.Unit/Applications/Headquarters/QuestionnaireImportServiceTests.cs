@@ -381,7 +381,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
                 Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
                 new QuestionnaireImportStatuses(),
-                Mock.Of<IAssignmentsUpgradeService>()
+                Mock.Of<IAssignmentsUpgradeService>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireBackup>>()
                 );
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
