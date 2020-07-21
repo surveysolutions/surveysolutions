@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
         private readonly QuestionnaireIdentity questionnaireIdentity;
         private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
         private readonly ILogger logger;
-        private readonly RestFile backupFile;
+        private RestFile backupFile;
 
         public QuestionnaireBackupImportStep(QuestionnaireIdentity questionnaireIdentity,
             IDesignerApi designerApi, 
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
         {
             logger.Verbose($"Downloading Questionnaire Backup: {questionnaireIdentity.QuestionnaireId} ver.{questionnaireIdentity.Version}");
 
-            var backupFile = await designerApi.DownloadQuestionnaireBackup(questionnaireIdentity.QuestionnaireId);
+            backupFile = await designerApi.DownloadQuestionnaireBackup(questionnaireIdentity.QuestionnaireId);
 
             progress.Report(100);
         }
