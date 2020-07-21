@@ -33,6 +33,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -1064,11 +1065,15 @@ namespace WB.Tests.Abc.TestFactories
             return new EnumeratorGroupGroupStateCalculationStrategy();
         }
 
-        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        public IInvitationService InvitationService(
+            IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null,
+            IAggregateRootPrototypePromoterService promoter = null
+            )
         {
             var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
                 invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
+                promoter ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
                 Create.Service.TokenGenerator());
             return service;
         }
@@ -1082,7 +1087,9 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             var service = new InvitationService(accessor,
-                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
+                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(),
+                Mock.Of<IAggregateRootPrototypePromoterService>(),
+                Mock.Of<ITokenGenerator>());
             return service;
         }
 
@@ -1134,9 +1141,13 @@ namespace WB.Tests.Abc.TestFactories
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
         }
 
-        public TokenGenerator TokenGenerator(int tokenLength = 8, IPlainStorageAccessor<Invitation> invitationStorage = null)
+        public TokenGenerator TokenGenerator(int tokenLength = 8, 
+            IPlainStorageAccessor<Invitation> invitationStorage = null,
+            IPlainKeyValueStorage<TenantSettings> tenantSettingsStorage = null)
         {
-            return new TokenGenerator(invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>())
+            return new TokenGenerator(
+                invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>(),
+                tenantSettingsStorage ?? new InMemoryPlainStorageAccessor<TenantSettings>())
             {
                 tokenLength = tokenLength
             };

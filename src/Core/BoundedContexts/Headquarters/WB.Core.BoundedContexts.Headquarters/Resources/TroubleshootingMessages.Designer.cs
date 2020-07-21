@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} has not yet been received by interviewer {1}. The interviewer has not synced yet..
+        ///   Looks up a localized string similar to Interview {0} has not yet been received by interviewer {1}..
         /// </summary>
         public static string NoData_InterviewWasNotReceived {
             get {

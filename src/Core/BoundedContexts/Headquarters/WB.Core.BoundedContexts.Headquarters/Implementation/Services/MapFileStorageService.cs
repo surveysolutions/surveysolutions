@@ -281,11 +281,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                                 item.XMaxVal = xMax;
                                 item.YMaxVal = yMax;
+
+                                item.Wkid = 4326; //geographic coordinates Wgs84
                             }
-
-                            item.Wkid = 4326; //geographic coordinates Wgs84
-
-
+                            else
+                                throw new Exception(".tif file is not recognized as map");
                         }
                         catch (Win32Exception e)
                         {
