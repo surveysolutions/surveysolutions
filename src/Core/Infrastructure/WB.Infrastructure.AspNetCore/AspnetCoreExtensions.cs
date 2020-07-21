@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -93,6 +94,16 @@ namespace WB.Infrastructure.AspNetCore
             })
                 .ConfigureWebHostDefaults(webBuilder =>
             {
+                if (args.Contains("--kestrel"))
+                {
+                    webBuilder.UseKestrel();
+                }
+
+                if (args.Contains("--httpsys"))
+                {
+                    webBuilder.UseHttpSys();
+                }
+
                 webBuilder.UseStartup<TStartup>();
             });
         }
