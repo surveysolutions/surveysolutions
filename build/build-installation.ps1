@@ -53,7 +53,7 @@ Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse
 Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 
-$file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
+$file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
 $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
 # $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
 $productFileVersion = $versionOfProduct.FileVersion
