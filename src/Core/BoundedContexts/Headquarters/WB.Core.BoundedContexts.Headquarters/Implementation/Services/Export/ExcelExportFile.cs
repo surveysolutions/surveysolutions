@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                         var cell = worksheet.Cell(rowIndex, columnIndex + 1);
                         var value = rowData[columnIndex];
 
+
                         SetCellValue(value, cell);
                     }
 
@@ -72,6 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             {
                 case long longValue:
                     cell.Value = longValue;
+                    cell.Style.NumberFormat.Format = "#,##0";
                     break;
                 case int intValue:
                     cell.Value = intValue;
