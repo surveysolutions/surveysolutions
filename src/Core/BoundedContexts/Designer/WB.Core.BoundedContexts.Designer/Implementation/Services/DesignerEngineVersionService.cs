@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     new QuestionnaireFeature
                     (
                         hasQuestionnaire: HasTranslatedTitle,
-                        description: "Has translated questionnaire title"
+                        description: "Translated questionnaire title"
                     ),
                 }
             },
