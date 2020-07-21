@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.eventRegistry.Subscribe(this, navigationState.InterviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
             BindAttachment().WaitAndUnwrapException();
         }
 
