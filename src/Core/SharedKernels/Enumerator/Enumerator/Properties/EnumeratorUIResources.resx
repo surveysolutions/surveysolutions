@@ -322,6 +322,9 @@ for further instructions</value>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
     <value>Assignments are locked until synchronization is complete</value>
   </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+      <value>More information on the synchronization errors may be found at the &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;support site&lt;/a&gt;</value>
+  </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>questionnaires</value>
   </data>
