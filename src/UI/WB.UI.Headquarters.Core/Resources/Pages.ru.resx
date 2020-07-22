@@ -1597,4 +1597,10 @@
   <data name="Diagnostics" xml:space="preserve">
     <value>Диагностика</value>
   </data>
+  <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+    <value>Дата последнего входа</value>
+  </data>
+  <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+    <value>Дата, когда интервьюер последний раз заходил в систему</value>
+  </data>
 </root>
