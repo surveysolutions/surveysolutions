@@ -69,28 +69,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
         private static void SetCellValue(object value, IXLCell cell)
         {
-            switch (value)
-            {
-                case long longValue:
-                    cell.Value = longValue;
-                    cell.Style.NumberFormat.Format = "#,##0";
-                    break;
-                case int intValue:
-                    cell.Value = intValue;
-                    break;
-                case double doubleValue:
-                    cell.Value = doubleValue;
-                    break;
-                case float floatValue:
-                    cell.Value = floatValue;
-                    break;
-                case decimal decimalValue:
-                    cell.Value = decimalValue;
-                    break;
-                default:
-                    cell.Value = value?.ToString() ?? "";
-                    break;
-            }
+            cell.SetValue(value);
+
+            if(value is long)
+                cell.Style.NumberFormat.Format = "#,##0";
         }
 
         public override string MimeType => @"application/vnd.oasis.opendocument.spreadsheet";

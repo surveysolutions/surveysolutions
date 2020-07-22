@@ -108,14 +108,6 @@ namespace WB.UI.Headquarters.Controllers
             if (signInResult.Succeeded)
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
-
-                var user = await this.signInManager.UserManager.FindByNameAsync(model.UserName);
-                if (user != null)
-                {
-                    user.LastLoginDate = DateTime.UtcNow;
-                    await this.signInManager.UserManager.UpdateAsync(user);
-                }
-
                 return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
             if (signInResult.RequiresTwoFactor)
@@ -159,9 +151,6 @@ namespace WB.UI.Headquarters.Controllers
             
             if (signInResult.Succeeded)
             {
-                user.LastLoginDate = DateTime.UtcNow;
-                await this.signInManager.UserManager.UpdateAsync(user);
-
                 return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
             
