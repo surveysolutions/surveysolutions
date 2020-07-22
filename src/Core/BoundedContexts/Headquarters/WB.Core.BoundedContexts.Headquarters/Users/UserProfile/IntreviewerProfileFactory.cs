@@ -20,17 +20,6 @@ using WB.Infrastructure.Native.Fetching;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 {
-    public interface IInterviewerProfileFactory
-    {
-        Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid interviewerId);
-
-        ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
-
-        InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId);
-
-        Task<InterviewerTrafficUsage> GetInterviewerTrafficUsageAsync(Guid interviewerId);
-    }
-
     public class InterviewerProfileFactory : IInterviewerProfileFactory
     {
         private readonly IUserRepository userManager;
@@ -215,7 +204,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             }
         }
 
-
         public async Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid userId)
         {
             var interviewer = await this.userManager.FindByIdAsync(userId);
@@ -225,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
-            var registredDeviceCount = this.deviceSyncInfoRepository.GetRegisteredDeviceCount(userId);
+            var registeredDeviceCount = this.deviceSyncInfoRepository.GetRegisteredDeviceCount(userId);
             var trafficUsed = (await this.deviceSyncInfoRepository.GetTotalTrafficUsageForInterviewer(userId)).InKb();
             InterviewerProfileModel profile = 
                 this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo, trafficUsed) as InterviewerProfileModel;
@@ -243,7 +231,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             profile.WaitingInterviewsForApprovalCount = completedInterviewCount;
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;
             profile.SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId);
-            profile.RegistredDevicesCount = registredDeviceCount;
+            profile.RegistredDevicesCount = registeredDeviceCount;
             profile.HasAnyGpsAnswerForInterviewer = interviewFactory.HasAnyGpsAnswerForInterviewer(userId);
 
             profile.SupportQRCodeGeneration = qRCodeHelper.SupportQRCodeGeneration();
@@ -524,7 +512,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             profile.RejectedInterviewsOnDevice = lastSuccessDeviceInfo.Statistics?.RejectedInterviewsOnDeviceCount ?? 0;
 
             profile.TrafficUsed = trafficUsed;
-
             profile.LastLoginDate = interviewer.LastLoginDate;
 
             return profile;
