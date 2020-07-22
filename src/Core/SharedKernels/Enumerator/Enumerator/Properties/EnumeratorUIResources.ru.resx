@@ -319,6 +319,9 @@
   <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
     <value>Получение {0}</value>
   </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Подробнее об ошибках синхронизации можно прочесть на &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;сайте тех. поддержки&lt;/a&gt;</value>
+  </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>интервью</value>
   </data>
