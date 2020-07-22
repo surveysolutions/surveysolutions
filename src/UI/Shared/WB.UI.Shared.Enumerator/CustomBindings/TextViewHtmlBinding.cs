@@ -1,4 +1,5 @@
-﻿using Android.Widget;
+﻿using Android.Text.Method;
+using Android.Widget;
 using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.Utils;
 
@@ -12,7 +13,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, string value)
         {
-            control?.SetText(value?.ToAndroidSpanned(), TextView.BufferType.Spannable);
+            control.SetText(value?.ToAndroidSpanned(), TextView.BufferType.Spannable);
+            control.MovementMethod = new LinkMovementMethod();
         }
     }
 }
