@@ -31,7 +31,6 @@ $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContai
 
 $HQsitePath = Join-path $workdir "HQwork"
 
-Rename-Item $HQsitePath\web.config $HQsitePath\Web.config
 
 #remove old files
 if (!($noDestCleanup)) {
@@ -50,6 +49,8 @@ if (!(Test-Path $HQsitePath)) {
 #$targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse
+Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
+
 #Remove-Item "$HQsitePath\HostMap.config"
 
 Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
