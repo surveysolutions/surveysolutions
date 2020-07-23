@@ -1950,7 +1950,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsCoverPage(Guid identityId) => innerDocument.IsCoverPage(identityId);
         public bool IsCoverPageSupported => innerDocument.IsCoverPageSupported;
         public Guid CoverPageSectionId => innerDocument.CoverPageSectionId;
-        public string GetAttachmentName(Guid entityId)
+        public string GetAttachmentNameForEntity(Guid entityId)
         {
             return this.GetStaticTextImpl(entityId).AttachmentName;
         }
