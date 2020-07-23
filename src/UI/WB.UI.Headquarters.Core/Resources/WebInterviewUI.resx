@@ -249,6 +249,9 @@
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
     <value>Categories will be available after answering referenced question</value>
   </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>The maximum number of selections ({{value}}) in this question has been made</value>
+  </data>
   <data name="ConfirmRosterRemove" xml:space="preserve">
     <value>Are you sure you want to remove related roster?</value>
   </data>
