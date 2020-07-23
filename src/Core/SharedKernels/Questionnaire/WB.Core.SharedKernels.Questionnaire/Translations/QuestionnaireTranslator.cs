@@ -13,6 +13,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             var translatedDocument = originalDocument.Clone();
 
+            TranslateTitle(translatedDocument, translation);
+            
             foreach (var entity in translatedDocument.Find<IQuestionnaireEntity>())
             {
                 var entityAsQuestion = entity as IQuestion;
