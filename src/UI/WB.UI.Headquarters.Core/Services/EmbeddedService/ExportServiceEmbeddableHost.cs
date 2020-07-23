@@ -43,12 +43,11 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var path = Path.GetFullPath(config.Value.EmbeddedExportSearchPath);
-            var exportHostPath = Path.Combine(path, "WB.Services.Export.Host.dll");
+            var exportHostPath = configuration.GetPathToExportServiceHostDll();
 
-            if (!System.IO.File.Exists(exportHostPath))
+            if (exportHostPath == null)
             {
-                logger.LogInformation("WB.Services.Export.Host.(exe/dll) is not found in {search}");
+                logger.LogInformation("WB.Services.Export.Host.exe is not found in {search}");
                 return;
             }
 
@@ -95,14 +94,15 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             });
 
             var host = hostBuilder?.Build();
+            
             var lifetime = host.Services.GetService<IHostApplicationLifetime>();
 
             lifetime.ApplicationStarted.Register(() =>
             {
-                var server = host.Services.GetService<IServer>();
-                if (server != null)
+                var exportServer = host.Services.GetService<IServer>();
+                if (exportServer != null)
                 {
-                    var addresses = server.Features.Get<IServerAddressesFeature>().Addresses;
+                    var addresses = exportServer.Features.Get<IServerAddressesFeature>().Addresses;
                     configuration["DataExport:ExportServiceUrl"] = addresses.First();
                 }
             });
