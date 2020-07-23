@@ -32,18 +32,9 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                     if (context.Configuration.GetPathToExportServiceHostDll() != null)
                     {
                         services.AddHostedService<ExportServiceEmbeddableHost>();
+                        var u = context.Configuration[WebHostDefaults.ServerUrlsKey];
+                        context.Configuration[WebHostDefaults.ServerUrlsKey] = u + ";http://127.0.0.1:0";
                     }
-                })
-
-                .ConfigureAppConfiguration(c =>
-                {
-                    c.Add(new MemoryConfigurationSource());
-                })
-
-                .ConfigureWebHost(w =>
-                {
-                    var u = w.GetSetting(WebHostDefaults.ServerUrlsKey);
-                    w.UseSetting(WebHostDefaults.ServerUrlsKey, u + ";http://127.0.0.1:0");
                 });
         }
     }
