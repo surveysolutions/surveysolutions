@@ -67,7 +67,7 @@ namespace WB.Infrastructure.AspNetCore
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
                     loggerConfig.WriteTo.Console(
-                        //outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {AppType:w3} {Message:lj}{NewLine}{Exception}"
                     );
                 }
             });
