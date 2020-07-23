@@ -42,7 +42,7 @@ namespace WB.Services.Export.Host.Infra
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
                 var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
-
+                
                 if (configuration[urlOverrideKey] != null)
                 {
                     httpClient.BaseAddress = new Uri(configuration[urlOverrideKey]);
@@ -51,6 +51,8 @@ namespace WB.Services.Export.Host.Infra
                 {
                     httpClient.BaseAddress = new Uri(tenant.BaseUrl);
                 }
+
+                logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
 
                 return RestService.For<T>(httpClient, new RefitSettings
                 {
