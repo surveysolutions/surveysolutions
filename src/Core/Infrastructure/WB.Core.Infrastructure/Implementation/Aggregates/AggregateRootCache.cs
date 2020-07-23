@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Metrics;
 
@@ -8,10 +9,12 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
     public class AggregateRootCache : IAggregateRootCache
     {
         private readonly IMemoryCache memoryCache;
+        private readonly ILogger<AggregateRootCache> log;
 
-        public AggregateRootCache(IMemoryCache memoryCache)
+        public AggregateRootCache(IMemoryCache memoryCache, ILogger<AggregateRootCache> log)
         {
             this.memoryCache = memoryCache;
+            this.log = log;
         }
 
         protected virtual TimeSpan Expiration { get; } = TimeSpan.FromMinutes(5);
@@ -36,8 +39,10 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             this.memoryCache.Set(Key(aggregateId), value, new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(expiration)
                 .RegisterPostEvictionCallback(CacheItemRemoved));
-
+            
             CoreMetrics.StatefullInterviewsCached?.Labels("added").Inc();
+            log.LogDebug("Cache item added. {aggregateId}. Total: {cacheAdded}", aggregateId,
+                CoreMetrics.StatefullInterviewsCached?.Labels("added").Value);
 
             return value;
         }
@@ -50,6 +55,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             }
 
             CoreMetrics.StatefullInterviewsCached?.Labels("removed").Inc();
+            log.LogDebug("Cache item removed. {aggregateId}. Reason: {reason}. Total: {cacheAdded}", key, reason, 
+                CoreMetrics.StatefullInterviewsCached?.Labels("removed").Value);
         }
 
         protected virtual void CacheItemRemoved(Guid id, EvictionReason reason)
