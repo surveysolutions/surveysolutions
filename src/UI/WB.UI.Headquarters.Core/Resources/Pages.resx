@@ -234,6 +234,9 @@
   <data name="CloseLabel" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Approve</value>
   </data>
@@ -646,6 +649,9 @@
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Account created on</value>
   </data>
+  <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+    <value>Last log in</value>
+  </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Interviewer's Email</value>
   </data>
@@ -847,6 +853,9 @@
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date when the interviewer account was created</value>
+  </data>
+  <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+    <value>Date when the interviewer loged in last time</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Login name of the interviewer’s supervisor</value>
