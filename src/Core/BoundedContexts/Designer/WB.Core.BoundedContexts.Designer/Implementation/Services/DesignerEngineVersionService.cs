@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -15,10 +16,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
         private readonly IAttachmentService attachmentService;
+        private readonly IDesignerTranslationService translationManagementService;
 
-        public DesignerEngineVersionService(IAttachmentService attachmentService)
+        public DesignerEngineVersionService(IAttachmentService attachmentService, 
+            IDesignerTranslationService translationManagementService)
         {
-            this.attachmentService = attachmentService;
+            this.attachmentService = attachmentService ?? throw new ArgumentNullException(nameof(attachmentService));
+            this.translationManagementService = translationManagementService ?? throw new ArgumentNullException(nameof(translationManagementService));
         }
 
         private const int OldestQuestionnaireContentVersion = 16;
@@ -168,7 +172,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     )
                 }
             },
-             new QuestionnaireContentVersion
+            new QuestionnaireContentVersion
             {
                 Version = 29,
                 NewFeatures = new []
@@ -188,7 +192,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ),
                 }
             },
-             new QuestionnaireContentVersion
+            new QuestionnaireContentVersion
             {
                 Version = 30,
                 NewFeatures = new []
@@ -223,9 +227,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                          },
                          description: "Variable attachment"
                      ),
+                    new QuestionnaireContentVersion
+                    {
+                        Version = ApiVersion.MaxQuestionnaireVersion,
+                        NewFeatures = new []
+                        {
+                            new QuestionnaireFeature
+                            (
+                                hasQuestionnaire: HasTranslatedTitle,
+                                description: "Translated questionnaire title"
+                            ),
+                        }
+                    }
                  }
              }
         };
+
+        private bool HasTranslatedTitle(QuestionnaireDocument questionnaire)
+        {
+            if (questionnaire.Translations.Count == 0) return false;
+
+            return this.translationManagementService.HasTranslatedTitle(questionnaire);
+        }
 
         private bool IsNonImageAttachment(string contentId) =>
             !this.attachmentService.GetContent(contentId).IsImage();
