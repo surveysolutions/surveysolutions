@@ -1,9 +1,13 @@
-using System;
+using System.IO;
+using System.Linq;
+using ClosedXML.Excel;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Tests.Abc;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
@@ -13,18 +17,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [Test]
         public void should_not_throw_any_exceptions()
         {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaireId = Id.g1;
 
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaires.SetReturnsDefault(Create.QuestionnaireDocument(questionnaireId));
+            questionnaires.SetReturnsDefault(Create.QuestionnaireDocument(questionnaireId, title: "To be translated"));
 
-            service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
+            var service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
 
-            service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
+            TranslationFile excelFile = service.GetAsExcelFile(questionnaireId, Id.gD);
+            
+            IXLWorksheet workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile)).Worksheets.First();
+            
+            var questionnaireTitleRow = 2;
+            Assert.That(workbook.Cell(questionnaireTitleRow, translationTypeColumn).Value, 
+                Is.EqualTo(TranslationType.Title.ToString()));
+            Assert.That(workbook.Cell(questionnaireTitleRow, translationIndexColumn).Value, Is.Empty);
+            Assert.That(workbook.Cell(questionnaireTitleRow, questionnaireEntityIdColumn).GetString(), Is.EqualTo(Id.g1.FormatGuid()));
+            Assert.That(workbook.Cell(questionnaireTitleRow, originalTextColumn).GetString(), Is.EqualTo("To be translated"));
+            Assert.That(workbook.Cell(questionnaireTitleRow, translactionColumn).Value, Is.Empty);
         }
-
-        TranslationsService service;
-        Guid questionnaireId;
-        Exception exception;
     }
 }

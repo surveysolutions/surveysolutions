@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.Group(groupId: group.Id, children: new List<IComposite>()
+                children: Create.Entity.Group(groupId: group.Id, children: new List<IComposite>()
                 {
                     Create.Entity.StaticText(staticText1Id),
                     Create.Entity.StaticText(staticText2Id),
