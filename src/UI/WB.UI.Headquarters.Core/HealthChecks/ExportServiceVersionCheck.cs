@@ -13,11 +13,11 @@ namespace WB.UI.Headquarters.HealthChecks
 {
     public class ExportServiceVersionCheck : IHealthCheck
     {
-        private readonly IOptionsMonitor<ExportServiceConfig> exportOptions;
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
         private readonly IInScopeExecutor scope;
 
         public ExportServiceVersionCheck(
-            IOptionsMonitor<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
+            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;
@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.HealthChecks
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
-            var uri = this.exportOptions.CurrentValue.ExportServiceUrl + "/.version";
+            var uri = this.exportOptions.Value.ExportServiceUrl + "/.version";
             try
             {
                 return await scope.ExecuteAsync(async sl =>
