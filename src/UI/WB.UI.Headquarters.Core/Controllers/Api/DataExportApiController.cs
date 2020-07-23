@@ -217,7 +217,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             InterviewStatus? status = null,
             DateTime? from = null,
             DateTime? to = null,
-            Guid? translationId = null)
+            Guid? translationId = null,
+            bool? includeMeta = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
@@ -226,7 +227,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound("Questionnaire not found");
 
             return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to, 
-                translation: translationId);
+                translation: translationId, includeMeta: includeMeta);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -238,7 +239,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             string accessToken = null,
             string refresh_token = null,
             ExternalStorageType? externalStorageType = null,
-            Guid? translation = null)
+            Guid? translation = null,
+            bool? includeMeta = null)
         {
             long jobId = 0;
             try
@@ -253,7 +255,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     accessToken,
                     refresh_token,
                     externalStorageType,
-                    translation);
+                    translation,
+                    includeMeta);
 
                 jobId = result?.JobId ?? 0;
 

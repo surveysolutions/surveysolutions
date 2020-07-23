@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.Ddi;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -34,6 +34,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
+        private readonly IDdiMetadataFactory ddiMetadataFactory;
 
         public TabularFormatExportService(
             ILogger<TabularFormatExportService> logger,
@@ -48,7 +49,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             IPdfExporter pdfExporter,
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentActionsExporter assignmentActionsExporter,
-            IJsonExporter jsonExporter)
+            IJsonExporter jsonExporter,
+            IDdiMetadataFactory ddiMetadataFactory)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -63,6 +65,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentActionsExporter = assignmentActionsExporter;
             this.jsonExporter = jsonExporter;
+            this.ddiMetadataFactory = ddiMetadataFactory;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -129,9 +132,14 @@ namespace WB.Services.Export.CsvExport.Implementation
                 await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, 
                     tenant, tempPath,  exportAssignmentActionsProgress, cancellationToken);
             }
-            
-            await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
-            await this.jsonExporter.ExportAsync(questionnaire, tempPath, cancellationToken);
+
+            if (settings.IncludeMeta != false)
+            {
+                await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
+                await this.jsonExporter.ExportAsync(questionnaire, tempPath, cancellationToken);
+                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(tenant,
+                    questionnaire.QuestionnaireId, tempPath);
+            }
 
             exportWatch.Stop();
 

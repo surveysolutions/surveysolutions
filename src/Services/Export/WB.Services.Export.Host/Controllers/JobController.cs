@@ -86,7 +86,8 @@ namespace WB.Services.Export.Host.Controllers
             string? accessToken,
             string? refreshToken,
             Guid? translationId,
-            ExternalStorageType? storageType)
+            ExternalStorageType? storageType,
+            bool? includeMeta)
         {
             var args = new DataExportProcessArgs(new ExportSettings
             (
