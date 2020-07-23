@@ -11,6 +11,7 @@
         </ol>
 
         <DataTables ref="table"
+            multiorder
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"></DataTables>
 

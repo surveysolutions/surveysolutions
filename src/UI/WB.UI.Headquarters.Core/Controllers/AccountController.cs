@@ -160,7 +160,6 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
 
-            
             this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.InvalidAuthenticatorCode);
             return View(model);
         }
