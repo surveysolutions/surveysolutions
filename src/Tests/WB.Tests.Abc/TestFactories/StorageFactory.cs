@@ -144,7 +144,7 @@ namespace WB.Tests.Abc.TestFactories
         public IMemoryCache NewMemoryCache() => cache;
 
         public AggregateRootCache NewAggregateRootCache() 
-            => new AggregateRootCache(NewMemoryCache(), Mock.Of<ILogger>());
+            => new AggregateRootCache(NewMemoryCache());
 
         public IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {
