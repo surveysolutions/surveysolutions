@@ -58,6 +58,7 @@
 }
 .content{
 	@extend %aside;
+	overflow: visible;
 	border-right: 3px solid $gray-super-light;
 	width: $content-width;
 }
@@ -569,18 +570,13 @@
 	max-width: 70%;
 	@extend .image-zoom-box;
 }
-.content .humburger-foldback-button{
-	display: none;
-}
 .fullscreen-hidden-content{
 	.content{
 		left: -$content-width;
 		box-shadow: none;
 		.humburger-foldback-button{
-			left: auto;
-			right: 20px;
-			top: 10px;
-			background-color: $gray_light;
+			right: -56px;
+			box-shadow: none;
 		}
 	}
 	.questionnaire.details-interview{
@@ -588,16 +584,13 @@
 	}
 	.humburger-foldback-button{
 		&:before, &:after{
-			left: 10px;
-			top: 9px;
-			@include rotate(0deg);
+			right: 5px;
+			top: 10px;
+			@include rotate(45deg);
 		}
 		&:after{
-			top: 21px;
-		}
-		span{
-			top: 15px;
-			visibility: visible;
+			top: 25px;
+			@include rotate(-45deg);
 		}
 	}
 }
@@ -811,6 +804,11 @@
 			width: auto;
 		}
 	}
+	.fullscreen-hidden-content{
+		.content{
+			left: -$content-width-small;
+		}
+	}
 }
 @media (max-width: $screen-md-min){
 	.wide-navbar{
@@ -869,7 +867,17 @@
 				border: none;
 				@include visible-foldback-button();
 			   	.humburger-foldback-button{
-					display: block;
+					right:16px;
+					top: 2px;
+					background-color: transparent;
+					border-color: transparent;
+					&:before, &:after{
+						right: 12px;
+						@include rotate(-45deg);
+					}
+					&:after{
+						@include rotate(45deg);
+					}
 				}
 			}
 		}
