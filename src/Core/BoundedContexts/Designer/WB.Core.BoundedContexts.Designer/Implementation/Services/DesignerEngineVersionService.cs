@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -46,95 +47,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private List<QuestionnaireContentVersion> questionnaireContentVersions => new List<QuestionnaireContentVersion>
         {
-            new QuestionnaireContentVersion
-            {
-                Version = 17, 
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    (
-                          hasQuestionnaire : questionnaire =>  questionnaire.Translations.Any(),
-                          description :"Multi-language questionnaire"
-                    )
-                }
-            },
-             new QuestionnaireContentVersion
-            {
-                Version = 18, 
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    (
-                          hasQuestionnaire : questionnaire => questionnaire.Find<AbstractQuestion>(q => q.LinkedToQuestionId.HasValue && 
-                                questionnaire.FirstOrDefault<AbstractQuestion>(x => x.PublicKey == q.LinkedToQuestionId)?.QuestionType == QuestionType.TextList).Any(),
-                          description : "Question linked to List question"
-                    )
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 19,
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    (
-                        hasQuestionnaire : questionnaire => 
-                            questionnaire.Find<IConditional>(q => !string.IsNullOrEmpty(q.ConditionExpression) 
-                                && q.ConditionExpression.Contains("rowindex")).Any()
-                          ||
-                            questionnaire.Find<IValidatable>(q => q.ValidationConditions.Count() == 1 
-                                &&!string.IsNullOrEmpty(q.ValidationConditions.First().Expression) 
-                                && q.ValidationConditions.First().Expression.Contains("rowindex")).Any(),
-                        description : "Usage of @rowindex in expressions"
-                    )
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 20,
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    (
-                        hasQuestionnaire : questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Area).Any(),
-                        description : "Area Question"
-                    )
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 21,
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    (
-                        hasQuestionnaire : questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Audio).Any(),
-                        description : "Audio Question"
-                    )
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 22,
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    (
-                        hasQuestionnaire : questionnaire => questionnaire.Find<INumericQuestion>(q => q.Answers?.Any() ?? false).Any(),
-                        description : "Numeric question with special values"
-                    ),
-                    new QuestionnaireFeature
-                    (
-                        hasQuestionnaire : questionnaire => questionnaire.Find<IValidatable>(q => q.ValidationConditions.Any(x => x.Severity == ValidationSeverity.Warning)).Any(),
-                        description : "Validation Warnings"
-                    ),
-                    new QuestionnaireFeature
-                    (
-                        hasQuestionnaire : questionnaire => questionnaire.Find<IMultimediaQuestion>(q => q.IsSignature).Any(),
-                        description : "Signature Question"
-                    )
-                }
-            },
             new QuestionnaireContentVersion
             {
                 Version = 23,
@@ -295,15 +207,34 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             new QuestionnaireContentVersion
             {
                 Version = ApiVersion.MaxQuestionnaireVersion,
-                NewFeatures = new []
+                NewFeatures = new[]
                 {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            var staticTextsWithAttachment =
+                                questionnaire.Find<IStaticText>(x => !string.IsNullOrWhiteSpace(x.AttachmentName));
+                            foreach (var staticText in staticTextsWithAttachment)
+                            {
+                                var referencedVariable =
+                                    questionnaire.FirstOrDefault<IVariable>(x =>
+                                        x.VariableName == staticText.AttachmentName);
+                                if (referencedVariable != null)
+                                    return true;
+                            }
+
+                            return false;
+                        },
+                        description: "Variable attachment"
+                    ),
                     new QuestionnaireFeature
                     (
                         hasQuestionnaire: HasTranslatedTitle,
                         description: "Translated questionnaire title"
                     ),
                 }
-            },
+            }
         };
 
         private bool HasTranslatedTitle(QuestionnaireDocument questionnaire)

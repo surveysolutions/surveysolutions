@@ -55,7 +55,10 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<AreaQuestionAnswered>,
         IEventHandler<AudioQuestionAnswered>,
         IEventHandler<AnswerCommented>,
-        IEventHandler<AnswerCommentResolved>
+        IEventHandler<AnswerCommentResolved>,
+        IEventHandler<VariablesChanged>,
+        IEventHandler<VariablesEnabled>,
+        IEventHandler<VariablesDisabled>
 
     {
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
@@ -300,6 +303,21 @@ namespace WB.Enumerator.Native.WebInterview
         public void Handle(IPublishedEvent<AnswerCommentResolved> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
+
+        public void Handle(IPublishedEvent<VariablesChanged> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedVariables.Select(x => x.Identity).ToArray());
+        }
+
+        public void Handle(IPublishedEvent<VariablesEnabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Variables);
+        }
+
+        public void Handle(IPublishedEvent<VariablesDisabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Variables);
         }
     }
 }
