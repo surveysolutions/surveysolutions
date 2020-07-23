@@ -203,44 +203,38 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         description: "New Cover page"
                     ),
                 }
-             },
-             new QuestionnaireContentVersion
-             {
-                 Version = ApiVersion.MaxQuestionnaireVersion,
-                 NewFeatures = new[]
-                 {
-                     new QuestionnaireFeature
-                     (
-                         hasQuestionnaire: questionnaire =>
-                         {
-                             var staticTextsWithAttachment = questionnaire.Find<IStaticText>(x => !string.IsNullOrWhiteSpace(x.AttachmentName));
-                             foreach (var staticText in staticTextsWithAttachment)
-                             {
-                                 var referencedVariable =
-                                     questionnaire.FirstOrDefault<IVariable>(x =>
-                                         x.VariableName == staticText.AttachmentName);
-                                 if (referencedVariable != null)
-                                     return true;
-                             }
-
-                             return false;
-                         },
-                         description: "Variable attachment"
-                     ),
-                    new QuestionnaireContentVersion
-                    {
-                        Version = ApiVersion.MaxQuestionnaireVersion,
-                        NewFeatures = new []
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new[]
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
                         {
-                            new QuestionnaireFeature
-                            (
-                                hasQuestionnaire: HasTranslatedTitle,
-                                description: "Translated questionnaire title"
-                            ),
-                        }
-                    }
-                 }
-             }
+                            var staticTextsWithAttachment =
+                                questionnaire.Find<IStaticText>(x => !string.IsNullOrWhiteSpace(x.AttachmentName));
+                            foreach (var staticText in staticTextsWithAttachment)
+                            {
+                                var referencedVariable =
+                                    questionnaire.FirstOrDefault<IVariable>(x =>
+                                        x.VariableName == staticText.AttachmentName);
+                                if (referencedVariable != null)
+                                    return true;
+                            }
+
+                            return false;
+                        },
+                        description: "Variable attachment"
+                    ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: HasTranslatedTitle,
+                        description: "Translated questionnaire title"
+                    ),
+                }
+            }
         };
 
         private bool HasTranslatedTitle(QuestionnaireDocument questionnaire)
