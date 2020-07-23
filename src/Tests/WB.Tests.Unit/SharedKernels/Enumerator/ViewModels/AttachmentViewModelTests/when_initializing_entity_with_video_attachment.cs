@@ -14,21 +14,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 {
     class when_initializing_entity_with_video_attachment : AttachmentViewModelTestContext
     {
-        [OneTimeSetUp]
-        public void Context()
+        [Test]
+        public void should_initialize_attachment_as_video()
         {
-            entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var attachmentContentId = "cccccc";
-            attachment = Create.Entity.Attachment(attachmentContentId);
-            attachmentContentMetadata = Create.Entity.AttachmentContentMetadata("video/mpg");
-            
-            attachmentContentData = Create.Entity.AttachmentContentData(new byte[] { 1, 2, 3 });
-            this.questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
+            var attachment = Create.Entity.Attachment(attachmentContentId);
+            var attachmentContentMetadata = Create.Entity.AttachmentContentMetadata("video/mpg");
+
+            var attachmentContentData = Create.Entity.AttachmentContentData(new byte[] {1, 2, 3});
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _
-                => _.GetAttachmentForEntity(entityId) == attachment);
+                => _.GetAttachmentForEntity(entityId) == attachment
+                   && _.GetAttachmentById(attachment.AttachmentId) == attachment);
 
-            var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity);
+            var entityIdentity = Create.Identity(entityId, Empty.RosterVector);
+            var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity &&
+                                                             i.GetAttachmentForEntity(entityIdentity) == attachment.AttachmentId);
             var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             var attachmentStorage = Mock.Of<IAttachmentContentStorage>(s =>
@@ -36,25 +39,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
                 && s.GetContent(attachmentContentId) == attachmentContentData.Content
                 && s.GetFileCacheLocation(attachmentContentId) == "cache");
 
-            viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
-            BecauseOf();
+            var viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository,
+                attachmentStorage);
+
+            // Act
+            viewModel.Init("interview", entityIdentity, Create.Other.NavigationState());
+
+            // Assert
+            viewModel.IsVideo.Should().BeTrue();
+            viewModel.Video.Should().NotBe(null);
+            viewModel.IsImage.Should().BeFalse();
+            viewModel.Video.ContentPath.Should().BeEquivalentTo("cache");
         }
-
-        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector), Create.Other.NavigationState());
-
-        [Test] public void should_initialize_attachment_as_video() => viewModel.IsVideo.Should().BeTrue();
-        [Test] public void should_initialize_attachment_video_property() => viewModel.Video.Should().NotBe(null);
-        [Test] public void should_not_initialize_attachment_as_image() => viewModel.IsImage.Should().BeFalse();
-
-        [Test] public void should_initialize_video_contentPath() 
-            => viewModel.Video.ContentPath.Should()
-                .BeEquivalentTo("cache");
-
-        static AttachmentViewModel viewModel;
-        private static Guid entityId;
-        private static AttachmentContentMetadata attachmentContentMetadata;
-        private static AttachmentContentData attachmentContentData;
-        private Attachment attachment;
-        private QuestionnaireIdentity questionnaireIdentity;
     }
 }
