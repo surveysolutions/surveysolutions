@@ -947,7 +947,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Guid? GetAttachmentForEntity(Identity entityId)
         {
             var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
-            string attachmentName = questionnaire.GetAttachmentName(entityId.Id);
+            string attachmentName = questionnaire.GetAttachmentNameForEntity(entityId.Id);
             
             if (questionnaire.HasVariable(attachmentName))
             {
