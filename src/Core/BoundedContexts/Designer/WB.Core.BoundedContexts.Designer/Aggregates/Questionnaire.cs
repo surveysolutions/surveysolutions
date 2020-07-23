@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
@@ -105,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IClock clock;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
-        private readonly ITranslationsService translationService;
+        private readonly IDesignerTranslationService translationService;
         private readonly ICategoriesService categoriesService;
         private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -117,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IClock clock, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            ITranslationsService translationService,
+            IDesignerTranslationService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             ICategoriesService categoriesService,
             IFindReplaceService findReplaceService)

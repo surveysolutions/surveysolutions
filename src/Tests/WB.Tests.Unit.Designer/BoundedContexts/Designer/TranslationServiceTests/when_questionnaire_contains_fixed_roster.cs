@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test]
         public void should_output_roster_title_translation()
         {
-            var questionTitleRow = 3;
+            var questionTitleRow = 4;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
             cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
             cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test]
         public void should_output_roster_fixed_option_title_translation()
         {
-            var questionTitleRow = 4;
+            var questionTitleRow = 5;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.FixedRosterTitle);
             cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("42");
             cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());

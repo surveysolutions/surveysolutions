@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         [OneTimeSetUp]
         public void Setup()
         {
-            var document = Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
+            var document = Create.Entity.QuestionnaireDocument(Guid.NewGuid(), null,
                 Create.Entity.Group(Id.IdentityA.Id, "Group A", children: new IComposite[]
                 {
                     Create.Entity.Variable(), // should not count

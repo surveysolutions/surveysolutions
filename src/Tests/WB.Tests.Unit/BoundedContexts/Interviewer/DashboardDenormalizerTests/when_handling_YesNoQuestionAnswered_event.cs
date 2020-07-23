@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version,
                 questionnaire: Create.Entity.PlainQuestionnaire(
-                    Create.Entity.QuestionnaireDocument(questionnaireIdentity.QuestionnaireId, new IComposite[]
+                    Create.Entity.QuestionnaireDocument(questionnaireIdentity.QuestionnaireId, children: new IComposite[]
                     {
                         Create.Entity.YesNoQuestion(questionId: questionId)
                     })));
