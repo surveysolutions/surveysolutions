@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters
             // configuration
             services.Configure<ApkConfig>(configuration.GetSection("Apks"));
             services.Configure<CaptchaConfig>(configuration.CaptchaOptionsSection());
-            services.Configure<DataExportOptions>(configuration.GetSection("DataExport"));
+            services.Configure<ExportServiceConfig>(configuration.GetSection("DataExport"));
             services.Configure<DesignerConfig>(configuration.GetSection("Designer"));
             services.Configure<GoogleMapsConfig>(configuration.GetSection("GoogleMap"));
             services.Configure<HeadquartersConfig>(configuration.HeadquarterOptions());
