@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -22,10 +23,12 @@ namespace WB.Services.Export.Host.Infra
     public class TenantApi<T> : ITenantApi<T>
     {
         private readonly ILogger<TenantApi<T>> logger;
+        private readonly IConfiguration configuration;
 
-        public TenantApi(ILogger<TenantApi<T>> logger)
+        public TenantApi(ILogger<TenantApi<T>> logger, IConfiguration configuration)
         {
             this.logger = logger;
+            this.configuration = configuration;
         }
         
         static readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
@@ -38,7 +41,16 @@ namespace WB.Services.Export.Host.Infra
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
-                httpClient.BaseAddress = new Uri(tenant.BaseUrl);
+                var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
+
+                if (configuration[urlOverrideKey] != null)
+                {
+                    httpClient.BaseAddress = new Uri(configuration[urlOverrideKey]);
+                }
+                else
+                {
+                    httpClient.BaseAddress = new Uri(tenant.BaseUrl);
+                }
 
                 return RestService.For<T>(httpClient, new RefitSettings
                 {

@@ -15,10 +15,10 @@ namespace WB.UI.Headquarters.HealthChecks
     public class ExportServiceConnectivityCheck : IHealthCheck
     {
         private readonly IInScopeExecutor scope;
-        private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IOptionsMonitor<ExportServiceConfig> exportOptions;
 
         public ExportServiceConnectivityCheck(
-            IOptions<DataExportOptions> exportOptions, IInScopeExecutor scope)
+            IOptionsMonitor<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;
@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.HealthChecks
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
-            var uri = this.exportOptions.Value.ExportServiceUrl;
+            var uri = this.exportOptions.CurrentValue.ExportServiceUrl;
 
             try
             {
