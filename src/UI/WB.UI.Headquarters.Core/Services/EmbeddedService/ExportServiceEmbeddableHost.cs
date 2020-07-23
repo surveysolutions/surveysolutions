@@ -40,9 +40,9 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
         {
             var exportHostPath = configuration.GetPathToExportServiceHostDll();
 
-            if (exportHostPath == null)
+            if (!System.IO.File.Exists(exportHostPath))
             {
-                logger.LogInformation("WB.Services.Export.Host.exe is not found in {search}");
+                logger.LogInformation("WB.Services.Export.Host.exe is not found in {search}", exportHostPath);
                 return;
             }
 
@@ -61,11 +61,9 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
             logger.LogInformation("Starting Export Service host");
 
-            configuration["DataExport:ExportServiceUrl"] = "http://localhost:5555";
+            IHostBuilder exportHostBuilder = createWebHostBuilder?.Invoke(null, new object[] { new string[] { } }) as IHostBuilder;
 
-            IHostBuilder hostBuilder = createWebHostBuilder?.Invoke(null, new object[] { new string[] { } }) as IHostBuilder;
-
-            if (hostBuilder == null)
+            if (exportHostBuilder == null)
             {
                 logger.LogError("Unable to find IHostBuilder implementation at WB.Services.Export.Host.Program.CreateWebHostBuilder");
                 return;
@@ -78,11 +76,14 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                 serverUrl = server.Features.Get<IServerAddressesFeature>().Addresses.FirstOrDefault(ip => ip.Contains("localhost"));
             }
 
-            hostBuilder.ConfigureWebHost(w =>
+            logger.LogInformation("Configuring export service to use {serverUrl} as tenant url for {tenant}",
+                serverUrl, this.headquarterOptions.Value.TenantName);
+
+            exportHostBuilder.ConfigureWebHost(w =>
             {
                 w.ConfigureAppConfiguration((ctx, c) =>
                 {
-                    c.Add(new MemoryConfigurationSource()
+                    c.Add(new MemoryConfigurationSource
                     {
                         InitialData = new Dictionary<string, string>
                         {
@@ -91,21 +92,22 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                     });
                 });
 
-                w.UseUrls("http://127.0.0.1:0"); 
+                w.UseUrls("http://127.0.0.1:0");
             });
 
-            var host = hostBuilder?.Build();
-            
+            var host = exportHostBuilder?.Build();
+
             var lifetime = host.Services.GetService<IHostApplicationLifetime>();
 
             lifetime.ApplicationStarted.Register(() =>
             {
-                var exportServer = host.Services.GetService<IServer>();
-                if (exportServer != null)
-                {
-                    var addresses = exportServer.Features.Get<IServerAddressesFeature>().Addresses;
-                    configuration["DataExport:ExportServiceUrl"] = addresses.First();
-                }
+                var exportServer = host.Services.GetRequiredService<IServer>();
+
+                var addresses = exportServer.Features.Get<IServerAddressesFeature>().Addresses;
+                configuration["DataExport:ExportServiceUrl"] = addresses.First();
+
+                logger.LogInformation("Headquarters reconfigured to use {exportUrl} address for Export Service",
+                    configuration["DataExport:ExportServiceUrl"]);
             });
 
             await host.RunAsync(stoppingToken);

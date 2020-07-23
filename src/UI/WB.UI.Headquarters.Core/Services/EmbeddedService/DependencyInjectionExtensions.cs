@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,11 +15,6 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             var path = Path.GetFullPath(exportFolder);
             var exportHostPath = Path.Combine(path, "WB.Services.Export.Host.dll");
 
-            if (!System.IO.File.Exists(exportHostPath))
-            {
-                return null;
-            }
-
             return exportHostPath;
         }
 
@@ -29,11 +23,17 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             return hostBuilder
                 .ConfigureServices((context, services) =>
                 {
-                    if (context.Configuration.GetPathToExportServiceHostDll() != null)
+                    var exportServiceHostDll = context.Configuration.GetPathToExportServiceHostDll();
+                    if (System.IO.File.Exists(exportServiceHostDll))
                     {
                         services.AddHostedService<ExportServiceEmbeddableHost>();
                         var u = context.Configuration[WebHostDefaults.ServerUrlsKey];
                         context.Configuration[WebHostDefaults.ServerUrlsKey] = u + ";http://127.0.0.1:0";
+                    }
+                    else
+                    {
+                        Serilog.Log.Logger.Information("No Embedded Export Service Host configured");
+                        Serilog.Log.Logger.Verbose("SearchPath: {searchPath}", exportServiceHostDll);
                     }
                 });
         }
