@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -15,26 +14,22 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
 {
     public class ExportServiceEmbeddableHost : BackgroundService
     {
-        private readonly IOptions<ExportServiceConfig> config;
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly ILogger<ExportServiceEmbeddableHost> logger;
         private readonly IConfiguration configuration;
         private readonly IServer server;
 
         public ExportServiceEmbeddableHost(
-            IOptions<ExportServiceConfig> config,
             IOptions<HeadquartersConfig> headquarterOptions,
             IConfiguration configuration,
             ILogger<ExportServiceEmbeddableHost> logger,
             IServer server)
         {
-            this.config = config;
             this.headquarterOptions = headquarterOptions;
             this.logger = logger;
             this.server = server;
@@ -69,6 +64,12 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             configuration["DataExport:ExportServiceUrl"] = "http://localhost:5555";
 
             IHostBuilder hostBuilder = createWebHostBuilder?.Invoke(null, new object[] { new string[] { } }) as IHostBuilder;
+
+            if (hostBuilder == null)
+            {
+                logger.LogError("Unable to find IHostBuilder implementation at WB.Services.Export.Host.Program.CreateWebHostBuilder");
+                return;
+            }
 
             var serverUrl = server.Features.Get<IServerAddressesFeature>().Addresses.FirstOrDefault(ip => ip.Contains("127.0.0.1"));
 
