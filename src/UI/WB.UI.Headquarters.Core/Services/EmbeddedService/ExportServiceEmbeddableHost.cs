@@ -60,8 +60,16 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             var createWebHostBuilder = program?.GetMethod("CreateWebHostBuilder");
 
             logger.LogInformation("Starting Export Service host");
+            logger.LogDebug("Starting Export Service host at {exportHostPath}", exportHostPath);
 
-            IHostBuilder exportHostBuilder = createWebHostBuilder?.Invoke(null, new object[] { new string[] { } }) as IHostBuilder;
+            var exportArgs = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(configuration["console"]))
+            {
+                exportArgs.Add("--console=" + configuration["console"]);
+            }
+
+            IHostBuilder exportHostBuilder = createWebHostBuilder?.Invoke(null, new object[] { exportArgs.ToArray() }) as IHostBuilder;
 
             if (exportHostBuilder == null)
             {
