@@ -59,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <param name="status">Status of exported interviews</param>
         /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
         /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="includeMeta">Should export result contain questionnaire meta information</param>
         /// 
         /// <response code="200">Export started</response>
         /// <response code="400">Questionnaire id is malformed</response>
@@ -70,7 +71,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             DataExportFormat exportType,
             [FromQuery]ExportInterviewStatus? status = null,
             [FromQuery]DateTime? from = null, 
-            [FromQuery]DateTime? to = null)
+            [FromQuery]DateTime? to = null,
+            [FromQuery]bool? includeMeta = null)
         {
             long jobId;
             switch (exportType)
@@ -86,7 +88,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                         return StatusCode(StatusCodes.Status400BadRequest, @"Questionnaire not found");
 
                     var result = await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
-                        exportType, status.ToInterviewStatus(), from, to, GetPasswordFromSettings(), null, null, null, null);
+                        exportType, status.ToInterviewStatus(), from, to, GetPasswordFromSettings(), 
+                        null, null, null, null, includeMeta);
 
                     jobId = result.JobId;
 
