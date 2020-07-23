@@ -659,6 +659,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} out of {1} categories selected</value>
   </data>
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>The maximum number of selections ({0}) in this question has been made</value>
+  </data>
   <data name="Interview_Overview" xml:space="preserve">
     <value>Overview</value>
   </data>
