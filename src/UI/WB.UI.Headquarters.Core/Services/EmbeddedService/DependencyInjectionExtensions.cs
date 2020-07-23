@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,10 +11,34 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
     {
         public static string GetPathToExportServiceHostDll(this IConfiguration configuration)
         {
-            var exportFolder = configuration["DataExport:EmbeddedExportSearchPath"];
+            var exportFolder = configuration["DataExport:EmbeddedExportSearchPath"] ?? "./Export.Service";
+            if (string.IsNullOrWhiteSpace(exportFolder))
+            {
+                exportFolder = "./export";
+            }
 
             var path = Path.GetFullPath(exportFolder);
             var exportHostPath = Path.Combine(path, "WB.Services.Export.Host.dll");
+
+            Serilog.Log.Verbose("Looking for WB.Services.Export.Host.dlll at {directory}", path);
+            if (!System.IO.File.Exists(exportHostPath))
+            {
+                
+                // looking for export relative to assembly location
+                var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                var assemblyDirectory = new FileInfo(assemblyLocation).Directory;
+
+                if (assemblyDirectory != null)
+                {
+                    Serilog.Log.Verbose("Looking WB.Services.Export.Host.dll at {directory}", assemblyDirectory.FullName);
+                    var export = Path.Combine(assemblyDirectory.FullName, exportFolder, "WB.Services.Export.Host.dll");
+
+                    if (System.IO.File.Exists(export))
+                    {
+                        return export;
+                    }
+                }
+            }
 
             return exportHostPath;
         }
@@ -27,6 +52,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                     if (System.IO.File.Exists(exportServiceHostDll))
                     {
                         services.AddHostedService<ExportServiceEmbeddableHost>();
+
                         var u = context.Configuration[WebHostDefaults.ServerUrlsKey];
                         context.Configuration[WebHostDefaults.ServerUrlsKey] = u + ";http://127.0.0.1:0";
                     }
