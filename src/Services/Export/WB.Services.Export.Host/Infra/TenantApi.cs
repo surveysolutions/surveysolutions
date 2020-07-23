@@ -28,7 +28,7 @@ namespace WB.Services.Export.Host.Infra
             this.logger = logger;
         }
         
-        readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
+        static readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
 
         public T For(TenantInfo? tenant)
         {
