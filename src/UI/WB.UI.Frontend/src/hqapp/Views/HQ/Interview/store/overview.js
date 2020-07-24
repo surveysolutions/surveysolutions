@@ -31,15 +31,21 @@ export default {
             dispatch('loadOverview', { skip: 0 })
         },
 
-        async loadOverview({ commit, dispatch, state }, { skip }) {
-            const data = await Vue.$api.interview.get('overview', { skip, take: state.pageSize })
+        loadAllOverviewData({ dispatch, commit, state }) {
+            if (!state.isLoaded) {
+                dispatch('loadOverview', { skip: state.loaded, take: 99999999 })
+            }
+        },
+
+        async loadOverview({ commit, dispatch, state }, { skip, take }) {
+            const data = await Vue.$api.interview.get('overview', { skip, take: take || state.pageSize })
 
             commit('SET_OVERVIEW_RESPONSE', data)
 
             if (!data.isLastPage) {
                 dispatch('loadOverview', {
                     skip: skip + data.count,
-                    take: state.pageSize,
+                    take: take || state.pageSize,
                 })
             }
         },

@@ -3,6 +3,12 @@
         id="overview">
         <div slot="title">
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
+            <button type="button"
+                class="btn btn-link"
+                style="float:right"
+                @click="print">
+                {{ $t("Pages.Print") }}
+            </button>
         </div>
 
         <OverviewItem
@@ -29,8 +35,8 @@
             <button type="button"
                 class="btn btn-link"
                 style="float:right"
-                @click="print">
-                {{ $t("Pages.Print") }}
+                @click="saveHtml">
+                {{ $t("Pages.SaveHtml") }}
             </button>
         </div>
     </ModalFrame>
@@ -149,9 +155,16 @@ export default {
         },
 
         print() {
+            this.$store.dispatch('loadAllOverviewData')
             window.print()
         },
 
+        saveHtml() {
+            this.$store.dispatch('loadAllOverviewData')
+            var win = window.open()
+            var overviewHtml = this.$refs.overview.innerHTML
+            win.document.body.innerHTML = overviewHtml
+        },
     },
 }
 </script>
