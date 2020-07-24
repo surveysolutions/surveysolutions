@@ -26,7 +26,7 @@
             <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
             <TextView style="@style/Dashboard_Synchronization_WithError_Title"
-                      local:MvxBind="Html Localization('Synchronization_LinkToErrors'); 
+                      local:MvxBind="HtmlWithLinks Localization('Synchronization_LinkToErrors'); 
                                      Visible IsSynchronizationFailOrCanceled(Synchronization.Status);" />
         </LinearLayout>
 
