@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WB.UI.Headquarters.HealthChecks;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
 {
@@ -50,6 +51,9 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
                         var u = context.Configuration[WebHostDefaults.ServerUrlsKey];
                         context.Configuration[WebHostDefaults.ServerUrlsKey] = u + ";http://127.0.0.1:0";
+
+                        services.AddSingleton<EmbeddedExportServiceHealthCheck>();
+                        services.AddHealthChecks().AddCheck<EmbeddedExportServiceHealthCheck>("embedded_export_service_check");
                     }
                     else
                     {
