@@ -114,7 +114,8 @@ namespace WB.Tests.Abc.TestFactories
             {
                 AnswerText = answer,
                 AnswerValue = value.ToString(),
-                ParentValue = parentValue?.ToString()
+                ParentValue = parentValue?.ToString(),
+                AnswerCode = value
             };
 
         public AnsweredQuestionSynchronizationDto AnsweredQuestionSynchronizationDto(
@@ -756,7 +757,7 @@ namespace WB.Tests.Abc.TestFactories
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
         public PlainQuestionnaire PlainQuestionnaire(params IComposite[] children)
-            => Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(null, children), 1L, null);
+            => Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(null, null, children), 1L, null);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
@@ -859,10 +860,13 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null, Guid? importedBy = null)
             => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment, importedBy);
 
-        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children) => new QuestionnaireDocument
+        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null,
+            string title = null,
+            params IComposite[] children) => new QuestionnaireDocument
         {
             HideIfDisabled = true,
             PublicKey = id ?? Guid.NewGuid(),
+            Title = title ?? "<Untitled>",
             Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
         }.WithEntityMap();
         

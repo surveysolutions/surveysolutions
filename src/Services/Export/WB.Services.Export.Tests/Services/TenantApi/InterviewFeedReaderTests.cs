@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoBogus;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -242,111 +239,6 @@ namespace WB.Services.Export.Tests.Services.TenantApi
 
             var faildCondition = Create.Identity("661de5b9-05c4-177b-57ed-34831bfad1a1", -23, 4, 5, 6, 7);
             Assert.That(ev.FailedValidationConditions[faildCondition][0].FailedConditionIndex, Is.EqualTo(0));
-        }
-    }
-
-    public class EventHandlerTests
-    {
-        [Test]
-        public async Task can_resolve_all_handlers()
-        {
-            var calledEvents = new HashSet<(IEvent, Guid)>();
-            IFunctionalHandler testSubj = new TestHandler(calledEvents);
-
-            var events = new[]
-            {
-                new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g1 },
-                new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g2},
-                new Event {Payload = new InterviewHardDeleted(), EventSourceId = Id.g2}
-            };
-
-            foreach (var ev in events)
-            {
-                await testSubj.Handle(ev);
-            }
-
-            Assert.That(calledEvents.Contains((events[0].Payload, events[0].EventSourceId)));
-            Assert.That(calledEvents.Contains((events[1].Payload, events[1].EventSourceId)));
-            Assert.That(calledEvents.Contains((events[2].Payload, events[2].EventSourceId)));
-        }
-
-        class TestHandler : IFunctionalHandler,
-            IEventHandler<InterviewCreated>,
-            IEventHandler<AnswersRemoved>,
-            IAsyncEventHandler<InterviewHardDeleted>
-        {
-            private readonly HashSet<(IEvent, Guid)> track;
-
-            public TestHandler(HashSet<(IEvent, Guid)> track)
-            {
-                this.track = track;
-            }
-
-            public Task SaveStateAsync(CancellationToken cancellationToken = default)
-            {
-                return Task.CompletedTask;
-            }
-
-            public void Handle(PublishedEvent<InterviewCreated> @event)
-            {
-                track.Add((@event.Event, @event.EventSourceId));
-            }
-
-            public void Handle(PublishedEvent<AnswersRemoved> @event)
-            {
-                track.Add((@event.Event, @event.EventSourceId));
-            }
-
-            public Task Handle(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
-            {
-                track.Add((@event.Event, @event.EventSourceId));
-                return Task.CompletedTask;
-            }
-        }
-
-        [Test]
-        public void should_not_allow_register_of_same_event_handling_sync_async()
-        {
-            IFunctionalHandler testSubj = new BrokenHandler();
-
-            var events = new[]
-            {
-                new Event {Payload = new InterviewCreated(), EventSourceId = Id.g1 }
-            };
-
-            Assert.ThrowsAsync<ArgumentException>(async () =>
-            {
-                foreach (var ev in events)
-                {
-                    await testSubj.Handle(ev);
-                }
-            });
-        }
-
-        private class BrokenHandler : IFunctionalHandler,
-            IEventHandler<InterviewCreated>,
-            IAsyncEventHandler<InterviewCreated>,
-            IEventHandler<InterviewHardDeleted>
-        {
-            public Task SaveStateAsync(CancellationToken cancellationToken = default)
-            {
-                return Task.CompletedTask;
-            }
-
-            public void Handle(PublishedEvent<InterviewCreated> @event)
-            {
-
-            }
-
-            public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
-            {
-                return Task.CompletedTask;
-            }
-
-            public void Handle(PublishedEvent<InterviewHardDeleted> @event)
-            {
-                
-            }
         }
     }
 }
