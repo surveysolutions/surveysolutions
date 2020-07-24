@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
         protected override QuestionnaireDocument GetDocument()
         {
             return Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
-
-                Create.Entity.Group(SectionA.Id, "Section A", "SecA", children: new IComposite[]
+                children: Create.Entity.Group(SectionA.Id, "Section A", "SecA", children: new IComposite[]
                 {
                     Create.Entity.TextQuestion(SecA_InterviewerQuestion.Id, text: "Interviewer Question", variable: "text_in"),
                     Create.Entity.TextQuestion(SecA_SupervisorQuestion.Id, text: "Supervisor Questions", variable: "text_sup", scope: QuestionScope.Supervisor)

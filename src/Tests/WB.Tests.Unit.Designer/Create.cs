@@ -264,7 +264,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
-            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
+            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
         }
 
         public static DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
@@ -617,7 +617,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IClock>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>(),
+                Mock.Of<IDesignerTranslationService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 Mock.Of<ICategoriesService>(),
                 findReplaceService ?? Mock.Of<IFindReplaceService>());
@@ -1420,9 +1420,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireTranslator QuestionnaireTranslator()
-            => new QuestionnaireTranslator();
-
         public static Translation Translation(Guid? translationId = null, string name = null)
         {
             return new Translation() { Name = name, Id = translationId ?? Guid.NewGuid() };
@@ -1526,7 +1523,9 @@ namespace WB.Tests.Unit.Designer
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
-                new DesignerEngineVersionService(Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})),
+                new DesignerEngineVersionService(
+                    Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})
+                    , Mock.Of<IDesignerTranslationService>()),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
