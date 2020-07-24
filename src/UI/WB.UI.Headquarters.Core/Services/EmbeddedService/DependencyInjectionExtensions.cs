@@ -12,18 +12,13 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
         public static string GetPathToExportServiceHostDll(this IConfiguration configuration)
         {
             var exportFolder = configuration["DataExport:EmbeddedExportSearchPath"] ?? "./Export.Service";
-            if (string.IsNullOrWhiteSpace(exportFolder))
-            {
-                exportFolder = "./export";
-            }
-
+            
             var path = Path.GetFullPath(exportFolder);
             var exportHostPath = Path.Combine(path, "WB.Services.Export.Host.dll");
 
-            Serilog.Log.Verbose("Looking for WB.Services.Export.Host.dlll at {directory}", path);
+            Serilog.Log.Verbose("Looking for WB.Services.Export.Host.dll at {directory}", path);
             if (!System.IO.File.Exists(exportHostPath))
             {
-                
                 // looking for export relative to assembly location
                 var assemblyLocation = Assembly.GetExecutingAssembly().Location;
                 var assemblyDirectory = new FileInfo(assemblyLocation).Directory;
