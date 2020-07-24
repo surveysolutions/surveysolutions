@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Infrastructure;
 
@@ -26,16 +24,8 @@ namespace WB.Services.Export.Host.Controllers
             }
             catch
             {
-                var apiType = this.tenantContext.Api.GetType();
-                var httpClientProperty = apiType.GetProperty("Client");
-                if (httpClientProperty != null)
-                {
-                    if (httpClientProperty.GetValue(this.tenantContext.Api) is HttpClient httpClient)
-                    {
-                        return BadRequest("Cannot connect back to Headquarters. Url: " + httpClient.BaseAddress);
-                    }
-                }
-                return BadRequest("Cannot connect back to Headquarters. Url: " + this.tenantContext.Tenant.BaseUrl);
+                var baseUrl = this.tenantContext.Api.BaseUrl();
+                return BadRequest("Cannot connect back to Headquarters. Url: " + baseUrl);
             }
         }
     }
