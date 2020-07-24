@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -66,7 +67,7 @@ namespace WB.Infrastructure.AspNetCore
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
                     loggerConfig.WriteTo.Console(
-                        //outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {AppType:w3} {Message:lj}{NewLine}{Exception}"
                     );
                 }
             });
@@ -93,6 +94,16 @@ namespace WB.Infrastructure.AspNetCore
             })
                 .ConfigureWebHostDefaults(webBuilder =>
             {
+                if (args.Contains("--kestrel"))
+                {
+                    webBuilder.UseKestrel();
+                }
+
+                if (args.Contains("--httpsys"))
+                {
+                    webBuilder.UseHttpSys();
+                }
+
                 webBuilder.UseStartup<TStartup>();
             });
         }

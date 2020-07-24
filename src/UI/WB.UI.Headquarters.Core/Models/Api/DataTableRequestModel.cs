@@ -96,15 +96,17 @@ namespace WB.UI.Headquarters.Models.Api
 
         public IEnumerable<OrderRequestItem> GetSortOrderRequestItems()
         {
-            var order = this.Order?.FirstOrDefault();
-            if (order == null)
+            var hasOrderInfo = this.Order?.Any() ?? false;
+            if (!hasOrderInfo)
                 return Enumerable.Empty<OrderRequestItem>();
 
-            var columnName = this.ColummnsList !=null && this.ColummnsList.Count > order.Column
-                ? this.ColummnsList?[order.Column].Name 
-                : order.Name;
-
-            return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
+            return this.Order.Select(order => new OrderRequestItem()
+            {
+                Direction = order.Dir,
+                Field = this.ColummnsList != null && this.ColummnsList.Count > order.Column
+                    ? this.ColummnsList?[order.Column].Name 
+                    : order.Name
+            });
         }
 
         public IEnumerable<OrderRequestItem> ToOrderRequestItems()

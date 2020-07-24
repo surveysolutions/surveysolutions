@@ -815,7 +815,11 @@
   </data>
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
     <value>Question references non-existent reusable category.</value>
-
   </data>
-
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>Only string variable type can be used as source of the attachment name</value>
+  </data>
+  <data name="WB0391" xml:space="preserve">
+    <value>Static text can not reference variable that has deeper roster scope then itself</value>
+  </data>
 </root>

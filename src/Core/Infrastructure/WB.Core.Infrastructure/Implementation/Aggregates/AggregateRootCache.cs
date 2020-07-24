@@ -36,7 +36,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             this.memoryCache.Set(Key(aggregateId), value, new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(expiration)
                 .RegisterPostEvictionCallback(CacheItemRemoved));
-
+            
             CoreMetrics.StatefullInterviewsCached?.Labels("added").Inc();
 
             return value;
