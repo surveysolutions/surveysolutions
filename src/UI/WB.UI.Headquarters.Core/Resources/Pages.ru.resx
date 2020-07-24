@@ -177,6 +177,9 @@
   <data name="Print" xml:space="preserve">
     <value>Печать</value>
   </data>
+  <data name="SaveHtml" xml:space="preserve">
+    <value>Сохранить Html</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
   </data>

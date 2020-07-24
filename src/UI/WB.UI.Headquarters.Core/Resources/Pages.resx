@@ -237,6 +237,9 @@
   <data name="Print" xml:space="preserve">
     <value>Print</value>
   </data>
+  <data name="SaveHtml" xml:space="preserve">
+    <value>Save Html</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Approve</value>
   </data>

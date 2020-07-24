@@ -3,40 +3,43 @@
         id="overview">
         <div slot="title">
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
+        </div>
+
+        <div style="text-align: right;">
             <button type="button"
                 class="btn btn-link"
-                style="float:right"
                 @click="print">
                 {{ $t("Pages.Print") }}
             </button>
+            <button type="button"
+                class="btn btn-link"
+                @click="saveHtml"
+                download='overview.html'>
+                {{ $t("Pages.SaveHtml") }}
+            </button>
         </div>
+        <div id="overview-data">
+            <OverviewItem
+                v-for="item in items"
+                :key="item.id"
+                :item="item"
+                @showAdditionalInfo="onShowAdditionalInfo"/>
 
-        <OverviewItem
-            v-for="item in items"
-            :key="item.id"
-            :item="item"
-            @showAdditionalInfo="onShowAdditionalInfo"/>
-
-        <infinite-loading
-            ref="loader"
-            v-if="overview.total > 0 && items.length > 0"
-            @infinite="infiniteHandler"
-            :distance="1000">
-            <span slot="no-more"></span>
-            <span slot="no-results"></span>
-        </infinite-loading>
+            <infinite-loading
+                ref="loader"
+                v-if="overview.total > 0 && items.length > 0"
+                @infinite="infiniteHandler"
+                :distance="1000">
+                <span slot="no-more"></span>
+                <span slot="no-results"></span>
+            </infinite-loading>
+        </div>
 
         <div slot="actions">
             <button type="button"
                 class="btn btn-link"
                 @click="hide">
                 {{ $t("Pages.CloseLabel") }}
-            </button>
-            <button type="button"
-                class="btn btn-link"
-                style="float:right"
-                @click="saveHtml">
-                {{ $t("Pages.SaveHtml") }}
             </button>
         </div>
     </ModalFrame>
@@ -162,8 +165,43 @@ export default {
         saveHtml() {
             this.$store.dispatch('loadAllOverviewData')
             var win = window.open()
-            var overviewHtml = this.$refs.overview.innerHTML
-            win.document.body.innerHTML = overviewHtml
+            win.document.open()
+            win.document.write(this.getOverviewPageHtml())
+            win.document.close()
+            win.focus()
+        },
+
+        getOverviewPageHtml() {
+            var overviewHtml = $('#overview .modal-body #overview-data')[0].innerHTML
+            var cssFiles = this.getCssFiles()
+            return '<html><head><title>' + this.$t('Pages.InterviewOverview') + '</title>'
+                + '<style>' + cssFiles + '</style>'
+                + '</head><body>'
+                + overviewHtml
+                + '</body></html>'
+        },
+
+        getCssFiles() {
+            var css = []
+            for (var i=0; i<document.styleSheets.length; i++)
+            {
+                var sheet = document.styleSheets[i]
+                var rules = ('cssRules' in sheet)? sheet.cssRules : sheet.rules
+                if (rules)
+                {
+                    css.push('\n/* Stylesheet : '+(sheet.href||'[inline styles]')+' */')
+                    for (var j=0; j<rules.length; j++)
+                    {
+                        var rule = rules[j]
+                        if ('cssText' in rule)
+                            css.push(rule.cssText)
+                        else
+                            css.push(rule.selectorText+' {\n'+rule.style.cssText+'\n}\n')
+                    }
+                }
+            }
+            var cssInline = css.join('\n')+'\n'
+            return cssInline
         },
     },
 }
