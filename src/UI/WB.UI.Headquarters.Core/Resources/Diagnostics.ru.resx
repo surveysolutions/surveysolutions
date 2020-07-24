@@ -168,4 +168,13 @@
   <data name="hq_baseurl_check_Degraded" xml:space="preserve">
     <value>Конфигурация Headquarters:BaseUrl '{0}' не совпадает с текущим адресом в адресной строке браузера. Это может привести с ошибке работы Экспорт сервиса и отсылке приглашений на email</value>
   </data>
+  <data name="embedded_export_service_check">
+      <value>Встроенная служба Экспорта</value>
+  </data>
+  <data name="embedded_export_service_check_Healty">
+      <value>Встроенная служба Экспорта работает</value>
+  </data>
+  <data name="embedded_export_service_check_Degraded">
+      <value>Встроенный служба Экспорта не работает</value>
+  </data>
 </root>

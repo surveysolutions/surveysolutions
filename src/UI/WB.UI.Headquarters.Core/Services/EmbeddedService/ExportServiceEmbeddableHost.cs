@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.UI.Headquarters.HealthChecks;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
 {
@@ -21,6 +22,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
     {
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly ILogger<ExportServiceEmbeddableHost> logger;
+        private readonly EmbeddedExportServiceHealthCheck healthCheck;
         private readonly IConfiguration configuration;
         private readonly IServer server;
 
@@ -28,10 +30,12 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             IOptions<HeadquartersConfig> headquarterOptions,
             IConfiguration configuration,
             ILogger<ExportServiceEmbeddableHost> logger,
+            EmbeddedExportServiceHealthCheck healthCheck,
             IServer server)
         {
             this.headquarterOptions = headquarterOptions;
             this.logger = logger;
+            this.healthCheck = healthCheck;
             this.server = server;
             this.configuration = configuration;
         }
@@ -118,7 +122,16 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                     configuration["DataExport:ExportServiceUrl"]);
             });
 
-            await host.RunAsync(stoppingToken);
+            healthCheck.StartupTaskCompleted = true;
+
+            try
+            {
+                await host.RunAsync(stoppingToken);
+            }
+            finally
+            {
+                healthCheck.StartupTaskCompleted = false;
+            }
         }
     }
 }
