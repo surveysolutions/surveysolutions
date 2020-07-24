@@ -11,7 +11,11 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .AsDateTime()
                 .Nullable();
             
-            Execute.Sql(@"update readside.interviewsummaries as isum
+            if (this.Schema.Schema("events").Exists())
+            {
+                if (this.Schema.Schema("events").Table("events").Exists())
+                {
+                    Execute.Sql(@"update readside.interviewsummaries as isum
                 set receivedbyintervieweratutc = (
 		        select e.""timestamp"" 
                     from events.events e 
@@ -20,7 +24,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                     limit 1
                         ) 
                 where isum.receivedbyinterviewer = true;");
-            
+                }
+            }
+
             Delete.Column("receivedbyinterviewer").FromTable("interviewsummaries");
         }
 

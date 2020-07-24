@@ -70,9 +70,21 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     }
 
                     var parent = this.GetParentIdentity(currentEntity, interview);
+                   
+                    
                     if (parent != null)
                     {
-                        if (questionnaire.IsCustomViewRoster(parent.Id))
+                        if (questionnaire.HasVariable(currentEntity.Id))
+                        {
+                            IEnumerable<Guid> affectedStaticTexts =
+                                questionnaire.GetStaticTextsThatUseVariableAsAttachment(currentEntity.Id);
+                            foreach (var staticTextId in affectedStaticTexts.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)))
+                            { 
+                                var parentGroup = interview.GetParentGroup(staticTextId);
+                                entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parentGroup, interview.Id), staticTextId));
+                            }
+                        }
+                        else if (questionnaire.IsCustomViewRoster(parent.Id))
                         {
                             var parentGroupIdentity = GetParentIdentity(parent, interview);
                             var connectedClientSectionKey = WebInterview.GetConnectedClientSectionKey(parentGroupIdentity, interview.Id);
@@ -80,7 +92,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         }
                         else
                         {
-                            entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), currentEntity));
+                            entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
+                                currentEntity));
                         }
                     }
 
@@ -200,6 +213,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return (interview.GetQuestion(identity)
                 ?? interview.GetStaticText(identity)
                 ?? interview.GetRoster(identity)
+                ?? interview.GetVariable(identity)
                 ?? (IInterviewTreeNode) interview.GetGroup(identity))?.Parent?.Identity;
         }
 

@@ -224,6 +224,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
        
         public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
+        public InterviewTreeVariable GetVariable(Identity identity) => this.Tree.GetVariable(identity);
 
         public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeGpsQuestion();
         public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeDateTimeQuestion();
@@ -941,6 +942,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool? GetIsAudioRecordingEnabled()
         {
             return this.properties.IsAudioRecordingEnabled;
+        }
+
+        public Guid? GetAttachmentForEntity(Identity entityId)
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
+            string attachmentName = questionnaire.GetAttachmentNameForEntity(entityId.Id);
+            
+            if (questionnaire.HasVariable(attachmentName))
+            {
+                var staticText = this.Tree.GetStaticText(entityId);
+                
+                Guid attachedVariable = questionnaire.GetVariableIdByVariableName(attachmentName);
+                var interviewTreeGroup = (InterviewTreeGroup)staticText.Parent;
+                InterviewTreeVariable variable = interviewTreeGroup.GetVariableFromThisOrUpperLevel(attachedVariable);
+                var attachmentNameFromInterview = (string) variable?.Value;
+                return attachmentNameFromInterview == null ? null : questionnaire.GetAttachmentIdByName(attachmentNameFromInterview);
+            }
+
+            return questionnaire.GetAttachmentIdByName(attachmentName);
         }
 
         public bool IsParentOf(Identity parentIdentity, Identity childIdentity)

@@ -273,6 +273,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return null;
         }
+        
+        public InterviewTreeVariable GetVariableFromThisOrUpperLevel(Guid attachedVariableId)
+        {
+            for (int i = this.Identity.RosterVector.Length; i >= 0; i--)
+            {
+                var variableIdentity = new Identity(attachedVariableId, this.Identity.RosterVector.Take(i));
+                var variable = this.Tree.GetVariable(variableIdentity);
+                if (variable != null)
+                    return variable;
+            }
+
+            return null;
+        }
 
         public virtual IInterviewTreeNode Clone()
         {

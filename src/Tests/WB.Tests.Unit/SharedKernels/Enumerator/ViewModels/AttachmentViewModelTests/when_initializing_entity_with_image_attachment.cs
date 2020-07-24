@@ -13,40 +13,39 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 {
     internal class when_initializing_entity_with_image_attachment : AttachmentViewModelTestContext
     {
-        [OneTimeSetUp]
-        public void context()
+        [Test]
+        public void should_initialize_attachment_as_image()
         {
-            entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var entityId = Id.gA;
             var attachmentContentId = "cccccc";
             var attachment = Create.Entity.Attachment(attachmentContentId);
-            attachmentContentMetadata = Create.Entity.AttachmentContentMetadata("image/png");
-            attachmentContentData = Create.Entity.AttachmentContentData(new byte[] { 1, 2, 3 });
+            var attachmentContentMetadata = Create.Entity.AttachmentContentMetadata("image/png");
+            var attachmentContentData = Create.Entity.AttachmentContentData(new byte[] {1, 2, 3});
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _
-                => _.GetAttachmentForEntity(entityId) == attachment);
+                => _.GetAttachmentForEntity(entityId) == attachment 
+                && _.GetAttachmentById(attachment.AttachmentId) == attachment);
 
-            var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity);
+            var entityIdentity = Create.Identity(entityId);
+            var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity &&
+                                                             i.GetAttachmentForEntity(entityIdentity) == attachment.AttachmentId);
             var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             var attachmentStorage = Mock.Of<IAttachmentContentStorage>(s =>
                 s.GetMetadata(attachmentContentId) == attachmentContentMetadata
                 && s.GetContent(attachmentContentId) == attachmentContentData.Content);
 
-            viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
-            BecauseOf();
+            var viewModel =
+                Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
+
+            // Act
+            viewModel.Init("interview", entityIdentity, Create.Other.NavigationState());
+
+            // Assert
+            viewModel.IsImage.Should().BeTrue();
+            viewModel.Image.Should().BeEquivalentTo(attachmentContentData.Content);
         }
-
-        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector), Create.Other.NavigationState());
-
-        [Test] public void should_initialize_attachment_as_image() => viewModel.IsImage.Should().BeTrue();
-
-        [Test] public void should_initialize_image_content() => viewModel.Image.Should().BeEquivalentTo(attachmentContentData.Content);
-
-        static AttachmentViewModel viewModel;
-        private static Guid entityId;
-        private static AttachmentContentMetadata attachmentContentMetadata;
-        private static AttachmentContentData attachmentContentData;
     }
 }
 

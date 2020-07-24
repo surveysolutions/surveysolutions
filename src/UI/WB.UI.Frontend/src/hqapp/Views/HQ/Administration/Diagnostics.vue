@@ -12,13 +12,13 @@
                             {{ $t("Diagnostics.HealthCheckStatus", { status: report.status}) }}
                         </h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body health-checks">
                         <ul class="list-group">
                             <a class="list-group-item"
                                 v-for="entry in entries"
                                 :key="entry.name"
                                 :href="entry.item.data.url"
-                                :class="itemStatus(entry.item)">
+                                :class="itemStatus(entry)">
                                 <h4>{{ $t("Diagnostics." + entry.name )}}</h4>
                                 <p>{{entry.item.description}}</p>
                                 <div class="well"
@@ -88,7 +88,7 @@ export default {
             const self = this
             this.$hq.ControlPanel.getHealthResult().then(response => {
                 self.report = response.data
-                setTimeout(this.getHealth, 1000)
+                setTimeout(this.getHealth, 5000)
             })
 
             this.$hq.ControlPanel.getMetricsState().then(response => {
@@ -105,7 +105,7 @@ export default {
             }
         },
         itemStatus(entry) {
-            return ['list-group-item-' + this.statusToBs(entry.status)]
+            return ['list-group-item-' + this.statusToBs(entry.item.status), 'check-' + entry.name]
         },
     },
 }
