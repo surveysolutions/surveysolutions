@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ClosedXML.Excel;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
@@ -46,9 +49,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
 
                 using var stream = new MemoryStream();
-                
-               excelPackage.SaveAs(stream);
-               return stream.ToArray();
+
+                excelPackage.SaveAs(stream);
+                return stream.ToArray();
             }
         }
     }
