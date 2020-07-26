@@ -14,9 +14,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Questionnaire;
@@ -44,6 +46,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ISystemLog auditLog;
         private readonly IUnitOfWork unitOfWork;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IArchiveUtils archiveUtils;
+        private readonly ICategoriesImporter categoriesImporter;
+        private readonly ITranslationImporter translationImporter;
 
         public QuestionnaireImportService(
             ISupportedVersionProvider supportedVersionProvider,
@@ -62,7 +67,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IDesignerUserCredentials designerUserCredentials,
             IDesignerApiFactory designerApiFactory,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
-            IAssignmentsUpgradeService assignmentsUpgradeService, IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
+            IAssignmentsUpgradeService assignmentsUpgradeService, 
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage,
+            IArchiveUtils archiveUtils,
+            ICategoriesImporter categoriesImporter,
+            ITranslationImporter translationImporter)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
@@ -82,6 +91,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.questionnaireBackupStorage = questionnaireBackupStorage;
+            this.archiveUtils = archiveUtils;
+            this.categoriesImporter = categoriesImporter;
+            this.translationImporter = translationImporter;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -133,8 +145,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
-                    var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
-                    var result = await questionnaireImportService.ImportImpl(designerApi, userId, userName, questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, shouldMigrateAssignments, migrateFrom, includePdf);
+                    var questionnaireImportService = 
+                        (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
+                    var result = await questionnaireImportService.ImportImpl(designerApi, userId, userName, 
+                        questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
+                        shouldMigrateAssignments, migrateFrom, includePdf);
                     return result;
                 });
             });
@@ -145,15 +160,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return questionnaireImportResult;
         }
 
-        private List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
+        private List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, 
+            QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, 
+            IDesignerApi designerApi, bool includePdf)
         {
             var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
             {
-                new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
-                new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
-                new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
-                new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
-                new QuestionnaireBackupImportStep(questionnaireIdentity, designerApi, questionnaireBackupStorage, logger)
+                new QuestionnaireBackupImportStep(questionnaireIdentity, questionnaireDocument, designerApi, 
+                    questionnaireBackupStorage, logger, attachmentContentService, translationManagementService, 
+                    lookupTablesStorage, reusableCategoriesStorage, archiveUtils, categoriesImporter,
+                    translationImporter),
+
+                //new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
+                //new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
+                //new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
+                //new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
+                
             };
 
             if (includePdf)
@@ -170,7 +192,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        private async Task<QuestionnaireImportResult> ImportImpl(IDesignerApi designerApi, Guid userId, string userName, Guid questionnaireId, QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
+        private async Task<QuestionnaireImportResult> ImportImpl(IDesignerApi designerApi, Guid userId, string userName, 
+            Guid questionnaireId, QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
             string comment, string requestUrl, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, bool includePdf = true)
         {
             try

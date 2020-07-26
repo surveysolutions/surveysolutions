@@ -10,6 +10,7 @@ namespace WB.Core.Infrastructure.FileSystem
         
         IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray);
         ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName);
+        ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName);
 
         bool IsZipFile(string filePath);
         bool IsZipStream(Stream zipStream);
