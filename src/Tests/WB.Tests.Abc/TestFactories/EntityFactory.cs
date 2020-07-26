@@ -131,7 +131,7 @@ namespace WB.Tests.Abc.TestFactories
             => new AnsweredYesNoOption(value, answer);
 
         public Attachment Attachment(string attachmentHash)
-            => new Attachment { ContentId = attachmentHash };
+            => new Attachment { ContentId = attachmentHash , AttachmentId = Guid.NewGuid()};
 
         public Translation Translation(Guid translationId, string translationName)
             => new Translation { Id = translationId, Name = translationName};

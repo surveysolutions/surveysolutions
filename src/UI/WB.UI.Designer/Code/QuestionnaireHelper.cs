@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
@@ -29,6 +30,7 @@ namespace WB.UI.Designer.Code
         private readonly ITranslationsService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly ILogger<QuestionnaireHelper> logger;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public QuestionnaireHelper(
             IQuestionnaireListViewFactory viewFactory,
@@ -38,7 +40,8 @@ namespace WB.UI.Designer.Code
             ILookupTableService lookupTableService, 
             ITranslationsService translationsService, 
             ICategoriesService categoriesService, 
-            ILogger<QuestionnaireHelper> logger)
+            ILogger<QuestionnaireHelper> logger, 
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -48,6 +51,7 @@ namespace WB.UI.Designer.Code
             this.translationsService = translationsService;
             this.categoriesService = categoriesService;
             this.logger = logger;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
@@ -155,7 +159,7 @@ namespace WB.UI.Designer.Code
             };
 
 
-        public MemoryStream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
+        public Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
         {
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
@@ -164,12 +168,9 @@ namespace WB.UI.Designer.Code
                 return null;
             }
 
-            questionnaireFileName = Path.GetInvalidFileNameChars()
-                .Aggregate(questionnaireView.Title.Substring(0, Math.Min(questionnaireView.Title.Length, 255)),
-                    (current, c) => current.Replace(c, 'x'));
-
+            questionnaireFileName = fileSystemAccessor.MakeValidFileName(questionnaireView.Title);
+            
             var questionnaireDocument = questionnaireView.Source;
-
             string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();

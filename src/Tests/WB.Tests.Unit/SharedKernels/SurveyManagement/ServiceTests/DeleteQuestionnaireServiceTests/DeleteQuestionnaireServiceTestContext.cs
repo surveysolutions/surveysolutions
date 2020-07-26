@@ -34,7 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             IQuestionnaireStorage questionnaireStorage = null,
             IAssignmentsImportService interviewImportService = null,
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null,
-            IAssignmentsToDeleteFactory assignmentsToDeleteFactory = null)
+            IAssignmentsToDeleteFactory assignmentsToDeleteFactory = null,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage = null)
         {
             SetUp.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return
@@ -52,7 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     Mock.Of<IInvitationsDeletionService>(),
                     Mock.Of<IAggregateRootCache>(),
                     assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(f => f.LoadBatch(It.IsAny<Guid>(), It.IsAny<long>()) == Enumerable.Empty<Assignment>().ToList()),
-                    Mock.Of<IReusableCategoriesStorage>());
+                    Mock.Of<IReusableCategoriesStorage>(),
+                    questionnaireBackupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireBackup>>());
         }
     }
 }
