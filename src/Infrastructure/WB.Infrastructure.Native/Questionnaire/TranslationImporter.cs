@@ -147,7 +147,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             return row;
         }
 
-        private TranslationInstance? GetQuestionnaireTranslation(QuestionnaireIdentity questionnaireIdentity,
+        private TranslationInstance GetQuestionnaireTranslation(QuestionnaireIdentity questionnaireIdentity,
             Guid translationId, TranslationRow extractedTranslation,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities)
         {
