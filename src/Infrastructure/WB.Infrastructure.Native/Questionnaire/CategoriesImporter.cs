@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -75,9 +76,9 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         internal class CategoriesHeaderMap
         {
-            public string? IdIndex { get; set; }
-            public string? ParentIdIndex { get; set; }
-            public string? TextIndex { get; set; }
+            public string IdIndex { get; set; }
+            public string ParentIdIndex { get; set; }
+            public string TextIndex { get; set; }
         }
     }
 
