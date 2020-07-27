@@ -5,19 +5,15 @@
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
         </div>
 
-        <div class="buttons"
-            style="text-align: right;">
-            <button type="button"
-                class="btn btn-link"
-                @click="print">
-                {{ $t("Pages.Print") }}
-            </button>
-            <button type="button"
-                class="btn btn-link"
-                @click="saveHtml"
-                download='overview.html'>
-                {{ $t("Pages.SaveHtml") }}
-            </button>
+        <div class="print-header">
+            <div class="overview-item section">
+                <div class="item-content">
+                    <h4>{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}</h4>
+                    <h4>[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</h4>
+                    <h4>{{this.$t('Details.Status')}}: {{this.$config.model.statusName}}</h4>
+                    <h4>{{this.$t('Details.LastUpdated')}}: {{ lastUpdateDate }}</h4>
+                </div>
+            </div>
         </div>
         <div id="overview-data">
             <OverviewItem
@@ -48,7 +44,15 @@
 
 <style>
 
+    .print-header {
+        display: none;
+    }
+
     @media print {
+        .overviewOpenned .print-header {
+            display: block;
+        }
+
         .overviewOpenned .web-interview-for-supervisor {
             display: none;
         }
@@ -70,7 +74,7 @@
             border-radius: 0px;
         }
 
-        .overviewOpenned .overviewModal .modal-header .buttons {
+        .overviewOpenned .overviewModal .modal-header {
             display: none;
         }
 
@@ -92,6 +96,8 @@ import InfiniteLoading from 'vue-infinite-loading'
 import OverviewItem from './components/OverviewItem'
 import vue from 'vue'
 import {slice} from 'lodash'
+import moment from 'moment'
+import {DateFormats} from '~/shared/helpers'
 
 export default {
     components: {InfiniteLoading, OverviewItem},
@@ -102,6 +108,7 @@ export default {
             scroll: 0,
             scrollable: null,
             itemWithAdditionalInfo: null,
+            callPrintAfterOpen: false,
         }
     },
     computed: {
@@ -112,11 +119,21 @@ export default {
         items() {
             return slice(this.overview.entities, 0, this.loaded)
         },
+
+        lastUpdateDate() {
+            return moment.utc(this.$config.model.lastUpdatedAtUtc).local().format(DateFormats.dateTime)
+        },
     },
     watch: {
         'overview.isLoaded'(to, from) {
             if (from == true && to == false) {
                 this.loaded = 100
+            }
+            if (from == false && to == true) {
+                if (this.callPrintAfterOpen == true) {
+                    this.loaded = this.overview.entities.length
+                    this.print()
+                }
             }
         },
     },
@@ -127,7 +144,8 @@ export default {
             $('body').removeClass('overviewOpenned')
         },
 
-        async show() {
+        show(print) {
+            this.callPrintAfterOpen = print
             this.$store.dispatch('loadOverviewData')
             document.addEventListener('scroll', this.handleScroll)
 
@@ -163,70 +181,10 @@ export default {
 
         print() {
             this.loaded = this.overview.entities.length
-            //this.$store.dispatch('loadAllOverviewData')
-            //Vue.nextTick(function() {
-            window.print()
-            //})
 
-        },
-
-        saveHtml() {
-            this.loaded = this.overview.entities.length
-            //this.$store.dispatch('loadAllOverviewData')
-
-            var content = this.getOverviewPageHtml()
-            //var uriContent = 'data:application/octet-stream,' + encodeURIComponent(content)
-            //var win = window.open(uriContent, 'neuesDokument')
-            this.download('overview.html', content)
-            //var win = window.open(uriContent, 'neuesDokument')
-        },
-
-        download(filename, text) {
-            var pom = document.createElement('a')
-            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
-            pom.setAttribute('download', filename)
-
-            if (document.createEvent) {
-                var event = document.createEvent('MouseEvents')
-                event.initEvent('click', true, true)
-                pom.dispatchEvent(event)
-            }
-            else {
-                pom.click()
-            }
-        },
-
-        getOverviewPageHtml() {
-            var overviewHtml = $('#overview .modal-body #overview-data')[0].innerHTML
-            var cssFiles = this.getCssFiles()
-            return '<html><head><title>' + this.$t('Pages.InterviewOverview') + '</title>'
-                + '<style>' + cssFiles + '</style>'
-                + '</head><body>'
-                + overviewHtml
-                + '</body></html>'
-        },
-
-        getCssFiles() {
-            var css = []
-            for (var i=0; i<document.styleSheets.length; i++)
-            {
-                var sheet = document.styleSheets[i]
-                var rules = ('cssRules' in sheet)? sheet.cssRules : sheet.rules
-                if (rules)
-                {
-                    css.push('\n/* Stylesheet : '+(sheet.href||'[inline styles]')+' */')
-                    for (var j=0; j<rules.length; j++)
-                    {
-                        var rule = rules[j]
-                        if ('cssText' in rule)
-                            css.push(rule.cssText)
-                        else
-                            css.push(rule.selectorText+' {\n'+rule.style.cssText+'\n}\n')
-                    }
-                }
-            }
-            var cssInline = css.join('\n')+'\n'
-            return cssInline
+            vue.nextTick(function() {
+                window.print()
+            })
         },
     },
 }

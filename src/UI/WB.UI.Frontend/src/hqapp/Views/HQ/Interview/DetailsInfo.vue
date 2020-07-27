@@ -44,6 +44,10 @@
                                 type="button"
                                 class="btn btn-link gray-action-unit"
                                 @click="showOverview">{{$t("Details.Overview")}}</button>
+                            <button id="btn_PrintOverview"
+                                type="button"
+                                class="btn btn-link gray-action-unit"
+                                @click="printOverview">{{$t("Pages.Print")}}</button>
                         </li>
                     </ul>
                 </div>
@@ -201,6 +205,9 @@ export default {
         showOverview() {
         //this.$router.push({name: "Overview"})
             this.$refs.overview.show()
+        },
+        printOverview() {
+            this.$refs.overview.show(/*print:*/true)
         },
     },
 
