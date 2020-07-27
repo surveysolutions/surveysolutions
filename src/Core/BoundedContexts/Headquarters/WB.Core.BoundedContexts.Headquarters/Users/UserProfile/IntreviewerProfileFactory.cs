@@ -394,7 +394,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                         interviewer, 
                         interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null,
                     deviceSyncInfos.GetOrNull(interviewer.Id),
-                    trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0));
+                    trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0))
+                .OrderBy(x=> x.InterviewerName);
         }
 
         private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile,
