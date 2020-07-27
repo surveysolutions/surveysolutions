@@ -277,7 +277,7 @@
         <ComponentRef Id="InterviewerExtTabletAppFileComponent"/>
         <!--<ComponentRef Id="StopService"/>-->
         <ComponentRef Id="ServiceConfigPreserve"/>
-        <ComponentRef Id="ExportServiceComponent"/>
+        <!--<ComponentRef Id="ExportServiceComponent"/>-->
     </ComponentGroup>
 
       <DirectoryRef Id="INSTALLFOLDER">
@@ -344,10 +344,10 @@
                                 Wait='yes'/>
             </Component>-->
 
-            <Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B0AA-1F22B2B48F74">
-                <!--Reference file to register service-->
-                <!--Should be excluded from harvested results-->
-                <!-- xsl transformation Filter.xsl cleans file after harvesting-->
+            <!--<Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B0AA-1F22B2B48F74">
+                ~1~Reference file to register service@1@
+                ~1~Should be excluded from harvested results@1@
+                ~1~ xsl transformation Filter.xsl cleans file after harvesting@1@
                 <File Id="WB.Services.Export.Host.exe"
                       Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe"
                       Vital="yes"
@@ -376,7 +376,7 @@
                                 Stop="both"
                                 Remove="uninstall" 
                                 Wait="no"></ServiceControl>
-            </Component>
+            </Component>-->
         </Directory>
       </Directory>
     </DirectoryRef>
