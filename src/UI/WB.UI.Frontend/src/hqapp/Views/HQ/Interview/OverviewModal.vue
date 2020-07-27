@@ -5,7 +5,8 @@
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
         </div>
 
-        <div style="text-align: right;">
+        <div class="buttons"
+            style="text-align: right;">
             <button type="button"
                 class="btn btn-link"
                 @click="print">
@@ -65,8 +66,11 @@
             border-radius: 0px;
         }
 
-        .overviewOpenned .overviewModal .modal-header {
+        .overviewOpenned .overviewModal .modal-content {
             border-radius: 0px;
+        }
+
+        .overviewOpenned .overviewModal .modal-header .buttons {
             display: none;
         }
 
@@ -158,17 +162,38 @@ export default {
         },
 
         print() {
-            this.$store.dispatch('loadAllOverviewData')
+            this.loaded = this.overview.entities.length
+            //this.$store.dispatch('loadAllOverviewData')
+            //Vue.nextTick(function() {
             window.print()
+            //})
+
         },
 
         saveHtml() {
-            this.$store.dispatch('loadAllOverviewData')
-            var win = window.open()
-            win.document.open()
-            win.document.write(this.getOverviewPageHtml())
-            win.document.close()
-            win.focus()
+            this.loaded = this.overview.entities.length
+            //this.$store.dispatch('loadAllOverviewData')
+
+            var content = this.getOverviewPageHtml()
+            //var uriContent = 'data:application/octet-stream,' + encodeURIComponent(content)
+            //var win = window.open(uriContent, 'neuesDokument')
+            this.download('overview.html', content)
+            //var win = window.open(uriContent, 'neuesDokument')
+        },
+
+        download(filename, text) {
+            var pom = document.createElement('a')
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+            pom.setAttribute('download', filename)
+
+            if (document.createEvent) {
+                var event = document.createEvent('MouseEvents')
+                event.initEvent('click', true, true)
+                pom.dispatchEvent(event)
+            }
+            else {
+                pom.click()
+            }
         },
 
         getOverviewPageHtml() {
