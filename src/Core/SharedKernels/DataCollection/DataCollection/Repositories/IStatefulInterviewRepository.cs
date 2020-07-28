@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     {
         IStatefulInterview? Get(string interviewId);
         Task<IStatefulInterview> GetAsync(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken);
+        IStatefulInterview GetOrThrow(string interviewId);
     }
 }

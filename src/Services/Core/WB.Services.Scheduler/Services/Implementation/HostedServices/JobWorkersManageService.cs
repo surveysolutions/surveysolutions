@@ -34,7 +34,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
             if (workersCount == 0)
             {
-                workersCount = Environment.ProcessorCount;
+                workersCount = 1;
             }
 
             logger.LogTrace("Starting " + workersCount + " workers");

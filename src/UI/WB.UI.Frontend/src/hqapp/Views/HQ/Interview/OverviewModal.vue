@@ -38,6 +38,12 @@
                 @click="hide">
                 {{ $t("Pages.CloseLabel") }}
             </button>
+            <button type="button"
+                class="btn btn-link"
+                style="float:right"
+                @click="print">
+                {{ $t("Pages.Print") }}
+            </button>
         </div>
     </ModalFrame>
 </template>
@@ -186,6 +192,11 @@ export default {
                 window.print()
             })
         },
+
+        print() {
+            window.print()
+        },
+
     },
 }
 </script>

@@ -13,11 +13,11 @@ namespace WB.UI.Headquarters.HealthChecks
 {
     public class ExportServiceVersionCheck : IHealthCheck
     {
-        private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
         private readonly IInScopeExecutor scope;
 
         public ExportServiceVersionCheck(
-            IOptions<DataExportOptions> exportOptions, IInScopeExecutor scope)
+            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;

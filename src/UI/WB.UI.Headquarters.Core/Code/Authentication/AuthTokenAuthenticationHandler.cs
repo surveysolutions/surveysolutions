@@ -48,6 +48,9 @@ namespace WB.UI.Headquarters.Code.Authentication
             }
 
             var user = await userRepository.FindByNameAsync(creds.Username);
+            
+            if(user == null) return AuthenticateResult.Fail("No user found");
+            
             if (user.IsArchivedOrLocked)
             {
                 this.isUserLocked = true;

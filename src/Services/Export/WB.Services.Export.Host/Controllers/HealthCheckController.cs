@@ -24,7 +24,8 @@ namespace WB.Services.Export.Host.Controllers
             }
             catch
             {
-                return BadRequest("Cannot connect back to Headquarters. Url: " + this.tenantContext.Tenant.BaseUrl);
+                var baseUrl = this.tenantContext.Api.BaseUrl();
+                return BadRequest("Cannot connect back to Headquarters. Url: " + baseUrl);
             }
         }
     }
