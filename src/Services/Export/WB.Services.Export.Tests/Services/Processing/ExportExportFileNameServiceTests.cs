@@ -5,6 +5,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.Services.Processing
@@ -60,6 +61,29 @@ namespace WB.Services.Export.Tests.Services.Processing
 
             Assert.That(fileNameForExportArchive, Is.EqualTo("var1_Tabular_Completed.zip"));
             
+        }
+
+        [Test]
+        public async Task should_generate_correct_file_name_if_name_was_not_provided()
+        {
+            long version = 45;
+            var questionnaire = Create.QuestionnaireDocument(
+                id: Id.g1,
+                version: version,
+                variableName: "var1");
+
+            var service = Create.ExportExportFileNameService(questionnaireStorage: Create.QuestionnaireStorage(questionnaire));
+
+            var fileNameForExportArchive = await service.GetFileNameForExportArchiveAsync(
+                new ExportSettings(
+                    tenant: new TenantInfo("http://test", ""),
+                    status: InterviewStatus.Completed,
+                    exportFormat: DataExportFormat.Tabular,
+                    questionnaireId: questionnaire.QuestionnaireId
+                ));
+
+            Assert.That(fileNameForExportArchive, Is.EqualTo($"{questionnaire.QuestionnaireId}_Tabular_Completed.zip"));
+
         }
     }
 }
