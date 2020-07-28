@@ -105,7 +105,7 @@ export default {
     methods:
     {
         show(){
-            this.$store.dispatch('loadAdditionalInfo', { id: this.item.id })
+            //this.$store.dispatch('loadAdditionalInfo', { id: this.item.id })
             this.isAdditionalInfoVisible = true
         },
         close(){
@@ -137,7 +137,7 @@ export default {
     },
     computed: {
         additionalInfo() {
-            return this.$store.state.review.overview.additionalInfo[this.item.id] || {}
+            return this.item.additionalInfo || {}
         },
         postBtnText() {
             return this.postingComment ? this.$t('WebInterviewUI.CommentPosting') : this.$t('WebInterviewUI.CommentPost')

@@ -76,8 +76,9 @@
             border-radius: 0px;
         }
 
-        .overviewOpenned .overviewModal .modal-content {
-            border-radius: 0px;
+        .overviewOpenned .overviewModal .modal-content .overview-additional-information {
+            visibility: visible;
+            position: relative;
         }
 
         .overviewOpenned .overviewModal .modal-header {
@@ -192,11 +193,6 @@ export default {
                 window.print()
             })
         },
-
-        print() {
-            window.print()
-        },
-
     },
 }
 </script>

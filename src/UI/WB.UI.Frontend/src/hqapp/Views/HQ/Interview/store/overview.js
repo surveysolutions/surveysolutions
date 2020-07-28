@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { concat } from 'lodash'
+import { concat, find } from 'lodash'
 
 Vue.use(Vuex)
 
@@ -9,9 +9,6 @@ export default {
         entities: [
             // { id: id, ...}
         ],
-        additionalInfo: {
-            // { id: id, ...}
-        },
         total: 0,
         pageSize: 100,
         isLoaded: false,
@@ -68,7 +65,8 @@ export default {
         },
 
         SET_ADDITIONAL_INFO(state, additionalInfo) {
-            Vue.set(state.additionalInfo, additionalInfo.id, additionalInfo.data)
+            let entity = find(state.entities, { id: additionalInfo.id })
+            entity.additionalInfo = additionalInfo.data
         },
     },
 
