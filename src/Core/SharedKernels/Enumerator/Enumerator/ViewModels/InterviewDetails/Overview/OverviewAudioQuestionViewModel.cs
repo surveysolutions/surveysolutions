@@ -23,8 +23,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public OverviewAudioQuestionViewModel(InterviewTreeQuestion treeQuestion,
             IAudioFileStorage audioFileStorage,
             IAudioService audioService,
-            IUserInteractionService interactionService, 
-            IStatefulInterview statefulInterview) : base(treeQuestion, statefulInterview, interactionService)
+            Guid currentUserId, 
+            IStatefulInterview statefulInterview) : base(treeQuestion, statefulInterview, currentUserId)
         {
             this.audioService = audioService;
             this.interviewId = Guid.Parse(treeQuestion.Tree.InterviewId);

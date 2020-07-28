@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -14,17 +15,21 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
         private readonly IWebNavigationService webNavigationService;
+        private readonly IAuthorizedUser authorizedUser;
 
         public InterviewOverviewService(IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IWebNavigationService webNavigationService)
+            IWebNavigationService webNavigationService,
+            IAuthorizedUser authorizedUser)
         {
             this.interviewEntityFactory = interviewEntityFactory;
             this.webNavigationService = webNavigationService;
+            this.authorizedUser = authorizedUser;
         }
 
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
             bool isReviewMode)
         {
+            var currentUserId = authorizedUser.Id;
             var enabledSectionIds = Enumerable.ToHashSet(interview.GetEnabledSections().Select(x => x.Identity));
 
             foreach (var enabledSectionId in enabledSectionIds)
@@ -34,7 +39,7 @@ namespace WB.UI.Headquarters.Services.Impl
                     : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
                 
                 foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
-                    yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
+                    yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds, currentUserId);
             }
         }
 
@@ -71,13 +76,14 @@ namespace WB.UI.Headquarters.Services.Impl
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
             IStatefulInterview interview,
             IQuestionnaire questionnaire,
-            ICollection<Identity> sections)
+            ICollection<Identity> sections,
+            Guid currentUserId)
         {
             var question = interview.GetQuestion(interviewerEntityIdentity);
             
             if (question != null)
             {
-                var overviewQuestion = new OverviewWebQuestionNode(question, interview);
+                var overviewQuestion = new OverviewWebQuestionNode(question, interview, currentUserId);
                 overviewQuestion.Title = this.webNavigationService.ResetNavigationLinksToDefault(overviewQuestion.Title);
                 return overviewQuestion;
             }

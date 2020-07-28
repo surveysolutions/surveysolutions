@@ -22,7 +22,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             this.ErrorMessages = interview.GetFailedValidationMessages(treeNode.Identity, "")
                 .Where(x => !string.IsNullOrEmpty(x)).ToList();
             this.HasWarnings = interview.GetFailedWarningMessages(treeNode.Identity, "").Any();
+            this.AdditionalInfo = new OverviewItemAdditionalInfo(treeNode, interview);
         }
+
+        public OverviewItemAdditionalInfo AdditionalInfo { get; set; }
 
         public List<string> ErrorMessages { get; set; }
 

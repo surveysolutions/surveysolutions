@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
     public class OverviewQuestion : OverviewNode
     {
-        public OverviewQuestion(InterviewTreeQuestion treeQuestion, IStatefulInterview interview) : base(treeQuestion)
+        public OverviewQuestion(InterviewTreeQuestion treeQuestion, IStatefulInterview interview, Guid currentUserId) : base(treeQuestion)
         {
             this.Answer = treeQuestion.GetAnswerAsString(CultureInfo.CurrentCulture);
             
@@ -27,12 +29,14 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 
             base.IsAnswered = treeQuestion.IsAnswered();
             this.HasErrors = interview.GetFailedValidationMessages(treeQuestion.Identity, null).Any();
-
             this.HasWarnings = interview.GetFailedWarningMessages(treeQuestion.Identity, string.Empty).Any();
-            HasComment = treeQuestion.AnswerComments.Count > 0;
+            this.HasComment = treeQuestion.AnswerComments.Count > 0;
             this.AnswerTimeUtc = treeQuestion.AnswerTimeUtc;
             this.SupportsComments = true;
+            this.AdditionalInfo = new OverviewItemAdditionalInfo(treeQuestion, interview, currentUserId);
         }
+
+        public OverviewItemAdditionalInfo AdditionalInfo { get; set; }
 
         public bool HasErrors { get; set; }
 

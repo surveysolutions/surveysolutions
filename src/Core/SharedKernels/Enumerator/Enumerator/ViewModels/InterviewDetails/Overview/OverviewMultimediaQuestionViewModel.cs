@@ -17,8 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public OverviewMultimediaQuestionViewModel(InterviewTreeQuestion treeNode, 
             IImageFileStorage fileStorageas,
             IViewModelNavigationService navigationService,
-            IUserInteractionService interactionService,
-            IStatefulInterview statefulInterview) : base(treeNode, statefulInterview, interactionService)
+            Guid currentUserId,
+            IStatefulInterview statefulInterview) : base(treeNode, statefulInterview, currentUserId)
         {
             this.navigationService = navigationService;
             interviewId = Guid.Parse(treeNode.Tree.InterviewId);

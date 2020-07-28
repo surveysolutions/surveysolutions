@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.OverviewTests
         public void should_set_unanswered_when_question_is_unanswered()
         {
             var identity = Create.Identity(questionId);
-            var node = new OverviewQuestion(interview.GetQuestion(identity), interview);
+            var node = new OverviewQuestion(interview.GetQuestion(identity), interview, Id.g1);
 
             Assert.That(node.Answer, Is.Null);
             Assert.That(node.IsAnswered, Is.False);
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.OverviewTests
 
             interview.ApplyEvent(Create.Event.AnswersDeclaredInvalid(identity));
 
-            var node = new OverviewQuestion(interview.GetQuestion(identity), interview);
+            var node = new OverviewQuestion(interview.GetQuestion(identity), interview, Id.g1);
 
             Assert.That(node.Answer, Is.EqualTo("answer"));
             Assert.That(node.HasWarnings, Is.False);
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.OverviewTests
             var identity = Create.Identity(questionId);
             interview.AnswerTextQuestion(Id.gA, identity.Id, identity.RosterVector, DateTime.Now, "answer");
 
-            var node = new OverviewQuestion(interview.GetQuestion(identity), interview);
+            var node = new OverviewQuestion(interview.GetQuestion(identity), interview, Id.g1);
 
             Assert.That(node.Answer, Is.EqualTo("answer"));
             Assert.That(node.HasWarnings, Is.False);
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.OverviewTests
             var identity = Create.Identity(questionId);
             interview.CommentAnswer(Id.gA,  identity.Id, identity.RosterVector, DateTime.Now, "comment");
 
-            var node = new OverviewQuestion(interview.GetQuestion(identity), interview);
+            var node = new OverviewQuestion(interview.GetQuestion(identity), interview, Id.g1);
 
             Assert.That(node.HasComment, Is.True);
         }

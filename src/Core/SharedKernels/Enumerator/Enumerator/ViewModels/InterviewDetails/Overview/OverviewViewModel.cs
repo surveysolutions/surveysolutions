@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly DynamicTextViewModel nameViewModel;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IUserIdentity userIdentity;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
             IImageFileStorage fileStorage,
@@ -34,7 +36,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IUserInteractionService userInteractionService,
             IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             DynamicTextViewModel nameViewModel,
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository,
+            IUserIdentity userIdentity)
         {
             this.interviewRepository = interviewRepository;
             this.fileStorage = fileStorage;
@@ -45,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.nameViewModel = nameViewModel;
             this.questionnaireRepository = questionnaireRepository;
+            this.userIdentity = userIdentity;
         }
 
         public void Configure(string interviewId, NavigationState navigationState)
@@ -68,8 +72,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 ? new OverviewSection(interview.GetGroup(coverIdentity))
                 : OverviewSection.Empty(UIResources.Interview_Cover_Screen_Title);
 
+            var currentUserId = userIdentity.UserId;
             this.Items = new List<OverviewNode>() { coverSectionItem }
-                .Concat(interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)))
+                .Concat(interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState, currentUserId)))
                 .ToList();
         }
 
@@ -78,7 +83,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
             IStatefulInterview interview,
             ICollection<Identity> sections, 
-            NavigationState navigationState)
+            NavigationState navigationState,
+            Guid currentUserId)
         {
             var question = interview.GetQuestion(interviewerEntityIdentity);
 
@@ -86,15 +92,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 if (question.IsMultimedia)
                 {
-                    return new OverviewMultimediaQuestionViewModel(question, fileStorage, navigationService, userInteractionService, interview);
+                    return new OverviewMultimediaQuestionViewModel(question, fileStorage, navigationService, currentUserId, interview);
                 }
 
                 if (question.IsAudio)
                 {
-                    return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService, userInteractionService, interview);
+                    return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService, currentUserId, interview);
                 }
 
-                return new OverviewQuestionViewModel(question, interview,userInteractionService);
+                return new OverviewQuestionViewModel(question, interview, currentUserId);
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);

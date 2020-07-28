@@ -1,4 +1,5 @@
-﻿using MvvmCross;
+﻿using System;
+using MvvmCross;
 using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -9,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
     public class OverviewQuestionViewModel : OverviewQuestion
     {
-        public OverviewQuestionViewModel(InterviewTreeQuestion treeQuestion, IStatefulInterview interview, IUserInteractionService userInteractionService) : base(treeQuestion, interview)
+        public OverviewQuestionViewModel(InterviewTreeQuestion treeQuestion, IStatefulInterview interview, Guid currentUserId) : base(treeQuestion, interview, currentUserId)
         {
 
         }

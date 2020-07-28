@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -91,7 +92,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             statefulInterview.AnswerGeoLocationQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, 11.11, 22.22, 5, 6, DateTimeOffset.Now);
 
             // act
-            var overviewNode = new OverviewWebQuestionNode(statefulInterview.GetQuestion(identity), statefulInterview);
+            var overviewNode = new OverviewWebQuestionNode(statefulInterview.GetQuestion(identity), statefulInterview, Id.g1);
 
             // assert
             Assert.That(overviewNode.Answer, Is.EqualTo(@"{ ""latitude"": 11.11, ""longitude"": 22.22 }"));
@@ -110,7 +111,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             statefulInterview.AnswerPictureQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, "file.name");
 
             // act
-            var overviewNode = new OverviewWebQuestionNode(statefulInterview.GetQuestion(identity), statefulInterview);
+            var overviewNode = new OverviewWebQuestionNode(statefulInterview.GetQuestion(identity), statefulInterview, Id.g1);
 
             // assert
             Assert.That(overviewNode.Answer, Is.EqualTo($@"?interviewId={statefulInterview.Id}&questionId=11111111111111111111111111111111&filename=file.name"));
@@ -164,7 +165,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         {
             var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory();
             return new InterviewOverviewService(webInterviewInterviewEntityFactory,
-                Web.Create.Service.WebNavigationService());
+                Web.Create.Service.WebNavigationService(), 
+                Mock.Of<IAuthorizedUser>());
         }
     }
 }
