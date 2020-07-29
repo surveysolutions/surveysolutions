@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
                 report.Data[0], 
                 Is.EquivalentTo(new object[]
                 { 
-                    "u1", Id.g1, "super", null, null, null,"AppVersion", false, null, 0, 0, 
+                    "u1", Id.g1, "super", null, null, null, string.Empty,"AppVersion", false, null, 0, 0, 
                     null, string.Empty, "device1", "DeviceSerialNumber", "DeviceType", "DeviceManufacturer", 
                     "DeviceModel", "DeviceBuildNumber", 30000, "DeviceLanguage", "Android AndroidSdkVersionName(25)",
                     deviceSyncInfos[0].LastAppUpdatedDate.ToString("s", CultureInfo.InvariantCulture), 
