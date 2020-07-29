@@ -87,16 +87,12 @@ a.disabled{
 	border-radius: 4px;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
-	@include absolute(10px, -43px, null, null);
+	@include absolute(5px, 0, null, null);
 	display: block;
-	@include size(42px, 42px);
+	@include size($width-foldback-button, $height-foldback-button);
 	cursor: pointer;
 	z-index: 3;
-	//top: calc(50% - 18px);
-	border: 2px solid #dbdfe2;
 	@extend .add-transition;
-	background-color: #dbdfe2;
-	box-shadow: 0 0 10px 5px rgba(63, 63, 63, .1); 
 	&:before, &:after{
 		content: "";
 		display: block;
@@ -125,15 +121,10 @@ a.disabled{
 		}
 	}
 }
-//@media only screen and (max-width: 615px){
-//	.humburger-foldback-button{
-//		left: 0;
-//	}
-//}
 @media (max-width: $screen-sm-min){
 	.humburger-foldback-button{
 		&:before, &:after{
-            right: 2px;
+			right: 2px;
 			@include rotate(-45deg);
 		}
 		&:after{
