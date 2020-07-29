@@ -57,12 +57,10 @@
 	}
 }
 .content{
-    @extend %aside;
-    overflow: visible;
+	@extend %aside;
+	//overflow: visible; 
 	border-right: 3px solid $gray-super-light;
 	width: $content-width;
-}
-.content{
 	z-index: 4;
 	left: 12px;
 	@include box-shadow(20px 10px 40px 0px rgba(0, 0, 0, 0.2));
@@ -201,10 +199,6 @@
         color: $warning_color;
     }
 	&.roster-section-info{
-		padding-top: 5px;
-	}
-	&.text-info{
-		color: $blue;
 		padding-top: 5px;
 	}
 }
@@ -576,11 +570,15 @@
 }
 .fullscreen-hidden-content{
 	.content{
+		overflow: visible;
 		left: -$content-width;
 		box-shadow: none;
 		.humburger-foldback-button{
-			right: -56px;
+			right: -54px;
 			box-shadow: none;
+			background-color: #dbdfe2;
+			box-shadow: 0 0 10px 5px rgba(63, 63, 63, .1); 
+			border: 2px solid #dbdfe2;
 		}
 	}
 	.questionnaire.details-interview{
@@ -595,7 +593,7 @@
 		&:after{
 			top: 25px;
 			@include rotate(-45deg);
-		}		
+		}
 	}
 }
 
@@ -807,8 +805,8 @@
 		.unit-title{
 			width: auto;
 		}
-    }
-    .fullscreen-hidden-content{
+	}
+	.fullscreen-hidden-content{
 		.content{
 			left: -$content-width-small;
 		}
@@ -854,7 +852,12 @@
 			box-shadow: none;
 			left: -$content-width-small;
 			@include hidden-foldback-button();
-			overflow: visible;
+			overflow: visible;	.humburger-foldback-button{
+				right:-54px;
+				border: 2px solid #dbdfe2;
+				background-color: #dbdfe2;
+				box-shadow: 0 0 10px 5px rgba(63, 63, 63, .1); 
+			}
 		}
 		.complete-link{
 			padding-left: 60px;
@@ -869,20 +872,22 @@
 				width: calc(100% - 12px);
 				height: auto;
 				border: none;
+				
 				@include visible-foldback-button();
 			   	.humburger-foldback-button{
-                    right:16px;
+					right:0;
 					top: 2px;
 					background-color: transparent;
 					border-color: transparent;
+					box-shadow: none;
 					&:before, &:after{
 						right: 12px;
 						@include rotate(-45deg);
-                    }
-                    &:after{
-                        @include rotate(45deg);
-                    }
-                }
+					}
+					&:after{
+						@include rotate(45deg);
+					}
+				}
 			}
 		}
 		.structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
