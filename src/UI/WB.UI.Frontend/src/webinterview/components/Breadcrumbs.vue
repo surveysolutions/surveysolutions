@@ -1,7 +1,6 @@
 <template>
     <div class="unit-title break-line"
         v-if="showBreadcrumbs">
-        <wb-humburger :visible="showHumburger"></wb-humburger>
         <ol class="breadcrumb">
             <li v-for="breadcrumb in entities"
                 :key="breadcrumb.target">

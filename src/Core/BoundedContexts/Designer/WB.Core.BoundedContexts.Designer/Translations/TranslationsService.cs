@@ -86,8 +86,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var allTranslationIds = questionnaire.Translations.Select(x => x.Id).ToList();
 
-            var hasTranslatedTitle = this.dbContext.TranslationInstances.Any(x => allTranslationIds.Contains(x.TranslationId) &&
-                                                                                  x.QuestionnaireEntityId == questionnaire.PublicKey);
+            var hasTranslatedTitle = this.dbContext.TranslationInstances.Any(x => 
+                allTranslationIds.Contains(x.TranslationId) 
+                && x.QuestionnaireId == questionnaire.PublicKey
+                && x.QuestionnaireEntityId == questionnaire.PublicKey
+                );
             return hasTranslatedTitle;
         }
 
