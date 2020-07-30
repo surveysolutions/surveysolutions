@@ -1,7 +1,7 @@
 <template>
     <div ref="additionalInfo"
         :class="{visible : isAdditionalInfoVisible}"
-        v-if="isAdditionalInfoVisible"
+        v-if="hasAnyAdditionalInfo"
         class="custom-popover overview-additional-information">
         <div class="popover-header">
             <button @click="close"
@@ -35,7 +35,8 @@
                         :text="comment.text"
                         :isOwnComment="comment.isOwnComment"
                         :resolved="comment.resolved"
-                        :key="comment.commentTimeUtc" />
+                        :key="comment.commentTimeUtc"
+                        :commentOnPreviousAnswer="comment.commentOnPreviousAnswer" />
                 </template>
                 <div class="comment"
                     v-if="isCommentFormIsVisible">
@@ -147,6 +148,12 @@ export default {
                 return this.$t('WebInterviewUI.InterviewReceivedCantModify')
             }
             return ''
+        },
+        hasAnyAdditionalInfo() {
+            return this.item.additionalInfo
+                && (this.item.additionalInfo.errors.length > 0
+                || this.item.additionalInfo.warnings.length > 0
+                || this.item.additionalInfo.comments.length > 0)
         },
     },
 }
