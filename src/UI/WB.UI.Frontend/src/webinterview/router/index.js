@@ -43,8 +43,9 @@ function NewRouter(store) {
                         component: Cover,
                         beforeEnter: (to, from, next) => {
                             if (Vue.$config.coverPageId)
-                                to.params.sectionId = Vue.$config.coverPageId
-                            next()
+                                next({ name: 'cover', params: { interviewId: to.params.interviewId } })
+                            else
+                                next()
                         },
                     },
                     {
