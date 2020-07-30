@@ -130,6 +130,17 @@ export default {
             callPrintAfterOpen: false,
         }
     },
+    mounted() {
+        const self = this
+
+        this.$nextTick(function() {
+            window.onbeforeprint = function() {
+                if ($('body').hasClass('overviewOpenned')) {
+                    self.loadAllData()
+                }
+            }
+        })
+    },
     computed: {
         overview() {
             return this.$store.state.review.overview
@@ -150,7 +161,7 @@ export default {
             }
             if (from == false && to == true) {
                 if (this.callPrintAfterOpen == true) {
-                    this.loaded = this.overview.entities.length
+                    this.loadAllData()
                     this.print()
                 }
             }
@@ -199,11 +210,17 @@ export default {
         },
 
         print() {
-            this.loaded = this.overview.entities.length
+            this.loadAllData()
 
             vue.nextTick(function() {
                 window.print()
             })
+        },
+
+        loadAllData() {
+            if (this.loaded != this.overview.total) {
+                this.loaded = this.overview.total
+            }
         },
     },
 }
