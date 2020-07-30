@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -80,10 +79,5 @@ namespace WB.Infrastructure.Native.Questionnaire
             public string ParentIdIndex { get; set; }
             public string TextIndex { get; set; }
         }
-    }
-
-    public interface ICategoriesImporter
-    {
-        List<CategoriesItem> ExtractCategoriesFromExcelFile(Stream xmlFile);
     }
 }
