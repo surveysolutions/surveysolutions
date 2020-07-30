@@ -7,6 +7,11 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG BUILD_VERSION
 
+ARG HQ_BUILD
+ARG IN_BUILD
+ARG SV_BUILD
+ARG EXPORT_BUILD
+
 # Labels.
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.build-date=$BUILD_DATE
@@ -16,10 +21,16 @@ LABEL org.label-schema.url="https://mysurvey.solutions"
 LABEL org.label-schema.vcs-ref=$VCS_REF
 LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
 LABEL org.label-schema.version=$BUILD_VERSION
+LABEL org.label-schema.usage="https://support.mysurvey.solutions/headquarters/config/$BUILD_VERSION}/docker"
+
+LABEL solutions.mysurvey.hq.build-no=$HQ_BUILD
+LABEL solutions.mysurvey.interviewer.build-no=$IN_BUILD
+LABEL solutions.mysurvey.supervisor.build-no=$SV_BUILD
+LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
 
 ADD headquarters.linux-x64.tar.gz /app/
 ADD export.linux-x64.tar.gz /app/Export.Service
-COPY appsettings.Production.ini /app/appsettings.Production.ini
+COPY appsettings.Production.ini /app/appsettings.cloud.ini
 
 COPY *.apk /app/Client/
 
