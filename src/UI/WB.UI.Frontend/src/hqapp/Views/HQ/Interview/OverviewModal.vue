@@ -58,7 +58,7 @@
 
         .overviewOpenned .overviewModal {
             padding-left: 0px !important;
-            position: unset;
+            position: static;
         }
 
         .overviewOpenned .overviewModal .modal-content {
