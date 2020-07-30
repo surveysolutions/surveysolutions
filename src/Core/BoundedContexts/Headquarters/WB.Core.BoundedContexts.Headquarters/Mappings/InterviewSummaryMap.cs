@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Type;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.SupervisorName, pm => pm.Column("teamleadname"));
             Property(x => x.SupervisorNameLowerCase, pm => pm.Column("teamlead_name_lower_case"));
             Property(x => x.ResponsibleRole);
-            Property(x => x.UpdateDate);
+            Property(x => x.UpdateDate, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.WasCreatedOnClient);
             Property(x => x.WasRejectedBySupervisor);
             Property(x => x.WasCompleted);
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Key);
             Property(x => x.QuestionnaireIdentity);
             Property(x => x.InterviewDurationLong, ptp => ptp.Column("interviewduration"));
-            Property(x => x.LastResumeEventUtcTimestamp);
+            Property(x => x.LastResumeEventUtcTimestamp, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.ClientKey);
             Property(x => x.FirstInterviewerName);
             Property(x => x.FirstSupervisorName);
@@ -55,11 +56,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
             Property(x => x.AssignmentId);
 
-            Property(x => x.ReceivedByInterviewerAtUtc, pm => pm.Column(cm =>
+            Property(x => x.ReceivedByInterviewerAtUtc, pm =>
             {
-                cm.Default(null);
-                cm.NotNullable(false);
-            }));
+                pm.Type<UtcDateTimeType>();
+                pm.Column(cm =>
+                {
+                    cm.Default(null);
+                    cm.NotNullable(false);
+                });
+            });
             Property(x => x.IsAssignedToInterviewer, pm => pm.Column(cm =>
             {
                 cm.Default(true);
