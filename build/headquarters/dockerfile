@@ -28,9 +28,10 @@ LABEL solutions.mysurvey.interviewer.build-no=$IN_BUILD
 LABEL solutions.mysurvey.supervisor.build-no=$SV_BUILD
 LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
 
+COPY appsettings.ini /app/appsettings.cloud.ini
+
 ADD headquarters.linux-x64.tar.gz /app/
 ADD export.linux-x64.tar.gz /app/Export.Service
-COPY appsettings.Production.ini /app/appsettings.cloud.ini
 
 COPY *.apk /app/Client/
 
