@@ -3,7 +3,7 @@
         <h6>{{ commentTitle }}
             <span class="publication-date"
                 :title="this.commentedAtDate">({{this.commentedAt}})</span>
-            <span class="publication-date publication-time"
+            <span class="publication-time"
                 style="dysplay:none">({{this.commentedAtDate}})</span>
         </h6>
         <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span>
