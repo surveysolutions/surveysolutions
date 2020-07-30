@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             //item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
                                  */
 
-                            if (deserialized.Wgs84Extent != null)
+                            if (deserialized?.Wgs84Extent != null)
                             {
                                 double xMin = double.MaxValue;
                                 double xMax = double.MinValue;
