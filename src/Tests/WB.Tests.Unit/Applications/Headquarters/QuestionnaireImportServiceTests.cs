@@ -428,26 +428,21 @@ namespace WB.Tests.Unit.Applications.Headquarters
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
-                attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
-                Mock.Of<ITranslationManagementService>(),
-                lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<ISystemLog>(),
                 unitOfWork,
                 globalInfoProvider,
                 Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
-                Mock.Of<IReusableCategoriesStorage>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
                 Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
                 new QuestionnaireImportStatuses(),
                 Mock.Of<IAssignmentsUpgradeService>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireBackup>>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 categoriesImporter ?? Mock.Of<ICategoriesImporter>(),
-                translationImporter ?? Mock.Of<ITranslationImporter>()
-                );
+                translationImporter ?? Mock.Of<ITranslationImporter>(),
+                Mock.Of<IServiceProvider>());
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
 
