@@ -18,8 +18,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
-using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -30,17 +28,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IStringCompressor zipUtils;
-        private readonly IAttachmentContentService attachmentContentService;
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IDesignerApiFactory designerApiFactory;
         private readonly IQuestionnaireImportStatuses questionnaireImportStatuses;
         private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
-        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
-        private readonly ITranslationManagementService translationManagementService;
-        private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ISystemLog auditLog;
@@ -49,51 +42,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IArchiveUtils archiveUtils;
         private readonly ICategoriesImporter categoriesImporter;
         private readonly ITranslationImporter translationImporter;
+        private readonly IServiceProvider serviceProvider;
 
         public QuestionnaireImportService(
             ISupportedVersionProvider supportedVersionProvider,
             IStringCompressor zipUtils,
-            IAttachmentContentService attachmentContentService,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
-            ITranslationManagementService translationManagementService,
-            IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
             ICommandService commandService,
             ILogger logger,
             ISystemLog auditLog,
             IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
-            IReusableCategoriesStorage reusableCategoriesStorage,
             IDesignerUserCredentials designerUserCredentials,
             IDesignerApiFactory designerApiFactory,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
-            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage,
             IArchiveUtils archiveUtils,
             ICategoriesImporter categoriesImporter,
-            ITranslationImporter translationImporter)
+            ITranslationImporter translationImporter,
+            IServiceProvider serviceProvider)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
-            this.attachmentContentService = attachmentContentService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
-            this.translationManagementService = translationManagementService;
-            this.lookupTablesStorage = lookupTablesStorage;
             this.commandService = commandService;
             this.logger = logger;
             this.auditLog = auditLog;
             this.unitOfWork = unitOfWork;
             this.authorizedUser = authorizedUser;
             this.pdfStorage = pdfStorage;
-            this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.designerUserCredentials = designerUserCredentials;
             this.designerApiFactory = designerApiFactory;
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
-            this.questionnaireBackupStorage = questionnaireBackupStorage;
             this.archiveUtils = archiveUtils;
             this.categoriesImporter = categoriesImporter;
             this.translationImporter = translationImporter;
+            this.serviceProvider = serviceProvider;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -167,9 +153,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
             {
                 new QuestionnaireBackupImportStep(questionnaireIdentity, questionnaireDocument, designerApi, 
-                    questionnaireBackupStorage, logger, attachmentContentService, translationManagementService, 
-                    lookupTablesStorage, reusableCategoriesStorage, archiveUtils, categoriesImporter,
-                    translationImporter),
+                     serviceProvider, archiveUtils, categoriesImporter, translationImporter),
 
                 //new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
                 //new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
