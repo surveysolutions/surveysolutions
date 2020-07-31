@@ -56,7 +56,15 @@ export default {
         },
 
         modal(params){
-            $(this.$refs.modal).appendTo('body').modal(params || {})
+            var self = this
+            var modal = $(this.$refs.modal).appendTo('body')
+            modal.one('shown.bs.modal', function () {
+                self.$emit('shown')
+            })
+            modal.one('hide.bs.modal', function () {
+                self.$emit('hide')
+            })
+            modal.modal(params || {})
         },
     },
 

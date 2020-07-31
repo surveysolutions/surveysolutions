@@ -1,6 +1,8 @@
 <template>
     <ModalFrame ref="modal"
-        id="overview">
+        id="overview"
+        @shown="modalOpened"
+        @hide="modalHide">
         <div slot="title">
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
         </div>
@@ -128,15 +130,21 @@ export default {
             scrollable: null,
             itemWithAdditionalInfo: null,
             callPrintAfterOpen: false,
+            isShown: false,
         }
     },
     mounted() {
         const self = this
 
         this.$nextTick(function() {
-            window.onbeforeprint = function() {
+            window.onbeforeprint = function(event) {
                 if ($('body').hasClass('overviewOpenned')) {
-                    self.loadAllData()
+                    if (this.overview.isLoaded) {
+                        self.loadAllData()
+                    }
+                    else {
+                        self.callPrintAfterOpen = true
+                    }
                 }
             }
         })
@@ -153,6 +161,10 @@ export default {
         lastUpdateDate() {
             return moment.utc(this.$config.model.lastUpdatedAtUtc).local().format(DateFormats.dateTime)
         },
+
+        isReadyToPrint() {
+            return this.overview.isLoaded && this.isShown
+        },
     },
     watch: {
         'overview.isLoaded'(to, from) {
@@ -160,8 +172,7 @@ export default {
                 this.loaded = 100
             }
             if (from == false && to == true) {
-                if (this.callPrintAfterOpen == true) {
-                    this.loadAllData()
+                if (this.callPrintAfterOpen == true && this.isReadyToPrint) {
                     this.print()
                 }
             }
@@ -218,9 +229,21 @@ export default {
         },
 
         loadAllData() {
-            if (this.loaded != this.overview.total) {
+            if (this.overview.total > 0 && this.loaded != this.overview.total) {
                 this.loaded = this.overview.total
             }
+        },
+
+        modalOpened() {
+            this.isShown = true
+
+            if (this.callPrintAfterOpen == true && this.isReadyToPrint) {
+                this.print()
+            }
+        },
+
+        modalHide() {
+            this.isShown = false
         },
     },
 }
