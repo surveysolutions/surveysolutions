@@ -1,5 +1,6 @@
 const AdministrationLayout = () => import( /*  webpackChunkName: "diagnostics" */ './AdministrationLayout')
 const Diagnostics = () => import( /*  webpackChunkName: "diagnostics" */ './Diagnostics')
+const TabletInfos = () => import( /*  webpackChunkName: "controlpanel" */ './TabletInfos')
 
 export default class MapComponent {
     get routes() {
@@ -11,6 +12,10 @@ export default class MapComponent {
                     {
                         path: 'Diagnostics',
                         component: Diagnostics,
+                    },
+                    {
+                        path: 'TabletInfos',
+                        component: TabletInfos,
                     },
                 ],
             },
