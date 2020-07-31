@@ -48,6 +48,8 @@
                 {{ $t("Pages.Print") }}
             </button>
         </div>
+        <div class="modal-backdrop fade in"
+            v-if="callPrintAfterOpen"></div>
     </ModalFrame>
 </template>
 
@@ -142,9 +144,6 @@ export default {
                     if (this.overview.isLoaded) {
                         self.loadAllData()
                     }
-                    else {
-                        self.callPrintAfterOpen = true
-                    }
                 }
             }
         })
@@ -222,6 +221,7 @@ export default {
 
         print() {
             this.loadAllData()
+            this.callPrintAfterOpen = false
 
             vue.nextTick(function() {
                 window.print()
