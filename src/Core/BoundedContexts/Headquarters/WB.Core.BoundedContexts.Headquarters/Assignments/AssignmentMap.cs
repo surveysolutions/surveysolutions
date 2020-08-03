@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Type;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -23,9 +24,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.ResponsibleId);
             Property(x => x.Quantity);
             Property(x => x.Archived);
-            Property(x => x.CreatedAtUtc);
-            Property(x => x.UpdatedAtUtc);
-            Property(x => x.ReceivedByTabletAtUtc);
+            Property(x => x.CreatedAtUtc,pm => pm.Type<UtcDateTimeType>());
+            Property(x => x.UpdatedAtUtc, pm => pm.Type<UtcDateTimeType>());
+            Property(x => x.ReceivedByTabletAtUtc, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.AudioRecording);
             Property(x => x.Password);
             Property(x => x.Email);
