@@ -277,7 +277,7 @@
         <ComponentRef Id="InterviewerExtTabletAppFileComponent"/>
         <!--<ComponentRef Id="StopService"/>-->
         <ComponentRef Id="ServiceConfigPreserve"/>
-        <!--<ComponentRef Id="ExportServiceComponent"/>-->
+        <ComponentRef Id="UninstallExportServiceComponent"/>
     </ComponentGroup>
 
       <DirectoryRef Id="INSTALLFOLDER">
@@ -343,6 +343,16 @@
                                 Stop='both' 
                                 Wait='yes'/>
             </Component>-->
+
+
+            <Component Id="UninstallExportServiceComponent" Guid="5AB1B28B-C884-A34B-9275-4095DDD06085" Shared="no" Permanent="no">
+                <ServiceControl Id="SurveySolutionsExport_Uninstall"
+                                Name="SurveySolutionsExport"
+                                Stop="both"
+                                Start="install"
+                                Remove="both"
+                                Wait="no" />
+            </Component>
 
             <!--<Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B0AA-1F22B2B48F74">
                 ~1~Reference file to register service@1@
