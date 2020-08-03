@@ -191,7 +191,10 @@
 		p{
             white-space: pre-wrap;
         }
-	}
+    }
+    &.text-info{
+        color: $blue;
+    }
 	&.text-danger{
 		color: $red_error;
 	}
