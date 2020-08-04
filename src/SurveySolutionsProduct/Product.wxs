@@ -346,6 +346,9 @@
 
 
             <Component Id="UninstallExportServiceComponent" Guid="5AB1B28B-C884-A34B-9275-4095DDD06085" Shared="no" Permanent="no">
+
+                <CreateFolder/>
+
                 <ServiceControl Id="SurveySolutionsExport_Uninstall"
                                 Name="SurveySolutionsExport"
                                 Stop="both"
