@@ -16,5 +16,6 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public string GetAbsolutePath(string relativePath) => relativePath.Replace("~", this.GetBaseUrl());
         public string GetBaseUrl() => this.options.Value.BaseUrl;
+        public string GetRelatedToRootPath(string relativePath) => relativePath.TrimStart('~');
     }
 }
