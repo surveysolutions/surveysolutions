@@ -131,8 +131,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 LastEntryDate = questionnaire.LastEntryDate,
-                Owner = questionnaire.CreatorName,
-                IsOwner = questionnaire.CreatorName == userName,
+                Owner = questionnaire.Owner ?? questionnaire.CreatorName,
+                IsOwner = (questionnaire.Owner ?? questionnaire.CreatorName) == userName,
                 IsPublic = questionnaire.IsPublic || isAdmin,
                 IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId)
             });
