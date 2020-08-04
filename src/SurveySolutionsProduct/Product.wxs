@@ -352,9 +352,9 @@
                 <ServiceControl Id="SurveySolutionsExport_Uninstall"
                                 Name="SurveySolutionsExport"
                                 Stop="both"
-                                Start="install"
+                                
                                 Remove="both"
-                                Wait="no" />
+                                Wait="no"/>
             </Component>
 
             <!--<Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B0AA-1F22B2B48F74">
