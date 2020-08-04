@@ -40,7 +40,7 @@
             <PackageGroupRef Id="WindowsDotNetHosting316"/>
             <RollbackBoundary/>
             <MsiPackage Id="SurveySolutionsPackage"
-                        Cache="no"
+                        Cache="yes"
                         Compressed="yes"
                         DisplayInternalUI="yes"
                         Vital="yes"
