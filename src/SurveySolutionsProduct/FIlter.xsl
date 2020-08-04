@@ -10,9 +10,9 @@
     </xsl:template>
 
     <!--Match and ignore WB.Services.Export.Host.exe files-->
-    <!--<xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Source, 'WB.Services.Export.Host.exe')]" use="@Id"/>
+    <xsl:key name="exe-search" match="wix:Component[contains(wix:File/@Source, 'WB.Services.Export.Host.exe')]" use="@Id"/>
     <xsl:template match="wix:Component[key('exe-search', @Id)]"/>
-    <xsl:template match="wix:ComponentRef[key('exe-search', @Id)]"/>-->
+    <xsl:template match="wix:ComponentRef[key('exe-search', @Id)]"/>
 
     <!--Match and ignore Web.config files-->
     <xsl:key name="config-search" match="wix:Component[contains(wix:File/@Source, 'Web.config')]" use="@Id"/>
