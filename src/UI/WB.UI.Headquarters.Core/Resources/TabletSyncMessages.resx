@@ -127,10 +127,10 @@
     <value>Synchronization failed. Please reinstall application. Installation identifier is missing. Please contact developers.</value>
   </data>
   <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
-    <value>Synchronization failed. Your application is not compatible with server one. Update your Interviewer app</value>
+    <value>Synchronization failed. Your application is not compatible, please update your Interviewer app.</value>
   </data>
   <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
-    <value>Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app</value>
+    <value>Synchronization failed. Your application is not compatible. Uninstall your application and download new version of Interviewer app</value>
   </data>
   <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
     <value>Synchronization failed. Android device id was not provided. Please contact developers.</value>

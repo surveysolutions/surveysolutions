@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 status: InterviewStatus.Completed,
                 questionnaireId: questionnaireId.QuestionnaireId,
                 questionnaireVersion: questionnaireId.Version,
-                receivedByInterviewer: false), interviewId.FormatGuid());
+                receivedByInterviewerAtUtc: null), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
@@ -82,7 +82,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 status: InterviewStatus.Completed,
                 questionnaireId: questionnaireId.QuestionnaireId,
                 questionnaireVersion: questionnaireId.Version,
-                receivedByInterviewer: false), interviewId.FormatGuid());
+                receivedByInterviewerAtUtc: null), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
@@ -124,7 +124,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     status: InterviewStatus.Completed,
                     questionnaireId: questionnaireId.QuestionnaireId,
                     questionnaireVersion: questionnaireId.Version,
-                    receivedByInterviewer: true), interviewId.FormatGuid());
+                    receivedByInterviewerAtUtc: DateTime.UtcNow.AddDays(-10)), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
@@ -150,7 +150,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 status: InterviewStatus.Completed,
                 questionnaireId: questionnaireId.QuestionnaireId,
                 questionnaireVersion: questionnaireId.Version,
-                receivedByInterviewer: true), interviewId.FormatGuid());
+                receivedByInterviewerAtUtc: DateTime.UtcNow.AddDays(-10)), interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 

@@ -135,3 +135,5 @@ Elmah/
 src/UI/WB.UI.Designer/wwwroot
 
 /src/Installation/SurveySolutions/.vagrant
+/src/Services/UI/WB.UI.Headquarters.Core/Export.Service
+/src/UI/WB.UI.Headquarters.Core/Export.Service

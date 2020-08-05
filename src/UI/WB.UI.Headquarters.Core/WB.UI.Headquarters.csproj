@@ -66,7 +66,11 @@
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
   </ItemGroup>
-
+  
+    <ItemGroup> 
+        <Content Remove="Export.Service/**/*.*"></Content>
+        <Content Include="Export.Service/**/*.*" CopyToPublishDirectory="Always"></Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
@@ -94,6 +98,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Assignments.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\BatchUpload.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Common.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Dashboard.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Details.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Details.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Diagnostics.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>Diagnostics.resx</DependentUpon>
@@ -102,28 +126,113 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\HQ.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Interviews.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Maps.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>Pages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\PeriodicStatusReport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireClonning.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Reports.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Settings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\TabletSyncMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Users.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\WebInterviewSettings.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>WebInterviewSettings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\WebInterviewUI.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Assignments.resx">
+      <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\BatchUpload.resx">
+      <LastGenOutput>BatchUpload.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.resx">
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Dashboard.resx">
+      <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Details.resx">
+      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Diagnostics.resx">
       <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
       <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\HQ.resx">
+      <LastGenOutput>HQ.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Interviews.resx">
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Maps.resx">
+      <LastGenOutput>Maps.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.resx">
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.resx">
+      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireClonning.resx">
+      <LastGenOutput>QuestionnaireClonning.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.resx">
+      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Settings.resx">
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.resx">
+      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Users.resx">
+      <LastGenOutput>Users.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
       <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewUI.resx">
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

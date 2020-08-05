@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -66,7 +67,7 @@ namespace WB.Infrastructure.AspNetCore
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
                     loggerConfig.WriteTo.Console(
-                        //outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {AppType:w3} {Message:lj}{NewLine}{Exception}"
                     );
                 }
             });
@@ -74,10 +75,15 @@ namespace WB.Infrastructure.AspNetCore
         
         private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
-        public static IHostBuilder ConfigureSurveySolutionsAppConfiguration<TStartup>(this IHostBuilder hostBuilder, 
-            string envPrefix, string [] args, Action<HostBuilderContext, IConfigurationBuilder>? configure = null) where TStartup : class
+        public static IHostBuilder ConfigureSurveySolutionsAppConfiguration<TStartup>(
+            this IHostBuilder hostBuilder, 
+            string envPrefix, 
+            string [] args,
+            bool useWebDefaults = true,
+            Action<HostBuilderContext, IConfigurationBuilder>? configure = null)
+            where TStartup : class
         {
-            return hostBuilder
+            hostBuilder
                 .ConfigureAppConfiguration((hostingContext, c) =>
             {
                 c.AddIniFile("appsettings.ini", false, true);
@@ -90,11 +96,32 @@ namespace WB.Infrastructure.AspNetCore
 
                 c.AddEnvironmentVariables(envPrefix);
                 c.AddCommandLine(args);
-            })
-                .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<TStartup>();
             });
+
+            if (useWebDefaults)
+            {
+                hostBuilder
+                    .ConfigureWebHostDefaults(webBuilder =>
+                    {
+                        if (args.Contains("--kestrel"))
+                        {
+                            webBuilder.UseKestrel();
+                        }
+
+                        if (args.Contains("--httpsys"))
+                        {
+                            webBuilder.UseHttpSys();
+                        }
+
+                        webBuilder.UseStartup<TStartup>();
+                    });
+            }
+            else
+            {
+                Log.Information("Skipping {method} call", "ConfigureWebHostDefaults");
+            }
+
+            return hostBuilder;
         }
     }
 }

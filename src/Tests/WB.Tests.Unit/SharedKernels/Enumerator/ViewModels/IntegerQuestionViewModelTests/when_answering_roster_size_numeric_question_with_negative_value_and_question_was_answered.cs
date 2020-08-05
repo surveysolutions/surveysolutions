@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         [Test]
         public void  should_mark_question_as_invalid_with_message() =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '-4' is incorrect because question is used as size of roster and specified answer is negative"), Times.Once);
+            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer '-4' is incorrect because question is a roster source question and specified answer is negative"), Times.Once);
         
         [Test]
         public void  should_not_send_answer_command() =>

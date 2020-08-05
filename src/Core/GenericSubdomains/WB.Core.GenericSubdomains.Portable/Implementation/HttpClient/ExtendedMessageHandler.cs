@@ -20,7 +20,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         {
             var call = new HttpCall(request);
 
-            call.StartedUtc = DateTime.UtcNow;
+            call.DurationStopwatch.Start();
             try
             {
                 call.Response = await InnerSendAsync(call, request, cancellationToken, times: 3)
@@ -38,7 +38,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
             finally
             {
-                call.EndedUtc = DateTime.UtcNow;
+                call.DurationStopwatch.Stop();
                 statistician?.CollectHttpCallStatistics(call);
             }
         }

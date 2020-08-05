@@ -160,7 +160,7 @@
     <value>Headquarters</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate this user in read only mode</value>
+    <value>View as this user in read only mode</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
@@ -250,7 +250,7 @@
     <value>Date when the supervisor account was created</value>
   </data>
   <data name="NotLinkedToDeviceTitle" xml:space="preserve">
-    <value>Number of interviewers who has not successfully synchronized their tablets to the server yet</value>
+    <value>Number of interviewers who have not successfully synchronized their tablets to the server yet</value>
   </data>
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
     <value>Number of interviewers in the team</value>
@@ -265,7 +265,7 @@
     <value>Supervisor's email</value>
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
-    <value>Headquarter's email</value>
+    <value>Headquarters email</value>
   </data>
   <data name="AddInterviewer" xml:space="preserve">
     <value>Add interviewer</value>

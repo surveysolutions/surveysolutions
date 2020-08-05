@@ -834,4 +834,10 @@
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
     <value>Идентификационные вопросы могут иметь только разрешенные типы (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного).</value>
   </data>
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>Только строковая переменная может быть использована как источник имени вложения</value>
+  </data>
+    <data name="WB0391" xml:space="preserve">
+    <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
+  </data>
 </root>

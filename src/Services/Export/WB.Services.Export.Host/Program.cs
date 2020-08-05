@@ -50,8 +50,8 @@ namespace WB.Services.Export.Host
                 throw;
             }
         }
-
-        public static IHostBuilder CreateWebHostBuilder(string[] args)
+         
+        public static IHostBuilder CreateWebHostBuilder(string[] args, bool useWebDefaults = true)
         {
             return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                 .ConfigureSurveySolutionsLogging("export-service", (host, logConfig) =>
@@ -60,7 +60,7 @@ namespace WB.Services.Export.Host
                         .Destructure.ByMaskingProperties("Password", "ArchivePassword")
                         .WriteTo.Postgres(host.Configuration.GetConnectionString("DefaultConnection"))
                 )
-                .ConfigureSurveySolutionsAppConfiguration<Startup>("Export_", args, (host, c) =>
+                .ConfigureSurveySolutionsAppConfiguration<Startup>("Export_", args, useWebDefaults, (host, c) =>
                 {
                     c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                     c.AddJsonFile($"appsettings.Cloud.json", true);

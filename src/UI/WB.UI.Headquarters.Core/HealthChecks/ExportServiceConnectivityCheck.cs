@@ -15,10 +15,10 @@ namespace WB.UI.Headquarters.HealthChecks
     public class ExportServiceConnectivityCheck : IHealthCheck
     {
         private readonly IInScopeExecutor scope;
-        private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
 
         public ExportServiceConnectivityCheck(
-            IOptions<DataExportOptions> exportOptions, IInScopeExecutor scope)
+            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;

@@ -32,6 +32,7 @@
                android:layout_height="match_parent">
 
     <ProgressBar style="@style/Dashboard_Progress_Indicator"
+                 android:id="@+id/pbIsSynchronizing"
                local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility VisibleOrInvisible(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
     <LinearLayout
       android:layout_width="match_parent"

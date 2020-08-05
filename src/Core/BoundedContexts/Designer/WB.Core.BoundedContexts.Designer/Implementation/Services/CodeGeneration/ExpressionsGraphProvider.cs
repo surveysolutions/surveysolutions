@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> rosterDependencies = BuildRosterDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> substitutionDependencies = BuildSubstitutionDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> staticTextDependencies = BuildStaticTextDependencies(questionnaire);
 
             Dictionary<Guid, List<Guid>> sectionsFromChildrenDependencies = BuildSectionFromChildrenDependencies(questionnaire);
 
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(rosterDependencies.Keys)
                     .Union(linkedQuestionByRosterDependencies.Keys)
                     .Union(substitutionDependencies.Keys)
+                    .Union(staticTextDependencies.Keys)
                     .Union(sectionsFromChildrenDependencies.Keys)
                     .Union(linkedQuestionByRosterDependencies.SelectMany(x => x.Value))
                     .Union(structuralDependencies.SelectMany(x => x.Value))
@@ -48,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(rosterDependencies.SelectMany(x => x.Value))
                     .Union(substitutionDependencies.SelectMany(x => x.Value))
                     .Union(sectionsFromChildrenDependencies.SelectMany(x => x.Value))
+                    .Union(staticTextDependencies.SelectMany(x => x.Value))
                     .Distinct();
 
             allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
@@ -55,6 +58,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var x in structuralDependencies)
             {
                 mergedDependencies[x.Key].AddRange(x.Value);
+            }
+
+            foreach (var staticTextDependency in staticTextDependencies)
+            {
+                mergedDependencies[staticTextDependency.Key].AddRange(staticTextDependency.Value);
             }
 
             foreach (var conditionalDependency in conditionalDependencies)
@@ -92,6 +100,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return mergedDependencies;
         }
 
+        private Dictionary<Guid, List<Guid>> BuildStaticTextDependencies(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var allStaticTextsWithAttachedVariables = questionnaire.Find<IStaticText>(s =>
+                !string.IsNullOrWhiteSpace(s.AttachmentName) &&
+                questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName) != null);
+
+            return allStaticTextsWithAttachedVariables.ToDictionary(s => s.PublicKey, s => new List<Guid>
+            {
+                questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName).PublicKey
+            });
+        }
 
         private Dictionary<Guid, List<Guid>> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {

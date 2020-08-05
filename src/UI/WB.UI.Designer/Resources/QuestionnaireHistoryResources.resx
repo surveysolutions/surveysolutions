@@ -265,7 +265,7 @@
     <value>Static text {0} cloned from static text {1}</value>
   </data>
   <data name="Variable_Clone" xml:space="preserve">
-    <value>Variable {0} cloned from variable {1}</value>
+    <value>Variable {0} copied from variable {1}</value>
   </data>
   <data name="Question_Clone" xml:space="preserve">
     <value>Question {0} cloned from question {1}</value>

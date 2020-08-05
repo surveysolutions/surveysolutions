@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is virtual Cover section in old questionnaire. You can&apos;t edit order of questions.
+        ///   Looks up a localized string similar to It is readonly Cover section. You can not edit or re-order questions in it..
         /// </summary>
         public static string CantEditCoverPageInOldQuestionnaire {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last existing section can not be removed from questionnaire.
+        ///   Looks up a localized string similar to Last existing section cannot be removed from questionnaire.
         /// </summary>
         public static string CantRemoveLastSectionInQuestionnaire {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories in cascading question can not have empty ParentValue column..
+        ///   Looks up a localized string similar to Categories in cascading question cannot have empty ParentValue column..
         /// </summary>
         public static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories in cascading question can not have not numeric value in ParentValue column..
+        ///   Looks up a localized string similar to Categories in cascading question cannot have not numeric value in ParentValue column..
         /// </summary>
         public static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cover section can contains only questions and static texts.
+        ///   Looks up a localized string similar to Cover section can contain only questions and static texts.
         /// </summary>
         public static string CoverPageCanContainsOnlyQuestionsAndStaticTexts {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}.
+        ///   Looks up a localized string similar to Failed attempt to add group {0} into group {1}. But group {1} doesn&apos;t exist in document {2}.
         /// </summary>
         public static string FailedToAddGroup {
             get {
@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster value is required.
+        ///   Looks up a localized string similar to Non empty values for fixed roster titles are required.
         /// </summary>
         public static string InvalidValueOfFixedTitle {
             get {
@@ -457,7 +457,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File with no data can not be loaded.
+        ///   Looks up a localized string similar to File with no data cannot be loaded.
         /// </summary>
         public static string LookupTables_cant_has_empty_content {
             get {
@@ -466,7 +466,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value {0} can not be parsed as decimal number. Column {1}, row {2}..
+        ///   Looks up a localized string similar to Value {0} cannot be parsed as decimal number. Column {1}, row {2}..
         /// </summary>
         public static string LookupTables_data_value_cannot_be_parsed {
             get {
@@ -502,7 +502,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value {0} can not be parsed as long integer number. Column {1}, row {2}..
+        ///   Looks up a localized string similar to Value {0} cannot be parsed as long integer number. Column {1}, row {2}..
         /// </summary>
         public static string LookupTables_rowcode_value_cannot_be_parsed {
             get {
@@ -538,7 +538,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with such is is already exist..
+        ///   Looks up a localized string similar to Macro already exists..
         /// </summary>
         public static string MacroAlreadyExist {
             get {
@@ -547,7 +547,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with such is is absent..
+        ///   Looks up a localized string similar to Macro is absent..
         /// </summary>
         public static string MacroIsAbsent {
             get {
@@ -610,7 +610,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Category value should have only number characters.
+        ///   Looks up a localized string similar to Category value should only have numeric characters.
         /// </summary>
         public static string OptionValuesShouldBeNumbers {
             get {
@@ -655,7 +655,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnire {0} of version {1} can&apos;t be found.
+        ///   Looks up a localized string similar to Questionnaire {0} of version {1} can&apos;t be found.
         /// </summary>
         public static string QuestionnaireRevisionCantBeFound {
             get {
@@ -664,7 +664,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire&apos;s title can not be empty or contains whitespace only..
+        ///   Looks up a localized string similar to Questionnaire&apos;s title cannot be empty or contain whitespace only..
         /// </summary>
         public static string QuestionnaireTitleIsEmpty {
             get {
@@ -835,7 +835,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster value should have only number characters.
+        ///   Looks up a localized string similar to Fixed set of items roster value should only have numeric characters.
         /// </summary>
         public static string ValueOfFixedTitleCantBeParsed {
             get {
