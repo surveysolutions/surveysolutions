@@ -6,5 +6,5 @@
   style="@style/Interview_Question_Title"
   local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Title.HtmlText, .); 
                  HideKeyboardOnClick .; 
-                 Tag Format('tv_Title_{0}',Id);
+                 Tag Format('tv_Title_{0}', Identity);
                  LongClick ShowCommentEditorCommand" />
