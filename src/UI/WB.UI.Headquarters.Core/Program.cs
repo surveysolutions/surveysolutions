@@ -2,13 +2,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.AspNetCore;
+using WB.UI.Headquarters.Services.EmbeddedService;
 
 namespace WB.UI.Headquarters
 {
@@ -38,6 +38,7 @@ namespace WB.UI.Headquarters
                     logger.MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
                 })
                 .ConfigureSurveySolutionsAppConfiguration<Startup>("HQ_", args)
+                .ConfigureEmbeddedServices()
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

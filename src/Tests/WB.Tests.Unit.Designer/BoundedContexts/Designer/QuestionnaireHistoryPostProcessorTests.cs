@@ -1238,6 +1238,69 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(state.GroupsState.ContainsKey(sourceGroupId), Is.False);
         }
 
+        
+        [Test]
+        public void When_question_pasting_into_cover_section_Then_question_paste_should_be_added_to_history()
+        {
+            // arrange
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid coverId = Id.g3;
+            Guid questionId = Id.g6;
+            Guid newQuestionId = Id.g5;
+            Guid sourceGroupId = Id.g7;
+
+            var dbContext = Create.InMemoryDbContext();
+            
+            var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+            questionnaireStateTackerStorage.Store(
+                new QuestionnaireStateTracker
+                {
+                    CreatedBy = responsibleId,
+                    GroupsState = new Dictionary<Guid, string>() { { coverId, "" } },
+                    VariableState = new Dictionary<Guid, string>() { },
+                    StaticTextState = new Dictionary<Guid, string>() { },
+                    QuestionsState = new Dictionary<Guid, string>() { { questionId, ""} }
+                },
+                questionnaireId.FormatGuid());
+            
+            var questionnaireDocument = new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    Create.Group(coverId, children: new List<IComposite>()
+                    {
+                        Create.TextQuestion(questionId: questionId),
+                        Create.TextQuestion(questionId: newQuestionId),
+                    }),
+                    Create.Group(sourceGroupId),
+                }.ToReadOnlyCollection()
+            };
+            questionnaireDocument.CoverPageSectionId = coverId;
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
+
+            var pastIntoCommand = Create.Command.PasteInto(questionnaireId, newQuestionId, questionnaireId, questionId, coverId, responsibleId);
+            var historyPostProcessor = Create.HistoryPostProcessor(dbContext,
+                Create.QuestionnireHistoryVersionsService(dbContext),
+                questionnaireStateTackerStorage);
+
+            // act
+            historyPostProcessor.Process(questionnaire, pastIntoCommand);
+
+            // assert
+            var newHistoryItems = dbContext.QuestionnaireChangeRecords.ToArray();
+            var state = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+
+            Assert.That(newHistoryItems.Length, Is.EqualTo(1));
+            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Question));
+            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
+
+            Assert.That(state.QuestionsState.ContainsKey(questionId), Is.True);
+            Assert.That(state.QuestionsState.ContainsKey(newQuestionId), Is.True);
+            Assert.That(state.GroupsState.ContainsKey(sourceGroupId), Is.False);
+        }
 
     }
 }

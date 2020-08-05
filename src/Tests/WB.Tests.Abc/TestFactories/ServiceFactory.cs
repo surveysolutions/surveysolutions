@@ -117,6 +117,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
@@ -659,28 +660,24 @@ namespace WB.Tests.Abc.TestFactories
                      x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
         }
 
-        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
-        //public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
-        //    IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
-        //    IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
-        //    IInterviewerVersionReader interviewerVersionReader = null,
-        //    IInterviewFactory interviewFactory = null,
-        //    IAuthorizedUser currentUser = null)
-        //{
-        //    // TODO: Core migration - fix
-        //    //var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
-        //    return new InterviewerProfileFactory(
-        //        null, //userManager ?? defaultUserManager,
-        //        interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-        //        deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
-        //        interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
-        //        interviewFactory ?? Mock.Of<IInterviewFactory>(),
-        //        currentUser ?? Mock.Of<IAuthorizedUser>(),
-        //        Mock.Of<IQRCodeHelper>(),
-        //        Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
-        //}
-
-
+        public InterviewerProfileFactory InterviewerProfileFactory(IUserRepository userManager = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
+            IInterviewerVersionReader interviewerVersionReader = null,
+            IInterviewFactory interviewFactory = null,
+            IAuthorizedUser currentUser = null)
+        {
+            var defaultUserManager = Mock.Of<IUserRepository>(x => x.Users == (new HqUser[0]).AsQueryable());
+            return new InterviewerProfileFactory(
+                userManager ?? defaultUserManager,
+                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
+                interviewFactory ?? Mock.Of<IInterviewFactory>(),
+                currentUser ?? Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IQRCodeHelper>(),
+                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
+        }
 
         public InterviewPackagesService InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
@@ -1242,6 +1239,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
+
+        public QuestionnaireTranslator QuestionnaireTranslator()
+            => new QuestionnaireTranslator();
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler

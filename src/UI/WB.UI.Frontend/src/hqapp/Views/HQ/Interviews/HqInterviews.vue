@@ -337,7 +337,7 @@
                     <a
                         class="interview-id title-row"
                         @click="viewInterview"
-                        href="#">{{interviewKey}}</a> by
+                        href="javascript:void(0)">{{interviewKey}}</a> by
                     <span :class="responsibleClass"
                         v-html="responsibleLink"></span>
                 </p>
@@ -392,6 +392,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
     nodes {
       id
       key
+      clientKey
       status
       questionnaireId
       responsibleId
@@ -400,7 +401,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       errorsCount
       assignmentId
       updateDate
-      receivedByInterviewer
+      receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
       identifyingQuestions {
@@ -520,8 +521,9 @@ export default {
                     responsivePriority: 2,
                     className: 'interview-id title-row',
                     render(data, type, row) {
-                        var result =
-                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.id + '\'>' + data + '</a>'
+                        const append = data === row.clientKey ? '' : ` <span class="text-muted">(${row.clientKey})</span>`
+                        const result =
+                            `<a href="${self.config.interviewReviewUrl}/${row.id}">${data}${append}</a>`
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -603,11 +605,16 @@ export default {
                     width: '100px',
                 },
                 {
-                    data: 'receivedByInterviewer',
-                    name: 'ReceivedByInterviewer',
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
                     title: this.$t('Common.ReceivedByInterviewer'),
                     render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
@@ -667,6 +674,7 @@ export default {
                     if(search && search != '') {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
+                            { clientKey_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
@@ -858,7 +866,7 @@ export default {
         },
         CountReceivedByInterviewerItems() {
             return this.getFilteredItems(function(item) {
-                return item.receivedByInterviewer === true
+                return item.receivedByInterviewerAtUtc != null
             }).length
         },
         questionnaireSelected(newValue) {
@@ -904,7 +912,7 @@ export default {
 
             if (!this.isReassignReceivedByInterviewer) {
                 filteredItems = this.arrayFilter(filteredItems, function(item) {
-                    return item.receivedByInterviewer === false
+                    return item.receivedByInterviewerAtUtc === null
                 })
             }
 
@@ -1308,7 +1316,7 @@ export default {
             menu.push({
                 name: self.$t('Pages.InterviewerHq_OpenInterview'),
                 callback: () => {
-                    window.location = self.config.interviewReviewUrl + '/' + rowData.id.replace(/-/g, '')
+                    window.location = `${self.config.interviewReviewUrl}/${rowData.id}`
                 },
             })
 

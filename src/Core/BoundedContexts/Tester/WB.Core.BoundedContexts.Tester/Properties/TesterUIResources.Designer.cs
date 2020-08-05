@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to list have not been updated.
+        ///   Looks up a localized string similar to list has not been updated.
         /// </summary>
         public static string Dashboard_HaveNotBeenUpdated {
             get {
@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview data can&apos;t be applied to new version of questionnaire. We will open empty interview.
+        ///   Looks up a localized string similar to Interview data can&apos;t be applied to a new version of the questionnaire. We will open a empty interview.
         /// </summary>
         public static string ReloadInterviewErrorMessage {
             get {

@@ -48,8 +48,9 @@ export default class ReviewComponent {
                 },
                 beforeEnter: (to, from, next) => {
                     if (this.config.coverPageId)
-                        to.params.sectionId = this.config.coverPageId
-                    next()
+                        next({ name: 'cover', params: { interviewId: to.params.interviewId } })
+                    else
+                        next()
                 },
             },
             {

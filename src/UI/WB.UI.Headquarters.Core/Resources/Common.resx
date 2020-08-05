@@ -172,10 +172,10 @@
     <value>Нas Errors</value>
   </data>
   <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>Received by Interviewer</value>
+    <value>Received by tablet</value>
   </data>
   <data name="CreatedOnClient" xml:space="preserve">
-    <value>Created on Client</value>
+    <value>Created on tablet</value>
   </data>
   <data name="Any" xml:space="preserve">
     <value>Any</value>

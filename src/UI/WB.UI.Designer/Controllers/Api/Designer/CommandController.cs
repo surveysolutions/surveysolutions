@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
-        private readonly ITranslationsService translationsService;
+        private readonly IDesignerTranslationService translationsService;
         private readonly ICategoriesService categoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ICommandInflater commandPreprocessor,
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITranslationsService translationsService,
+            IDesignerTranslationService translationsService,
             ICategoriesService categoriesService,
             IFileSystemAccessor fileSystemAccessor)
         {
@@ -287,7 +287,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (model?.Command == null)
                 return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
-            var commandType = typeof(AddOrUpdateTranslation).Name;
+            var commandType = nameof(AddOrUpdateTranslation);
             AddOrUpdateTranslation command;
             try
             {
@@ -295,7 +295,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 if (model.File != null)
                 {
                     byte[] postedFile;
-                    using (var stream = new MemoryStream())
+                    await using (var stream = new MemoryStream())
                     {
                         await model.File.CopyToAsync(stream);
                         postedFile = stream.ToArray();

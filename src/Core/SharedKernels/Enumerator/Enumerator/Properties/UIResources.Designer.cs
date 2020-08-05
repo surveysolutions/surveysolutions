@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -887,6 +887,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_MaxAnswersCount {
             get {
                 return ResourceManager.GetString("Interview_MaxAnswersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The maximum number of selections ({0}) in this question has been made.
+        /// </summary>
+        public static string Interview_MaxAnswersCountSelected {
+            get {
+                return ResourceManager.GetString("Interview_MaxAnswersCountSelected", resourceCulture);
             }
         }
         

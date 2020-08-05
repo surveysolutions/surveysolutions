@@ -83,7 +83,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
-            registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
+            registry.Bind<IMapInteractionService,  WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
 #endif
 
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();

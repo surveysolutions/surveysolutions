@@ -75,7 +75,7 @@ namespace WB.Tests.Abc
         public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)
         {
             return Mock.Of<IStatefulInterviewRepository>(_
-                => _.Get(It.IsAny<string>()) == interview);
+                => _.Get(It.IsAny<string>()) == interview && _.GetOrThrow(It.IsAny<string>()) == interview);
         }
 
         public static Interview InterviewForQuestionnaire(IQuestionnaire questionnaire)

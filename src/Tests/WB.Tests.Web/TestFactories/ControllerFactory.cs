@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
@@ -115,6 +116,9 @@ namespace WB.Tests.Web.TestFactories
             IAssignmentsImportService assignmentsImportService = null,
             ISerializer serializer = null)
         {
+            var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsService);
+            var scopeExecutor = Abc.Create.Service.InScopeExecutor(sl);
+            
             var result = new AssignmentsController(
                 assignmentViewFactory,
                 assignmentsService,
@@ -130,7 +134,8 @@ namespace WB.Tests.Web.TestFactories
                 assignmentsImportService ?? Mock.Of<IAssignmentsImportService>(),
                 serializer ?? Mock.Of<ISerializer>(),
                 Mock.Of<IInvitationService>(),
-                Mock.Of<IWebInterviewLinkProvider>());
+                Mock.Of<IWebInterviewLinkProvider>(),
+                scopeExecutor);
 
             return result;
         }

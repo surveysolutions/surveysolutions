@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Interviews {
@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment.
+        ///   Looks up a localized string similar to Assignment ID.
         /// </summary>
         public static string Assignment {
             get {
@@ -137,7 +137,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please choose a responsible supervisor or interviewer..
+        ///   Looks up a localized string similar to Please choose a Supervisor or Interviewer..
         /// </summary>
         public static string ChooseResponsible {
             get {
@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please choose a responsible interviewer..
+        ///   Looks up a localized string similar to Please choose an Interviewer..
         /// </summary>
         public static string ChooseResponsibleInterviewer {
             get {
@@ -155,7 +155,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please choose a responsible supervisor..
+        ///   Looks up a localized string similar to Please choose a Supervisor..
         /// </summary>
         public static string ChooseResponsibleSupervisor {
             get {
@@ -201,7 +201,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors.
+        ///   Looks up a localized string similar to Errors count.
         /// </summary>
         public static string Errors {
             get {

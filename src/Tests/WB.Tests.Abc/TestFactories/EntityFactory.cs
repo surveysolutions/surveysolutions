@@ -114,7 +114,8 @@ namespace WB.Tests.Abc.TestFactories
             {
                 AnswerText = answer,
                 AnswerValue = value.ToString(),
-                ParentValue = parentValue?.ToString()
+                ParentValue = parentValue?.ToString(),
+                AnswerCode = value
             };
 
         public AnsweredQuestionSynchronizationDto AnsweredQuestionSynchronizationDto(
@@ -430,11 +431,12 @@ namespace WB.Tests.Abc.TestFactories
             string key = null,
             DateTime? updateDate = null,
             bool? wasCreatedOnClient = null,
-            bool receivedByInterviewer = false,
+            DateTime? receivedByInterviewerAtUtc = null,
             int? assignmentId = null,
             bool wasCompleted = false,
             int? errorsCount = 0,
             TimeSpan? interviewingTotalTime = null,
+            string questionnaireVariable = "automation",
             IEnumerable<InterviewCommentedStatus> statuses = null,
             IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
@@ -452,16 +454,16 @@ namespace WB.Tests.Abc.TestFactories
                 SupervisorName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role,
                 Key = key,
-                UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
+                UpdateDate = updateDate ?? new DateTime(2017, 3, 23).ToUniversalTime(),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
-                ReceivedByInterviewer = receivedByInterviewer,
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAtUtc,
                 AssignmentId = assignmentId,
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
-                QuestionnaireVariable = "automation",
-                TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
+                QuestionnaireVariable = questionnaireVariable,
+                TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>(),
             };
         }
 
@@ -756,7 +758,7 @@ namespace WB.Tests.Abc.TestFactories
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
         public PlainQuestionnaire PlainQuestionnaire(params IComposite[] children)
-            => Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(null, children), 1L, null);
+            => Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(null, null, children), 1L, null);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
@@ -859,10 +861,13 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true, string comment = null, Guid? importedBy = null)
             => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables, comment, importedBy);
 
-        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children) => new QuestionnaireDocument
+        public QuestionnaireDocument QuestionnaireDocument(Guid? id = null,
+            string title = null,
+            params IComposite[] children) => new QuestionnaireDocument
         {
             HideIfDisabled = true,
             PublicKey = id ?? Guid.NewGuid(),
+            Title = title ?? "<Untitled>",
             Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
         }.WithEntityMap();
         

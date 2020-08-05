@@ -88,7 +88,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (nearestInterviewEntity == null) return null;
 
             if (questionId.HasValue)
-                return questionnaire.IsPrefilled(questionId.Value)
+                return questionnaire.IsPrefilled(questionId.Value) && !questionnaire.IsCoverPageSupported
                     ? GenerateInterviewUrl("cover", interview.Id, virtualDirectoryName)
                     : GenerateInterviewUrl("section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
 
