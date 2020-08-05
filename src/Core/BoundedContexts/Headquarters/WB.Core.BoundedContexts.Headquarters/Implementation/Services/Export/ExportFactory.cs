@@ -1,6 +1,5 @@
 using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {

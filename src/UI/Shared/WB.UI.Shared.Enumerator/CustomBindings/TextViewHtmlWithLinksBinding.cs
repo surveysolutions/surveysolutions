@@ -1,18 +1,27 @@
 ﻿using Android.Text.Method;
 using Android.Widget;
 using Java.Lang;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class TextViewHtmlWithLinksBinding : BaseBinding<TextView, ICharSequence>
+    public partial class TextViewHtmlWithLinksBinding : BaseBinding<TextView, object>
     {
         public TextViewHtmlWithLinksBinding(TextView androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(TextView control, ICharSequence value)
+        protected override void SetValueToView(TextView control, object value)
         {
-            control.SetText(value, TextView.BufferType.Spannable);
+            if (value is ICharSequence charSequence)
+            {
+                control.SetText(charSequence, TextView.BufferType.Spannable);
+            }
+            else if (value is string stringValue)
+            {
+                control.SetText(stringValue.ToAndroidSpanned(), TextView.BufferType.Spannable);
+            }
+
             control.MovementMethod = LinkMovementMethod.Instance;
         }
     }

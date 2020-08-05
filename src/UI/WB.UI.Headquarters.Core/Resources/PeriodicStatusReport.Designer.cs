@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average time that interview was presented on screen of interviewer before completion per team..
+        ///   Looks up a localized string similar to Average time that interview was presented on screen of interviewer before completion per supervisor..
         /// </summary>
         public static string AverageInterviewDurationForSupervisors {
             get {

@@ -26,9 +26,53 @@
                 @click="hide">
                 {{ $t("Pages.CloseLabel") }}
             </button>
+            <!-- <button type="button"
+                class="btn btn-link"
+                style="float:right"
+                @click="print">
+                {{ $t("Pages.Print") }}
+            </button> -->
         </div>
     </ModalFrame>
 </template>
+
+<style>
+
+    @media print {
+        .overviewOpenned .web-interview-for-supervisor {
+            display: none;
+        }
+
+        .overviewOpenned .footer {
+            display: none;
+        }
+
+        .overviewOpenned .overviewModal {
+            padding-left: 0px !important;
+            position: unset;
+        }
+
+        .overviewOpenned .overviewModal .modal-content {
+            border-radius: 0px;
+        }
+
+        .overviewOpenned .overviewModal .modal-header {
+            border-radius: 0px;
+            display: none;
+        }
+
+        .overviewOpenned .overviewModal .modal-dialog {
+            margin: 0px;
+            width: 100% !important;
+            max-width: 100% !important;
+            display: block;
+        }
+
+        .overviewOpenned .overviewModal .modal-footer {
+            display:none;
+        }
+    }
+</style>
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
@@ -67,6 +111,7 @@ export default {
         hide() {
             document.removeEventListener('scroll', this.handleScroll)
             $(this.$refs.modal).modal('hide')
+            $('body').removeClass('overviewOpenned')
         },
 
         async show() {
@@ -77,6 +122,8 @@ export default {
                 backdrop: 'static',
                 keyboard: false,
             })
+
+            $('body').addClass('overviewOpenned')
         },
 
         infiniteHandler($state) {
@@ -100,6 +147,11 @@ export default {
             }
             this.itemWithAdditionalInfo = itemToShow
         },
+
+        print() {
+            window.print()
+        },
+
     },
 }
 </script>

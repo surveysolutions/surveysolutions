@@ -169,7 +169,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User doesn&apos;t have permissions to access requested questionnaire.
+        ///   Looks up a localized string similar to User doesn&apos;t have permission to access requested questionnaire.
         /// </summary>
         public static string NoAccessToQuestionnaire {
             get {

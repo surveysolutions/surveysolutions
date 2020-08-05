@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clone.
+        ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Clone {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clone Questionnaire.
+        ///   Looks up a localized string similar to Copy Questionnaire.
         /// </summary>
         public static string CloneQuestionnaireTitle {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clone questionnaire.
+        ///   Looks up a localized string similar to Copy questionnaire.
         /// </summary>
         public static string ToCloneQuestionnaire {
             get {

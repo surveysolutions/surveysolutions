@@ -163,7 +163,7 @@
     <value>NEVER SYNCHED</value>
   </data>
   <data name="COLUMN_OLD_VERSION" xml:space="preserve">
-    <value>OLD VERSION</value>
+    <value>OLD INTERVIEWER APP</value>
   </data>
   <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
     <value>LESS THAN 100MB FREE SPACE</value>
@@ -175,10 +175,10 @@
     <value>ANDROID 4.4 OR LOWER</value>
   </data>
   <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
-    <value>NO ASSIGNMENTS RECEIVED</value>
+    <value>NEVER RECEIVED</value>
   </data>
   <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
-    <value>NEVER UPLOADED</value>
+    <value>NEVER SENT</value>
   </data>
   <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
     <value>TABLET REASSIGNED</value>

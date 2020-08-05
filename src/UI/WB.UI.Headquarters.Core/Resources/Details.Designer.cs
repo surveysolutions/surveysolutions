@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview has no responsible. Please, choose responsible interviewer.
+        ///   Looks up a localized string similar to Please choose a person responsible for the assignment..
         /// </summary>
         public static string ChooseResponsibleInterviewer {
             get {

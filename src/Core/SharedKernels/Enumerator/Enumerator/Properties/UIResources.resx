@@ -253,10 +253,10 @@
     <value>Section started: {0}</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
-    <value>Entered value can not be parsed as integer value</value>
+    <value>Entered value cannot be parsed as integer value</value>
   </data>
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
-    <value>Entered value can not be parsed as decimal value</value>
+    <value>Entered value cannot be parsed as decimal value</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
     <value>{0} errors</value>
@@ -297,13 +297,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
   </data>
   <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>Categories will be available after answering referenced question</value>
+    <value>Categories will appear only after answering the question that defines this questions categories.</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Answer "{0}" does not match any category</value>
+    <value>Answer "{0}" not allowed for this question</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Answer "{0}" does not match any category</value>
+    <value>Answer "{0}" not allowed for this question</value>
   </data>
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Next section</value>
@@ -315,7 +315,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to enter text ({0})</value>
   </data>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
-    <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative</value>
+    <value>Answer '{0}' is incorrect because question is a roster source question and specified answer is negative</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Answer '{0}' is incorrect because answer is greater than Roster upper bound '{1}'.</value>
@@ -480,7 +480,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Load map to show location for GPS questions</value>
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
-    <value>If interviewers don't have an access to the internet, this functionality should be enabled, because it make possibility to update their applications during offline synchronization with Supervisor application</value>
+    <value>If interviewers don't have an access to the internet, this functionality should be enabled, because it makes it possible to update their applications during offline synchronization with the Supervisor application</value>
   </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;empty&gt;</value>
@@ -492,7 +492,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Interviewer comment</value>
   </data>
   <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
-    <value>Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use device location.</value>
+    <value>Application does not have enough permissions to execute requested action. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use device location.</value>
   </data>
   <data name="MissingPermissions_Camera" xml:space="preserve">
     <value>Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use camera.</value>
@@ -531,10 +531,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Location</value>
   </data>
   <data name="AreaMap_NoChangesInfo" xml:space="preserve">
-    <value>No changes we made to be saved.</value>
+    <value>No changes to be saved.</value>
   </data>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
-    <value>Your location is out of boundaries of the map</value>
+    <value>Your location is outside the boundaries of the map.</value>
   </data>
   <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
     <value>Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting</value>
@@ -633,7 +633,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>{0} of audio recording</value>
   </data>
   <data name="Audio_Io_Exception_Message" xml:space="preserve">
-    <value>Could not write audio file. Ensure that device has a free space on an internal storage</value>
+    <value>Could not save audio file. Please check whether the device has internal storage available.</value>
   </data>
   <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
     <value>Unexpected exception during start audio recording</value>
@@ -659,6 +659,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} out of {1} categories selected</value>
   </data>
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>The maximum number of selections ({0}) in this question has been made</value>
+  </data>
   <data name="Interview_Overview" xml:space="preserve">
     <value>Overview</value>
   </data>
@@ -675,7 +678,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Warning(s)</value>
   </data>
   <data name="Interview_Overview_Comments" xml:space="preserve">
-    <value>Commentaries</value>
+    <value>Comments</value>
   </data>
   <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
     <value>Approve</value>
@@ -721,7 +724,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Show PDF </value>
   </data>
   <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
-    <value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
+    <value>This interview contains more data than the system allows. If possible, delete unnecessary roster rows and/or unanswer questions.</value>
   </data>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} notifications</value>

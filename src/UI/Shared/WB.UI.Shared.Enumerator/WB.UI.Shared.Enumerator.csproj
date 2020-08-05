@@ -757,6 +757,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_question_multi_option_bottom.axml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__instructions.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -2241,9 +2245,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.Platforms">
       <Version>3.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="modernhttpclient-updated">
-      <Version>3.4.3</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Droid.Support.Core.Utils">
       <Version>6.4.1</Version>

@@ -208,7 +208,7 @@
     <value>Average time that interview was presented on screen of interviewer before completion per interviewer.</value>
   </data>
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Average time that interview was presented on screen of interviewer before completion per team.</value>
+    <value>Average time that interview was presented on screen of interviewer before completion per supervisor.</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
     <value>Average time from when the interview is first assigned to when HQ approves that interview.</value>

@@ -14,14 +14,16 @@ namespace WB.UI.Headquarters.Services
 {
     class ExportServiceApiFactory : IExportServiceApiFactory
     {
-        private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
+
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ExportServiceApiFactory(IOptions<DataExportOptions> exportOptions,
+        public ExportServiceApiFactory(
+            IOptionsSnapshot<ExportServiceConfig> exportOptions,
             IOptions<HeadquartersConfig> headquarterOptions,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings, 
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
             IHttpContextAccessor httpContextAccessor)
         {
             this.exportOptions = exportOptions;
@@ -47,7 +49,7 @@ namespace WB.UI.Headquarters.Services
             }
 
             string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
-
+            
             var http = new HttpClient
             {
                 BaseAddress = new Uri(exportOptions.Value.ExportServiceUrl),

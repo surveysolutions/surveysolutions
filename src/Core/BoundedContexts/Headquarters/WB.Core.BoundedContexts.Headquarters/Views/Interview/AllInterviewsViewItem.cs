@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { set; get; }
         public string Key { get; set; }
-        public bool ReceivedByInterviewer { get; set; }
+        public DateTime? ReceivedByInterviewerAtUtc { get; set; }
         public string TeamLeadName { get; set; }
         public string ClientKey { get; set; }
     }

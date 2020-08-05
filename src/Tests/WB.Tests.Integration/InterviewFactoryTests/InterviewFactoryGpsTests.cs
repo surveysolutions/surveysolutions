@@ -489,19 +489,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             foreach (var gpsAnswer in answers)
             {
-                var interviewSummary = new InterviewSummary
-                {
-                    Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
-                    SupervisorId = gpsAnswer.TeamLeadId ?? Guid.Empty,
-                    InterviewId = gpsAnswer.InterviewId,
-                    ReceivedByInterviewer = false,
-                    QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
-                    QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
-                    QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
-                    ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid(),
-                    QuestionnaireVariable = "automation"
-                };
-
+                var interviewSummary =
+                    Create.Entity.InterviewSummary(status: gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
+                        interviewId: gpsAnswer.InterviewId,
+                        teamLeadId: gpsAnswer.TeamLeadId,
+                        questionnaireId: gpsAnswer.QuestionnaireId.QuestionnaireId,
+                        questionnaireVersion: gpsAnswer.QuestionnaireId.Version,
+                        responsibleId: gpsAnswer.ResponsibleId);
+                    
                 interviewSummaryRepositoryLocal.Store(interviewSummary, gpsAnswer.InterviewId.FormatGuid());
 
                 geolocationDenormalizer.Update(interviewSummary, new PublishedEvent<GeoLocationQuestionAnswered>(

@@ -5,17 +5,24 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
     [TestFixture]
+    [TestOf(typeof(DesignerEngineVersionService))]
     internal class DesignerEngineVersionServiceNUnitTests
     {
         private DesignerEngineVersionService CreateDesignerEngineVersionService(
-            IAttachmentService attachments = null)
+            IAttachmentService attachments = null,
+            IDesignerTranslationService translaitonsService = null)
         {
-            return new DesignerEngineVersionService(attachments ?? Mock.Of<IAttachmentService>());
+            return new DesignerEngineVersionService(attachments ?? Mock.Of<IAttachmentService>(),
+                translaitonsService ?? Mock.Of<IDesignerTranslationService>());
         }
 
         [Test]
@@ -201,5 +208,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             Assert.That(contentVersion, Is.EqualTo(30));
         }
 
+        [Test]
+        public void should_return_31_when_static_text_references_variable()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithCoverPage(children:new IComposite[]
+            {
+                Create.StaticText(attachmentName: "var1"),
+                Create.Variable(variableName: "var1", type: VariableType.String)
+            });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            
+            Assert.That(contentVersion, Is.EqualTo(31));
+        }
+
+        [Test]
+        public void should_return_31_when_has_translated_title()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter();
+            questionnaire.Translations.Add(new Translation
+            {
+                Id = Id.gA
+            });
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.TranslationInstances.Add(Create.TranslationInstance(questionnaire.PublicKey,
+                TranslationType.Title, questionnaire.PublicKey, translationId: Id.gA));
+
+            dbContext.SaveChanges();
+
+            var translationsService = Create.TranslationsService(dbContext);
+            var service = CreateDesignerEngineVersionService(translaitonsService: translationsService);
+
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(31));
+        }
     }
 }

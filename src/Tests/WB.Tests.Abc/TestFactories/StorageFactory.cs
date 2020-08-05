@@ -133,11 +133,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IStatefulInterviewRepository InterviewRepository(IStatefulInterview interview)
         {
-            var result = new Mock<IStatefulInterviewRepository>();
-            result.Setup(x => x.Get(It.IsAny<string>()))
-                .Returns(interview);
-
-            return result.Object;
+            return SetUp.StatefulInterviewRepository(interview);
         }
 
         private static IMemoryCache cache = new MemoryCache(Options.Create(new MemoryCacheOptions()));

@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled, interviewer application will record interview process. When audio audit is on an amount of synchronization data would be significantly larger.
+        ///   Looks up a localized string similar to The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger..
         /// </summary>
         public static string RecordAudioTitle {
             get {

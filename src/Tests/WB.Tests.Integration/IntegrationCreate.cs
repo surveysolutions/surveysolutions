@@ -25,6 +25,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -434,7 +435,7 @@ namespace WB.Tests.Integration
         }
 
         public static DesignerEngineVersionService DesignerEngineVersionService()
-            => new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
+            => new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
             IUnitOfWork sessionProvider = null)

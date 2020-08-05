@@ -16,6 +16,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (value != null)
             {
                 control.Tag = value;
+                control.ContentDescription = value;
             }
         }
     }
