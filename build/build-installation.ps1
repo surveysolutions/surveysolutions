@@ -31,6 +31,7 @@ $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContai
 
 $HQsitePath = Join-path $workdir "HQwork"
 
+
 #remove old files
 if (!($noDestCleanup)) {
 	if (Test-Path $HQsitePath){
@@ -48,18 +49,26 @@ if (!(Test-Path $HQsitePath)) {
 #$targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse
+Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
+
 #Remove-Item "$HQsitePath\HostMap.config"
 
 Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 
-$file = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.exe"})
-$versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
+$files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe"})
+
+foreach($file in $files) {
+    $versionOfProduct = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($file.FullName)
+    
+    if(($versionOfProduct.FileVersion -eq '') -or ($null -eq $versionOfProduct.FileVersion)) {
+        continue
+    }
+
+    break;
+}
 # $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
 $productFileVersion = $versionOfProduct.FileVersion
-
-
-
 # https://github.com/dotnet/core/issues/4011#issuecomment-567610911
 $envBundle = [xml] @"
 <environmentVariables>
