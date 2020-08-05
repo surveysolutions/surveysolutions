@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Admin;
@@ -28,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
+        [ActivePage(MenuItem.Settings)]
         public IActionResult Index()
         {
             var model = GetSettingsModel();
@@ -44,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             return adminSettingsModel;
         }
 
+        [ActivePage(MenuItem.EmailProviders)]
         public IActionResult EmailProviders()
         {
             return View(new EmailProviders()

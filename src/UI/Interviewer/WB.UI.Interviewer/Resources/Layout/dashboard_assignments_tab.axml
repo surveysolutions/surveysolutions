@@ -9,12 +9,15 @@
                 android:paddingTop="@dimen/Dashboard_Tab_Frame_paddingTop"
                 local:MvxBind="Visible Not(GreaterThan(ItemsCount, 0));">
     <TextView style="@style/Dashboard_NewTab_NoInterviewsTitle"
+              android:id="@+id/tvNoInterviewsTitle"
               local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
 
     <TextView style="@style/Dashboard_NoInterviewsText"
+              android:id="@+id/tvNoInterviewsText"
               local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
 
     <Button style="@style/Dashboard_NewTab_NoInterviewsSyncButton"
+            android:id="@+id/btnNoInterviewsSyncButton"
             local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
                                Visible SynchronizationWithHqEnabled;
                                Click SynchronizationCommand;" />
