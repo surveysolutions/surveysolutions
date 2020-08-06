@@ -21,7 +21,7 @@ LABEL org.label-schema.url="https://mysurvey.solutions"
 LABEL org.label-schema.vcs-ref=$VCS_REF
 LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
 LABEL org.label-schema.version=$BUILD_VERSION
-LABEL org.label-schema.usage="https://support.mysurvey.solutions/headquarters/config/$BUILD_VERSION}/docker"
+LABEL org.label-schema.usage="https://support.mysurvey.solutions/headquarters/config/${BUILD_VERSION}/docker"
 
 LABEL solutions.mysurvey.hq.build-no=$HQ_BUILD
 LABEL solutions.mysurvey.interviewer.build-no=$IN_BUILD
