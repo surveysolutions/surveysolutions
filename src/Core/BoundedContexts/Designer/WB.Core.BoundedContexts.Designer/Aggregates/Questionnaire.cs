@@ -585,7 +585,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         .Any(c => !(c is IQuestion || c is IStaticText));
                     if (isContainsNotAllowedEntities)
                     {
-                        throw new QuestionnaireException(ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+                        throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
                     }
                 }
 
@@ -1550,6 +1550,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var sourceVariable = this.innerDocument.Find<IVariable>(entityId);
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceVariable != null ? sourceVariable.GetParent() as IGroup : null);
+
+            if (IsCoverPage(targetEntityId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+            }
 
             this.innerDocument.MoveItem(entityId, targetEntityId, targetIndex);
         }
