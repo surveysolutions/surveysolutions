@@ -1952,7 +1952,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid CoverPageSectionId => innerDocument.CoverPageSectionId;
         public string GetAttachmentNameForEntity(Guid entityId)
         {
-            return this.GetStaticTextImpl(entityId).AttachmentName;
+            var staticText = this.GetStaticTextImpl(entityId);
+            if(staticText == null) 
+                throw new QuestionnaireException($"Static text {entityId} was not found in questionnaire");
+            return staticText.AttachmentName;
         }
         
         public IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId)
