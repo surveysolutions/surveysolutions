@@ -130,7 +130,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                 sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
                     TargetScreen = questionnaire.IsPrefilled(questionId.Value)
-                        ? ScreenType.Identifying
+                        ? ScreenType.Cover
                         : ScreenType.Group,
                     TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
                     AnchoredElementIdentity = nearestInterviewEntity
