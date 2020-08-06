@@ -156,26 +156,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (scrollTo != null)
             {
                 ScrollToIdentity = scrollTo;
-                
-                if (IsEditMode)
-                {
-                    var childItem =
-                        (ICompositeEntity) this.PrefilledEditableEntities.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) 
-                        ?? this.PrefilledEditableEntities.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
-
-                    this.ScrollToIndex = childItem != null ? this.PrefilledEditableEntities.ToList().IndexOf(childItem) : 0;
-                }
-                else
-                {
-                    var childItem = this.PrefilledReadOnlyEntities.FirstOrDefault(x => x.Identity.Equals(scrollTo));
-                    this.ScrollToIndex = childItem != null ? this.PrefilledReadOnlyEntities.ToList().IndexOf(childItem) : 0;
-                }
             }
         }
 
-        public int? ScrollToIndex { get; set; }
         public Identity ScrollToIdentity { get; set; }
-
 
         private CompositeCollection<ICompositeEntity> GetEditablePrefilledData(string interviewId, NavigationState navigationState)
         {
