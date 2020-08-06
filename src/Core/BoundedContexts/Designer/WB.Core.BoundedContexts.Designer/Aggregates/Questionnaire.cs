@@ -579,6 +579,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var sourceChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(groupId);
                 var targetChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(targetGroupId.Value);
 
+                if (IsCoverPage(targetChapter.PublicKey))
+                {
+                    bool isContainsNotAllowedEntities = sourceChapter.Children
+                        .Any(c => !(c is IQuestion || c is IStaticText));
+                    if (isContainsNotAllowedEntities)
+                    {
+                        throw new QuestionnaireException(ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+                    }
+                }
+
                 if (sourceChapter.PublicKey != targetChapter.PublicKey)
                 {
                     var numberOfMovedItems = sourceGroup.Children
@@ -602,14 +612,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                 }
-                
             }
             
             // if we don't have a target group we would like to move source group into root of questionnaire
             
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup ?? this.innerDocument, sourceGroup.GetParent() as IGroup);
 
-            this.innerDocument.MoveItem(groupId, targetGroupId, targetIndex);
+            var targetIsCoverPage = targetGroupId.HasValue && IsCoverPage(targetGroupId.Value);
+            if (targetIsCoverPage)
+            {
+                var elementsToCopy = sourceGroup.Children
+                        .Where(el => el is IQuestion || el is StaticText)
+                        .Select(el => el.PublicKey)
+                        .ToList();
+                foreach (var compositeId in elementsToCopy)
+                {
+                    this.innerDocument.MoveItem(compositeId, targetGroupId, targetIndex);
+                }
+            }
+            else
+            {
+                this.innerDocument.MoveItem(groupId, targetGroupId, targetIndex);
+            }
         }
 
         #endregion
