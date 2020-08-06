@@ -581,7 +581,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (IsCoverPage(targetChapter.PublicKey))
                 {
-                    bool isContainsNotAllowedEntities = sourceChapter.Children
+                    bool isContainsNotAllowedEntities = sourceGroup.Children
                         .Any(c => !(c is IQuestion || c is IStaticText));
                     if (isContainsNotAllowedEntities)
                     {
