@@ -67,7 +67,38 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CanNotAddElementToCoverPage));
         }
-        
+
+        [Test]
+        public void MoveGroup_When_User_try_move_subsection_with_only_allowed_entities_into_cover_Then_content_of_section_should_be_moved()
+        {
+            // Arrange
+            var groupId = Guid.NewGuid();
+            var staticTextId = Guid.NewGuid();
+            var questionId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            
+            var questionnaire = CreateQuestionnaireWithOneGroup(
+                    groupId: groupId,
+                    responsibleId: responsibleId);
+            questionnaire.AddTextQuestion(questionId, groupId, responsibleId);
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id, staticTextId, "text", responsibleId, groupId));
+            
+            // act
+            questionnaire.MoveGroup(groupId, questionnaire.QuestionnaireDocument.CoverPageSectionId, 0, responsibleId: responsibleId);
+
+            // assert
+            var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
+            Assert.That(question!.Featured, Is.True);
+            Assert.That(question!.GetParent()!.PublicKey, Is.EqualTo(questionnaire.QuestionnaireDocument.CoverPageSectionId));
+
+            var staticText = questionnaire.QuestionnaireDocument.Find<IStaticText>(staticTextId);
+            Assert.That(staticText!.GetParent()!.PublicKey, Is.EqualTo(questionnaire.QuestionnaireDocument.CoverPageSectionId));
+
+            var group = questionnaire.QuestionnaireDocument.Find<IGroup>(groupId);
+            Assert.That(group, Is.Not.Null);
+            Assert.That(group.Children.Count, Is.EqualTo(0));
+        }
+
         [Test]
         public void MoveQuestion_When_User_try_move_question_to_cover_Then_Featured_flag_is_true()
         {
