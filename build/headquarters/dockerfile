@@ -1,7 +1,9 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
 RUN apt-get update \
-    && apt-get install -y libfontconfig1 libgdiplus ffmpeg gdal-bin
+    && apt-get install -y --no-install-recommends libfontconfig1 libgdiplus ffmpeg gdal-bin \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -30,10 +32,11 @@ LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
 
 COPY appsettings.ini /app/appsettings.cloud.ini
 
+# Larger files at first
+COPY *.apk /app/Client/
+
 ADD headquarters.linux-x64.tar.gz /app/
 ADD export.linux-x64.tar.gz /app/Export.Service
-
-COPY *.apk /app/Client/
 
 WORKDIR /app
 EXPOSE 80
