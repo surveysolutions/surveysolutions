@@ -46,5 +46,68 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
+        
+        [Test]
+        public void MoveGroup_When_User_try_move_subsection_with_not_allowed_entities_into_cover_Then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            var groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire =
+                CreateQuestionnaireWithOneGroup(
+                    groupId: groupId,
+                    responsibleId: responsibleId);
+            questionnaire.AddVariable(Guid.NewGuid(), groupId, responsibleId);
+            
+            // act
+            TestDelegate act = () => 
+                questionnaire.MoveGroup(groupId, questionnaire.QuestionnaireDocument.CoverPageSectionId, 0, responsibleId: responsibleId);
+
+            // assert
+            var domainException = Assert.Throws<QuestionnaireException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CanNotAddElementToCoverPage));
+        }
+        
+        [Test]
+        public void MoveQuestion_When_User_try_move_question_to_cover_Then_Featured_flag_is_true()
+        {
+            // Arrange
+            var questionId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire =
+                CreateQuestionnaireWithOneQuestion(
+                    questionId: questionId,
+                    responsibleId: responsibleId);
+            
+            // act
+            questionnaire.MoveQuestion(questionId, questionnaire.QuestionnaireDocument.CoverPageSectionId, 0, responsibleId: responsibleId);
+
+            // assert
+            var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
+            Assert.That(question!.Featured, Is.True);
+            Assert.That(question!.GetParent()!.PublicKey, Is.EqualTo(questionnaire.QuestionnaireDocument.CoverPageSectionId));
+        }
+
+        [Test]
+        public void MoveQuestion_When_User_try_move_question_from_cover_Then_Featured_flag_is_false()
+        {
+            // Arrange
+            var questionId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire =
+                CreateQuestionnaireWithOneGroup(
+                    groupId: groupId,
+                    responsibleId: responsibleId);
+            questionnaire.AddTextQuestion(questionId, questionnaire.QuestionnaireDocument.CoverPageSectionId, responsibleId);
+            
+            // act
+            questionnaire.MoveQuestion(questionId, groupId, 0, responsibleId: responsibleId);
+
+            // assert
+            var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
+            Assert.That(question!.Featured, Is.False);
+            Assert.That(question!.GetParent()!.PublicKey, Is.EqualTo(groupId));
+        }
     }
 }
