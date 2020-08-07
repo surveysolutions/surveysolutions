@@ -481,6 +481,16 @@ namespace Main.Core.Documents
                 return;
 
             sourceContainer.RemoveChild(itemId);
+            if (IsCoverPageSupported && targetGroupId.HasValue)
+            {
+                var questions = item.TreeToEnumerable(c => c.Children)
+                    .Where(c => c is IQuestion)
+                    .Cast<IQuestion>();
+                foreach (var question in questions)
+                {
+                    question.Featured = IsCoverPage(targetGroupId.Value);
+                }
+            }
             targetContainer.Insert(targetIndex, item, targetGroupId);
             this.LastEntryDate = DateTime.UtcNow;
         }
