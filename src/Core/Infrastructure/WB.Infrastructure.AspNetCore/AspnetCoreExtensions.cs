@@ -45,6 +45,7 @@ namespace WB.Infrastructure.AspNetCore
                 .WriteTo
                     .File(new RenderedCompactJsonFormatter(), Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                         retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
+                .ReadFrom.Configuration(host.Configuration, "Logging")
                 ;    
         }
 
