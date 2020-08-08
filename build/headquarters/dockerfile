@@ -40,6 +40,6 @@ ADD export.linux-x64.tar.gz /app/Export.Service
 
 WORKDIR /app
 EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://hq/.hc/ready
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://hq/.hc/ready
 
 ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll", "--urls=http://0.0.0.0:80"]
