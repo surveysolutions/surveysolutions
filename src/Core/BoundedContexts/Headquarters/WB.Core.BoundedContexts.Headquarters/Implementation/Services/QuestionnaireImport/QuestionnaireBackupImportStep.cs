@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -31,20 +32,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
         private readonly ITranslationImporter translationImporter;
 
         private Dictionary<string, long> filesInBackup = new Dictionary<string, long>();
-        private readonly IServiceProvider serviceProvider;
+        private readonly IServiceLocator serviceLocator;
 
         public QuestionnaireBackupImportStep(QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireDocument questionnaire,
-            IDesignerApi designerApi, 
-            IServiceProvider serviceProvider,
+            IDesignerApi designerApi,
+            IServiceLocator serviceLocator,
             IArchiveUtils archiveUtils,
             ICategoriesImporter categoriesImportService, 
             ITranslationImporter translationImporter)
         {
             this.questionnaireIdentity = questionnaireIdentity;
             this.designerApi = designerApi;
-            this.serviceProvider = serviceProvider;
-            this.logger = serviceProvider.GetService<ILogger<QuestionnaireBackupImportStep>>();
+            this.serviceLocator = serviceLocator;
+            this.logger = serviceLocator.GetInstance<ILogger<QuestionnaireBackupImportStep>>();
             
             this.questionnaire = questionnaire;
 
@@ -68,33 +69,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
         {
             if (backupFile != null)
             {
-                using (var scope = serviceProvider.CreateScope())
-                {
-                    var questionnaireBackupStorage = scope.ServiceProvider.GetService<IPlainKeyValueStorage<QuestionnaireBackup>>();
+                var questionnaireBackupStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireBackup>>();
                     questionnaireBackupStorage.Store(new QuestionnaireBackup { Content = backupFile.Content }, questionnaireIdentity.ToString());
 
-                    ProcessDependingObjects(scope);
-                }
+                ProcessDependingObjects();
+                
             }
 
             progress.Report(100);
         }
 
-        private void ProcessDependingObjects(IServiceScope scope)
+        private void ProcessDependingObjects()
         {
             filesInBackup = archiveUtils.GetArchivedFileNamesAndSize(backupFile.Content);
 
-            ProcessAttachments(scope);
-            ProcessTranslations(scope);
-            ProcessLookupTables(scope);
-            ProcessCategories(scope);
+            ProcessAttachments();
+            ProcessTranslations();
+            ProcessLookupTables();
+            ProcessCategories();
         }
 
-        private void ProcessAttachments(IServiceScope scope)
+        private void ProcessAttachments()
         {
             if (questionnaire.Attachments?.Count > 0)
             {
-                var attachmentContentService = scope.ServiceProvider.GetService<IAttachmentContentService>();
+                var attachmentContentService = serviceLocator.GetInstance<IAttachmentContentService>();
 
                 foreach (var questionnaireAttachment in questionnaire.Attachments)
                 {
@@ -146,11 +145,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             }
         }
 
-        private void ProcessLookupTables(IServiceScope scope)
+        private void ProcessLookupTables()
         {
             foreach (var lookupId in questionnaire.LookupTables)
             {
-                var lookupTablesStorage = scope.ServiceProvider.GetService<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
+                var lookupTablesStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
                 this.logger.LogInformation($"Saving lookup table.", questionnaireIdentity, lookupId.Key);
 
@@ -179,11 +178,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             }
         }
 
-        private void ProcessCategories(IServiceScope scope)
+        private void ProcessCategories()
         {
             if (questionnaire.Categories.Count <= 0) return;
 
-            var reusableCategoriesStorage = scope.ServiceProvider.GetService<IReusableCategoriesStorage>();
+            var reusableCategoriesStorage = serviceLocator.GetInstance<IReusableCategoriesStorage>();
 
             foreach (var category in questionnaire.Categories)
             {
@@ -206,11 +205,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             }
         }
 
-        private void ProcessTranslations(IServiceScope scope)
+        private void ProcessTranslations()
         {
             if (questionnaire.Translations?.Count != 0)
             {
-                var translationManagementService = scope.ServiceProvider.GetService<ITranslationManagementService>();
+                var translationManagementService = serviceLocator.GetInstance<ITranslationManagementService>();
 
                 translationManagementService.Delete(questionnaireIdentity);
 
