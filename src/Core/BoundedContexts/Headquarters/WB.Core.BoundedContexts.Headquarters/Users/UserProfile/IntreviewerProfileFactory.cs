@@ -277,6 +277,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     "i_fullName",
                     "i_email",
                     "i_phone",
+                    "i_lastLoginDate",
                     "s_appVersion",
                     "s_updateAvailable",
                     "s_linkedDate",
@@ -324,6 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     x.FullName,
                     x.Email,
                     x.Phone,
+                    x.LastLoginDate?.ToString("s", CultureInfo.InvariantCulture) ?? "",
                     x.InterviewerAppVersion,
                     x.HasUpdateForInterviewerApp,
                     x.DeviceAssignmentDate?.ToString("yyyy-MM-dd"),
@@ -394,7 +396,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                         interviewer, 
                         interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null,
                     deviceSyncInfos.GetOrNull(interviewer.Id),
-                    trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0));
+                    trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0))
+                .OrderBy(x=> x.InterviewerName);
         }
 
         private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile,

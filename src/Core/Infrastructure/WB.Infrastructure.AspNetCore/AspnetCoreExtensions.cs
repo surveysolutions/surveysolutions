@@ -75,10 +75,15 @@ namespace WB.Infrastructure.AspNetCore
         
         private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
-        public static IHostBuilder ConfigureSurveySolutionsAppConfiguration<TStartup>(this IHostBuilder hostBuilder, 
-            string envPrefix, string [] args, Action<HostBuilderContext, IConfigurationBuilder>? configure = null) where TStartup : class
+        public static IHostBuilder ConfigureSurveySolutionsAppConfiguration<TStartup>(
+            this IHostBuilder hostBuilder, 
+            string envPrefix, 
+            string [] args,
+            bool useWebDefaults = true,
+            Action<HostBuilderContext, IConfigurationBuilder>? configure = null)
+            where TStartup : class
         {
-            return hostBuilder
+            hostBuilder
                 .ConfigureAppConfiguration((hostingContext, c) =>
             {
                 c.AddIniFile("appsettings.ini", false, true);
@@ -91,21 +96,32 @@ namespace WB.Infrastructure.AspNetCore
 
                 c.AddEnvironmentVariables(envPrefix);
                 c.AddCommandLine(args);
-            })
-                .ConfigureWebHostDefaults(webBuilder =>
-            {
-                if (args.Contains("--kestrel"))
-                {
-                    webBuilder.UseKestrel();
-                }
-
-                if (args.Contains("--httpsys"))
-                {
-                    webBuilder.UseHttpSys();
-                }
-
-                webBuilder.UseStartup<TStartup>();
             });
+
+            if (useWebDefaults)
+            {
+                hostBuilder
+                    .ConfigureWebHostDefaults(webBuilder =>
+                    {
+                        if (args.Contains("--kestrel"))
+                        {
+                            webBuilder.UseKestrel();
+                        }
+
+                        if (args.Contains("--httpsys"))
+                        {
+                            webBuilder.UseHttpSys();
+                        }
+
+                        webBuilder.UseStartup<TStartup>();
+                    });
+            }
+            else
+            {
+                Log.Information("Skipping {method} call", "ConfigureWebHostDefaults");
+            }
+
+            return hostBuilder;
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using WB.UI.Headquarters.HealthChecks;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
@@ -49,8 +51,11 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                     {
                         services.AddHostedService<ExportServiceEmbeddableHost>();
 
-                        var u = context.Configuration[WebHostDefaults.ServerUrlsKey];
-                        context.Configuration[WebHostDefaults.ServerUrlsKey] = u + ";http://127.0.0.1:0";
+                        if (!context.IsRunningOnIIS())
+                        {
+                            var u = context.Configuration[WebHostDefaults.ServerUrlsKey];
+                            context.Configuration[WebHostDefaults.ServerUrlsKey] = u + ";http://127.0.0.1:0";
+                        }
 
                         services.AddSingleton<EmbeddedExportServiceHealthCheck>();
                         services.AddHealthChecks().AddCheck<EmbeddedExportServiceHealthCheck>("embedded_export_service_check");
@@ -61,6 +66,11 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                         Serilog.Log.Logger.Verbose("SearchPath: {searchPath}", exportServiceHostDll);
                     }
                 });
+        }
+
+        public static bool IsRunningOnIIS(this HostBuilderContext ctx)
+        {
+            return Environment.GetEnvironmentVariable("APP_POOL_ID") != null;
         }
     }
 }

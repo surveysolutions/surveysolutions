@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.UI.Headquarters.HealthChecks;
 
@@ -73,7 +76,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                 exportArgs.Add("--console=" + configuration["console"]);
             }
 
-            IHostBuilder exportHostBuilder = createWebHostBuilder?.Invoke(null, new object[] { exportArgs.ToArray() }) as IHostBuilder;
+            IHostBuilder exportHostBuilder = createWebHostBuilder?.Invoke(null, new object[] { exportArgs.ToArray(), false }) as IHostBuilder;
 
             if (exportHostBuilder == null)
             {
@@ -91,20 +94,16 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             logger.LogInformation("Configuring export service to use {serverUrl} as tenant url for {tenant}",
                 serverUrl, this.headquarterOptions.Value.TenantName);
 
+            exportHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
+            {
+                ctx.Configuration["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl;
+            });
+
             exportHostBuilder.ConfigureWebHost(w =>
             {
-                w.ConfigureAppConfiguration((ctx, c) =>
-                {
-                    c.Add(new MemoryConfigurationSource
-                    {
-                        InitialData = new Dictionary<string, string>
-                        {
-                            ["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl
-                        }
-                    });
-                });
-
-                w.UseUrls("http://127.0.0.1:0");
+                w.UseSetting("UseIISIntegration", true.ToString());
+                w.UseKestrel(k => k.Listen(IPAddress.Loopback, 0));
+                w.UseStartup(exportHost.GetType("WB.Services.Export.Host.Startup"));
             });
 
             var host = exportHostBuilder?.Build();

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,57 +17,21 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator")]
     public class ControlPanelController : Controller
     {
-        private readonly IUserViewFactory userViewFactory;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly ITabletInformationService tabletInformationService;
-        private readonly UserManager<HqUser> users;
         private readonly ICommandService commandService;
         private readonly ILogger<ControlPanelController> logger;
 
-        public ControlPanelController(IUserViewFactory userViewFactory, 
+        public ControlPanelController(
             IAuthorizedUser authorizedUser,
-            ITabletInformationService tabletInformationService, 
-            UserManager<HqUser> users,
             ICommandService commandService,
             ILogger<ControlPanelController> logger)
         {
-            this.userViewFactory = userViewFactory;
             this.authorizedUser = authorizedUser;
-            this.tabletInformationService = tabletInformationService;
-            this.users = users;
             this.commandService = commandService;
             this.logger = logger;
         }
 
         public ActionResult Index() => View();
-
-        [ActivePage(MenuItem.Administration_TabletInfo)]
-        public IActionResult TabletInfos() => View("Index");
-
-        [HttpPost]
-        public async Task<ActionResult> TabletInfos(IFormFile file)
-        {
-            try
-            {
-                if (file != null && file.Length > 0)
-                {
-                    using var ms = new MemoryStream();
-                    await using (var readStream = file.OpenReadStream())
-                        await readStream.CopyToAsync(ms);
-
-                    this.tabletInformationService.SaveTabletInformation(
-                        content: ms.ToArray(),
-                        androidId: @"manual-restore",
-                        user: this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id)));
-                }
-            }
-            catch (Exception exception)
-            {
-                this.logger.LogError($"Exception on tablet info uploading: {file?.Name}", exception);
-            }
-
-            return RedirectToAction("TabletInfos");
-        }
 
         [ActivePage(MenuItem.Administration_Config)]
         public IActionResult Configuration() => View("Index");
