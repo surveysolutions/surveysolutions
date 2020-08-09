@@ -30,27 +30,34 @@ namespace WB.Services.Export.Host.Infra
             this.logger = logger;
             this.configuration = configuration;
         }
-        
+
         static readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
 
         public T For(TenantInfo? tenant)
         {
-            if (tenant == null) throw new InvalidOperationException("Tenant must be not null."); 
+            if (tenant == null) throw new InvalidOperationException("Tenant must be not null.");
 
             return cache.GetOrAdd(tenant, id =>
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
                 var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
-                
+
                 if (configuration[urlOverrideKey] != null)
                 {
                     httpClient.BaseAddress = new Uri(configuration[urlOverrideKey]);
+
+                    var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");
+                    if (aspnetcoreToken != null)
+                    {
+                        httpClient.DefaultRequestHeaders.Add("MS-ASPNETCORE-TOKEN", aspnetcoreToken);
+                    }
                 }
                 else
                 {
                     httpClient.BaseAddress = new Uri(tenant.BaseUrl);
                 }
+
 
                 logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
 
@@ -100,9 +107,9 @@ namespace WB.Services.Export.Host.Infra
             {
                 var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
                 request.RequestUri = new Uri(uri);
-                
+
                 request.Headers.Authorization = new AuthenticationHeaderValue("TenantToken", this.tenant.Id.ToString());
-                
+
                 using (LoggingHelpers.LogContext(("uri", request.RequestUri)))
                 {
                     var sw = Stopwatch.StartNew();
@@ -117,9 +124,9 @@ namespace WB.Services.Export.Host.Infra
                         sw.Elapsed.TotalSeconds,
                         size);
 
-                    logger.LogTrace("TenantApi executed request {uri} with size {size} in {elapsed} ms", 
+                    logger.LogTrace("TenantApi executed request {uri} with size {size} in {elapsed} ms",
                         request.RequestUri.LocalPath,
-                        size, 
+                        size,
                         sw.ElapsedMilliseconds);
 
                     return result;

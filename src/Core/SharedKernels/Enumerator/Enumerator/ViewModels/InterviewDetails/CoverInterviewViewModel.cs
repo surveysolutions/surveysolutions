@@ -172,8 +172,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Select(entity =>
                 {
                     var entityIdentity = new Identity(entity.EntityId, RosterVector.Empty);
-                    var attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
-                    attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
+                    AttachmentViewModel attachmentViewModel = null;
+                    if (entity.IsStaticText)
+                    {
+                        attachmentViewModel = this.interviewViewModelFactory.GetNew<AttachmentViewModel>();
+                        attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
+                    }
 
                     return new CoverPrefilledEntity
                     {

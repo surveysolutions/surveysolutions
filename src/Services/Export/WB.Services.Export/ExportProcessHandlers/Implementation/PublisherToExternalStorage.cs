@@ -56,16 +56,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                 await using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
-                    string questionnaireName = "";
+                    string? questionnaireNamePrefixOverride = null;
                     if (!string.IsNullOrEmpty(questionnaire.VariableName))
                     {
                         var split = questionnaire.QuestionnaireId.Id.Split('$');
                         var questionnaireVersion = split.Length == 2 
                             ? split[1]
                             : questionnaire.QuestionnaireId.Id;
-                        questionnaireName = $"{questionnaire.VariableName}_v{questionnaireVersion}";
+                        questionnaireNamePrefixOverride = $"{questionnaire.VariableName}_v{questionnaireVersion}";
                     }
-                    var filename = await this.exportFileNameService.GetFileNameForExportArchiveAsync(state.Settings, questionnaireName);
+                    var filename = await this.exportFileNameService.GetFileNameForExportArchiveAsync(state.Settings, questionnaireNamePrefixOverride);
                     await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
             }

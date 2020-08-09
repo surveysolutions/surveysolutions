@@ -11,6 +11,7 @@ using WB.UI.Designer.Services.Restore;
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
     [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
+    [RequestSizeLimit(200 * 1024 * 1024)]
     public class RestoreQuestionnaireModel : PageModel
     {
         private readonly ILogger<RestoreQuestionnaireModel> logger;
