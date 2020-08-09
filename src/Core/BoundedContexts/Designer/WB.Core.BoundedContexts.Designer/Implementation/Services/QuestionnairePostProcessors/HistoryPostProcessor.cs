@@ -544,7 +544,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             var entities = new List<IComposite>();
 
-            if (aggregate.QuestionnaireDocument.IsCoverPage(targetParentId))
+            var pasteEntity = aggregate.QuestionnaireDocument.Find<IComposite>(targetEntityId);
+            
+            if (aggregate.QuestionnaireDocument.IsCoverPage(targetParentId) && pasteEntity == null)
             {
                 var coverGroup = aggregate.QuestionnaireDocument.Find<IGroup>(targetParentId);
                 if (coverGroup == null)
@@ -569,7 +571,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 return;
             }
 
-            var pasteEntity = aggregate.QuestionnaireDocument.Find<IComposite>(targetEntityId);
             if (pasteEntity == null)
                 throw new InvalidOperationException($"Entity was not found ({targetEntityId}).");
 
