@@ -14,6 +14,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabularFormatExportService tabularFormatExportService;
 
+        private readonly string tabExtension = ".tab";
+
         protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             ITabularFormatExportService tabularFormatExportService)
         {
@@ -40,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(
                 state.Settings, state.ExportTempFolder, exportProgress, cancellationToken);
 
-            return this.fileSystemAccessor.GetFilesInDirectory(state.ExportTempFolder);
+            return this.fileSystemAccessor.GetFilesInDirectory(state.ExportTempFolder, $"*{this.tabExtension}");
         }
 
         protected void DeleteTabularDataFiles(string[] tabDataFiles, CancellationToken cancellationToken)
