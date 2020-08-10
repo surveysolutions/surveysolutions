@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -28,8 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
         private readonly ILogger<QuestionnaireBackupImportStep> logger;
         private RestFile backupFile;
         private readonly IArchiveUtils archiveUtils;
-        private readonly ICategoriesImporter categoriesImportService;
-        private readonly ITranslationImporter translationImporter;
 
         private Dictionary<string, long> filesInBackup = new Dictionary<string, long>();
         private readonly IServiceLocator serviceLocator;
@@ -38,9 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             QuestionnaireDocument questionnaire,
             IDesignerApi designerApi,
             IServiceLocator serviceLocator,
-            IArchiveUtils archiveUtils,
-            ICategoriesImporter categoriesImportService, 
-            ITranslationImporter translationImporter)
+            IArchiveUtils archiveUtils)
         {
             this.questionnaireIdentity = questionnaireIdentity;
             this.designerApi = designerApi;
@@ -50,8 +45,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
             this.questionnaire = questionnaire;
 
             this.archiveUtils = archiveUtils;
-            this.categoriesImportService = categoriesImportService;
-            this.translationImporter = translationImporter;
         }
 
         public bool IsNeedProcessing() => true;
@@ -184,6 +177,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
             var reusableCategoriesStorage = serviceLocator.GetInstance<IReusableCategoriesStorage>();
 
+            var categoriesImportService = serviceLocator.GetInstance<ICategoriesImporter>();
+
             foreach (var category in questionnaire.Categories)
             {
                 this.logger.LogInformation($"Saving reusable category.", questionnaireIdentity, category.Id);
@@ -198,7 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
                 }
 
                 var categoryContent = archiveUtils.GetFileFromArchive(backupFile.Content, categoryFile);
-                var reusableCategories = this.categoriesImportService.ExtractCategoriesFromExcelFile(new MemoryStream(categoryContent.Bytes));
+                var reusableCategories = categoriesImportService.ExtractCategoriesFromExcelFile(new MemoryStream(categoryContent.Bytes));
 
                 reusableCategoriesStorage.Store(questionnaireIdentity, category.Id, reusableCategories);
                     
@@ -237,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionn
 
         private List<TranslationInstance> GetTranslations(Guid translationId, byte[] content)
         {
-            return translationImporter.GetTranslationInstancesFromExcelFile(questionnaire, questionnaireIdentity,
+            return serviceLocator.GetInstance<ITranslationImporter>().GetTranslationInstancesFromExcelFile(questionnaire, questionnaireIdentity,
                 translationId, content);
         }
     }
