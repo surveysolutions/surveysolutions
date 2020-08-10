@@ -61,7 +61,7 @@ namespace WB.Services.Export.Services.Processing
             return false;
         }
 
-        public async Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string withQuestionnaireName = "")
+        public async Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string? questionnaireNamePrefixOverride = null)
         {
             var statusSuffix = exportSettings.Status == null ? "All" : exportSettings.Status.ToString();
 
@@ -81,7 +81,7 @@ namespace WB.Services.Export.Services.Processing
                 translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
             }
 
-            var archiveName = $"{withQuestionnaireName ?? exportSettings.QuestionnaireId.ToString()}_" +
+            var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
                               $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}.zip";
 
             return archiveName;

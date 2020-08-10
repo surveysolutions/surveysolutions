@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Main.Core.Entities.Composite;
+using NUnit.Framework;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -28,5 +30,28 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.StaticText(text: ""),
                 })
                 .ExpectError("WB0071");
+
+        [Test]
+        public void when_non_string_variable_referenced_Should_return_WB0390_error()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.StaticText(attachmentName: "var1"),
+                Create.Variable(variableName: "var1", type: VariableType.Boolean)
+            }).ExpectError("WB0390");
+        }
+        
+        [Test]
+        public void when_variable_from_deeper_scope_referenced_Should_return_WB0391_error()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.StaticText(attachmentName: "var1"),
+                Create.FixedRoster(children: new []
+                {
+                    Create.Variable(variableName: "var1", type: VariableType.String)
+                })
+            }).ExpectError("WB0391");
+        }
     }
 }

@@ -148,4 +148,13 @@
   <data name="hq_baseurl_check_Degraded" xml:space="preserve">
     <value>Headquarters configured with Headquarters:BaseUrl: {0} is different from the current URL in browser address bar. This may cause issues with Email links and Export Service functionality</value>
   </data>
+  <data name="embedded_export_service_check">
+    <value>Embedded Export Service Host</value>
+  </data>
+  <data name="embedded_export_service_check_Healty">
+    <value>Export Service is running</value>
+  </data>
+  <data name="embedded_export_service_check_Degraded">
+    <value>Export Service is not running</value>
+  </data>
 </root>

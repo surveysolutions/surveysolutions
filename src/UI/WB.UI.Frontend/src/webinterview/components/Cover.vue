@@ -108,8 +108,11 @@ export default {
     },
 
     mounted() {
-        window.scroll({ top: 0, behavior: 'smooth' })
+        if(this.$route.hash){
+            this.$store.dispatch('sectionRequireScroll', { id: this.$route.hash })
+        }
     },
+
 
     computed: {
         title() {

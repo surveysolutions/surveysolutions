@@ -12,12 +12,15 @@
 
         <TextView
           style="@style/Interview_Cover_Main_First_Header"
+          android:id="@+id/tv_coverInterviewKey"
           local:MvxBind="Text InterviewKey; Visible InterviewKey;" />
         <TextView
           style="@style/Interview_Cover_Main_Second_Header"
+          android:id="@+id/tv_coverAssignmentId"
           local:MvxBind="Text AssignmentId; Visible AssignmentId;" />
         <TextView
           style="@style/Interview_Cover_Description_Header"
+          android:id="@+id/tv_coverQuestionnaireTitle"
           local:MvxBind="Text QuestionnaireTitle;" />
       
         <LinearLayout android:orientation="vertical" 
@@ -28,6 +31,7 @@
                       style="@style/Interview_Complete_Screen_Text"
                       local:MvxBind="Text Localization('Interview_Cover_Supervisor_Note')" />
                   <TextView
+                          android:id="@+id/tv_coverSupervisorNote"
                       style="@style/Interview_Cover_Supervisor_Note_Text"
                       local:MvxBind="Text SupervisorNote;" />
             </LinearLayout>
@@ -36,11 +40,13 @@
         <LinearLayout style="@style/Interview_Entity" android:orientation="vertical" local:MvxBind="Visibility Visibility(DoesShowCommentsBlock)">
             <LinearLayout style="@style/Interview_Question_Header">
                 <TextView
+                        android:id="@+id/tv_coverCommentedEntitiesDescription"
                     style="@style/Interview_Complete_Screen_Text"
                     local:MvxBind="Text CommentedEntitiesDescription" />
             </LinearLayout>
             <MvxLinearLayout style="@style/Interview_Question_Header"
                   android:orientation="vertical"
+                             android:id="@+id/tv_coverCommentedEntities"
                   local:MvxBind="ItemsSource CommentedEntities; Visibility Visibility(CountOfCommentedQuestions)"
                   local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
         </LinearLayout>
@@ -72,6 +78,7 @@
         <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
             
             <Button
+                android:id="@+id/btn_coverStartInterview"
                 style="@style/Interview_Complete_Screen_Button"
                 local:MvxBind="HideKeyboardOnClick .; 
                 Click StartInterviewCommand; 

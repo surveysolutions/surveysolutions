@@ -337,7 +337,7 @@
                     <a
                         class="interview-id title-row"
                         @click="viewInterview"
-                        href="#">{{interviewKey}}</a> by
+                        href="javascript:void(0)">{{interviewKey}}</a> by
                     <span :class="responsibleClass"
                         v-html="responsibleLink"></span>
                 </p>
@@ -1316,7 +1316,7 @@ export default {
             menu.push({
                 name: self.$t('Pages.InterviewerHq_OpenInterview'),
                 callback: () => {
-                    window.location = self.config.interviewReviewUrl + '/' + rowData.id.replace(/-/g, '')
+                    window.location = `${self.config.interviewReviewUrl}/${rowData.id}`
                 },
             })
 

@@ -85,50 +85,46 @@ a.disabled{
 }
 .humburger-foldback-button{
 	border-radius: 4px;
-	@include absolute(0, null, null, 20px);
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	@include absolute(5px, 0, null, null);
 	display: block;
-	@include size(42px, 32px);
+	@include size($width-foldback-button, $height-foldback-button);
 	cursor: pointer;
 	z-index: 3;
-	top: calc(50% - 18px);
-	display: block;
 	@extend .add-transition;
 	&:before, &:after{
 		content: "";
 		display: block;
 		@include size(22px, 2px); 
-		@include absolute(((32px)/2 + 8px), 10px);
+		@include absolute(((42px)/2 + 4px), 10px);
 		@include rotate(45deg);
-		background-color: rgba(255,255,255, 0.8);
+		background-color: rgba(63,63,63, 0.5);
 	}
 	span{
 		display: block;
 		@include size(22px, 2px); 
-		background-color: rgba(255,255,255, 0.8);
-		@include absolute(((32px)/2), null, null, 10px);
+		background-color: rgba(63,63,63, 0.5);
+		@include absolute(((42px)/2), null, null, 10px);
 		visibility: hidden;
 	}
 	&:after{
 		@include rotate(-45deg);
-		top: 9px;
+		top: 10px;
 	}
 	&:hover, &:focus, &:active{
 		span{
-			background-color: rgba(255,255,255, 1);
+			background-color: rgba(63,63,63, 1);
 		}
 		&:before, &:after{
-			background-color: rgba(255,255,255, 1);
+			background-color: rgba(63,63,63, 1);
 		}
-	}
-}
-@media only screen and (max-width: 615px){
-	.humburger-foldback-button{
-		left: 0;
 	}
 }
 @media (max-width: $screen-sm-min){
 	.humburger-foldback-button{
 		&:before, &:after{
+			right: 2px;
 			@include rotate(-45deg);
 		}
 		&:after{
