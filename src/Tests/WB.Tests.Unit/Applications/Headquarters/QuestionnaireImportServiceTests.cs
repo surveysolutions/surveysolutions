@@ -436,10 +436,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
                 new QuestionnaireImportStatuses(),
                 Mock.Of<IAssignmentsUpgradeService>(),
-                archiveUtils ?? Mock.Of<IArchiveUtils>(),
-                categoriesImporter ?? Mock.Of<ICategoriesImporter>(),
-                translationImporter ?? Mock.Of<ITranslationImporter>()
-                );
+                archiveUtils ?? Mock.Of<IArchiveUtils>());
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>())
@@ -455,6 +452,12 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<ICommandService> ())
                 .Returns(commandService ?? Mock.Of< ICommandService> ());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ICategoriesImporter>())
+                .Returns(categoriesImporter ?? Mock.Of<ICategoriesImporter>());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ITranslationImporter>())
+                .Returns(translationImporter ?? Mock.Of<ITranslationImporter>());
 
             return questionnaireImportService;
         }
