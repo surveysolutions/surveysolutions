@@ -35,10 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ILogger logger;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IArchiveUtils archiveUtils;
-        private readonly ICategoriesImporter categoriesImporter;
-        private readonly ITranslationImporter translationImporter;
         
-
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
             ILogger logger,
@@ -47,9 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IDesignerApiFactory designerApiFactory,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
-            IArchiveUtils archiveUtils,
-            ICategoriesImporter categoriesImporter,
-            ITranslationImporter translationImporter)
+            IArchiveUtils archiveUtils)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
@@ -59,8 +54,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.archiveUtils = archiveUtils;
-            this.categoriesImporter = categoriesImporter;
-            this.translationImporter = translationImporter;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -134,13 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
             {
                 new QuestionnaireBackupImportStep(questionnaireIdentity, questionnaireDocument, designerApi, 
-                     serviceLocator, archiveUtils, categoriesImporter, translationImporter),
-
-                //new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
-                //new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
-                //new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
-                //new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
-                
+                     serviceLocator, archiveUtils)
             };
 
             if (includePdf)
