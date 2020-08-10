@@ -4,6 +4,7 @@
         <div class="information-block instruction"
             v-if="!$me.hideInstructions || shown">
             <p v-dateTimeFormatting
+                v-linkToRoute
                 v-html="$me.instructions"></p>
         </div>
         <button v-else
