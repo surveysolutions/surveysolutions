@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             var numericQuestion = Id.g2;
             var multimediaQuestion = Id.g3;
             
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(Id.g1,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(Id.g1, null,
                 Create.Entity.Group(Id.gA, children: new IComposite[]
                 {
                     Create.Entity.TextQuestion(textQuestion, variable: "textQ", preFilled: false),
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
                 Create.Entity.CategoriesItem("33", 33),
             };
 
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(Id.g1,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(Id.g1, null,
                 Create.Entity.Group(Id.gA, children: new IComposite[]
                 {
                     Create.Entity.SingleOptionQuestion(singleQuestion1, categoryId: category1, answers: new List<Answer>()),

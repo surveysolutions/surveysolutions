@@ -13,12 +13,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
-        private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IOptions<ExportServiceConfig> exportOptions;
 
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
-            IOptions<DataExportOptions> exportOptions)
+            IOptions<ExportServiceConfig> exportOptions)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.exportServiceSettings = exportServiceSettings;

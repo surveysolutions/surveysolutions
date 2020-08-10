@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
@@ -105,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IClock clock;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
-        private readonly ITranslationsService translationService;
+        private readonly IDesignerTranslationService translationService;
         private readonly ICategoriesService categoriesService;
         private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -117,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IClock clock, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            ITranslationsService translationService,
+            IDesignerTranslationService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             ICategoriesService categoriesService,
             IFindReplaceService findReplaceService)
@@ -578,6 +579,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var sourceChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(groupId);
                 var targetChapter = this.innerDocument.GetChapterOfItemByIdOrThrow(targetGroupId.Value);
 
+                if (IsCoverPage(targetChapter.PublicKey))
+                {
+                    bool isContainsNotAllowedEntities = sourceGroup.Children
+                        .Any(c => !(c is IQuestion || c is IStaticText));
+                    if (isContainsNotAllowedEntities)
+                    {
+                        throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+                    }
+                }
+
                 if (sourceChapter.PublicKey != targetChapter.PublicKey)
                 {
                     var numberOfMovedItems = sourceGroup.Children
@@ -601,14 +612,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                 }
-                
             }
             
             // if we don't have a target group we would like to move source group into root of questionnaire
             
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup ?? this.innerDocument, sourceGroup.GetParent() as IGroup);
 
-            this.innerDocument.MoveItem(groupId, targetGroupId, targetIndex);
+            var targetIsCoverPage = targetGroupId.HasValue && IsCoverPage(targetGroupId.Value);
+            if (targetIsCoverPage)
+            {
+                var elementsToCopy = sourceGroup.Children
+                        .Where(el => el is IQuestion || el is StaticText)
+                        .Select(el => el.PublicKey)
+                        .ToList();
+                foreach (var compositeId in elementsToCopy)
+                {
+                    this.innerDocument.MoveItem(compositeId, targetGroupId, targetIndex);
+                }
+            }
+            else
+            {
+                this.innerDocument.MoveItem(groupId, targetGroupId, targetIndex);
+            }
         }
 
         #endregion
@@ -1525,6 +1550,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var sourceVariable = this.innerDocument.Find<IVariable>(entityId);
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceVariable != null ? sourceVariable.GetParent() as IGroup : null);
+
+            if (IsCoverPage(targetEntityId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+            }
 
             this.innerDocument.MoveItem(entityId, targetEntityId, targetIndex);
         }

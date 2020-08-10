@@ -70,7 +70,7 @@ namespace WB.Infrastructure.Native.Utils
                 return readError.Result;
             }
 
-            return string.Empty;
+            return result;
         }
         
         public static Task RunAsync(this Process process, bool noEcho, CancellationToken cancellationToken = default)

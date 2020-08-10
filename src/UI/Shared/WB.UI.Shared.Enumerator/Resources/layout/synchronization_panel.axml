@@ -26,12 +26,13 @@
             <TextView style="@style/Dashboard_Synchronization_Operation_Title"
                   local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
             <TextView style="@style/Dashboard_Synchronization_WithError_Title"
-                      local:MvxBind="Html Localization('Synchronization_LinkToErrors'); 
+                      local:MvxBind="HtmlWithLinks Localization('Synchronization_LinkToErrors'); 
                                      Visible IsSynchronizationFailOrCanceled(Synchronization.Status);" />
         </LinearLayout>
 
       <LinearLayout style="@style/VerticalContentHeightWrappingLayout" local:MvxBind="Visible Synchronization.SynchronizationErrorOccured">
         <TextView style="@style/Dashboard_Synchronization_WithError_Title"
+                  android:id="@+id/tvSynchronizationDoneWithErrors"
                   local:MvxBind="Text Localization('Synchronization_DoneWithErrors_Title');" />
       </LinearLayout>
 
@@ -39,10 +40,13 @@
           <TextView style="@style/Dashboard_Synchronization_Lock_Text"
                     local:MvxBind="Text Localization('Synchronization_LockedAssignments_Text'); Visible Synchronization.IsSynchronizationInProgress" />
           <TextView style="@style/Dashboard_Synchronization_Cancel_Text"
+                    android:id="@+id/btnSynchronizationCancel"
                     local:MvxBind="Text Localization('Synchronization_Cancel'); Click Synchronization.CancelSynchronizationCommand; Visible Synchronization.IsSynchronizationInProgress"/>
           <TextView style="@style/Dashboard_Synchronization_Cancel_Text"
+                    android:id="@+id/btnSynchronizationDone"
                     local:MvxBind="Text Localization('Synchronization_Done'); Click Synchronization.HideSynchronizationCommand; Visible Not(Synchronization.IsSynchronizationInProgress)"/>
           <TextView style="@style/Dashboard_Synchronization_Update_Text"
+                    android:id="@+id/btnSynchronizationUpdateApp"
                     local:MvxBind="Text Localization('Synchronization_UpdateApp'); Click Synchronization.UpdateApplicationCommand; Visible Synchronization.IsUpdateRequired"/>
       </RelativeLayout>
       <RelativeLayout style="@style/FullWidthWrappingLayout">

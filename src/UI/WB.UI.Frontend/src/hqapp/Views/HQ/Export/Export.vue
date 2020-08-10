@@ -526,8 +526,11 @@ export default {
                 scope: storageSettings.scope,
             }
 
-            if(this.dataDestination === 'googleDrive')
-            {
+            if(this.dataDestination === 'dropbox') {
+                request.token_access_type = 'offline'
+            }
+
+            if(this.dataDestination === 'googleDrive') {
                 request.access_type = 'offline'
                 request.prompt = 'consent'
             }
