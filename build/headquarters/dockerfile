@@ -1,7 +1,11 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libfontconfig1 libgdiplus ffmpeg gdal-bin \
+    && apt-get install -y --no-install-recommends \
+    gdal-bin \
+    ffmpeg \
+    libfontconfig1 \
+    libgdiplus \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -42,4 +46,4 @@ WORKDIR /app
 EXPOSE 80
 HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://hq/.hc/ready
 
-ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll", "--urls=http://0.0.0.0:80"]
+ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll"]
