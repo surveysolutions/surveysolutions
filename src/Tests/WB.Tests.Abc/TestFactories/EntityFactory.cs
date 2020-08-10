@@ -436,6 +436,7 @@ namespace WB.Tests.Abc.TestFactories
             bool wasCompleted = false,
             int? errorsCount = 0,
             TimeSpan? interviewingTotalTime = null,
+            string questionnaireVariable = "automation",
             IEnumerable<InterviewCommentedStatus> statuses = null,
             IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
@@ -453,7 +454,7 @@ namespace WB.Tests.Abc.TestFactories
                 SupervisorName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role,
                 Key = key,
-                UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
+                UpdateDate = updateDate ?? new DateTime(2017, 3, 23).ToUniversalTime(),
                 WasCreatedOnClient = wasCreatedOnClient ?? false,
                 ReceivedByInterviewerAtUtc = receivedByInterviewerAtUtc,
                 AssignmentId = assignmentId,
@@ -461,8 +462,8 @@ namespace WB.Tests.Abc.TestFactories
                 WasCompleted = wasCompleted,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
-                QuestionnaireVariable = "automation",
-                TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>()
+                QuestionnaireVariable = questionnaireVariable,
+                TimeSpansBetweenStatuses = timeSpans != null ? timeSpans.ToHashSet() : new HashSet<TimeSpanBetweenStatuses>(),
             };
         }
 
