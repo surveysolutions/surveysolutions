@@ -18,8 +18,8 @@ namespace WB.Services.Export.Infrastructure
         private TenantInfo? tenant;
         public TenantInfo Tenant
         {
-            get { return tenant ?? throw new InvalidOperationException("Tenant was not set.");}
-            set { tenant = value; }
+            get => tenant ?? throw new InvalidOperationException("Tenant was not set.");
+            set => tenant = value;
         }
 
         private IHeadquartersApi? api = null;

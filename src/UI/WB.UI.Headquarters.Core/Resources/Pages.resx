@@ -649,6 +649,9 @@
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Account created on</value>
   </data>
+  <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+    <value>Last log in</value>
+  </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Interviewer's Email</value>
   </data>
@@ -850,6 +853,9 @@
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date when the interviewer account was created</value>
+  </data>
+  <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+    <value>Date when the interviewer logged in to website last time</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Login name of the interviewer’s supervisor</value>

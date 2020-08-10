@@ -21,6 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
 
         [HttpGet]
+        [HttpHead]
         [AllowAnonymous]
         public IActionResult GetLatestVersion()
         {
@@ -28,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
+        [HttpHead]
         [AllowAnonymous]
         public IActionResult GetLatestExtendedVersion()
         {
@@ -35,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
+        [HttpHead]
         [AllowAnonymous]
         public IActionResult GetLatestSupervisor()
         {

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc.Storage;
@@ -47,7 +48,8 @@ namespace WB.Tests.Web.TestFactories
                     new CodeGeneratorV2(CodeGenerationModelsFactory()),
                     new DynamicCompilerSettingsProvider());
 
-            var latestSupportedVersion = new DesignerEngineVersionService(Mock.Of<IAttachmentService>()).LatestSupportedVersion;
+            var latestSupportedVersion = new DesignerEngineVersionService(Mock.Of<IAttachmentService>(),
+                Mock.Of<IDesignerTranslationService>()).LatestSupportedVersion;
             var emitResult = 
                 expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,  
                     latestSupportedVersion, 
