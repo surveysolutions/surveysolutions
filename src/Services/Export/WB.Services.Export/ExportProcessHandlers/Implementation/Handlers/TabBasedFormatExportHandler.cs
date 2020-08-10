@@ -42,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(
                 state.Settings, state.ExportTempFolder, exportProgress, cancellationToken);
 
-            return this.fileSystemAccessor.GetFilesInDirectory(state.ExportTempFolder, $"*{this.tabExtension}");
+            return this.fileSystemAccessor.GetFilesInDirectory(state.ExportTempFolder);
         }
 
         protected void DeleteTabularDataFiles(string[] tabDataFiles, CancellationToken cancellationToken)
