@@ -4,7 +4,6 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <Configuration Condition=" '$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -2241,7 +2240,7 @@
       <Version>4.7.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory">
-      <Version>3.1.4</Version>
+      <Version>3.1.6</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.Platforms">
       <Version>3.1.1</Version>
@@ -2268,7 +2267,7 @@
       <Version>12.0.3</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.7.2</Version>
+      <Version>4.7.3</Version>
     </PackageReference>
     <PackageReference Include="PCLStorage">
       <Version>1.0.2</Version>
