@@ -171,6 +171,35 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return null;
         }
 
+        public ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName)
+        {
+            using (var archiveStream = new MemoryStream(archivedFileAsArray))
+            {
+                using (var zips = ZipFile.Read(archiveStream))
+                {
+                    foreach (var zip in zips)
+                    {
+                        if (zip.IsDirectory) continue;
+                        if (!zip.FileName.Contains(fileName)) continue;
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            zip.Extract(memoryStream);
+
+                            return new ExtractedFile
+                            {
+                                Name = zip.FileName,
+                                Size = zip.UncompressedSize,
+                                Bytes = memoryStream.ToArray()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public bool IsZipFile(string filePath)
         {
             return ZipFile.IsZipFile(filePath);

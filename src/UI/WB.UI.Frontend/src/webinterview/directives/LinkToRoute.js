@@ -28,6 +28,9 @@ Vue.directive('linkToRoute', {
                 if (window.location.pathname !== to && event.preventDefault) {
                     event.preventDefault()
 
+                    // do not go into interview from take new page
+                    if (vnode.context.$store.getters.isTakeNewAssignment === true) return
+
                     var toPath = vnode.context.$router.options.base == '/'
                         ? to
                         : to.replace(vnode.context.$router.options.base, '')

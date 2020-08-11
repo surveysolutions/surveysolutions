@@ -30,7 +30,7 @@ namespace WB.Services.Export.CsvExport.Implementation
 
         private readonly IProductVersion productVersion;
         private readonly IPdfExporter pdfExporter;
-        private readonly IJsonExporter jsonExporter;
+        private readonly IQuestionnaireBackupExporter questionnaireBackupExporter;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
@@ -49,8 +49,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             IPdfExporter pdfExporter,
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentActionsExporter assignmentActionsExporter,
-            IJsonExporter jsonExporter,
-            IDdiMetadataFactory ddiMetadataFactory)
+            IQuestionnaireBackupExporter questionnaireBackupExporter)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -64,8 +63,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.pdfExporter = pdfExporter;
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentActionsExporter = assignmentActionsExporter;
-            this.jsonExporter = jsonExporter;
-            this.ddiMetadataFactory = ddiMetadataFactory;
+            this.questionnaireBackupExporter = questionnaireBackupExporter;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -136,7 +134,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             if (settings.IncludeMeta != false)
             {
                 await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
-                await this.jsonExporter.ExportAsync(questionnaire, tempPath, cancellationToken);
+                await this.questionnaireBackupExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
                 await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(tenant,
                     questionnaire.QuestionnaireId, tempPath);
             }

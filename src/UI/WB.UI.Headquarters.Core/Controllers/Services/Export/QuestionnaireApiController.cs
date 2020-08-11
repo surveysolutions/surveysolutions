@@ -24,6 +24,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISerializer serializer;
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
@@ -33,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
             IReusableCategoriesStorage reusableCategoriesStorage,
             ITranslationStorage translationStorage,
-            IQuestionnaireTranslator translator)
+            IQuestionnaireTranslator translator, IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -41,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             this.reusableCategoriesStorage = reusableCategoriesStorage ?? throw new ArgumentNullException(nameof(reusableCategoriesStorage));
             this.translationStorage = translationStorage ?? throw new ArgumentNullException(nameof(translationStorage));
             this.translator = translator ?? throw new ArgumentNullException(nameof(translator));
+            this.questionnaireBackupStorage = questionnaireBackupStorage;
         }
 
         [Route("{id}")]
@@ -91,6 +93,16 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             }
 
             return categoriesList;
+        }
+
+        [Route("{id}/backup")]
+        [HttpGet]
+        public ActionResult Backup(string id)
+        {
+            var backup = questionnaireBackupStorage.GetById(id);
+            if (backup == null) return NotFound("Questionnaire backup not found.");
+
+            return File(backup.Content, "application/zip");
         }
     }
 }
