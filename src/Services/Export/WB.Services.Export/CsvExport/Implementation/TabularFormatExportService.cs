@@ -49,7 +49,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             IPdfExporter pdfExporter,
             IFileSystemAccessor fileSystemAccessor,
             IAssignmentActionsExporter assignmentActionsExporter,
-            IQuestionnaireBackupExporter questionnaireBackupExporter)
+            IQuestionnaireBackupExporter questionnaireBackupExporter, 
+            IDdiMetadataFactory ddiMetadataFactory)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -64,6 +65,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentActionsExporter = assignmentActionsExporter;
             this.questionnaireBackupExporter = questionnaireBackupExporter;
+            this.ddiMetadataFactory = ddiMetadataFactory;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(

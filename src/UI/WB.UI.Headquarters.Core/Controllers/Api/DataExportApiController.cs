@@ -159,7 +159,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 processView.InterviewStatus,
                 processView.FromDate,
                 processView.ToDate,
-                processView.TranslationId);
+                processView.TranslationId,
+                processView.IncludeMeta);
         }
 
         [HttpGet]
@@ -169,10 +170,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             InterviewStatus? status = null,
             DateTime? from = null,
             DateTime? to = null,
-            Guid? translationId = null)
+            Guid? translationId = null,
+            bool? includeMeta = null)
         {
             DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(
-                new QuestionnaireIdentity(id, version), format, status, from, to, translationId);
+                new QuestionnaireIdentity(id, version), format, status, from, to, translationId, includeMeta);
             if (result == null)
             {
                 return NotFound();

@@ -53,7 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
              InterviewStatus? status,
              DateTime? fromDate,
              DateTime? toDate,
-             Guid? translationId);
+             Guid? translationId,
+             bool? includeMeta);
 
         [Get("/api/v1/job/wasExportRecreated")]
         Task<bool> WasExportRecreated(long processId);

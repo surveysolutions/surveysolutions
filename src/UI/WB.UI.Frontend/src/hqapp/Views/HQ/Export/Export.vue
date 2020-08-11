@@ -192,7 +192,7 @@
                                         class>
                                         <span class="tick"></span>
                                         <span
-                                            class="format-data">{{$t('DataExport.QuestionnaireInformation_Exclude')}}</span>
+                                            class="format-data no-meta">{{$t('DataExport.QuestionnaireInformation_Exclude')}}</span>
                                     </label>
                                 </div>
                             </div>
