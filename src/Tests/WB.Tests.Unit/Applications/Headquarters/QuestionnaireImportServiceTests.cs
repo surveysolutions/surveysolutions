@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using AutoFixture;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -11,11 +14,13 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -87,7 +92,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var commandService = new Mock<ICommandService>();
             commandService
-                .Setup(cs => cs.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Setup(cs => cs.ExecuteAsync(It.IsAny<ICommand>(), It.IsAny<string>(), default))
                 .Throws(new QuestionnaireAssemblyAlreadyExistsException("", Create.Entity.QuestionnaireIdentity()));
 
             var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
@@ -108,15 +113,15 @@ namespace WB.Tests.Unit.Applications.Headquarters
         [Test]
         public async Task when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception()
         {
-            var supportedVerstion = 1;
+            var supportedVersion = 1;
 
-            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVerstion);
+            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVersion);
 
             var commandServiceException = new Exception("meessage");
 
             var commandService = new Mock<ICommandService>();
             commandService
-                .Setup(cs => cs.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Setup(cs => cs.ExecuteAsync(It.IsAny<ICommand>(), It.IsAny<string>(),default))
                 .Throws(commandServiceException);
 
             var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
@@ -155,37 +160,58 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var designerApi = new Mock<IDesignerApi>();
             SetupGetQuestionnaire(designerApi);
-            SetupDownloadAttachment(designerApi);                       
-
+            SetupDownloadAttachment(designerApi);
+            
+            SetupDownloadQuestionnaireBackup(designerApi);
+            
             var mockOfAttachmentContentService = new Mock<IAttachmentContentService>();
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[0].ContentId)).Returns(true);
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[1].ContentId)).Returns(false);
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[2].ContentId)).Returns(false);
 
+            var files = new Dictionary<string, long>();
+            foreach (var questionnaireAttachment in questionnaireAttachments)
+            {
+                files.Add(questionnaireAttachment.AttachmentId.FormatGuid() + "/content-type.txt", 3);
+                files.Add(questionnaireAttachment.AttachmentId.FormatGuid() + "/att.png", 3);
+            }
+            
+            var archiveUtils = new Mock<IArchiveUtils>();
+            archiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()))
+                .Returns(files);
+
+            foreach (var questionnaireAttachment in questionnaireAttachments)
+            {
+                archiveUtils.Setup(x => x.GetFileFromArchive(It.IsAny<byte[]>(), questionnaireAttachment.AttachmentId.FormatGuid() + "/content-type.txt"))
+                    .Returns(new ExtractedFile()
+                    {
+                        Bytes = Encoding.UTF8.GetBytes("image/png")
+
+                    });
+
+                archiveUtils.Setup(x => x.GetFileFromArchive(It.IsAny<byte[]>(), questionnaireAttachment.AttachmentId.FormatGuid() + "/att.png"))
+                    .Returns(new ExtractedFile()
+                    {
+                        Bytes = Encoding.UTF8.GetBytes("anything")
+
+                    });
+            }
+
             var service = CreateIQuestionnaireImportService(attachmentContentService: mockOfAttachmentContentService.Object,
-                supportedVersionProvider: versionProvider, zipUtils: zipUtils, designerApi: designerApi.Object);
+                supportedVersionProvider: versionProvider, zipUtils: zipUtils, designerApi: designerApi.Object, archiveUtils:archiveUtils.Object);
 
             // Act
             await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             // Assert
-            designerApi
-                    .Verify(x => x.DownloadQuestionnaireAttachment(questionnaireAttachments[0].ContentId, It.IsAny<Guid>()),
-                    Times.Never, "Should not download first attachment, due to has attachment configuration");
-
-            designerApi
-                    .Verify(x => x.DownloadQuestionnaireAttachment(questionnaireAttachments[1].ContentId, It.IsAny<Guid>()), 
-                    Times.Once, "Should download second attachment, due to has attachment configuration");
-
-            designerApi
-                    .Verify(x => x.DownloadQuestionnaireAttachment(questionnaireAttachments[2].ContentId, It.IsAny<Guid>()),
-                    Times.Once, "Should download third attachment, due to has attachment configuration");
-
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), 
+            mockOfAttachmentContentService.Verify(x => 
+                    x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), 
                 Times.Never);
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), 
+            mockOfAttachmentContentService.Verify(x => 
+                    x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), 
                 Times.Once);
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), 
+            mockOfAttachmentContentService.Verify(x => 
+                    x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), 
                 Times.Once);
         }
 
@@ -212,6 +238,14 @@ namespace WB.Tests.Unit.Applications.Headquarters
                     new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
         }
 
+        private void SetupDownloadQuestionnaireBackup(Mock<IDesignerApi> designerApi, RestFile file = null)
+        {
+            designerApi
+                .Setup(d => d.DownloadQuestionnaireBackup(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(file ??
+                                         new RestFile(new byte[] { 1 }, "application/zip", "content id", 0, "file.zip", HttpStatusCode.OK)));
+        }
+
         [Test]
         public async Task when_import_questionnaire_with_lookup_tables()
         {
@@ -236,6 +270,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
             SetupGetQuestionnaire(designerApi);
             SetupDownloadAttachment(designerApi);
 
+            SetupDownloadQuestionnaireBackup(designerApi);
+
             void SetupLookupQuery((Guid id, string content) lookup)
             {
                 designerApi
@@ -250,17 +286,42 @@ namespace WB.Tests.Unit.Applications.Headquarters
             SetupLookupQuery(lookup1);
             SetupLookupQuery(lookup2);
 
+            var archiveUtils = new Mock<IArchiveUtils>();
+            archiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()))
+                .Returns(new Dictionary<string, long>()
+                {
+                    {lookup1.id.FormatGuid(), 1},
+                    {lookup2.id.FormatGuid(), 1},
+                });
+
+            archiveUtils.Setup(x => x.GetFileFromArchive(It.IsAny<byte[]>(), lookup1.id.FormatGuid()))
+                .Returns(new ExtractedFile()
+                {
+                    Bytes = Encoding.UTF8.GetBytes(lookup1.content)
+
+                });
+
+            archiveUtils.Setup(x => x.GetFileFromArchive(It.IsAny<byte[]>(), lookup2.id.FormatGuid()))
+                .Returns(new ExtractedFile()
+                {
+                    Bytes = Encoding.UTF8.GetBytes(lookup2.content)
+
+                });
+
             var service = CreateIQuestionnaireImportService(
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, designerApi: designerApi.Object, 
-                lookupStorage: lookupStorage);
+                lookupStorage: lookupStorage, archiveUtils: archiveUtils.Object);
 
             // Act
             await service.Import(Guid.NewGuid(), "null", false, null, null, includePdf: false);
 
             // Assert
 
-            Mock.Get(lookupStorage).Verify(ls => ls.Store(It.Is<QuestionnaireLookupTable>(lt => lt.Content == lookup1.content), It.IsAny<string>()), Times.Once);
-            Mock.Get(lookupStorage).Verify(ls => ls.Store(It.Is<QuestionnaireLookupTable>(lt => lt.Content == lookup2.content), It.IsAny<string>()), Times.Once);
+            Mock.Get(lookupStorage).Verify(ls => 
+                ls.Store(It.Is<QuestionnaireLookupTable>(lt => lt.Content == lookup1.content), It.IsAny<string>()), 
+                Times.Once);
+            Mock.Get(lookupStorage).Verify(ls => 
+                ls.Store(It.Is<QuestionnaireLookupTable>(lt => lt.Content == lookup2.content), It.IsAny<string>()), Times.Once);
 
         }
 
@@ -346,7 +407,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
           IQuestionnaireVersionProvider questionnaireVersionProvider = null,
           IDesignerUserCredentials designerUserCredentials = null,
           IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null,
-          IUnitOfWork unitOfWork = null
+          IUnitOfWork unitOfWork = null,
+          IArchiveUtils archiveUtils = null,
+          ICategoriesImporter categoriesImporter = null,
+          ITranslationImporter translationImporter = null
       )
         {
             var globalInfoProvider = authorizedUser ?? new Mock<IAuthorizedUser> { DefaultValue = DefaultValue.Mock }.Object;
@@ -365,26 +429,35 @@ namespace WB.Tests.Unit.Applications.Headquarters
             InScopeExecutor.Init(executor);
 
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
-                supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
-                attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
-                questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
-                Mock.Of<ITranslationManagementService>(),
-                lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
-                commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
-                Mock.Of<ISystemLog>(),
-                unitOfWork,
                 globalInfoProvider,
-                Mock.Of<IPlainKeyValueStorage<QuestionnairePdf>>(),
-                Mock.Of<IReusableCategoriesStorage>(),
                 designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
                 Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
                 new QuestionnaireImportStatuses(),
-                Mock.Of<IAssignmentsUpgradeService>()
-                );
+                Mock.Of<IAssignmentsUpgradeService>(),
+                archiveUtils ?? Mock.Of<IArchiveUtils>());
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>())
+                .Returns(lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>());
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IUnitOfWork>())
+                .Returns(unitOfWork);
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IAttachmentContentService>())
+                .Returns(attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ISupportedVersionProvider>())
+                .Returns(supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>());
+            serviceLocatorNestedMock.Setup(x => x.GetInstance< IQuestionnaireVersionProvider> ())
+                .Returns(questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ICommandService> ())
+                .Returns(commandService ?? Mock.Of< ICommandService> ());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ICategoriesImporter>())
+                .Returns(categoriesImporter ?? Mock.Of<ICategoriesImporter>());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ITranslationImporter>())
+                .Returns(translationImporter ?? Mock.Of<ITranslationImporter>());
 
             return questionnaireImportService;
         }

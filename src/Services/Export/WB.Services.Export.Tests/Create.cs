@@ -205,7 +205,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
-                Mock.Of<IJsonExporter>());
+                Mock.Of<IQuestionnaireBackupExporter>());
         }
 
         public static CommentsExporter CommentsExporter()
@@ -718,10 +718,12 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ILogger<PdfExporter>>());
         }
 
-        public static JsonExporter JsonExporter(IFileSystemAccessor fileSystem = null)
+        public static QuestionnaireBackupExporter QuestionnaireBackupExporter(IFileSystemAccessor fileSystem = null,
+            ITenantApi<IHeadquartersApi> tenantApi = null)
         {
-            return new JsonExporter(fileSystem ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ILogger<JsonExporter>>());
+            return new QuestionnaireBackupExporter(fileSystem ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ILogger<QuestionnaireBackupExporter>>(),
+                tenantApi?? Mock.Of<ITenantApi<IHeadquartersApi>>());
         }
 
         internal static IInterviewsDoFilesExporter InterviewsDoFilesExporter(IFileSystemAccessor fileSystemAccessor, QuestionnaireLabelFactory questionnaireLabelFactory = null)
