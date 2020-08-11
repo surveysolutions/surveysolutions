@@ -20,6 +20,7 @@ namespace WB.Services.Export.Infrastructure
         void DeleteFile(string path);
         void MoveFile(string fromPath, string toPath);
         string[] GetFilesInDirectory(string directoryPath);
+        string[] GetFilesInDirectory(string pathToDirectory, string pattern);
         bool IsFileExists(string filePath);
         byte[]? ReadAllBytes(string filePath);
         void WriteAllBytes(string filePath, byte[] data);

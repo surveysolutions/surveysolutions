@@ -72,6 +72,7 @@ namespace WB.Tests.Web.TestFactories
         {
             var mockOfVirtualPathService = new Mock<IVirtualPathService>();
             mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
+            mockOfVirtualPathService.Setup(x => x.GetRelatedToRootPath(It.IsAny<string>())).Returns<string>(x => x);
 
             return new WebNavigationService(mockOfVirtualPathService.Object);
         }
