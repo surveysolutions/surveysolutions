@@ -1,5 +1,6 @@
 <template>
     <h5 v-dateTimeFormatting
+        v-linkToRoute
         v-html="$me.title"></h5>
 </template>
 <script lang="js">
