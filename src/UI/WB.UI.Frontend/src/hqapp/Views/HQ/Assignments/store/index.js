@@ -14,6 +14,9 @@ const store = {
         isReviewMode() {
             return false
         },
+        isTakeNewAssignment() {
+            return true
+        },
     },
 }
 
