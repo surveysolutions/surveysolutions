@@ -81,8 +81,10 @@ namespace WB.Services.Export.Services.Processing
                 translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
             }
 
+            string metaSuffix = exportSettings.IncludeMeta != false ? "" : "no-meta";
+
             var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
-                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}.zip";
+                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
 
             return archiveName;
         }

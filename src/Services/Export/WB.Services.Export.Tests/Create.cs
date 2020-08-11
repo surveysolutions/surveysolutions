@@ -206,7 +206,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
-                Mock.Of<IQuestionnaireBackupExporter>());
+                Mock.Of<IQuestionnaireBackupExporter>(),
+                Mock.Of<IDdiMetadataFactory>());
         }
 
         public static CommentsExporter CommentsExporter()
