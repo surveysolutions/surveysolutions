@@ -2444,9 +2444,6 @@
     <PackageReference Include="Xamarin.GooglePlayServices.Base">
       <Version>71.1610.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.GooglePlayServices.Basement">
-      <Version>71.1620.2</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
       <Version>71.1610.1</Version>
     </PackageReference>

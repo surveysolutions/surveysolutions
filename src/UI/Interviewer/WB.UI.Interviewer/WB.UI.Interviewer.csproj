@@ -146,43 +146,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Directory.Build.props">
-      <SubType>Designer</SubType>
-    </None>
-    <AndroidResource Include="Resources\layout\ActionBar.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\Login.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\Diagnostics.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\diagnostics__tabletinformation.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\SyncLogin.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\InterviewActionBar.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\splash.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\styles.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\dashboard.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\relink.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <None Include="Directory.Build.props" />
+    <AndroidResource Include="Resources\layout\ActionBar.axml" />
+    <AndroidResource Include="Resources\layout\Login.axml" />
+    <AndroidResource Include="Resources\layout\Diagnostics.axml" />
+    <AndroidResource Include="Resources\layout\diagnostics__tabletinformation.axml" />
+    <AndroidResource Include="Resources\layout\SyncLogin.axml" />
+    <AndroidResource Include="Resources\layout\InterviewActionBar.axml" />
+    <AndroidResource Include="Resources\layout\splash.axml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\layout\dashboard.axml" />
+    <AndroidResource Include="Resources\layout\relink.axml" />
     <AndroidResource Include="Resources\layout\dashboard_census_questionnare_item.axml" />
-    <AndroidResource Include="Resources\layout\finish_installation.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\layout\finish_installation.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
@@ -297,48 +273,15 @@
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\menu\maps.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\menu\maps.xml" />
     <AndroidResource Include="Resources\values\login.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\values\dimensions.xml" />
     <AndroidResource Include="Resources\values\diagnostics.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\dashboard_tab.axml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\dashboard_assignments_tab.axml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\offline_sync.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_tab.axml" />
+    <AndroidResource Include="Resources\layout\dashboard_assignments_tab.axml" />
+    <AndroidResource Include="Resources\values\offline_sync.xml" />
     <AndroidResource Include="Resources\drawable\scan_icon.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -587,9 +530,6 @@
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Base">
       <Version>71.1610.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.GooglePlayServices.Basement">
-      <Version>71.1620.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
       <Version>71.1600.1</Version>
