@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using Microsoft.Extensions.Caching.Memory;
+using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
 using Polly.Bulkhead;
@@ -43,7 +44,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             var session = this.sessionProvider.Session;
             command.Connection = session.Connection;
-            session.Transaction.Enlist(command);
+            session.GetCurrentTransaction().Enlist(command);
         }
 
         public void BulkStore(List<Tuple<TEntity, string>> bulk)
