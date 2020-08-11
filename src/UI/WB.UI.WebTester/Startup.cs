@@ -106,7 +106,7 @@ namespace WB.UI.WebTester
 
             app.UseCookiePolicy();
             app.UseSession();
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");

@@ -18,11 +18,11 @@
         <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
         <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.7" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />
