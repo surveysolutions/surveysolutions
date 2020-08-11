@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IReusableCategoriesStorage categoriesStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
 
         private Guid Id { get; set; }
 
@@ -42,7 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations,
             IReusableCategoriesStorage categoriesStorage,
-            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage)
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
@@ -51,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.translations = translations;
             this.categoriesStorage = categoriesStorage;
             this.pdfStorage = pdfStorage;
+            this.questionnaireBackupStorage = questionnaireBackupStorage;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -93,6 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             CloneTranslations(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
             CloneCategories(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
             ClonePdfs(sourceQuestionnaireClone, sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
+            CloneQuestionnaireBackup(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
                 sourceQuestionnaireClone,
@@ -105,6 +109,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 comment: command.Comment,
                 userId: command.UserId,
                 questionnaireBrowseItem.IsAudioRecordingEnabled);
+        }
+
+        private void CloneQuestionnaireBackup(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, sourceQuestionnaireVersion);
+            var clonedQuestionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, newQuestionnaireVersion);
+
+            var backup = this.questionnaireBackupStorage.GetById(questionnaireIdentity.ToString());
+            if (backup != null)
+            {
+                this.questionnaireBackupStorage.Store(backup, clonedQuestionnaireIdentity.ToString());
+            }
         }
 
         private void ClonePdfs(QuestionnaireDocument questionnaire, Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)

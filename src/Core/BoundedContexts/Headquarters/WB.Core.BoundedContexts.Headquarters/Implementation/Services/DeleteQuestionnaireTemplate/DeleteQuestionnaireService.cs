@@ -48,6 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly DeleteQuestionnaireJobScheduler deleteQuestionnaireTask;
 
+        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
+
         public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory,
             ICommandService commandService,
             ILogger logger,
@@ -61,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IInvitationsDeletionService invitationsDeletionService,
             IAggregateRootCache aggregateRootCache,
             IAssignmentsToDeleteFactory assignmentsToDeleteFactory,
-            IReusableCategoriesStorage reusableCategoriesStorage)
+            IReusableCategoriesStorage reusableCategoriesStorage, IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -77,6 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.aggregateRootCache = aggregateRootCache;
             this.assignmentsToDeleteFactory = assignmentsToDeleteFactory;
             this.reusableCategoriesStorage = reusableCategoriesStorage;
+            this.questionnaireBackupStorage = questionnaireBackupStorage;
         }
 
         public async Task DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -118,6 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity, questionnaireDocument);
                 this.DeleteReusableCategories(questionnaireIdentity, questionnaireDocument);
+                this.DeleteQuestionnaireBackup(questionnaireIdentity);
 
                 var assignmentsImportStatus = this.importService.GetImportStatus();
 
@@ -140,6 +144,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 DeleteInProcess.Remove(questionnaireKey);
             }
+        }
+
+        private void DeleteQuestionnaireBackup(QuestionnaireIdentity questionnaireIdentity)
+        {
+            questionnaireBackupStorage.Remove(questionnaireIdentity.ToString());
         }
 
         private void DeleteInvitations(QuestionnaireIdentity questionnaireIdentity)
