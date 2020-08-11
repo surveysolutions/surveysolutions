@@ -6,7 +6,6 @@
     <AndroidDexTool>d8</AndroidDexTool>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -165,28 +164,14 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <None Include="Properties\AndroidManifest.xml">
-      <SubType>Designer</SubType>
-    </None>
-    <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\Themes.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <None Include="Properties\AndroidManifest.xml" />
+    <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml" />
+    <AndroidResource Include="Resources\values\Themes.xml" />
     <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\values\settings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\login.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\settings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\dashboard.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\values\settings.xml" />
+    <AndroidResource Include="Resources\menu\login.xml" />
+    <AndroidResource Include="Resources\menu\settings.xml" />
+    <AndroidResource Include="Resources\menu\dashboard.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
@@ -198,16 +183,10 @@
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\xml\preferences.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\relink.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\xml\preferences.xml" />
+    <AndroidResource Include="Resources\values\relink.xml" />
     <AndroidResource Include="Resources\menu\troubleshooting.xml" />
-    <AndroidResource Include="Resources\menu\relink.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\menu\relink.xml" />
     <AndroidResource Include="Resources\menu\finish.xml" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -222,12 +201,8 @@
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
     <AndroidResource Include="Resources\menu\diagnostics.xml" />
     <AndroidResource Include="Resources\xml\file_paths.xml" />
-    <AndroidResource Include="Resources\values-small\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values-large\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\values-small\dimensions.xml" />
+    <AndroidResource Include="Resources\values-large\dimensions.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -370,7 +345,7 @@
       <Version>2.0.3</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.7.2</Version>
+      <Version>4.7.3</Version>
     </PackageReference>
     <PackageReference Include="PCLStorage">
       <Version>1.0.2</Version>
