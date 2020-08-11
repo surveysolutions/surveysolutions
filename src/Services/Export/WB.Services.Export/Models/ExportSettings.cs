@@ -39,7 +39,7 @@ namespace WB.Services.Export.Models
                                    $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
                                    $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}" +
                                    $"${this.Translation?.ToString("N") ?? "No translation"}" +
-                                   $"${this.IncludeMeta ?? true}";
+                                   ( this.IncludeMeta == false ? "no-meta" : "" );
 
         private string InterviewStatusString() => Status?.ToString() ?? "All";
 

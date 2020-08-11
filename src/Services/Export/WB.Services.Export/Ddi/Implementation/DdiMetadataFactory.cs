@@ -118,7 +118,10 @@ namespace WB.Services.Export.Ddi.Implementation
                     }
                 }
 
-                var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(
+                var targetFolder = this.fileSystemAccessor.Combine(basePath, "Questionnaire");
+                this.fileSystemAccessor.CreateDirectory(targetFolder);
+
+                var pathToWrite = this.fileSystemAccessor.CombinePath(targetFolder, ExportFileSettings.GetDDIFileName(
                     $"{questionnaireId}_ddi"));
 
                 metadataWriter.SaveMetadataInFile(pathToWrite);
