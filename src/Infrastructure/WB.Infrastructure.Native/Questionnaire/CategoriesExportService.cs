@@ -46,9 +46,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
 
                 using var stream = new MemoryStream();
-                
-               excelPackage.SaveAs(stream);
-               return stream.ToArray();
+
+                excelPackage.SaveAs(stream);
+                return stream.ToArray();
             }
         }
     }
