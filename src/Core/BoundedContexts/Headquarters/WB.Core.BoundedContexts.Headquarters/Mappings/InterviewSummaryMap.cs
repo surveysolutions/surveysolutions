@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstAnswerDate);
             Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
+            Property(x => x.NotAnsweredCount, ptp => ptp.Column("not_answered_count"));
             Property(x => x.CommentedEntitiesCount, clm =>
             {
                 clm.Lazy(true);
