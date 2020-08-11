@@ -183,6 +183,11 @@ input AssignmentsFilter {
   AND: [AssignmentsFilter!]
   archived: Boolean
   OR: [AssignmentsFilter!]
+  questionnaireId: QuestionnaireIdentity
+  receivedByTabletAtUtc: DateTime
+  receivedByTabletAtUtc_gt: DateTime
+  receivedByTabletAtUtc_lt: DateTime
+  receivedByTabletAtUtc_not: DateTime
   responsibleId: Uuid
   responsibleId_in: [Uuid!]
   responsibleId_not: Uuid
@@ -233,6 +238,7 @@ input InterviewFilter {
   receivedByInterviewerAtUtc: DateTime
   receivedByInterviewerAtUtc_gt: DateTime
   receivedByInterviewerAtUtc_lt: DateTime
+  receivedByInterviewerAtUtc_not: DateTime
   responsibleName: String
   responsibleNameLowerCase: String
   responsibleNameLowerCase_in: [String]
@@ -340,6 +346,25 @@ input QuestionFilter {
   questionText: String
   scope: QuestionScope
   variable: String
+}
+
+input QuestionnaireIdentity {
+  AND: [QuestionnaireIdentity!]
+  id: Uuid
+  id_not: Uuid
+  OR: [QuestionnaireIdentity!]
+  version: Long
+  version_gt: Long
+  version_gte: Long
+  version_in: [Long!]
+  version_lt: Long
+  version_lte: Long
+  version_not: Long
+  version_not_gt: Long
+  version_not_gte: Long
+  version_not_in: [Long!]
+  version_not_lt: Long
+  version_not_lte: Long
 }
 
 input UserMapFilter {
