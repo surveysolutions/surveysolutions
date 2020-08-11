@@ -69,11 +69,12 @@ namespace WB.Infrastructure.AspNetCore
                 {
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                    loggerConfig.WriteTo.Console(
+                    loggerConfig.WriteTo
+                        .Console(LogEventLevel.Debug,
                         outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {AppType:w3} {Message:lj}{NewLine}{Exception}"
                     );
                 }
-            });
+            }, preserveStaticLogger: true);
         }
         
         private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";

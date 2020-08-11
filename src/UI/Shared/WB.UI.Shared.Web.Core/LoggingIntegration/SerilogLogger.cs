@@ -7,14 +7,9 @@ namespace WB.UI.Shared.Web.LoggingIntegration
     {
         private readonly Serilog.ILogger logger;
 
-        public SerilogLogger()
+        public SerilogLogger(ILogger logger)
         {
-            this.logger = Log.Logger;
-        }
-
-        public SerilogLogger(Type type)
-        {
-            this.logger = Log.ForContext(type);
+            this.logger = logger;
         }
 
         public void Trace(string message, Exception exception = null)
@@ -45,19 +40,6 @@ namespace WB.UI.Shared.Web.LoggingIntegration
         public void Fatal(string message, Exception exception = null)
         {
             this.logger.Fatal(exception, message);
-        }
-    }
-
-    public class SerilogLoggerProvider : WB.Core.GenericSubdomains.Portable.Services.ILoggerProvider
-    {
-        public Core.GenericSubdomains.Portable.Services.ILogger GetFor<T>()
-        {
-            return new SerilogLogger(typeof(T));
-        }
-
-        public Core.GenericSubdomains.Portable.Services.ILogger GetForType(Type type)
-        {
-            return new SerilogLogger(type);
         }
     }
 }
