@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 
             descriptor.Field(x => x.ReceivedByInterviewerAtUtc)
                 .Type<DateTimeType>()
-                .Description("Represents date (UTC) when the interview was received by the interviewer’s tablet.");
+                .Description("Represents date (UTC) when the interview was received by the interviewer’s tablet");
             
             descriptor.Field(x => x.ErrorsCount)
                 .Description("Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1")
@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.AnswersToFeaturedQuestions)
                 .Name("identifyingQuestions")
-                .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer.")
+                .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
                 .Resolver(context => 
                     context.GroupDataLoader<string, QuestionAnswer>
                         ("answersByInterview", async keys =>
@@ -103,6 +103,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
                 .Description("List of actions that can be applied to interview")
                 .Name("actionFlags");
+
+            descriptor.Field(x => x.NotAnsweredCount)
+                .Deprecated(
+                    "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");
         }
     }
 }
