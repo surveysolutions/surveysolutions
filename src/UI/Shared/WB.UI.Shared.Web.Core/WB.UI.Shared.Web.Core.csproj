@@ -23,7 +23,7 @@
     <PackageReference Include="Refit" Version="5.1.67" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0008" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0010" />
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.1.0" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.1.0" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
