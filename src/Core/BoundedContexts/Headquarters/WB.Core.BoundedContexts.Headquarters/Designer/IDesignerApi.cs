@@ -51,6 +51,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
 
         [Get("/api/hq/categories/{questionnaireId}/{categoryId}")]
         Task<List<CategoriesItem>> GetReusableCategories(Guid questionnaireId, Guid categoryId);
+
+        [Get("/api/hq/backup/{questionnaireId}")]
+        Task<RestFile> DownloadQuestionnaireBackup(Guid questionnaireId);
     }
 
     public class DesignerQuestionnairesListFilter
