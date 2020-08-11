@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Name("actionFlags");
 
             descriptor.Field(x => x.NotAnsweredCount)
-                .Deprecated(
+                .Description(
                     "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");
         }
     }
