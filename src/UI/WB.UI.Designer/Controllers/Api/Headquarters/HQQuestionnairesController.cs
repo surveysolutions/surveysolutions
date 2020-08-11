@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/v3/questionnaires")]
     [Authorize]
-    public class HQQuestionnairesController : ControllerBase
+    public class HQQuestionnairesController : HQControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -276,14 +276,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             return resultAssembly;
-        }
-
-        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
-        {
-            if (questionnaireView.CreatedBy == User.GetId())
-                return true;
-
-            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }

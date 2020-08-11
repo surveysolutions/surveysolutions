@@ -379,5 +379,17 @@ namespace WB.UI.Designer.Controllers
             string referer = Request.Headers["Referer"].ToString();
             return this.Redirect(referer);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public FileResult? Backup(Guid id)
+        {
+            var stream = this.questionnaireHelper.GetBackupQuestionnaire(id, out string questionnaireFileName);
+            
+            return stream == null
+                    ? null
+                    : File(stream, "application/zip", $"{questionnaireFileName}.zip");
+            
+        }
     }
 }
