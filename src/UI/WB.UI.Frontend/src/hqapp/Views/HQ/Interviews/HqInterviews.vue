@@ -404,6 +404,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
+      notAnsweredCount
       identifyingQuestions {
         question {
           variable
@@ -581,6 +582,7 @@ export default {
                 {
                     data: 'errorsCount',
                     name: 'ErrorsCount',
+                    class: 'type-numeric',
                     title: this.$t('Interviews.Errors'),
                     orderable: true,
                     render(data) {
@@ -588,6 +590,19 @@ export default {
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
+                    },
+                    width: '50px',
+                },{
+                    data: 'notAnsweredCount',
+                    name: 'NotAnsweredCount',
+                    class: 'type-numeric',
+                    title: this.$t('Interviews.NotAnsweredCount'),
+                    orderable: true,
+                    render(data) {
+                        return data === null ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
+                    },
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'nonAnswered')
                     },
                     width: '50px',
                 },

@@ -32,6 +32,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowContains().And().AllowIn();
             
+            descriptor.Filter(x => x.NotAnsweredCount);
+            
             descriptor.Filter(x => x.ClientKey)
                 .BindFiltersExplicitly()
                 .AllowEquals().And().AllowStartsWith().And().AllowContains().And().AllowIn();
