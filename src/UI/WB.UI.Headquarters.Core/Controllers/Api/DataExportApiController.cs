@@ -4,9 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Amazon.S3.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
@@ -24,7 +22,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Filters;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.Controllers.Api
 {
     [ApiValidationAntiForgeryToken]
     [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Administrator, Headquarter")]
@@ -160,7 +158,9 @@ namespace WB.UI.Headquarters.API
                 processView.Format,
                 processView.InterviewStatus,
                 processView.FromDate,
-                processView.ToDate);
+                processView.ToDate,
+                processView.TranslationId,
+                processView.IncludeMeta);
         }
 
         [HttpGet]
@@ -169,9 +169,12 @@ namespace WB.UI.Headquarters.API
         public async Task<ActionResult> AllData(Guid id, long version, DataExportFormat format,
             InterviewStatus? status = null,
             DateTime? from = null,
-            DateTime? to = null)
+            DateTime? to = null,
+            Guid? translationId = null,
+            bool? includeMeta = null)
         {
-            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from, to);
+            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(
+                new QuestionnaireIdentity(id, version), format, status, from, to, translationId, includeMeta);
             if (result == null)
             {
                 return NotFound();
@@ -212,7 +215,12 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObservingNotAllowed]
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
-            DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+            DataExportFormat format,
+            InterviewStatus? status = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            Guid? translationId = null,
+            bool? includeMeta = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
@@ -220,7 +228,8 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null)
                 return NotFound("Questionnaire not found");
 
-            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to);
+            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to, 
+                translation: translationId, includeMeta: includeMeta);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -231,7 +240,9 @@ namespace WB.UI.Headquarters.API
             DateTime? to,
             string accessToken = null,
             string refresh_token = null,
-            ExternalStorageType? externalStorageType = null)
+            ExternalStorageType? externalStorageType = null,
+            Guid? translation = null,
+            bool? includeMeta = null)
         {
             long jobId = 0;
             try
@@ -245,7 +256,9 @@ namespace WB.UI.Headquarters.API
                     GetPasswordFromSettings(),
                     accessToken,
                     refresh_token,
-                    externalStorageType);
+                    externalStorageType,
+                    translation,
+                    includeMeta);
 
                 jobId = result?.JobId ?? 0;
 
@@ -324,11 +337,12 @@ namespace WB.UI.Headquarters.API
                     state.ToDate?.ToUniversalTime(),
                     response.AccessToken,
                     response.RefreshToken,
-                    state.Type);
+                    state.Type,
+                    translation: state.TranslationId);
 
                 return ExportToExternalStorage();
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
@@ -389,6 +403,7 @@ namespace WB.UI.Headquarters.API
             public DateTime? FromDate { get; set; }
             public DateTime? ToDate { get; set; }
             public DataExportFormat? Format { get; set; }
+            public Guid? TranslationId { get; set; }
         }
     }
 }

@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public string VariableName => this.Questionnaire.VariableName;
         public Guid PublicKey => this.Questionnaire.PublicKey;
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public T? Find<T>(Guid publicKey) where T : class, IComposite
             => this.Questionnaire.Find<T>(publicKey);
 
         public IEnumerable<T> Find<T>() where T : class
@@ -49,14 +49,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public class TranslatedEntity<TEntity>
         {
-            public TranslatedEntity(TEntity entity, string translationName)
+            public TranslatedEntity(TEntity entity, string? translationName)
             {
                 this.Entity = entity;
                 this.TranslationName = translationName;
             }
 
             public TEntity Entity { get; private set; }
-            public string TranslationName { get; private set; }
+            public string? TranslationName { get; private set; } 
         }
 
         public IEnumerable<TranslatedEntity<T>> FindWithTranslations<T>(Func<T, bool> condition) where T : class

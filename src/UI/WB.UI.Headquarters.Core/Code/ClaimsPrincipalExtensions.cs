@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Code
             return result;
         }
 
-        public static string? UserName(this ClaimsPrincipal principal)
+        public static string UserName(this ClaimsPrincipal principal)
         {
             return principal.FindFirstValue(ClaimTypes.Name);
         }

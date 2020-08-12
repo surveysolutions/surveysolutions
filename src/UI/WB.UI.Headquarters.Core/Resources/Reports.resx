@@ -346,7 +346,7 @@
     <value>Map data is loading</value>
   </data>
   <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
-    <value>There is compatibility issues between questionnaire versions. Some answers in early versions of questionnaire are no longer exist in latest questionnaire version. Such answers were ignored</value>
+    <value>There are compatibility issues between questionnaire versions. Answers in earlier versions of the questionnaire that no longer exist in the latest questionnaire version were ignored.</value>
   </data>
   <data name="ToAllQuestionnaires" xml:space="preserve">
     <value>Back to questionnaires</value>

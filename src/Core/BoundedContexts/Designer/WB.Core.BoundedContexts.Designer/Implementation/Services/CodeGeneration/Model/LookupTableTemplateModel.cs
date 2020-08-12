@@ -4,6 +4,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class LookupTableTemplateModel
     {
+        public LookupTableTemplateModel(string typeName, string tableName, string tableNameField, string[] variableNames, LookupTableRow[] rows)
+        {
+            TypeName = typeName;
+            TableName = tableName;
+            TableNameField = tableNameField;
+            VariableNames = variableNames;
+            Rows = rows;
+        }
+
         public string TypeName { set; get; }
         public string TableName { set; get; }
         public string TableNameField { set; get; }

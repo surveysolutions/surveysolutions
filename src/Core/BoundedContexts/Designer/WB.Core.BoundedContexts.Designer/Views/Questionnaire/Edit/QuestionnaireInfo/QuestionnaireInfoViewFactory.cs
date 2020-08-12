@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -36,34 +37,56 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.loggedInUser = loggedInUser;
         }
 
-        public QuestionnaireInfoView Load(QuestionnaireRevision revision, Guid viewerId)
+        public QuestionnaireInfoView? Load(QuestionnaireRevision revision, Guid viewerId)
         {
             var questionnaireDocument = this.questionnaireStorage.Get(revision);
 
-            if (questionnaireDocument == null) return null;
+            if (questionnaireDocument == null) 
+                return null;
 
             var questionnaireInfoView = new QuestionnaireInfoView
+            (
+                questionnaireId : revision.QuestionnaireId.FormatGuid(),
+                questionnaireRevision : revision.Revision.FormatGuid(),
+                title : questionnaireDocument.Title,
+                variable : questionnaireDocument.VariableName,
+                isPublic : questionnaireDocument.IsPublic,
+                hideIfDisabled : questionnaireDocument.HideIfDisabled,
+                defaultLanguageName : questionnaireDocument.DefaultLanguageName,
+                isCoverPageSupported : questionnaireDocument.IsCoverPageSupported,
+                countries: CountryListProvider.GetCounryItems()
+            );
+
+            if (!questionnaireDocument.IsCoverPageSupported)
             {
-                QuestionnaireId = revision.QuestionnaireId.FormatGuid(),
-                QuestionnaireRevision = revision.Revision.FormatGuid(),
-                Title = questionnaireDocument.Title,
-                Variable = questionnaireDocument.VariableName,
-                Chapters = new List<ChapterInfoView>(),
-                IsPublic = questionnaireDocument.IsPublic,
-                HideIfDisabled = questionnaireDocument.HideIfDisabled,
-                DefaultLanguageName = questionnaireDocument.DefaultLanguageName
-            };
+                questionnaireInfoView.Chapters.Add(new ChapterInfoView
+                (
+                    itemId: questionnaireDocument.CoverPageSectionId.FormatGuid(),
+                    title: QuestionnaireEditor.CoverPageSection,
+                    isCover: true,
+                    isReadOnly: true,
+                    groupsCount: 0,
+                    rostersCount: 0,
+                    questionsCount: questionnaireDocument.Children
+                        .TreeToEnumerable(item => item.Children)
+                        .Where(c => c is IQuestion)
+                        .Cast<IQuestion>()
+                        .Count(q => q.Featured)
+                ));
+            }
 
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
             {
                 questionnaireInfoView.Chapters.Add(new ChapterInfoView
-                {
-                    ItemId = chapter.PublicKey.FormatGuid(),
-                    Title = chapter.Title,
-                    GroupsCount = 0,
-                    RostersCount = 0,
-                    QuestionsCount = 0
-                });
+                (
+                    itemId : chapter.PublicKey.FormatGuid(),
+                    title : chapter.Title,
+                    isCover: chapter.PublicKey == questionnaireDocument.CoverPageSectionId,
+                    isReadOnly: false,
+                    groupsCount : 0,
+                    rostersCount : 0,
+                    questionsCount : 0
+                ));
             }
 
             int questionsCount = 0, groupsCount = 0, rostersCount = 0;
@@ -163,12 +186,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.Attachments = questionnaireDocument.Attachments
                 .Select(attachmentIdentity => new AttachmentView
-                {
-                    AttachmentId = attachmentIdentity.AttachmentId.FormatGuid(),
-                    Name = attachmentIdentity.Name,
-                    Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
-                    Meta = attachments?.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
-                })
+                (
+                    attachmentId : attachmentIdentity.AttachmentId.FormatGuid(),
+                    name : attachmentIdentity.Name,
+                    content : this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
+                    meta : attachments?.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
+                ))
                 .OrderBy(x => x.Name)
                 .ToList();
 
@@ -184,11 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .ToList();
 
             questionnaireInfoView.Categories = questionnaireDocument.Categories
-                .Select(categoriesIdentity => new CategoriesView
-                {
-                    CategoriesId = categoriesIdentity.Id.FormatGuid(),
-                    Name = categoriesIdentity.Name,
-                })
+                .Select(categoriesIdentity => new CategoriesView(categoriesId : categoriesIdentity.Id.FormatGuid(), name : categoriesIdentity.Name))
                 .OrderBy(x => x.Name)
                 .ToList();
 
@@ -217,7 +236,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.StudyTypes = StudyTypeProvider.GetStudyTypeItems();
             questionnaireInfoView.KindsOfData = KindOfDataProvider.GetKindOfDataItems();
-            questionnaireInfoView.Countries = CountryListProvider.GetCounryItems();
             questionnaireInfoView.ModesOfDataCollection = ModeOfDataCollectionProvider.GetModeOfDataCollectionItems();
 
             questionnaireInfoView.Scenarios = dbContext.Scenarios

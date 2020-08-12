@@ -31,6 +31,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         {
             Guid questionnaireId = Guid.Parse(id);
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
+            if (questionnaireView == null)
+                return NotFound();
             var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
             //Cast<TranslationDto> preserves TranslationInstance type that used during serialization

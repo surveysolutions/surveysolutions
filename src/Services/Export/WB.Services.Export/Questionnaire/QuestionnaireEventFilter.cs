@@ -76,7 +76,10 @@ namespace WB.Services.Export.Questionnaire
                             $"Encountered interview id {@event.EventSourceId} without corresponding InterviewCreated or InterviewOnClientCreated events");
                     }
 
-                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId), cancellationToken);
+                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId), token: cancellationToken);
+
+                    if (questionnaire == null)
+                        throw new InvalidOperationException("questionnaire must be not null.");
 
                     if (!questionnaire.IsDeleted)
                     {
@@ -97,7 +100,10 @@ namespace WB.Services.Export.Questionnaire
 
             foreach (var questionnaireId in questionnaireIds)
             {
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
+                if (questionnaire == null)
+                    throw new InvalidOperationException("questionnaire must be not null.");
+
                 databaseSchemaService.CreateOrRemoveSchema(questionnaire);
             }
 

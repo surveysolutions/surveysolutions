@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -5,6 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -27,15 +29,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
             IUserInteractionService userInteractionService,
-            IAuditLogService auditLogService) 
+            IAuditLogService auditLogService,
+            IDeviceInformationService deviceInformationService) 
             : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
-                logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService)
+                logger, qrBarcodeScanService, serializer, userInteractionService, auditLogService,
+                deviceInformationService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewerPrincipal = principal;
             this.synchronizationService = synchronizationService;
         }
-         
+
+        protected override string GetRequiredUpdateMessage(string targetVersion, string appVersion)
+        {
+            return EnumeratorUIResources.UpgradeRequired 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.HeadquartersVersion, targetVersion) 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
+        }
+
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
             var identity = await GenerateInterviewerIdentity(credentials, token);

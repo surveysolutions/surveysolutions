@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class InMemoryCacheStorage<T, TK> : ICacheStorage<T, TK> where T : class
+    public class InMemoryCacheStorage<T, TK> : ICacheStorage<T, TK> where TK : notnull where T : class
     {
         private readonly ConcurrentDictionary<Guid, Dictionary<TK, T>> memoryCache =
             new ConcurrentDictionary<Guid, Dictionary<TK, T>>();
 
         public IEnumerable<T> GetArea(Guid area)
         {
-            memoryCache.TryGetValue(area, out var cache);
-
-            return (IEnumerable<T>)cache?.Values ?? Array.Empty<T>();
+            return memoryCache.TryGetValue(area, out var cache) 
+                ? (IEnumerable<T>)cache.Values ?? Array.Empty<T>()
+                : Array.Empty<T>();
         }
 
         public void Remove(TK id, Guid area = default(Guid))
@@ -39,10 +39,11 @@ namespace WB.UI.WebTester.Services.Implementation
             });
         }
 
-        public T Get(TK id, Guid area = default(Guid))
+        public T? Get(TK id, Guid area = default(Guid))
         {
             if (!memoryCache.TryGetValue(area, out var cache)) return null;
 
+            if(id == null) throw new ArgumentException(nameof(id));
             return cache.TryGetValue(id, out var file) ? file : null;
         }
     }

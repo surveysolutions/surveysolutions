@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
             return TestEnvironment
                 .GetAllFilesFromSourceFolder(resourcesRelativePath, "*.xml", "*.axml")
                 .Where(HasHardcodedDimensions)
-                .Select(xmlResourceFullPath => xmlResourceFullPath.Replace(resourcesFullPath, string.Empty).TrimStart('\\'));
+                .Select(xmlResourceFullPath => xmlResourceFullPath.Replace(resourcesFullPath, string.Empty).TrimStart('/', '\\'));
         }
 
         protected static IEnumerable<string> GetDimensionsNames(string resourcesRelativePath)

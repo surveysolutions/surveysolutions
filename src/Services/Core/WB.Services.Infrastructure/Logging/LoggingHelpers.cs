@@ -15,7 +15,7 @@ namespace WB.Services.Infrastructure.Logging
             return LogContext((key, value));
         }
 
-        public static IDisposable LogContext(params (string key, object value)[] properties)
+        public static IDisposable LogContext(params (string key, object? value)[] properties)
         {
             var enrichers = properties.Select(p => (ILogEventEnricher)new PropertyEnricher(p.key, p.value)).ToArray();
             return Serilog.Context.LogContext.Push(enrichers);

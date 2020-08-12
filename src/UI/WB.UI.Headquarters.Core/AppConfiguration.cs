@@ -1,11 +1,12 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
@@ -14,14 +15,14 @@ namespace WB.UI.Headquarters
 {
     public static class AppConfiguration
     {
-        private static object lockObject = new object();
+        private static readonly object lockObject = new object();
 
         public static void AddOptionsConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             // configuration
             services.Configure<ApkConfig>(configuration.GetSection("Apks"));
             services.Configure<CaptchaConfig>(configuration.CaptchaOptionsSection());
-            services.Configure<DataExportOptions>(configuration.GetSection("DataExport"));
+            services.Configure<ExportServiceConfig>(configuration.GetSection("DataExport"));
             services.Configure<DesignerConfig>(configuration.GetSection("Designer"));
             services.Configure<GoogleMapsConfig>(configuration.GetSection("GoogleMap"));
             services.Configure<HeadquartersConfig>(configuration.HeadquarterOptions());
@@ -29,6 +30,8 @@ namespace WB.UI.Headquarters
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
             services.Configure<FileStorageConfig>(configuration.GetSection("FileStorage"));
+            services.Configure<GeospatialConfig>(configuration.GetSection("Geospatial"));
+            
             services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
 
             services.PostConfigure<FileStorageConfig>(c =>

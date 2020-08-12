@@ -12,7 +12,7 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         private static readonly CultureInfo ExportCulture = CultureInfo.InvariantCulture;
 
-        public string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header)
+        public string[] GetExportedQuestion(InterviewEntity? question, ExportedQuestionHeaderItem header)
         {
             var answers = this.GetAnswers(question, header);
 
@@ -23,7 +23,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return answers;
         }
 
-        public string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled)
+        public string[] GetExportedVariable(object? variable, ExportedVariableHeaderItem header, bool isDisabled)
         {
             if (isDisabled)
                 return header.ColumnHeaders.Select(c => ExportFormatSettings.DisableValue).ToArray();
@@ -31,7 +31,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             switch (header.VariableType)
             {
                 case VariableType.String:
-                    return new string[] { (string)variable ?? ExportFormatSettings.MissingStringQuestionValue };
+                    return new string[] { (string?)variable ?? ExportFormatSettings.MissingStringQuestionValue };
                 case VariableType.LongInteger:
                     return new string[] { ((long?)variable)?.ToString(CultureInfo.InvariantCulture) ?? ExportFormatSettings.MissingNumericQuestionValue };
                 case VariableType.Boolean:
@@ -54,7 +54,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private string[] GetAnswers(InterviewEntity question, ExportedQuestionHeaderItem header)
+        private string[] GetAnswers(InterviewEntity? question, ExportedQuestionHeaderItem header)
         {
             if (question == null)
                 return BuildMissingValueAnswer(header);
@@ -143,30 +143,25 @@ namespace WB.Services.Export.CsvExport.Exporters
             return header.ColumnHeaders.Select(c => missingValue).ToArray();
         }
 
-        private IEnumerable<object> TryCastToEnumerable(object value)
+        private IEnumerable<object>? TryCastToEnumerable(object? value)
         {
-            var arrayOfDecimal = value as IEnumerable<decimal>;
-            if (arrayOfDecimal != null)
+            switch (value)
             {
-                return arrayOfDecimal.Select(d => (object)d);
+                case IEnumerable<decimal> arrayOfDecimal:
+                    return arrayOfDecimal.Select(d => (object)d);
+                case IEnumerable<int> arrayOfInteger:
+                    return arrayOfInteger.Select(i => (object)i);
+                case InterviewTextListAnswer[] interviewTextListAnswer:
+                    return interviewTextListAnswer.Select(a => a.Answer).ToArray();
+                default:
+                {
+                    var listOfAnswers = value as IEnumerable<object>;
+                    return listOfAnswers;
+                }
             }
-
-            var arrayOfInteger = value as IEnumerable<int>;
-            if (arrayOfInteger != null)
-            {
-                return arrayOfInteger.Select(i => (object)i);
-            }
-
-            if (value is InterviewTextListAnswer[] interviewTextListAnswer)
-            {
-                return interviewTextListAnswer.Select(a => a.Answer).ToArray();
-            }
-
-            var listOfAnswers = value as IEnumerable<object>;
-            return listOfAnswers;
         }
 
-        private string ConvertAnswerToStringValue(object answer, ExportedQuestionHeaderItem header)
+        private string ConvertAnswerToStringValue(object? answer, ExportedQuestionHeaderItem header)
         {
             if (answer == null)
                 return ExportFormatSettings.MissingStringQuestionValue;
@@ -196,7 +191,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
 
-        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header)
+        private string[] BuildAnswerListForQuestionByHeader(object? answer, ExportedQuestionHeaderItem header)
         {
             if (header.ColumnHeaders.Count == 1)
                 return new string[] { this.ConvertAnswerToStringValue(answer, header) };
@@ -204,7 +199,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             var result = new string[header.ColumnHeaders.Count];
 
             var answersAsEnumerable = this.TryCastToEnumerable(answer);
-            var answers = answersAsEnumerable?.ToArray() ?? new object[] { answer };
+            var answers = answersAsEnumerable?.ToArray() ?? new object?[] { answer };
 
             if (header.QuestionType != QuestionType.MultyOption)
             {
@@ -215,14 +210,14 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        private IEnumerable<string> GetSingleLinkedToRosterAnswer(int[] answer, ExportedQuestionHeaderItem header)
+        private IEnumerable<string> GetSingleLinkedToRosterAnswer(int[]? answer, ExportedQuestionHeaderItem header)
         {
             if (answer == null) yield return ExportFormatSettings.MissingNumericQuestionValue;
 
             yield return ConvertAnswerToStringValue(answer, header);
         }
 
-        private IEnumerable<string> GetMultiLinkedToListAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
+        private IEnumerable<string> GetMultiLinkedToListAnswers(int[]? answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
             if (answers != null)
             {
@@ -246,9 +241,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                 yield return ExportFormatSettings.MissingNumericQuestionValue;
         }
 
-        private static IEnumerable<string> GetCategoricalMultiAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
+        private static IEnumerable<string> GetCategoricalMultiAnswers(int[]? answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
-            bool isMissingQuestion = answers.Length == 0;
+            bool isMissingQuestion = answers == null || answers.Length == 0;
 
             for (int i = 0; i < expectedColumnCount; i++)
             {
@@ -264,9 +259,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private static IEnumerable<string> GetCategoricalMultiOrderedAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
+        private static IEnumerable<string> GetCategoricalMultiOrderedAnswers(int[]? answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
-            bool isMissingQuestion = answers.Length == 0;
+            bool isMissingQuestion = answers == null || answers.Length == 0;
 
             for (int i = 0; i < expectedColumnCount; i++)
             {
@@ -282,7 +277,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private void PutAnswersAsStringValuesIntoResultArray(object[] answers, ExportedQuestionHeaderItem header, string[] result)
+        private void PutAnswersAsStringValuesIntoResultArray(object?[] answers, ExportedQuestionHeaderItem header, string[] result)
         {
             for (int i = 0; i < result.Length; i++)
             {
@@ -290,7 +285,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private static IEnumerable<string> GetYesNoAnswers(AnsweredYesNoOption[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount, bool ordered)
+        private static IEnumerable<string> GetYesNoAnswers(AnsweredYesNoOption[]? answers, ExportedQuestionHeaderItem header, int expectedColumnCount, bool ordered)
         {
             for (int i = 0; i < expectedColumnCount; i++)
             {
@@ -338,7 +333,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
 
             if (questionType == QuestionType.Audio)
-                return ((AudioAnswer)obj)?.FileName;
+                return (obj as AudioAnswer)?.FileName ?? string.Empty;
 
             var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
 
@@ -346,7 +341,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 if (obj is String ans) return ans;
                 
-                return ((InterviewTextListAnswer)obj)?.Answer.Replace(answersSeparator, String.Empty);
+                return (obj as InterviewTextListAnswer)?.Answer.Replace(answersSeparator, String.Empty) ?? String.Empty;
             }
 
             return obj.ToString().Replace(answersSeparator, string.Empty);

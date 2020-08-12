@@ -8,11 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -21,8 +18,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
-        string LoadQuestionnaireTitle(Guid questionnaireId);
+        PdfQuestionnaireModel? Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
+        string? LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
     public class PdfFactory : IPdfFactory
@@ -50,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.categoriesService = categoriesService;
         }
 
-        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
+        public PdfQuestionnaireModel? Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             
@@ -59,13 +56,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 return null;
             }
 
-            ITranslation translationData = null;
+            ITranslation? translationData = null;
 
             if (translation.HasValue)
             {
                 var translationMetadata = questionnaire.Translations.FirstOrDefault(t => t.Id == translation.Value);
                 if (translationMetadata == null)
-                    throw new ArgumentException("Questionnaire doesn't contains translation: " + translation);
+                    return null;
 
                 translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
@@ -117,17 +114,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             if (questionnaire.CreatedBy == requestedByUserId)
                 statisticsByUsers = statisticsByUsers.Where(sharedPerson => sharedPerson.Name != requestedByUserName);
 
-            var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings)
+            var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings, allItems,
+                created:statisticsByUser, requested: modificationStatisticsByUser, lastModified: lastModified
+            )
             {
-                Requested = modificationStatisticsByUser,
-                Created = statisticsByUser,
-                LastModified = lastModified,
                 SharedPersons = statisticsByUsers,
-                AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
                 QuestionsWithLongInstructions = Find<IQuestion>(allItems, x => x.Instructions?.Length > this.pdfSettings.InstructionsExcerptLength).ToList(),
-                QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength || x.LinkedFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
+                QuestionsWithLongOptionsFilterExpression = Find<IQuestion>(allItems, x => x.Properties?.OptionsFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength || x.LinkedFilterExpression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongOptionsList = Find<ICategoricalQuestion>(allItems, x => !x.CategoriesId.HasValue && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
                 VariableWithLongExpressions = Find<IVariable>(allItems, x => x.Expression?.Length > this.pdfSettings.VariableExpressionExcerptLength).ToList(),
                 QuestionsWithLongSpecialValuesList = Find<IQuestion>(allItems, x => x.QuestionType == QuestionType.Numeric && x.Answers?.Count > this.pdfSettings.OptionsExcerptCount).ToList(),
@@ -143,7 +138,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return pdfView;
         }
 
-        private List<PdfQuestionnaireModel.Categories> GetCategoriesList(QuestionnaireDocument questionnaire, ITranslation translationData)
+        private List<PdfQuestionnaireModel.Categories> GetCategoriesList(QuestionnaireDocument questionnaire, ITranslation? translationData)
         {
             return questionnaire.Categories.Select(x => new PdfQuestionnaireModel.Categories
             {
@@ -160,7 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }).ToList();
         }
 
-        public string LoadQuestionnaireTitle(Guid questionnaireId)
+        public string? LoadQuestionnaireTitle(Guid questionnaireId)
         {
             return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid()).Title;
         }
@@ -171,19 +166,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private List<PdfQuestionnaireModel.EntityWithLongValidation> CollectItemsWithLongValidations(List<IComposite> allItems, PdfSettings settings)
         {
             var questions = this.Find<IQuestion>(allItems, x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > settings.ExpressionExcerptLength))
-                .Select(x => new PdfQuestionnaireModel.EntityWithLongValidation
+                .Select(x => new PdfQuestionnaireModel.EntityWithLongValidation(x.ValidationConditions.ToList())
                 {
                     Id = x.PublicKey,
                     Title = x.QuestionText,
-                    VariableName = x.StataExportCaption,
-                    ValidationConditions = x.ValidationConditions.ToList()
+                    VariableName = x.StataExportCaption
                 });
             var staticTexts = this.Find<IStaticText>(allItems, x => x.ValidationConditions?.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > settings.ExpressionExcerptLength))
-                .Select(x => new PdfQuestionnaireModel.EntityWithLongValidation
+                .Select(x => new PdfQuestionnaireModel.EntityWithLongValidation(x.ValidationConditions.ToList())
                 {
                     Id = x.PublicKey,
-                    Title = x.Text,
-                    ValidationConditions = x.ValidationConditions.ToList()
+                    Title = x.Text
                 });
             var entitiesWithLongValidations = questions.Concat(staticTexts).ToList();
 

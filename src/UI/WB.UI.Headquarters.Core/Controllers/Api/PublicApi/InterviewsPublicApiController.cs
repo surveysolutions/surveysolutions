@@ -287,18 +287,31 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Rejection comment</param>
+        /// <param name="responsibleId">New responsible id</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected or selected responsible cannot be assigned</response>
+
         [HttpPatch]
         [Route("{id:guid}/reject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult Reject(Guid id, string comment = null)
+        public ActionResult Reject(Guid id, string comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
+
+            if (!responsibleId.HasValue)
+                return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
             
-            return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
+            var userInfo = this.userViewFactory.GetUser(responsibleId.Value);
+
+            if(userInfo == null)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User was not found.");
+
+            if(!userInfo.Roles.Contains(UserRoles.Interviewer))
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User is not an interviewer.");
+
+            return this.TryExecuteCommand(new RejectInterviewToInterviewerCommand(this.authorizedUser.Id, id, userInfo.PublicKey, comment));
         }
 
         /// <summary>
@@ -325,18 +338,34 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
         /// <param name="comment">Rejection comment</param>
+        /// <param name="responsibleId">New responsible id</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
-        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected or selected responsible cannot be assigned</response>
+
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult HQReject(Guid id, string comment = null)
+        public ActionResult HQReject(Guid id, string comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
             
-            return this.TryExecuteCommand(new HqRejectInterviewCommand(id, this.authorizedUser.Id, comment));
+            if (!responsibleId.HasValue)
+                return this.TryExecuteCommand(new HqRejectInterviewCommand(id, this.authorizedUser.Id, comment));
+           
+            var userInfo = this.userViewFactory.GetUser(responsibleId.Value);
+
+            if(userInfo == null)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User was not found.");
+
+            if(userInfo.Roles.Contains(UserRoles.Interviewer))
+                return this.TryExecuteCommand(new HqRejectInterviewToInterviewerCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id, comment));
+
+            if(userInfo.Roles.Contains(UserRoles.Supervisor))
+                return this.TryExecuteCommand(new HqRejectInterviewToSupervisorCommand(id, this.authorizedUser.Id, userInfo.PublicKey, comment));
+            
+            return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible is not an interviewer or supervisor.");
         }
 
         /// <summary>

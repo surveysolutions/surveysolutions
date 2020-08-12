@@ -10,7 +10,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
         }
 
-        protected override Assembly Load(AssemblyName assemblyName)
+        protected override Assembly? Load(AssemblyName assemblyName)
         {
             return null;
         }

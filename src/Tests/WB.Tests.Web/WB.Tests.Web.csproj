@@ -8,8 +8,8 @@
     </PropertyGroup>
     <ItemGroup>
         <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
-        <PackageReference Include="ApprovalTests" Version="5.1.0" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
+        <PackageReference Include="ApprovalTests" Version="5.2.5" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
 
         <PackageReference Include="Autofac" Version="4.9.4" />
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
@@ -18,12 +18,11 @@
         <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
         <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.7" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.5.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />

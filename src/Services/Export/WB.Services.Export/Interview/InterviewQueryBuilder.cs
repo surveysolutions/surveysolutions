@@ -13,6 +13,9 @@ namespace WB.Services.Export.Interview
         public static string GetEnabledQuestionAnswersQuery(Question question)
         {
             var parentGroup = question.GetParent() as Group;
+            if(parentGroup == null)
+                throw new InvalidOperationException("Parent was not found.");
+
             StringBuilder result = new StringBuilder("select ");
             result.AppendFormat("data.\"{1}\" as data__{1}, data.\"{0}\" as \"data__{0}\"",
                 question.ColumnName, InterviewDatabaseConstants.InterviewId);
@@ -47,10 +50,14 @@ namespace WB.Services.Export.Interview
                     query.AppendFormat(", data.{0} as data__{0} ", InterviewDatabaseConstants.RosterVector);
                 }
 
-                if (group.HasAnyExportableQuestions)
+                if (group.HasAnyExportableChild)
                 {
-                    query.Append(", ");
-                    query.Append(BuildSelectColumns("data", @group, includeStaticText: false));
+                    var columns = BuildSelectColumns("data", @group, includeStaticText: false);
+                    if (!string.IsNullOrWhiteSpace(columns))
+                    {
+                        query.Append(", ");
+                        query.Append(columns);
+                    }
                 }
             }
 

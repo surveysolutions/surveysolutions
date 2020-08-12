@@ -2,6 +2,6 @@
 {
     public class QuestionnaireListViewItemSearchable : QuestionnaireListViewItem
     {
-        public string TitleIndexed { get; set; }
+        public string? TitleIndexed { get; set; }
     }
 }

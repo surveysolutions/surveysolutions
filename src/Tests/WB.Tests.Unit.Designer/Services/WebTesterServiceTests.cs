@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using WB.Tests.Abc;
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public void should_create_token_linked_to_questionnaire()
         {
-            var subj = new WebTesterService(Mock.Of<IOptions<WebTesterSettings>>(
+            var subj = new WebTesterService(new MemoryCache(Options.Create(new MemoryCacheOptions())), Mock.Of<IOptions<WebTesterSettings>>(
                 x => x.Value == new WebTesterSettings {ExpirationAmountMinutes = 1}));
 
             var token = subj.CreateTestQuestionnaire(Id.g1);

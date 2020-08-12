@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     internal class when_toggling_answer_and_confirmation_dialog_is_open: MultiOptionQuestionViewModelTestsContext
     {
         [OneTimeSetUp] 
-        public async Task context () {
+        public void context () {
             var options = new[]
             {
                 Create.Entity.Option(1, "item1"),

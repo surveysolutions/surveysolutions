@@ -11,9 +11,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public Guid Id { get; set; }
         public bool IsRoster { get; set; }
-        public string TableName { get; set; }
-        public string EnablementTableName { get; set; }
-        public string ValidityTableName { get; set; }
+        public string TableName { get; set; } = String.Empty;
+        public string EnablementTableName { get; set; } = String.Empty;
+        public string ValidityTableName { get; set; } = String.Empty;
         public List<IQuestionnaireEntity> DataColumns { get; set; } = new List<IQuestionnaireEntity>();
         public List<IQuestionnaireEntity> EnablementColumns { get; set; } = new List<IQuestionnaireEntity>();
         public List<IQuestionnaireEntity> ValidityColumns { get; set; } = new List<IQuestionnaireEntity>();

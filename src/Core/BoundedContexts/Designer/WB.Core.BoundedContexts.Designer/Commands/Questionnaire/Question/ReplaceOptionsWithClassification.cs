@@ -11,8 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.ClassificationId = classificationId;
         }
 
-        public Guid ClassificationId { get; set; } 
+        public Guid ClassificationId { get; set; }
 
-        public Option[] Options { get; set; }
+        public Option[] Options { get; set; } = new Option[0];
     }
 }

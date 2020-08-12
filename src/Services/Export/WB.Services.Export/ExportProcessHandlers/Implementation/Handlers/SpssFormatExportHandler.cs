@@ -36,7 +36,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
             await this.GenerateDescriptionTxtAsync(settings.Tenant, settings.QuestionnaireId, 
-                state.ExportTempFolder, ExportFileSettings.SpssDataFileExtension);
+                state.ExportTempFolder, ExportFileSettings.SpssDataFileExtension, cancellationToken);
         }
 
         private async Task<string[]> CreateSpssDataFilesFromTabularDataFilesAsync(
@@ -47,7 +47,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 (sender, donePercent) => state.Progress.Report(50 + (donePercent.Percent / 2), donePercent.Eta);
 
             return await tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                state.Settings.Tenant, state.Settings.QuestionnaireId,
+                state.Settings.Tenant, state.Settings.QuestionnaireId, state.Settings.Translation,
                 tabDataFiles,
                 exportProgress,
                 cancellationToken);

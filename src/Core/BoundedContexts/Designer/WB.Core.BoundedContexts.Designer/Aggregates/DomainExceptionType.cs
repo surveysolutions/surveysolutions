@@ -157,6 +157,11 @@
         GroupYouAreLinkedToIsNotRoster,
 
         VariableLabelContainsSubstitutionReference,
-        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
+
+        TryToDeleteCoverPage,
+        CoverSectionMustBeFirst,
+        CanNotAddElementToCoverPage,
+        CanNotEditElementIntoCoverPage,
     }
 }

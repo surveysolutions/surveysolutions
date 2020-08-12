@@ -2,6 +2,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
     public enum QuestionnaireVerificationReferenceType
     {
+        Unknown = 0,
         Question = 1,
         Group = 10,
         Roster = 20,

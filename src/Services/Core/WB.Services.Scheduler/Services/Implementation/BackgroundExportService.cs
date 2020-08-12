@@ -13,10 +13,10 @@ namespace WB.Services.Scheduler.Services.Implementation
     internal class BackgroundExportService : IHostedService
     {
         private readonly IServiceProvider serviceProvider;
-        private IEnumerable<IHostedSchedulerService> backgroundServices;
+        private IEnumerable<IHostedSchedulerService>? backgroundServices;
         private readonly ILogger<BackgroundExportService> logger;
-        private IServiceScope scope;
-        private CancellationTokenSource cts;
+        private IServiceScope? scope;
+        private CancellationTokenSource? cts;
 
         public BackgroundExportService(IServiceProvider serviceProvider,
             ILogger<BackgroundExportService> logger)
@@ -54,17 +54,19 @@ namespace WB.Services.Scheduler.Services.Implementation
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             cts?.Cancel();
-
-            foreach (var backgroundService in backgroundServices)
+            if (backgroundServices != null)
             {
-                if(backgroundService == null) continue;
-                
-                await backgroundService.StopAsync(cancellationToken);
-                logger.LogInformation("Stopped background service: {name}", backgroundService.GetType().Name);
+                foreach (var backgroundService in backgroundServices)
+                {
+                    if (backgroundService == null) continue;
+
+                    await backgroundService.StopAsync(cancellationToken);
+                    logger.LogInformation("Stopped background service: {name}", backgroundService.GetType().Name);
+                }
             }
 
             cts?.Dispose();
-            this.scope.Dispose();
+            this.scope?.Dispose();
         }
     }
 }

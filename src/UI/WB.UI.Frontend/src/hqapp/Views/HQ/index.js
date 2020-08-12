@@ -1,4 +1,5 @@
 import Assignments from './Assignments'
+import Administration from './Administration'
 import Reports from './Reports'
 import Review from './Interview'
 import Users from './Users'
@@ -18,6 +19,7 @@ import WebInterview from './WebInterview'
 
 export default [
     Assignments,
+    Administration,
     Reports,
     Review,
     Users,

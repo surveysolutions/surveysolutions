@@ -13,6 +13,7 @@ using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
+using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation
@@ -34,9 +35,12 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             // act
             var questionnaireId = new QuestionnaireId("questionnaire");
             await exportService.ExportInterviewsInTabularFormatAsync(new ExportSettings
-            {
-                QuestionnaireId = questionnaireId
-            }, "x:/", new ExportProgress(), CancellationToken.None);
+            (
+                questionnaireId : questionnaireId,
+                exportFormat: DataExportFormat.Tabular,
+                tenant: new TenantInfo("http://example", "hello", "some name")
+
+            ), "x:/", new ExportProgress(), CancellationToken.None);
             
             // assert
             assignmentsExporter.Verify(x => x.ExportAllAsync(It.IsAny<TenantInfo>(), questionnaireId, @"x:/", It.IsAny<ExportProgress>(),
@@ -55,7 +59,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
@@ -79,7 +83,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), "x:/", ".xlsx");
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), "x:/", ".xlsx", new CancellationToken());
 
             // assert
             Assert.That(description, Is.Not.Null.Or.Empty);
@@ -108,7 +112,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             questionnaireDocument.Title = "Name of questionnaire";
             questionnaireDocument.PublicKey = Guid.Parse("11111111111111111111111111111111");
             questionnaireDocument.Revision = 1;
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure();
@@ -119,7 +123,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 questionnaireStorage: questionnaireStorage.Object);
 
             // act
-            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:/", ".xlsx");
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId("id"), @"x:/", ".xlsx", new CancellationToken());
 
             // assert
             Assert.That(description, Is.Not.Empty);
@@ -132,11 +136,11 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null,
             IEnumerable<IExportedHeaderItem> headerItems = null)
         {
-            return new HeaderStructureForLevel
+            return new HeaderStructureForLevel(
+                levelScopeVector ?? new ValueVector<Guid>(),
+                (levelScopeVector == null || levelScopeVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelName),
+                levelName)
             {
-                LevelScopeVector = levelScopeVector ?? new ValueVector<Guid>(),
-                LevelName = levelName,
-                LevelIdColumnName = (levelScopeVector == null || levelScopeVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelName),
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems = headerItems?.ToDictionary(item => item.PublicKey, item => item)
@@ -170,17 +174,17 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             };
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(
-            string questionnaireId = null, params HeaderStructureForLevel[] levels)
+            string questionnaireId = "", params HeaderStructureForLevel[] levels)
         {
             var header = levels != null && levels.Length > 0
                 ? levels.ToDictionary(i => i.LevelScopeVector, i => i)
                 : new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
 
             return new QuestionnaireExportStructure
-            {
-                HeaderToLevelMap = header,
-                QuestionnaireId = questionnaireId
-            };
+            (
+                headerMap : header,
+                questionnaireId : questionnaireId
+            );
         }
 
         protected class CsvWriterServiceTestable : ICsvWriterService

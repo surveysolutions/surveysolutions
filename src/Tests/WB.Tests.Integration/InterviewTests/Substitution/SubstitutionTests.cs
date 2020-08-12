@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -67,7 +68,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                     => _.GetLatest(typeof(StatefulInterview), interview.Id) == interview);
 
                 using var eventContext = new EventContext();
-                var eventStore = new InMemoryEventStore();
+                var eventStore = Create.Storage.InMemoryEventStore();
                 var eventBus = Create.Service.LiteEventBus(eventStore: eventStore);
 
                 var commandService = Create.Service.CommandService(repository: repository, eventBus: eventBus);
@@ -117,13 +118,14 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                 var interviewLocator = new StatefulInterview(
                     Create.Service.SubstitutionTextFactory(),
                     Create.Service.InterviewTreeBuilder(),
-                    Mock.Of<IQuestionOptionsRepository>()
+                    Mock.Of<IQuestionOptionsRepository>(),
+                    new SystemClock()
                 );
                 interviewLocator.ServiceLocatorInstance = ServiceLocator.Current;
                 SetUp.InstanceToMockedServiceLocator<StatefulInterview>(interviewLocator);
 
                 ServiceFactory factory = new ServiceFactory();
-                var eventStore = new InMemoryEventStore();
+                var eventStore = Create.Storage.InMemoryEventStore();
                 var events = new IEvent[]
                 {
                     Create.Event.InterviewCreated(),

@@ -3,7 +3,9 @@
         :class="coverStatusClass">
         <div class="unit-title">
             <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
-            <h3>{{ $t("WebInterviewUI.Cover")}}</h3>
+            <h3 id="cover-title">
+                {{ this.$store.state.webinterview.breadcrumbs.title || this.$store.state.webinterview.coverInfo.title || $t("WebInterviewUI.Cover")}}
+            </h3>
         </div>
 
         <div class="wrapper-info error">
@@ -47,33 +49,33 @@
             </div>
         </div>
 
-        <template v-for="question in questions">
+        <template v-for="entity in identifyingEntities">
             <div class="wrapper-info"
-                v-if="question.isReadonly"
-                :key="question.id">
+                v-if="entity.isReadonly"
+                :key="entity.id">
                 <div class="container-info"
-                    :id="question.identity">
-                    <h5 v-html="question.title"></h5>
+                    :id="entity.identity">
+                    <h5 v-html="entity.title"></h5>
                     <p>
-                        <b v-if="question.type == 'Gps'">
-                            <a :href="getGpsUrl(question)"
-                                target="_blank">{{question.answer}}</a>
+                        <b v-if="entity.type == 'Gps'">
+                            <a :href="getGpsUrl(entity)"
+                                target="_blank">{{entity.answer}}</a>
                             <br/>
-                            <img v-bind:src="googleMapPosition(question.answer)"
+                            <img v-bind:src="googleMapPosition(entity.answer)"
                                 draggable="false" />
                         </b>
-                        <b v-else-if="question.type == 'DateTime'"
+                        <b v-else-if="entity.type == 'DateTime'"
                             v-dateTimeFormatting
-                            v-html="question.answer">
+                            v-html="entity.answer">
                         </b>
-                        <b v-else>{{question.answer}}</b>
+                        <b v-else>{{entity.answer}}</b>
                     </p>
                 </div>
             </div>
             <component v-else
-                :key="question.identity"
-                v-bind:is="question.type"
-                v-bind:id="question.identity"
+                :key="entity.identity"
+                v-bind:is="entity.type"
+                v-bind:id="entity.identity"
                 fetchOnMount></component>
         </template>
 
@@ -85,6 +87,7 @@
 
 <script lang="js">
 import isEmpty from 'lodash/isEmpty'
+import { GroupStatus } from './questions'
 
 export default {
     name: 'cover-readonly-view',
@@ -105,8 +108,11 @@ export default {
     },
 
     mounted() {
-        window.scroll({ top: 0, behavior: 'smooth' })
+        if(this.$route.hash){
+            this.$store.dispatch('sectionRequireScroll', { id: this.$route.hash })
+        }
     },
+
 
     computed: {
         title() {
@@ -117,8 +123,8 @@ export default {
                 ? this.$t('WebInterviewUI.CoverFirstComments', { count: this.$store.state.webinterview.coverInfo.entitiesWithComments.length})
                 : this.$t('WebInterviewUI.CoverComments')
         },
-        questions() {
-            return this.$store.state.webinterview.coverInfo.identifyingQuestions
+        identifyingEntities() {
+            return this.$store.state.webinterview.coverInfo.identifyingEntities
         },
         commentedQuestions() {
             return this.$store.state.webinterview.coverInfo.entitiesWithComments || []
@@ -137,7 +143,23 @@ export default {
                 ? false
                 : this.$store.state.webinterview.doesBrokenPackageExist
         },
+        info() {
+            return this.$store.state.webinterview.breadcrumbs
+        },
+        hasError() {
+            return this.info.validity && this.info.validity.isValid === false
+        },
         coverStatusClass() {
+            const coverPageId = this.$config.coverPageId == undefined ? this.$config.model.coverPageId : this.$config.coverPageId
+            if (coverPageId) {
+                return [
+                    {
+                        'complete-section'  : !this.hasBrokenPackage && this.info.status == GroupStatus.Completed && !this.hasError,
+                        'section-with-error': this.hasBrokenPackage || this.hasError,
+                    },
+                ]
+            }
+
             return [
                 {
                     'complete-section'  : !this.hasBrokenPackage,
@@ -154,6 +176,7 @@ export default {
         },
         fetch() {
             this.$store.dispatch('fetchCoverInfo')
+            this.$store.dispatch('fetchBreadcrumbs')
         },
         getGpsUrl(question) {
             return `http://maps.google.com/maps?q=${question.answer}`

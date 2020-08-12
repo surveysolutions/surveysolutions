@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,6 +8,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -20,40 +20,50 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Host.Infra
 {
-    public class TenantApi<T> : ITenantApi<T>, IDisposable
+    public class TenantApi<T> : ITenantApi<T>
     {
         private readonly ILogger<TenantApi<T>> logger;
+        private readonly IConfiguration configuration;
 
-        [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
-        private static long _counter = 0;
-
-        private readonly long id;
-
-        public TenantApi(ILogger<TenantApi<T>> logger)
+        public TenantApi(ILogger<TenantApi<T>> logger, IConfiguration configuration)
         {
             this.logger = logger;
-            id = Interlocked.Increment(ref _counter);
-            // logger.LogTrace("Creating new TenantApi<{name}> #{id}", typeof(T).Name, id);
+            this.configuration = configuration;
         }
 
-        public void Dispose()
-        {
-            //logger.LogTrace("Disposing TenantApi<{name}> #{id}", typeof(T).Name, id);
-        }
+        static readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
 
-        readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
-
-        public T For(TenantInfo tenant)
+        public T For(TenantInfo? tenant)
         {
+            if (tenant == null) throw new InvalidOperationException("Tenant must be not null.");
+
             return cache.GetOrAdd(tenant, id =>
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
-                httpClient.BaseAddress = new Uri(tenant.BaseUrl);
+                var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
+
+                if (configuration[urlOverrideKey] != null)
+                {
+                    httpClient.BaseAddress = new Uri(configuration[urlOverrideKey]);
+
+                    var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");
+                    if (aspnetcoreToken != null)
+                    {
+                        httpClient.DefaultRequestHeaders.Add("MS-ASPNETCORE-TOKEN", aspnetcoreToken);
+                    }
+                }
+                else
+                {
+                    httpClient.BaseAddress = new Uri(tenant.BaseUrl);
+                }
+
+
+                logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
 
                 return RestService.For<T>(httpClient, new RefitSettings
                 {
-                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings()
+                    ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
                     {
                         SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
                         TypeNameHandling = TypeNameHandling.Auto
@@ -77,7 +87,7 @@ namespace WB.Services.Export.Host.Infra
                     .HandleResult<HttpResponseMessage>(
                         message => message.RequestMessage.Method == HttpMethod.Get
                                    && !message.IsSuccessStatusCode && message.StatusCode != HttpStatusCode.NotFound)
-                    .WaitAndRetryAsync(6,
+                    .WaitAndRetryAsync(4,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         (response, timeSpan, retryCount, context) =>
                             {
@@ -97,9 +107,9 @@ namespace WB.Services.Export.Host.Infra
             {
                 var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
                 request.RequestUri = new Uri(uri);
-                
+
                 request.Headers.Authorization = new AuthenticationHeaderValue("TenantToken", this.tenant.Id.ToString());
-                
+
                 using (LoggingHelpers.LogContext(("uri", request.RequestUri)))
                 {
                     var sw = Stopwatch.StartNew();
@@ -114,23 +124,24 @@ namespace WB.Services.Export.Host.Infra
                         sw.Elapsed.TotalSeconds,
                         size);
 
-                    logger.LogTrace("TenantApi executed request {uri} with size {size} in {elapsed} ms", 
+                    logger.LogTrace("TenantApi executed request {uri} with size {size} in {elapsed} ms",
                         request.RequestUri.LocalPath,
-                        size, 
+                        size,
                         sw.ElapsedMilliseconds);
 
                     return result;
                 }
             }
 
-            private static readonly ConcurrentDictionary<Type, FieldInfo> Cache = new ConcurrentDictionary<Type, FieldInfo>();
+            // ReSharper disable once StaticMemberInGenericType
+            private static readonly ConcurrentDictionary<Type, FieldInfo?> Cache = new ConcurrentDictionary<Type, FieldInfo?>();
 
             private static long? GetRawSizeUsingReflection(HttpResponseMessage result)
             {
                 var field = Cache.GetOrAdd(result.Content.GetType(), type =>
                 {
                     var bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-                    return type.BaseType.GetField("_originalContent", bindFlags);
+                    return type.BaseType?.GetField("_originalContent", bindFlags);
                 });
 
                 var val = field?.GetValue(result.Content) as HttpContent;

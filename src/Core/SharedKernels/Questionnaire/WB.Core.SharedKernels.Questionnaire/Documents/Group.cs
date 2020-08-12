@@ -12,12 +12,12 @@ namespace Main.Core.Entities.SubEntities
     [DebuggerDisplay("Group {PublicKey}")]
     public class Group : IGroup
     {
-        public Group(string title = null, List<IComposite> children = null)
+        public Group(string? title = null, List<IComposite>? children = null)
         {
-            this.Title = title;
+            this.Title = title ?? string.Empty;
 
             this.PublicKey = Guid.NewGuid();
-            this.children = new List<IComposite>();
+            //this.children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
@@ -76,7 +76,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string Description { get; set; }
 
-        public string VariableName { get; set; }
+        public string VariableName { get; set; } = String.Empty;
 
         public bool IsRoster { get; set; }
 
@@ -90,14 +90,14 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid? RosterTitleQuestionId { get; set; }
 
-        private IComposite parent;
+        private IComposite? parent;
 
-        public IComposite GetParent()
+        public IComposite? GetParent()
         {
             return parent;
         }
 
-        public void SetParent(IComposite parent)
+        public void SetParent(IComposite? parent)
         {
             this.parent = parent;
         }
@@ -106,7 +106,7 @@ namespace Main.Core.Entities.SubEntities
 
         public string Title { get; set; }
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public T? Find<T>(Guid publicKey) where T : class, IComposite
         {
             foreach (IComposite child in this.children)
             {
@@ -128,13 +128,15 @@ namespace Main.Core.Entities.SubEntities
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
-                this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                    this.Children.SelectMany(q => q.Find(condition)));
+                this.Children.Where(a => a is T arg && condition(arg))
+                    .Select(a => a as T)
+                    .Union(this.Children.SelectMany(q => q.Find(condition)))!;
         }
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()
+            return this.Children.Where(a => a is T arg && condition(arg))
+                       .Select(a => a as T).FirstOrDefault()
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
@@ -215,7 +217,7 @@ namespace Main.Core.Entities.SubEntities
 
         public override string ToString()
         {
-            return string.Format("Group {{{0}}} '{1}'", this.PublicKey, this.Title ?? "<untitled>");
+            return $"Group {{{this.PublicKey}}} '{this.Title ?? "<untitled>"}'";
         }
     }
 }

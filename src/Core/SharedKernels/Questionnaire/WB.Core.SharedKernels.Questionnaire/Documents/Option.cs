@@ -5,7 +5,7 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Option
     {
-        public Option() {}
+        public Option() { }
 
         public Option(string value, string title)
         {
@@ -26,10 +26,10 @@ namespace Main.Core.Entities.SubEntities
             this.ParentValue = parentValue.HasValue ? parentValue.Value.ToString("G29", CultureInfo.InvariantCulture) : null;
         }
 
-        public string Value { get; set; }
+        public string Value { get; set; } = String.Empty;
 
-        public string Title { get; set; }
+        public string Title { get; set; } = String.Empty;
 
-        public string ParentValue { get; set; }
+        public string? ParentValue { get; set; }
     }
 }

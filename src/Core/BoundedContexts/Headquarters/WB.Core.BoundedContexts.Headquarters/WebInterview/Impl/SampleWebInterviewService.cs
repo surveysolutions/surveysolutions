@@ -42,22 +42,20 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaire, null);
 
-            using (MemoryStream output = new MemoryStream())
+            using MemoryStream output = new MemoryStream();
+            using (StreamWriter streamWriter = new StreamWriter(output))
             {
-                using (StreamWriter streamWriter = new StreamWriter(output))
+                using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
                 {
-                    using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
+                    var header = this.WriteHeaderRow(csvWriter, questionnaireDocument, invitationsToExport);
+                    foreach (Invitation invitation in invitationsToExport)
                     {
-                        var header = this.WriteHeaderRow(csvWriter, questionnaireDocument, invitationsToExport);
-                        foreach (Invitation invitation in invitationsToExport)
-                        {
-                            PushAssignment(header, invitation, questionnaireDocument, csvWriter, baseUrl);
-                        }
+                        PushAssignment(header, invitation, questionnaireDocument, csvWriter, baseUrl);
                     }
                 }
-
-                return output.ToArray();
             }
+
+            return output.ToArray();
         }
 
         private List<Invitation> GetInvitations(QuestionnaireIdentity questionnaireIdentity)

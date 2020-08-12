@@ -74,12 +74,12 @@ namespace WB.UI.Interviewer
                 {typeof(InterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
                 {typeof(SearchViewModel), typeof(InterviewerSearchActivity)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                ,{typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel), typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardActivity)}
 #endif
             });
 

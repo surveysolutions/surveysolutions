@@ -7,13 +7,14 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Ncqrs.Eventing;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
-    internal class when_publishing_event_by_ignored_event_source : NcqrCompatibleEventDispatcherTestContext
+    internal class when_publishing_event_by_prototype_event_source : NcqrCompatibleEventDispatcherTestContext
     {
         [NUnit.Framework.Test]
         public void should_not_call_registered_event_handler()
@@ -26,10 +27,10 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(TestDenormalzier)) == secondEventHandlerMock.Object);
 
-            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings
-            {
-                IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
-            }, serviceLocator, denormalizerRegistry);
+            var prototype = Create.Service.MockOfAggregatePrototypeService(PrototypeType.Temporary);
+
+            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(null, 
+                serviceLocator, denormalizerRegistry, prototype);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId: ignoredEventSource) });
@@ -48,8 +49,8 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             }
 
             public string Name => "CustomHandler";
-            public object[] Readers => Array.Empty<object>();
-            public object[] Writers => Array.Empty<object>();
+            public object[] Readers { get; }
+            public object[] Writers { get; }
         }
 
         [NUnit.Framework.Test]
@@ -65,10 +66,11 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(CustomHandler)) == customHandler);
 
-            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
-            {
-                IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
-            }, serviceLocator, denormalizerRegistry);
+            var prototype = Create.Service.MockOfAggregatePrototypeService(PrototypeType.Temporary);
+            var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(
+                serviceLocator: serviceLocator, 
+                denormalizerRegistry: denormalizerRegistry, 
+                prototypeService: prototype);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.PublishedEvent.InterviewCreated(interviewId: ignoredEventSource) });

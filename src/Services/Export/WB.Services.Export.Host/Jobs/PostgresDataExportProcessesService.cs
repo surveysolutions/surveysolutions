@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Logging;
-using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
@@ -21,17 +22,23 @@ namespace WB.Services.Export.Host.Jobs
         private readonly IJobProgressReporter jobProgressReporter;
         private readonly ILogger<PostgresDataExportProcessesService> logger;
         private readonly IOptions<JobSettings> jobSettings;
+        private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext tenantDbContext;
 
         public PostgresDataExportProcessesService(
             IJobService jobService,
             IJobProgressReporter jobProgressReporter,
             ILogger<PostgresDataExportProcessesService> logger,
-            IOptions<JobSettings> jobSettings)
+            IOptions<JobSettings> jobSettings,
+            ITenantContext tenantContext,
+            TenantDbContext tenantDbContext)
         {
             this.jobService = jobService;
             this.jobProgressReporter = jobProgressReporter;
             this.logger = logger;
             this.jobSettings = jobSettings;
+            this.tenantContext = tenantContext;
+            this.tenantDbContext = tenantDbContext;
         }
 
         public async Task<long> AddDataExport(DataExportProcessArgs args)
@@ -42,7 +49,7 @@ namespace WB.Services.Export.Host.Jobs
                 {
                     MaxRetryAttempts = this.jobSettings.Value.MaxRetryAttempts,
                     Tenant = args.ExportSettings.Tenant.ToString(),
-                    TenantName = args.ExportSettings.Tenant.Name,
+                    TenantName = args.ExportSettings.Tenant.Name ?? String.Empty,
                     Args = JsonConvert.SerializeObject(args),
                     Tag = args.NaturalId,
                     Type = ExportJobRunner.Name,
@@ -55,18 +62,52 @@ namespace WB.Services.Export.Host.Jobs
                 return job.Id;
             }
         }
+        
+        public async Task<List<DataExportProcessArgs>> GetAllProcessesAsync(bool runningOnly = true, CancellationToken token = default)
+        {
+            await tenantDbContext.EnsureMigrated(token);
 
-        private DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
+            var jobItems = runningOnly
+                ? await this.jobService.GetRunningOrQueuedJobs(tenantContext.Tenant)
+                : await this.jobService.GetAllJobsAsync(tenantContext.Tenant);
+
+            return AsDataExportProcesses(jobItems).ToList();
+        }
+
+        private HashSet<string>? deletedQuestionnaires;
+        private HashSet<string> DeletedQuestionnaires => deletedQuestionnaires ??= 
+            this.tenantDbContext.GeneratedQuestionnaires
+                .Where(q => q.DeletedAt != null)
+                .Select(q => q.Id)
+                .ToHashSet();
+
+        private IEnumerable<DataExportProcessArgs> AsDataExportProcesses(IEnumerable<JobItem> jobItems)
+        {
+            return jobItems.Select(j => AsDataExportProcessArgs(j))
+                .Where(d => !DeletedQuestionnaires.Contains(d.ExportSettings.QuestionnaireId.Id))
+                .ToArray();
+        }
+
+        public async Task<DataExportProcessArgs?> GetProcessAsync(long processId)
+        {
+            var job = await this.jobService.GetJobAsync(processId);
+            if (job == null || job.Tenant != this.tenantContext.Tenant.Id.Id) return null;
+
+            return AsDataExportProcessArgs(job);
+        }
+
+        DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
         {
             var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
 
             var eta = job.GetData<string>(EtaField);
-            var status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField));
+            var statusValue = job.GetData<string>(StatusField);
+            var status = statusValue == null ? DataExportStatus.Unknown : Enum.Parse<DataExportStatus>(statusValue);
             var hasError = /*job.Status == JobStatus.Canceled ||*/ job.Status == JobStatus.Fail;
 
             args.Status = new DataExportProcessStatus
             {
-                TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
+                TimeEstimation = eta == null ? (TimeSpan?)null : TimeSpan.Parse(eta),
                 CreatedDate = job.CreatedAt,
                 BeginDate = job.StartAt ?? job.CreatedAt,
                 EndDate = job.EndAt,
@@ -79,37 +120,19 @@ namespace WB.Services.Export.Host.Jobs
                     {
                         Type = Enum.Parse<DataExportError>(job.GetData<string>(ErrorTypeField) ??
                                                            DataExportError.Unexpected.ToString()),
-                        Message = job.GetData<string>(ErrorField)
+                        Message = job.GetData<string>(ErrorField) ?? String.Empty
                     }
                     : null
             };
 
-
             args.ProcessId = job.Id;
             return args;
         }
-
-        public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant, bool runningOnly = true)
-        {
-            var jobItems = runningOnly
-                ? await this.jobService.GetRunningOrQueuedJobs(tenant)
-                : await this.jobService.GetAllJobsAsync(tenant);
-
-            return jobItems.Select(AsDataExportProcessArgs).ToArray();
-        }
-
-        public async Task<DataExportProcessArgs> GetProcessAsync(long processId)
-        {
-            var job = await this.jobService.GetJobAsync(processId);
-            if (job == null) return null;
-            return AsDataExportProcessArgs(job);
-        }
-
         public async Task<List<DataExportProcessArgs>> GetProcessesAsync(long[] processIds)
         {
             var jobs = await this.jobService.GetJobsAsync(processIds);
-            
-            return jobs.Where(j => j != null).Select(AsDataExportProcessArgs).ToList();
+            await this.tenantDbContext.EnsureMigrated(CancellationToken.None);
+            return AsDataExportProcesses(jobs).ToList();
         }
 
         public void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default)

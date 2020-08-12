@@ -24,7 +24,7 @@ namespace Ncqrs.Eventing.Storage
 
         int? GetMaxEventSequenceWithAnyOfSpecifiedTypes(Guid eventSourceId, params string[] typeNames);
 
-        IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize);
+        IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize, long limitSize = long.MaxValue);
 
         Task<long> GetMaximumGlobalSequence();
 

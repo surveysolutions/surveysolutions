@@ -24,7 +24,11 @@
         };
 
         $scope.viewModel.translations = _.map($scope.questionnaire.translations, _.clone);
-        $scope.viewModel.translations.splice(0, 0, { translationId: null, name: $i18next.t("Translation_Original") });
+        $scope.viewModel.translations.splice(0, 0, { 
+            translationId: null, 
+            name: !$scope.questionnaire.defaultLanguageName ? $i18next.t("Translation_Original") : $scope.questionnaire.defaultLanguageName 
+        });
+        
         $scope.viewModel.selectedTranslation = $scope.viewModel.translations[0];
 
         var generateTimerId = null;

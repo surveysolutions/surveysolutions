@@ -19,7 +19,6 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         public JobProgressReporterBackgroundService(IServiceProvider serviceProvider, 
             ILogger<JobProgressReporterBackgroundService> logger)
         {
-         
             this.logger = logger;
             this.serviceProvider = serviceProvider;
         }
@@ -81,7 +80,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         public Task AbortAsync(CancellationToken cancellationToken)
         {
             queue.CompleteAdding();
-            queueCompletion.Task.Wait(TimeSpan.FromSeconds(5)); // waiting at least 5 seconds to complete queue
+            queueCompletion.Task.Wait(TimeSpan.FromSeconds(1)); // waiting at least 1 second to complete queue
             return Task.CompletedTask;
         }
 

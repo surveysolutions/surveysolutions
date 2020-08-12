@@ -9,7 +9,7 @@ namespace Main.Core.Entities.SubEntities
         {
         }
 
-        public UserLight(Guid id, string name)
+        public UserLight(Guid id, string? name)
         {
             this.Id = id;
             this.Name = name;
@@ -17,7 +17,7 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -59,7 +59,7 @@ namespace Main.Core.Entities.SubEntities
 
         public override string ToString()
         {
-            return string.Format("{0}: [{1}]", this.Name, this.Id);
+            return $"{this.Name}: [{this.Id}]";
         }
     }
 }

@@ -83,6 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return true;
         }
 
+        [RequestSizeLimit(10L * 1024 * 1024 * 1024)]
         public virtual async Task<IActionResult> PostTabletInformation()
         {
             if (!Request.HasFormContentType)

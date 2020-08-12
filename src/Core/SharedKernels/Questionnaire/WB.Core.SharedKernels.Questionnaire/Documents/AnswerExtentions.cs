@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
 {
     public static class AnswerExtentions
     {
-        public static CategoricalOption ToCategoricalOption(this Answer answer)
+        public static CategoricalOption? ToCategoricalOption(this Answer answer)
         {
             if (answer == null)
                 return null;
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             };
         }
 
-        private static int? ParseValue(string stringValue)
+        private static int? ParseValue(string? stringValue)
         {
             decimal parsedValue;
 

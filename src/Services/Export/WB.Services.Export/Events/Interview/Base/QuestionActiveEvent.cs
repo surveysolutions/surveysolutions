@@ -7,6 +7,6 @@ namespace WB.Services.Export.Events.Interview.Base
     public abstract class QuestionActiveEvent : InterviewActiveEvent
     {
         public Guid QuestionId { get; set; }
-        public RosterVector RosterVector { get; set; }
+        public RosterVector RosterVector { get; set; } = RosterVector.Empty;
     }
 }

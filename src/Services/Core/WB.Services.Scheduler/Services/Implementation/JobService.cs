@@ -56,7 +56,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             return newItem.Entity;
         }
 
-        public async Task<JobItem> GetFreeJobAsync(CancellationToken token = default)
+        public async Task<JobItem?> GetFreeJobAsync(CancellationToken token = default)
         {
             await using var tr = await db.Database.BeginTransactionAsync(token);
             await db.AcquireXactLockAsync(lock_add_value);

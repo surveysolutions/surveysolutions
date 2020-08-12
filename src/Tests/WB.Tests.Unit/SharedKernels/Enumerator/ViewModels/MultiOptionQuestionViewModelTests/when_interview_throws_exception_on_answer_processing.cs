@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     internal class when_interview_throws_exception_on_answer_processing: MultiOptionQuestionViewModelTestsContext
     {
         [OneTimeSetUp] 
-        public async Task context () {
+        public void context () {
             var options = new[]
             {
                 Create.Entity.Option(1, "item1"),

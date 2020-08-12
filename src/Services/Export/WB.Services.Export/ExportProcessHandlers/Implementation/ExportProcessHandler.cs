@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Runtime.Internal.Util;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
@@ -127,7 +126,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         private async Task PrepareOutputArchive(ExportState state, CancellationToken cancellationToken)
         {
-            state.ArchiveFilePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(state.Settings);
+            state.ArchiveFilePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(state.Settings);
             state.QuestionnaireName = await this.exportFileNameService.GetQuestionnaireDirectoryName(state.Settings, cancellationToken);
         }
 

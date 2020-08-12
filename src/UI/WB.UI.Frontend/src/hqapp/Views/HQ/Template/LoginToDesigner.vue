@@ -57,11 +57,22 @@
                             <div class="form-group"
                                 :class="{'has-error': errors.has('Password')}">
                                 <input type="password"
+                                    id="Password"
                                     name="Password"
                                     class="form-control"
                                     v-model="password"
                                     v-validate="'required'"
                                     :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
+                            </div>
+                            <div class="form-group">
+                                <input
+                                    id="ShowPassword"
+                                    type="checkbox"
+                                    onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');">
+                                <label for="ShowPassword"
+                                    style="padding-left:5px;">
+                                    <span></span>{{$t('Pages.ShowPassword')}}
+                                </label>
                             </div>
                             <div class="form-actions">
                                 <button type="submit"

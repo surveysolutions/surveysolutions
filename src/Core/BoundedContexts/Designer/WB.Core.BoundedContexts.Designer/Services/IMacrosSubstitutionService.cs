@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IMacrosSubstitutionService
     {
-        string InlineMacros(string expression, IEnumerable<Macro> macros);
+        string InlineMacros(string? expression, IEnumerable<Macro> macros);
     }
 }

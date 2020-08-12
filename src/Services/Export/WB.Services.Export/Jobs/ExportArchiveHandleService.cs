@@ -36,6 +36,8 @@ namespace WB.Services.Export.Jobs
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
                 var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
+                if(items == null) return;
+
                 logger.LogInformation("Deleting export archives for tenant: {tenant} - there is {count} files", tenant, items.Count);
 
                 foreach (var file in items)
@@ -53,11 +55,11 @@ namespace WB.Services.Export.Jobs
             }
         }
 
-        public async Task<DataExportArchive> DownloadArchiveAsync(ExportSettings settings, string archiveName)
+        public async Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string questionnaireNamePrefixOverride)
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {
-                var internalFilePath = this.fileNameService.GetFileNameForExportArchive(settings);
+                var internalFilePath = await this.fileNameService.GetFileNameForExportArchiveAsync(settings);
 
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(
                     settings.Tenant, Path.GetFileName(internalFilePath));
@@ -66,7 +68,7 @@ namespace WB.Services.Export.Jobs
 
                 if (metadata != null)
                 {
-                    var downloadFileName = this.fileNameService.GetFileNameForExportArchive(settings, archiveName);
+                    var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, questionnaireNamePrefixOverride);
 
                     var uri = this.externalArtifactsStorage.GetDirectLink(externalStoragePath,
                         TimeSpan.FromHours(10), downloadFileName);
@@ -79,10 +81,10 @@ namespace WB.Services.Export.Jobs
             }
             else
             {
-                var filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(settings);
+                var filePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(settings);
                 if (File.Exists(filePath))
                 {
-                    var downloadFileName = this.fileNameService.GetFileNameForExportArchive(settings, archiveName);
+                    var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, questionnaireNamePrefixOverride);
 
                     return new DataExportArchive
                     {

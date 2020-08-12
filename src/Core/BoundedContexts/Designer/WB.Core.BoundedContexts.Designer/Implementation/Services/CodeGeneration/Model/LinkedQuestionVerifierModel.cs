@@ -4,6 +4,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class LinkedQuestionVerifierModel
     {
+        public LinkedQuestionVerifierModel(Guid id, string rosterScopeName, string memberName, string typeName, string stateName)
+        {
+            Id = id;
+            RosterScopeName = rosterScopeName;
+            MemberName = memberName;
+            TypeName = typeName;
+            StateName = stateName;
+        }
+
         public Guid Id { set; get; }
         public string RosterScopeName { set; get; }
         public string MemberName { set; get; }

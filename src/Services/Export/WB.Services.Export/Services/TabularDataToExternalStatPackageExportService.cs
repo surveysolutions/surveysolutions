@@ -50,23 +50,34 @@ namespace WB.Services.Export.Services
         private const string StataFileNameExtension = ExportFileSettings.StataDataFileExtension;
         private const string SpssFileNameExtension = ExportFileSettings.SpssDataFileExtension;
 
-        public async Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId,
+        public async Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, 
+            QuestionnaireId questionnaireId,
+            Guid? translationId,
             string[] tabularDataFiles,
             ExportProgress progress,
             CancellationToken cancellationToken)
         {
-            return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
+            return await this.CreateAndGetExportDataFiles(tenant, 
+                questionnaireId,
+                translationId,
+                DataExportFormat.STATA,
+                tabularDataFiles, 
+                progress,
+                cancellationToken);
         }
 
-        public async Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant,QuestionnaireId questionnaireId,
+        public async Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant,
+            QuestionnaireId questionnaireId,
+            Guid? translationId,
             string[] tabularDataFiles,
             ExportProgress progress,
             CancellationToken cancellationToken)
         {
-            return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
+            return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, translationId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
 
-        private async Task<string[]> CreateAndGetExportDataFiles(TenantInfo tenant,QuestionnaireId questionnaireId, DataExportFormat format,
+        private async Task<string[]> CreateAndGetExportDataFiles(TenantInfo tenant, QuestionnaireId questionnaireId,
+            Guid? translationId, DataExportFormat format,
             string[] dataFiles, ExportProgress progress, CancellationToken cancellationToken)
         {
             string currentDataInfo = string.Empty;
@@ -76,7 +87,7 @@ namespace WB.Services.Export.Services
 
                 var questionnaireExportStructure = await
                         this.questionnaireExportStructureStorage
-                            .GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
+                            .GetQuestionnaireExportStructureAsync(tenant, questionnaireId, translationId);
 
                 if (questionnaireExportStructure == null)
                     return Array.Empty<string>();

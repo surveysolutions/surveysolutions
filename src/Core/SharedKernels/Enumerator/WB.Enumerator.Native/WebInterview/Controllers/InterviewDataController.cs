@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -69,7 +70,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             
             return new LanguageInfo
             {
-                OriginalLanguageName = questionnaire.DefaultLanguageName ?? Resources.WebInterview.Original_Language,
+                OriginalLanguageName = string.IsNullOrEmpty(questionnaire.DefaultLanguageName) ? Resources.WebInterview.Original_Language : questionnaire.DefaultLanguageName,
                 Languages = questionnaire.GetTranslationLanguages(),
                 CurrentLanguage = statefulInterview.Language
             };
@@ -80,7 +81,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
 
-            var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
+            var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
 
             return new InterviewInfo
             {
@@ -116,13 +117,25 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode());
         }
 
-        private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
+        private IdentifyingEntity GetIdentifyingEntity(Guid entityId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            var result = new IdentifyingQuestion();
-            var entityType = this.interviewEntityFactory.GetEntityType(new Identity(questionId, RosterVector.Empty), questionnaire, interview, IsReviewMode());
+            var entityIdentity = new Identity(entityId, RosterVector.Empty);
+            var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode());
 
+            if (entityType == InterviewEntityType.StaticText)
+            {
+                var staticText = interview.GetStaticText(entityIdentity);
+                return new IdentifyingStaticText()
+                {
+                    Type = entityType.ToString(),
+                    Identity = entityIdentity.ToString(),
+                    Title = staticText.Title.BrowserReadyText,
+                };
+            }
+
+            var result = new IdentifyingQuestion();
             result.Type = entityType.ToString();
-            var questionIdentity = new Identity(questionId, RosterVector.Empty);
+            var questionIdentity = entityIdentity;
             result.Identity = questionIdentity.ToString();
             var interviewQuestion = interview.GetQuestion(questionIdentity);
 
@@ -152,7 +165,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return result;
         }
 
-        public virtual InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId)
+        public virtual InterviewEntityWithType[] GetInterviewEntitiesWithTypes(Guid interviewId)
         {
             var interview = this.GetCallerInterview(interviewId);
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
@@ -175,7 +188,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (statefulInterview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
 
-            InterviewEntityWithType[] interviewEntityWithTypes = GetPrefilledQuestions(interviewId)
+            InterviewEntityWithType[] interviewEntityWithTypes = GetInterviewEntitiesWithTypes(interviewId)
                 .Union(ActionButtonsDefinition)
                 .ToArray();
 
@@ -276,7 +289,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             var sections = callerQuestionnaire.GetAllSections()
-                .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
+                .Where(sec => 
+                    statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)) 
+                    && !callerQuestionnaire.IsCoverPage(sec))
                 .ToArray();
 
             if (sectionId == null)
@@ -459,9 +474,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var interview = this.GetCallerInterview(interviewId);
             if (interview == null) return false;
 
-            return this.GetCallerQuestionnaire(interview.QuestionnaireIdentity).GetPrefilledQuestions().Any()
-                || interview.GetAllCommentedEnabledQuestions().Any()
-                || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
+            var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
+            if (questionnaire.IsCoverPageSupported)
+                return false;
+            
+            return questionnaire.GetPrefilledEntities().Any()
+                   || interview.GetAllCommentedEnabledQuestions().Any()
+                   || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.sidebar.js")]
@@ -529,6 +548,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 UnansweredCount = questionsCount - answeredQuestionsCount,
                 EntitiesWithError = invalidEntities
             };
+
             return completeInfo;
         }
 
@@ -562,18 +582,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }).ToArray();
 
             var interviewEntityWithTypes = questionnaire
-                .GetPrefilledQuestions()
-                .Select(x => this.GetIdentifyingQuestion(x, interview, questionnaire))
+                .GetPrefilledEntities()
+                .Select(x => this.GetIdentifyingEntity(x, interview, questionnaire))
                 .ToList();
 
-            var completeInfo = new CoverInfo
+            var coverInfo = new CoverInfo
             {
+                Title = questionnaire.IsCoverPageSupported 
+                    ? interview.GetTitleText(new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty))
+                    : null,
                 EntitiesWithComments = entitiesWithComments,
-                IdentifyingQuestions = interviewEntityWithTypes,
+                IdentifyingEntities = interviewEntityWithTypes,
                 CommentedQuestionsCount = commentedQuestionsCount,
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };
-            return completeInfo;
+            return coverInfo;
         }
     }
 }

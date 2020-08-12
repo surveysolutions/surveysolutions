@@ -83,13 +83,17 @@
                             <li class="chapter-panel-item"
                                 ng-repeat="chapter in questionnaire.chapters"
                                 ui-tree-node
+                                data-nodrag="{{ chapter.isCover }}"
                                 ng-class="{ current: isCurrentChapter(chapter) }"
                                 context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
                                 context-menu-hide-on-mouse-leave="true">
                                 <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                                     <div class="inner">
-                                        <a class="handler" ui-tree-handle><span></span></a>
-                                        <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})" ng-bind-html="chapter.title | escape"></a>
+                                        <a class="handler" ui-tree-handle ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover"><span></span></a>
+                                        <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">
+                                            <span ng-bind-html="chapter.title | escape"></span>
+                                            <help key="coverPage" ng-if="chapter.isCover" />
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
@@ -97,9 +101,9 @@
                                         <li><a ng-click="editChapter(chapter);" ng-i18next>Open</a></li>
                                         <li><a ng-click="copyRef(chapter);" ng-i18next>Copy</a></li>
                                         <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>PasteAfter</a>
+                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>PasteAfter</a>
                                         </li>
-                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>Delete</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>Delete</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -368,7 +372,7 @@
                                        ng-disabled="questionnaire.isReadOnlyForUser" 
                                        class="btn delete-btn" 
                                        tabindex="-1"
-                                       ng-show="translation.canUpdate"></a>
+                                       ng-show="!translation.isOriginalTranslation"></a>
                                     <div class="translation-content">
                                         <input focus-on-out="focusTranslation{{translation.translationId}}"
                                                required=""
@@ -384,15 +388,15 @@
                                         </div>
                                         <div class="actions" ng-class="{dirty: translation.form.$dirty }">
                                             <div ng-show="translation.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || translation.form.$invalid" class="btn lighter-hover" ng-click="translation.onSave($event)"
+                                                <button type="submit" ng-disabled="questionnaire.isReadOnlyForUser || translation.form.$invalid" class="btn lighter-hover" ng-click="onSave($event, translation)"
                                                         ng-i18next>
                                                     Save
                                                 </button>
-                                                <button type="button" class="btn lighter-hover" ng-click="translation.onCancel($event)" ng-i18next>Cancel</button>
+                                                <button type="button" class="btn lighter-hover" ng-click="onCancel($event, translation)" ng-i18next>Cancel</button>
                                             </div>
 
                                             <button type="button" class="btn btn-default"
-                                                    ng-show="translation.isDefault && translation.canUpdate"
+                                                    ng-show="translation.isDefault && !translation.isOriginalTranslation"
                                                     ng-click="setDefaultTranslation($index, false);$event.stopPropagation()" ng-i18next>
                                                 UnMarkAsDefault
                                             </button>
@@ -405,10 +409,10 @@
                                                     MarkAsDefault
                                                 </button>
 
-                                                <a href="{{translation.downloadUrl}}" class="btn btn-default"
+                                                <a ng-if="translation.downloadUrl" href="{{translation.downloadUrl}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
 
-                                                <button ng-hide="translation.form.$dirty || !translation.canUpdate" 
+                                                <button ng-hide="translation.form.$dirty || translation.isOriginalTranslation" 
                                                         ng-disabled="isReadOnlyForUser" 
                                                         class="btn btn-default" 
                                                         ngf-select="" 
@@ -900,7 +904,7 @@
             <h1 ng-i18next="MoveToAnotherSubSection"></h1>
             <ul>
                 <li ng-repeat="chapter in $parent.questionnaire.chapters">
-                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
+                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-show="!chapter.isReadOnly" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
                         {{chapter.title}}
                     </a>
                 </li>

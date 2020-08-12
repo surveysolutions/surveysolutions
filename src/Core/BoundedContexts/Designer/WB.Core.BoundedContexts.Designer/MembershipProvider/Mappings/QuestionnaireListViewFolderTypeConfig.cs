@@ -22,11 +22,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.CreatedBy).HasColumnName("createdby");
 
-            builder.Property(e => e.CreatorName).HasColumnName("creatorname");
+            builder.Property(e => e.CreatorName).HasColumnName("creatorname").IsRequired(false);
 
             builder.Property(e => e.Depth).HasColumnName("depth");
 
-            builder.Property(e => e.Parent).HasColumnName("parent");
+            builder.Property(e => e.Parent).HasColumnName("parent").IsRequired(false);
 
             builder.Property(e => e.Path)
                 .IsRequired()

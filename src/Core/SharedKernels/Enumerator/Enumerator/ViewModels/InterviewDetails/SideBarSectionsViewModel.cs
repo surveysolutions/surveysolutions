@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private string interviewId;
+        private bool needAddVirtualCoverPage = false;
         private List<Identity> sectionIdentities;
 
         public SynchronizedList<ISideBarSectionItem> items = new SynchronizedList<ISideBarSectionItem>();
@@ -65,18 +66,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
+            
             this.sectionIdentities = questionnaire.GetAllSections()
                 .Select(sectionId => Identity.Create(sectionId, RosterVector.Empty))
                 .ToList();
 
-            this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(new[]
-            {
-                this.modelsFactory.BuildCoverItem(this.navigationState),
-                this.modelsFactory.BuildOverviewItem(this.navigationState, this.interviewId),
-                this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId)
-            });
+            needAddVirtualCoverPage = !questionnaire.IsCoverPageSupported;
+            var predefItems = new List<ISideBarItem>();
+            
+            if (needAddVirtualCoverPage)
+                predefItems.Add(this.modelsFactory.BuildCoverItem(this.navigationState));
+            predefItems.Add(this.modelsFactory.BuildOverviewItem(this.navigationState, this.interviewId));
+            predefItems.Add(this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId));
 
+            this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(predefItems);
             this.UpdateSections();
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -159,8 +162,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.AllVisibleSections.RemoveRange(removedViewModels);
 
+            var offset = needAddVirtualCoverPage ? 1 : 0;
             foreach (var addedSectionViewModel in addedSectionViewModels)
-                this.AllVisibleSections.Insert(this.items.IndexOf(addedSectionViewModel) + 1, addedSectionViewModel);
+                this.AllVisibleSections.Insert(this.items.IndexOf(addedSectionViewModel) + offset, addedSectionViewModel);
         });
 
         internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded, ToggleSectionEventArgs toggledSection = null)
@@ -168,12 +172,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            bool IsSectionVisible(InterviewTreeGroup group) => !@group.IsDisabled() ||
-                @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id);
+            bool IsSectionVisible(InterviewTreeGroup group)
+            {
+                if (questionnaire.IsCoverPage(group.Identity.Id))
+                {
+                    return !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment())
+                           || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any()
+                           || questionnaire.GetPrefilledQuestions().Any();
+                }
+                
+                return (
+                    !@group.IsDisabled()
+                    || @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id)
+                );
+            }
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
-            List<Identity> parentsOfCurrentGroup = GetCurrentSectionAndItsParentsIdentities(interview, this.navigationState.CurrentGroup);
+            List<Identity> parentsOfCurrentGroup = GetCurrentSectionAndItsParentsIdentities(interview, questionnaire, this.navigationState.CurrentGroup);
 
             List<Identity> itemsToBeExpanded = expandedSectionIdentities.Union(parentsOfCurrentGroup).Distinct().ToList();
 
@@ -191,8 +207,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     .ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x.Identity));
             }
 
-            foreach (var sectionOrSubSection in  interview.GetAllGroupsAndRosters().Where(x =>
-                IsSectionVisible(x) && !questionnaire.IsFlatRoster(x.Identity.Id)))
+            var sectionOrSubSections = interview.GetAllGroupsAndRosters().Where(x =>
+                IsSectionVisible(x) && !questionnaire.IsFlatRoster(x.Identity.Id));
+            foreach (var sectionOrSubSection in  sectionOrSubSections)
             {
                 if (sectionOrSubSection is InterviewTreeSection)
                     yield return sectionOrSubSection.Identity;
@@ -211,9 +228,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private List<Identity> GetCurrentSectionAndItsParentsIdentities(IStatefulInterview interview, Identity currentGroupIdentity)
+        private List<Identity> GetCurrentSectionAndItsParentsIdentities(IStatefulInterview interview, IQuestionnaire questionnaire, Identity currentGroupIdentity)
         {
-            var currentGroup = interview.GetGroup(currentGroupIdentity) ?? interview.FirstSection;
+            var currentGroup = interview.GetGroup(currentGroupIdentity) 
+                               ?? interview.GetEnabledSections().First(section => !questionnaire.IsCoverPage(section.Identity.Id));
             List<Identity> parentsOfCurrentGroup = new List<Identity>{ currentGroup.Identity };
             parentsOfCurrentGroup.AddRange(currentGroup.Parents?.Select(group => @group.Identity));
             return parentsOfCurrentGroup;

@@ -83,17 +83,20 @@ namespace WB.UI.Headquarters.SupportTool
                 .ExecuteAsync(async () =>
                 {
                     Stopwatch sw = Stopwatch.StartNew();
-                    
+
+                    var uinfo = host.Services.GetRequiredService<UnderConstructionInfo>();
+
                     await new OrmModule(unitOfWorkConnectionSettings)
-                        .Init(host.Services.GetRequiredService<IServiceLocator>(), new UnderConstructionInfo());
+                        .Init(host.Services.GetRequiredService<IServiceLocator>(), uinfo);
                     
                     logger.LogInformation($"All migrations completed in {sw.Elapsed.TotalSeconds.Seconds()}");
                 });
             }
             else
             {
+                var uinfo = host.Services.GetRequiredService<UnderConstructionInfo>();
                 await new OrmModule(unitOfWorkConnectionSettings)
-                    .Init(host.Services.GetRequiredService<IServiceLocator>(), new UnderConstructionInfo());
+                    .Init(host.Services.GetRequiredService<IServiceLocator>(), uinfo);
             }
 
             logger.LogInformation("Headquarters migrated to latest ");

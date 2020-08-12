@@ -202,7 +202,7 @@
     <value>El archivo a cargar contiene demasiadas columnas. El número máximo de columnas es {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>El número máximo de filas ({0}) ha sido excedido</value>
+    <value>Número de líneas:{1}. El número máximo de filas ({0}) ha sido excedido</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Ya existe una macro como la indicada </value>

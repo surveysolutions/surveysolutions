@@ -163,7 +163,7 @@
     <value>Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}.</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Превышена максимальная граница ({0}) колочества строк.</value>
+    <value>Количество строк: {1}. Превышена максимальная граница ({0}) количества строк.</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Макрос с таким ключом уже существует</value>
@@ -300,46 +300,46 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Переменная с ключом {0} не найдена в опроснике {1}</value>
   </data>
-    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
     <value>Заголовок {0} не был найден в excel файле</value>
     <comment>Заголовок {0} не был найден в excel файле</comment>
   </data>
-    <data name="Column" xml:space="preserve">
+  <data name="Column" xml:space="preserve">
     <value>столбец</value>
   </data>
-    <data name="Row" xml:space="preserve">
+  <data name="Row" xml:space="preserve">
     <value>строка</value>
   </data>
-    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
     <value>Пустое значение</value>
   </data>
-    <data name="ImportOptions_NotNumber" xml:space="preserve">
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
     <value>Неверное 32-разрядное целочисленное значение '{0}'. Значение должно быть в пределах от -2147483647 до 2147483647</value>
   </data>
-    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
     <value>Родительский вопрос не содержит категорию со значением '{0}'</value>
   </data>
-    <data name="NoParentCascadingOptions" xml:space="preserve">
+  <data name="NoParentCascadingOptions" xml:space="preserve">
     <value>У родительского вопроса '{0}' отсутствуют категории</value>
   </data>
-    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
     <value>Дубрикат категории '{0}' с родительским значением '{1}'</value>
   </data>
-    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
     <value>Родительский вопрос '{0}' содержит {1} категории со значением '{2}'</value>
   </data>
-    <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Название слишком длинное. Название должно быть не больше {0} символов</value>
   </data>
-    <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
     <value>Дубликат категории '{0}' со значением '{1}'</value>
   </data>
-    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
     <value>Некоторые колонки отсутствуют. Убедитесь что файл который Вы загружаете содержит обязательные поля</value>
   </data>
   <data name="CategoriesCantBeExtracted" xml:space="preserve">
-      <value>Произошла ошибка при попытке разбора загруженного файла с категориями</value>
-      <comment>Произошла ошибка при попытке разбора загруженного файла с категориями</comment>
+    <value>Произошла ошибка при попытке разбора загруженного файла с категориями</value>
+    <comment>Произошла ошибка при попытке разбора загруженного файла с категориями</comment>
   </data>
   <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
     <value>[{0}] Неверное целочисленное значение</value>
@@ -351,36 +351,49 @@
     <value>[{0}] Пустое значение</value>
   </data>
   <data name="Excel_Categories_Duplicated" xml:space="preserve">
-      <value>Дубликаты категорий в строках: {0}</value>
-      <comment>Дубликаты категорий в строках: {0}</comment>
+    <value>Дубликаты категорий в строках: {0}</value>
+    <comment>Дубликаты категорий в строках: {0}</comment>
   </data>
   <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
-      <value>У некоторых категорий нет родительского идентификатора</value>
-      <comment>У некоторых категорий нет родительского идентификатора</comment>
+    <value>У некоторых категорий нет родительского идентификатора</value>
+    <comment>У некоторых категорий нет родительского идентификатора</comment>
   </data>
   <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
-      <value>Количество категорий не может быть больше {0}</value>
-      <comment>Идентификаторы категорий должны быть уникальными</comment>
+    <value>Количество категорий не может быть больше {0}</value>
+    <comment>Идентификаторы категорий должны быть уникальными</comment>
   </data>
   <data name="Excel_NoCategories" xml:space="preserve">
-      <value>В файле нет категорий</value>
-      <comment>В файле нет категорий</comment>
+    <value>В файле нет категорий</value>
+    <comment>В файле нет категорий</comment>
   </data>
   <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
-      <value>Набор категорий должен содержать как минимум 2 категории</value>
-      <comment>Набор категорий должен содержать как минимум 2 категории</comment>
+    <value>Набор категорий должен содержать как минимум 2 категории</value>
+    <comment>Набор категорий должен содержать как минимум 2 категории</comment>
   </data>
   <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
-      <value>[{0}] Текст категории должен быть меньше чем 250 символов</value>
-      <comment>[{0}] Текст категории должен быть меньше чем 250 символов</comment>
+    <value>[{0}] Текст категории должен быть меньше чем 250 символов</value>
+    <comment>[{0}] Текст категории должен быть меньше чем 250 символов</comment>
   </data>
   <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
-      <value>Разрешены только файлы разделенные табуляцией (*.tab, *.txt, *.tsv) и эксель файлы (*.xslx, *.xls, *.ods)</value>
+    <value>Разрешены только файлы разделенные табуляцией (*.tab, *.txt, *.tsv) и эксель файлы (*.xslx, *.xls, *.ods)</value>
   </data>
   <data name="ProvidedFileHasErrors" xml:space="preserve">
-      <value>Найдены ошибки в файле
+    <value>Найдены ошибки в файле
 </value>
-      <comment>Найдены ошибки в файле
+    <comment>Найдены ошибки в файле
       </comment>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Секция "Обложка" не может быть удалена из опросника</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Секция "Обложка" должна быть первой секцией в опроснике</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
+    <value>Секция "Обложка" может содержать только вопросы и статические тексты</value>
+
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>Вы используете старый опросник. Поэтому редактирование порядка вопросов в секции "Обложка" не доступно.</value>
   </data>
 </root>

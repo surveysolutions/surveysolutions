@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NAudio.MediaFoundation;
-using NAudio.Wave;
+using Microsoft.Extensions.Options;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Enumerator.Native.WebInterview.Services
@@ -17,30 +18,24 @@ namespace WB.Enumerator.Native.WebInterview.Services
     public class AudioProcessingService : IAudioProcessingService
     {
         private readonly ILogger<AudioProcessingService> logger;
-        private readonly bool audioEncoderStarted = false;
-
+        private readonly IOptions<FileStorageConfig> fileStorageConfig;
+        const string pathInAppDataForFfmpeg = "FFmpeg";
         private const string MimeType = @"audio/m4a";
+        private Task audioProcessor;
 
-        public AudioProcessingService(ILogger<AudioProcessingService> logger)
+        public AudioProcessingService(ILogger<AudioProcessingService> logger,
+             IOptions<FileStorageConfig> fileStorageConfig)
         {
             this.logger = logger;
-            try
+            this.fileStorageConfig = fileStorageConfig;
+            audioProcessor = Task.Factory.StartNew(AudioCompressionQueueProcessor);
+            TempFilesFolder = Path.Combine(this.fileStorageConfig.Value.TempData, pathInAppDataForFfmpeg);
+            if(!Directory.Exists(TempFilesFolder))
             {
-                MediaFoundationApi.Startup();
-                audioEncoderStarted = true;
-            }
-            catch (Exception e)
-            {
-                this.logger.LogWarning(e, "Failed to start audio encoder. Web interview audio questions will not be ");
-            }
-            finally
-            {
-                // single thread to process all audio compression requests
-                // if there is need to process audio in more then one queue - duplicate line below
-
-                Task.Factory.StartNew(AudioCompressionQueueProcessor);
+                Directory.CreateDirectory(TempFilesFolder);
             }
         }
+
 
         public Task<AudioFileInformation> CompressAudioFileAsync(byte[] bytes)
         {
@@ -50,35 +45,44 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return tcs.Task;
         }
 
-        private AudioFileInformation CompressData(byte[] audio)
+        private async Task<AudioFileInformation> CompressData(byte[] audio)
         {
-            var tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".aac");
+            var destFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "resultAudio"), ".aac");
+            var sourceFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".wav");
             var audioResult = new AudioFileInformation();
 
             try
             {
-                using (var ms = new MemoryStream(audio))
-                using (var wavFile = new WaveFileReader(ms))
+                logger.LogInformation("Running conversion for file {source} into {dest}", sourceFile, destFile);
+                
+                await File.WriteAllBytesAsync(sourceFile, audio).ConfigureAwait(false);
+                
+                var fullPathForSourceFile = Path.GetFullPath(sourceFile);
+                var fullPathForDestFile = Path.GetFullPath(destFile);
+
+                this.logger.LogDebug("Starting audio audio encoder in {ffmpegHome}", 
+                    this.fileStorageConfig.Value.FFmpegExecutablePath);
+
+                var pathToFfmpeg = Path.Combine(this.fileStorageConfig.Value.FFmpegExecutablePath, "ffmpeg");
+                
+                var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg
+                    , $"-i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
+                var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)");
+                var hours = Int32.Parse(match.Groups[1].Value);
+                var minutes = Int32.Parse(match.Groups[2].Value);
+                var seconds = Int32.Parse(match.Groups[4].Value);
+                int milliseconds = 0;
+                if (match.Groups.Count > 4)
                 {
-                    audioResult.Duration = wavFile.TotalTime;
-
-                    if (!audioEncoderStarted)
-                    {
-                        return new AudioFileInformation
-                        {
-                            Binary = audio,
-                            Duration = audioResult.Duration,
-                            Hash = CalculateHash(audio),
-                            MimeType = "audio/wav"
-                        };
-                    }
-
-                    const int desiredBitRate = 64 * 1024;
-                    MediaFoundationEncoder.EncodeToAac(wavFile, tempFile,  desiredBitRate);
+                    milliseconds = Int32.Parse(match.Groups[5].Value.Replace(".", ""));
                 }
 
-                audioResult.Binary = File.ReadAllBytes(tempFile);
+                audioResult.Duration = new TimeSpan(0, hours, minutes, seconds, milliseconds);
+                audioResult.Binary = await File.ReadAllBytesAsync(destFile).ConfigureAwait(false);
                 audioResult.MimeType = MimeType;
+
+                logger.LogInformation("Done conversion for file {dest}. Reduced size from {srcSize} to {destSize} (bytes)", 
+                    destFile, audio.Length, audioResult.Binary.Length);
 
                 return audioResult;
             }
@@ -88,19 +92,23 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
+                audioResult.Duration = TimeSpan.FromSeconds(1);
 
                 return audioResult;
             }
             finally
             {
-                File.Delete(tempFile);
+                if(File.Exists(destFile))
+                    File.Delete(destFile);
+                if(File.Exists(sourceFile))
+                    File.Delete(sourceFile);
             }
         }
 
         private readonly BlockingCollection<(TaskCompletionSource<AudioFileInformation> task, byte[] bytes)> audioCompressionQueue
             = new BlockingCollection<(TaskCompletionSource<AudioFileInformation>, byte[])>();
 
-        private void AudioCompressionQueueProcessor()
+        private async Task AudioCompressionQueueProcessor()
         {
             audioFilesInQueue.Set(0);
 
@@ -112,9 +120,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 try
                 {
                     sw.Restart();
-                    var result = CompressData(job.bytes);
+                    
+                    var result = await CompressData(job.bytes);
 
-                    var resultHash = CalculateHash(result.Binary);
+                    string resultHash = CalculateHash(result.Binary);
                     result.Hash = resultHash;
                     job.task.SetResult(result);
                 }
@@ -149,6 +158,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly Gauge audioFilesInQueue =new Gauge(@"wb_audio_queue_files_count", @"Number of audio files in queue");
         private readonly Counter audioFilesProcessed = new Counter(@"wb_audio_files_total", @"Total count of processed audio files");
         private readonly Counter audtioFilesProcessingTime = new Counter(@"wb_audio_files_processing_seconds", @"Total processing time");
+        private string TempFilesFolder;
     }
 
     public class AudioFileInformation

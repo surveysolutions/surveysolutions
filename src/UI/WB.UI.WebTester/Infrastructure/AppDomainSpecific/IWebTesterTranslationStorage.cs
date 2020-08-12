@@ -7,6 +7,6 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public interface IWebTesterTranslationStorage
     {
-        QuestionnaireDocument GetTranslated(QuestionnaireDocument questionnaire, long version, string language, out Translation translation);
+        QuestionnaireDocument GetTranslated(QuestionnaireDocument questionnaire, long version, string? language, out Translation? translation);
     }
 }

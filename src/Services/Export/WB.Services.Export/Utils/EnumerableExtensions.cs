@@ -47,7 +47,7 @@ namespace WB.Services.Export
         private static IEnumerable<TResult> BatchImpl<TSource, TResult>(this IEnumerable<TSource> source, int size,
             Func<IEnumerable<TSource>, TResult> resultSelector)
         {
-            TSource[] bucket = null;
+            TSource[]? bucket = null;
             var count = 0;
 
             foreach (var item in source)
@@ -80,7 +80,7 @@ namespace WB.Services.Export
         }
 
         public static IEnumerable<List<T>> BatchInTime<T>(this ICollection<T> source, BatchOptions options,
-            ILogger logger = null)
+            ILogger? logger = null)
         {
             long index = 0;
 
@@ -89,7 +89,7 @@ namespace WB.Services.Export
 
             using (var queue = source.GetEnumerator())
             {
-                Stopwatch sw = null;
+                Stopwatch? sw = null;
 
                 while (index < source.Count)
                 {

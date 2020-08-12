@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Humanizer;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -65,10 +68,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return false;
         }
 
+
+
         [ActivePage(MenuItem.Docs)]
         [Route("Interview/Review/{id}")]
-        [Route("Interview/Review/{id}/Section/{url}")]
         [Route("Interview/Review/{id}/Cover")]
+        public ActionResult Cover(Guid id)
+        {
+            var interviewId = id.FormatGuid();
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+            if (questionnaire.GetPrefilledEntities().Any()
+                || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
+                || interview.GetAllCommentedEnabledQuestions().Any())
+            {
+                if (questionnaire.IsCoverPageSupported)
+                {
+                    return RedirectToAction("Review", new{ id = interviewId, url = questionnaire.CoverPageSectionId.FormatGuid()});
+                }
+
+                return Review(id, null);
+            }
+
+            return RedirectToAction("Review", new{ id = interviewId, url = questionnaire.GetFirstSectionId().FormatGuid()});
+        }        
+
+        [ActivePage(MenuItem.Docs)]
+        [Route("Interview/Review/{id}/Section/{url}")]
         public ActionResult Review(Guid id, string url)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
@@ -78,13 +105,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return NotFound();
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity));
 
             ViewBag.SpecificPageCaption = interviewSummary.Key;
             ViewBag.ExcludeMarkupSpecific = true;
 
-            return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
+            return View("Review", new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
+                CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : String.Empty,
                 Key = interviewSummary.Key,
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
                 StatusName = interviewSummary.Status.ToLocalizeString(),
@@ -105,8 +134,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
         {
             ApproveRejectAllowed approveRejectAllowed = new ApproveRejectAllowed();
-            approveRejectAllowed.InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "Teams", action = "InterviewersCombobox" });
+            approveRejectAllowed.InterviewersListUrl = 
+                this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter
+                ? Url.Action("ResponsiblesCombobox", "Teams")
+                : Url.Action("InterviewersCombobox", "Teams");
 
             if(!this.authorizedUser.IsObserving)
             {
@@ -126,8 +157,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                                                 authorizedUser.IsSupervisor;
             }
 
-            approveRejectAllowed.InterviewerShouldbeSelected =
-                approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+            approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed
+                                                               && !interviewSummary.IsAssignedToInterviewer; 
 
             return approveRejectAllowed;
         }
@@ -174,6 +205,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         public string Id { get; set; }
+        
+        public string CoverPageId { get; set; }
 
         public string Key { get; set; }
 

@@ -1,10 +1,12 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Services;
+﻿using System;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchronization;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
@@ -47,5 +49,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewerPrincipal.SaveInterviewer(localInterviewer);
             this.interviewerPrincipal.SignIn(localInterviewer.Name, credentials.Password, true);
         }
+        
+        protected override string GetRequiredUpdate(string targetVersion, string appVersion)
+        {
+            return EnumeratorUIResources.UpgradeRequired 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.HeadquartersVersion, targetVersion) 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
+        }
+
     }
 }

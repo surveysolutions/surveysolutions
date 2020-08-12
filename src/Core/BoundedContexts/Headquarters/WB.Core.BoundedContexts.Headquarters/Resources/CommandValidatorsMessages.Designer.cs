@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class CommandValidatorsMessages {
@@ -79,11 +79,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only the responsible supervisor for this assignment can answer its supervisor&apos;s questions.
+        ///   Looks up a localized string similar to Only the supervisor responsible for this assignment can answer the supervisor questions.
         /// </summary>
         public static string UserDontHavePermissionsToAnswer {
             get {
                 return ResourceManager.GetString("UserDontHavePermissionsToAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An assignment for web interview must have an interviewer as responsible.
+        /// </summary>
+        public static string WebModeAssignmentShouldBeOnInterviewer {
+            get {
+                return ResourceManager.GetString("WebModeAssignmentShouldBeOnInterviewer", resourceCulture);
             }
         }
     }

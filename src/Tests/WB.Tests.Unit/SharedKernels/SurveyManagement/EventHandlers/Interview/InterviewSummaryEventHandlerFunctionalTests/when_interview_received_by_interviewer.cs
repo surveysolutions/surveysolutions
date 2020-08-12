@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var updatedModel = denormalizer.Update(viewModel, Create.Event.InterviewReceivedByInterviewer().ToPublishedEvent());
 
-            updatedModel.ReceivedByInterviewer.Should().BeTrue();
+            updatedModel.ReceivedByInterviewerAtUtc.Should().NotBeNull();
         }
     }
 }

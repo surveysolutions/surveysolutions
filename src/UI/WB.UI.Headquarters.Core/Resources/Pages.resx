@@ -234,6 +234,9 @@
   <data name="CloseLabel" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Approve</value>
   </data>
@@ -490,7 +493,7 @@
     <value>Last Survey Solutions updated date</value>
   </data>
   <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
-    <value>Total number of success synchronizations</value>
+    <value>Total number of successful synchronizations</value>
   </data>
   <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
     <value>Total number of failed synchronizations</value>
@@ -563,7 +566,7 @@
     <value>Number of unfinished or unsynchronized assignments on device every given moment</value>
   </data>
   <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
-    <value>Recent synchronizations activity</value>
+    <value>Recent synchronization activity</value>
   </data>
   <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
     <value>Last connection statistics</value>
@@ -595,6 +598,9 @@
   <data name="Interviewers_Header" xml:space="preserve">
     <value>Interviewers</value>
   </data>
+  <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
+      <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
+  </data>  
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
@@ -614,7 +620,7 @@
     <value>Surveys and Statuses</value>
   </data>
   <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
-    <value>The Surveys and Statuses report shows number of interviews in each status by surveys</value>
+    <value>Shows the number of interviews in each status (columns) for each survey instrument (rows)</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
     <value>The Surveys and Statuses report shows number of interviews in each status for surveys in which this supervisor is involved</value>
@@ -642,6 +648,9 @@
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Account created on</value>
+  </data>
+  <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+    <value>Last log in</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Interviewer's Email</value>
@@ -845,6 +854,9 @@
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date when the interviewer account was created</value>
   </data>
+  <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+    <value>Date when the interviewer logged in to website last time</value>
+  </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Login name of the interviewer’s supervisor</value>
   </data>
@@ -865,6 +877,9 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Show Password</value>
   </data>
   <data name="AuthenticatorCode" xml:space="preserve">
     <value>Authenticator code</value>
@@ -1058,7 +1073,7 @@
     <value>Locked headquarters (box checked) cannot login and perform any actions on the server.</value>
   </data>
   <data name="Interviewer_LockWarning" xml:space="preserve">
-    <value>Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server.</value>
+    <value>Locked interviewers cannot connect their tablets with the server and send interviews.</value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Locked supervisor (box checked) cannot login and perform any actions on the server.</value>
@@ -1181,7 +1196,7 @@
     <value>Devices/Interviewers</value>
   </data>
   <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
-    <value>The Devices/Interviewer report shows number of interviewer accounts on this server affected by each issue</value>
+    <value>Issues for each interviewer</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
@@ -1241,10 +1256,10 @@
     <value>Upload .zip file</value>
   </data>
   <data name="MapList_UploadDescription" xml:space="preserve">
-    <value>Upload zip archive containing maps.</value>
+    <value>Upload a zip archive containing maps.</value>
   </data>
   <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
-    <value>Files with same name will be overridden.</value>
+    <value>Note: Files with same name will be overwritten.</value>
   </data>
   <data name="MapList_UserLinking" xml:space="preserve">
     <value>Update user-to-map linking</value>
@@ -1411,6 +1426,9 @@
   </data>
   <data name="Configuration" xml:space="preserve">
     <value>Configuration</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
   </data>
   <data name="AppUpdates" xml:space="preserve">
     <value>Apk infos</value>

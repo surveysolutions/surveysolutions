@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId, RosterDisplayMode displayMode,
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[]? fixedRosterTitles, Guid? rosterTitleQuestionId, RosterDisplayMode displayMode,
             bool customRosterTitle)
             : base(questionnaireId, groupId, responsibleId)
         {
@@ -36,10 +36,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public RosterDisplayMode DisplayMode { get; private set; }
         public Guid? RosterSizeQuestionId { get; private set; }
         public RosterSizeSourceType RosterSizeSource { get; private set; }
-        public FixedRosterTitleItem[] FixedRosterTitles { get; private set; }
+        public FixedRosterTitleItem[]? FixedRosterTitles { get; private set; }
         public Guid? RosterTitleQuestionId { get; private set; }
         public bool CustomRosterTitle { get; }
-        public string Description { get; private set; }
+        public string? Description { get; private set; }
 
         public string Condition { get; private set; }
         public bool HideIfDisabled { get; private set; }

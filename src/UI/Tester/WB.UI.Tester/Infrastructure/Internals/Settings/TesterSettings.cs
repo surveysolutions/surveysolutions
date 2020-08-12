@@ -152,6 +152,9 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         public void MarkSyncStart(){}
 
         public void MarkSyncSucceeded(){}
+        public string LastOpenedMapName { get; }
+        public void SetLastOpenedMapName(string mapName) {}
+
         public bool DashboardViewsUpdated => false;
         public void SetDashboardViewsUpdated(bool updated)
         {

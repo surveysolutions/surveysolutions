@@ -108,7 +108,7 @@ namespace WB.Services.Export.Interview
             }
         }
 
-        private void FillAnswerToVariable(Variable variable, InterviewEntity entity, object answer)
+        private void FillAnswerToVariable(Variable variable, InterviewEntity entity, object? answer)
         {
             switch (variable.Type)
             {
@@ -125,14 +125,14 @@ namespace WB.Services.Export.Interview
                     entity.AsDateTime = (DateTime?)answer;
                     break;
                 case VariableType.String:
-                    entity.AsString = (string)answer;
+                    entity.AsString = (string?)answer;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Variable {variable.Type} is not supported by export");
             }
         }
 
-        private void FillAnswerToQuestion(Question question, InterviewEntity entity, object answer)
+        private void FillAnswerToQuestion(Question question, InterviewEntity entity, object? answer)
         {
             if (answer == null) return;
             switch (question.QuestionType)
@@ -228,10 +228,10 @@ namespace WB.Services.Export.Interview
                     }
 
                     var interviewLevel = new InterviewLevel
-                    {
-                        RosterVector = rosterVector,
-                        RosterScope = rosterScope
-                    };
+                    (
+                        vector : rosterVector,
+                        scopeVector: rosterScope
+                    );
 
                     foreach (var entity in entitiesLevelLookup[rosterVector])
                     {

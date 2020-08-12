@@ -101,65 +101,68 @@
 </table>
 <div id="table-content-holder">
     <div class="scroller-container">
-        @if (Model.List.TotalCount == 0)
+        @if (Model.List != null)
         {
-        <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
-        }
-        else
-        {
-        <table id="user-table-content" class="table table-content">
-            <tbody>
-                @foreach (var user in Model.List)
-                {
-                <tr>
-                    <td class="search-value">
-                        <a asp-page="./UserDetails" asp-route-id="@user.Id">
-                            @user.UserName
-                        </a>
-                    </td>
-                    <td class="email">
-                        @{ var emailParts = user.Email.Split(new char[] {'@'}, 2); }
-                        <strong>@emailParts[0]</strong>@("@" + emailParts[1])
-                    </td>
-                    <td class="date">
-                        @user.CreationDate.ConvertToLocalAndFormatDate()
-                    </td>
-                    <td>
-                        @(user.IsApproved ? "Yes" : "No")
-                    </td>
-                    <td>
-                        @(user.IsLockedOut ? "Yes" : "No")
-                    </td>
-                    <td>
-                        @(user.CanImportOnHq ? "Yes" : "No")
-                    </td>
-                    <td>
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                                Action
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                @{
-                                    <li>
-                                        <a asp-page="./EditUser" asp-route-id="@user.Id">
-                                            Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-page="./UserDetails" asp-route-id="@user.Id">
-                                            Details
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+            if (Model.List.TotalCount == 0)
+            {
+                <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+            }
+            else
+            {
+                <table id="user-table-content" class="table table-content">
+                    <tbody>
+                    @foreach (var user in Model.List)
+                    {
+                        <tr>
+                            <td class="search-value">
+                                <a asp-page="./UserDetails" asp-route-id="@user.Id">
+                                    @user.UserName
+                                </a>
+                            </td>
+                            <td class="email">
+                                @{ var emailParts = user.Email.Split(new char[] {'@'}, 2); }
+                                <strong>@emailParts[0]</strong>@("@" + emailParts[1])
+                            </td>
+                            <td class="date">
+                                @user.CreationDate.ConvertToLocalAndFormatDate()
+                            </td>
+                            <td>
+                                @(user.IsApproved ? "Yes" : "No")
+                            </td>
+                            <td>
+                                @(user.IsLockedOut ? "Yes" : "No")
+                            </td>
+                            <td>
+                                @(user.CanImportOnHq ? "Yes" : "No")
+                            </td>
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                        Action
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @{
+                                            <li>
+                                                <a asp-page="./EditUser" asp-route-id="@user.Id">
+                                                    Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a asp-page="./UserDetails" asp-route-id="@user.Id">
+                                                    Details
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
                     }
-            </tbody>
-        </table>
-        @Html.Pager(Model.List.PageIndex + 1, Model.List.TotalPages, x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new { p = x, sb = Model.SortBy, so = Model.SortOrder, f = Model.Filter }), 2)
+                    </tbody>
+                </table>
+                @Html.Pager(Model.List.PageIndex + 1, Model.List.TotalPages, x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new {p = x, sb = Model.SortBy, so = Model.SortOrder, f = Model.Filter}), 2)
+            }
         }
     </div>
 </div>

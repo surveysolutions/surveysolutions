@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -24,21 +23,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         public class SelectOption
         {
-            public string Value { get; set; }
-            public string Text { get; set; }
+            public string? Value { get; set; }
+            public string? Text { get; set; }
         }
 
         private readonly IDesignerQuestionnaireStorage questionnaireDocumentReader;
        
         private readonly IExpressionProcessor expressionProcessor;
 
-        private SelectOption[] AllQuestionScopeOptions => new []
+        private SelectOption[] GetQuestionScopeOptions(QuestionnaireDocument document)
         {
-            new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
-            new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
-            new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
-            new SelectOption {Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying}
-        };
+            if (document.IsCoverPageSupported)
+                return new[]
+                {
+                    new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
+                    new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
+                    new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
+                };
+
+            return new[]
+            {
+                new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
+                new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
+                new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
+                new SelectOption {Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying}
+            };
+        } 
 
         private static readonly HashSet<QuestionType> QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new HashSet<QuestionType>
         { QuestionType.Text, QuestionType.Numeric, QuestionType.DateTime };
@@ -98,65 +108,73 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         };
 
-        private SelectOption[] QuestionTypeOptions => new []
+        private SelectOption[] GetQuestionTypeOptions(QuestionnaireDocument document, IQuestion question)
         {
-            new SelectOption
+            var isQuestionOnCover = document.IsCoverPage(question.GetParent()!.PublicKey);
+            
+            List<SelectOption> list = new List<SelectOption>();
+            list.Add(new SelectOption
             {
                 Value = "SingleOption",
                 Text = QuestionnaireEditor.QuestionTypeSingleSelect
-            },
-            new SelectOption
-            {
-                Value = "MultyOption",
-                Text = QuestionnaireEditor.QuestionTypeMultiSelect
-            },
-            new SelectOption
+            });
+            if (!isQuestionOnCover)
+                list.Add(new SelectOption
+                {
+                    Value = "MultyOption",
+                    Text = QuestionnaireEditor.QuestionTypeMultiSelect
+                });
+            list.Add(new SelectOption
             {
                 Value = "Numeric",
                 Text = QuestionnaireEditor.QuestionTypeNumeric
-            },
-            new SelectOption
+            });
+            list.Add(new SelectOption
             {
                 Value = "DateTime",
                 Text = QuestionnaireEditor.QuestionTypeDate
-            },
-            new SelectOption
+            });
+            list.Add(new SelectOption
             {
                 Value = "Text",
                 Text = QuestionnaireEditor.QuestionTypeText
-            },
-            new SelectOption
+            });
+            list.Add(new SelectOption
             {
                 Value = "GpsCoordinates",
                 Text = QuestionnaireEditor.QuestionTypeGPS
+            });
+            if (!isQuestionOnCover)
+            {
+                list.Add(new SelectOption
+                {
+                    Value = "TextList",
+                    Text = QuestionnaireEditor.QuestionTypeList
+                });
+                list.Add(new SelectOption
+                {
+                    Value = "QRBarcode",
+                    Text = QuestionnaireEditor.QuestionTypeBarcode
+                });
+                list.Add(new SelectOption
+                {
+                    Value = "Multimedia",
+                    Text = QuestionnaireEditor.QuestionTypePicture
+                });
+                list.Add(new SelectOption
+                {
+                    Value = "Audio",
+                    Text = QuestionnaireEditor.QuestionTypeAudio
+                });
+                list.Add(new SelectOption
+                {
+                    Value = "Area",
+                    Text = QuestionnaireEditor.QuestionTypeGeography
+                });
             }
-            ,
-            new SelectOption
-            {
-                Value = "TextList",
-                Text = QuestionnaireEditor.QuestionTypeList
-            },
-            new SelectOption
-            {
-                Value = "QRBarcode",
-                Text = QuestionnaireEditor.QuestionTypeBarcode
-            },
-            new SelectOption
-            {
-                Value = "Multimedia",
-                Text = QuestionnaireEditor.QuestionTypePicture
-            },
-            new SelectOption
-            {
-                Value = "Audio",
-                Text = QuestionnaireEditor.QuestionTypeAudio
-            },
-            new SelectOption
-            {
-                Value = "Area",
-                Text = QuestionnaireEditor.QuestionTypeGeography
-            }
-        };
+
+            return list.ToArray();
+        }
 
         private readonly string rosterType = "roster";
 
@@ -181,6 +199,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Guid GetSectionIdForItem(QuestionnaireRevision questionnaireId, Guid? entityid)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
+            if(document == null)
+                throw new InvalidOperationException($"Questionnaire was not found ({questionnaireId}).");
             document.ConnectChildrenWithParent();
             var firstSectionId = document.Children.First().PublicKey;
             if (entityid == null)
@@ -191,29 +211,54 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return firstSectionId;
 
             List<IGroup> parents = new List<IGroup>();
-            var parent = (IGroup)entity.GetParent();
+            var parent = entity.GetParent() as IGroup;
             while (parent != null && !(parent is QuestionnaireDocument))
             {
                 parents.Add(parent);
-                parent = (IGroup)parent.GetParent();
+                parent = parent.GetParent() as IGroup;
             }
             var sectionId = parents.Select(x => x.PublicKey).LastOrDefault();
 
             return sectionId == Guid.Empty ? entity.PublicKey : sectionId;
         }
 
-        public NewEditGroupView GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId)
+        public NewEditGroupView? GetGroupEditView(QuestionnaireRevision questionnaireId, Guid groupId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
-            var group = document?.Find<IGroup>(groupId);
-            if (@group == null)
+            if (document == null)
                 return null;
+
+            var group = document.Find<IGroup>(groupId);
+            if (@group == null)
+            {
+                if (document.IsCoverPage(groupId) && !document.IsCoverPageSupported)
+                {
+                    return new NewEditGroupView
+                    (
+                        group: new GroupDetailsView
+                        { 
+                            Id = document.CoverPageSectionId,
+                            Title = QuestionnaireEditor.CoverPageSection,
+                            EnablementCondition = null,
+                            HideIfDisabled = false,
+                            VariableName = null,
+                            DisplayMode = RosterDisplayMode.SubSection
+                        },
+                        breadcrumbs: new[] { new Breadcrumb()
+                        {
+                            Id = document.CoverPageSectionId.FormatGuid(),
+                            Title = QuestionnaireEditor.CoverPageSection
+                        }}
+                    );
+                }
+                return null;
+            }
 
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             var result = new NewEditGroupView
-            {
-                Group = new GroupDetailsView
+            (
+                group : new GroupDetailsView
                 {
                     Id = group.PublicKey,
                     Title = group.Title,
@@ -222,13 +267,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     VariableName = group.VariableName,
                     DisplayMode = group.DisplayMode
                 },
-                Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
-            };
+                breadcrumbs : this.GetBreadcrumbs(questionnaire, group)
+            );
             return result;
         }
 
 
-        public NewEditRosterView GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId)
+        public NewEditRosterView? GetRosterEditView(QuestionnaireRevision questionnaireId, Guid rosterId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
@@ -236,6 +281,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (roster == null)
                 return null;
 
+            if (document == null)
+                return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             RosterType rosterType = this.getRosterType(questionnaire: questionnaire,
@@ -243,7 +290,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var rosterScope = questionnaire.GetRosterScope(roster);
 
-            var result = new NewEditRosterView
+            var result = new NewEditRosterView(
+                displayMode: roster.DisplayMode,
+                displayModes : Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray())
             {
                 ItemId = roster.PublicKey.FormatGuid(),
                 Title = roster.Title,
@@ -252,7 +301,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 VariableName = roster.VariableName,
                 DisplayMode = roster.DisplayMode,
                 CustomRosterTitle = roster.CustomRosterTitle,
-                DisplayModes = Enum.GetValues(typeof(RosterDisplayMode)).Cast<RosterDisplayMode>().ToArray(),
+                
 
                 Type = rosterType,
                 RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId.FormatGuid() : null,
@@ -272,7 +321,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        public NewEditQuestionView GetQuestionEditView(QuestionnaireRevision questionnaireId, Guid questionId)
+        public NewEditQuestionView? GetQuestionEditView(QuestionnaireRevision questionnaireId, Guid questionId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
@@ -280,49 +329,55 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (question == null)
                 return null;
 
+            if (document == null)
+                return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
-            NewEditQuestionView result = MapQuestionFields(question);
-            result.Options = result.Options ?? new CategoricalOption[0];
-            result.OptionsCount = result.Options.Length;
-            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
-            result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
-            result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
-            result.QuestionTypeOptions = QuestionTypeOptions;
-            result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-            result.GeometryTypeOptions = GeometryTypeOptions;
+            NewEditQuestionView? result = MapQuestionFields(question);
+            if (result != null)
+            {
+                result.Options ??= new CategoricalOption[0];
+                result.OptionsCount = result.Options.Length;
+                result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
+                result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
+                result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
+                result.QuestionTypeOptions = GetQuestionTypeOptions(document, question);
+                result.AllQuestionScopeOptions = GetQuestionScopeOptions(document);
+                result.GeometryTypeOptions = GeometryTypeOptions;
+                result.ChapterId = questionnaire.GetParentGroupsIds(question).LastOrDefault();
 
-            this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
+                this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
+            }
 
             return result;
         }
 
-        public NewEditStaticTextView GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId)
+        public NewEditStaticTextView? GetStaticTextEditView(QuestionnaireRevision questionnaireId, Guid staticTextId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
-
             var staticText = document?.Find<IStaticText>(staticTextId);
             if (staticText == null)
                 return null;
 
+            if (document == null)
+                return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             var result = new NewEditStaticTextView
-            {
-                Id = staticText.PublicKey,
-                Text = staticText.Text,
-                AttachmentName = staticText.AttachmentName,
-                EnablementCondition = staticText.ConditionExpression,
-                HideIfDisabled = staticText.HideIfDisabled,
-            };
-
-            result.ValidationConditions.AddRange(staticText.ValidationConditions);
-            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticText);
+            (
+                id : staticText.PublicKey,
+                text : staticText.Text,
+                attachmentName : staticText.AttachmentName,
+                enablementCondition : staticText.ConditionExpression,
+                hideIfDisabled : staticText.HideIfDisabled,
+                breadcrumbs: this.GetBreadcrumbs(questionnaire, staticText),
+                validationCondition: staticText.ValidationConditions.ToList()
+            );
 
             return result;
         }
 
-        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision questionnaireId, Guid rosterId, Guid rosterSizeQuestionId)
+        public List<DropdownEntityView>? GetQuestionsEligibleForNumericRosterTitle(QuestionnaireRevision questionnaireId, Guid rosterId, Guid rosterSizeQuestionId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
             if (document == null)
@@ -331,6 +386,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
             var roster = questionnaire.GetRoster(rosterId);
+            if (roster == null)
+                return null;
             RosterScope rosterScope = questionnaire.GetRosterScope(roster);
 
             IEnumerable<IQuestion> filteredQuestions = document.Find<IQuestion>().Where(x => x.QuestionType != QuestionType.Multimedia);
@@ -356,7 +413,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return this.PrepareGroupedQuestionsListForDropdown(questionnaire, filteredQuestions);
         }
 
-        public VariableView GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId)
+        public VariableView? GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId)
         {
             var document = this.questionnaireDocumentReader.Get(questionnaireId);
 
@@ -364,16 +421,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (variable == null)
                 return null;
 
+            if (document == null)
+                return null;
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(document);
 
-            VariableView result = new VariableView
-            {
-                Id = variable.PublicKey,
-                ItemId = variable.PublicKey.FormatGuid(),
-                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label,variable.DoNotExport),
-                TypeOptions = VariableTypeOptions,
-                Breadcrumbs = this.GetBreadcrumbs(questionnaire, variable),
-            };
+            VariableView result = new VariableView(
+                variable.PublicKey,
+                variable.PublicKey.FormatGuid(),
+                new VariableData(variable.Type, variable.Name, variable.Expression, variable.Label,variable.DoNotExport),
+                this.GetBreadcrumbs(questionnaire, variable),
+                VariableTypeOptions);
 
             return result;
         }
@@ -382,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             var questionnaireDocument = this.questionnaireDocumentReader.Get(questionnaireId);
             if (questionnaireDocument == null)
-                return null;
+                return new List<QuestionnaireItemLink>();
 
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(questionnaireDocument);
 
@@ -458,37 +515,38 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             foreach (var validationExpression in model.ValidationConditions)
             {
                 validationExpression.Expression = expressionReplacer.ReplaceGuidsWithStataCaptions(
-                    validationExpression.Expression, questionnaireKey.QuestionnaireId);
+                    validationExpression.Expression, questionnaireKey.QuestionnaireId) ?? String.Empty;
             }
         }
 
-        private static NewEditQuestionView MapQuestionFields(IQuestion question)
+        private static NewEditQuestionView? MapQuestionFields(IQuestion question)
         {
-            var questionView = new NewEditQuestionView()
-            {
-                Title = question.QuestionText,
-                Type = question.QuestionType,
-                VariableLabel = question.VariableLabel,
-                Id = question.PublicKey,
-                ParentGroupId = question.GetParent().PublicKey,
-                Instructions = question.Instructions,
-                EnablementCondition = question.ConditionExpression,
-                IsPreFilled = question.Featured,
-                IsTimestamp = question.IsTimestamp,
-                DefaultDate = question.Properties?.DefaultDate,
-                IsFilteredCombobox = question.IsFilteredCombobox,
-                QuestionScope = question.QuestionScope,
-                HideIfDisabled = question.HideIfDisabled,
-                CascadeFromQuestionId = question.CascadeFromQuestionId?.FormatGuid(),
-                LinkedFilterExpression = question.LinkedFilterExpression,
-                HideInstructions = question.Properties?.HideInstructions ?? false,
-                UseFormatting = question.Properties?.UseFormatting ?? false,
-                OptionsFilterExpression = question.Properties?.OptionsFilterExpression,
-                VariableName = question.StataExportCaption,
-                LinkedToEntityId = (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
-                QuestionTypeOptions = question.Answers.Select(a => new SelectOption() { Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
-                GeometryType = question.Properties?.GeometryType ?? GeometryType.Polygon
-            };
+            var questionView = new NewEditQuestionView
+            (
+                title : question.QuestionText,
+                type : question.QuestionType,
+                variableLabel : question.VariableLabel,
+                id : question.PublicKey,
+                parentGroupId : (question.GetParent() ?? throw new InvalidOperationException("Parent was not found.")).PublicKey,
+                instructions : question.Instructions,
+                enablementCondition : question.ConditionExpression,
+                isPreFilled : question.Featured,
+                isTimestamp : question.IsTimestamp,
+                defaultDate : question.Properties?.DefaultDate,
+                isFilteredCombobox : question.IsFilteredCombobox,
+                questionScope : question.QuestionScope,
+                hideIfDisabled : question.HideIfDisabled,
+                cascadeFromQuestionId : question.CascadeFromQuestionId?.FormatGuid(),
+                linkedFilterExpression : question.LinkedFilterExpression,
+                hideInstructions : question.Properties?.HideInstructions ?? false,
+                useFormatting : question.Properties?.UseFormatting ?? false,
+                optionsFilterExpression : question.Properties?.OptionsFilterExpression,
+                variableName : question.StataExportCaption,
+                linkedToEntityId : (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
+                questionTypeOptions : question.Answers
+                    .Select(a => new SelectOption() {Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
+                geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon
+            );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 
             questionView.RosterScopeIds = new Guid[0];
@@ -498,13 +556,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 case QuestionType.MultyOption:
                     var multyOptionsQuestion = (IMultyOptionsQuestion)question;
+                    if(multyOptionsQuestion == null)
+                        throw new InvalidOperationException("Question has incorrect type.");
                     questionView.YesNoView = multyOptionsQuestion.YesNoView;
                     questionView.AreAnswersOrdered = multyOptionsQuestion.AreAnswersOrdered;
                     questionView.MaxAllowedAnswers = multyOptionsQuestion.MaxAllowedAnswers;
                     questionView.LinkedToEntityId = multyOptionsQuestion.LinkedToQuestionId?.FormatGuid() ?? multyOptionsQuestion.LinkedToRosterId?.FormatGuid();
                     questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
                     questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
-                    questionView.OptionsFilterExpression = multyOptionsQuestion.Properties.OptionsFilterExpression;
+                    questionView.OptionsFilterExpression = multyOptionsQuestion.Properties?.OptionsFilterExpression;
                     questionView.CategoriesId = multyOptionsQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.TextList:
@@ -526,7 +586,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                     questionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId?.FormatGuid();
                     questionView.Options = CreateCategoricalOptions(singleoptionQuestion.Answers);
-                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
+                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties?.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
                     questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
                     questionView.CategoriesId = singleoptionQuestion.CategoriesId.FormatGuid();
@@ -538,7 +598,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.DateTime:
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
-                    questionView.DefaultDate = dateTimeQuestion.Properties.DefaultDate;
+                    questionView.DefaultDate = dateTimeQuestion.Properties?.DefaultDate;
                     return questionView;
                 case QuestionType.Multimedia:
                     var multimediaQuestion = (MultimediaQuestion) question;
@@ -555,9 +615,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
-            if (answers == null)
-                return new CategoricalOption[0];
-            
             return answers?.Select(x =>
             {
                 var option = new CategoricalOption();
@@ -568,7 +625,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 }
                 option.ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue);
                 return option;
-            }).ToArray();
+            }).ToArray()
+                   ?? new CategoricalOption[0];
         }
 
 
@@ -606,6 +664,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 if (document.IsRoster(entity))
                 {
                     var roster = entity as Group;
+                    if(roster == null) continue;
+                    
                     var rosterTitlePlaceholder = this.CreateRosterDropdownView(roster, document);
                     result.Add(rosterTitlePlaceholder);
                 }
@@ -770,11 +830,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private Breadcrumb[] GetBreadcrumbs(ReadOnlyQuestionnaireDocument document, IComposite entity)
         {
             List<IGroup> parents = new List<IGroup>();
-            var parent = (IGroup)entity.GetParent();
+            var parent = entity.GetParent() as IGroup;
             while (parent != null && parent != document.Questionnaire)
             {
                 parents.Add(parent);
-                parent = (IGroup)parent.GetParent();
+                parent = parent.GetParent() as IGroup;
             }
             parents.Reverse();
 

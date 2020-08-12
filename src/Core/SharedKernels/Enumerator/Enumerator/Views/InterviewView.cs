@@ -2,6 +2,7 @@ using System;
 using SQLite;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
@@ -41,5 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string InterviewKey { get; set; }
 
         public DateTime? ReceivedByInterviewerAtUtc { get; set; }
+        public string LastVisitedSectionId { get; set; }
+        public ScreenType? LastVisitedScreenType { get; set; }
     }
 }

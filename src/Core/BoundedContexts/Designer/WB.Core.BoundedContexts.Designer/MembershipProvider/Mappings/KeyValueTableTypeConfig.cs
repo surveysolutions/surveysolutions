@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
         {
             builder.ToTable(tableName, "plainstore");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
-            builder.Property(x => x.Value).HasColumnName("value").HasColumnType("json");
+            builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever().IsRequired(true);
+            builder.Property(x => x.Value).HasColumnName("value").HasColumnType("json").IsRequired(false);
         }
     }
 }

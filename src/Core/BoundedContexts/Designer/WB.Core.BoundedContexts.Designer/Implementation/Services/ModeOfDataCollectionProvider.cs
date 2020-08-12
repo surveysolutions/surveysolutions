@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -7,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     public class ModeOfDataCollectionItem
     {
         public ModeOfDataCollection Code { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } = String.Empty;
     }
 
     public static class ModeOfDataCollectionProvider

@@ -54,6 +54,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                 new List<Type>
                 {
                     typeof(InterviewSummaryMap),
+                    typeof(InterviewGpsMap),
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
                     typeof(InterviewStatisticsReportRowMap),
@@ -76,7 +77,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
         {
             this.UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
-            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            this.interviewSummaryRepository = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
         }
 
         [TearDown]
@@ -96,7 +97,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
             interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
             interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
 
-            var repository = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            var repository = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
             repository.Store(interviewSummary, interviewSummary.SummaryId);
             UnitOfWork.Session.Flush();
         }

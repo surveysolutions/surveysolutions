@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
                 var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
-                if (questionnaire.GetPrefilledQuestions().Count == 0)
+                if (questionnaire.GetPrefilledEntities().Count == 0)
                 {
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
                         .ConfigureAwait(false);

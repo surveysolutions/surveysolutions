@@ -16,18 +16,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             int incrementer = 0;
             oldOptions = new Option[210].Select(
                 answer =>
-                    new Option()
-                    {
-                        Value = incrementer.ToString(),
-                        Title = (incrementer++).ToString()
-                    }).ToArray();
+                    new Option(
+                        value : incrementer.ToString(),
+                        title : (incrementer++).ToString()
+                    )).ToArray();
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
                 parentQuestionId,
                 chapterId,
-                options : new Option[] { new Option { Title = "option1", Value = "1" }, new Option { Title = "option2", Value = "2" } },
+                options : new Option[] { new Option (title : "option1", value : "1" ), new Option (title : "option2", value : "2" ) },
                 title : "Parent question",
                 variableName : "cascade_parent",
                 responsibleId : responsibleId,

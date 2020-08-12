@@ -1,5 +1,6 @@
 using System;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {

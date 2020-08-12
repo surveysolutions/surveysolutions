@@ -140,13 +140,13 @@
 &lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt; can be reassigned.</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>No responsible chosen for some interview(s). Please choose a responsible interviewer.</value>
+    <value>Please choose an Interviewer.</value>
   </data>
   <data name="ChooseResponsibleSupervisor" xml:space="preserve">
-    <value>No responsible chosen for some interview(s). Please choose a responsible supervisor.</value>
+    <value>Please choose a Supervisor.</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
-    <value>No responsible chosen for some interview(s). Please choose a responsible supervisor or interviewer.</value>
+    <value>Please choose a Supervisor or Interviewer.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Do you want to continue?</value>
@@ -166,12 +166,18 @@
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Reject to original responsible</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Reject and choose new responsible</value>
+  </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;
 &lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>Assignment</value>
+    <value>Assignment ID</value>
   </data>
   <data name="ClientKeyTitle" xml:space="preserve">
     <value>Key that was generated on device, but was changed due to the collision with existing interview on server</value>
@@ -216,7 +222,13 @@
     <value>Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1.</value>
   </data>
   <data name="Errors" xml:space="preserve">
-    <value>Errors</value>
+    <value>Errors count</value>
+  </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
+  </data>
+    <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Not answered</value>
   </data>
   <data name="ChooseQuestionsTitle" xml:space="preserve">
     <value>Choose identifying questions to use in the filter</value>

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer
 
         public static Guid GetId(this ClaimsPrincipal identity)
         {
-            var userId = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = identity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return Guid.Parse(userId);
         }
 

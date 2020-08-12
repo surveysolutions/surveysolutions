@@ -124,6 +124,9 @@
     <value>You have already imported another questionnaire with questionnaire variable '{0}' from Designer. If you still want to import this particular one, please give it a different questionnaire variable in Designer.</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>Only the responsible supervisor for this assignment can answer its supervisor's questions</value>
+    <value>Only the supervisor responsible for this assignment can answer the supervisor questions</value>
+  </data>
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>An assignment for web interview must have an interviewer as responsible</value>
   </data>
 </root>

@@ -38,17 +38,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
            CodeGenerationSettings codeGenerationSettings)
         {
             var expressionState = new QuestionnaireExpressionStateModel
-            {
-                AdditionalInterfaces = codeGenerationSettings.AdditionInterfaces,
-                Namespaces = codeGenerationSettings.Namespaces,
-                Id = questionnaire.PublicKey,
-                ClassName = $"{CodeGenerator.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
-                QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel(),
-                LookupTables = BuildLookupTableModels(questionnaire).ToList(),
-                StructuralDependencies = BuildStructuralDependencies(questionnaire),
-                ConditionalDependencies = BuildConditionalDependencies(questionnaire),
-                RosterDependencies = BuildRosterDependencies(questionnaire),
-            };
+            (
+                additionalInterfaces : codeGenerationSettings.AdditionInterfaces,
+                namespaces : codeGenerationSettings.Namespaces,
+                id : questionnaire.PublicKey,
+                className : $"{CodeGenerator.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
+                questionnaireLevelModel : new QuestionnaireLevelTemplateModel(),
+                lookupTables : BuildLookupTableModels(questionnaire).ToList(),
+                structuralDependencies : BuildStructuralDependencies(questionnaire),
+                conditionalDependencies : BuildConditionalDependencies(questionnaire),
+                rosterDependencies : BuildRosterDependencies(questionnaire)
+            );
 
             this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
 
@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<QuestionTemplateModel> questions,
             List<StaticTextTemplateModel> staticTexts,
             List<GroupTemplateModel> groups,
-            List<RosterTemplateModel> rosters,
+            List<RosterTemplateModel>? rosters,
             List<LinkedQuestionVerifierModel> linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter,
             List<Guid> conditionsPlayOrder)
         {
@@ -421,9 +421,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static IEnumerable<RosterScopeTemplateModel> GetParentRosters(RosterScopeTemplateModel rosterModel, Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope)
         {
-            var parentScopeTypeName = rosterModel.ParentTypeName ?? "";
+            string? parentScopeTypeName = rosterModel?.ParentTypeName;
 
-            while (rostersGroupedByScope.ContainsKey(parentScopeTypeName))
+            while (parentScopeTypeName != null && rostersGroupedByScope.ContainsKey(parentScopeTypeName))
             {
                 RosterScopeTemplateModel parentScope = rostersGroupedByScope[parentScopeTypeName];
 
@@ -438,15 +438,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var table in questionnaire.LookupTables)
             {
                 var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+                if (lookupTableData == null)
+                    throw new InvalidOperationException("Lookup table is empty.");
+
                 var tableName = table.Value.TableName;
                 var tableTemplateModel = new LookupTableTemplateModel
-                {
-                    TableName = tableName,
-                    TypeName = CodeGenerator.LookupPrefix + tableName.ToPascalCase(),
-                    TableNameField = CodeGenerator.PrivateFieldsPrefix + tableName.ToCamelCase(),
-                    Rows = lookupTableData.Rows,
-                    VariableNames = lookupTableData.VariableNames
-                };
+                (
+                    tableName : tableName,
+                    typeName : CodeGenerator.LookupPrefix + tableName.ToPascalCase(),
+                    tableNameField : CodeGenerator.PrivateFieldsPrefix + tableName.ToCamelCase(),
+                    rows : lookupTableData.Rows,
+                    variableNames : lookupTableData.VariableNames
+                );
                 yield return tableTemplateModel;
             }
         }
@@ -581,13 +584,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     {
                         roster.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter
                             .Add(new LinkedQuestionVerifierModel
-                            {
-                                Id = question.Id,
-                                MemberName = question.MemberName,
-                                TypeName = question.TypeName,
-                                StateName = question.StateName,
-                                RosterScopeName = expressionState.AllQuestions.Single(q => q.Id == linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter[question.Id]).RosterScopeName
-                            });
+                            (
+                                id : question.Id,
+                                memberName : question.MemberName,
+                                typeName : question.TypeName,
+                                stateName : question.StateName,
+                                rosterScopeName : expressionState.AllQuestions.Single(q => q.Id == linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter[question.Id]).RosterScopeName
+                            ));
                     }
                 }
             }
@@ -598,13 +601,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     expressionState.QuestionnaireLevelModel.LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter
                         .Add(new LinkedQuestionVerifierModel
-                        {
-                            Id = question.Id,
-                            MemberName = question.MemberName,
-                            TypeName = question.TypeName,
-                            StateName = question.StateName,
-                            RosterScopeName = expressionState.AllQuestions.Single(q => q.Id == linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter[question.Id]).RosterScopeName
-                        });
+                        (
+                            id : question.Id,
+                            memberName : question.MemberName,
+                            typeName : question.TypeName,
+                            stateName : question.StateName,
+                            rosterScopeName : expressionState.AllQuestions.Single(q => q.Id == linkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter[question.Id]).RosterScopeName
+                        ));
                 }
             }
         }
@@ -613,14 +616,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             QuestionnaireDocument questionnaireDoc,
             Guid? rosterSizeQuestionId)
         {
-            var isRosterTriggeredByQuestion = rosterSizeQuestionId.HasValue;
-            if (isRosterTriggeredByQuestion)
-            {
-                var rosterSizeQuestion = questionnaireDoc.Find<IQuestion>(rosterSizeQuestionId.Value);
-                return !string.IsNullOrWhiteSpace(rosterSizeQuestion.Properties.OptionsFilterExpression);
-            }
-
-            return false;
+            if (!rosterSizeQuestionId.HasValue) return false;
+            var rosterSizeQuestion = questionnaireDoc.Find<IQuestion>(rosterSizeQuestionId.Value);
+            return !string.IsNullOrWhiteSpace(rosterSizeQuestion?.Properties?.OptionsFilterExpression);
         }
 
         private List<LinkedQuestionFilterExpressionModel> CreateLinkedQuestionFilterExpressionModels(QuestionnaireDocument questionnaireDoc)
@@ -629,6 +627,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var linkedQuestionsFilterModels = new List<LinkedQuestionFilterExpressionModel>();
             foreach (var linkedQuestion in linkedQuestions)
             {
+                if(!linkedQuestion.LinkedToQuestionId.HasValue)
+                    continue;
+
                 var linkedQuestionSource = questionnaireDoc.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
                 if (linkedQuestionSource == null)
                     continue;
@@ -656,6 +657,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var linkedToRosterQuestions = questionnaireDoc.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).ToList();
             foreach (var linkedToRosterQuestion in linkedToRosterQuestions)
             {
+                if(!linkedToRosterQuestion.LinkedToRosterId.HasValue)
+                    continue;
                 var sourceRoster = questionnaireDoc.Find<IGroup>(linkedToRosterQuestion.LinkedToRosterId.Value);
                 if (sourceRoster == null)
                     continue;
@@ -670,9 +673,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 string finalFilterExpression;
                 if (sourceRoster.RosterTitleQuestionId != null)
                 {
-
                     var titleQuestion = questionnaireDoc.Find<IQuestion>(sourceRoster.RosterTitleQuestionId.Value);
-                    
+                    if(titleQuestion == null)
+                        throw new InvalidOperationException("Entity was nit found.");
+
                     finalFilterExpression = $"{rosterState}.State != State.Disabled && IsAnswered({titleQuestion.StataExportCaption}) && ({filterExpression})";
                 }
                 else
@@ -717,14 +721,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? question.StataExportCaption
                 : "__" + question.PublicKey.FormatGuid();
 
-            var questionModel = new QuestionTemplateModel
-            {
-                Id = question.PublicKey,
-                VariableName = varName,
-                TypeName = GenerateQuestionTypeName(question, questionnaire),
-                RosterScopeName = rosterScopeName,
-                ParentScopeTypeName = parentScopeTypeName
-            };
+            var questionModel = new QuestionTemplateModel(
+                rosterScopeName : rosterScopeName,
+                id : question.PublicKey,
+                variableName : varName,
+                typeName : GenerateQuestionTypeName(question, questionnaire),
+                parentScopeTypeName : parentScopeTypeName
+            );
 
             if (question.CascadeFromQuestionId.HasValue)
             {
@@ -744,7 +747,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         index))
                 .ToList();
 
-            questionModel.OptionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
+            questionModel.OptionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties?.OptionsFilterExpression ?? "", questionnaire.Macros.Values);
 
             if (question.LinkedToQuestionId != null && this.IsLinkedToListQuestion(questionnaire, question))
             {
@@ -755,8 +758,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             if (IsMultiQuestion(question))
             {
                 var multyOptionsQuestion = question as IMultyOptionsQuestion;
-                questionModel.IsMultiOptionYesNoQuestion = multyOptionsQuestion.YesNoView;
-                if (questionModel.IsMultiOptionYesNoQuestion)
+                questionModel.IsMultiOptionYesNoQuestion = multyOptionsQuestion?.YesNoView ?? false;
+                if (multyOptionsQuestion != null && questionModel.IsMultiOptionYesNoQuestion)
                 {
                     questionModel.AllMultioptionYesNoCodes = multyOptionsQuestion.Answers.Select(x => x.AnswerValue).ToList();
                 }
@@ -776,7 +779,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     return "long?";
 
                 case QuestionType.Numeric:
-                    return (question as NumericQuestion).IsInteger ? "long?" : "double?";
+                    return (question as NumericQuestion)?.IsInteger == true ? "long?" : "double?";
 
                 case QuestionType.QRBarcode:
                     return "string";
@@ -845,13 +848,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             RosterScopeBaseModel currentScope,
             List<LinkedQuestionFilterExpressionModel> linkedQuestions)
         {
-            Guid currentScopeId = childAsIGroup.RosterSizeSource == RosterSizeSourceType.FixedTitles
-                ? childAsIGroup.PublicKey
-                : childAsIGroup.RosterSizeQuestionId.Value;
-
             List<Guid> currentRosterScope = currentScope.RosterScope.ToList();
-            currentRosterScope.Add(currentScopeId);
 
+            if(childAsIGroup.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                currentRosterScope.Add(childAsIGroup.PublicKey);
+            else
+            {
+                if(childAsIGroup.RosterSizeQuestionId == null)
+                    throw new InvalidOperationException("Value is empty.");
+                
+                currentRosterScope.Add(childAsIGroup.RosterSizeQuestionId.Value);
+            }
+            
             string varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName)
                 ? childAsIGroup.VariableName
                 : "__" + childAsIGroup.PublicKey.FormatGuid();
@@ -882,14 +890,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             QuestionnaireDocument questionnaireDoc,
             IGroup childAsIGroup,
             RosterScopeBaseModel currentScope)
-            => new GroupTemplateModel
-            {
-                Id = childAsIGroup.PublicKey,
-                Condition = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
-                VariableName = childAsIGroup.PublicKey.FormatGuid(),
-                RosterScopeName = currentScope.RosterScopeName,
-                ParentScopeTypeName = currentScope.TypeName,
-            };
+            => new GroupTemplateModel(
+                id : childAsIGroup.PublicKey,
+                condition : this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
+                variableName : childAsIGroup.PublicKey.FormatGuid(),
+                rosterScopeName : currentScope.RosterScopeName,
+                parentScopeTypeName : currentScope.TypeName
+            );
 
         private VariableTemplateModel CreateVariableTemplateModel(IVariable variable, RosterScopeBaseModel currentScope,
             QuestionnaireDocument questionnaire)
@@ -932,11 +939,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private void FillConditionForCascadingQuestion(QuestionTemplateModel questionModel, QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
         {
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
-            var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
+            if(childQuestion == null)
+                return;
 
             var conditionForChildCascadingQuestion = this.macrosSubstitutionService.InlineMacros(childQuestion.ConditionExpression, questionnaireDocument.Macros.Values);
 
-            if (parentQuestion == null)
+            if (!childQuestion.CascadeFromQuestionId.HasValue)
+            {
+                questionModel.Condition = conditionForChildCascadingQuestion;
+                return;
+            }
+
+            var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
+            if ( parentQuestion  == null)
             {
                 questionModel.Condition = conditionForChildCascadingQuestion;
                 return;
@@ -974,7 +989,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 return;
             }
 
-            var lazyhashVariable = new LazyHashSetGeneratedVariable(childQuestion.PublicKey.FormatGuid() + parentQuestion.StataExportCaption, "int", parentOptionsThatHaveNoChildOptions);
+            var lazyhashVariable = new LazyHashSetGeneratedVariable(childQuestion.PublicKey.FormatGuid() + parentQuestion.StataExportCaption,
+                "int", parentOptionsThatHaveNoChildOptions);
 
             questionModel.GeneratedVariables.Add(lazyhashVariable);
 
@@ -987,7 +1003,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             return questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
                 .Where(x => x.RosterSizeQuestionId.HasValue)
-                .GroupBy(x => x.RosterSizeQuestionId.Value)
+                .GroupBy(x => x.RosterSizeQuestionId!.Value)
                 .ToDictionary(x => x.Key, x => x.Select(r => r.PublicKey).ToList());
         }
         
@@ -1007,7 +1023,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var question = entity as IQuestion;
                 if (question != null)
                 {
-                    this.FillDependencies(dependencies, question.PublicKey, question.Properties.OptionsFilterExpression, allMacroses, variableNamesByEntitiyIds);
+                    this.FillDependencies(dependencies, question.PublicKey, question.Properties?.OptionsFilterExpression ?? "", allMacroses, variableNamesByEntitiyIds);
                     if (question.CascadeFromQuestionId != null)
                     {
                         if (dependencies.ContainsKey(entity.PublicKey))

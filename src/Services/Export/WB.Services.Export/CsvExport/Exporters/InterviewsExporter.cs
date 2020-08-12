@@ -296,15 +296,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                     };
                 }
 
-                string[][] questionsForExport = this.GetExportValues(dataByLevel, headerStructureForLevel);
+                string[][] questionAnswersForExport = this.GetExportValues(dataByLevel, headerStructureForLevel);
 
                 dataRecords.Add(new InterviewDataExportRecord(recordId,
                     referenceValues,
                     parentRecordIds,
-                    systemVariableValues)
-                {
-                    Answers = questionsForExport
-                });
+                    systemVariableValues,
+                    questionAnswersForExport));
             }
 
             return dataRecords.ToArray();
@@ -362,7 +360,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     continue;
 
 
-                InterviewTextListAnswer item = null;
+                InterviewTextListAnswer? item = null;
                 var listAnswers = questionToCheck.AsList;
                 if (listAnswers != null)
                 {
@@ -382,7 +380,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var levels = interview.Levels.Values.Where(level => level.RosterScope.Equals(new ValueVector<Guid>())).ToList();
                 return levels.Any()
                     ? levels
-                    : new List<InterviewLevel> { new InterviewLevel { RosterVector = RosterVector.Empty } };
+                    : new List<InterviewLevel> { new InterviewLevel(new ValueVector<Guid>(), RosterVector.Empty)};
             }
             return interview.Levels.Values.Where(level => level.RosterScope.Equals(levelVector)).ToList();
         }
@@ -443,10 +441,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
 
             var interviewExportedData = new InterviewExportedDataRecord
-            {
-                InterviewId = interviewId.Id.FormatGuid(),
-                Data = interviewData,
-            };
+            (
+                interviewId : interviewId.Id.FormatGuid(),
+                data : interviewData
+            );
 
             return interviewExportedData;
         }

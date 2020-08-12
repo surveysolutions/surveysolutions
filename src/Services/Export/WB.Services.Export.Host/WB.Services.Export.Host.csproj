@@ -2,19 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
     <PackageId>WB.Services.Export.Host</PackageId>
     <Product>Survey Solutions Export Service</Product>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
     <Configurations>Debug;Release;DebugEmptyTenant</Configurations>
     <DefineConstants Condition="'$(Configuration)' == 'DebugEmptyTenant'">DEBUG;TRACE;RANDOMSCHEMA</DefineConstants>
     <RootNamespace>WB.Services.Export.Host</RootNamespace>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="logs\**" />
     <Content Remove="logs\**" />
@@ -32,25 +36,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.30" />
-    <PackageReference Include="Humanizer.Core" Version="2.7.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
+    <PackageReference Include="Dapper" Version="2.0.35" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
     <PackageReference Include="Masking.Serilog" Version="1.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
-    <PackageReference Include="Npgsql" Version="4.1.2" />
-    <PackageReference Include="Polly" Version="7.2.0" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="3.4.0" />
-    <PackageReference Include="prometheus-net" Version="3.4.0" />
-    <PackageReference Include="Refit" Version="5.0.23" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-    <PackageReference Include="Serilog.Exceptions" Version="5.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+    <PackageReference Include="Npgsql" Version="4.1.4" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="3.6.0" />
+    <PackageReference Include="prometheus-net" Version="3.6.0" />
+    <PackageReference Include="Refit" Version="5.1.67" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="5.6.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Serilog" Version="2.9.0" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

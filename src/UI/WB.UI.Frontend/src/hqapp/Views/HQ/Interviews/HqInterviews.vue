@@ -126,7 +126,8 @@
             </div>
         </DataTables>
 
-        <ModalFrame ref="assignModal">
+        <ModalFrame ref="assignModal"
+            :title="$t('Common.Assign')">
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-if="getFilteredToAssign().length > 0">
@@ -187,7 +188,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="deleteModal">
+        <ModalFrame ref="deleteModal"
+            :title="$t('Common.Delete')">
             <div class="action-container">
                 <p
                     v-html="$t('Interviews.DeleteConfirmMessageHQ', {count: this.getFilteredToDelete().length, status1: 'Supervisor assigned', status2: 'Interviewer assigned'})"></p>
@@ -206,7 +208,8 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="approveModal">
+        <ModalFrame ref="approveModal"
+            :title="$t('Common.Approve')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -238,7 +241,9 @@
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="rejectModal">
+        <ModalFrame ref="rejectModal"
+            :title="$t('Common.Reject')"
+            id="rejectModel">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -249,19 +254,31 @@
                         v-html="$t('Interviews.RejectConfirmMessage', {count: this.getFilteredToReject().length, status1: 'Completed', status2: 'Rejected by Headquarters'} )"></p>
                 </div>
 
-                <div v-if="config.isSupervisor && isNeedShowAssignInterviewers()">
-                    <p>
-                        <label
-                            class="control-label"
-                            for="newResponsibleId">{{$t('Interviews.ChooseResponsibleInterviewer')}}</label>
-                        <Typeahead
-                            control-id="newResponsibleId"
-                            :placeholder="$t('Common.Responsible')"
-                            :value="newResponsibleId"
-                            :ajax-params="{ }"
-                            @selected="newResponsibleSelected"
-                            :fetch-url="config.api.responsible"></Typeahead>
-                    </p>
+                <div>
+                    <div class="options-group">
+                        <Radio
+                            :label="$t('Interviews.RejectToOriginal')"
+                            :radioGroup="false"
+                            name="rejectToNewResponsible"
+                            :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = false; newResponsibleId = null" />
+                        <Radio
+                            :label="$t('Interviews.RejectToNewResponsible')"
+                            :radioGroup="true"
+                            name="rejectToNewResponsible"
+                            :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = true" />
+                        <p>
+                            <Typeahead
+                                v-if="rejectToNewResponsible == true"
+                                control-id="rejectResponsibleId"
+                                :placeholder="$t('Common.Responsible')"
+                                :value="newResponsibleId"
+                                :ajax-params="{ }"
+                                @selected="newResponsibleSelected"
+                                :fetch-url="config.api.responsible"></Typeahead>
+                        </p>
+                    </div>
                 </div>
 
                 <div>
@@ -277,19 +294,22 @@
             </form>
             <div slot="actions">
                 <button
+                    id="rejectOk"
                     type="button"
                     class="btn btn-primary"
                     role="confirm"
                     @click="rejectInterviews"
-                    :disabled="getFilteredToReject().length==0">{{ $t("Common.Reject") }}</button>
+                    :disabled="getFilteredToReject().length==0 || (rejectToNewResponsible == true && newResponsibleId == null)">{{ $t("Common.Reject") }}</button>
                 <button
+                    id="rejectCancel"
                     type="button"
                     class="btn btn-link"
                     data-dismiss="modal"
                     role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
-        <ModalFrame ref="unapproveModal">
+        <ModalFrame ref="unapproveModal"
+            :title="$t('Common.Unapprove')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p
@@ -317,7 +337,7 @@
                     <a
                         class="interview-id title-row"
                         @click="viewInterview"
-                        href="#">{{interviewKey}}</a> by
+                        href="javascript:void(0)">{{interviewKey}}</a> by
                     <span :class="responsibleClass"
                         v-html="responsibleLink"></span>
                 </p>
@@ -372,6 +392,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
     nodes {
       id
       key
+      clientKey
       status
       questionnaireId
       responsibleId
@@ -380,9 +401,10 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       errorsCount
       assignmentId
       updateDate
-      receivedByInterviewer
+      receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
+      notAnsweredCount
       identifyingQuestions {
         question {
           variable
@@ -441,6 +463,7 @@ export default {
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
             newResponsibleId: null,
+            rejectToNewResponsible: false,
             statusChangeComment: null,
             status: null,
             selectedStatus: null,
@@ -499,8 +522,9 @@ export default {
                     responsivePriority: 2,
                     className: 'interview-id title-row',
                     render(data, type, row) {
-                        var result =
-                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.id + '\'>' + data + '</a>'
+                        const append = data === row.clientKey ? '' : ` <span class="text-muted">(${row.clientKey})</span>`
+                        const result =
+                            `<a href="${self.config.interviewReviewUrl}/${row.id}">${data}${append}</a>`
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -558,6 +582,7 @@ export default {
                 {
                     data: 'errorsCount',
                     name: 'ErrorsCount',
+                    class: 'type-numeric',
                     title: this.$t('Interviews.Errors'),
                     orderable: true,
                     render(data) {
@@ -565,6 +590,19 @@ export default {
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
+                    },
+                    width: '50px',
+                },{
+                    data: 'notAnsweredCount',
+                    name: 'NotAnsweredCount',
+                    class: 'type-numeric',
+                    title: this.$t('Interviews.NotAnsweredCount'),
+                    orderable: true,
+                    render(data) {
+                        return data === null ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
+                    },
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'nonAnswered')
                     },
                     width: '50px',
                 },
@@ -582,11 +620,16 @@ export default {
                     width: '100px',
                 },
                 {
-                    data: 'receivedByInterviewer',
-                    name: 'ReceivedByInterviewer',
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
                     title: this.$t('Common.ReceivedByInterviewer'),
                     render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
@@ -646,6 +689,7 @@ export default {
                     if(search && search != '') {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
+                            { clientKey_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
@@ -743,7 +787,7 @@ export default {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    const identifyingQuestions_some = { question: {variable: cond.variable}}
+                    let identifyingQuestions_some = { question: {variable: cond.variable}}
 
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingQuestions_some[cond.field] = value
@@ -837,7 +881,7 @@ export default {
         },
         CountReceivedByInterviewerItems() {
             return this.getFilteredItems(function(item) {
-                return item.receivedByInterviewer === true
+                return item.receivedByInterviewerAtUtc != null
             }).length
         },
         questionnaireSelected(newValue) {
@@ -883,7 +927,7 @@ export default {
 
             if (!this.isReassignReceivedByInterviewer) {
                 filteredItems = this.arrayFilter(filteredItems, function(item) {
-                    return item.receivedByInterviewer === false
+                    return item.receivedByInterviewerAtUtc === null
                 })
             }
 
@@ -984,13 +1028,60 @@ export default {
             }
 
             if (!self.config.isSupervisor) {
-                var command = this.getCommand(
-                    'HqRejectInterviewCommand',
-                    map(filteredItems, interview => {
-                        return interview.id
-                    }),
-                    this.statusChangeComment
-                )
+                var command = null
+
+                if (self.newResponsibleId == null)
+                {
+                    command = this.getCommand(
+                        'HqRejectInterviewCommand',
+                        map(filteredItems, interview => {
+                            return interview.id
+                        }),
+                        this.statusChangeComment
+                    )
+                }
+                else if (self.newResponsibleId.iconClass === 'interviewer')
+                {
+                    var rejToIntCommands = this.arrayMap(
+                        map(filteredItems, interview => {
+                            return interview.id
+                        }),
+                        function(rowId) {
+                            var item = {
+                                InterviewId: rowId,
+                                InterviewerId: self.newResponsibleId.key,
+                                Comment: self.statusChangeComment,
+                            }
+                            return JSON.stringify(item)
+                        }
+                    )
+
+                    command = {
+                        type: 'HqRejectInterviewToInterviewerCommand',
+                        commands: rejToIntCommands,
+                    }
+                }
+                else if (self.newResponsibleId.iconClass === 'supervisor')
+                {
+                    var rejToSvCommands = this.arrayMap(
+                        map(filteredItems, interview => {
+                            return interview.id
+                        }),
+                        function(rowId) {
+                            var item = {
+                                InterviewId: rowId,
+                                SupervisorId: self.newResponsibleId.key,
+                                Comment: self.statusChangeComment,
+                            }
+                            return JSON.stringify(item)
+                        }
+                    )
+
+                    command = {
+                        type: 'HqRejectInterviewToSupervisorCommand',
+                        commands: rejToSvCommands,
+                    }
+                }
 
                 this.executeCommand(
                     command,
@@ -1001,14 +1092,10 @@ export default {
                     }
                 )
             } else {
-                var noReassignInterviews = this.arrayFilter(filteredItems, function(item) {
-                    return !item.isNeedInterviewerAssign
-                })
-
-                if (noReassignInterviews.length > 0) {
+                if (self.newResponsibleId == null) {
                     var cmd = this.getCommand(
                         'RejectInterviewCommand',
-                        map(noReassignInterviews, interview => {
+                        map(filteredItems, interview => {
                             return interview.id
                         }),
                         this.statusChangeComment
@@ -1023,14 +1110,9 @@ export default {
                         }
                     )
                 }
-
-                var toReassignInterviews = this.arrayFilter(filteredItems, function(item) {
-                    return item.isNeedInterviewerAssign
-                })
-
-                if (toReassignInterviews.length > 0 && self.newResponsibleId != null) {
+                else if (self.newResponsibleId != null) {
                     var commands = this.arrayMap(
-                        map(toReassignInterviews, interview => {
+                        map(filteredItems, interview => {
                             return interview.id
                         }),
                         function(rowId) {
@@ -1067,6 +1149,8 @@ export default {
         rejectInterview() {
             this.statusChangeComment = null
             this.newResponsibleId = null
+            this.rejectToNewResponsible = false
+
             this.$refs.rejectModal.modal({
                 keyboard: false,
             })
@@ -1247,7 +1331,7 @@ export default {
             menu.push({
                 name: self.$t('Pages.InterviewerHq_OpenInterview'),
                 callback: () => {
-                    window.location = self.config.interviewReviewUrl + '/' + rowData.id.replace(/-/g, '')
+                    window.location = `${self.config.interviewReviewUrl}/${rowData.id}`
                 },
             })
 

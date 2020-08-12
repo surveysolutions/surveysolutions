@@ -1,4 +1,5 @@
-using OfficeOpenXml;
+using System.IO;
+using ClosedXML.Excel;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
@@ -10,15 +11,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             var headers = report.Headers;
             var data = report.Data;
 
-            using (ExcelPackage excelPackage = new ExcelPackage())
+            using (XLWorkbook excelPackage = new XLWorkbook())
             {
-                var worksheet = excelPackage.Workbook.Worksheets.Add(report.Name ?? "Data");
+                var worksheet = excelPackage.Worksheets.Add(report.Name ?? "Data");
                 var rowIndex = 1;
 
                 // setting headers
                 for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)
                 {
-                    var cell = worksheet.Cells[rowIndex, columnIndex + 1];
+                    var cell = worksheet.Cell(rowIndex, columnIndex + 1);
                     cell.Value = headers[columnIndex];
                     cell.Style.Font.Bold = true;
                 }
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 {
                     for (int columnIndex = 0; columnIndex < report.Totals.Length; columnIndex++)
                     {
-                        var cell = worksheet.Cells[rowIndex, columnIndex + 1];
+                        var cell = worksheet.Cell(rowIndex, columnIndex + 1);
                         cell.Style.Font.Bold = true;
                         var value = report.Totals[columnIndex];
 
@@ -47,50 +48,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
                     for (int columnIndex = 0; columnIndex < rowData.Length; columnIndex++)
                     {
-                        var cell = worksheet.Cells[rowIndex, columnIndex + 1];
+                        var cell = worksheet.Cell(rowIndex, columnIndex + 1);
                         var value = rowData[columnIndex];
+
 
                         SetCellValue(value, cell);
                     }
 
                     rowIndex++;
                 }
+
+                worksheet.Columns().AdjustToContents();
+
+                using var stream = new MemoryStream();
+                excelPackage.SaveAs(stream);
                 
-                if (worksheet.Dimension != null)
-                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-
-                for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)
-                {
-                    worksheet.Column(columnIndex + 1).AutoFit();
-                }
-
-                return excelPackage.GetAsByteArray();
+                return stream.ToArray();
             }
         }
 
-        private static void SetCellValue(object value, ExcelRange cell)
+        private static void SetCellValue(object value, IXLCell cell)
         {
-            switch (value)
-            {
-                case long longValue:
-                    cell.Value = longValue;
-                    break;
-                case int intValue:
-                    cell.Value = intValue;
-                    break;
-                case double doubleValue:
-                    cell.Value = doubleValue;
-                    break;
-                case float floatValue:
-                    cell.Value = floatValue;
-                    break;
-                case decimal decimalValue:
-                    cell.Value = decimalValue;
-                    break;
-                default:
-                    cell.Value = value?.ToString() ?? "";
-                    break;
-            }
+            cell.SetValue(value);
+
+            if(value is long)
+                cell.Style.NumberFormat.Format = "#,##0";
         }
 
         public override string MimeType => @"application/vnd.oasis.opendocument.spreadsheet";

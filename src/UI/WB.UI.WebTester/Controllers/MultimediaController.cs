@@ -51,7 +51,7 @@ namespace WB.UI.WebTester.Controllers
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            MultimediaFile file = null;
+            MultimediaFile? file = null;
             if (fileName != null)
             {
                 file = this.mediaStorage.Get(fileName, id);
@@ -66,7 +66,12 @@ namespace WB.UI.WebTester.Controllers
         [HttpPost]
         public async Task<ActionResult> Audio(string id, [FromForm] string questionId, [FromForm] IFormFile file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(id);
+            var interview = this.statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
 
             var questionIdentity = Identity.Parse(questionId);
             InterviewTreeQuestion question = interview.GetQuestion(questionIdentity);
@@ -78,30 +83,23 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
-                using (var ms = new MemoryStream())
-                {
-                    await file.CopyToAsync(ms);
+                await using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
 
-                    byte[] bytes = ms.ToArray();
+                byte[] bytes = ms.ToArray();
 
-                    var audioFile = await audioProcessingService.CompressAudioFileAsync(bytes);
+                var audioFile = await audioProcessingService.CompressAudioFileAsync(bytes);
 
-                    var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
+                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
 
-                    mediaStorage.Store(new MultimediaFile
-                    {
-                        Filename = fileName,
-                        Data = audioFile.Binary,
-                        Duration = audioFile.Duration,
-                        MimeType = audioFile.MimeType
-                    }, fileName, interview.Id);
+                var entity = new  MultimediaFile(fileName, audioFile.Binary, audioFile.Duration, audioFile.MimeType);
+                mediaStorage.Store(entity, fileName, interview.Id);
 
-                    var command = new AnswerAudioQuestionCommand(interview.Id,
-                        interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                        fileName, audioFile.Duration);
+                var command = new AnswerAudioQuestionCommand(interview.Id,
+                    interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
+                    fileName, audioFile.Duration);
 
-                    this.commandService.Execute(command);
-                }
+                this.commandService.Execute(command);
             }
             catch (Exception e)
             {
@@ -116,7 +114,12 @@ namespace WB.UI.WebTester.Controllers
         [HttpPost]
         public async Task<ActionResult> Image(string id, [FromForm]  string questionId, [FromForm]  IFormFile file)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(id);
+            var interview = this.statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
@@ -126,7 +129,7 @@ namespace WB.UI.WebTester.Controllers
                 return this.Json("fail");
             }
 
-            string fileName = null;
+            string? fileName = null;
 
             try
             {
@@ -140,12 +143,8 @@ namespace WB.UI.WebTester.Controllers
 
                 var responsibleId = interview.CurrentResponsibleId;
 
-                this.mediaStorage.Store(new MultimediaFile
-                {
-                    Filename = fileName,
-                    Data = fileContent,
-                    MimeType = file.ContentType
-                }, fileName, interview.Id);
+                var entity = new MultimediaFile(fileName, fileContent, null,file.ContentType);
+                this.mediaStorage.Store(entity, fileName, interview.Id);
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));

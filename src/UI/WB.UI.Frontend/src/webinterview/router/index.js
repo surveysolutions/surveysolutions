@@ -41,11 +41,33 @@ function NewRouter(store) {
                         name: 'prefilled',
                         path: 'Cover',
                         component: Cover,
+                        beforeEnter: (to, from, next) => {
+                            if (Vue.$config.coverPageId)
+                                next({ name: 'cover', params: { interviewId: to.params.interviewId } })
+                            else
+                                next()
+                        },
+                    },
+                    {
+                        name: 'cover',
+                        path: 'Section/' + (Vue.$config.coverPageId || 'newcover'),
+                        component: Cover,
+                        beforeEnter: (to, from, next) => {
+                            if (Vue.$config.coverPageId)
+                                to.params.sectionId = Vue.$config.coverPageId
+                            next()
+                        },
                     },
                     {
                         name: 'section',
                         path: 'Section/:sectionId',
                         component: Section,
+                        beforeEnter: (to, from, next) => {
+                            if (Vue.$config.coverPageId && to.params.sectionId == Vue.$config.coverPageId)
+                                next({ name: 'cover' })
+                            else
+                                next()
+                        },
                     },
                     {
                         name: 'complete',
@@ -66,7 +88,7 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-        if(Vue.$config.splashScreen) { next(); return }
+        if (Vue.$config.splashScreen) { next(); return }
         next()
     })
 

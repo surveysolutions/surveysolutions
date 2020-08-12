@@ -21,19 +21,21 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(TenantInfo tenant,
-            QuestionnaireId questionnaireId)
+            QuestionnaireId questionnaireId,
+            Guid? translation)
         {
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
-            if (questionnaire == null) return null;
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, translation);
+            if (questionnaire == null) throw new InvalidOperationException("questionnaire must be not null.");
+            
             return CreateQuestionnaireExportStructure(questionnaire);
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
         {
             var result = new QuestionnaireExportStructure
-            {
-                QuestionnaireId = questionnaire.Id
-            };
+            (
+                questionnaireId : questionnaire.Id
+            );
 
             var rosterScopes = this.GetRosterScopes(questionnaire);
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
@@ -53,8 +55,8 @@ namespace WB.Services.Export.Questionnaire
         Dictionary<ValueVector<Guid>, RosterScopeDescription> GetRosterScopes(QuestionnaireDocument document)
         {
             var rosterScopesFiller = new RosterScopesFiller(document);
-            rosterScopesFiller.FillRosterScopes();
-            return rosterScopesFiller.Result;
+            
+            return rosterScopesFiller.FillRosterScopes();
         }
 
         private HeaderStructureForLevel CreateHeaderStructureForLevel(
@@ -65,11 +67,10 @@ namespace WB.Services.Export.Questionnaire
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
             ValueVector<Guid> levelVector)
         {
-            var headerStructureForLevel = new HeaderStructureForLevel();
-            headerStructureForLevel.LevelScopeVector = levelVector;
-            headerStructureForLevel.LevelIdColumnName = (levelVector == null || levelVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelTitle);
-
-            headerStructureForLevel.LevelName = levelTitle;
+            var headerStructureForLevel = new HeaderStructureForLevel(
+                levelScopeVector : levelVector,
+                levelIdColumnName: (levelVector == null || levelVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelTitle),
+                levelName: levelTitle);
 
             foreach (var rootGroup in groupsInLevel)
             {
@@ -138,6 +139,9 @@ namespace WB.Services.Export.Questionnaire
                 if (multiOptionQuestion.LinkedToQuestionId.HasValue)
                 {
                     var sourceQuestion = questionnaire.Find<Question>(multiOptionQuestion.LinkedToQuestionId.Value);
+                    if(sourceQuestion == null)
+                        throw new InvalidOperationException($"Source question {multiOptionQuestion.LinkedToQuestionId.Value} was not found.");
+
                     exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceQuestion).Length > 1
                         ? QuestionSubtype.MultiOptionLinkedNestedLevel
                         : QuestionSubtype.MultiOptionLinkedFirstLevel;
@@ -145,6 +149,8 @@ namespace WB.Services.Export.Questionnaire
                 else if (multiOptionQuestion.LinkedToRosterId.HasValue)
                 {
                     var sourceRoster = questionnaire.Find<Group>(multiOptionQuestion.LinkedToRosterId.Value);
+                    if (sourceRoster == null)
+                        throw new InvalidOperationException($"Source roster {multiOptionQuestion.LinkedToRosterId.Value} was not found.");
                     exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceRoster).Length > 1
                         ? QuestionSubtype.MultiOptionLinkedNestedLevel
                         : QuestionSubtype.MultiOptionLinkedFirstLevel;
@@ -176,7 +182,9 @@ namespace WB.Services.Export.Questionnaire
                 if (singleQuestion.LinkedToQuestionId.HasValue)
                 {
                     var sourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
-                    
+                    if(sourceQuestion == null)
+                        throw new InvalidOperationException($"Source question {singleQuestion.LinkedToQuestionId.Value} was not found.");
+
                     exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceQuestion).Length > 1
                             ? QuestionSubtype.SingleOptionLinkedNestedLevel
                             : QuestionSubtype.SingleOptionLinkedFirstLevel;
@@ -185,7 +193,8 @@ namespace WB.Services.Export.Questionnaire
                 else if (singleQuestion.LinkedToRosterId.HasValue)
                 {
                     var sourceRoster = questionnaire.Find<Group>(singleQuestion.LinkedToRosterId.Value);
-
+                    if (sourceRoster == null)
+                        throw new InvalidOperationException($"Source roster {singleQuestion.LinkedToRosterId.Value} was not found.");
                     exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceRoster).Length > 1
                         ? QuestionSubtype.SingleOptionLinkedNestedLevel
                         : QuestionSubtype.SingleOptionLinkedFirstLevel;
@@ -213,22 +222,22 @@ namespace WB.Services.Export.Questionnaire
             exportedHeaderItem.Labels = new List<LabelItem>();
             if (question is ICategoricalQuestion categoricalQuestion && categoricalQuestion.CategoriesId.HasValue)
             {
+                var categories = questionnaire.Categories.FirstOrDefault(c => c.Id == categoricalQuestion.CategoriesId.Value);
                 var isMultiWithoutPredefineCategories = question is MultyOptionsQuestion multyOptionsQuestion
                                                         && multyOptionsQuestion.IsFilteredCombobox != true;
 
-                if (!isMultiWithoutPredefineCategories)
+                if (categories != null && !isMultiWithoutPredefineCategories)
                 {
                     exportedHeaderItem.LabelReferenceId = categoricalQuestion.CategoriesId;
 
                     if (!headerStructureForLevel.ReusableLabels.ContainsKey(categoricalQuestion.CategoriesId.Value))
                     {
-                        var categories = questionnaire.Categories.First(c => c.Id == categoricalQuestion.CategoriesId.Value);
                         headerStructureForLevel.ReusableLabels[categoricalQuestion.CategoriesId.Value] =
-                            new ReusableLabels()
-                            {
-                                Name = categories.Name,
-                                Labels = categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
-                            };
+                            new ReusableLabels
+                            (
+                                name : categories.Name,
+                                labels : categories.Values.Select(o => new LabelItem(o.Id.ToString(), o.Text)).ToArray()
+                            );
                     }
                 }
             }
@@ -241,11 +250,11 @@ namespace WB.Services.Export.Questionnaire
                     exportedHeaderItem.LabelReferenceId = question.PublicKey;
 
                     headerStructureForLevel.ReusableLabels[question.PublicKey] =
-                        new ReusableLabels()
-                        {
-                            Name = question.VariableName,
-                            Labels = question.Answers.Select(a => new LabelItem(a.AnswerValue, a.AnswerText)).ToArray()
-                        };
+                        new ReusableLabels
+                        (
+                            name : question.VariableName,
+                            labels : question.Answers.Select(a => new LabelItem(a.AnswerValue, a.AnswerText)).ToArray()
+                        );
                 }
                 else
                 {
@@ -345,7 +354,7 @@ namespace WB.Services.Export.Questionnaire
                         var optionText = asCategorical?.IsFilteredCombobox ?? false
                             ? i.ToString()
                             : asCategorical?.CategoriesId.HasValue ?? false
-                                ? questionnaire.Categories.First(c => c.Id == asCategorical.CategoriesId.Value).Values[i].Text
+                                ? questionnaire.Categories.First(c => c.Id == asCategorical!.CategoriesId!.Value).Values[i].Text
                                 : question.Answers[i].AnswerText;
 
                         headerColumn.Title = $"{questionLabel}:{optionText}";
@@ -382,25 +391,31 @@ namespace WB.Services.Export.Questionnaire
             var fixedRosterGroups =
                 document.Find<Group>(@group => @group.IsRoster && group.IsFixedRoster);
 
-            IEnumerable<MultyOptionsQuestion> rosterSizeMultyOptionQuestions =
-                rosterGroups.Select(@group => document.Find<MultyOptionsQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null).Distinct();
+            IEnumerable<MultyOptionsQuestion?> rosterSizeMultyOptionQuestions =
+                rosterGroups
+                    .Select(@group => document.Find<MultyOptionsQuestion>(@group.RosterSizeQuestionId!.Value))
+                    .Where(question => question != null)
+                    .Distinct();
 
-            IEnumerable<TextListQuestion> rosterSizeTextListQuestions =
-                rosterGroups.Select(@group => document.Find<TextListQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null).Distinct();
+            IEnumerable<TextListQuestion?> rosterSizeTextListQuestions =
+                rosterGroups
+                    .Select(@group => document.Find<TextListQuestion>(@group.RosterSizeQuestionId!.Value))
+                    .Where(question => question != null)
+                    .Distinct();
 
             var collectedMaxValues = new Dictionary<Guid, int>();
 
-            foreach (MultyOptionsQuestion rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
+            foreach (MultyOptionsQuestion? rosterSizeMultyOptionQuestion in rosterSizeMultyOptionQuestions)
             {
-                collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey, rosterSizeMultyOptionQuestion.Answers.Count);
+                if(rosterSizeMultyOptionQuestion != null)
+                    collectedMaxValues.Add(rosterSizeMultyOptionQuestion.PublicKey, rosterSizeMultyOptionQuestion.Answers.Count);
             }
 
-            foreach (TextListQuestion rosterSizeTextListQuestion in rosterSizeTextListQuestions)
+            foreach (TextListQuestion? rosterSizeTextListQuestion in rosterSizeTextListQuestions)
             {
-                collectedMaxValues.Add(rosterSizeTextListQuestion.PublicKey,
-                    rosterSizeTextListQuestion.MaxAnswerCount ?? Constants.MaxLongRosterRowCount);
+                if(rosterSizeTextListQuestion != null)
+                    collectedMaxValues.Add(rosterSizeTextListQuestion.PublicKey,
+                        rosterSizeTextListQuestion.MaxAnswerCount ?? Constants.MaxLongRosterRowCount);
             }
 
             foreach (Group fixedRosterGroup in fixedRosterGroups)
@@ -593,14 +608,14 @@ namespace WB.Services.Export.Questionnaire
 
         private int GetColumnsCountForMultiOptionQuestion(Question question, QuestionnaireDocument questionnaire)
         {
-            var typedQuestion = question as MultyOptionsQuestion;
-            var isSupportReusableCategories = typedQuestion?.CategoriesId.HasValue ?? false;
-
-            var optionCount = isSupportReusableCategories
+            MultyOptionsQuestion? typedQuestion = question as MultyOptionsQuestion;
+            if (typedQuestion == null) return question.Answers.Count;
+            
+            var optionCount = typedQuestion.CategoriesId != null
                 ? questionnaire.Categories.First(c => c.Id == typedQuestion.CategoriesId.Value).Values.Length
                 : question.Answers.Count;
 
-            if (typedQuestion?.IsFilteredCombobox ?? false)
+            if (typedQuestion.IsFilteredCombobox ?? false)
                 return Math.Min(typedQuestion.MaxAllowedAnswers ?? Constants.MaxLongRosterRowCount, optionCount);
 
             return optionCount;
@@ -665,6 +680,7 @@ namespace WB.Services.Export.Questionnaire
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             var referencedByLinkedQuestionEntity = GetReferencedByLinkedQuestionEntity(question, questionnaire);
+            if(referencedByLinkedQuestionEntity == null) throw new InvalidOperationException("Referenced entity was not found.");
             var rosterVectorReferencedQuestion = this.GetRosterSizeSourcesForEntity(referencedByLinkedQuestionEntity);
             var rosterVectorLinkedQuestion = this.GetRosterSizeSourcesForEntity(question);
             var linkedVectorScope = FindLinkedVectorScope(rosterVectorLinkedQuestion, rosterVectorReferencedQuestion);
@@ -707,7 +723,7 @@ namespace WB.Services.Export.Questionnaire
             return new ValueVector<Guid>(rosterVectorReferencedQuestion.Skip(commonIndex.Value + 1));
         }
 
-        private IQuestionnaireEntity GetReferencedByLinkedQuestionEntity(Question question, QuestionnaireDocument questionnaire)
+        private IQuestionnaireEntity? GetReferencedByLinkedQuestionEntity(Question question, QuestionnaireDocument questionnaire)
         {
             if (question.LinkedToQuestionId.HasValue)
             {
@@ -721,9 +737,10 @@ namespace WB.Services.Export.Questionnaire
             return null;
         }
 
-        private ValueVector<Guid> GetRosterSizeSourcesForEntity(IQuestionnaireEntity entity)
+        private ValueVector<Guid> GetRosterSizeSourcesForEntity(IQuestionnaireEntity entityFor)
         {
             var rosterSizes = new List<Guid>();
+            IQuestionnaireEntity? entity = entityFor;
             while (!(entity is QuestionnaireDocument))
             {
                 if (entity is Group group)
@@ -732,7 +749,7 @@ namespace WB.Services.Export.Questionnaire
                         rosterSizes.Add(group.RosterSizeQuestionId ?? group.PublicKey);
                 }
 
-                entity = entity.GetParent();
+                entity = entity?.GetParent();
             }
 
             rosterSizes.Reverse();

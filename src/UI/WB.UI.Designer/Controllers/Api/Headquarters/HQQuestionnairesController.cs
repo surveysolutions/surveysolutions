@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/v3/questionnaires")]
     [Authorize]
-    public class HQQuestionnairesController : ControllerBase
+    public class HQQuestionnairesController : HQControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -104,7 +104,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
-            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             if (questionnaireView == null)
             {
@@ -176,19 +176,18 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
 
             return Ok(new QuestionnaireCommunicationPackage
-            {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
-                QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = versionToCompileAssembly
-            });
+            (
+                questionnaire : this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
+                questionnaireAssembly : resultAssembly,
+                questionnaireContentVersion : versionToCompileAssembly
+            ));
         }
 
         [HttpPost]
         [Route("{id:Guid}/revision/{rev:int}/metadata")]
         public async Task<IActionResult> UpdateRevisionMetadata(Guid id, int rev, [FromBody] QuestionnaireRevisionMetaDataUpdate tagData)
         {
-            QuestionnaireView questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-
+            QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status404NotFound, string.Format(ErrorMessages.TemplateNotFound, id));
@@ -234,7 +233,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             {
                 if (questionnaireEntry is IGroup @group)
                 {
-                    if (group.GetParent().PublicKey == questionnaire.PublicKey)
+                    if (group.GetParent()?.PublicKey == questionnaire.PublicKey)
                     {
                         result.ChaptersCount++;
                     }
@@ -277,14 +276,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             return resultAssembly;
-        }
-
-        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
-        {
-            if (questionnaireView.CreatedBy == User.GetId())
-                return true;
-
-            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }

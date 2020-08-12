@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
                 responsibleId: responsibleId,
                 options: new Option[]
                 {
-                    new Option() {Title = "Option 1", Value = "1"},
-                    new Option() {Title = "Option 2", Value = "2"}
+                    new Option(title : "Option 1", value : "1"),
+                    new Option(title : "Option 2", value : "2")
                 }
             );
             questionnaire.AddSingleOptionQuestion(

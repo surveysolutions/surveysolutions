@@ -5,6 +5,8 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -32,16 +34,17 @@
     <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.3" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="Dapper" Version="2.0.35" />
-    <PackageReference Include="EPPlus" Version="4.5.3.3" />
-    <PackageReference Include="HtmlSanitizer" Version="5.0.310" />
-    <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
+    <PackageReference Include="HtmlSanitizer" Version="5.0.343" />
+    <PackageReference Include="JsonDiffPatch.Net" Version="2.2.0" />
     <PackageReference Include="Markdig" Version="0.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.5.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.6" />    
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0" />
     <PackageReference Include="System.CodeDom" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapService
 {
     public interface IMapService
     {
-        List<MapDescription> GetAvailableMaps();
+        List<MapDescription> GetAvailableMaps(bool includeOnline = false);
         bool DoesMapExist(string mapName);
         void SaveMap(string mapName, byte[] content);
         MapDescription PrepareAndGetDefaultMap();

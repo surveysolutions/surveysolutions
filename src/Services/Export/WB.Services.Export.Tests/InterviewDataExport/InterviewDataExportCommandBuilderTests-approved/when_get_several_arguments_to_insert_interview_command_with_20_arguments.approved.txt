@@ -1,0 +1,4 @@
+﻿INSERT INTO "fakeTableName1" (interview__id) VALUES  (@interviewId1), (@interviewId2), (@interviewId3), (@interviewId4), (@interviewId5) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id) VALUES  (@interviewId6), (@interviewId7), (@interviewId8), (@interviewId9), (@interviewId10) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id) VALUES  (@interviewId11), (@interviewId12), (@interviewId13), (@interviewId14), (@interviewId15) ON CONFLICT DO NOTHING;
+INSERT INTO "fakeTableName1" (interview__id) VALUES  (@interviewId16), (@interviewId17), (@interviewId18), (@interviewId19), (@interviewId20) ON CONFLICT DO NOTHING;

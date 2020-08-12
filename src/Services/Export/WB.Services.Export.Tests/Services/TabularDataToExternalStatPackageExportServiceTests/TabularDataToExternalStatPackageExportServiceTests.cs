@@ -26,7 +26,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             string mailLevelFileName = "main level.tab";
             string nestedRosterFileName = "nested roster level.tab";
 
-            var questionnaireExportStructure = CreateQuestionnaireExportStructure(
+            var questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaireId.ToString(),
                 CreateHeaderStructureForLevel("main level"),
                 CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] {"r1", "r2"},
                     levelScopeVector: new ValueVector<Guid>(new[] {Guid.NewGuid()})));
@@ -50,7 +50,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             
             //act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] {mailLevelFileName, nestedRosterFileName},
+                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), null, new[] {mailLevelFileName, nestedRosterFileName},
                     new ExportProgress(), CancellationToken.None);
 
            //Assert
@@ -69,7 +69,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             string extraFile = "extra.tab";
             string extraFileExported = "extra.sav";
 
-            var questionnaireExportStructure = CreateQuestionnaireExportStructure(
+            var questionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaireId.ToString(),
                 CreateHeaderStructureForLevel("main level"),
                 CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] {"r1", "r2"},
                     levelScopeVector: new ValueVector<Guid>(new[] {Guid.NewGuid()})));
@@ -102,7 +102,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
 
             // Act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
-                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] { mailLevelFileName, nestedRosterFileName , extraFile },
+                    Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), null, new[] { mailLevelFileName, nestedRosterFileName , extraFile },
                     new ExportProgress(), CancellationToken.None);
 
             //Assert

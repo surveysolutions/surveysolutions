@@ -46,6 +46,9 @@ namespace WB.Services.Export.Ddi.Implementation
             QuestionnaireId questionnaireId, string basePath)
         {
             var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
+            if(bigTemplateObject == null)
+                throw new InvalidOperationException("Questionnaire must be not null.");
+
             QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureStorage.CreateQuestionnaireExportStructure(bigTemplateObject);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)
@@ -115,7 +118,10 @@ namespace WB.Services.Export.Ddi.Implementation
                     }
                 }
 
-                var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(
+                var targetFolder = this.fileSystemAccessor.CombinePath(basePath, "Questionnaire");
+                this.fileSystemAccessor.CreateDirectory(targetFolder);
+
+                var pathToWrite = this.fileSystemAccessor.CombinePath(targetFolder, ExportFileSettings.GetDDIFileName(
                     $"{questionnaireId}_ddi"));
 
                 metadataWriter.SaveMetadataInFile(pathToWrite);

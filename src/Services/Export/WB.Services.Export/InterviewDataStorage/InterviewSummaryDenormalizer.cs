@@ -96,7 +96,7 @@ namespace WB.Services.Export.InterviewDataStorage
             EnlistChange(@event.EventSourceId, @event.EventTimeStamp, null);
         }
 
-        private void EnlistChange(Guid interviewId, DateTime updateDate, Action<InterviewReference> action)
+        private void EnlistChange(Guid interviewId, DateTime updateDate, Action<InterviewReference>? action)
         {
             var changesList = this.changes.GetOrNull(interviewId) ?? new List<Action<InterviewReference>>();
             if (action != null)

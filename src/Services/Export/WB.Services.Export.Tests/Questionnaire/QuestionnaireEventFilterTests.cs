@@ -41,11 +41,12 @@ namespace WB.Services.Export.Tests.Questionnaire
         {
             var interviewId = Id.g1;
 
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            var questionnaireVersion = 1;
+            var questionnaire = Create.QuestionnaireDocument(
                 id: Id.gA,
+                version: questionnaireVersion,
                 children: Create.TextQuestion(Id.gB));
-            questionnaire.Id = $"{Id.gA:N}$1";
-
+            
             var eventFeed = new List<Event>
             {
                 new Event
@@ -54,7 +55,7 @@ namespace WB.Services.Export.Tests.Questionnaire
                     Payload = new InterviewCreated
                     {
                         QuestionnaireId = questionnaire.PublicKey,
-                        QuestionnaireVersion = 1
+                        QuestionnaireVersion = questionnaireVersion
                     }
                 },
                 new Event
@@ -63,7 +64,7 @@ namespace WB.Services.Export.Tests.Questionnaire
                     Payload = new InterviewOnClientCreated
                     {
                         QuestionnaireId = questionnaire.PublicKey,
-                        QuestionnaireVersion = 1
+                        QuestionnaireVersion = questionnaireVersion
                     }
                 }
 
@@ -88,10 +89,11 @@ namespace WB.Services.Export.Tests.Questionnaire
         {
             var interviewId = Id.g1;
 
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            var questionnaireVersion = 1;
+            var questionnaire = Create.QuestionnaireDocument(
                 id: Id.gA,
+                version:questionnaireVersion,
                 children: Create.TextQuestion(Id.gB));
-            questionnaire.Id = $"{Id.gA:N}$1";
 
             var eventFeed = new List<Event>
             {
@@ -101,7 +103,7 @@ namespace WB.Services.Export.Tests.Questionnaire
                     Payload = new InterviewFromPreloadedDataCreated
                     {
                         QuestionnaireId = questionnaire.PublicKey,
-                        QuestionnaireVersion = 1
+                        QuestionnaireVersion = questionnaireVersion
                     }
                 }
             };
@@ -277,7 +279,7 @@ namespace WB.Services.Export.Tests.Questionnaire
                 }
             });
 
-            Mock.Get(questionnaireStorage).Verify(q => q.InvalidateQuestionnaire(questionnaire.QuestionnaireId), Times.Exactly(2));
+            Mock.Get(questionnaireStorage).Verify(q => q.InvalidateQuestionnaire(questionnaire.QuestionnaireId, null), Times.Exactly(2));
             questionnaireSchemaGenerator.Verify(q => q.DropQuestionnaireDbStructure(questionnaire), Times.Once);
         }
 

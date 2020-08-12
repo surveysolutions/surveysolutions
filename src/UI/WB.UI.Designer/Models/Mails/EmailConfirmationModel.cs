@@ -2,7 +2,7 @@
 {
     public class EmailConfirmationModel 
     {
-        public string UserName { get; set; }
-        public object ConfirmationLink { get; set; }
+        public string? UserName { get; set; }
+        public string? ConfirmationLink { get; set; }
     }
 }

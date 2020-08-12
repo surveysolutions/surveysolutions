@@ -70,6 +70,9 @@
                 <wb-lock />
             </div>
         </div>
+        <div
+            v-if="allAnswersGiven"
+            class="information-block text-info"><h6>{{ $t("WebInterviewUI.MaxAnswersCountSelected", {value: $me.maxSelectedAnswersCount }) }}</h6></div>
     </wb-question>
 </template>
 <script lang="js">

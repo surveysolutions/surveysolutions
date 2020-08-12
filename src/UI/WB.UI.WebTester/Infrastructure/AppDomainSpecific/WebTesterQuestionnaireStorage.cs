@@ -31,9 +31,9 @@ namespace WB.UI.WebTester.Infrastructure
         private readonly ISubstitutionService substitutionService;
         private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
 
-        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
+        public IQuestionnaire? GetQuestionnaire(QuestionnaireIdentity identity, string? language)
         {
-            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q))
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire? q))
             {
                 if (language == null)
                 {
@@ -41,7 +41,7 @@ namespace WB.UI.WebTester.Infrastructure
                 }
             }
 
-            return this.translationService.Translate(q, identity.Version, language);
+            return q == null ? null : this.translationService.Translate(q, identity.Version, language);
         }
         
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
@@ -56,9 +56,9 @@ namespace WB.UI.WebTester.Infrastructure
                  new PlainQuestionnaire(questionnaireMergedWithCategories, version, questionOptionsRepository, substitutionService);
         }
 
-        public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
+        public QuestionnaireDocument? GetQuestionnaireDocument(QuestionnaireIdentity identity)
         {
-            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire q))
+            if (this.plainQuestionnairesCache.TryGetValue(identity.ToString(), out PlainQuestionnaire? q))
             {
                 return q.QuestionnaireDocument;
             }
@@ -66,7 +66,7 @@ namespace WB.UI.WebTester.Infrastructure
             return null;
         }
 
-        public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
+        public QuestionnaireDocument? GetQuestionnaireDocument(Guid id, long version)
         {
             return this.GetQuestionnaireDocument(new QuestionnaireIdentity(id, version));
         }

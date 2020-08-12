@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             );
 
             // act
-            questionnaire.MoveGroup(chapterAId, null, 0, responsibleId);
+            questionnaire.MoveGroup(chapterAId, null, 1, responsibleId);
         }
 
         private static Exception exception;
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterAId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid chapterBId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static Guid rosterId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid rosterId = Guid.Parse("11111111111111111111111111111112");
         private static Guid questionWithSubstitutionId = Guid.Parse("44444444444444444444444444444444");
     }
 }

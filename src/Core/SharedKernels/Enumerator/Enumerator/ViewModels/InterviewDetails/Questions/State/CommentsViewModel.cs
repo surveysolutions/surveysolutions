@@ -82,10 +82,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.interview = this.interviewRepository.Get(interviewId);
 
-            var questionComments = interview.GetQuestionComments(this.Identity, true);
-            var anyResolvedCommentsExists = questionComments.Any(x => x.Resolved);
-            this.ShowResolvedCommentsVisible = anyResolvedCommentsExists;
-            this.ShowResolvedComments = false;
+            var question = interview.GetQuestion(entityIdentity);
+            if (question != null)
+            {
+                var questionComments = interview.GetQuestionComments(this.Identity, true);
+                var anyResolvedCommentsExists = questionComments.Any(x => x.Resolved);
+                this.ShowResolvedCommentsVisible = anyResolvedCommentsExists;
+                this.ShowResolvedComments = false;
+            }
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
 
             this.eventRegistry.Subscribe(this, interviewId);

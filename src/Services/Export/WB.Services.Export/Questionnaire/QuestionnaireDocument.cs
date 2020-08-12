@@ -4,13 +4,12 @@ using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
-using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Questionnaire
 {
     public class QuestionnaireDocument : Group
     {
-        public QuestionnaireDocument(List<IQuestionnaireEntity> children = null) : base(children)
+        public QuestionnaireDocument(List<IQuestionnaireEntity>? children = null) : base(children)
         {
             this.memoryCache = new MemoryCache(new MemoryCacheOptions());
             this.Translations = new List<Translation>();
@@ -21,7 +20,7 @@ namespace WB.Services.Export.Questionnaire
 
         public List<Categories> Categories { get; set; }
 
-        public string Id { get; set;}
+        public string Id { get; set;} = String.Empty;
         public int Revision { get; set; }
 
         public bool IsIntegerQuestion(Guid publicKey)
@@ -30,7 +29,7 @@ namespace WB.Services.Export.Questionnaire
             return result != null;
         }
 
-        public string GetQuestionVariableName(Guid publicKey)
+        public string? GetQuestionVariableName(Guid publicKey)
         {
             var result = this.FirstOrDefault<Question>(x => x.PublicKey == publicKey);
             return result?.VariableName;
@@ -49,7 +48,7 @@ namespace WB.Services.Export.Questionnaire
 
         private bool IsRosterGroup(Guid groupId)
         {
-            Group group = this.Find<Group>(groupId);
+            Group? group = this.Find<Group>(groupId);
 
             if (group == null) return false;
 
@@ -58,9 +57,14 @@ namespace WB.Services.Export.Questionnaire
 
         private IEnumerable<Guid> GetAllParentGroupsForEntityStartingFromBottom(Guid entityId)
         {
-            IQuestionnaireEntity entity = this.Find<IQuestionnaireEntity>(entityId);
+            IQuestionnaireEntity? entity = this.Find<IQuestionnaireEntity>(entityId);
 
-            var parentGroup = (Group)entity.GetParent();
+            if(entity == null)
+                throw new InvalidOperationException($"Entity {entityId} was not found.");
+            
+            var parentGroup = entity.GetParent() as Group;
+            if (parentGroup == null)
+                throw new InvalidOperationException($"Parent for entity {entityId} is not valid.");
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -72,22 +76,26 @@ namespace WB.Services.Export.Questionnaire
 
         private IEnumerable<Group> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(Group group, QuestionnaireDocument document)
         {
-            while (group != document)
+            Group? groupIterator = group;
+
+            while (groupIterator != null && groupIterator != document)
             {
-                yield return group;
-                group = (Group)group.GetParent();
+                yield return groupIterator;
+                groupIterator = groupIterator.GetParent() as Group;
             }
         }
 
-        public string GetRosterVariableName(Guid publicKey)
+        public string? GetRosterVariableName(Guid publicKey)
         {
-            Group group = this.Find<Group>(publicKey);
+            Group? group = this.Find<Group>(publicKey);
             return group?.VariableName;
         }
 
         public string GetValidationMessage(Guid publicKey, int conditionIndex)
         {
             var entity = this.Find<IValidatableQuestionnaireEntity>(publicKey);
+            if (entity == null) return string.Empty;
+            
             return entity.ValidationConditions[conditionIndex].Message;
         }
 
@@ -118,7 +126,8 @@ namespace WB.Services.Export.Questionnaire
         {
             return this.memoryCache.GetOrCreate("GetRosterSource:" + rosterId, entry =>
             {
-                Group roster = this.Find<Group>(rosterId);
+                Group? roster = this.Find<Group>(rosterId);
+                if (roster == null) throw new InvalidOperationException("Roster was not found.");
 
                 return roster.RosterSizeQuestionId ?? roster.PublicKey;
             });
@@ -129,12 +138,12 @@ namespace WB.Services.Export.Questionnaire
 
         public Group GetGroup(Guid groupId) => this.GroupsCache[groupId];
 
-        public T Find<T>(Guid publicKey) where T : class, IQuestionnaireEntity
+        public T? Find<T>(Guid publicKey) where T : class, IQuestionnaireEntity
         {
             return EntitiesCache[publicKey] as T; ;
         }
 
-        private Dictionary<ValueVector<Guid>, Guid[]> rostersInLevelCache = null;
+        private Dictionary<ValueVector<Guid>, Guid[]>? rostersInLevelCache = null;
 
         public Guid[] GetRostersInLevel(ValueVector<Guid> rosterScope)
         {
@@ -158,33 +167,31 @@ namespace WB.Services.Export.Questionnaire
 
         private readonly MemoryCache memoryCache;
 
-        private Dictionary<Guid, IQuestionnaireEntity> entitiesCache;
+        private Dictionary<Guid, IQuestionnaireEntity>? entitiesCache;
         private Dictionary<Guid, IQuestionnaireEntity> EntitiesCache
         {
             get
             {
-                return this.entitiesCache ?? (
-                           this.entitiesCache = this.Find<IQuestionnaireEntity>(_ => true)
-                               .ToDictionary(
-                                   entity => entity.PublicKey,
-                                   entity => entity));
+                return this.entitiesCache ??= this.Find<IQuestionnaireEntity>(_ => true)
+                    .ToDictionary(
+                        entity => entity.PublicKey,
+                        entity => entity);
             }
         }
 
-        private Dictionary<Guid, Group> groupsCache; 
+        private Dictionary<Guid, Group>? groupsCache; 
         private Dictionary<Guid, Group> GroupsCache
         {
             get
             {
-                return this.groupsCache ?? (
-                           this.groupsCache = EntitiesCache.Where(kv => kv.Value is Group)
-                               .ToDictionary(
-                                   group => group.Key,
-                                   group => (Group)group.Value));
+                return this.groupsCache ??= EntitiesCache.Where(kv => kv.Value is Group)
+                    .ToDictionary(
+                        group => @group.Key,
+                        group => (Group)@group.Value);
             }
         }
 
-        public QuestionnaireId QuestionnaireId { get; set; }
+        public QuestionnaireId QuestionnaireId { get; set; } = null!;
 
         public IEnumerable<Group> GetAllStoredGroups()
         {
@@ -206,9 +213,9 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private QuestionnaireDatabaseStructure databaseStructure;
+        private QuestionnaireDatabaseStructure? databaseStructure;
         public QuestionnaireDatabaseStructure DatabaseStructure =>
-            databaseStructure ?? (databaseStructure = new QuestionnaireDatabaseStructure(this));
+            databaseStructure ??= new QuestionnaireDatabaseStructure(this);
 
         public bool IsDeleted { get; set; }
     }

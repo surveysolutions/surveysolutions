@@ -12,7 +12,7 @@ namespace WB.Services.Export.Events.Assignment
         public int? Quantity { get; set; }
         public bool AudioRecording { get; set; }
         public bool? WebMode { get; set; }
-        public string Comment { get; set; }
+        public string Comment { get; set; } = String.Empty;
         
         public string QuestionnaireIdentity => QuestionnaireId.ToString("N") + "$" +
                                                QuestionnaireVersion;

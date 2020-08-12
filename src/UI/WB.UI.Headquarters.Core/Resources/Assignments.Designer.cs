@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Assignments {
@@ -385,7 +385,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled, interviewer application will record interview process. With turning audio audit on an amount of synchronization data would be significantly larger.
+        ///   Looks up a localized string similar to The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger..
         /// </summary>
         public static string AudioRecordingExplanation {
             get {
@@ -430,7 +430,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Count.
+        ///   Looks up a localized string similar to Collected.
         /// </summary>
         public static string Count {
             get {
@@ -574,7 +574,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment can not be created. .
+        ///   Looks up a localized string similar to Assignment cannot be created. .
         /// </summary>
         public static string ErrorToCreateAssignment {
             get {
@@ -772,6 +772,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Responsible is required.
+        /// </summary>
+        public static string ResponsibleRequired {
+            get {
+                return ResourceManager.GetString("ResponsibleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select existing questionnaire to upgrade assignments from.
         /// </summary>
         public static string SelectQuestionnaire {
@@ -817,7 +826,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
+        ///   Looks up a localized string similar to Expected.
         /// </summary>
         public static string Size {
             get {
@@ -898,7 +907,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show only assignments that were or were not received by tablets..
+        ///   Looks up a localized string similar to Indicator of whether the assignment has been received or not.
         /// </summary>
         public static string Tooltip_Filter_Received {
             get {
@@ -1042,7 +1051,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Existing not completed assignments are going to be upgraded from selected questionnaire and archived. .
+        ///   Looks up a localized string similar to When assignments are upgraded, all outstanding assignments will be upgraded..
         /// </summary>
         public static string UpgradeDescription {
             get {
@@ -1128,6 +1137,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebMode {
             get {
                 return ResourceManager.GetString("WebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All assignments for web interviews must be made to an interviewer.
+        /// </summary>
+        public static string WebModeNonInterviewer {
+            get {
+                return ResourceManager.GetString("WebModeNonInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are reassigning web assignment to a user who is not an INTERVIEWER. If you&apos;ve already sent out the link for this assignment, the respondents will not be able to respond to your survey until the assignment is returned to a user in the role INTERVIEWER..
+        /// </summary>
+        public static string WebModeReassignToNonInterviewer {
+            get {
+                return ResourceManager.GetString("WebModeReassignToNonInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are reassigning web assignments to a user who is not an INTERVIEWER. If you&apos;ve already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignments are returned to a user in the role INTERVIEWER..
+        /// </summary>
+        public static string WebModeReassignToNonInterviewer_plural {
+            get {
+                return ResourceManager.GetString("WebModeReassignToNonInterviewer_plural", resourceCulture);
             }
         }
     }

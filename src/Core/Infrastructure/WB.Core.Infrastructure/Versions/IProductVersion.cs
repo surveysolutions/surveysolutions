@@ -6,6 +6,6 @@ namespace WB.Core.Infrastructure.Versions
     {
         string ToString();
         Version GetVersion();
-        int GetBildNumber();
+        int GetBuildNumber();
     }
 }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Domain;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation
@@ -25,54 +24,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 
         public void Execute(Action<IServiceLocator> action)
         {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+            using var scope = CreateChildContainer();
+            var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
-                action(serviceLocatorLocal);
+            action(serviceLocatorLocal);
 
-                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
-            }
+            serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
         }
         
         public T Execute<T>(Func<IServiceLocator, T> func)
         {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+            using var scope = CreateChildContainer();
+            var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
-                var result = func(serviceLocatorLocal);
+            var result = func(serviceLocatorLocal);
 
-                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
+            serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
 
-                return result;
-            }
+            return result;
         }
 
         public async Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func)
         {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+            using var scope = CreateChildContainer();
+            var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
-                var result = await func(serviceLocatorLocal);
+            var result = await func(serviceLocatorLocal);
 
-                scope.Resolve<IUnitOfWork>().AcceptChanges();
+            scope.Resolve<IUnitOfWork>().AcceptChanges();
 
-                return result;
-            }
+            return result;
         }
 
         public async Task ExecuteAsync(Func<IServiceLocator, Task> func)
         {
-            using (var scope = CreateChildContainer())
-            {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+            using var scope = CreateChildContainer();
+            var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
-                await func(serviceLocatorLocal);
+            await func(serviceLocatorLocal);
 
-                scope.Resolve<IUnitOfWork>().AcceptChanges();
-            }
+            scope.Resolve<IUnitOfWork>().AcceptChanges();
         }
     }
 

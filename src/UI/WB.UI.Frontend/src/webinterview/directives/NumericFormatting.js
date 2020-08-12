@@ -15,5 +15,8 @@ Vue.directive('numericFormatting', {
     bind: (el, binding, vnode) => {
         const settings = assign(defaults, binding.value)
         vnode.context.autoNumericElement = new AutoNumeric(el, settings)
+        el.addEventListener('autoNumeric:rawValueModified', (e) => {
+            e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target))
+        })
     },
 })

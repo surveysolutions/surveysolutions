@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
-using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.ReportTests
 {
@@ -24,7 +21,12 @@ namespace WB.Tests.Integration.ReportTests
         public readonly SvReport Sv;
         public readonly HqReport Hq;
 
-        
+        [OneTimeSetUp]
+        public void Init()
+        {
+            DatabaseTestInitializer.InitializeDb(connectionStringBuilder.ConnectionString, DbType.ReadSide);
+        }
+
         protected PostgreReadSideStorage<InterviewSummary> SetupAndCreateInterviewSummaryRepository()
         {
             SetupSessionFactory();
@@ -33,24 +35,26 @@ namespace WB.Tests.Integration.ReportTests
 
         protected void SetupSessionFactory()
         {
+
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
                 new[]
                 {
                     typeof(InterviewSummaryMap),
+                    typeof(InterviewGpsMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(QuestionAnswerMap),
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
                     typeof(QuestionnaireCompositeItemMap)
-                }, true);
+                }, true, "readside");
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
         }
 
         protected PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            return IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
         }
 
         internal class SvReport

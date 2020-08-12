@@ -6,7 +6,7 @@ namespace WB.UI.Designer.Models.ControlPanel
     public class CompilationVersionModel
     {
         public Guid QuestionnaireId { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
         [Range(17, 19)]

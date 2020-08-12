@@ -1,13 +1,22 @@
-﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+﻿using System;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Enumerator.Native.WebInterview.Models
 {
-    public class IdentifyingQuestion
+    public class IdentifyingEntity
     {
         public string Identity { get; set; }
-        public string Answer { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
+    }
+
+    public class IdentifyingStaticText : IdentifyingEntity
+    {
+    }
+
+    public class IdentifyingQuestion : IdentifyingEntity
+    {
+        public string Answer { get; set; }
         public bool IsReadonly { get; set; }
     }
 

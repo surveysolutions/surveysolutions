@@ -17,10 +17,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Sortable(x => x.AssignmentId);
             descriptor.Sortable(x => x.ErrorsCount);
             descriptor.Sortable(x => x.Status);
-            descriptor.Sortable(x => x.ReceivedByInterviewer);
+            descriptor.Sortable(x => x.ReceivedByInterviewerAtUtc);
             descriptor.Sortable(x => x.QuestionnaireId);
             descriptor.Sortable(x => x.QuestionnaireVersion);
             descriptor.Sortable(x => x.SummaryId).Name("id");
+            descriptor.Sortable(x => x.NotAnsweredCount);
         }
     }
 }

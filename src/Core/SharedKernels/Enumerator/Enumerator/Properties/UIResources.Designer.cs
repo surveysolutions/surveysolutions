@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -151,11 +151,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting.
+        /// </summary>
+        public static string AreaMap_LocationDataSourceFailed {
+            get {
+                return ResourceManager.GetString("AreaMap_LocationDataSourceFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your location is out of boundaries of the map.
         /// </summary>
         public static string AreaMap_LocationOutOfBoundaries {
             get {
                 return ResourceManager.GetString("AreaMap_LocationOutOfBoundaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded map is outside of visible boundaries.
+        /// </summary>
+        public static string AreaMap_MapIsOutOfVisibleBoundaries {
+            get {
+                return ResourceManager.GetString("AreaMap_MapIsOutOfVisibleBoundaries", resourceCulture);
             }
         }
         
@@ -873,6 +891,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The maximum number of selections ({0}) in this question has been made.
+        /// </summary>
+        public static string Interview_MaxAnswersCountSelected {
+            get {
+                return ResourceManager.GetString("Interview_MaxAnswersCountSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
@@ -1341,6 +1368,69 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All questionnaires.
+        /// </summary>
+        public static string MapDashboard_AllQuestionnaires {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string MapDashboard_Assignments {
+            get {
+                return ResourceManager.GetString("MapDashboard_Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to only items with known coordinates are shown.
+        /// </summary>
+        public static string MapDashboard_Disclaimer {
+            get {
+                return ResourceManager.GetString("MapDashboard_Disclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string MapDashboard_FiltersTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_FiltersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string MapDashboard_Interviews {
+            get {
+                return ResourceManager.GetString("MapDashboard_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string MapDashboard_QuestionnaireTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_QuestionnaireTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string MapDashboard_TypeTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_TypeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit Map Editor.
         /// </summary>
         public static string MenuItem_Title_AreaCancel {
@@ -1355,6 +1445,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MenuItem_Title_AreaCancelEdit {
             get {
                 return ResourceManager.GetString("MenuItem_Title_AreaCancelEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
             }
         }
         

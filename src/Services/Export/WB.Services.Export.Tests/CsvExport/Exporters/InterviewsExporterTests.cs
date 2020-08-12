@@ -419,7 +419,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                     }));
 
             var interview = CreateInterviewData();
-            var rosterLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, null, new int[] { 0 });
+            var rosterLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, new int[] { 0 });
             interview.Levels.Add("0", rosterLevel);
 
             if (!rosterLevel.QuestionsSearchCache.ContainsKey(linkedQuestionId))
@@ -489,7 +489,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var vector1 = new[] { 1 };
             var vector2 = new[] { 2 };
 
-            var newLevel1 = new InterviewLevel(valueVector1, null, vector1);
+            var newLevel1 = new InterviewLevel(valueVector1, vector1);
 
             interviewData.Levels.Add(InterviewLevel.GetLevelKeyName(valueVector1, vector1), newLevel1);
 
@@ -500,12 +500,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                     Create.InterviewEntity(identity: Create.Identity(rosterSizeQuestionId), asList: new[] { new InterviewTextListAnswer(1, someAnswer) })
                 );
 
-            var newLevel2 = new InterviewLevel(valueVector1, null, vector2);
+            var newLevel2 = new InterviewLevel(valueVector1, vector2);
             interviewData.Levels.Add(InterviewLevel.GetLevelKeyName(valueVector1, vector2), newLevel2);
 
             var valueVector11 = new ValueVector<Guid> { rosterId, rosterSizeQuestionId };
             var vector11 = new[] { 1, 1 };
-            var newLevel11 = new InterviewLevel(valueVector11, null, vector11);
+            var newLevel11 = new InterviewLevel(valueVector11, vector11);
 
             if (!newLevel11.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))
                 newLevel11.QuestionsSearchCache.Add(questionInsideRosterGroupId,
@@ -607,7 +607,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         protected InterviewData CreateInterviewData(params InterviewEntity[] topLevelQuestions)
         {
             var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new int[0]));
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), new int[0]));
             foreach (var interviewQuestion in topLevelQuestions)
             {
                 interviewData.Levels["#"].QuestionsSearchCache.Add(interviewQuestion.Identity.Id, interviewQuestion);
@@ -618,7 +618,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         protected InterviewData CreateInterviewData(Guid variableId, object topLevelVariable)
         {
             var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new int[0]));
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), new int[0]));
             interviewData.Levels["#"].Variables.Add(variableId, topLevelVariable);
             return interviewData;
         }
@@ -629,12 +629,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             for (int i = 0; i < 2; i++)
             {
                 var vector = new int[1] { i };
-                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, null, vector);
+                var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
                 for (int j = 0; j < 2; j++)
                 {
                     var nestedVector = new int[] { i, j };
-                    var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId }, null, nestedVector);
+                    var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId }, nestedVector);
                     interview.Levels.Add(string.Join(",", nestedVector), nestedLevel);
 
                     if (!nestedLevel.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))
@@ -655,7 +655,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         protected static InterviewData CreateInterviewData()
         {
             var interviewData = new InterviewData() { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new int[0]));
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), new int[0]));
             return interviewData;
         }
     }

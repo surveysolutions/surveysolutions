@@ -27,10 +27,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
             var filteredCount = pageRequestInfo.HasFilteredCount ? await this.source.CountAsync(cancellationToken) : 0;
             var totalCount = pageRequestInfo.HasTotalCount ? await this.unfilteredQuery.CountAsync(cancellationToken) : 0;
 
-            var data = await this.source
-                .Skip(this.pageRequestInfo.Skip)
-                .Take(this.pageRequestInfo.Take)
-                .ToListAsync(cancellationToken);
+            var query = this.source;
+            
+            if (this.pageRequestInfo.Skip.HasValue)
+                query = query.Skip(this.pageRequestInfo.Skip.Value);
+            if (this.pageRequestInfo.Take.HasValue)
+                query = query.Take(this.pageRequestInfo.Take.Value);
+            
+            var data = await query.ToListAsync(cancellationToken);
 
             return new PagedConnection<TSchemaType>(totalCount, filteredCount, data);
         }

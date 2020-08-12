@@ -32,6 +32,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void MarkSyncStart();
         void MarkSyncSucceeded();
 
+        string LastOpenedMapName { get; }
+        void SetLastOpenedMapName(string mapName);
+
         bool DashboardViewsUpdated { get; }
         void SetDashboardViewsUpdated(bool updated);
     }

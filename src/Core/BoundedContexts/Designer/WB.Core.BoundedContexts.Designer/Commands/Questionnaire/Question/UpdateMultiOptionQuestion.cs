@@ -20,9 +20,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             QuestionScope scope,
             Option[] options,
             Guid? linkedToEntityId,
-            bool areAnswersOrdered,
+            bool? areAnswersOrdered,
             int? maxAllowedAnswers,
-            bool yesNoView,
+            bool? yesNoView,
             List<ValidationCondition> validationConditions,
             string linkedFilterExpression,
             bool isFilteredCombobox,
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.Scope = scope;
             options?.ToList()
                 .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
-            this.Options = options;
+            this.Options = options ?? new Option[0];
             this.LinkedToEntityId = linkedToEntityId;
             this.LinkedFilterExpression = linkedFilterExpression;
             this.AreAnswersOrdered = areAnswersOrdered;
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public QuestionScope Scope { get; set; }
 
-        public bool AreAnswersOrdered { get; set; }
+        public bool? AreAnswersOrdered { get; set; }
 
         public Guid? LinkedToEntityId { get; set; }
 
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public int? MaxAllowedAnswers { get; set; }
 
-        public bool YesNoView { get; set; }
+        public bool? YesNoView { get; set; }
 
         public Option[] Options { get; set; }
         public Guid? CategoriesId { get; set; }

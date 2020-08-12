@@ -31,15 +31,19 @@
                     "esri/geometry/Polygon",
                     "esri/geometry/Extent",
                     "esri/symbols/SimpleLineSymbol",
-                    "esri/symbols/SimpleFillSymbol",
+                "esri/symbols/SimpleFillSymbol",
+                "esri/geometry/support/webMercatorUtils",
                     "dojo/domReady!"
                 ],
-                function (Map, MapView, Graphic, Polygon, Extent, SimpleLineSymbol, SimpleFillSymbol) {
-                    
+                function (Map, MapView, Graphic, Polygon, Extent, SimpleLineSymbol, SimpleFillSymbol, webMercatorUtils) {
+
                     var startExtent = new Extent({
                         "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
                         "spatialReference":{"wkid":@Model.Wkid}
                     });
+
+                    if (startExtent.spatialReference.isWGS84)
+                        startExtent = webMercatorUtils.geographicToWebMercator(startExtent);
 
                     var map = new Map({
                         basemap: "hybrid",
@@ -47,7 +51,7 @@
                     });
 
                     var polygon = Polygon.fromExtent(startExtent);
-
+                    
                     var fillSymbol = new SimpleFillSymbol({
                         outline: {
                             color: [255, 255, 255],
@@ -60,7 +64,7 @@
                         symbol: fillSymbol
                     });
                     var view = new MapView({
-                        spatialReference: startExtent.spatialReference,
+                        spatialReference: {"wkid":102100},
                         container: "viewDiv",
                         map: map
                     });

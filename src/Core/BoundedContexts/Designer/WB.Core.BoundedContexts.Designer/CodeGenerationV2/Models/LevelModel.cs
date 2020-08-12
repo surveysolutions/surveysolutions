@@ -49,11 +49,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 
                 var className = levelClassNames[rosterScope];
                 this.Rosters.Add(new RosterModel
-                {
-                    Variable = questionnaire.GetVariable(roster),
-                    RosterScope = rosterScope,
-                    ClassName = className
-                });
+                (
+                    variable : questionnaire.GetVariable(roster),
+                    rosterScope : rosterScope,
+                    className : className
+                ));
             }
         }
 
@@ -66,12 +66,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
                 this.Variables.Add(new VariableModel
-                {
-                    Id = variable.PublicKey,
-                    Variable = questionnaire.GetVariable(variable),
-                    TypeName = questionTypeMapper.GetVariableType(variable.Type),
-                    RosterScope = rosterScope
-                });
+                (
+                    id : variable.PublicKey,
+                    variable : questionnaire.GetVariable(variable),
+                    typeName : questionTypeMapper.GetVariableType(variable.Type),
+                    rosterScope : rosterScope
+                ));
             }
         }
 
@@ -84,12 +84,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
                 this.Questions.Add(new QuestionModel
-                {
-                    Id = question.PublicKey,
-                    Variable = questionnaire.GetVariable(question),
-                    TypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
-                    RosterScope = rosterScope
-                });
+                (
+                    id : question.PublicKey,
+                    variable : questionnaire.GetVariable(question),
+                    typeName : questionTypeMapper.GetQuestionType(question, questionnaire),
+                    rosterScope : rosterScope
+                ));
             }
         }
 
@@ -102,11 +102,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
                 this.Sections.Add(new SectionModel
-                {
-                    Variable = questionnaire.GetVariable(section),
-                    RosterScope = rosterScope,
-                    //ClassName = className
-                });
+                (
+                    variable : questionnaire.GetVariable(section),
+                    rosterScope : rosterScope
+                ));
             }
         }
     }

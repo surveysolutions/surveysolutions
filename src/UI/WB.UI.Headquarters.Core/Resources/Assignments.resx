@@ -148,7 +148,7 @@
     <value>Identifying Questions</value>
   </data>
   <data name="Count" xml:space="preserve">
-    <value>Count</value>
+    <value>Collected</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} Assignment is going to be changed</value>
@@ -157,10 +157,22 @@
     <value>{{count}} Assignments are going to be changed</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Expected</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Select responsible</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Responsible is required</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>All assignments for web interviews must be made to an interviewer</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>You are reassigning web assignment to a user who is not an INTERVIEWER. If you've already sent out the link for this assignment, the respondents will not be able to respond to your survey until the assignment is returned to a user in the role INTERVIEWER.</value>
+  </data>
+    <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
+    <value>You are reassigning web assignments to a user who is not an INTERVIEWER. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignments are returned to a user in the role INTERVIEWER.</value>
   </data>
   <data name="ShowArchived" xml:space="preserve">
     <value>Archived status</value>
@@ -232,7 +244,7 @@
     <value>Select existing questionnaire to upgrade assignments from</value>
   </data>
   <data name="UpgradeDescription" xml:space="preserve">
-    <value>Existing not completed assignments are going to be upgraded from selected questionnaire and archived. </value>
+    <value>When assignments are upgraded, all outstanding assignments will be upgraded.</value>
   </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
     <value>Select questionnaire to upgrade from</value>
@@ -280,7 +292,7 @@
     <value>Not received by tablet</value>
   </data>
   <data name="Tooltip_Filter_Received" xml:space="preserve">
-    <value>Show only assignments that were or were not received by tablets.</value>
+    <value>Indicator of whether the assignment has been received or not</value>
   </data>
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Received by tablet</value>
@@ -295,7 +307,7 @@
     <value>Select a questionnaire version to see its associated assignments. Select “All versions” to see assignments associated with any version of selected questionnaire.</value>
   </data>
   <data name="ErrorToCreateAssignment" xml:space="preserve">
-    <value>Assignment can not be created. </value>
+    <value>Assignment cannot be created. </value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
     <value>Audio recording</value>
@@ -310,7 +322,7 @@
     <value>Enable audio recording</value>
   </data>
   <data name="AudioRecordingExplanation" xml:space="preserve">
-    <value>When enabled, interviewer application will record interview process. With turning audio audit on an amount of synchronization data would be significantly larger</value>
+    <value>The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>New Assignment</value>

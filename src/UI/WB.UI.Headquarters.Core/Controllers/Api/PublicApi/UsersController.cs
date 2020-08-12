@@ -18,7 +18,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
-    [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+    [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
     [Route("api/v1")]
     [PublicApiJson]
     public class UsersController : ControllerBase
@@ -68,23 +68,38 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Gets detailed info about single user
         /// </summary>
-        /// <param name="id">User id</param>
+        /// <param name="id">User id or user name or user email</param>
         [HttpGet]
         [Route("supervisors/{id:guid}")]
-        [Route("users/{id:guid}")]
-        public ActionResult<UserApiDetails> Details(Guid id)
+        [Route("users/{id}")]
+        public ActionResult<UserApiDetails> Details(string id)
         {
-            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
+            var userViewInputModel = new UserViewInputModel();
+            
+            if (Guid.TryParse(id, out Guid userId))
+            {
+                userViewInputModel.PublicKey = userId;
+            }
+            else
+            {
+                userViewInputModel.UserName = id;
+            }
+            
+            var user = this.usersFactory.GetUser(userViewInputModel);
 
+            
             if (user == null)
             {
-                return NotFound();
+                user = this.usersFactory.GetUser(new UserViewInputModel {UserEmail = id});
+                if (user == null)
+                {
+                    return NotFound();
+                }
             }
 
             return new UserApiDetails(user);
         }
-
-
+        
         /// <summary>
         /// Gets detailed info about single interviewer
         /// </summary>
@@ -216,6 +231,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("users")]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
         {
+            if (!Enum.IsDefined(typeof(UserRoles), (UserRoles)model.Role))
+            {
+                ModelState.AddModelError(nameof(model.Role), "Trying to create user with unknown role");
+            }
+            
             var result = new UserCreationResult();
             var createdUserRole = model.GetDomainRole();
 

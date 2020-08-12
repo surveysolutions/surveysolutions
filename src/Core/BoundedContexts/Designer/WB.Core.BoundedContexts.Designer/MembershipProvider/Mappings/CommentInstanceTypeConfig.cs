@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
 
-            builder.Property(e => e.ResolveDate).HasColumnName("resolvedate");
+            builder.Property(e => e.ResolveDate).HasColumnName("resolvedate").IsRequired(false);
 
             builder.Property(e => e.UserEmail)
                 .IsRequired()

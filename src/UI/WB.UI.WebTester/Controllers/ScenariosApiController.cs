@@ -38,6 +38,12 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult Get(string id)
         {
             var interview = statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                return NotFound();
+            }
+
             var commands = this.executedCommandsStorage.Get(interview.Id, interview.Id);
             if (commands == null)
                 return StatusCode(StatusCodes.Status404NotFound);

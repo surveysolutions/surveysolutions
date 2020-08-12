@@ -27,8 +27,7 @@
                                     <div class="filter-column">
                                         <h5>
                                             {{$t('DataExport.SurveyQuestionnaire')}}
-                                            <span
-                                                class="text-danger">*</span>
+                                            <span class="text-danger">*</span>
                                         </h5>
                                         <div
                                             class="form-group"
@@ -64,6 +63,22 @@
                                                 :selectFirst="true"/>
                                             <span
                                                 class="help-block">{{ errors.first('questionnaireVersion') }}</span>
+                                        </div>
+                                        <div class="form-group"
+                                            v-if="translations.length > 0">
+                                            <Typeahead
+                                                noClear
+                                                selectFirst
+                                                control-id="questionnaireTranslation"
+                                                ref="questionnaireTranslation"
+                                                data-vv-name="questionnaireTranslation"
+                                                data-vv-as="questionnaire translation"
+                                                :placeholder="$t('DataExport.QuestionnaireTranslation')"
+                                                :selectedKey="pageState.translation"
+                                                :value="questionnaireTranslation"
+                                                :values="translations"
+                                                :disabled="questionnaireVersion == null"
+                                                v-on:selected="translationSelected"/>
                                         </div>
                                     </div>
 
@@ -115,7 +130,7 @@
                                             class="format-data Binary">{{$t('DataExport.DataType_Binary')}}</span>
                                     </label>
                                 </div>
-                                <div class="radio-btn-row"
+                                <!-- <div class="radio-btn-row"
                                     v-if="questionnaireVersion">
                                     <input
                                         class="radio-row"
@@ -128,7 +143,7 @@
                                         <span class="tick"></span>
                                         <span class="format-data">{{$t('DataExport.DataType_Ddi')}}</span>
                                     </label>
-                                </div>
+                                </div> -->
                                 <div class="radio-btn-row"
                                     v-if="hasInterviews">
                                     <input
@@ -145,6 +160,45 @@
                                     </label>
                                 </div>
                             </div>
+
+
+                            <div
+                                class="mb-30"
+                                v-if="dataType == 'surveyData' && questionnaireVersion">
+                                <h3>{{$t('DataExport.QuestionnaireInformation')}}</h3>
+                                <div class="radio-btn-row">
+                                    <input
+                                        class="radio-row"
+                                        type="radio"
+                                        name="includeMeta"
+                                        id="metaInclude"
+                                        v-model="includeMeta"
+                                        value="True"/>
+                                    <label for="metaInclude">
+                                        <span class="tick"></span>
+                                        <span
+                                            class="format-data">{{$t('DataExport.QuestionnaireInformation_Include')}}</span>
+                                    </label>
+                                </div>
+                                <div class="radio-btn-row">
+                                    <input
+                                        class="radio-row"
+                                        type="radio"
+                                        name="includeMeta"
+                                        id="metaExclude"
+                                        v-model="includeMeta"
+                                        value="False"/>
+                                    <label for="metaExclude"
+                                        class>
+                                        <span class="tick"></span>
+                                        <span
+                                            class="format-data no-meta">{{$t('DataExport.QuestionnaireInformation_Exclude')}}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+
                             <div
                                 class="mb-30"
                                 v-if="dataType == 'surveyData' && questionnaireVersion">
@@ -211,7 +265,7 @@
                                     </label>
                                 </div>
                                 <div class="radio-btn-row"
-                                    v-if="isDropboxSetUp">
+                                    v-if="isOneDriveSetUp">
                                     <input
                                         class="radio-row"
                                         type="radio"
@@ -312,6 +366,8 @@
 <script>
 import Vue from 'vue'
 import ExportProcessCard from './ExportProcessCard'
+import gql from 'graphql-tag'
+import { filter, toNumber, map} from 'lodash'
 
 const dataFormatNum = {Tabular: 1, Stata: 2, Spss: 3, Binary: 4, Ddi: 5, Paradata: 6}
 const ExternalStorageType = {dropbox: 1, oneDrive: 2, googleDrive: 3}
@@ -321,9 +377,12 @@ export default {
         return {
             dataType: 'surveyData',
             dataFormat: 'Tabular',
+            includeMeta: 'True',
             dataDestination: 'zip',
             questionnaireId: null,
             questionnaireVersion: null,
+            questionnaireTranslation: null,
+            translations: [],
             status: null,
             statuses: this.$config.model.statuses,
             isUpdatingDataAvailability: false,
@@ -338,7 +397,7 @@ export default {
 
     computed: {
         exportResults() {
-            return this.$store.state.export.jobs
+            return filter(this.$store.state.export.jobs, j => j.deleted == false)
         },
         exportServiceIsUnavailable() {
             return this.$store.state.export.exportServiceIsUnavailable
@@ -380,6 +439,7 @@ export default {
         resetForm() {
             this.dataType = 'surveyData'
             this.dataFormat = 'Tabular'
+            this.includeMeta = 'True'
             this.dataDestination = 'zip'
             this.questionnaireId = null
             this.questionnaireVersion = null
@@ -403,7 +463,9 @@ export default {
                     self.dataType,
                     self.dataFormat,
                     self.dataDestination,
-                    self.status
+                    self.status,
+                    self.questionnaireTranslation,
+                    this.includeMeta
                 )
 
                 self.$store.dispatch('showProgress')
@@ -434,7 +496,9 @@ export default {
                 this.dataType,
                 this.dataFormat,
                 this.dataDestination,
-                this.status
+                this.status,
+                this.questionnaireTranslation,
+                this.includeMeta
             )
 
             var state = {
@@ -444,6 +508,7 @@ export default {
                 },
                 format: exportParams.format,
                 interviewStatus: exportParams.status,
+                translationId: exportParams.translationId,
                 type: ExternalStorageType[this.dataDestination],
             }
 
@@ -461,8 +526,11 @@ export default {
                 scope: storageSettings.scope,
             }
 
-            if(this.dataDestination === 'googleDrive')
-            {
+            if(this.dataDestination === 'dropbox') {
+                request.token_access_type = 'offline'
+            }
+
+            if(this.dataDestination === 'googleDrive') {
                 request.access_type = 'offline'
                 request.prompt = 'consent'
             }
@@ -470,7 +538,7 @@ export default {
             window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 
-        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption) {
+        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption, translation, includeMeta) {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -489,12 +557,15 @@ export default {
             }
 
             const status = (statusOption || {key: null}).key
+            const tr = (translation || {key: null}).key
 
             return {
                 id: questionnaireId,
                 version: questionnaireVersion,
-                format,
-                status,
+                format: format,
+                status: status,
+                translationId: tr,
+                includeMeta: includeMeta,
             }
         },
 
@@ -509,12 +580,49 @@ export default {
             }
         },
 
-        questionnaireVersionSelected(newValue) {
+        translationSelected(newValue) {
+            this.questionnaireTranslation = newValue
+        },
+
+        async questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
-            if (this.questionnaireVersion) this.updateDataAvalability()
-            else {
+            this.translations = []
+            this.questionnaireTranslation = null
+
+            if (this.questionnaireVersion)
+                this.updateDataAvalability()
+            else
                 this.resetDataAvalability()
+
+            const query = gql`query questionnaires ($id: Uuid, $version: Long) {
+ questionnaires(id: $id, version: $version) {
+  nodes {
+    defaultLanguageName,
+    translations {
+        id, 
+        name
+    }
+  }}}`
+            if (newValue == null) return
+
+            const translationsResponse = await this.$apollo.query({
+                query,
+                variables: {
+                    id: this.questionnaireId.key,
+                    version: toNumber(newValue.key),
+                },
+                fetchPolicy: 'network-only',
+            })
+            const data = translationsResponse.data.questionnaires.nodes[0]
+            this.translations = map(data.translations, i => {return  {key: i.id, value: i.name } })
+            if(this.translations.length > 0) {
+                this.translations.unshift({
+                    key: null,
+                    value: data.defaultLanguageName || this.$t('WebInterview.Original_Language'),
+                }
+                )
             }
+
         },
         resetDataAvalability() {
             this.hasInterviews = null

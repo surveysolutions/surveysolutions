@@ -79,7 +79,7 @@ namespace WB.Services.Infrastructure.Logging
                            + " @host, @version, @app)",
                     events.Select(e =>
                     {
-                        string GetProperty(string name)
+                        string? GetProperty(string name)
                         {
                             return e.Properties.ContainsKey(name) ? e.Properties[name].ToString() : null;
                         }

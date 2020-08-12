@@ -181,6 +181,9 @@
   <data name="ReadOnly" xml:space="preserve">
     <value>Read Only</value>
   </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>It is readonly question. You can not edit it.</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
@@ -733,6 +736,9 @@
   <data name="AddSubsection" xml:space="preserve">
     <value>Add sub-section</value>
   </data>
+  <data name="VirtualCoverPage" xml:space="preserve">
+    <value>Virtual cover page</value>
+  </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Add variable</value>
   </data>
@@ -970,6 +976,14 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="HelpAttachmentName" xml:space="preserve">
     <value>The name of attachment file that will be displayed.</value>
+  </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.</value>
+  </data>
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+    <value>Cover is virtual section that shows all identifying questions.
+    Questions cannot be changed in this section</value>
+
   </data>
   <data name="ConditionMightBeBroken" xml:space="preserve">
     <value>Condition or cascading depended items might be broken</value>
@@ -1219,6 +1233,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="EditorAddComment" xml:space="preserve">
     <value>Add comment</value>
+  </data>
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>Jump to edit</value>
   </data>
   <data name="CommentEditorResolve" xml:space="preserve">
     <value>Resolve</value>

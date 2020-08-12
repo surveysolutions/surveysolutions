@@ -36,6 +36,7 @@ export const entityDetails = {
                 isLoading: true,
             }
         },
+
         hash() {
             return getLocationHash(this.id)
         },
@@ -85,8 +86,10 @@ export const entityDetails = {
         sendAnswer(callback) {
             if (this.acceptAnswer) {
                 callback()
+                this.$store.dispatch('tryResolveFetch', this.id)
             }
         },
+
         cleanValidity() {
             this.$store.dispatch('clearAnswerValidity', { id: this.id })
         },
@@ -96,6 +99,7 @@ export const entityDetails = {
         removeAnswer() {
             this.$store.dispatch('removeAnswer', this.$me.id)
             this.$emit('answerRemoved', this.$me.id)
+
         },
 
         fetch(id) {
@@ -107,13 +111,14 @@ export const entityDetails = {
         },
 
         handleEmptyAnswer(answer) {
-            const answ = answer === undefined || answer === null || answer === '' ? undefined : answer
+            const newAnswer = answer === undefined || answer === null || answer === '' ? null : answer
+            const currentAnswer = this.$me.answer === undefined || this.$me.answer === null || this.$me.answer === '' ? null : this.$me.answer
 
-            if (answ === this.$me.answer || (answer === undefined && this.$me.answer === null)) {
+            if (newAnswer === currentAnswer) {
                 return true
             }
 
-            if ((answ === '' || answ === null) && this.$me.isAnswered) {
+            if (newAnswer === null && this.$me.isAnswered) {
                 this.removeAnswer()
                 return true
             }

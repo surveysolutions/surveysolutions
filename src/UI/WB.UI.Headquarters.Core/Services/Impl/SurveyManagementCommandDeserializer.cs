@@ -42,6 +42,8 @@ namespace WB.UI.Headquarters.Services.Impl
                         { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
                         { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },
                         { "RejectInterviewToInterviewerCommand", typeof ( RejectInterviewToInterviewerCommand) },
+                        { "HqRejectInterviewToInterviewerCommand", typeof ( HqRejectInterviewToInterviewerCommand) },
+                        { "HqRejectInterviewToSupervisorCommand", typeof ( HqRejectInterviewToSupervisorCommand) },
 
                         { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
                         { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },

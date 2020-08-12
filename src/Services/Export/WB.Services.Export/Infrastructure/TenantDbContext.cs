@@ -34,12 +34,12 @@ namespace WB.Services.Export.Infrastructure
         private const long ContextSchemaVersion = 4;
 
         private readonly IOptions<DbConnectionSettings> connectionSettings;
-        private readonly ILogger<TenantDbContext> logger;
+        private readonly ILogger<TenantDbContext>? logger;
 
         public TenantDbContext(ITenantContext tenantContext,
             IOptions<DbConnectionSettings> connectionSettings,
             DbContextOptions options,
-            ILogger<TenantDbContext> logger = null) : base(options)
+            ILogger<TenantDbContext>? logger = null) : base(options)
         {
             this.TenantContext = tenantContext;
             this.connectionSettings = connectionSettings;
@@ -68,11 +68,11 @@ namespace WB.Services.Export.Infrastructure
 
         private static readonly ConcurrentDictionary<string, string> connectionStringCache = new ConcurrentDictionary<string, string>();
 
-        public DbSet<InterviewReference> InterviewReferences { get; set; }
-        public DbSet<Metadata> MetadataSet { get; set; }
-        public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; }
-        public DbSet<AssignmentAction> AssignmentActions { get; set; }
-        public DbSet<Assignment.Assignment> Assignments { get; set; }
+        public DbSet<InterviewReference> InterviewReferences { get; set; } = null!;
+        public DbSet<Metadata> MetadataSet { get; set; } = null!;
+        public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; } = null!;
+        public DbSet<AssignmentAction> AssignmentActions { get; set; } = null!;
+        public DbSet<Assignment.Assignment> Assignments { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -120,7 +120,7 @@ namespace WB.Services.Export.Infrastructure
             }
         }
 
-        public async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
+        private async Task CheckSchemaVersionAndMigrate(CancellationToken cancellationToken)
         {
             if (await DoesSchemaExist(cancellationToken))
             {
@@ -142,16 +142,16 @@ namespace WB.Services.Export.Infrastructure
                 }
             }
 
-            this.Database.Migrate();
+            await this.Database.MigrateAsync(cancellationToken: cancellationToken);
         }
 
-        public async Task SetContextSchema(CancellationToken cancellationToken)
+        private async Task SetContextSchema(CancellationToken cancellationToken)
         {
-            await using var tr = Database.BeginTransaction();
+            await using var tr = await Database.BeginTransactionAsync(cancellationToken);
 
             SchemaVersion.AsLong = ContextSchemaVersion;
             await SaveChangesAsync(cancellationToken);
-            tr.Commit();
+            await tr.CommitAsync(cancellationToken);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -159,7 +159,7 @@ namespace WB.Services.Export.Infrastructure
             base.OnModelCreating(modelBuilder);
             modelBuilder.UseSnakeCaseNaming();
 
-            string schema = null;
+            string? schema = null;
             if (!this.TenantContext.Tenant.Id.Equals(TenantId.None))
             {
                 modelBuilder.HasDefaultSchema(TenantContext.Tenant.SchemaName());
@@ -205,7 +205,7 @@ namespace WB.Services.Export.Infrastructure
 
             foreach (var tables in tablesToDelete.Batch(30))
             {
-                await using var tr = db.BeginTransaction();
+                await using var tr = await db.BeginTransactionAsync(cancellationToken);
                 foreach (var table in tables)
                 {
                     await db.ExecuteAsync($@"drop table if exists {table}");
@@ -215,7 +215,7 @@ namespace WB.Services.Export.Infrastructure
                 await tr.CommitAsync(cancellationToken);
             }
 
-            await using (var tr = db.BeginTransaction())
+            await using (var tr = await db.BeginTransactionAsync(cancellationToken))
             {
                 foreach (var schema in schemas)
                 {
@@ -240,6 +240,15 @@ namespace WB.Services.Export.Infrastructure
                     name
                 });
             return exists;
+        }
+
+        public async Task EnsureMigrated(CancellationToken cancellationToken)
+        {
+            if (Database.IsNpgsql())
+            {
+                await CheckSchemaVersionAndMigrate(cancellationToken);
+                await SetContextSchema(cancellationToken);
+            }
         }
     }
 }

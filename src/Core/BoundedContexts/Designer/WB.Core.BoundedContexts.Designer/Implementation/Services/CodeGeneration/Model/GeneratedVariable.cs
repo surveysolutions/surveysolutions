@@ -2,12 +2,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class GeneratedVariable
     {
+
         public GeneratedVariable()
         {
-            
+            Name = string.Empty;
+            Type = string.Empty;
+            Visibility = "private";
         }
 
-        public GeneratedVariable(string name, string type, string initialization = null, string visibility = "private", bool isStatic = true, bool isReadonly = true)
+        public GeneratedVariable(string name, string type, string? initialization = null, string visibility = "private", bool isStatic = true, bool isReadonly = true)
         {
             this.Type = type;
             this.Name = name;
@@ -22,6 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string Visibility { get; set; }
         public bool IsStatic { get; set; }
         public bool IsReadonly { get; set; }
-        public string Initialization { get; set; }
+        public string? Initialization { get; set; }
     }
 }

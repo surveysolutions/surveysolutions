@@ -7,7 +7,7 @@ namespace Main.Core.Entities.SubEntities.Question
 {
     public class MultyOptionsQuestion : AbstractQuestion, IMultyOptionsQuestion
     {
-        public MultyOptionsQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){ }
+        public MultyOptionsQuestion(string? questionText = null, List<IComposite>? children = null):base(questionText, children){ }
 
         public override void AddAnswer(Answer answer)
         {
@@ -19,7 +19,7 @@ namespace Main.Core.Entities.SubEntities.Question
             this.Answers.Add(answer);
         }
 
-        public override T Find<T>(Guid publicKey)
+        public override T? Find<T>(Guid publicKey) where T: class
         {
             return null;
         }
@@ -29,7 +29,7 @@ namespace Main.Core.Entities.SubEntities.Question
             return Enumerable.Empty<T>();
         }
 
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
+        public override T? FirstOrDefault<T>(Func<T, bool> condition) where T: class
         {
             return null;
         }

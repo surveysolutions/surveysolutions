@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -90,14 +91,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         }
 
         private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons, 
-            Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
+            Guid? questionnaireId = null, string? questionnaireTitle = null, Guid? createdBy = null,
             bool? isPublic = null, DateTime? creationDate = null)
         {
             var questionnaireIdValue = questionnaireId ?? document.PublicKey;
 
             Guid? creatorId = createdBy ?? document.CreatedBy;
 
-            var sourceQuestionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireIdValue.FormatGuid());
+            var sourceQuestionnaireListViewItem =
+                this.dbContext.Questionnaires.Include(x => x.SharedPersons)
+                    .FirstOrDefault(x => x.QuestionnaireId == questionnaireIdValue.FormatGuid());
+            
+            
             var questionnaireListViewItem = sourceQuestionnaireListViewItem ?? new QuestionnaireListViewItem();
             questionnaireListViewItem.PublicId = questionnaireIdValue;
             questionnaireListViewItem.Title = questionnaireTitle ?? document.Title;
@@ -106,11 +111,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.CreatedBy = creatorId.GetValueOrDefault();
             questionnaireListViewItem.IsPublic = isPublic ?? document.IsPublic;
             questionnaireListViewItem.Owner = null;
-            questionnaireListViewItem.CreatorName = null;
+            questionnaireListViewItem.CreatorName = string.Empty;
             questionnaireListViewItem.IsDeleted = false;
 
             if (creatorId.HasValue)
-                questionnaireListViewItem.CreatorName = this.dbContext.Users.Find(creatorId.Value)?.UserName;
+                questionnaireListViewItem.CreatorName = this.dbContext.Users.Find(creatorId.Value)?.UserName ?? String.Empty;
 
             if (!shouldPreserveSharedPersons)
             {
@@ -152,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 LastEntryDate = DateTime.UtcNow,
                 CreatedBy = command.ResponsibleId,
                 IsPublic = command.IsPublic,
-                CreatorName = this.dbContext.Users.Find(command.ResponsibleId)?.UserName
+                CreatorName = this.dbContext.Users.Find(command.ResponsibleId)?.UserName ?? String.Empty
             };
             this.dbContext.Questionnaires.Add(questionnaireListViewItem);
         }
@@ -274,15 +279,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string questionnaireId, 
             ShareType shareType)
         {
-            string mailFrom = this.dbContext.Users.Find(responsibleId)?.Email;
-            string mailToUserName = this.dbContext.Users.FirstOrDefault(x => x.NormalizedEmail == mailTo.ToUpper())?.UserName;
+            string? mailFrom = this.dbContext.Users.Find(responsibleId)?.Email;
+            string? mailToUserName = this.dbContext.Users.FirstOrDefault(x => x.NormalizedEmail == mailTo.ToUpper())?.UserName;
 
             this.emailNotifier.NotifyTargetPersonAboutShareChange(
                 shareChangeType, 
                 mailTo, 
                 mailToUserName, 
                 questionnaireId,
-                questionnaireTitle, shareType, mailFrom);
+                questionnaireTitle, shareType,
+                mailFrom);
 
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 

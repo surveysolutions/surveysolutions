@@ -8,16 +8,28 @@
 
 @functions {
 
-    private static List<Answer> GetOptions(ICategoricalQuestion question, PdfQuestionnaireModel questionnaire)
-        => question.CategoriesId.HasValue ? questionnaire.CategoriesList.Find(x => x.Id == question.CategoriesId.Value).Items.Select(x => new Answer
-        {
-            AnswerValue = x.Id.ToString(),
-            ParentValue = x.ParentId?.ToString(),
-            AnswerText = x.Text
-        }).ToList() : question.Answers;
+    private static List<Answer> GetOptions(ICategoricalQuestion? question, PdfQuestionnaireModel questionnaire)
+    {
+        if(question == null)
+            return new List<Answer>();
+        if (!question.CategoriesId.HasValue)
+            return question.Answers;
 
-    private static string GetOptionsRef(PdfQuestionnaireModel questionnaire, ICategoricalQuestion question)
-        => questionnaire.GetOptionsRef(question.CategoriesId.HasValue ? question.CategoriesId.Value : question.PublicKey);
+        var categories = questionnaire.CategoriesList.Find(x => x.Id == question.CategoriesId.Value);
+
+        return categories!= null
+            ? categories.Items.Select(x => new Answer
+            {
+                AnswerValue = x.Id.ToString(),
+                ParentValue = x.ParentId?.ToString(),
+                AnswerText = x.Text
+            }).ToList()
+            : new List<Answer>();
+        
+    }
+
+    private static string GetOptionsRef(PdfQuestionnaireModel questionnaire, ICategoricalQuestion? question)
+        => question == null? "" : questionnaire.GetOptionsRef(question.CategoriesId.HasValue ? question.CategoriesId.Value : question.PublicKey);
 }
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
@@ -34,7 +46,7 @@
                     @if (questionnaire.InstructionIsTooLong(question))
                     {
                         <div class="more">
-                            <a href="#@questionnaire.GetInstructionsRef(question.PublicKey)">@Pdf.Format(PdfStrings.AppendixLink, question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I"))</a>
+                            <a href="#@questionnaire.GetInstructionsRef(question.PublicKey)">@Pdf.Format(PdfStrings.AppendixLink, (question.Instructions ?? "").Length - questionnaire.Settings.InstructionsExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I"))</a>
                         </div>
                     }
                 </div>
@@ -47,7 +59,7 @@
                     {
                         <div class="more">
                             <a href="#@questionnaire.GetOptionsFilterRef(question.PublicKey)">
-                                @Pdf.Format(PdfStrings.AppendixLink, questionnaire.GetQuestionOptionsFilter(question).Length - questionnaire.Settings.VariableExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "F"))
+                                @Pdf.Format(PdfStrings.AppendixLink, (questionnaire.GetQuestionOptionsFilter(question) ?? "").Length - questionnaire.Settings.VariableExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "F"))
                             </a>
                         </div>
                     }
@@ -92,7 +104,7 @@
         <div class="question-meta">
             <div class="type">
                 @questionnaire.GetFormattedQuestionType(question)
-                @if (!questionnaire.IsInterviewerQuestion(question))
+                @if (!questionnaire.IsInterviewerQuestion(question) && !questionnaire.IsParentCover(question))
                 {
                     <br />
                     <span>@string.Format(PdfStrings.Scope, questionnaire.GetQuestionScope(question))</span>

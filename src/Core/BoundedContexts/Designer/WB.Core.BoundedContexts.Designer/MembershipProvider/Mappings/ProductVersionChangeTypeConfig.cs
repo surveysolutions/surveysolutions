@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
                 .ValueGeneratedNever()
                 .IsRequired();
 
-            builder.Property(e => e.ProductVersion).HasColumnName("productversion");
+            builder.Property(e => e.ProductVersion).HasColumnName("productversion").IsRequired(true);
         }
     }
 }

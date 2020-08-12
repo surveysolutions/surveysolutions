@@ -8,7 +8,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
     {
         private readonly IMemoryCache memoryCache;
         private readonly ITenantContext tenantContext;
-        private string keyPart;
+        private string? keyPart;
 
         public QuestionnaireStorageCache(
             IMemoryCache memoryCache,
@@ -18,15 +18,15 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             this.tenantContext = tenantContext;
         }
 
-        private string Key(QuestionnaireId id)
+        private string Key(QuestionnaireId id, Guid? translation)
         {
-            if (keyPart == null) keyPart = nameof(QuestionnaireStorageCache) + ":" + tenantContext.Tenant.Id + ":";
-            return keyPart + id;
+            keyPart ??= nameof(QuestionnaireStorageCache) + ":" + tenantContext.Tenant.Id + ":";
+            return keyPart + id + (translation != null ? $":{translation}" : string.Empty);
         }
 
-        public bool TryGetValue(QuestionnaireId id, out QuestionnaireDocument document)
+        public bool TryGetValue(QuestionnaireId id, Guid? translation, out QuestionnaireDocument? document)
         {
-            if (memoryCache.TryGetValue(Key(id), out var res))
+            if (memoryCache.TryGetValue(Key(id, translation), out var res))
             {
                 document = res as QuestionnaireDocument;
                 if (document == null)
@@ -39,14 +39,14 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             return false;
         }
 
-        public void Remove(QuestionnaireId id)
+        public void Remove(QuestionnaireId id, Guid? translation)
         {
-            memoryCache.Remove(Key(id));
+            memoryCache.Remove(Key(id, translation));
         }
 
-        public void Set(QuestionnaireId id, QuestionnaireDocument questionnaire)
+        public void Set(QuestionnaireId id, Guid? translation, QuestionnaireDocument questionnaire)
         {
-            memoryCache.Set(Key(id), questionnaire, new MemoryCacheEntryOptions
+            memoryCache.Set(Key(id, translation), questionnaire, new MemoryCacheEntryOptions
             {
                 SlidingExpiration = TimeSpan.FromMinutes(5)
             });

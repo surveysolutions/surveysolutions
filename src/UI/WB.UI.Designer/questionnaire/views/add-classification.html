@@ -53,7 +53,7 @@
                     </div>
                     <div class="tile-footer clearfix">
                         <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
-                        <button class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
+                        <button ng-if="!isReadOnlyForUser" class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="tile-footer clearfix">
                         <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
-                        <button class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
+                        <button ng-if="!isReadOnlyForUser" class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                     </div>
                 </div>
             </div>

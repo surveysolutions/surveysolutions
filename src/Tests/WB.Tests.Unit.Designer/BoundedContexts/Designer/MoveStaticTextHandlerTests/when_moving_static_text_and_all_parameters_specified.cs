@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().Children[targetIndex].PublicKey.Should().Be(entityId);
         
         private static Questionnaire questionnaire;
-        private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid entityId = Guid.Parse("11111111111111111111111111111112");
         private static Guid targetEntityId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

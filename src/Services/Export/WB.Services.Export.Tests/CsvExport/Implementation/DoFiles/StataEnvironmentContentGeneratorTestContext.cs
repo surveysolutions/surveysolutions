@@ -36,13 +36,13 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             return fileSystemAccessorMock.Object;
         }
 
-        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = null,
+        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "",
             params ExportedQuestionHeaderItem[] exportedQuestionHeaderItems)
         {
-            var result = new HeaderStructureForLevel();
-            result.LevelScopeVector = new ValueVector<Guid>();
-            result.LevelName = levelName;
-            result.LevelIdColumnName = "Id";
+            var result = new HeaderStructureForLevel(new ValueVector<Guid>(),
+                "Id",
+                levelName);
+
             foreach (var exportedHeaderItem in exportedQuestionHeaderItems)
             {
                 result.HeaderItems.Add(exportedHeaderItem.PublicKey, exportedHeaderItem);

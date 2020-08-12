@@ -10,8 +10,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         public InterviewGpsMap()
         {
             Table("interview_geo_answers");
-            Id(x => x.Id, Idmap => Idmap.Generator(Generators.Identity));
-            Property(x => x.InterviewId);
+            Id(x => x.Id, map => map.Generator(Generators.Identity));
+
+            ManyToOne(x => x.InterviewSummary, mto => mto.Column("interview_id"));
+
             Property(x => x.QuestionId);
             Property(x => x.RosterVector);
             Property(x => x.Latitude);

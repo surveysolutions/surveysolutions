@@ -10,14 +10,13 @@ namespace WB.Services.Export.Jobs
 {
     public interface IJobsStatusReporting
     {
-        Task<DataExportProcessView> GetDataExportStatusAsync(long processId, TenantInfo tenant);
-        Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds, TenantInfo tenant);
+        Task<DataExportProcessView?> GetDataExportStatusAsync(long processId);
+        Task<List<DataExportProcessView>> GetDataExportStatusesAsync(long[] processIds);
 
         Task<IEnumerable<DataExportProcessView>> GetDataExportStatusesAsync(DataExportFormat? exportType,
-            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset, TenantInfo tenant);
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset);
 
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
-            TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
     }

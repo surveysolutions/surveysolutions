@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 state.ArchiveFilePath, state.StorageType);
 
             var dataClient = externalStorageDataClientFactory.GetDataClient(state.StorageType);
+
+            if (dataClient == null)
+                throw new ArgumentException("Cannot find appropriate external storage data client for type: " + state.StorageType);
+            if (state.ProcessArgs.AccessToken == null)
+                throw new ArgumentException("Cannot publish to external storage export without accessToken", nameof(ExportState.ProcessArgs.AccessToken));
+            if (state.ProcessArgs.RefreshToken == null)
+                throw new ArgumentException("Cannot publish to external storage export without refreshToken", nameof(ExportState.ProcessArgs.RefreshToken));
+
             dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.ProcessArgs.RefreshToken,
                 state.Settings.Tenant);
             
@@ -39,20 +48,24 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             {
                 var applicationFolder = await dataClient.CreateApplicationFolderAsync("Data Export");
 
-                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, cancellationToken);
-                
-                using (var fileStream = File.OpenRead(state.ArchiveFilePath))
+                var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(state.Settings.QuestionnaireId, 
+                    token: cancellationToken);
+
+                if (questionnaire == null)
+                    throw new InvalidOperationException("Questionnaire was not found.");
+
+                await using (var fileStream = File.OpenRead(state.ArchiveFilePath))
                 {
-                    string questionnaireName = null;
+                    string? questionnaireNamePrefixOverride = null;
                     if (!string.IsNullOrEmpty(questionnaire.VariableName))
                     {
                         var split = questionnaire.QuestionnaireId.Id.Split('$');
                         var questionnaireVersion = split.Length == 2 
                             ? split[1]
                             : questionnaire.QuestionnaireId.Id;
-                        questionnaireName = $"{questionnaire.VariableName}_v{questionnaireVersion}";
+                        questionnaireNamePrefixOverride = $"{questionnaire.VariableName}_v{questionnaireVersion}";
                     }
-                    var filename = this.exportFileNameService.GetFileNameForExportArchive(state.Settings, questionnaireName);
+                    var filename = await this.exportFileNameService.GetFileNameForExportArchiveAsync(state.Settings, questionnaireNamePrefixOverride);
                     await dataClient.UploadFileAsync(applicationFolder, filename, fileStream, fileStream.Length, cancellationToken);
                 }
             }

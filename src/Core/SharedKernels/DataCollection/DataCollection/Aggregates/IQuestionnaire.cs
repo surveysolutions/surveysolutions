@@ -106,6 +106,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsInterviewierQuestion(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
+        
+        ReadOnlyCollection<Guid> GetPrefilledEntities();
 
         ReadOnlyCollection<Guid> GetHiddenQuestions();
 
@@ -316,5 +318,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         GeometryType? GetQuestionGeometryType(Guid questionId);
         int GetEntityIdMapValue(Guid entityId);
+        bool IsCoverPage(Guid identityId);
+        bool IsCoverPageSupported { get; }
+        Guid CoverPageSectionId { get; }
+        string GetAttachmentNameForEntity(Guid entityId);
+        IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
     }
 }

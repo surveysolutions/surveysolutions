@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -23,13 +24,15 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IAuthorizedUser authorizedUser;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private IInterviewUniqueKeyGenerator interviewUniqueKeyGenerator;
+        private readonly IUserViewFactory userViewFactory;
 
         public CommandTransformator(IAuthorizedUser authorizedUser, IQuestionnaireStorage questionnaireStorage, 
-            IInterviewUniqueKeyGenerator interviewUniqueKeyGenerator)
+            IInterviewUniqueKeyGenerator interviewUniqueKeyGenerator, IUserViewFactory userViewFactory)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewUniqueKeyGenerator = interviewUniqueKeyGenerator;
+            this.userViewFactory = userViewFactory;
         }
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
@@ -55,6 +58,18 @@ namespace WB.UI.Headquarters.Services.Impl
             if (rejectToInterviewerCommand != null)
             {
                 rejectToInterviewerCommand.OriginDate = DateTimeOffset.Now;
+            }
+
+            if (command is HqRejectInterviewToSupervisorCommand hqRejectInterviewToSupervisorCommand)
+            {
+                hqRejectInterviewToSupervisorCommand.OriginDate = DateTimeOffset.UtcNow;
+            }
+
+            if (command is HqRejectInterviewToInterviewerCommand hqRejectInterviewToInterviewerCommand)
+            {
+                hqRejectInterviewToInterviewerCommand.OriginDate = DateTimeOffset.UtcNow;
+                var interviewer = userViewFactory.GetUser(hqRejectInterviewToInterviewerCommand.InterviewerId);
+                hqRejectInterviewToInterviewerCommand.SupervisorId = interviewer.Supervisor.Id;
             }
 
             var assignCommand = command as AssignInterviewerCommand;

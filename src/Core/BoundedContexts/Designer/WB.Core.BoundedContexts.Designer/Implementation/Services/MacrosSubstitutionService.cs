@@ -8,10 +8,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class MacrosSubstitutionService : IMacrosSubstitutionService
     {
-        public string InlineMacros(string expression, IEnumerable<Macro> macros)
+        public string InlineMacros(string? expression, IEnumerable<Macro> macros)
         {
             if (string.IsNullOrWhiteSpace(expression))
-                return expression;
+                return string.Empty;
 
             var expressionContainsMacrosMarker = expression.Contains("$");
             if (!expressionContainsMacrosMarker)
