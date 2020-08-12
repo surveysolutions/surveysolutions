@@ -25,7 +25,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             doContent.AppendLine($"insheet using \"{fileName}\", tab case names");
         }
 
-        private static string doFileHeader = null;
+        private static string? doFileHeader = null;
 
         private void AppendHeaderFromFile()
         {

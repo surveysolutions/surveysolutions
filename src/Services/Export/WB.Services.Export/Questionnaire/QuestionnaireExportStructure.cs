@@ -9,9 +9,10 @@ namespace WB.Services.Export.Questionnaire
     {
         private int? maxRosterDepthInQuestionnaire = null;
 
-        public QuestionnaireExportStructure()
+        public QuestionnaireExportStructure(string questionnaireId, Dictionary<ValueVector<Guid>, HeaderStructureForLevel>? headerMap = null)
         {
-            this.HeaderToLevelMap = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
+            QuestionnaireId = questionnaireId;
+            this.HeaderToLevelMap = headerMap ?? new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
         }
 
         public string QuestionnaireId { get; set; }
@@ -42,10 +43,7 @@ namespace WB.Services.Export.Questionnaire
         {
             get
             {
-                if (!maxRosterDepthInQuestionnaire.HasValue)
-                {
-                    maxRosterDepthInQuestionnaire = this.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
-                }
+                maxRosterDepthInQuestionnaire ??= this.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
 
                 return maxRosterDepthInQuestionnaire.Value;
             }

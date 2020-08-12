@@ -25,7 +25,6 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();
             registry.Bind<IVerificationErrorsMapper, VerificationErrorsMapper>();
             registry.Bind<IDynamicCompiler, RoslynCompiler>();
-            registry.Bind<IExpressionReplacer, ExpressionReplacer>();
             registry.Bind<IMacrosSubstitutionService, MacrosSubstitutionService>();
             registry.Bind<IExpressionProcessorGenerator, QuestionnaireExpressionProcessorGenerator>();
             registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();

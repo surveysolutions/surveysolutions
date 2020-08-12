@@ -12,7 +12,7 @@ namespace WB.Services.Export.Events.Interview.Dtos
     {
         public Guid GroupId { get; set; }
 
-        public RosterVector OuterRosterVector { get; set; }
+        public RosterVector OuterRosterVector { get; set; } = RosterVector.Empty;
         
         public decimal RosterInstanceId { get; set; }
 

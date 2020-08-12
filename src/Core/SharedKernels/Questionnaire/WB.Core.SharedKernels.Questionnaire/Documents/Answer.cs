@@ -6,11 +6,11 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Answer
     {
-        public string AnswerText { get; set; }
+        public string AnswerText { get; set; } = String.Empty;
 
-        public string AnswerValue { get; set; }
+        public string AnswerValue { get; set; } = String.Empty;
 
-        public string ParentValue { get; set; }
+        public string? ParentValue { get; set; }
        
         public decimal? AnswerCode { get; set; }
 
@@ -18,7 +18,10 @@ namespace Main.Core.Entities.SubEntities
 
         public Answer Clone()
         {
-            return this.MemberwiseClone() as Answer;
+            var answer = this.MemberwiseClone() as Answer;
+            if(answer == null)
+                throw new InvalidOperationException("Cloned object is not an Answer.");
+            return answer;
         }
 
         public decimal GetParsedValue()
@@ -39,17 +42,6 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HasValue() => AnswerCode.HasValue || !string.IsNullOrEmpty(AnswerValue);
 
-        public static Answer CreateFromOther(Answer answer)
-        {
-            return new Answer
-            {
-                AnswerText = answer.AnswerText,
-                AnswerValue = answer.AnswerValue,
-                ParentValue = answer.ParentValue,
-                AnswerCode = answer.AnswerCode
-            };
-        }
-
         public override bool Equals(object obj)
         {
             return obj is Answer answer &&
@@ -61,7 +53,7 @@ namespace Main.Core.Entities.SubEntities
         public override int GetHashCode()
         {
             var hashCode = 1711232258;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AnswerText);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string?>.Default.GetHashCode(AnswerText);
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedValue());
             hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(GetParsedParentValue());
             return hashCode;

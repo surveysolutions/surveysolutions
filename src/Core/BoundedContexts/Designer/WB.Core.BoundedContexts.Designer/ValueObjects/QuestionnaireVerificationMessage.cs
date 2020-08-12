@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             public int GetHashCode(QuestionnaireVerificationMessage message) => message.Code.GetHashCode();
         }
 
-        public static QuestionnaireVerificationMessage Error(string code, string message, string translationName = "", params QuestionnaireEntityReference[] references)
+        public static QuestionnaireVerificationMessage Error(string code, string message, string? translationName = "", params QuestionnaireEntityReference[] references)
             => new QuestionnaireVerificationMessage(code, message, null, VerificationMessageLevel.General, translationName, references);
 
         public static QuestionnaireVerificationMessage Error(string code, string message,params QuestionnaireEntityReference[] references)
@@ -34,9 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         private QuestionnaireVerificationMessage(
             string code, 
             string message,
-            IEnumerable<string> compilationErrorMessages,
+            IEnumerable<string>? compilationErrorMessages,
             VerificationMessageLevel messageLevel,
-            string translationName,
+            string? translationName,
             IEnumerable<QuestionnaireEntityReference> references)
         {
             this.Code = code;
@@ -53,9 +53,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             ? this.message :
             $"{this.TranslationName}: {this.message}";
 
-        public IEnumerable<string> CompilationErrorMessages { get; }
+        public IEnumerable<string>? CompilationErrorMessages { get; }
         public VerificationMessageLevel MessageLevel { get; }
-        public string TranslationName { get; set; }
+        public string? TranslationName { get; set; }
         public IReadOnlyCollection<QuestionnaireEntityReference> References { get; }
 
         public override string ToString() => string.IsNullOrWhiteSpace(this.TranslationName) 

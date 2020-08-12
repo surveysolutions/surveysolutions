@@ -73,9 +73,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                 q => q.Id, 
                                 q =>
                                 {
-                                    var questionType = q.Item3.GetQuestionType(q.EntityId);
+                                    var questionType = q.Item3!.GetQuestionType(q.EntityId);
                                     if(questionType == QuestionType.SingleOption)
-                                        return q.Item3.GetOptionsForQuestion(q.EntityId, null, null, null).ToList();
+                                        return q.Item3!.GetOptionsForQuestion(q.EntityId, null, null, null).ToList();
                                     return new List<CategoricalOption>();
                                 });
                       

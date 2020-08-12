@@ -26,22 +26,22 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
         }
 
         [TempData]
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
 
         [TempData]
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
         public class InputModel
         {
             [StringLength(100, ErrorMessageResourceName = nameof(ErrorMessages.FullNameMaxLengthError), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string FullName { get; set; }
+            public string? FullName { get; set; }
 
             [Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public string? Email { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (Input == null || !ModelState.IsValid)
             {
                 return Page();
             }

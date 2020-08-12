@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType);
         byte[] GetTemplateAsExcelFile();
         IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id);
-        CategoriesFile GetAsExcelFile(Guid questionnaireId, Guid categoriesId);
+        CategoriesFile? GetAsExcelFile(Guid questionnaireId, Guid categoriesId);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
     }
 }

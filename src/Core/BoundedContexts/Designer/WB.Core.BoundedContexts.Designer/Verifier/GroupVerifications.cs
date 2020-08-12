@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return links.Any();
         }
 
-        public static IEnumerable<string> GetMarkdownLinksFromText(string text)
+        public static IEnumerable<string> GetMarkdownLinksFromText(string? text)
         {
             if (string.IsNullOrWhiteSpace(text)) yield break;
 
@@ -119,9 +119,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if(!(node is LeafBlock leafBlock)) continue;
                 foreach (var inline in leafBlock.Inline)
                 {
-                    if(!(inline is LinkInline link)) continue;
-
-                    yield return link.Url?.ToLower();
+                    if(!(inline is LinkInline link) || link.Url==null) continue;
+                    
+                    yield return link.Url.ToLower();
                 }
             }
         }
@@ -153,13 +153,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool NotSingleSectionWithLessThan5Questions(IGroup group)
             => IsSection(group)
-               && group.GetParent().Children.Count > 1
+               && (group.GetParent() ?? throw new InvalidOperationException("Parent was not found.")).Children.Count > 1
                && group.GetDescendants().Count(Question) < 5;
 
         private static bool Question(IQuestionnaireEntity entity) => entity is IQuestion;
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
+               && rosterGroup.DisplayMode != RosterDisplayMode.Matrix
                && rosterGroup.Children.Count == 1
                && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
 
@@ -205,7 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var parentComposite = group.GetParent();
-            if (parentComposite.PublicKey != questionnaire.PublicKey) return false;
+            if (parentComposite?.PublicKey != questionnaire.PublicKey) return false;
 
             if (parentComposite.Children.IndexOf(group) != 0) return false;
 
@@ -256,7 +257,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool GroupHasLevelDepthMoreThan10(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             int groupLevel = 0;
-            IComposite questionnaireItem = group;
+            IComposite? questionnaireItem = group;
             while (questionnaireItem != null)
             {
                 groupLevel++;

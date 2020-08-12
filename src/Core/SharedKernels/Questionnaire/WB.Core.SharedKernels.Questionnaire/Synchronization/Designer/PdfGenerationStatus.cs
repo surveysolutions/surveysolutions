@@ -2,7 +2,7 @@
 {
     public class PdfStatus
     {
-        public string Message { get; set; }
+        public string? Message { get; set; }
         public bool ReadyForDownload { get; set; }
         public bool CanRetry { get; set; }
     }

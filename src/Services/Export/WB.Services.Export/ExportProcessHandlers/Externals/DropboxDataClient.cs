@@ -14,9 +14,33 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     {
         private readonly ILogger<DropboxDataClient> logger;
 
-        private DropboxClient client;
-        private TenantInfo tenant;
-        
+
+        private DropboxClient? client;
+
+        private DropboxClient Client
+        {
+            set => client = value;
+            get
+            {
+                if(client == null)
+                    throw new InvalidOperationException("DropboxDataClient was not initialized.");
+                return client;
+            }
+        }
+
+        private TenantInfo? tenant { set; get; }
+
+        private TenantInfo Tenant
+        {
+            set => tenant = value;
+            get
+            {
+                if (tenant == null)
+                    throw new InvalidOperationException("DropboxDataClient was not initialized.");
+                return tenant;
+            }
+        }
+
         public DropboxDataClient(ILogger<DropboxDataClient> logger)
         {
             this.logger = logger;
@@ -24,8 +48,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
         {
-            this.client = new DropboxClient(accessToken);
-            this.tenant = tenant;
+            this.Client = new DropboxClient(accessToken);
+            this.Tenant = tenant;
             logger.LogTrace("Got Dropbox client");
         }
 
@@ -33,7 +57,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             => string.Join("/", path.Where(p => p != null));
 
         public Task<string> CreateApplicationFolderAsync(string subFolder) =>
-            Task.FromResult("/" + Join(tenant.Name, subFolder).TrimStart('/'));
+            Task.FromResult("/" + Join(Tenant.Name, subFolder).TrimStart('/'));
 
         public Task<string> CreateFolderAsync(string folder, string parentFolder)
             => Task.FromResult("/" + Join(parentFolder, folder).TrimStart('/'));
@@ -42,7 +66,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             logger.LogTrace("Uploading file: {folder}/{fileName} - {length}bytes", folder, fileName, contentLength);
 
-            await this.client.Files.UploadAsync(
+            await this.Client.Files.UploadAsync(
                 new CommitInfo(Join(folder, fileName), WriteMode.Overwrite.Instance), 
                 fileStream);
             
@@ -51,15 +75,18 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public async Task<long?> GetFreeSpaceAsync()
         {
-            var storageInfo = await this.client.Users.GetSpaceUsageAsync();
+            var storageInfo = await this.Client.Users.GetSpaceUsageAsync();
             if (storageInfo == null) return null;
 
-            var allocated = storageInfo.Allocation?.AsIndividual?.Value?.Allocated ??
+            ulong? allocated = storageInfo.Allocation?.AsIndividual?.Value?.Allocated ??
                             storageInfo.Allocation?.AsTeam?.Value?.Allocated;
 
-            if (allocated == null) return null;
+            if (allocated.HasValue)
+            {
+                return (long) (allocated.Value - storageInfo.Used);
+            }
 
-            return (long)(allocated - storageInfo.Used);
+            return null;
         }
 
         public void Dispose()

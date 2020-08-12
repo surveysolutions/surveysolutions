@@ -13,6 +13,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             var translatedDocument = originalDocument.Clone();
 
+            TranslateTitle(translatedDocument, translation);
+            
             foreach (var entity in translatedDocument.Find<IQuestionnaireEntity>())
             {
                 var entityAsQuestion = entity as IQuestion;
@@ -49,7 +51,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             entity.SetTitle(Translate(
                 original: entity.GetTitle(),
-                translated: translation.GetTitle(entity.PublicKey)));
+                translated: translation.GetTitle(entity.PublicKey)) ?? string.Empty);
         }
 
         private static void TranslateInstruction(IQuestion question, ITranslation translation)
@@ -74,15 +76,19 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
 
         private static void TranslateAnswerOption(Guid questionId, Answer answerOption, ITranslation translation)
         {
+            if(answerOption == null) throw new ArgumentException("Answer option must be not null.");
+            
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
-                translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue, answerOption.ParentValue));
+                translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue, answerOption.ParentValue))
+                                      ?? String.Empty;
         }
 
         private static void TranslateCategories(Guid categoriesId, Answer answerOption, ITranslation translation) =>
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
-                translated: translation.GetCategoriesText(categoriesId, (int)answerOption.GetParsedValue(), answerOption.GetParsedParentValue()));
+                translated: translation.GetCategoriesText(categoriesId, (int)answerOption.GetParsedValue(), answerOption.GetParsedParentValue())) 
+                                      ?? String.Empty;
 
         private static void TranslateSpecialValues(IQuestion question, ITranslation translation)
         {
@@ -96,7 +102,8 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
-                translated: translation.GetSpecialValue(questionId, answerOption.AnswerValue));
+                translated: translation.GetSpecialValue(questionId, answerOption.AnswerValue)) 
+                                      ?? String.Empty;
         }
 
         private static void TranslateValidationMessages(IValidatable validatableEntity, ITranslation translation)
@@ -113,7 +120,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         {
             validation.Message = Translate(
                 original: validation.Message,
-                translated: translation.GetValidationMessage(validatableEntityId, validationOneBasedIndex));
+                translated: translation.GetValidationMessage(validatableEntityId, validationOneBasedIndex)) ?? String.Empty;
         }
 
         private static void TranslateFixedRosterTitles(IGroup roster, ITranslation translation)
@@ -131,7 +138,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 translated: translation.GetFixedRosterTitle(rosterId, fixedRosterTitle.Value));
         }
 
-        private static string Translate(string original, string translated)
+        private static string? Translate(string? original, string? translated)
             => !string.IsNullOrWhiteSpace(translated) ? translated : original;
     }
 }

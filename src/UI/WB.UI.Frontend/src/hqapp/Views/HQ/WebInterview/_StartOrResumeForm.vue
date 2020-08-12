@@ -44,7 +44,7 @@
                     class="form-control"
                     type="password"
                     name="password"
-                    placeholder="Enter the password"/>
+                    :placeholder="$t('WebInterviewUI.EnterPassword')"/>
                 <span
                     v-if="model.isPasswordInvalid"
                     class="help-block">{{$t('WebInterview.InvalidPassword')}}</span>

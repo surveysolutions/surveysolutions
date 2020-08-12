@@ -1,14 +1,11 @@
-﻿using System.Threading.Tasks;
-using Ncqrs;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Aggregates;
+﻿using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure
@@ -23,10 +20,13 @@ namespace WB.Core.Infrastructure
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepositoryCacheCleaner, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
+            registry.Bind<IAggregateRootCache, AggregateRootCache>();
             registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
+            registry.Bind<IAggregateRootPrototypeService, DummyAggregateRootPrototypeService>();
+            registry.Bind<IAggregateRootPrototypePromoterService, DummyAggregateRootPrototypePromoterService>();
         }
     }
 }

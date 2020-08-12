@@ -5,8 +5,8 @@ namespace WB.Services.Export.Storage
 {
     public class InterviewBinaryDataDescriptor
     {
-        public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, string contentType,
-            Func<Task<byte[]>> getData)
+        public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, string? contentType,
+            Func<Task<byte[]?>> getData)
         {
             this.InterviewId = interviewId;
             this.FileName = fileName;
@@ -16,13 +16,13 @@ namespace WB.Services.Export.Storage
 
         public Guid InterviewId { get; private set; }
         public string FileName { get; private set; }
-        public string ContentType { get; private set; }
+        public string? ContentType { get; private set; }
 
-        public Task<byte[]> GetData()
+        public Task<byte[]?> GetData()
         {
             return this.getData();
         }
 
-        private readonly Func<Task<byte[]>> getData;
+        private readonly Func<Task<byte[]?>> getData;
     }
 }

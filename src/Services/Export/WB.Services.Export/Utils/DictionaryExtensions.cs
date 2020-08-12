@@ -5,7 +5,7 @@ namespace WB.Services.Export
 {
     public static class DictionaryExtensions
     {
-        public static TValue GetOrNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+        public static TValue? GetOrNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
             return dictionary.TryGetValue(key, out var value) ? value : null;

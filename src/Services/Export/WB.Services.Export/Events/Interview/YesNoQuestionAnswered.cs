@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class YesNoQuestionAnswered : QuestionAnswered
     {
-        public AnsweredYesNoOption[] AnsweredOptions { get; set; }
+        public AnsweredYesNoOption[] AnsweredOptions { get; set; } = new AnsweredYesNoOption[0];
     }
 }

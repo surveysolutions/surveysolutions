@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -8,14 +9,14 @@ namespace WB.Core.SharedKernels.NonConficltingNamespace // we cannot put any cla
     public static class ValidationConditionsBackwardCompatibility
     {
         public static IList<ValidationCondition> ConcatWithOldConditionIfNotEmpty(
-            this IList<ValidationCondition> validationConditions, string expression, string message)
+            this IList<ValidationCondition> validationConditions, string? expression, string? message)
         {
             if (!string.IsNullOrEmpty(expression) || !string.IsNullOrEmpty(message))
             {
                 return validationConditions.Concat(new ValidationCondition
                 {
-                    Expression = expression,
-                    Message = message
+                    Expression = expression ?? String.Empty,
+                    Message = message ?? String.Empty
                 }.ToEnumerable()).ToList();
             }
 

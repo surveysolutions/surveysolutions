@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File &apos;{0}&apos; contains data system can&apos;t process. Error: {1}.
+        ///   Looks up a localized string similar to File &apos;{0}&apos; contains data the system can&apos;t process. Error: {1}.
         /// </summary>
         public static string MapLoadingInvalidFile {
             get {

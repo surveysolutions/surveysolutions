@@ -7,10 +7,10 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
-using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -42,7 +42,6 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
@@ -55,7 +54,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
-using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -67,7 +65,6 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
@@ -76,7 +73,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
@@ -185,6 +181,8 @@ namespace WB.Core.BoundedContexts.Headquarters
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<ITranslationImporter, TranslationImporter>();
+            registry.Bind<ICategoriesImporter, CategoriesImporter>();
             registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
@@ -241,6 +239,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
             registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
             registry.Bind<QuestionnaireValidator>();
+            registry.Bind<WebModeResponsibleAssignmentValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -282,7 +281,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
 
-            registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
             registry.Bind<IAuditLogService, AuditLogService>();
             registry.BindToConstant<IAuditLogTypeResolver>(() => new AuditLogTypeResolver(typeof(IAuditLogEntity).Assembly));
@@ -295,10 +293,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.BindAsSingleton<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
-
-
-            registry.BindInPerLifetimeScope<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
-
+            registry.BindInPerLifetimeScope<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
+            
             registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
             
             if (fileSystemEmailServiceSettings?.IsEnabled ?? false)
@@ -315,6 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITokenGenerator, TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
+            registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
@@ -330,14 +327,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentsImportTask>();
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
             registry.Bind<UsersImportTask>();
-            registry.Bind<PauseResumeJobScheduler>();
             registry.Bind<UpgradeAssignmentJobScheduler>();
             registry.Bind<SendInvitationsTask>();
             registry.Bind<SendRemindersTask>();
             registry.Bind<UpgradeAssignmentJob>();
             registry.Bind<SyncPackagesReprocessorBackgroundJob>();
             registry.Bind<UsersImportJob>();
-            registry.Bind<PauseResumeJob>();
             registry.Bind<UsersImportJob>();
             registry.Bind<AssignmentsImportJob>();
             registry.Bind<SendInvitationsJob>();
@@ -365,7 +360,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<AssignmentAggregateRoot>()
                 .ResolvesIdFrom<AssignmentCommand>(command => command.PublicKey)
-                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment)
+                .InitializesWith<CreateAssignment>(aggregate => aggregate.CreateAssignment, cfg =>cfg.ValidatedBy<WebModeResponsibleAssignmentValidator>())
                 .StatelessHandles<DeleteAssignment>(aggregate => aggregate.DeleteAssignment)
 
                 .Handles<ReassignAssignment>(aggregate => aggregate.Reassign)
@@ -411,6 +406,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<DeleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Delete(command.UserId, command.OriginDate))
                 .Handles<HqApproveInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqApprove(command.UserId, command.Comment, command.OriginDate))
                 .Handles<HqRejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqReject(command.UserId, command.Comment, command.OriginDate))
+                .Handles<HqRejectInterviewToSupervisorCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqRejectInterviewToSupervisor(command.UserId, command.SupervisorId, command.Comment, command.OriginDate))
+                .Handles<HqRejectInterviewToInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.HqRejectInterviewToInterviewer(command.UserId, command.InterviewerId, command.SupervisorId, command.Comment, command.OriginDate))
                 .Handles<UnapproveByHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.UnapproveByHeadquarters(command.UserId, command.Comment, command.OriginDate))
                 .Handles<MarkInterviewAsReceivedByInterviewer>(command => command.InterviewId, (command, aggregate) => aggregate.MarkInterviewAsReceivedByInterviwer(command.UserId, command.OriginDate))
                 .Handles<ReevaluateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.ReevaluateInterview(command.UserId))
@@ -424,8 +421,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
                 .Handles<PauseInterviewCommand>(cmd => cmd.InterviewId, a => a.Pause)
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
-                .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupevisor)
-                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor);
+                .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
+                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
                 configuration

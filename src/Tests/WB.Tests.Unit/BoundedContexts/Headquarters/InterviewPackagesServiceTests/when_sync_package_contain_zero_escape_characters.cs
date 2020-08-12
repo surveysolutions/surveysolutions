@@ -68,7 +68,5 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             Assert.That(syncCommand, Is.Not.Null);
             Assert.That(syncCommand.SynchronizedEvents[0].Payload, Has.Property(nameof(TextQuestionAnswered.Answer)).EqualTo("a1"));
         }
-        
-        private static IServiceLocator serviceLocatorOriginal = null;
     }
 }

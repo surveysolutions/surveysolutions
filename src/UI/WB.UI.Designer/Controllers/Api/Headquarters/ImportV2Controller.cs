@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
@@ -56,8 +58,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("Questionnaire")]
         public IActionResult Questionnaire(DownloadQuestionnaireRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
+            if (request?.SupportedVersion == null) throw new ArgumentNullException(nameof(request));
+            
             var questionnaireView1 = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView1 == null)
             {
@@ -89,16 +91,16 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Macros = null;
-            questionnaire.LookupTables = null;
+            questionnaire.Macros = new Dictionary<Guid, Macro>();
+            questionnaire.LookupTables = new Dictionary<Guid, LookupTable>();
             questionnaire.IsUsingExpressionStorage = questionnaireContentVersion > 19;
 
             var questionnaireCommunicationPackage = new QuestionnaireCommunicationPackage
-            {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
-                QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion
-            };
+            (
+                questionnaire : this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
+                questionnaireAssembly : resultAssembly,
+                questionnaireContentVersion : questionnaireContentVersion
+            );
             return Ok(questionnaireCommunicationPackage);
         }
 

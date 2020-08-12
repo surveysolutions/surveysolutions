@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -29,9 +30,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IWebInterviewConfigProvider webInterviewConfigProvider;
         private WebInterviewConfig webInterviewConfig;
         private Mock<IAuthorizedUser> authorizedUserMock;
-        private EventBusSettings eventBusSettings;
+        private Mock<IAggregateRootPrototypeService> prototypeService;
         private Mock<IStatefulInterviewRepository> statefulInterviewRepo;
         private StatefulInterview interview;
+
 
         [SetUp]
         public void Setup()
@@ -40,13 +42,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
             authorizedUserMock = new Mock<IAuthorizedUser>();
-            eventBusSettings = new EventBusSettings();
+            prototypeService = new Mock<IAggregateRootPrototypeService>();
 
             var interviewAllowService = new WebInterviewAllowService(
                 statefulInterviewRepo.Object,
                 webInterviewConfigProvider,
-                authorizedUserMock.Object,
-                eventBusSettings);
+                authorizedUserMock.Object, 
+                prototypeService.Object);
             webInterviewAllowService = interviewAllowService;
         }
 
@@ -202,7 +204,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
             this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
 
-            eventBusSettings.IgnoredAggregateRoots.Add(interviewId.FormatGuid());
+            this.prototypeService.Setup(p => p.GetPrototypeType(It.IsAny<Guid>())).Returns(PrototypeType.Temporary);
 
             // Act
             Assert.DoesNotThrow(Act);

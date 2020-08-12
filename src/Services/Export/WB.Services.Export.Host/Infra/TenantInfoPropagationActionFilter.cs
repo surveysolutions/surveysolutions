@@ -17,7 +17,8 @@ namespace WB.Services.Export.Host.Infra
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            var tenant = context.ActionArguments.Values.OfType<TenantInfo>().FirstOrDefault();
+            var tenant = context.ActionArguments.Values.OfType<TenantInfo>().FirstOrDefault() 
+                ?? context.HttpContext.Request.GetTenantInfo();
             if(tenant != null)
             {
                 provider.SetTenant(tenant);

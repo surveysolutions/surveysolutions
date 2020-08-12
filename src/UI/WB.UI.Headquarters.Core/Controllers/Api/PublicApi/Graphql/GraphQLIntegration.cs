@@ -11,13 +11,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static void AddGraphQL(this IServiceCollection services)
         {
             services.AddDataLoaderRegistry()
-                .AddGraphQL(x => HeadquartersSchema);
+                .AddGraphQL(x => HeadquartersSchema)
+                .AddErrorFilter<GraphQLErrorFilter>();
         }
 
         public static ISchema HeadquartersSchema => SchemaBuilder.New()
             .AddAuthorizeDirectiveType()
             .AddType(new PaginationAmountType(200))
-            .AddQueryType<HeadquartersQuery>().Create(); 
+            .AddQueryType<HeadquartersQuery>()
+            .AddMutationType<HeadquartersMutations>().Create(); 
 
         public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {

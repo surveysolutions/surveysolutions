@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.InterviewId, 
                         x.QuestionnaireIdentity, 
                         x.WasRejectedBySupervisor, 
-                        x.ReceivedByInterviewer,
+                        ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue,
                         x.ResponsibleId})
                     .ToList());
 
@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.QuestionnaireVersion,
                         x.WasRejectedBySupervisor,
                         x.ResponsibleId,
-                        x.ReceivedByInterviewer
+                        ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue
                     })
                     .ToList());
 

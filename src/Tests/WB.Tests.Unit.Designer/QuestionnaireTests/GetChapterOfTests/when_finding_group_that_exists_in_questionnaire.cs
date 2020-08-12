@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOf
             BecauseOf();
         }
 
-        private void BecauseOf() => foundGroup = questionnaire.GetChapterOfItemById(targetGroupId);
+        private void BecauseOf() => foundGroup = questionnaire.GetChapterOfItemByIdOrThrow(targetGroupId);
 
         [NUnit.Framework.Test] public void should_find_needed_group () => foundGroup.PublicKey.Should().Be(chapterId);
 

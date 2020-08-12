@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
         [Test]
         public void should_not_store_interview_change_with_questionnaire_and_event_date_and_last_status_and_minus_one_value () 
         {
-            denormalizer.Handle(@event.ToEnumerable(), @event.EventSourceId);
+            denormalizer.Handle(@event.ToEnumerable());
             var minusKey = $"{@Id.g9.FormatGuid()}-minus";
             Assert.That(cumulativeReportStatusChangeStorage.GetById(minusKey), Is.Null);
         }
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
         [Test]
         public void should_store_interview_change_with_questionnaire_and_event_date_and_new_status_and_plus_one_value()
         {
-            denormalizer.Handle(@event.ToEnumerable(), @event.EventSourceId);
+            denormalizer.Handle(@event.ToEnumerable());
             var plusKey = $"{@Id.g9.FormatGuid()}-plus";
             var plusRecord = cumulativeReportStatusChangeStorage.GetById(plusKey);
             Assert.That(plusRecord, Is.Not.Null);

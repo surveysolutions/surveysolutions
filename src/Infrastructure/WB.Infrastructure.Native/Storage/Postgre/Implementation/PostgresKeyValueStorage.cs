@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data.Common;
 using Humanizer;
 using Npgsql;
@@ -14,10 +13,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     internal abstract class PostgresKeyValueStorage<TEntity> 
         where TEntity: class
     {
-        protected readonly string connectionString;
+        private readonly string connectionString;
         protected readonly string tableName;
         private readonly ILogger logger;
-        private readonly IEntitySerializer<TEntity> serializer;
+        protected readonly IEntitySerializer<TEntity> serializer;
 
         static ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
             
@@ -34,7 +33,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (!string.IsNullOrWhiteSpace(schemaName))
                 tableName = schemaName + "." + tableName;
-            //this.EnshureTableExists();
+
         }
 
         public virtual TEntity GetById(string id)
@@ -141,73 +140,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
-        {
-            EnsureTableExists();
-
-            try
-            {
-                this.FastBulkStore(bulk);
-            }
-            catch (Exception exception)
-            {
-                this.logger.Warn($"Failed to store bulk of {bulk.Count} entities of type {this.ViewType.Name} using fast way. Switching to slow way.", exception);
-
-                this.SlowBulkStore(bulk);
-            }
-        }
-
-        public virtual void Clear()
-        {
-            this.EnsureTableExists();
-
-            using (var command = new NpgsqlCommand())
-            {
-                command.CommandText = $"DELETE FROM {this.tableName}";
-                this.ExecuteNonQuery(command);
-            }
-        }
-
         public void Dispose() {}
 
         public Type ViewType => typeof(TEntity);
 
         public virtual string GetReadableStatus() => "Postgres K/V :/";
-
-        private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
-        {
-            this.EnsureTableExists();
-
-            using (var connection = new NpgsqlConnection(this.connectionString))
-            {
-                connection.Open();
-                using (var writer = connection.BeginBinaryImport($"COPY {this.tableName}(id, value) FROM STDIN BINARY;"))
-                {
-                    foreach (var item in bulk)
-                    {
-                        writer.StartRow();
-                        writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
-                        var serializedValue = this.serializer.Serialize(item.Item1);
-                        writer.Write(serializedValue, NpgsqlDbType.Jsonb); // write value
-                    }
-
-                    writer.Complete();
-                }
-            }
-        }
-
-        private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
-        {
-            EnsureTableExists();
-
-            foreach (var tuple in bulk)
-            {
-                var entity = tuple.Item1;
-                var id = tuple.Item2;
-
-                this.Store(entity, id);
-            }
-        }
 
         private static bool doesExistTable = false;
 

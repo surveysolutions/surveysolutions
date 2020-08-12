@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return rosterCount;
 
             long parentCountMultiplier = 1;
-            IComposite questionnaireItem = roster.GetParent();
+            var questionnaireItem = roster.GetParent();
             while (questionnaireItem != null)
             {
                 if (questionnaire.Questionnaire.IsRoster(questionnaireItem))
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return questionMaxAnswersCount;
         }
 
-        protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent().GetParent() == null;
+        protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent()?.GetParent() == null;
 
         protected static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
             where TEntity : class, IComposite

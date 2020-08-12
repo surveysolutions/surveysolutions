@@ -178,9 +178,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return Tuple.Create(false, 0);
 
             int variableLengthLimit = DefaultVariableLengthLimit;
-            if (entity is IQuestion)
+            if (entity is IQuestion question)
             {
-                variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains((entity as IQuestion).QuestionType)
+                variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(question.QuestionType)
                     ? DefaultRestrictedVariableLengthLimit
                     : DefaultVariableLengthLimit;
             }
@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle() ?? String.Empty, questionnaire));
                 
                 if (translatedEntity.Entity is Main.Core.Entities.SubEntities.IValidatable entityAsValidatable)
                 {
@@ -335,9 +335,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var allAllowedVariableNames = questionnaire
                 .Find<IComposite>(x => x is IQuestion || x is IGroup group)
-                .Select(x => x.VariableName?.ToLower())
-                .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower()))
+                .Select(x => x.VariableName?.ToLower() ?? "")
+                .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower() ?? ""))
                 .Where(x => !string.IsNullOrEmpty(x))
+                .Distinct()
                 .ToArray();
 
             foreach (var staticTextOrQuestion in questionnaire.Find<IComposite>(x => x is IStaticText || x is IQuestion))
@@ -366,7 +367,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
             => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
 
-        private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
+        private static bool TextHasMarkdownLinkWithUnknownVariable(string? text, string[] allAllowedVariableNames)
         {
             foreach (var url in GroupVerifications.GetMarkdownLinksFromText(text))
             {
@@ -400,16 +401,20 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(validationCondition, translatedEntity.Entity.VariableName);
 
             if (!substitutionReferences.Any())
-                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+                yield break;
 
             Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = questionnaire.Questionnaire.GetRosterScope(translatedEntity.Entity);
 
-            IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+            IEnumerable<QuestionnaireVerificationMessage?> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
-                    translatedEntity, validationConditionIndex, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
-                .Where(errorOrNull => errorOrNull != null);
+                    translatedEntity, validationConditionIndex, identifier, 
+                    vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire));
 
-            return entityErrors;
+            foreach (var questionnaireVerificationMessage in entityErrors)
+            {
+                if (questionnaireVerificationMessage != null)
+                    yield return questionnaireVerificationMessage;
+            }
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
@@ -417,23 +422,27 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title, translatedEntity.Entity.VariableName);
 
             if (!substitutionReferences.Any())
-                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+                yield break;
 
             var question = translatedEntity.Entity as IQuestion;
             if (question != null && questionnaire.Questionnaire.IsPreFilledQuestion(question))
-                return QuestionWithTitleSubstitutionCantBePrefilled(question).ToEnumerable();
+                yield return QuestionWithTitleSubstitutionCantBePrefilled(question);
 
             Guid[] vectorOfRosterSizeQuestionsForEntityWithSubstitution = questionnaire.Questionnaire.GetRosterScope(translatedEntity.Entity);
 
-            IEnumerable<QuestionnaireVerificationMessage> entityErrors = substitutionReferences
+            IEnumerable<QuestionnaireVerificationMessage?> entityErrors = substitutionReferences
                 .Select(identifier => this.GetVerificationErrorsBySubstitutionReferenceOrNull(
-                    translatedEntity, null, identifier, vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire))
-                .Where(errorOrNull => errorOrNull != null);
+                    translatedEntity, null, identifier, 
+                    vectorOfRosterSizeQuestionsForEntityWithSubstitution, questionnaire));
 
-            return entityErrors;
+            foreach (var questionnaireVerificationMessage in entityErrors)
+            {
+                if (questionnaireVerificationMessage != null)
+                    yield return questionnaireVerificationMessage;
+            }
         }
 
-        private QuestionnaireVerificationMessage GetVerificationErrorsBySubstitutionReferenceOrNull(
+        private QuestionnaireVerificationMessage? GetVerificationErrorsBySubstitutionReferenceOrNull(
             MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> traslatedEntityWithSubstitution,
             int? validationConditionIndex,
             string substitutionReference,
@@ -583,7 +592,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return !questionnaire.Find<IQuestion>(_ => true).Any();
+            return !questionnaire.Find<IQuestion>(question => !questionnaire.Questionnaire.IsCoverPage(question.GetParent()!.PublicKey)).Any();
         }
 
         private static bool QuestionnaireTitleTooLong(MultiLanguageQuestionnaireDocument questionnaire)

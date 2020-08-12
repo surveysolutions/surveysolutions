@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     public class QuestionnaireListView 
     {
         public QuestionnaireListView(
-            int page, int pageSize, int totalCount, IEnumerable<IQuestionnaireListItem> items, string order)
+            int page, int pageSize, int totalCount, IEnumerable<IQuestionnaireListItem> items, string? order)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public IEnumerable<IQuestionnaireListItem> Items { get; private set; }
         
-        public string Order { get; set; }
+        public string Order { get; set; } 
       
         public int Page { get; private set; }
     

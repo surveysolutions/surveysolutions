@@ -32,7 +32,7 @@ namespace WB.Services.Export
                 "wb_export_events_processed_latency",
             "Events handling latency by Export Service", "tenant");
 
-        public static void TrackEventsProcessedCount(string tenant, double value)
+        public static void TrackEventsProcessedCount(string? tenant, double value)
         {
             if (tenant != null)
                 EventsProcessedCounter.Labels(tenant).Inc(value);

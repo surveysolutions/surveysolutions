@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupStateViewModel : MvxNotifyPropertyChanged
     {
-        private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
+        protected readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IQuestionnaireStorage questionnaireRepository;
+        protected readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
 
         protected GroupStateViewModel()
         {
@@ -27,9 +27,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        private string interviewId;
+        protected string interviewId;
 
-        private Identity group;
+        protected Identity group;
 
         public virtual void Init(string interviewId, Identity groupIdentity)
         {

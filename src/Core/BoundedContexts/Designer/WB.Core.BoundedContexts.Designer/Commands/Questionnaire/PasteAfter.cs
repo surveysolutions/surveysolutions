@@ -19,6 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 
         public Guid ItemToPasteAfterId { get; private set; }
 
-        public QuestionnaireDocument SourceDocument { get; set; }
+        public QuestionnaireDocument? SourceDocument { get; set; }
     }
 }

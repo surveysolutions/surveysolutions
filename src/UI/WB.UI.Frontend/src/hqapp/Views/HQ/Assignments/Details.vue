@@ -185,7 +185,9 @@ export default {
             return this.model.isAudioRecordingEnabled ? this.$t('Common.Yes') : this.$t('Common.No')
         },
         isReceivedByTablet() {
-            return this.model.receivedByTabletAtUtc != null ? this.$t('Common.Yes') : this.$t('Common.No')
+            return this.model.receivedByTabletAtUtc != null
+                ? moment.utc(this.model.receivedByTabletAtUtc).local().format(DateFormats.dateTimeInList)
+                : this.$t('Common.No')
         },
         isWebMode() {
             return this.model.webMode === false ?  this.$t('Common.No') : this.$t('Common.Yes')

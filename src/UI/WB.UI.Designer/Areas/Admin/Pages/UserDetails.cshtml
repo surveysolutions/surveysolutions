@@ -3,7 +3,7 @@
 @model WB.UI.Designer.Areas.Admin.Pages.UserDetailsModel
 
 @{
-    ViewBag.Title = "User details: "  + this.Model.Account.UserName;
+    ViewBag.Title = "User details: "  + Model.Account.UserName;
 }
 <div id="edit-form">
     <h1>
@@ -52,21 +52,24 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var listViewModel in Model.OwnedQuestionnaires)
+        @if(Model.OwnedQuestionnaires != null)
         {
-            <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
-                <td class="search-value">
-                    <a asp-controller="Questionnaire" asp-action="Details" asp-route-id="@listViewModel.Id" target="_blank">
-                        @listViewModel.Title
-                    </a>
-                </td>
-                <td class="date">
-                    @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
-                </td>
-                <td class="date">
-                    @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
-                </td>
-            </tr>
+            foreach (var listViewModel in Model.OwnedQuestionnaires)
+            {
+                <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
+                    <td class="search-value">
+                        <a asp-controller="Questionnaire" asp-action="Details" asp-route-id="@listViewModel.Id" target="_blank">
+                            @listViewModel.Title
+                        </a>
+                    </td>
+                    <td class="date">
+                        @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
+                    </td>
+                    <td class="date">
+                        @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
+                    </td>
+                </tr>
+            }
         }
         </tbody>
     </table>
@@ -86,8 +89,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var listViewModel in Model.SharedQuestionnaires)
+        @if(Model.SharedQuestionnaires!= null)
         {
+            foreach (var listViewModel in Model.SharedQuestionnaires)
+            {
             <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                 <td class="search-value">
                     <a asp-controller="Questionnaire" asp-action="Details" asp-route-id="@listViewModel.Id" target="_blank">
@@ -101,6 +106,7 @@
                     @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
                 </td>
             </tr>
+            }
         }
         </tbody>
     </table>

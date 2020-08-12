@@ -10,7 +10,9 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.Tests.Integration.PostgreSQLTests;
+using WB.Tests.Abc;
+using WB.Tests.Integration.PostgreSQLEventStoreTests;
+using with_postgres_db = WB.Tests.Integration.PostgreSQLTests.with_postgres_db;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 {
@@ -37,6 +39,8 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
+            DatabaseTestInitializer.InitializeDb(ConnectionStringBuilder.ConnectionString, DbType.ReadSide);
+
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[]
             {
                 typeof(InterviewSummaryMap),
@@ -45,12 +49,13 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(InterviewStatisticsReportRowMap),
                 typeof(InterviewCommentedStatusMap),
                 typeof(InterviewCommentMap),
+                typeof(InterviewGpsMap),
                 typeof(QuestionnaireCompositeItemMap)
                 
-            }, true);
+            }, true, "readside");
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
-            return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            return IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
         }
 
         protected static void ExecuteInCommandTransaction(Action action)

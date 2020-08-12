@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor
         };
 
-        private InterviewCommentedStatus[] GetStausesAfterLastAssignOrReject(InterviewSummary statusHistory, InterviewCommentedStatus lastAssignOfRejectStatus)
+        private InterviewCommentedStatus[] GetStatusesAfterLastAssignOrReject(InterviewSummary statusHistory, InterviewCommentedStatus lastAssignOfRejectStatus)
         {
             return statusHistory.InterviewCommentedStatuses.SkipWhile(s => s.Id != lastAssignOfRejectStatus.Id)
                   .Skip(1)
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var completeTime = evnt.Payload.CompleteTime ?? evnt.EventTimeStamp;
             var completeTimeSpan = completeTime - lastAssignOfRejectStatus.Timestamp;
 
-            var statusesAfterLastAssign = this.GetStausesAfterLastAssignOrReject(state, lastAssignOfRejectStatus);
+            var statusesAfterLastAssign = this.GetStatusesAfterLastAssignOrReject(state, lastAssignOfRejectStatus);
 
             var wasInterviewRestarted = statusesAfterLastAssign.Any(s => s.Status == InterviewExportedAction.Restarted);
 

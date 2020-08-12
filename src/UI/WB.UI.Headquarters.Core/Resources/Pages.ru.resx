@@ -144,7 +144,10 @@
   <data name="Interviewers_OutdatedOption" xml:space="preserve">
     <value>Устаревшая</value>
   </data>
-  <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+    <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
+      <value>Вы переносите интервьюера у которого есть задания по web интервью. Эта задания будут назначены на текущего супервизора. Если Вы уже отправили ссылки для этих заданий, респонденты не смогут проходить интервью до тех пор пока задания не будут назначены на интервьюра.</value>
+  </data>
+    <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Утвердить</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
@@ -170,6 +173,9 @@
   </data>
   <data name="CloseLabel" xml:space="preserve">
     <value>Закрыть</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Печать</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
@@ -629,6 +635,9 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Показать пароль</value>
   </data>
   <data name="AuthenticatorCode" xml:space="preserve">
     <value>Аутентификационный код</value>
@@ -1584,5 +1593,14 @@
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Двухфакторная аутентификация </value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Диагностика</value>
+  </data>
+  <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+    <value>Дата последнего входа</value>
+  </data>
+  <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+    <value>Дата, когда интервьюер последний раз заходил в систему</value>
   </data>
 </root>

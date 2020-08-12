@@ -31,6 +31,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+                return NotFound();
             var categoriesIds = questionnaireView.Source.Categories.Select(x => x.Id).ToList();
 
             return Ok(categoriesIds.Select(categoriesId => new ReusableCategoriesDto

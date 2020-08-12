@@ -4,8 +4,8 @@
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
-    <ul class="nav navbar-nav">
-        <li class="dropdown @(page == MenuItem.MapReport ||
+<ul class="nav navbar-nav">
+    <li class="dropdown @(page == MenuItem.MapReport ||
                           page == MenuItem.Surveys ||
                           page == MenuItem.SurveyAndStatuses ||
                           page == MenuItem.Summary ||
@@ -13,77 +13,87 @@
                           page == MenuItem.DevicesInterviewers ||
                           page == MenuItem.StatusDuration ||
                           page == MenuItem.InterviewsChart ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
-                @MainMenu.Reports <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.SurveyAndStatuses)
-                @Html.MainMenuItem("SupervisorsAndStatuses", "Reports", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
-                @Html.MainMenuItem("StatusDuration", "Reports", @MainMenu.StatusDuration, MenuItem.StatusDuration)
-                @Html.MainMenuItem("InterviewersAndDevices", "Reports", @MainMenu.DevicesInterviewers, MenuItem.DevicesInterviewers)
-                @Html.MainMenuItem("MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
-                @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
-                @Html.MainMenuItem("QuantityBySupervisors", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
-                @Html.MainMenuItem("SpeedBySupervisors", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
-                @Html.MainMenuItem("SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
-            </ul>
-        </li>
-        @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
+            @MainMenu.Reports <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.SurveyAndStatuses)
+            @Html.MainMenuItem("SupervisorsAndStatuses", "Reports", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
+            @Html.MainMenuItem("StatusDuration", "Reports", @MainMenu.StatusDuration, MenuItem.StatusDuration)
+            @Html.MainMenuItem("InterviewersAndDevices", "Reports", @MainMenu.DevicesInterviewers, MenuItem.DevicesInterviewers)
+            @Html.MainMenuItem("MapReport", "Reports", @MainMenu.MapReport, MenuItem.MapReport)
+            @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
+            @Html.MainMenuItem("QuantityBySupervisors", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
+            @Html.MainMenuItem("SpeedBySupervisors", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
+            @Html.MainMenuItem("SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
+        </ul>
+    </li>
+    @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
 
-        <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters || page == MenuItem.Interviewers || page == MenuItem.Observers || page == MenuItem.ApiUsers || page == MenuItem.UserBatchUpload ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
-                @MainMenu.TeamsAndRoles <span class="caret"></span>
+    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters || page == MenuItem.Interviewers || page == MenuItem.Observers || page == MenuItem.ApiUsers || page == MenuItem.UserBatchUpload ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
+            @MainMenu.TeamsAndRoles <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @Html.MainMenuItem("Headquarters", "Users", @MainMenu.Headquarters, MenuItem.Headquarters)
+            @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
+            @Html.MainMenuItem("Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
+            @Html.MainMenuItem("Observers", "Users", @MainMenu.Observers, MenuItem.Observers)
+            @Html.MainMenuItem("ApiUsers", "Users", @MainMenu.ApiUsers, MenuItem.ApiUsers)
+            @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+        </ul>
+    </li>
+    <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+            @MainMenu.SurveySetup <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
+            @Html.MainMenuItem("Index", "Assignments", @MainMenu.Assignments, MenuItem.Assignments)
+            @Html.MainMenuItem("Index", "Maps", @MainMenu.Maps, MenuItem.Maps)
+        </ul>
+    </li>
+    @Html.MainMenuItem("New", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
+    @if (ViewContext.RouteData.Values["controller"].ToString() == "ControlPanel")
+    {
+        <li class="dropdown  @(new[] {MenuItem.Administration_AppUpdates, MenuItem.Administration_Config, MenuItem.Administration_InterviewPackages, MenuItem.Administration_Exceptions, MenuItem.Administration_ChangePassword, MenuItem.Administration_ReevaluateInterview}.Contains((MenuItem) page) ? "active" : "")">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
+                @MainMenu.Administration <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-                @Html.MainMenuItem("Headquarters", "Users", @MainMenu.Headquarters, MenuItem.Headquarters)
-                @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
-                @Html.MainMenuItem("Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
-                @Html.MainMenuItem("Observers", "Users", @MainMenu.Observers, MenuItem.Observers)
-                @Html.MainMenuItem("ApiUsers", "Users", @MainMenu.ApiUsers, MenuItem.ApiUsers)
-                @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+                @Html.MainMenuItem("Configuration", "ControlPanel", Pages.Configuration, MenuItem.Administration_Config)
+                
+                @Html.MainMenuItem("AppUpdates", "ControlPanel", Pages.AppUpdates, MenuItem.Administration_AppUpdates)
+                @Html.MainMenuItem("InterviewPackages", "ControlPanel", Pages.InterviewPackages, MenuItem.Administration_InterviewPackages)
+                @Html.MainMenuItem("Exceptions", "ControlPanel", Pages.Exceptions, MenuItem.Administration_Exceptions)
+                @Html.MainMenuItem("ReevaluateInterview", "ControlPanel", Pages.ReevaluateInterview, MenuItem.Administration_ReevaluateInterview)
             </ul>
         </li>
-        <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
-                @MainMenu.SurveySetup <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
-                @Html.MainMenuItem("Index", "Assignments", @MainMenu.Assignments, MenuItem.Assignments)
-                @Html.MainMenuItem("Index", "Maps", @MainMenu.Maps, MenuItem.Maps)
-            </ul>
-        </li>
-        @Html.MainMenuItem("New", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
-        @if (ViewContext.RouteData.Values["controller"].ToString() == "ControlPanel")
-        {
-            <li class="dropdown  @(new[] {MenuItem.Administration_AppUpdates, MenuItem.Administration_Config, MenuItem.Administration_InterviewPackages, MenuItem.Administration_TabletInfo, MenuItem.Administration_Exceptions, MenuItem.Administration_ChangePassword, MenuItem.Administration_ReevaluateInterview}.Contains((MenuItem) page) ? "active" : "")">
-                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
-                    @MainMenu.Administration <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    @Html.MainMenuItem("Configuration", "ControlPanel", Pages.Configuration, MenuItem.Administration_Config)
-                    @Html.MainMenuItem("TabletInfos", "ControlPanel", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
-                    @Html.MainMenuItem("AppUpdates", "ControlPanel", Pages.AppUpdates, MenuItem.Administration_AppUpdates)
-                    @Html.MainMenuItem("InterviewPackages", "ControlPanel", Pages.InterviewPackages, MenuItem.Administration_InterviewPackages)
-                    @Html.MainMenuItem("CreateAdmin", "ControlPanel", Pages.CreateAdmin, MenuItem.Administration_CreateAdmin)
-                    @Html.MainMenuItem("ResetPrivilegedUserPassword", "ControlPanel", Pages.ChangePassword, MenuItem.Administration_ChangePassword)
-                    @Html.MainMenuItem("Exceptions", "ControlPanel", Pages.Exceptions, MenuItem.Administration_Exceptions)
-                    @Html.MainMenuItem("ReevaluateInterview", "ControlPanel", Pages.ReevaluateInterview, MenuItem.Administration_ReevaluateInterview)
-                </ul>
-            </li>
-        }
-    </ul>
+    }
+</ul>
 <ul class="nav navbar-nav navbar-right">
+    @if (User.IsInRole("Administrator"))
+    {
+        <li class="dropdown  @(new[] {MenuItem.Administration_Diagnostics, MenuItem.Administration_Config, MenuItem.Administration_TabletInfo, MenuItem.Settings, MenuItem.TabletLogs, MenuItem.EmailProviders, MenuItem.AuditLog}.Contains((MenuItem) page) ? "active" : "")">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
+                @MainMenu.Administration <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
+                @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
+                @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
+                @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
+                @Html.MainMenuItem("AuditLog", "Diagnostics", Common.AuditLog, MenuItem.AuditLog)
+                @Html.MainMenuItem("TabletInfos", "Administration", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
+            </ul>
+        </li>
+    }
     <li><a href="http://support.mysurvey.solutions/admin" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
-            @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
-            @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
-            @Html.MainMenuItem("AuditLog", "Diagnostics", Common.AuditLog, MenuItem.AuditLog)
             @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
-            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
+            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
         </ul>
     </li>
 

@@ -13,8 +13,8 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         private readonly IOptions<JobSettings> options;
         private readonly ILogger<BackgroundExportService> logger;
 
-        private IServiceScope scope;
-        private IJobWorker[] workers;
+        private IServiceScope? scope;
+        //private IJobWorker[] workers;
 
         public JobWorkersManageService(
             IServiceProvider serviceProvider,
@@ -34,12 +34,12 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
             if (workersCount == 0)
             {
-                workersCount = Environment.ProcessorCount;
+                workersCount = 1;
             }
 
             logger.LogTrace("Starting " + workersCount + " workers");
 
-            this.workers = new IJobWorker[workersCount];
+            var workers = new IJobWorker[workersCount];
 
             for (int i = 0; i < workers.Length; i++)
             {
@@ -54,7 +54,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         public Task StopAsync(CancellationToken cancellationToken)
         {
             
-            scope.Dispose();
+            this.scope?.Dispose();
             return Task.CompletedTask;
         }
     }

@@ -48,44 +48,44 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
-        public string ReturnUrl { get; set; }
-        public string ErrorMessage { get; set; }
+        public string? ReturnUrl { get; set; }
+        public string? ErrorMessage { get; set; }
 
         public class InputModel
         {
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "UserName_required")]
             [Display(Name = "User name", Order = 1)]
             [RegularExpression("^[a-zA-Z0-9_]{3,15}$", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "User_name_needs_to_be_between_3_and_15_characters")]
-            public string Login { get; set; }
+            public string? Login { get; set; }
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Email_required))]
             [EmailAddress(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.InvalidEmailAddress))]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public string? Password { get; set; }
 
             [DataType(DataType.Password)]
             [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.The_password_and_confirmation_password_do_not_match))]
-            public string ConfirmPassword { get; set; }
+            public string? ConfirmPassword { get; set; }
 
             [Display(Name = "Full name", Order = 4)]
             [StringLength(100, ErrorMessageResourceName = nameof(ErrorMessages.FullNameMaxLengthError), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string FullName { get; set; }
+            public string? FullName { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public void OnGet(string? returnUrl = null)
         {
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
-            if (ModelState.IsValid)
+            returnUrl ??= Url.Content("~/");
+            if (Input != null && ModelState.IsValid)
             {
                 if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
                 {

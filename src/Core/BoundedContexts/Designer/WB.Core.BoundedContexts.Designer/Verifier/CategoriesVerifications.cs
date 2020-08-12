@@ -12,10 +12,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class CategoriesVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly IKeywordsProvider keywordsProvider;
+        private readonly ICategoriesService categoriesService;
 
-        public CategoriesVerifications(IKeywordsProvider keywordsProvider)
+        public CategoriesVerifications(IKeywordsProvider keywordsProvider, ICategoriesService categoriesService)
         {
             this.keywordsProvider = keywordsProvider;
+            this.categoriesService = categoriesService;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -23,11 +25,41 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0289", VariableNameTooLong, string.Format(VerificationMessages.WB0289, DefaultVariableLengthLimit)),
             Error("WB0290", VariableNameEndWithUnderscore, VerificationMessages.WB0290),
             Error("WB0291", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0291),
+            Error("WB0305", HasDuplicatedPair_Id_ParentId, VerificationMessages.WB0305_DuplicatedCategoryIdParentIdPair),
+            Error("WB0306", HasDuplicatedPair_ParentId_Text, VerificationMessages.WB0306_DuplicatedCategoryParentIdText),
             Critical("WB0292", VariableNameIsEmpty, string.Format(VerificationMessages.WB0292)),
             Critical("WB0293", VariableNameIsKeywords, VerificationMessages.WB0293),
             Critical("WB0294", VariableNameHasSpecialCharacters, VerificationMessages.WB0294),
             Critical("WB0295", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0295)
         };
+
+        private bool HasDuplicatedPair_Id_ParentId(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var duplicated = 
+                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
+                group row by new { row.Id, row.ParentId}
+                into g
+                where g.Count() > 1
+                select g.Key;
+
+            if (duplicated.Any()) return true;
+
+            return false;
+        }     
+        
+        private bool HasDuplicatedPair_ParentId_Text(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var duplicated = 
+                from row in this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
+                group row by new { row.Text, row.ParentId}
+                into g
+                where g.Count() > 1
+                select g.Key;
+
+            if (duplicated.Any()) return true;
+
+            return false;
+        }
 
         private static bool VariableNameIsEmpty(Categories entity) =>
             string.IsNullOrWhiteSpace(entity.Name);
@@ -59,11 +91,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical(string code, Func<Categories, bool> hasError, string message) =>
-            questionnaire => questionnaire.Categories.Where(entity => hasError(entity)).Select(entity =>
+            questionnaire => 
+                questionnaire.Categories.Where(entity => hasError(entity)).Select(entity =>
                 QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireEntityReference.CreateForCategories(entity.Id)));
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error(string code, Func<Categories, bool> hasError, string message) =>
             questionnaire => questionnaire.Categories.Where(entity => hasError(entity)).Select(entity =>
+                QuestionnaireVerificationMessage.Error(code, message, QuestionnaireEntityReference.CreateForCategories(entity.Id)));
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> 
+            Error(string code, Func<Categories, MultiLanguageQuestionnaireDocument, bool> hasError, string message) =>
+            questionnaire => questionnaire.Categories.Where(entity => hasError(entity, questionnaire)).Select(entity =>
                 QuestionnaireVerificationMessage.Error(code, message, QuestionnaireEntityReference.CreateForCategories(entity.Id)));
     }
 }

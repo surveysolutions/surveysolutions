@@ -57,6 +57,13 @@
                         <button type="submit" class="btn btn-primary btn-block">@Common.Create</button>
                     </div>
                 </div>
+                <div class="form-group">
+                    <input id="ShowPassword" type="checkbox" 
+                           onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
+                    <label for="ShowPassword">
+                        <span></span>@Pages.ShowPassword
+                    </label>
+                </div>
             </fieldset>
 
         </form>

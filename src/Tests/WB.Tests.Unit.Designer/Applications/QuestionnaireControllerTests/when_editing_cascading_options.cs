@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             
             controller.questionWithOptionsViewModel =
                 new QuestionnaireController.EditOptionsViewModel
-                {
-                    QuestionnaireId = questionnaireId.FormatGuid(),
-                    QuestionId = questionId,
-                    IsCascading = true
-                };
+                (
+                    questionnaireId : questionnaireId.FormatGuid(),
+                    questionId : questionId,
+                    options:new QuestionnaireCategoricalOption[0]
+                );
 
             var stream = GenerateStreamFromString("1\tStreet 1\t2");
 

@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
         [Test]
         public void should_store_interview_change_with_questionnaire_and_event_date_and_new_status_and_plus_one_value()
         {
-            denormalizer.Handle(@events, interviewId);
+            denormalizer.Handle(@events);
 
             var superPlusKey = $"{@Id.g7.FormatGuid()}-plus";
             var superPlusRecord = cumulativeReportStatusChangeStorage.GetById(superPlusKey);

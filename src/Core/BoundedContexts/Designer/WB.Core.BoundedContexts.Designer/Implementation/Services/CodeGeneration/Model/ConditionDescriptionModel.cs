@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static System.String;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
@@ -8,15 +9,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             string className, 
             string methodName, 
             string[] namespaces,
-            string expression, 
+            string? expression, 
             bool generateSelf, 
-            string variableName,
+            string? variableName,
             string returnType = "bool")
         {
             this.ClassName = className;
             this.MethodName = methodName;
             this.Namespaces = namespaces;
-            this.Expression = expression;
+            this.Expression = expression ?? Empty;
             this.VariableName = variableName;
             this.GenerateSelf = generateSelf;
             this.ReturnType = returnType;
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string MethodName { set; get; }
         public string[] Namespaces { get; set; }
         public string Expression { set; get; }
-        public string VariableName { set; get; }
+        public string? VariableName { set; get; }
         public bool GenerateSelf { set; get; }
         public string ReturnType { get; set; }
         public List<GeneratedVariable> GeneratedVariables { get; set; } = new List<GeneratedVariable>();
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
     public class OptionsFilterConditionDescriptionModel : ConditionDescriptionModel
     {
-        public OptionsFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string expression, string variableName) 
+        public OptionsFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string? expression, string variableName) 
             : base(className, methodName, namespaces, expression, true, variableName, "bool")
         {
         }
@@ -47,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public bool IsSourceAndLinkedQuestionOnSameLevel => LinkedQuestionScopeName == this.ClassName;
 
         public LinkedFilterConditionDescriptionModel(string className, string methodName, string[] namespaces, string expression, string linkedQuestionScopeName)
-            : base(className, methodName, namespaces, expression, false, string.Empty, "bool")
+            : base(className, methodName, namespaces, expression, false, Empty, "bool")
         {
             this.LinkedQuestionScopeName = linkedQuestionScopeName;
         }

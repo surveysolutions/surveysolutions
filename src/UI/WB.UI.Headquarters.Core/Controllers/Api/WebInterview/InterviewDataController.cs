@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpGet]
         [Route("getPrefilledQuestions")]
-        public override InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId) => base.GetPrefilledQuestions(interviewId);
+        public override InterviewEntityWithType[] GetInterviewEntitiesWithTypes(Guid interviewId) => base.GetInterviewEntitiesWithTypes(interviewId);
 
         [HttpGet]
         [Route("getPrefilledEntities")]
@@ -188,7 +188,12 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         public override InterviewInfo GetInterviewDetails(Guid interviewId)
         {
             var interviewDetails = base.GetInterviewDetails(interviewId);
-            interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(interviewId);
+            if (IsReviewMode())
+            {
+                interviewDetails.DoesBrokenPackageExist =
+                    this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(interviewId);
+            }
+
             return interviewDetails;
         }
     }

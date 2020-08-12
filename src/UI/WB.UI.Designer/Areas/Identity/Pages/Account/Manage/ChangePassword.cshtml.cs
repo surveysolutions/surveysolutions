@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,26 +23,27 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
         [TempData]
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
 
         public class InputModel
         {
             [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Current password")]
-            public string OldPassword { get; set; }
+            public string OldPassword { get; set; }= String.Empty;
 
-            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages),
+                ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
             [Display(Name = "New password")]
-            public string NewPassword { get; set; }
+            public string NewPassword { get; set; } = string.Empty;
 
             [DataType(DataType.Password)]
             [Compare(nameof(NewPassword), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.The_password_and_confirmation_password_do_not_match))]
-            public string ConfirmPassword { get; set; }
+            public string ConfirmPassword { get; set; } = String.Empty;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -57,7 +59,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (Input == null || !ModelState.IsValid)
             {
                 return Page();
             }

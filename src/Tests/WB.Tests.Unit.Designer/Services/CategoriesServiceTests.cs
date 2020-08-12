@@ -4,12 +4,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ClosedXML.Excel;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -60,18 +60,17 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static Stream CreateExcelFile(string[][] data)
         {
-            using (ExcelPackage package = new ExcelPackage())
-            {
-                var worksheet = package.Workbook.Worksheets.Add("Categories");
+            using XLWorkbook package = new XLWorkbook();
+            var worksheet = package.Worksheets.Add("Categories");
 
-                for (var row = 0; row < data.Length; row++)
-                for (var column = 0; column < data[row].Length; column++)
-                    worksheet.Cells[row + 1, column + 1].Value = data[row][column];
+            for (var row = 0; row < data.Length; row++)
+            for (var column = 0; column < data[row].Length; column++)
+                worksheet.Cell(row + 1, column + 1).Value = data[row][column];
 
-                var ms = new MemoryStream();
-                package.SaveAs(ms);
-                return ms;
-            }
+            var ms = new MemoryStream();
+            package.SaveAs(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
         }
 
         private static Stream CreateTsvFile(string[][] data)
@@ -361,7 +360,7 @@ namespace WB.Tests.Unit.Designer.Services
             // arrange
             var questionnaireId = Id.g1;
             var categoriesId = Id.g2;
-            var data = new string[][]
+            var data = new[]
             {
                 new[] {"1", "option 1", "1"}, 
                 new[] {"", "", ""}, 

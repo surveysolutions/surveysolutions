@@ -14,12 +14,19 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             featuredQuestionWithSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+                new TextQuestion()
+                {
+                    StataExportCaption = "world",
+                    PublicKey = Guid.Parse("20000000000000000000000000000000"),
+                    QuestionText = "test"
+                },
+                new SingleQuestion()
             {
                 PublicKey = featuredQuestionWithSubstitutionsId,
                 StataExportCaption = "var",
                 Featured = true,
-                QuestionText = "hello %word%!",
+                QuestionText = "hello %world%!",
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 

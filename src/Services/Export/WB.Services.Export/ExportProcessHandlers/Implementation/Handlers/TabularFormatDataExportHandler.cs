@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.CsvExport;
@@ -31,17 +32,27 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             var settings = state.Settings;
             var tempDir = state.ExportTempFolder;
 
-            await this.tabularFormatExportService.GenerateDescriptionFileAsync(settings.Tenant, settings.QuestionnaireId,tempDir, ExportFileSettings.TabDataFileExtension);
-            await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(settings, tempDir, state.Progress, cancellationToken);
-            await this.CreateDoFilesForQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, tempDir, cancellationToken);
+            await this.tabularFormatExportService.GenerateDescriptionFileAsync(settings.Tenant,
+                settings.QuestionnaireId, tempDir,
+                ExportFileSettings.TabDataFileExtension, cancellationToken);
+            await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(settings, tempDir,
+                state.Progress, cancellationToken);
+            await this.CreateDoFilesForQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, tempDir,
+                settings.Translation,
+                cancellationToken);
         }
 
-        private async Task CreateDoFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
+        private async Task CreateDoFilesForQuestionnaireAsync(TenantInfo tenant,
+            QuestionnaireId questionnaireIdentity,
+            string directoryPath,
+            Guid? translation,
+            CancellationToken cancellationToken)
         {
             var questionnaireExportStructure = await this.questionnaireExportStructureStorage
-                .GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
+                .GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity, translation);
 
-            this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
+            this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath,
+                cancellationToken);
         }
     }
 }

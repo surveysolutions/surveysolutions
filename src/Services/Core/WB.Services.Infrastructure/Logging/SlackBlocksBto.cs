@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace WB.Services.Infrastructure.Logging
@@ -32,7 +33,7 @@ namespace WB.Services.Infrastructure.Logging
         public class Attachment
         {
             public string mrkdwn_in { get; } = "text";
-            public string text { get; set; }
+            public string text { get; set; } = String.Empty;
         }
 
         public class Message

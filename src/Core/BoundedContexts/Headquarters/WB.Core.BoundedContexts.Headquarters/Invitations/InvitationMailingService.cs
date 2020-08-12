@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -18,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
         private readonly IWebInterviewEmailRenderer webInterviewEmailRenderer;
-        private readonly IOptions<HeadquartersConfig> configuration;
+        private readonly IWebInterviewLinkProvider linkProvider;
 
         public InvitationMailingService(
             IInvitationService invitationService, 
@@ -26,32 +23,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             IWebInterviewConfigProvider webInterviewConfigProvider, 
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage,
             IWebInterviewEmailRenderer webInterviewEmailRenderer,
-            IOptions<HeadquartersConfig> configuration)
+            IWebInterviewLinkProvider linkProvider)
         {
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.emailParamsStorage = emailParamsStorage;
             this.webInterviewEmailRenderer = webInterviewEmailRenderer;
-            this.configuration = configuration;
+            this.linkProvider = linkProvider;
         }
 
         public async Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null)
         {
             Invitation invitation = invitationService.GetInvitation(invitationId);
-            var link = $"WebInterview/{invitation.Token}/Start";
+            var link = this.linkProvider.WebInterviewStartLink(invitation);
             await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.InvitationTemplate, link);
         }
         
         public async Task SendResumeAsync(int invitationId, Assignment assignment, string email)
         {
             Invitation invitation = invitationService.GetInvitation(invitationId);
-            var link = $"/WebInterview/Continue/{invitation.Token}";
+            var link = this.linkProvider.WebInterviewContinueLink(invitation);
             await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.ResumeTemplate, link);
         }
 
         private async Task SendEmailByTemplate(Invitation invitation, Assignment assignment, string email, 
-            EmailTextTemplateType emailTemplateType, string relativeUri)
+            EmailTextTemplateType emailTemplateType, string link)
         {
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(assignment.QuestionnaireId);
             var emailTemplate = webInterviewConfig.GetEmailTemplate(emailTemplateType);
@@ -63,7 +60,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var password = assignment.Password;
             var address = email ?? assignment.Email;
 
-            var link = new Url(configuration.Value.BaseUrl, relativeUri, queryParams: null).ToString();
             var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
 
             var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitation.Id}";
@@ -82,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 SenderName = senderInfo.SenderName,
                 Link = link
             };
+
             emailParamsStorage.Store(emailParams, emailParamsId);
 
             var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams);

@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             var categoriesFile = this.categoriesService.GetAsExcelFile(id, categoriesId);
 
-            if (categoriesFile.Content == null) return NotFound();
+            if (categoriesFile?.Content == null) return NotFound();
 
             var categoriesName = string.IsNullOrEmpty(categoriesFile.CategoriesName)
                 ? "New categories"

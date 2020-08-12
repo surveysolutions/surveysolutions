@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     public class AttachmentSize
     {
         public Guid AttachmentId { get; set; }
-        public string ContentId { get; set; }
+        public string ContentId { get; set; } = string.Empty;
         public long Size { get; set; }
     }
 }

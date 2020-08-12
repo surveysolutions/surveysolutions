@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 
             var denormalizer = CreateDenormalizer(interviewSummaryStorage);
 
-            denormalizer.Handle(new[] { Create.PublishedEvent.InterviewDeleted(interviewId: interviewId) }, interviewId);
+            denormalizer.Handle(new[] { Create.PublishedEvent.InterviewDeleted(interviewId: interviewId) });
 
             Assert.That(interviewSummaryStorage.GetById(interviewId.FormatGuid()), Is.Null);
         }
@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 
-                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage),
                 new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage)                );
         }
 

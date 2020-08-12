@@ -14,7 +14,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.services = services;
         }
 
-        public IExternalDataClient GetDataClient(ExternalStorageType? storageType)
+        public IExternalDataClient? GetDataClient(ExternalStorageType? storageType)
         {
             if (storageType == null)
             {

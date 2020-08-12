@@ -126,4 +126,7 @@
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Только ответственный супервизор должен отвечать на вопросы супервизора </value>
   </data>
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>Все задания для web интервью должны быть назначены на интервьюера</value>
+  </data>
 </root>

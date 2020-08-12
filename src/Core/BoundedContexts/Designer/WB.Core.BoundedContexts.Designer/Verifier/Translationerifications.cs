@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var trimedTranslationName = translation.Name?.Trim() ?? "";
             var countNames = questionnaire.Questionnaire.Translations.Count(t => (t.Name?.Trim() ?? "") == trimedTranslationName);
-            return countNames > 1;
+            return countNames > 1 || string.Equals(questionnaire.Questionnaire.DefaultLanguageName?.Trim(), trimedTranslationName);
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation(

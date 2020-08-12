@@ -37,10 +37,10 @@
 
         <Chain>
             <PackageGroupRef Id="ActivateIisFeatures"/>
-            <PackageGroupRef Id="WindowsDotNetHosting311"/>
+            <PackageGroupRef Id="WindowsDotNetHosting316"/>
             <RollbackBoundary/>
             <MsiPackage Id="SurveySolutionsPackage"
-                        Cache="no"
+                        Cache="yes"
                         Compressed="yes"
                         DisplayInternalUI="yes"
                         Vital="yes"

@@ -104,9 +104,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 {
                     await Policy.Handle<InitializationException>(e => e.IsTransient)
                         .WaitAndRetryAsync(10, i => TimeSpan.FromSeconds(i),
-                            (exception, span) => status.Error(exception.Message, exception))
-                        .ExecuteAsync(async () => await module.Init(serviceLocatorLocal, status));
-                    status.Run();
+                            (exception, span) => status.Run())
+                        .ExecuteAsync(async () =>
+                        {
+                            await module.Init(serviceLocatorLocal, status);
+                            status.ClearMessage();
+                        });
                 }
                 catch (InitializationException ie) when (ie.Subsystem == Subsystem.Database)
                 {

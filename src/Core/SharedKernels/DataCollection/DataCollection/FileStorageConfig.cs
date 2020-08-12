@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.IO;
 
 namespace WB.Core.SharedKernels.DataCollection
@@ -9,6 +10,8 @@ namespace WB.Core.SharedKernels.DataCollection
         public string TempData { get; set; } = "~/App_Data";
 
         public StorageProviderType? StorageProviderType { get; set; }
+        
+        public string? FFmpegExecutablePath { get; set; }
 
         private StorageProviderType? storageType;
 

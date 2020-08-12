@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -14,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -27,6 +27,8 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IAuditLogService auditLogService;
         private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IJsonAllTypesSerializer serializer;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -48,7 +50,9 @@ namespace WB.UI.Interviewer.ViewModel
             IAuditLogService auditLogService,
             IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
-            ILogger logger)
+            ILogger logger, 
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IJsonAllTypesSerializer serializer)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
@@ -58,12 +62,9 @@ namespace WB.UI.Interviewer.ViewModel
             this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
             this.logger = logger;
+            this.interviewViewRepository = interviewViewRepository;
+            this.serializer = serializer;
         }
-
-        static readonly TimeSpan PauseResumeThrottling = TimeSpan.FromSeconds(5);
-        static readonly object ThrottlingLock = new Object();
-        static PauseInterviewCommand pendingPause = null;
-        private static Thread PauseThread;
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
@@ -102,7 +103,7 @@ namespace WB.UI.Interviewer.ViewModel
                     return base.UpdateCurrentScreenViewModel(eventArgs);
             }
         }
-
+        
         public override void ViewAppeared()
         {
             if (!this.Principal.IsAuthenticated)
@@ -116,29 +117,9 @@ namespace WB.UI.Interviewer.ViewModel
                 var interviewId = Guid.Parse(InterviewId);
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview == null) return;
-
-                if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
-                {
-                    lock (ThrottlingLock)
-                    {
-                        PauseThread?.Abort();
-                        if (pendingPause == null)
-                        {
-                            commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-                        }
-                        else
-                        {
-                            var delay = DateTimeOffset.Now - pendingPause.OriginDate;
-                            if (delay > PauseResumeThrottling && pendingPause.InterviewId == interviewId)
-                            {
-                                commandService.Execute(pendingPause);
-                                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
-                            }
-                        }
-
-                        pendingPause = null;
-                    }
-                }
+                
+                commandService.Execute(new ResumeInterviewCommand(interviewId,
+                    Principal.CurrentUserIdentity.UserId));
 
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
                 {
@@ -178,15 +159,8 @@ namespace WB.UI.Interviewer.ViewModel
                 {
                     var interviewId = interview.Id;
 
-                    if (!interview.IsCompleted)
-                    {
-                        pendingPause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
-                        var cmdid = pendingPause.CommandIdentifier; // to make sure it's a same command
-
-                        // discard - c# feature to ignore warning on non awaited Task
-                        PauseThread = new Thread(() => { PauseInterview(interviewId, cmdid); });
-                        PauseThread.Start();
-                    }
+                    var pause = new PauseInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId);
+                    commandService.Execute(pause);
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
@@ -195,37 +169,18 @@ namespace WB.UI.Interviewer.ViewModel
                 }
             }
 
-            base.ViewDisappearing();
-        }
-
-        private void PauseInterview(Guid interviewId, Guid cmdid)
-        {
-            Thread.Sleep(PauseResumeThrottling);
-
-            lock (ThrottlingLock)
+            var interviewView = this.interviewViewRepository.GetById(InterviewId);
+            if (interviewView != null)
             {
-                var delay = DateTimeOffset.Now - pendingPause.OriginDate;
-                var sameInterview = pendingPause.InterviewId == interviewId;
-                var samePendingCommand = pendingPause.CommandIdentifier == cmdid;
-
-                if (pendingPause != null 
-                    && delay > PauseResumeThrottling 
-                    && sameInterview 
-                    && samePendingCommand 
-                    && interviewRepository.Get(this.InterviewId) != null)//could be synced and deleted
+                if (this.navigationState.CurrentGroup != null)
                 {
-                    try
-                    {
-                        commandService.Execute(pendingPause);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Info($"Was not able to save pause event for {pendingPause.InterviewId}", e);
-                    }
+                    interviewView.LastVisitedSectionId = this.serializer.Serialize(this.navigationState.CurrentGroup);
                 }
-
-                pendingPause = null;
+                interviewView.LastVisitedScreenType = this.navigationState.CurrentScreenType;
+                this.interviewViewRepository.Store(interviewView);
             }
+            
+            base.ViewDisappearing();
         }
     }
 }

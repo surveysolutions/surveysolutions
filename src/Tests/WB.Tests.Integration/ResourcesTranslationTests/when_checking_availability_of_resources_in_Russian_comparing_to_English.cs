@@ -41,10 +41,11 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             Assert.That(englishResourceFiles, Is.Not.Empty);
 
             //should_be_the_same_set_of_resource_files_in_Russian_as_it_is_in_English() => 
-            Assert.That(russianResourceFiles.Select(f => f.Replace(".ru.", ".")), Is.EqualTo(englishResourceFiles));
+            Assert.That(russianResourceFiles.Select(f => f.Replace(".ru.", ".")).OrderBy(x => x), 
+                Is.EquivalentTo(englishResourceFiles.OrderBy(x => x)));
 
             // should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
-            Assert.That(russianResourceNames, Is.EqualTo(englishResourceNames));
+            Assert.That(russianResourceNames.OrderBy(x => x), Is.EquivalentTo(englishResourceNames.OrderBy(x => x)));
         }
 
 

@@ -32,7 +32,7 @@ namespace WB.Services.Scheduler.Model
             map.Property(b => b.Data)
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v),
-                    v => JsonConvert.DeserializeObject<Dictionary<string, object>>(v));
+                    v => JsonConvert.DeserializeObject<Dictionary<string, object?>>(v));
             map.Property(p => p.ScheduleAt).IsRequired(false);
 
             map.HasIndex(nameof(JobItem.Tenant), nameof(JobItem.Status));

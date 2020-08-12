@@ -19,10 +19,12 @@ namespace WB.Services.Export.Services
     public interface IHeadquartersApi
     {
         [Get("/api/export/v1/questionnaire/{id}")]
-        Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId, CancellationToken cancellationToken);
+        Task<QuestionnaireDocument> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId, 
+            Guid? translation,
+            CancellationToken cancellationToken);
 
         [Get("/api/export/v1/questionnaire/{questionnaireId}/category/{categoryId}")]
-        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId, CancellationToken cancellationToken);
+        Task<CategoryItem[]> GetCategoriesAsync(QuestionnaireId questionnaireId, Guid categoryId, Guid? translation, CancellationToken cancellationToken);
 
         [Get("/api/export/v1/questionnaire/{id}/pdf")]
         Task<HttpContent> GetPdfAsync([AliasAs("id")] QuestionnaireId questionnaireId, Guid? translation = null);
@@ -61,5 +63,8 @@ namespace WB.Services.Export.Services
         Task<User.User> GetUserAsync(Guid userId);
         [Post("/api/export/v1/externalstorages/refreshtoken")]
         Task<string> GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType type, string refreshToken);
+
+        [Get("/api/export/v1/questionnaire/{id}/backup")]
+        Task<HttpContent> GetBackupAsync([AliasAs("id")] QuestionnaireId questionnaireId);
     }
 }

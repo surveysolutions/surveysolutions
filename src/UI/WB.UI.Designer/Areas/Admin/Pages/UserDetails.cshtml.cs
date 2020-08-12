@@ -36,13 +36,13 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         public class AccountViewModel
         {
             [Display(Name = "Comment", Order = 12)]
-            public string Comment { get; set; }
+            public string? Comment { get; set; }
 
             [Display(Name = "Created date", Order = 3)]
-            public string CreationDate { get; set; }
+            public string? CreationDate { get; set; }
 
             [Display(Name = "Email", Order = 2)]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Key]
             public Guid Id { get; set; }
@@ -57,22 +57,21 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             public bool CanImportOnHq { get; set; }
 
             [Display(Name = "Last Password Changed Date", Order = 10)]
-            public string LastPasswordChangedDate { get; set; }
+            public string? LastPasswordChangedDate { get; set; }
 
             [Display(Name = "Questionnaires", Order = 13)]
-            public IEnumerable<QuestionnaireListViewModel> OwnedQuestionnaires { get; set; }
+            public IEnumerable<QuestionnaireListViewModel> OwnedQuestionnaires { get; set; } = new List<QuestionnaireListViewModel>();
 
             [Display(Name = "Questionnaires", Order = 14)]
-            public IEnumerable<QuestionnaireListViewModel> SharedQuestionnaires { get; set; }
+            public IEnumerable<QuestionnaireListViewModel> SharedQuestionnaires { get; set; } = new List<QuestionnaireListViewModel>();
 
-            [Display(Name = "Name", Order = 1)]
-            public string UserName { get; set; }
+            [Display(Name = "Name", Order = 1)] public string UserName { get; set; } = string.Empty;
 
             [Display(Name = "Full name", Order = 2)]
-            public string FullName { get; set; }
+            public string? FullName { get; set; }
         }
 
-        public AccountViewModel Account { get; private set; }
+        public AccountViewModel Account { get; private set; } = new AccountViewModel();
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -120,8 +119,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             return Page();
         }
 
-        public IPagedList<QuestionnaireListViewModel> SharedQuestionnaires { get; set; }
+        public IPagedList<QuestionnaireListViewModel>? SharedQuestionnaires { get; set; }
 
-        public IPagedList<QuestionnaireListViewModel> OwnedQuestionnaires { get; set; }
+        public IPagedList<QuestionnaireListViewModel>? OwnedQuestionnaires { get; set; }
     }
 }

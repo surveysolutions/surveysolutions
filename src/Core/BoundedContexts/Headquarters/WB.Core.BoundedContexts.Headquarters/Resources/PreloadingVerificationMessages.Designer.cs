@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0002] N/A.
+        ///   Looks up a localized string similar to [PL0002] N/A. Contact the support team at support@mysurvey.solutions.
         /// </summary>
         public static string PL0002_MoreThenOneLevel {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided question value not allowed..
+        ///   Looks up a localized string similar to Question value not allowed..
         /// </summary>
         public static string PL0014_ParsedValueIsNotAllowed {
             get {
@@ -349,7 +349,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable has type that does not support protection..
+        ///   Looks up a localized string similar to Variable type cannot be protected..
         /// </summary>
         public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
             get {
@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster by list question should have column for text list answers.
+        ///   Looks up a localized string similar to List roster should have a column for text list answers.
         /// </summary>
         public static string PL0052_ColumnByTextListRosterSizeAnswerNotFound {
             get {
@@ -453,6 +453,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0061_DuplicatePasswordWithQuantity1 {
             get {
                 return ResourceManager.GetString("PL0061_DuplicatePasswordWithQuantity1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All assignments for web interviews must be made to an interviewer.
+        /// </summary>
+        public static string PL0062_WebModeOnlyForInterviewer {
+            get {
+                return ResourceManager.GetString("PL0062_WebModeOnlyForInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer to question with variable name {0} can&apos;t be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version..
+        /// </summary>
+        public static string PL0063_NoPermittedQuestion {
+            get {
+                return ResourceManager.GetString("PL0063_NoPermittedQuestion", resourceCulture);
             }
         }
     }

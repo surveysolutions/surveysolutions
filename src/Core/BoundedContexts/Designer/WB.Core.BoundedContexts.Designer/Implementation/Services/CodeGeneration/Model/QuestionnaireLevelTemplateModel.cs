@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<QuestionTemplateModel> QuestionsWithOptionsFilter => Questions.Where(x => x.HasOptionsFilter).ToList();
 
-        public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; }
+        public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; } = new List<ConditionMethodAndState>();
         public List<LinkedQuestionVerifierModel> LinkedQuestionsThatReferencesRosterDependentOnQuestionWithOptionsFilter { get; set; }
     }
 }

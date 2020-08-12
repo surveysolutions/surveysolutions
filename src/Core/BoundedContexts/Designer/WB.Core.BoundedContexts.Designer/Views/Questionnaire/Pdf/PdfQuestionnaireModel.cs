@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Markdig.Helpers;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -18,11 +19,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public class ModificationStatisticsByUser
         {
             public Guid UserId { get; set; }
-            public string Name { get; set; }
+            public string? Name { get; set; }
             public DateTime? Date { get; set; }
 
             public DateTime? On => this.Date;
-            public string By => this.Name;
+            public string? By => this.Name;
         }
 
         public class GroupStatistics
@@ -45,32 +46,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             public  int Index { get; set; }
             public Guid Id { get; set; }
-            public string VariableName { get; set; }
-            public string Title { get; set; }
-            public string EnablementCondition { get; set; }
+            public string? VariableName { get; set; }
+            public string? Title { get; set; }
+            public string? EnablementCondition { get; set; }
         }
 
         public class EntityWithLongValidation
         {
+            public EntityWithLongValidation(List<ValidationCondition> validationConditions)
+            {
+                ValidationConditions = validationConditions;
+            }
+
             public int Index { get; set; }
             public Guid Id { get; set; }
-            public string VariableName { get; set; }
-            public string Title { get; set; }
+            public string? VariableName { get; set; }
+            public string? Title { get; set; }
             public List<ValidationCondition> ValidationConditions { get; set; }
         }
 
         public class Categories
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }
-            public List<CategoriesItem> Items { get; set; }
+            public string? Name { get; set; }
+            public List<CategoriesItem> Items { get; set; } = new List<CategoriesItem>();
         }
 
         public class CategoriesItem
         {
             public int Id { get; set; }
             public int? ParentId { get; set; }
-            public string Text { get; set; }
+            public string Text { get; set; } = String.Empty;
         }
 
         private readonly QuestionnaireDocument questionnaire;
@@ -83,33 +89,42 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public QuestionnaireStatistics Statistics { get; set; } = new QuestionnaireStatistics();
         internal List<IComposite> AllItems;
 
-        public PdfQuestionnaireModel(QuestionnaireDocument questionnaire, PdfSettings settings)
+        public PdfQuestionnaireModel(QuestionnaireDocument questionnaire, PdfSettings settings, 
+            List<IComposite> allItems, ModificationStatisticsByUser created,
+            ModificationStatisticsByUser lastModified,
+            ModificationStatisticsByUser requested
+            )
         {
+            Created = created;
+            LastModified = lastModified;
+            Requested = requested;
             this.questionnaire = questionnaire;
             this.Settings = settings;
             this.Metadata = this.questionnaire.Metadata ?? new QuestionnaireMetaInfo();
+            AllItems = allItems;
         }
 
-        public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; }
+        public List<ICategoricalQuestion> QuestionsWithLongOptionsList { get; internal set; } = new List<ICategoricalQuestion>();
 
-        public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; }
+        public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; } = new List<IQuestion>();
 
-        public List<IQuestion> QuestionsWithLongInstructions { get; internal set; }
 
-        public List<IQuestion> QuestionsWithLongOptionsFilterExpression { get; internal set; }
+        public List<IQuestion> QuestionsWithLongInstructions { get; internal set; } = new List<IQuestion>();
 
-        public List<EntityWithLongValidation> ItemsWithLongValidations { get; internal set; }
+        public List<IQuestion> QuestionsWithLongOptionsFilterExpression { get; internal set; } = new List<IQuestion>();
 
-        public List<EntityWithLongCondition> ItemsWithLongConditions { get; internal set; }
+        public List<EntityWithLongValidation> ItemsWithLongValidations { get; internal set; } = new OrderedList<EntityWithLongValidation>();
 
-        public List<IVariable> VariableWithLongExpressions { get; internal set; }
+        public List<EntityWithLongCondition> ItemsWithLongConditions { get; internal set; } = new List<EntityWithLongCondition>();
 
-        public List<Categories> CategoriesList { get; internal set; }
+        public List<IVariable> VariableWithLongExpressions { get; internal set; } = new List<IVariable>();
+
+        public List<Categories> CategoriesList { get; internal set; } = new List<Categories>();
 
         public string Title => this.questionnaire.Title;
         public QuestionnaireMetaInfo Metadata { get; internal set; } 
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
-        public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; }
+        public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; } = new List<ModificationStatisticsByUser>();
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
            => this.Find(condition).FirstOrDefault();
@@ -120,14 +135,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Find<T>().Where(condition);
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public T FindOrThrow<T>(Guid publicKey) where T : class, IComposite
         {
-            return this.AllItems.FirstOrDefault(x => x is T && x.PublicKey == publicKey) as T;
+            return this.AllItems.First(x => x is T && x.PublicKey == publicKey) as T 
+                   ?? throw new InvalidOperationException("Entity was not found");
+        }
+
+        public T? FindOrNull<T>(Guid publicKey) where T : class, IComposite
+        {
+            return this.AllItems.First(x => x is T && x.PublicKey == publicKey) as T
+                   ?? null;
         }
 
         public IEnumerable<IComposite> GetChildren(Guid groupId)
         {
-            return this.Find<Group>(groupId).Children;
+            return this.FindOrThrow<Group>(groupId).Children;
         }
 
         public bool IsQuestion(IComposite item)
@@ -157,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetBreadcrumbsForGroup(Guid groupId)
         {
-            var parents = this.GetAllParentGroupsStartingFromBottom(this.Find<Group>(groupId), this.questionnaire).ToList();
+            var parents = this.GetAllParentGroupsStartingFromBottom(this.FindOrThrow<Group>(groupId), this.questionnaire).ToList();
             parents.Reverse();
             return string.Join(" / ", parents.Select(x => x.Title));
         }
@@ -165,20 +187,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private IEnumerable<IGroup> GetAllParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
         {
             var startGroupId = group.PublicKey;
-            while (group != document)
+            IGroup? groupCursor = group;
+            while (groupCursor != document && groupCursor != null)
             {
-                if (group.PublicKey != startGroupId)
+                if (groupCursor.PublicKey != startGroupId)
                 {
-                    yield return group;
+                    yield return groupCursor;
                 }
-                group = (IGroup)group.GetParent();
+                groupCursor = groupCursor.GetParent() as IGroup;
             }
         }
 
         public GroupStatistics GetGroupStatistics(Guid groupId)
         {
             var statistics = new GroupStatistics();
-            var childItems = this.Find<Group>(groupId).TreeToEnumerable<IComposite>(g => g.Children).Where(x => x.PublicKey != groupId);
+            var childItems = this.FindOrThrow<Group>(groupId).TreeToEnumerable<IComposite>(g => g.Children).Where(x => x.PublicKey != groupId);
             return this.FillStatistics(childItems, statistics);
         }
 
@@ -200,11 +223,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return statistics;
         }
 
-        public string GetQuestionTitle(IQuestion question) => question.QuestionText;
+        public string? GetQuestionTitle(IQuestion question) => question.QuestionText;
 
         public string GetGroupTitle(IGroup group) => group.Title;
 
-        public string GetGroupTitle(Guid groupId, bool removeHtmlTags = false) => removeHtmlTags ? this.Find<Group>(groupId).Title.RemoveHtmlTags() : this.Find<Group>(groupId).Title;
+        public string GetGroupTitle(Guid groupId, bool removeHtmlTags = false) => removeHtmlTags ? this.FindOrThrow<Group>(groupId).Title.RemoveHtmlTags() : this.FindOrThrow<Group>(groupId).Title;
 
         public string GetStaticText(IStaticText staticText) => staticText.Text;
 
@@ -212,17 +235,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool QuestionHasEnablementCondition(IQuestion question) => !string.IsNullOrWhiteSpace(question.ConditionExpression);
 
-        public bool QuestionHasOptionsFilter(IQuestion question) => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression) || !string.IsNullOrWhiteSpace(question.LinkedFilterExpression);
+        public bool QuestionHasOptionsFilter(IQuestion question) => !string.IsNullOrWhiteSpace(question.Properties?.OptionsFilterExpression) || !string.IsNullOrWhiteSpace(question.LinkedFilterExpression);
 
         public bool GroupHasEnablementCondition(IGroup group) => !string.IsNullOrWhiteSpace(@group.ConditionExpression);
 
         public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
 
-        public string GetRosterSourceQuestionVariable(Guid rosterId)
+        public string? GetRosterSourceQuestionVariable(Guid rosterId)
         {
-            var roster = this.Find<Group>(rosterId);
+            var roster = this.FindOrThrow<Group>(rosterId);
             return roster?.RosterSizeQuestionId != null
-                ? this.Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption
+                ? this.FindOrThrow<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption
                 : string.Empty;
         }
 
@@ -231,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             if (!rosterSizeQuestionId.HasValue)
                 return string.Empty;
 
-            var question = this.Find<IQuestion>(rosterSizeQuestionId.Value);
+            var question = this.FindOrNull<IQuestion>(rosterSizeQuestionId.Value);
             if (question == null)
                 return string.Empty;
             switch (question.QuestionType)
@@ -343,9 +366,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
-        public string GetQuestionOptionsFilter(IQuestion question)
+        public string? GetQuestionOptionsFilter(IQuestion question)
         {
-            return string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression) ? question.LinkedFilterExpression : question.Properties.OptionsFilterExpression;
+            return string.IsNullOrWhiteSpace(question.Properties?.OptionsFilterExpression) ? question.LinkedFilterExpression : question.Properties.OptionsFilterExpression;
         }
 
         private string FormatAsIntegerWithLeadingZeros(decimal value, IEnumerable<double> values)
@@ -355,23 +378,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return Convert.ToInt64(value).ToString($"D{maxValue}");
         }
 
-        public string GetQuestionInstructionExcerpt(IQuestion question) =>
-            question.Instructions.Substring(0, Math.Min(this.Settings.InstructionsExcerptLength, question.Instructions.Length));
+        public string? GetQuestionInstructionExcerpt(IQuestion question) =>
+            question.Instructions?.Substring(0, Math.Min(this.Settings.InstructionsExcerptLength, question.Instructions.Length));
 
-        public string GetQuestionOptionsFilterExcerpt(IQuestion question) =>
-            GetQuestionOptionsFilter(question).Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, GetQuestionOptionsFilter(question).Length));
+        public string? GetQuestionOptionsFilterExcerpt(IQuestion question)
+        {
+            var filter = GetQuestionOptionsFilter(question);
 
-        public string GetLinkedQuestionFilterExcerpt(IQuestion question) =>
-            question.LinkedFilterExpression.Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, question.LinkedFilterExpression.Length));
+            return filter?.Substring(0,
+                Math.Min(this.Settings.VariableExpressionExcerptLength, filter.Length));
+        }
 
-        public string GetVariableExpressionExcerpt(IVariable variable) =>
+        public string? GetLinkedQuestionFilterExcerpt(IQuestion question) =>
+            question.LinkedFilterExpression?.Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, question.LinkedFilterExpression.Length));
+
+        public string? GetVariableExpressionExcerpt(IVariable variable) =>
             variable.Expression?.Substring(0, Math.Min(this.Settings.VariableExpressionExcerptLength, variable.Expression.Length));
 
         public bool InstructionIsTooLong(IQuestion question) =>
             question.Instructions?.Length > this.Settings.InstructionsExcerptLength;
 
         public bool OptionsFilterIsTooLong(IQuestion question) =>
-            question.Properties.OptionsFilterExpression?.Length > this.Settings.VariableExpressionExcerptLength || question.LinkedFilterExpression?.Length > this.Settings.VariableExpressionExcerptLength;
+            question.Properties?.OptionsFilterExpression?.Length > this.Settings.VariableExpressionExcerptLength || question.LinkedFilterExpression?.Length > this.Settings.VariableExpressionExcerptLength;
 
         public bool VariableExpressionIsTooLong(IVariable variable) =>
             variable.Expression?.Length > this.Settings.VariableExpressionExcerptLength;
@@ -386,17 +414,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return this.ItemsWithLongValidations.Single(x => x.Id == entityId).Index;
                 case "I":
                 {
-                    var question = Find<IQuestion>(entityId);
+                    var question = FindOrThrow<IQuestion>(entityId);
                     return  QuestionsWithLongInstructions.IndexOf(question) + 1;
                 }
                 case "F":
                 {
-                    var question = Find<IQuestion>(entityId);
+                    var question = FindOrThrow<IQuestion>(entityId);
                     return QuestionsWithLongOptionsFilterExpression.IndexOf(question) + 1;
                 }
                 case "O":
                 {
-                    var question = Find<ICategoricalQuestion>(entityId);
+                    var question = FindOrThrow<ICategoricalQuestion>(entityId);
                     if (!question.CategoriesId.HasValue)
                         return CategoriesList.Count + QuestionsWithLongOptionsList.IndexOf(question) + 1;
                     else
@@ -466,6 +494,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
+        public bool IsParentCover(IQuestion question) => questionnaire.IsCoverPageSupported && questionnaire.IsCoverPage(question.GetParent()!.PublicKey);
 
         public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;

@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("multiLinked validation");
             question.Condition.Should().Be("multiLinked condition");
             question.IsMultiOptionYesNoQuestion.Should().BeFalse();
-            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.AllMultioptionYesNoCodes.Should().BeEmpty();
             question.TypeName.Should().Be("decimal[][]");
             question.RosterScopeName.Should().Be(CodeGenerator.QuestionnaireScope);
             question.ParentScopeTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);

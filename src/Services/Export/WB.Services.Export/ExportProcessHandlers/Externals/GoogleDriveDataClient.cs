@@ -46,8 +46,22 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 });
         }
         
-        private DriveService driveService;
-        private string refreshToken;
+        private DriveService? driveService;
+
+
+        private DriveService DriveService
+        {
+            set => driveService = value;
+            get
+            {
+                if (driveService == null)
+                    throw new InvalidOperationException("GoogleDriveDataClient was not initialized.");
+                return driveService;
+            }
+        }
+
+
+        private string refreshToken = String.Empty;
         private const string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
 
         public void InitializeDataClient(string accessToken, string refreshToken, TenantInfo tenant)
@@ -83,7 +97,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 HttpClientInitializer = credential
             };
 
-            this.driveService = new DriveService(serviceInitializer);
+            this.DriveService = new DriveService(serviceInitializer);
         }
 
         public async Task<string> CreateApplicationFolderAsync(string subFolder)
@@ -124,17 +138,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             var file = await GetFileIdAsync(fileName, folder);
             if (file != null)
             {
-                await this.retry.ExecuteAsync(() => driveService.Files.Delete(file.Id).ExecuteAsync(cancellationToken));
+                await this.retry.ExecuteAsync(() => DriveService.Files.Delete(file.Id).ExecuteAsync(cancellationToken));
             }
 
-            await driveService.Files.Create(fileMetadata, fileStream, "application/octet-stream").UploadAsync(cancellationToken);
+            await DriveService.Files.Create(fileMetadata, fileStream, "application/octet-stream").UploadAsync(cancellationToken);
         }
 
         public async Task<long?> GetFreeSpaceAsync()
         {
             var storageInfo = await this.retry.ExecuteAsync(() =>
             {
-                var storageInfoRequest = driveService.About.Get();
+                var storageInfoRequest = DriveService.About.Get();
                 storageInfoRequest.Fields = "storageQuota";
 
                 return storageInfoRequest.ExecuteAsync();
@@ -144,19 +158,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return storageInfo.StorageQuota.Limit - storageInfo.StorageQuota.Usage ?? 0;
         }
 
-        private Task<File> GetFileIdAsync(string filename, string parentFolderId = null)
+        private Task<File> GetFileIdAsync(string filename, string parentFolderId = "")
         {
             var query = SearchQuery(filename, parentFolderId);
             return SearchForFirstOccurenceAsync(query);
         }
 
-        private async Task<File> GetOrCreateFolderAsync(string folder, string parentId = null)
+        private async Task<File> GetOrCreateFolderAsync(string folder, string parentId = "")
         {
             return await this.GetFolderIdAsync(folder, parentId)
                    ?? await this.ExecuteCreateFolderAsync(folder, parentId);
         }
 
-        private async Task<File> ExecuteCreateFolderAsync(string folder, string parentId = null)
+        private async Task<File> ExecuteCreateFolderAsync(string folder, string parentId = "")
         {
             var file = new File
             {
@@ -171,14 +185,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
             return await retry.ExecuteAsync(() =>
             {
-                var createRequest = driveService.Files.Create(file);
+                var createRequest = DriveService.Files.Create(file);
                 createRequest.Fields = "id";
 
                 return createRequest.ExecuteAsync();
             });
         }
 
-        private Task<File> GetFolderIdAsync(string folderName, string parentFolderId = null)
+        private Task<File> GetFolderIdAsync(string folderName, string parentFolderId = "")
         {
             var query = SearchQuery(folderName, parentFolderId);
             query += $" and mimeType = \'{GoogleDriveFolderMimeType}'";
@@ -188,7 +202,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         private async Task<File> SearchForFirstOccurenceAsync(string query) =>
             (await retry.ExecuteAsync(() =>
             {
-                var listRequest = this.driveService.Files.List();
+                var listRequest = this.DriveService.Files.List();
 
                 listRequest.Q = query;
                 listRequest.Fields = "files(id, name)";
@@ -199,7 +213,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         private string SearchQuery(string name, string parentFolder)
         {
             var query = $"name = '{name}' and trashed = false";
-            if (parentFolder != null) query += $" and '{parentFolder}' in parents";
+            if (!string.IsNullOrEmpty(parentFolder)) query += $" and '{parentFolder}' in parents";
             return query;
         }
         

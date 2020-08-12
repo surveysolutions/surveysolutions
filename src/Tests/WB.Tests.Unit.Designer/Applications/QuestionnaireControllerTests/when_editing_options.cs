@@ -33,18 +33,27 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
             controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel
+            (
+                questionnaireId : questionnaireId.FormatGuid(),
+                questionId : questionId,
+                options:new QuestionnaireCategoricalOption[0]
+            )
             {
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                QuestionId = questionId,
                 IsCascading = true
             };
             BecauseOf();
         }
 
-        private void BecauseOf() => view = controller.EditOptions(postedFile) as JsonResult;
+        private void BecauseOf() => view = controller.EditOptions(postedFile) as ViewResult;
 
-        [NUnit.Framework.Test] public void should_return_0_errors () =>
-            ((List<string>)view.Value).Should().BeEmpty();
+        [NUnit.Framework.Test] public void should_return_list_with_1_option () =>
+            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.Count().Should().Be(1);
+
+        [NUnit.Framework.Test] public void should_return_first_option_with_value_equals_1 () =>
+            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.First().Value.Should().Be(1);
+
+        [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
+            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.First().Title.Should().Be("Street 1");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()
@@ -55,6 +64,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private static QuestionnaireController controller;
         private static IFormFile postedFile;
         private static Stream stream = new MemoryStream();
-        private static JsonResult view;
+        private static ViewResult view;
     }
 }

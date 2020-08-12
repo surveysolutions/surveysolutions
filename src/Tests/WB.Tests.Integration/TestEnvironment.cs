@@ -21,7 +21,7 @@ namespace WB.Tests.Integration
                 projectsInSolution = content.Where(c => c.Contains(".csproj", StringComparison.OrdinalIgnoreCase))
                     .Select(l => Regex.Match(l, @"[^""]*\.csproj"))
                     .Where(m => m.Success)
-                    .Select(m => Path.Combine(slnFolder, m.Value)).ToList();
+                    .Select(m => Path.Combine(slnFolder, m.Value.Replace('\\', Path.DirectorySeparatorChar))).ToList();
             }
 
             return projectsInSolution;

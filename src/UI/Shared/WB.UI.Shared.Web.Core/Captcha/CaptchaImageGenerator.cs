@@ -1,16 +1,15 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors.Convolution;
 using SixLabors.ImageSharp.Processing.Processors.Quantization;
-using SixLabors.Primitives;
 using Color = SixLabors.ImageSharp.Color;
 using FontStyle = SixLabors.Fonts.FontStyle;
 using SystemFonts = SixLabors.Fonts.SystemFonts;
@@ -121,7 +120,7 @@ namespace WB.UI.Shared.Web.Captcha
 
                 DrawRandomLines(ctx, width, height);
 
-                ctx.ApplyProcessor(new LaplacianOfGaussianProcessor(false));
+                ctx.ApplyProcessor(new EdgeDetectorProcessor(EdgeDetectorKernel.LaplacianOfGaussian, false));
                 ctx.Invert();
 
                 DrawRandomPixels(ctx, width, height);

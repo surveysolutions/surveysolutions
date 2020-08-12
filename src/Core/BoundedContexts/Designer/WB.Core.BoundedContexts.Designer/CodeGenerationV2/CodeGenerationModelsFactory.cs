@@ -115,7 +115,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 var sourceLevelClassName = levelClassNames[question.LinkedToQuestionId.HasValue 
                     ? questionnaire.GetRosterScope(question.LinkedToQuestionId.Value) 
-                    : questionnaire.GetRosterScope(questionnaire.Find<IGroup>(question.LinkedToRosterId.Value))];
+                    : questionnaire.GetRosterScope(questionnaire.Find<IGroup>(question.LinkedToRosterId!.Value) 
+                                                   ?? throw new InvalidOperationException("Referenced roster was not found."))];
 
                 var linkedFilterExpression = this.macrosSubstitutionService.InlineMacros(question.LinkedFilterExpression, questionnaire.Macros.Values);
 
@@ -161,13 +162,13 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         {
             var questionsWithFilter = questionnaire
                 .Find<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(this.macrosSubstitutionService.InlineMacros(x.Properties.OptionsFilterExpression, questionnaire.Macros.Values)));
+                .Where(x => !string.IsNullOrWhiteSpace(this.macrosSubstitutionService.InlineMacros(x.Properties?.OptionsFilterExpression, questionnaire.Macros.Values)));
 
             foreach (var question in questionsWithFilter)
             {
                 var variable = questionnaire.GetVariable(question);
                 var methodName = $"{CodeGeneratorV2.OptionsFilterPrefix}{variable}";
-                var expression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
+                var expression = this.macrosSubstitutionService.InlineMacros(question.Properties?.OptionsFilterExpression, questionnaire.Macros.Values);
                 var levelClassName = levelClassNames[questionnaire.GetRosterScope(question)];
 
                 yield return new OptionsFilterMethodModel(
@@ -271,15 +272,19 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             foreach (var table in questionnaire.LookupTables)
             {
                 var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+
+                if (lookupTableData == null)
+                    throw new InvalidOperationException("Lookup table is empty.");
+
                 var tableName = table.Value.TableName;
                 var tableTemplateModel = new LookupTableTemplateModel
-                {
-                    TableName = tableName,
-                    TypeName = CodeGeneratorV2.LookupPrefix + tableName.ToPascalCase(),
-                    TableNameField = CodeGeneratorV2.PrivateFieldsPrefix + tableName.ToCamelCase(),
-                    Rows = lookupTableData.Rows,
-                    VariableNames = lookupTableData.VariableNames
-                };
+                (
+                    tableName : tableName,
+                    typeName : CodeGeneratorV2.LookupPrefix + tableName.ToPascalCase(),
+                    tableNameField : CodeGeneratorV2.PrivateFieldsPrefix + tableName.ToCamelCase(),
+                    rows : lookupTableData.Rows,
+                    variableNames : lookupTableData.VariableNames
+                );
                 yield return tableTemplateModel;
             }
         }

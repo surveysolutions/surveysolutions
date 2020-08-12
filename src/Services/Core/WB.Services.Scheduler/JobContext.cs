@@ -15,11 +15,13 @@ namespace WB.Services.Scheduler
         private static long counter = 0;
         public long Id { get; }
         private readonly IOptions<JobSettings> jobSettings;
-        private readonly ILoggerFactory loggerFactory;
+        private readonly ILoggerFactory? loggerFactory;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public JobContext(DbContextOptions<JobContext> options,
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
             IOptions<JobSettings> jobSettings,
-            ILoggerFactory loggerFactory = null)
+            ILoggerFactory? loggerFactory = null)
             : base(options)
         {
             this.jobSettings = jobSettings;

@@ -5,7 +5,7 @@ namespace WB.Services.Export.Questionnaire
 {
     public class StaticText : IValidatableQuestionnaireEntity
     {
-        private IQuestionnaireEntity parent;
+        private IQuestionnaireEntity? parent;
 
         public StaticText()
         {
@@ -17,7 +17,7 @@ namespace WB.Services.Export.Questionnaire
 
         public IEnumerable<IQuestionnaireEntity> Children { get; }
 
-        public IQuestionnaireEntity GetParent()
+        public IQuestionnaireEntity? GetParent()
         {
             return parent;
         }
@@ -29,7 +29,7 @@ namespace WB.Services.Export.Questionnaire
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
 
-        private string columnName;
+        private string? columnName;
         public string ColumnName
         {
             get

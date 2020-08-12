@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace WB.Services.Export.Infrastructure.Implementation
 {
@@ -17,6 +18,10 @@ namespace WB.Services.Export.Infrastructure.Implementation
         }
 
         public void WriteAllText(string pathToFile, string content) => File.WriteAllText(pathToFile, content);
+        public async Task WriteAllTextAsync(string pathToFile, string content)
+        {
+            await File.WriteAllTextAsync(pathToFile, content);
+        }
 
         public string MakeValidFileName(string name)
         {
@@ -44,6 +49,11 @@ namespace WB.Services.Export.Infrastructure.Implementation
         public string[] GetFilesInDirectory(string directoryPath)
         {
             return Directory.GetFiles(directoryPath);
+        }
+
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
+        {
+            return Directory.GetFiles(pathToDirectory, pattern);
         }
 
         public bool IsFileExists(string filePath) => File.Exists(filePath);

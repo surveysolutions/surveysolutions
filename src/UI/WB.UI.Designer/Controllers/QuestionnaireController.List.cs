@@ -21,19 +21,19 @@ namespace WB.UI.Designer.Controllers
                 type: QuestionnairesType.Public, folderId: id);
 
             var folderPath = publicFoldersStorage.GetFoldersPath(folderId: id);
-            var breadcrumbs = folderPath.Select(folder => new FolderBreadcrumbsModel()
-            {
-                FolderId = folder.PublicId,
-                Title = folder.Title
-            }).ToArray();
+            var breadcrumbs = folderPath.Select(folder => new FolderBreadcrumbsModel
+            (
+                folderId : folder.PublicId,
+                title : folder.Title
+            )).ToArray();
 
-            var model = new QuestionnaireListModel()
-            {
-                IsSupportAssignFolders = User.IsAdmin(),
-                CurrentFolderId = id,
-                Breadcrumbs = breadcrumbs,
-                Questionnaires = questionnaires
-            };
+            var model = new QuestionnaireListModel
+            (
+                isSupportAssignFolders : User.IsAdmin(),
+                currentFolderId : id,
+                breadcrumbs : breadcrumbs,
+                questionnaires : questionnaires
+            );
 
             return this.View(model);
         }

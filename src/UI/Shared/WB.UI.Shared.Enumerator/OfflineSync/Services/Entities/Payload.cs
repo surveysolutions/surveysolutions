@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -31,7 +32,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
 
         public Android.Gms.Nearby.Connection.Payload NearbyPayload { get; }
 
-
         public static IPayload FromStream(string endpoint, Stream stream)
         {
             return new Payload(Android.Gms.Nearby.Connection.Payload.FromStream(stream), endpoint);
@@ -42,19 +42,32 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
             return new Payload(Android.Gms.Nearby.Connection.Payload.FromBytes(bytes), endpoint);
         }
 
-        private TaskCompletionSource<byte[]> tsc = null;
-
-        public Task<byte[]> BytesFromStream => tsc?.Task;
-
-        public async Task ReadStreamAsync()
+        public Task<byte[]> BytesFromStream { get; private set; }
+        
+        public void ReadStream()
         {
-            tsc = new TaskCompletionSource<byte[]>();
-
-            using (var ms = new MemoryStream())
+            BytesFromStream = Task.Run(() =>
             {
-                await Stream.CopyToAsync(ms);
-                tsc.SetResult(ms.ToArray());
-            }
+                using var ms = new MemoryStream();
+
+                // implementation from Stream.Copy()
+                var buffer = ArrayPool<byte>.Shared.Rent(81920);
+
+                try
+                {
+                    int read;
+                    while ((read = Stream.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(buffer);
+                }
+
+                return ms.ToArray();
+            });
         }
 
         public override string ToString()

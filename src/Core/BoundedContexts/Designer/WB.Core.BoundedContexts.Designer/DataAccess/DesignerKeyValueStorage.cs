@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             this.serializer = serializer;
         }
 
-        public T GetById(string id)
+        public T? GetById(string id)
         {
             return memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             }
         }
 
-        private EntityEntry<KeyValueEntity> FindEntry(string id)
+        private EntityEntry<KeyValueEntity>? FindEntry(string id)
         {
             var entity = this.dbContext.Find(QueryType, id) as KeyValueEntity;            
             return entity == null ? null : this.dbContext.Entry(entity);
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         private string CacheKey(string id) => QueryType.Name + id;
 
-        private static Type _queryType = null;
+        private static Type? _queryType = null;
         private static Type QueryType
         {
             get

@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return classifications;
         }
 
-        public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly, Guid userId)
+        public async Task<ClassificationsSearchResult> SearchAsync(string? query, Guid? groupId, bool privateOnly, Guid userId)
         {
             
                 var searchQuery = ApplySearchFilter(dbContext.ClassificationEntities, query, groupId, privateOnly, userId);
@@ -99,29 +99,25 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
             var classifications = dbEntities.Where(x => x.Type == ClassificationEntityType.Classification)
                 .Select(x => new Classification
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Group = (groups.ContainsKey(x.Parent ?? Guid.Empty) ? groups[x.Parent ?? Guid.Empty] : null) ?? groups.Values.FirstOrDefault(),
-                    CategoriesCount = categoriesCounts.ContainsKey(x.Id) ? categoriesCounts[x.Id] : 0,
-                    UserId = x.UserId,
-                    Parent = x.Parent
-                }).ToList();
+                (
+                    id : x.Id,
+                    title : x.Title,
+                    group : (groups.ContainsKey(x.Parent ?? Guid.Empty) ? groups[x.Parent ?? Guid.Empty] : null) ?? groups.Values.FirstOrDefault(),
+                    categoriesCount : categoriesCounts.ContainsKey(x.Id) ? categoriesCounts[x.Id] : 0,
+                    userId : x.UserId,
+                    parent : x.Parent
+                )).ToList();
 
             var total = ApplySearchFilter(dbContext.ClassificationEntities, query, groupId, privateOnly, userId)
                 .Select(x => x.ClassificationId)
                 .Distinct()
                 .Count();
 
-            return await Task.FromResult(new ClassificationsSearchResult
-            {
-                Classifications = classifications,  
-                Total = total
-            });
+            return await Task.FromResult(new ClassificationsSearchResult(classifications, total));
         }
 
         private IQueryable<ClassificationEntity> ApplySearchFilter(IQueryable<ClassificationEntity> entities, 
-            string query, Guid? groupId, bool privateOnly, Guid userId)
+            string? query, Guid? groupId, bool privateOnly, Guid userId)
         {
             var searchQuery = privateOnly
                 ? entities.Where(x => x.UserId == userId)

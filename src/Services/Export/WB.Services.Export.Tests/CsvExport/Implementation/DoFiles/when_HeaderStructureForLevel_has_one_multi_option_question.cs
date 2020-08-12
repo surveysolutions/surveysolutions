@@ -39,7 +39,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
          
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName));
+            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case names{1}", dataFileName, Environment.NewLine));
 
         [NUnit.Framework.Test] public void should_contain_stata_variable_on_title_mapping_for_first_option () =>
             stataGeneratedContent.Should().Contain("label variable var1__1 `\"title1:one\"'");

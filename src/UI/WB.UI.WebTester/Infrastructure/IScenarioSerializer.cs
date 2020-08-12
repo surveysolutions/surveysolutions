@@ -12,7 +12,7 @@ namespace WB.UI.WebTester.Infrastructure
     {
         string Serialize(Scenario scenario);
 
-        Scenario Deserialize(string scenario);
+        Scenario? Deserialize(string scenario);
     }
 
     class ScenarioSerializer : IScenarioSerializer
@@ -40,7 +40,7 @@ namespace WB.UI.WebTester.Infrastructure
             return JsonConvert.SerializeObject(scenario, this.settings);
         }
 
-        public Scenario Deserialize(string scenario)
+        public Scenario? Deserialize(string scenario)
         {
             return JsonConvert.DeserializeObject<Scenario>(scenario, this.settings);
         }
@@ -67,12 +67,12 @@ namespace WB.UI.WebTester.Infrastructure
             }
         }
 
-        public override Type BindToType(string assemblyName, string typeName)
+        public override Type BindToType(string? assemblyName, string typeName)
         {
             return shortTypeNameToTypeMap[typeName];
         }
 
-        public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        public override void BindToName(Type serializedType, out string? assemblyName, out string typeName)
         {
             assemblyName = null;
             typeName = serializedType.Name;

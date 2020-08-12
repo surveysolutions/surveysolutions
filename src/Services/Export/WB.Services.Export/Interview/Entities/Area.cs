@@ -1,3 +1,5 @@
+using System;
+
 namespace WB.Services.Export.Interview.Entities
 {
     public class Area
@@ -16,11 +18,11 @@ namespace WB.Services.Export.Interview.Entities
             this.NumberOfPoints = numberOfPoints;
         }
 
-        public string Geometry { set; get; }
-        public string MapName { set; get; }
+        public string Geometry { set; get; } = String.Empty;
+        public string MapName { set; get; } = String.Empty;
         public double? AreaSize { set; get; }
         public double? Length { set; get; }
-        public string Coordinates { set; get; }
+        public string Coordinates { set; get; } = String.Empty;
 
         public double? DistanceToEditor { set; get; }
 

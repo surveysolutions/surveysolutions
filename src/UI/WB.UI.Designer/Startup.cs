@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
@@ -36,10 +38,12 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
 using WB.UI.Designer.Services;
+using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace WB.UI.Designer
 {
@@ -56,7 +60,7 @@ namespace WB.UI.Designer
 
         public IConfiguration Configuration { get; }
 
-        private AspCoreKernel aspCoreKernel;
+        private AspCoreKernel? aspCoreKernel;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -68,6 +72,7 @@ namespace WB.UI.Designer
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+                options.Cookie.Name = "Designer";
             });
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -123,6 +128,24 @@ namespace WB.UI.Designer
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
                     opts => { opts.Realm = "mysurvey.solutions"; });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    var hasAcceptHeader = context.Request.Headers.TryGetValue(HeaderNames.Accept, out var accept);
+                    if (hasAcceptHeader && accept.ToString().Contains("application/json", StringComparison.OrdinalIgnoreCase) && context.Response.StatusCode == StatusCodes.Status200OK)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    }
+                    else
+                    {
+                        context.Response.Redirect(context.RedirectUri);
+                    }
+
+                    return Task.CompletedTask;
+                };
+            });
+            
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()                    
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
@@ -151,6 +174,7 @@ namespace WB.UI.Designer
 
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
 
+            services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddTransient<ICaptchaProtectedAuthenticationService, CaptchaProtectedAuthenticationService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
@@ -290,6 +314,8 @@ namespace WB.UI.Designer
                     pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
                 routes.MapRazorPages();
             });
+
+            if (aspCoreKernel == null) return;
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);
             if (env.IsDevelopment())

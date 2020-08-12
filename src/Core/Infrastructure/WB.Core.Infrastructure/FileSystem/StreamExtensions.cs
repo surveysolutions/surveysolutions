@@ -33,5 +33,26 @@ namespace WB.Core.Infrastructure.FileSystem
             System.Diagnostics.Debug.Assert(offset == count);
             return buffer;
         }
+
+
+        public static T WrapStreamIntoTempFile<T>(this Stream stream, Func<Stream, T> body)
+        {
+            var tmpFile = Path.GetTempFileName();
+            
+            try
+            {
+                using (var fs = File.OpenWrite(tmpFile))
+                {
+                    stream.CopyTo(fs);
+                }
+
+                using var xmlFile = File.OpenRead(tmpFile);
+                return body(xmlFile);
+            }
+            finally
+            {
+                File.Delete(tmpFile);
+            }
+        }
     }
 }

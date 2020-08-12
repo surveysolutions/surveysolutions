@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
         
         private static Questionnaire questionnaire;
         private static Exception exception;
-        private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid entityId = Guid.Parse("11111111111111111111111111111112");
         private static Guid notExistingEntityId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

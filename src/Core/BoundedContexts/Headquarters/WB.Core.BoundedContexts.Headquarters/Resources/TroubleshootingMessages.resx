@@ -133,7 +133,7 @@
     <value>The interviewer changed tablets. The data for interview {0} might be lost because data are deleted when interviewers move from one tablet to another. If this is the case, that interview cannot be recovered</value>
   </data>
   <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
-    <value>Interview {0} has not yet been received by interviewer {1}. The interviewer has not synced yet.</value>
+    <value>Interview {0} has not yet been received by interviewer {1}.</value>
   </data>
   <data name="NoData_InterviewWasReassigned" xml:space="preserve">
     <value>Interview {0} was re-assigned to a different interviewer. The interview is currently on that latter interviewer's tablet.</value>

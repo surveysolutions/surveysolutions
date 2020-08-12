@@ -14,6 +14,7 @@ namespace WB.Infrastructure.Native.Storage
 
         public JsonAllTypesSerializer()
         {
+#pragma warning disable 612, 618
             this.jsonSerializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
@@ -22,6 +23,7 @@ namespace WB.Infrastructure.Native.Storage
                 Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
                 SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
             };
+#pragma warning restore 612, 618
         }
 
         public string Serialize(object item)

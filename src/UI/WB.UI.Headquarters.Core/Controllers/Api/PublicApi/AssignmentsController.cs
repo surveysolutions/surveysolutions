@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,25 +9,25 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
- using Newtonsoft.Json.Linq;
- using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
- using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
- using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users;
- using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
- using WB.Core.BoundedContexts.Headquarters.Views.User;
- using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
- using WB.Core.GenericSubdomains.Portable.Services;
- using WB.Core.Infrastructure.CommandBus;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection;
- using WB.Core.SharedKernels.DataCollection.Aggregates;
- using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
- using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
- using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
- using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -56,6 +56,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IInvitationService invitationService;
+        private readonly IWebInterviewLinkProvider interviewLinkProvider;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -70,7 +73,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IUnitOfWork unitOfWork,
             IUserViewFactory userViewFactory,
             IAssignmentsImportService assignmentsImportService,
-            ISerializer serializer)
+            ISerializer serializer,
+            IInvitationService invitationService,
+            IWebInterviewLinkProvider interviewLinkProvider,
+            IInScopeExecutor inScopeExecutor)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -85,6 +91,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.userViewFactory = userViewFactory;
             this.assignmentsImportService = assignmentsImportService;
             this.serializer = serializer;
+            this.invitationService = invitationService;
+            this.interviewLinkProvider = interviewLinkProvider;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         /// <summary>
@@ -131,7 +140,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var responsible = await GetResponsibleIdPersonFromRequestValueAsync(filter.Responsible);
             try
             {
-
                 AssignmentsWithoutIdentifingData result = this.assignmentViewFactory.Load(new AssignmentsInputModel
                 {
                     QuestionnaireId = questionnaireId?.QuestionnaireId,
@@ -190,10 +198,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
         //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
-        public async Task<ActionResult<CreateAssignmentResult>> Create([FromBody] CreateAssignmentApiRequest createItem)
+        public ActionResult<CreateAssignmentResult> Create(
+            [FromBody] CreateAssignmentApiRequest createItem)
         {
             if (createItem == null) return StatusCode(StatusCodes.Status400BadRequest, "Bad assignment info");
-            
+
             if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
             {
                 return StatusCode(StatusCodes.Status404NotFound,
@@ -202,18 +211,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
             if (questionnaire == null)
-                return StatusCode(StatusCodes.Status404NotFound, $"Questionnaire not found: {createItem?.QuestionnaireId}");
+                return StatusCode(StatusCodes.Status404NotFound,
+                    $"Questionnaire not found: {createItem?.QuestionnaireId}");
 
             if (string.IsNullOrEmpty(createItem.Responsible))
                 return StatusCode(StatusCodes.Status400BadRequest, "Responsible is required");
 
             var assignmentAnswers = createItem.IdentifyingData
-                .Select(x=>this.ToAssignmentAnswer(x, questionnaire))
+                .Select(x => this.ToAssignmentAnswer(x, questionnaire))
                 .ToList();
-            
+
             var unknownQuestions = assignmentAnswers
                 .Where(x => x.QuestionIdentity == null || string.IsNullOrEmpty(x.Variable))
                 .ToArray();
+
             if (unknownQuestions.Any())
                 return StatusCode(StatusCodes.Status400BadRequest,
                     $"Question(s) not found: {string.Join(", ", unknownQuestions.Select(x => x.Source.Variable ?? x.Source.Identity))}");
@@ -234,7 +245,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var importError = this.verifier.VerifyWithInterviewTree(assignmentToImport.Answers,
                 this.authorizedUser.Id, questionnaire);
-            
+
             if (importError != null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new CreateAssignmentResult
@@ -251,13 +262,25 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var assignmentId = this.assignmentsImportService.ImportAssignment(
                 assignmentToImport, questionnaire, this.authorizedUser.Id);
-            
+
             var assignment = this.assignmentsStorage.GetAssignment(assignmentId);
 
-            return new CreateAssignmentResult
+            var result = new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment)
             };
+
+            if (assignment?.WebMode == true)
+            {
+                var invitation = this.invitationService.GetInvitationByAssignmentId(assignment.Id);
+
+                if (invitation != null)
+                {
+                    result.WebInterviewLink = this.interviewLinkProvider.WebInterviewStartLink(invitation);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -271,7 +294,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/assign")]
         [Authorize(Roles = "ApiUser, Administrator")]
-        public async Task<ActionResult<AssignmentDetails>> Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
+        public async Task<ActionResult<AssignmentDetails>> Assign(int id,
+            [FromBody] AssignmentAssignRequest assigneeRequest)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
@@ -292,9 +316,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(e.StatusCode, e.Message);
             }
 
-            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id, assignment.Comments));
+            commandService.Execute(new ReassignAssignment(assignment.PublicKey, authorizedUser.Id, responsibleUser.Id,
+                assignment.Comments));
 
-            return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetAssignment(id));
+            return GetUpdatedAssignment(id);
+        }
+
+        private AssignmentDetails GetUpdatedAssignment(int id)
+        {
+            var updatedDetails =
+                inScopeExecutor.Execute(sl =>
+                {
+                    var assignmentsService = sl.GetInstance<IAssignmentsService>();
+                    var assignment = assignmentsService.GetAssignment(id);
+
+                    return this.mapper.Map<AssignmentDetails>(assignment);;
+                });
+            return updatedDetails;
         }
 
         private void VerifyAssigneeInRoles(HqUser responsibleUser, string providedValue, params UserRoles[] roles)
@@ -348,10 +386,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity));
             this.auditLog.AssignmentSizeChanged(id, quantity);
 
-            var changedAssignment = assignmentsStorage.GetAssignment(id);
-            var assignmentDetails = this.mapper.Map<AssignmentDetails>(changedAssignment);
-            assignmentDetails.Quantity = quantity; // quantity changed in other transaction and is not visible from this unit of work.
-            return assignmentDetails;
+            return GetUpdatedAssignment(id);
         }
 
         /// <summary>
@@ -374,14 +409,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             commandService.Execute(new ArchiveAssignment(assignment.PublicKey, authorizedUser.Id));
 
-            return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetAssignment(id));
+            return GetUpdatedAssignment(id);
         }
 
         /// <summary>
         /// Archive assignment
         /// </summary>
         /// <param name="id">Assignment id</param>
-        /// <response code="200">Assingment details</response>
+        /// <response code="200">Assignment details</response>
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/unarchive")]
@@ -394,7 +429,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
 
-            return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetAssignment(id));
+            var updatedDetails = GetUpdatedAssignment(id);
+
+            return GetUpdatedAssignment(id);
         }
 
         /// <summary>
@@ -434,10 +471,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
-            if(assignment == null || assignment.Archived) 
+            if (assignment == null || assignment.Archived)
                 return NotFound();
 
-            commandService.Execute(new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, request.Enabled));
+            commandService.Execute(
+                new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, request.Enabled));
 
             return NoContent();
         }
@@ -454,7 +492,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult<AssignmentQuantitySettings> AssignmentQuantitySettings(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
-            if(assignment == null || assignment.Archived) 
+            if (assignment == null || assignment.Archived)
                 return NotFound();
 
             return new AssignmentQuantitySettings
@@ -477,7 +515,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult Close(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
-            if(assignment == null) 
+            if (assignment == null)
                 return NotFound();
             if (!assignment.QuantityCanBeChanged)
                 return Conflict();
@@ -501,7 +539,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:int}/history")]
         [Authorize(Roles = "ApiUser, Supervisor, Headquarter, Administrator")]
-        public async Task<ActionResult<AssignmentHistory>> History(int id, [FromQuery]int start = 0, [FromQuery]int length = 30)
+        public async Task<ActionResult<AssignmentHistory>> History(int id, [FromQuery] int start = 0,
+            [FromQuery] int length = 30)
         {
             var assignment = this.assignmentsStorage.GetAssignment(id);
             if (assignment == null)
@@ -514,16 +553,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
                 if (!responsible.IsInRole(UserRoles.Interviewer))
                     return Forbid();
-                if(responsible.Profile.SupervisorId != this.authorizedUser.Id)
+                if (responsible.Profile.SupervisorId != this.authorizedUser.Id)
                     return Forbid();
             }
 
-            AssignmentHistory result = await this.assignmentViewFactory.LoadHistoryAsync(assignment.PublicKey, start, length);
+            AssignmentHistory result =
+                await this.assignmentViewFactory.LoadHistoryAsync(assignment.PublicKey, start, length);
             return result;
         }
-        
-        
-        private IEnumerable<PanelImportVerificationError> VerifyAssignment(List<PreloadingAssignmentRow> assignmentRows, IQuestionnaire questionnaire)
+
+
+        private IEnumerable<PanelImportVerificationError> VerifyAssignment(List<PreloadingAssignmentRow> assignmentRows,
+            IQuestionnaire questionnaire)
         {
             foreach (var assignmentRow in assignmentRows)
             foreach (var error in this.verifier.VerifyRowValues(assignmentRow, questionnaire))
@@ -540,7 +581,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             List<AssignmentAnswer> answers, IQuestionnaire questionnaire)
         {
             var tempAssignmentId = Guid.NewGuid().ToString("N");
-            
+
             var identifyingAnswers = answers
                 .Where(x => x.QuestionIdentity.RosterVector == RosterVector.Empty)
                 .ToList();
@@ -551,16 +592,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 FileName = questionnaire.Title,
                 QuestionnaireOrRosterName = questionnaire.VariableName,
-                InterviewIdValue = new PreloadingValue{Value = tempAssignmentId}.ToAssignmentInterviewId(), 
-                Email = new PreloadingValue {Value = assignmentInfo.Email, Column = nameof(assignmentInfo.Email)}.ToAssignmentEmail(),
-                Password = new PreloadingValue {Value = assignmentInfo.Password, Column = nameof(assignmentInfo.Password)}.ToAssignmentPassword(),
-                Quantity = new AssignmentQuantity {Quantity = assignmentInfo.Quantity, Column = nameof(assignmentInfo.Quantity)},
-                WebMode = new AssignmentWebMode {WebMode = assignmentInfo.WebMode, Column = nameof(assignmentInfo.WebMode)},
-                RecordAudio = new AssignmentRecordAudio {DoesNeedRecord = assignmentInfo.IsAudioRecordingEnabled, Column = nameof(assignmentInfo.IsAudioRecordingEnabled)},
-                Responsible = new PreloadingValue {Value = assignmentInfo.Responsible, Column = nameof(assignmentInfo.Responsible)}.ToAssignmentResponsible(
-                    this.userViewFactory, new Dictionary<string, UserToVerify>()),
+                InterviewIdValue = new PreloadingValue {Value = tempAssignmentId}.ToAssignmentInterviewId(),
+                Email = new PreloadingValue {Value = assignmentInfo.Email, Column = nameof(assignmentInfo.Email)}
+                    .ToAssignmentEmail(),
+                Password = new PreloadingValue
+                    {Value = assignmentInfo.Password, Column = nameof(assignmentInfo.Password)}.ToAssignmentPassword(),
+                Quantity = new AssignmentQuantity
+                    {Quantity = assignmentInfo.Quantity, Column = nameof(assignmentInfo.Quantity)},
+                WebMode = new AssignmentWebMode
+                    {WebMode = assignmentInfo.WebMode, Column = nameof(assignmentInfo.WebMode)},
+                RecordAudio = new AssignmentRecordAudio
+                {
+                    DoesNeedRecord = assignmentInfo.IsAudioRecordingEnabled,
+                    Column = nameof(assignmentInfo.IsAudioRecordingEnabled)
+                },
+                Responsible = new PreloadingValue
+                        {Value = assignmentInfo.Responsible, Column = nameof(assignmentInfo.Responsible)}
+                    .ToAssignmentResponsible(
+                        this.userViewFactory, new Dictionary<string, UserToVerify>()),
                 Answers = identifyingAnswers.Select(x => this.ToPreloadAnswer(x, questionnaire)).ToArray(),
-                Comments = new PreloadingValue{Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments()
+                Comments = new PreloadingValue
+                    {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments()
             };
 
             var rosterRows = rosterAnswers
@@ -607,12 +659,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 default:
                     return new PreloadingValue
                     {
-                        VariableOrCodeOrPropertyName = answer.Variable, 
-                        Value = answer.Source.Answer, 
+                        VariableOrCodeOrPropertyName = answer.Variable,
+                        Value = answer.Source.Answer,
                         Column = answer.Variable
                     }.ToAssignmentAnswer(questionnaire);
             }
         }
+
         private BaseAssignmentValue ToPreloadYesNoAnswer(AssignmentAnswer answer, IQuestionnaire questionnaire)
         {
             return new PreloadingCompositeValue
@@ -685,18 +738,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             public AssignmentIdentifyingDataItem Source { get; set; }
             public Identity QuestionIdentity { get; set; }
             public string Variable { get; set; }
+
+            public QuestionType? QuestionType { get; set; }
         }
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
         {
-            var answer = new AssignmentAnswer {Source = item};
+            var answer = new AssignmentAnswer {Source = item, QuestionType = null};
 
             if (!string.IsNullOrEmpty(item.Identity) && Identity.TryParse(item.Identity, out Identity identity))
             {
                 answer.QuestionIdentity = identity;
-                
+
                 if (questionnaire.HasQuestion(identity.Id))
+                {
                     answer.Variable = questionnaire.GetQuestionVariableName(identity.Id);
+                    answer.QuestionType = questionnaire.GetQuestionType(identity.Id);
+                }
             }
             else if (!string.IsNullOrEmpty(item.Variable))
             {
@@ -704,7 +762,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
                 var questionId = questionnaire.GetQuestionIdByVariable(item.Variable);
                 if (questionId.HasValue)
+                {
                     answer.QuestionIdentity = Identity.Create(questionId.Value, RosterVector.Empty);
+                    answer.QuestionType = questionnaire.GetQuestionType(answer.QuestionIdentity.Id);
+                }
             }
 
             return answer;

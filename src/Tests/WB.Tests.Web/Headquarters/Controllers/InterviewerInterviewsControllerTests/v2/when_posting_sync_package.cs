@@ -31,7 +31,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string eventsInJsonString = "serialized events";
 
-        private static readonly InterviewMetaInfo interviewMetaInfo = new InterviewMetaInfo
+        private static readonly InterviewMetaInfo interviewMetaInfo = new InterviewMetaInfo(new FeaturedQuestionMeta[0])
         {
             TemplateId = Guid.Parse("22222222222222222222222222222222"),
             TemplateVersion = 111,

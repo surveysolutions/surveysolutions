@@ -2,6 +2,7 @@
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
@@ -56,5 +57,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public DateTime DataFileLastUpdateDate { get; set; }
         public string DataDestination { get; set; }
         public string Title { get; set; }
+        
+        public Guid? TranslationId { get; set; }
+        public bool Deleted { get; set; } = false;
+        public string TranslationName { get; set; }
+
+        public bool? IncludeMeta { set; get; }
     }
 }

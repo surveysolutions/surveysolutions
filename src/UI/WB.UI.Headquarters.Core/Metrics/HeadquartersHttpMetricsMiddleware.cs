@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Prometheus;
 using WB.Infrastructure.Native.Monitoring;
+using Counter = Prometheus.Counter;
 using Gauge = Prometheus.Gauge;
 using Histogram = Prometheus.Histogram;
 
@@ -14,10 +15,12 @@ namespace WB.UI.Headquarters.Metrics
         public static readonly Gauge HttpInProgress = Prometheus.Metrics.CreateGauge("http_requests_in_progress", "Number or requests in progress", "system");
         public static readonly Histogram HttpRequestsDuration = Prometheus.Metrics.CreateHistogram("http_requests_duration_seconds", "Duration of http requests per tracking system", "system");
         
+        public static readonly Counter HttpRequestsTotal = Prometheus.Metrics.CreateCounter("http_request_total",
+            "Total number of requests processed, excluding /metrics, /.version, /.hc");
+
         public HeadquartersHttpMetricsMiddleware(RequestDelegate next)
         {
             this.next = next;
-
         }
 
         public async Task Invoke(HttpContext context)
@@ -63,6 +66,8 @@ namespace WB.UI.Headquarters.Metrics
                 CommonMetrics.ExceptionsOccur.Inc();
                 throw;
             }
+
+            HttpRequestsTotal.Inc();
         }
     }
 }

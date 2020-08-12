@@ -46,6 +46,8 @@ namespace WB.UI.Shared.Enumerator.Services
         public DateTime? LastSync => this.CurrentSettings.LastSync;
 
         public bool? LastSyncSucceeded => this.CurrentSettings.LastSyncSucceeded;
+        public string LastOpenedMapName => this.CurrentSettings.LastOpenedMapName;
+
         public abstract bool VibrateOnError { get; }
         public abstract bool ShowLocationOnMap { get; }
         public abstract int GpsReceiveTimeoutSec { get; }
@@ -113,6 +115,12 @@ namespace WB.UI.Shared.Enumerator.Services
             this.SaveCurrentSettings(settings => {
                 settings.LastSync = DateTime.Now;
                 settings.LastSyncSucceeded = true;
+            });
+        }
+        public void SetLastOpenedMapName(string mapName)
+        {
+            this.SaveCurrentSettings(settings => {
+                settings.LastOpenedMapName = mapName;
             });
         }
 

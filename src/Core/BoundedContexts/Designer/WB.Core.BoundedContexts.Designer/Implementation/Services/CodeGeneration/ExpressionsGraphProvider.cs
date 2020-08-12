@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> rosterDependencies = BuildRosterDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> substitutionDependencies = BuildSubstitutionDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> staticTextDependencies = BuildStaticTextDependencies(questionnaire);
 
             Dictionary<Guid, List<Guid>> sectionsFromChildrenDependencies = BuildSectionFromChildrenDependencies(questionnaire);
 
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(rosterDependencies.Keys)
                     .Union(linkedQuestionByRosterDependencies.Keys)
                     .Union(substitutionDependencies.Keys)
+                    .Union(staticTextDependencies.Keys)
                     .Union(sectionsFromChildrenDependencies.Keys)
                     .Union(linkedQuestionByRosterDependencies.SelectMany(x => x.Value))
                     .Union(structuralDependencies.SelectMany(x => x.Value))
@@ -48,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(rosterDependencies.SelectMany(x => x.Value))
                     .Union(substitutionDependencies.SelectMany(x => x.Value))
                     .Union(sectionsFromChildrenDependencies.SelectMany(x => x.Value))
+                    .Union(staticTextDependencies.SelectMany(x => x.Value))
                     .Distinct();
 
             allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
@@ -55,6 +58,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var x in structuralDependencies)
             {
                 mergedDependencies[x.Key].AddRange(x.Value);
+            }
+
+            foreach (var staticTextDependency in staticTextDependencies)
+            {
+                mergedDependencies[staticTextDependency.Key].AddRange(staticTextDependency.Value);
             }
 
             foreach (var conditionalDependency in conditionalDependencies)
@@ -92,19 +100,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return mergedDependencies;
         }
 
+        private Dictionary<Guid, List<Guid>> BuildStaticTextDependencies(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var allStaticTextsWithAttachedVariables = questionnaire.Find<IStaticText>(s =>
+                !string.IsNullOrWhiteSpace(s.AttachmentName) &&
+                questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName) != null);
+
+            return allStaticTextsWithAttachedVariables.ToDictionary(s => s.PublicKey, s => new List<Guid>
+            {
+                questionnaire.FirstOrDefault<IVariable>(v => v.VariableName == s.AttachmentName).PublicKey
+            });
+        }
 
         private Dictionary<Guid, List<Guid>> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
                     .Find<IQuestion>(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue)
-                    .Select(x => new { Key = x.PublicKey, Value = x.LinkedToQuestionId ?? x.LinkedToRosterId.Value })
+                    .Select(x => new { Key = x.PublicKey, Value = (Guid?)(x.LinkedToQuestionId ?? x.LinkedToRosterId) })
                 .Union(questionnaire
                     .Find<IQuestion>(x => x.LinkedToRosterId.HasValue)
-                    .Select(x => new { Id = x.PublicKey, RosterTitleQuestionId = questionnaire.GetRoster(x.LinkedToRosterId.Value)?.RosterTitleQuestionId })
+                    .Select(x => new { Id = x.PublicKey, RosterTitleQuestionId = (x.LinkedToRosterId.HasValue ? questionnaire.GetRoster(x.LinkedToRosterId.Value)?.RosterTitleQuestionId:(Guid?)null) })
                     .Where(x => x.RosterTitleQuestionId.HasValue)
-                    .Select(x => new { Key = x.Id, Value = x.RosterTitleQuestionId.Value }))
+                    .Select(x => new { Key = x.Id, Value = x.RosterTitleQuestionId }))
                 .GroupBy(x => x.Key)
-                .ToDictionary(x => x.Key, x => x.Select(s => s.Value).ToList());
+                    .ToDictionary(x => x.Key, x => x.Select(s => s.Value!.Value).ToList());
         }
 
         private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(ReadOnlyQuestionnaireDocument questionnaire)
@@ -127,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var rosterDependencies =
                 questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
                         .Where(x => x.RosterSizeQuestionId.HasValue)
-                        .Select(x => new { Key = x.RosterSizeQuestionId.Value, Value = x.PublicKey })
+                        .Select(x => new { Key = x.RosterSizeQuestionId!.Value, Value = x.PublicKey })
                     .GroupBy(x => x.Key)
                     .ToDictionary(x => x.Key, x => x.Select(r => r.Value).ToList());
 
@@ -166,7 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (entity is IQuestion question)
                 {
-                    FillDependencies(dependencies, variableNamesByEntityIds, allMacros, question.PublicKey, question.Properties.OptionsFilterExpression, sectionsFromChildrenDependencies);
+                    FillDependencies(dependencies, variableNamesByEntityIds, allMacros, question.PublicKey, question.Properties?.OptionsFilterExpression, sectionsFromChildrenDependencies);
                     FillDependencies(dependencies, variableNamesByEntityIds, allMacros, question.PublicKey, question.LinkedFilterExpression, sectionsFromChildrenDependencies);
 
                     if (question.CascadeFromQuestionId != null)
@@ -242,7 +261,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<string, Guid> variableNamesByEntitiyIds, 
             Dictionary<Guid, Macro>.ValueCollection allMacros, 
             Guid entityId, 
-            string expression,
+            string? expression,
             Dictionary<Guid, List<Guid>> sectionsFromChildrenDependencies,
             bool ignoreReferenceOnSelf = false)
         {

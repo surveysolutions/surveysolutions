@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Common;
+using Microsoft.Extensions.Caching.Memory;
+using NHibernate;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -10,8 +12,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IUnitOfWork sessionProvider;
 
-        public PostgresPlainKeyValueStorage(IUnitOfWork sessionProvider, UnitOfWorkConnectionSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> serializer)
-            : base(connectionSettings.ConnectionString, connectionSettings.PlainStorageSchemaName, logger, serializer)
+        public PostgresPlainKeyValueStorage(IUnitOfWork sessionProvider,
+            UnitOfWorkConnectionSettings connectionSettings,
+            ILogger logger,
+            IMemoryCache memoryCache,
+            IEntitySerializer<TEntity> serializer)
+            : base(connectionSettings.ConnectionString, connectionSettings.PlainStorageSchemaName, logger, memoryCache, serializer)
         {
             this.sessionProvider = sessionProvider;
         }
@@ -19,8 +25,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         protected override object ExecuteScalar(DbCommand command)
         {
             var session = this.sessionProvider.Session;
-            command.Connection = session.Connection; 
-            session.Transaction.Enlist(command);
+            command.Connection = session.Connection;
+            session.GetCurrentTransaction().Enlist(command);
             return command.ExecuteScalar();
         }
 
@@ -28,7 +34,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             var session = this.sessionProvider.Session;
             command.Connection = session.Connection;
-            session.Transaction.Enlist(command);
+            session.GetCurrentTransaction().Enlist(command);
             return command.ExecuteNonQuery();
         }
     }

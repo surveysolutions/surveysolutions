@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
             BecauseOf();
         }
 
-        public void BecauseOf() => testableFunctionalEventHandler.Handle(new[] { CreatePublishableEvent() }, eventSourceId);
+        public void BecauseOf() => testableFunctionalEventHandler.Handle(new[] { CreatePublishableEvent() });
 
         [NUnit.Framework.Test] public void should_readSideRepositoryWriters_method_Remove_called_only_once_at_firts_read () =>
             readSideRepositoryWriterMock.Verify(x => x.Remove(eventSourceId.FormatGuid()), Times.Once());
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
 
         private static TestableFunctionalEventHandlerWhichDeletesUpdatedView testableFunctionalEventHandler;
         private static Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>> readSideRepositoryWriterMock;
-        private static Guid eventSourceId;
+        
 
         public class TestableFunctionalEventHandlerWhichDeletesUpdatedView : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IUpdateHandler<IReadSideRepositoryEntity, TestableFunctionalEvent>
         {

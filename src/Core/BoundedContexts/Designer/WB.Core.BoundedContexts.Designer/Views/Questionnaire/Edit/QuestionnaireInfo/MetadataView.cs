@@ -4,41 +4,41 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class MetadataView
     {
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string SubTitle { get; set; }
+        public string? SubTitle { get; set; }
 
         public StudyType? StudyType { get; set; }
 
-        public string Version { get; set; }
+        public string? Version { get; set; }
 
-        public string VersionNotes { get; set; }
+        public string? VersionNotes { get; set; }
 
-        public string KindOfData { get; set; }
+        public string? KindOfData { get; set; }
 
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         public int? Year { get; set; }
 
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
-        public string Coverage { get; set; }
+        public string? Coverage { get; set; }
 
-        public string Universe { get; set; }
+        public string? Universe { get; set; }
 
-        public string UnitOfAnalysis { get; set; }
+        public string? UnitOfAnalysis { get; set; }
 
-        public string PrimaryInvestigator { get; set; }
+        public string? PrimaryInvestigator { get; set; }
 
-        public string Funding { get; set; }
+        public string? Funding { get; set; }
 
-        public string Consultant { get; set; }
+        public string? Consultant { get; set; }
 
         public ModeOfDataCollection? ModeOfDataCollection { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
-        public string Keywords { get; set; }
+        public string? Keywords { get; set; }
 
         public bool AgreeToMakeThisQuestionnairePublic { get; set; }
     }

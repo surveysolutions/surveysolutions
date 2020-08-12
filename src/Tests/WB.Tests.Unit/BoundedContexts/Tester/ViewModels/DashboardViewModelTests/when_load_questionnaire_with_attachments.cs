@@ -25,15 +25,15 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         public async Task Establish()
         {
             downloadedQuestionnaire = new Questionnaire
-            {
-                Document = Create.Entity.QuestionnaireDocumentWithAttachments(attachments: new[]
+            (
+                document : Create.Entity.QuestionnaireDocumentWithAttachments(attachments: new[]
                 {
                     Create.Entity.Attachment("1"),
                     Create.Entity.Attachment("5"),
                     Create.Entity.Attachment("2"),
                 }),
-                Assembly = "assembly"
-            };
+                assembly : "assembly"
+            );
 
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("1")).Returns(false);
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("2")).Returns(false);

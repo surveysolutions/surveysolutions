@@ -7,9 +7,9 @@ namespace WB.UI.Designer.CommonWeb
 {
     public class ProductVersion : IProductVersion
     {
-        private Assembly assembly;
-        private string productVersion;
-        private int? bildNumber;
+        private readonly Assembly assembly;
+        private string? productVersion;
+        private int? buildNumber;
 
         public ProductVersion()
         {
@@ -18,23 +18,15 @@ namespace WB.UI.Designer.CommonWeb
 
         public override string ToString()
         {
-            if (productVersion == null)
-            {
-                productVersion = FileVersionInfo.GetVersionInfo(this.assembly.Location).ProductVersion;
-            }
-
-            return productVersion;
+            return productVersion ??= FileVersionInfo.GetVersionInfo(this.assembly.Location).ProductVersion;
         }
 
         public Version GetVersion() => new Version(this.ToString().Split(' ')[0]);
 
-        public int GetBildNumber()
+        public int GetBuildNumber()
         {
-            if (this.bildNumber == null)
-            {
-                this.bildNumber = FileVersionInfo.GetVersionInfo(this.assembly.Location).FilePrivatePart;
-            }
-            return bildNumber.Value;
+            this.buildNumber ??= FileVersionInfo.GetVersionInfo(this.assembly.Location).FilePrivatePart;
+            return buildNumber.Value;
         }
     }
 }

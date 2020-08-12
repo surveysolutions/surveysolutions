@@ -16,6 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         AttachmentMeta GetAttachmentMeta(Guid attachmentId);
         AttachmentContent GetContent(string contentId);
         List<AttachmentSize> GetAttachmentSizesByQuestionnaire(Guid questionnaireId);
-        string GetAttachmentContentId(Guid attachmentId);
+        string? GetAttachmentContentId(Guid attachmentId);
     }
 }

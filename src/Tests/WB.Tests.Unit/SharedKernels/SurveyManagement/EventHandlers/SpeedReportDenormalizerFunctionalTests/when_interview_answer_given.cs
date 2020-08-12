@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
 
             foreach (var publishableEvent in statusEventsToPublish)
             {
-                denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
+                denormalizer.Handle(new[] { publishableEvent });
             }
 
             var summary = interviewSummariesStorage.GetById(interviewId.FormatGuid());
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
 
             foreach (var publishableEvent in statusEventsToPublish)
             {
-                denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
+                denormalizer.Handle(new[] { publishableEvent });
             }
 
             var summary = interviewSummariesStorage.GetById(interviewId.FormatGuid());
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
 
             foreach (var publishableEvent in statusEventsToPublish)
             {
-                denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
+                denormalizer.Handle(new[] { publishableEvent });
             }
 
             var speedReportInterviewItem = interviewSummariesStorage.GetById(interviewId.FormatGuid());
@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
 
             foreach (var publishableEvent in statusEventsToPublish)
             {
-                denormalizer.Handle(new[] { publishableEvent }, publishableEvent.EventSourceId);
+                denormalizer.Handle(new[] { publishableEvent });
             }
 
             var speedReportInterviewItem = interviewSummariesStorage.GetById(interviewId.FormatGuid());

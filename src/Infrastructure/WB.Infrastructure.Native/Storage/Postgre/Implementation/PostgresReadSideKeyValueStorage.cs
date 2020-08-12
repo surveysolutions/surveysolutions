@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using Microsoft.Extensions.Caching.Memory;
+using NHibernate;
+using Npgsql;
+using NpgsqlTypes;
+using Polly.Bulkhead;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -7,15 +13,15 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal class PostgresReadSideKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
-        IReadSideKeyValueStorage<TEntity>, IDisposable
+    internal class PostgresReadSideKeyValueStorage<TEntity> 
+        : PostgresKeyValueStorageWithCache<TEntity>, IReadSideKeyValueStorage<TEntity>, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IUnitOfWork sessionProvider;
 
         public PostgresReadSideKeyValueStorage(IUnitOfWork unitOfWork, 
-            UnitOfWorkConnectionSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> entitySerializer) 
-            : base(connectionSettings.ConnectionString, connectionSettings.ReadSideSchemaName, logger, entitySerializer)
+            UnitOfWorkConnectionSettings connectionSettings, ILogger logger, IMemoryCache memoryCache, IEntitySerializer<TEntity> entitySerializer) 
+            : base(connectionSettings.ConnectionString, connectionSettings.ReadSideSchemaName, logger, memoryCache, entitySerializer)
         {
             this.sessionProvider = unitOfWork;
 
@@ -38,7 +44,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             var session = this.sessionProvider.Session;
             command.Connection = session.Connection;
-            session.Transaction.Enlist(command);
+            session.GetCurrentTransaction().Enlist(command);
+        }
+
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            base.BulkStore(bulk, this.sessionProvider.Session.Connection as NpgsqlConnection);
         }
 
         public void Flush()

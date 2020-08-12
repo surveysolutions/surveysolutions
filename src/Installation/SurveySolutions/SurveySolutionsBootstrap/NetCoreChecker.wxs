@@ -104,4 +104,77 @@
       </ExePackage>
     </PackageGroup>
   </Fragment>
+  <Fragment>
+    <Variable Name="WindowsDotNetHosting314InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\3.1.4" />
+    <util:DirectorySearch Id="WindowsDotNetHosting314Installed" Path="[WindowsDotNetHosting314InstallDir]" Variable="WindowsDotNetHosting314Installed" Result="exists" />
+
+    <WixVariable Id="WindowsDotNetHosting314InstalledDetectCondition" Value="WindowsDotNetHosting314Installed" Overridable="yes" />
+    <WixVariable Id="WindowsDotNetHosting314InstalledInstallCondition" Value="" Overridable="yes" />
+
+    <PackageGroup Id="WindowsDotNetHosting314">
+      <ExePackage
+          Name="dotnet-hosting-3.1.4-win.exe"
+          InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting314Log]&quot;"
+          RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting314Log]&quot;"
+          UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting314Log]&quot;"
+          PerMachine="yes"
+          DetectCondition="!(wix.WindowsDotNetHosting314InstalledDetectCondition)"
+          InstallCondition="!(wix.WindowsDotNetHosting314InstalledInstallCondition)"
+          Vital="yes"
+          Permanent="yes"
+          Protocol="burn"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/5bed16f2-fd1a-4027-bee3-3d6a1b5844cc/dd22ca2820fadb57fd5378e1763d27cd/dotnet-hosting-3.1.4-win.exe"
+          LogPathVariable="WindowsDotNetHosting314Log"
+          Compressed="no">
+        <!-- heat.exe payload "dotnet-hosting-3.1.4-win.exe" -o "dotnet-hosting.wxs" -->
+        <RemotePayload 
+            CertificatePublicKey="3756E9BBF4461DCD0AA68E0D1FCFFA9CEA47AC18" 
+            CertificateThumbprint="2485A7AFA98E178CB8F30C9838346B514AEA4769" 
+            Description="Microsoft .NET Core 3.1.4 - Windows Server Hosting" 
+            Hash="17C869B0D792643A1344DFAD0F5DE3FEC3437CC6" 
+            ProductName="Microsoft .NET Core 3.1.4 - Windows Server Hosting" 
+            Size="64749160" 
+            Version="3.1.4.20222" />
+      </ExePackage>
+    </PackageGroup>
+    </Fragment>
+    
+    <Fragment>
+    <Variable Name="WindowsDotNetHosting316InstallDir" Value="[ProgramFiles64Folder]dotnet\host\fxr\3.1.6" />
+    <util:DirectorySearch Id="WindowsDotNetHosting316Installed" Path="[WindowsDotNetHosting316InstallDir]" Variable="WindowsDotNetHosting316Installed" Result="exists" />
+
+    <WixVariable Id="WindowsDotNetHosting316InstalledDetectCondition" Value="WindowsDotNetHosting316Installed" Overridable="yes" />
+    <WixVariable Id="WindowsDotNetHosting316InstalledInstallCondition" Value="" Overridable="yes" />
+
+    <PackageGroup Id="WindowsDotNetHosting316">
+      <ExePackage
+          Name="dotnet-hosting-3.1.6-win.exe"
+          InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting316Log]&quot;"
+          RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting316Log]&quot;"
+          UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting316Log]&quot;"
+          PerMachine="yes"
+          DetectCondition="!(wix.WindowsDotNetHosting316InstalledDetectCondition)"
+          InstallCondition="!(wix.WindowsDotNetHosting316InstalledInstallCondition)"
+          Vital="yes"
+          Permanent="yes"
+          Protocol="burn"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/9b9f4a6e-aef8-41e0-90db-bae1b0cf4e34/4ab93354cdff8991d91a9f40d022d450/dotnet-hosting-3.1.6-win.exe"
+          LogPathVariable="WindowsDotNetHosting316Log"
+          Compressed="no">
+        <!-- heat.exe payload "dotnet-hosting-3.1.6-win.exe" -o "dotnet-hosting.wxs" -->
+        <RemotePayload 
+            CertificatePublicKey="F7E39D0BEF5615C1D09E695629E32600EE79639C" 
+            CertificateThumbprint="A5BCE29A2944105E0E25B626120264BB03499052" 
+            Description="Microsoft .NET Core 3.1.6 - Windows Server Hosting" 
+            Hash="D88A402C3BCC3DC720A7E77600FE60FEA8B06665" 
+            ProductName="Microsoft .NET Core 3.1.6 - Windows Server Hosting" 
+            Size="64815008" 
+            Version="3.1.6.20317" />
+      </ExePackage>
+    </PackageGroup>
+  </Fragment>
+
+
+
+
 </Wix>

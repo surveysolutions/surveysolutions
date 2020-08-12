@@ -1,12 +1,10 @@
 ﻿using System;
-using System.IO;
-using Microsoft.AspNetCore;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.AspNetCore;
@@ -18,56 +16,39 @@ namespace WB.UI.Designer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
-            var appRoot = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+            var webHost = CreateWebHostBuilder(args).Build();
 
-            Log.Logger = new LoggerConfiguration()
-                .ConfigureSurveySolutionsLogging(appRoot, "designer")
-                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-                .CreateLogger();
-
-            try
+            if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
             {
-                var webHost = CreateWebHostBuilder(args).Build();
-                var version = webHost.Services.GetService<IProductVersion>();
-                var applicationVersion = version.ToString();
+                return await new SupportTool.SupportTool(webHost).Run(args.Skip(1).ToArray());
+            }
 
-                Log.Logger.Warning("Designer application started. Version {version}", applicationVersion);
+            var version = webHost.Services.GetService<IProductVersion>();
+            var applicationVersion = version.ToString();
+            var logger = webHost.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogWarning("Designer application started. Version {version}", applicationVersion);
 
-                webHost
-                    .RunMigrations(typeof(M001_Init), "plainstore")
-                    .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs")
-                    .Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            await webHost
+                .RunMigrations(typeof(M001_Init), "plainstore")
+                .RunMigrations(typeof(M201904221727_AddErrorsTable), "logs")
+                .RunAsync();
+            
+            return 0;
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .ConfigureAppConfiguration((hostingContext, c) =>
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureSurveySolutionsLogging("designer",(host, loggerConfig) =>
                 {
-                    c.AddIniFile("appsettings.ini", false, true);
-                    c.AddIniFile("appsettings.cloud.ini", true, true);
-                    c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
-                    c.AddIniFile("appsettings.Production.ini", true);
-                    c.AddCommandLine(args);
-
-                    if(hostingContext.HostingEnvironment.IsDevelopment())
+                    if (!host.HostingEnvironment.IsDevelopment())
                     {
-                        c.AddUserSecrets<Startup>();
+                        loggerConfig.MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning);
                     }
-                });
+                })
+                .ConfigureSurveySolutionsAppConfiguration<Startup>("DESIGNER_", args);
         }
     }
 }

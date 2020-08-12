@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
                     (InterviewStatus)Enum.Parse(typeof(InterviewStatus), item.Status),
                     item.LastEntryDateUtc, 
                     item.FeaturedQuestions,
-                    item.ReceivedByInterviewer));
+                    item.ReceivedByInterviewerAtUtc));
 
             this.Limit = questionnaireBrowseView.PageSize;
             this.Offset = questionnaireBrowseView.Page;

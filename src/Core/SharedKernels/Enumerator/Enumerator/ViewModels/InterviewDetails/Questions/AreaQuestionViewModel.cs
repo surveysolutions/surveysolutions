@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IAreaEditService areaEditService;
+        private readonly IMapInteractionService mapInteractionService;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private string interviewId;
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AreaQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
-            IAreaEditService areaEditService,
+            IMapInteractionService mapInteractionService,
             IViewModelEventRegistry eventRegistry,
             IUserInteractionService userInteractionService,
             IQuestionnaireStorage questionnaireRepository,
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
-            this.areaEditService = areaEditService;
+            this.mapInteractionService = mapInteractionService;
             this.eventRegistry = eventRegistry;
 
             this.questionState = questionStateViewModel;
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.IsInProgress = true;
             try
             {
-                var answerArea = await this.areaEditService.EditAreaAsync(this.answer, geometryType);
+                var answerArea = await this.mapInteractionService.EditAreaAsync(this.answer, geometryType);
 
                 if (answerArea != null)
                 {

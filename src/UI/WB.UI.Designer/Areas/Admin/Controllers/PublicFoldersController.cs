@@ -23,8 +23,8 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
 
         public class TreeNode
         {
-            public string key { get; set; }
-            public string title { get; set; }
+            public string? key { get; set; }
+            public string? title { get; set; }
             public bool lazy { get; set; } = true;
             public bool folder { get; set; } = true;
         }
@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public class CreateFolderModel
         {
             public Guid? ParentId { get; set; }
-            public string Title { get; set; }
+            public string? Title { get; set; }
         }
 
         [HttpPost]
@@ -77,13 +77,13 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public class RenameFolderModel
         {
             public Guid Id { get; set; }
-            public string NewTitle { get; set; }
+            public string? NewTitle { get; set; }
         }
 
         [HttpPost]
         public IActionResult RenameFolder(RenameFolderModel model)
         {
-            this.publicFoldersStorage.RenameFolder(model.Id, model.NewTitle);
+            this.publicFoldersStorage.RenameFolder(model.Id, model.NewTitle ?? "");
             return Ok();
         }
 

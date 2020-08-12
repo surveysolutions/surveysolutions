@@ -26,10 +26,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
                 });
 
             var mapService = new Mock<IMapService>();
-            mapService.Setup(x => x.GetAvailableMaps()).Returns(new List<MapDescription>()
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>()
             {
-                new MapDescription(){MapFileName = "test"},
-                new MapDescription(){MapFileName = "test1"}
+                new MapDescription(MapType.LocalFile, "test"){MapFileName = "test"},
+                new MapDescription(MapType.LocalFile, "test1"){MapFileName = "test1"}
             });
 
             mapService.Setup(x => x.DoesMapExist(It.IsAny<string>())).Returns(true);

@@ -2,6 +2,6 @@
 {
     public class UiConfig
     {
-        public string DesignerHelpUrl { get; set; }
+        public string? DesignerHelpUrl { get; set; }
     }
 }

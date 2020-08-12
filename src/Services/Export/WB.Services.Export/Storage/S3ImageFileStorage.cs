@@ -15,12 +15,12 @@ namespace WB.Services.Export.Storage
             this.externalArtifactsStorage = externalArtifactsStorage;
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string filename)
+        public Task<byte[]?> GetInterviewBinaryData(Guid interviewId, string filename)
         {
             return this.externalArtifactsStorage.GetBinaryAsync(GetPath(interviewId, filename));
         }
 
-        private string GetPath(Guid interviewId, string filename = null) =>
+        private string GetPath(Guid interviewId, string? filename = null) =>
             $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
 
         public async Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)

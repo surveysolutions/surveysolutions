@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -43,9 +44,24 @@ namespace WB.Enumerator.Native.WebInterview.Services
             string[] sectionIds,
             bool isReviewMode)
         {
-            bool IsSectionVisible(InterviewTreeGroup x) =>
-                (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
-                && !questionnaire.IsCustomViewRoster(x.Identity.Id);
+            bool IsSectionVisible(InterviewTreeGroup x)
+            {
+                var isVisible = (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
+                                 && !questionnaire.IsCustomViewRoster(x.Identity.Id);
+                if (!isVisible)
+                    return false;
+
+                if (questionnaire.IsCoverPage(x.Identity.Id))
+                {
+                    return questionnaire.GetPrefilledEntities().Any()
+                           || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment)
+                           || (isReviewMode
+                                ? interview.GetAllCommentedEnabledQuestions().Any()
+                                : interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any());
+                }
+
+                return true;
+            }
 
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
@@ -90,6 +106,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                         sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(IsSectionVisible);
+                        sidebarPanel.IsDisabled = g.IsDisabled();
                     });
                 }
             }
@@ -319,9 +336,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
 
-                var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
-                result.AttachmentContent = attachment?.ContentId;
-
+                var attachment = callerInterview.GetAttachmentForEntity(identity);
+                if(attachment != null)
+                {
+                    var attachmentById = questionnaire.GetAttachmentById(attachment.Value);
+                    result.AttachmentContent = attachmentById?.ContentId;
+                }
+                
                 result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
 
                 this.ApplyDisablement(result, identity, questionnaire);

@@ -35,11 +35,11 @@ namespace WB.UI.Designer.Code.Implementation
 
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType,
             string email,
-            string userName,
+            string? userName,
             string questionnaireId,
             string questionnaireTitle,
             ShareType shareType,
-            string actionPersonEmail)
+            string? actionPersonEmail)
         {
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
 
@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Code.Implementation
             });
         }
 
-        public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string actionPersonEmail, string sharedWithPersonEmail)
+        public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string? actionPersonEmail, string sharedWithPersonEmail)
         {
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
             var sharingNotificationModel = new SharingNotificationModel
@@ -101,7 +101,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         public async Task<string> GetShareChangeNotificationEmail(SharingNotificationModel model)
         {
-            string email = null;
+            string? email = null;
 
             switch (model.ShareChangeType)
             {

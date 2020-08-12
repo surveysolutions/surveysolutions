@@ -220,10 +220,10 @@
     <value>You don't have permission to edit this questionnaire</value>
   </data>
   <data name="ForbiddenDelete" xml:space="preserve">
-    <value>You don't have permissions to delete this questionnaire.</value>
+    <value>You don't have permission to delete this questionnaire.</value>
   </data>
   <data name="ForbiddenRevert" xml:space="preserve">
-    <value>You don't  have permissions to restore operation for this questionnaire.</value>
+    <value>You don't  have permission to restore operation for this questionnaire.</value>
   </data>
   <data name="GeneratingPdf" xml:space="preserve">
     <value>Generating pdf for "{0}"</value>
@@ -310,7 +310,7 @@
     <value>Questionnaires shared with me</value>
   </data>
   <data name="NotSupportedBrowserUsed" xml:space="preserve">
-    <value>Not supported browser used</value>
+    <value>Internet browser is not supported. Please use another browser.</value>
   </data>
   <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
     <value>You are using Internet Explorer browser that is not supported. Some features might not work properly.</value>

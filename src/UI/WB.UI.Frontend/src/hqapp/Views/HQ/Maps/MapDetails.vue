@@ -54,6 +54,11 @@
 </template>
 
 <script>
+
+import {orderBy} from 'lodash'
+import * as toastr from 'toastr'
+import gql from 'graphql-tag'
+
 export default {
     mounted() {
         this.reload()
@@ -81,12 +86,23 @@ export default {
             {
                 if (ok)
                 {
-                    this.$http({
-                        method: 'delete',
-                        url: this.$config.model.deleteMapUserLinkUrl,
-                        data: {user:userName, map: fileName}})
-
-                    this.$refs.table.reload()
+                    self.$apollo.mutate({
+                        mutation: gql`
+                                mutation deleteUserFromMap($fileName: String!, $userName: String!) {
+                                    deleteUserFromMap(fileName: $fileName, userName: $userName) {
+                                        fileName
+                                    }
+                                }`,
+                        variables: {
+                            'fileName' : fileName,
+                            'userName': userName,
+                        },
+                    }).then(response => {
+                        self.$refs.table.reload()
+                    }).catch(err => {
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 }
             })
         },
@@ -108,9 +124,48 @@ export default {
                         orderable: true,
                     },
                 ],
-                ajax: {
-                    url: this.$config.model.dataUrl,
-                    type: 'GET',
+                ajax (data, callback, settings) {
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
+
+                    const query = gql`query ($fileName: String!) {
+                                        maps(where: {fileName: $fileName}) {
+                                            nodes {
+                                                users {
+                                                    userName
+                                                }
+                                            }
+                                        }
+                                    }`
+
+                    self.$apollo.query({
+                        query,
+                        variables: {
+                            'fileName' : self.$config.model.fileName,
+                        },
+                        fetchPolicy: 'network-only',
+                    }).then(response => {
+                        const users = response.data.maps.nodes[0].users
+                        const orderedUsers = orderBy(users, [column.data], [order_col.dir])
+
+                        self.totalRows = users.length
+                        self.filteredCount = users.length
+                        callback({
+                            recordsTotal: self.totalRows,
+                            recordsFiltered: self.filteredCount,
+                            draw: ++this.draw,
+                            data: orderedUsers,
+                        })
+                    }).catch(err => {
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                            error: err.toString(),
+                        })
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 },
                 responsive: false,
                 order: [[0, 'asc']],

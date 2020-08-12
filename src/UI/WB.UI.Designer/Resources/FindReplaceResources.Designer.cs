@@ -61,7 +61,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Serch regular expression is malformed.
+        ///   Looks up a localized string similar to Problem with find and replace. Regular expression specified in &quot;Find what&quot; is invalid. Please revise the expression..
         /// </summary>
         public static string SearchForRegexNotValid {
             get {

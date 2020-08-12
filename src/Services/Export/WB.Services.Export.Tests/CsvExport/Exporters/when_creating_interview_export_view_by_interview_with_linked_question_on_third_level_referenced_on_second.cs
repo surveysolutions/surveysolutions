@@ -35,7 +35,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                     }));
 
             interview = CreateInterviewData();
-            var rosterLevel = new InterviewLevel(new ValueVector<Guid>{ rosterId, nestedRosterId }, null, new int[] { 0, 0 });
+            var rosterLevel = new InterviewLevel(new ValueVector<Guid>{ rosterId, nestedRosterId }, new int[] { 0, 0 });
             interview.Levels.Add("0,0", rosterLevel);
 
             if (!rosterLevel.QuestionsSearchCache.ContainsKey(linkedQuestionId))

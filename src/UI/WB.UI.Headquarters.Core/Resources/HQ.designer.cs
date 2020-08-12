@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire &apos;{0}&apos; was successfully cloned with a new title &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Questionnaire &apos;{0}&apos; was successfully copied with a new title &apos;{1}&apos;..
         /// </summary>
         public static string QuestionnaireClonedAndRenamedFormat {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire &apos;{0}&apos; was successfully cloned..
+        ///   Looks up a localized string similar to Questionnaire &apos;{0}&apos; was successfully copied..
         /// </summary>
         public static string QuestionnaireClonedFormat {
             get {

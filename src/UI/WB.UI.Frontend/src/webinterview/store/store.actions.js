@@ -2,6 +2,7 @@ import { map, debounce, uniq } from 'lodash'
 import Vue from 'vue'
 
 import { batchedAction } from '../helpers'
+import { StatusNames } from '~/shared/constants'
 
 import modal from '@/shared/modal'
 
@@ -12,10 +13,11 @@ function getAnswer(state, identity) {
 }
 
 export default {
-    loadInterview({ commit }) {
-        const details = Vue.$api.interview.get('getInterviewDetails').then(info => commit('SET_INTERVIEW_INFO', info))
-        const cover = Vue.$api.interview.get('hasCoverPage').then(flag => commit('SET_HAS_COVER_PAGE', flag))
-        return Promise.all([details, cover])
+    async loadInterview({ commit, state, rootState, $router }) {
+        const details = await Vue.$api.interview.get('getInterviewDetails')
+        commit('SET_INTERVIEW_INFO', details)
+        const hasCover = await Vue.$api.interview.get('hasCoverPage')
+        commit('SET_HAS_COVER_PAGE', hasCover)
     },
 
     async getLanguageInfo({ commit }) {
@@ -100,8 +102,21 @@ export default {
         return Vue.$api.interview.answer(identity, 'answerQRBarcodeQuestion', { answer: text })
     },
 
-    removeAnswer(_, identity) {
-        return Vue.$api.interview.answer(identity, 'removeAnswer')
+    async removeAnswer({ dispatch }, identity) {
+        await Vue.$api.interview.answer(identity, 'removeAnswer')
+        dispatch('tryResolveFetch', identity)
+    },
+
+    tryResolveFetch({ getters, dispatch }, identity) {
+        setTimeout(() => {
+            if (getters.loadingProgress) {
+                dispatch({
+                    type: 'fetchEntity',
+                    id: identity,
+                    source: 'client',
+                })
+            }
+        }, 2000)
     },
 
     sendNewComment({ commit }, { identity, comment }) {
@@ -275,10 +290,13 @@ export default {
         commit('SET_COVER_INFO', coverInfo)
     }, 200),
 
-    completeInterview({ state, commit }, comment) {
+    completeInterview({ state, commit, rootState }, comment) {
         if (state.interviewCompleted) return
 
         commit('COMPLETE_INTERVIEW')
+
+        const interviewId = rootState.route.params.interviewId
+        commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
 
         Vue.$api.interview.answer(null, 'completeInterview', { comment })
     },
@@ -295,7 +313,9 @@ export default {
         Vue.$api.hub.stop()
     },
 
-    changeSection(_, { to, from }) {
+    changeSection({ commit, rootState }, { to, from }) {
+        const interviewId = rootState.route.params.interviewId
+        commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
         return Vue.$api.hub.changeSection(to, from)
     },
 }

@@ -12,22 +12,22 @@ namespace WB.Services.Scheduler.Model
     public class JobItem
     {
         public long Id { get; set; }
-        public string Type { get; set; }
+        public string Type { get; set; } = String.Empty;
         public string Args { get; set; } = "{}";
-        public string Tag { get; set; }
-        public string Tenant { get; set; }
-        public string TenantName { get; set; }
+        public string Tag { get; set; } = String.Empty;
+        public string? Tenant { get; set; }
+        public string TenantName { get; set; } = String.Empty;
         public JobStatus Status { get; set; }
         public DateTime? StartAt { get; set; }
         public DateTime? EndAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdateAt { get; set; }
         public DateTime? ScheduleAt { get; set; }
-        public string WorkerId { get; set; }
+        public string? WorkerId { get; set; }
 
-        public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object?> Data { get; set; } = new Dictionary<string, object?>();
 
-        public T GetData<T>(string key) => Data.TryGetValue(key, out var val) ? (T)val : default;
+        public T? GetData<T>(string key) where T: class => Data.TryGetValue(key, out var val) ? (T?)val : default;
 
         public void Handle(IJobEvent @event)
         {
@@ -65,30 +65,30 @@ namespace WB.Services.Scheduler.Model
         [NotMapped]
         public long FailedTimes
         {
-            get => (long)(this["failedTimes"] ?? 0l);
+            get => (long)(this["failedTimes"] ?? 0L);
             set => this["failedTimes"] = value;
         }
 
-        private string Error
+        private string? Error
         {
-            get => (string)this["error"];
+            get => (string?)this["error"];
             set => this["error"] = value;
         }
 
-        private string ErrorType
+        private string? ErrorType
         {
-            get => (string)this["errorType"];
+            get => (string?)this["errorType"];
             set => this["errorType"] = value;
         }
 
         [NotMapped]
         public long MaxRetryAttempts
         {
-            get => (long) this["maxRetry"];
+            get => (long) (this["maxRetry"] ?? 3L);
             set => this["maxRetry"] = value;
         } 
 
-        public object this[string key]
+        public object? this[string key]
         {
             get => Data.TryGetValue(key, out var res) ? res : null;
             set => Data[key] = value;
@@ -98,13 +98,6 @@ namespace WB.Services.Scheduler.Model
         {
             switch (ev.Exception)
             {
-                case HttpRequestException http when http.InnerException is SocketException:
-                case SocketException _:
-                    // if HQ not available then, retry again in 30 seconds
-                    // do not increase failed times
-                    this.ScheduleAt = DateTime.UtcNow.AddSeconds(30);
-                    this.Status = JobStatus.Created;
-                    return;
                 case IOException io when io.HResult == 0x70:
                     this.ErrorType = JobError.NotEnoughExternalStorageSpace.ToString();
                     this.Error = io.ToStringDemystified();
@@ -151,6 +144,6 @@ namespace WB.Services.Scheduler.Model
         }
 
         // drop tenant schema before last retry
-        public bool ShouldDropTenantSchema => this.FailedTimes == MaxRetryAttempts;
+        public bool ShouldDropTenantSchema => false; //this.FailedTimes == MaxRetryAttempts;
     }
 }

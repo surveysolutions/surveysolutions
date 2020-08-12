@@ -28,7 +28,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             string archivePassword,
             string accessToken,
             string refreshToken,
-            ExternalStorageType? storageType);
+            ExternalStorageType? storageType,
+            Guid? translationId,
+            bool? includeMeta);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -50,7 +52,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
              DataExportFormat format,
              InterviewStatus? status,
              DateTime? fromDate,
-             DateTime? toDate);
+             DateTime? toDate,
+             Guid? translationId,
+             bool? includeMeta);
 
         [Get("/api/v1/job/wasExportRecreated")]
         Task<bool> WasExportRecreated(long processId);
@@ -79,5 +83,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         [Get("/.version")]
         Task<string> Version();
+
+        [Get("/.connectivity")]
+        Task<string> GetConnectivityStatus();
     }
 }

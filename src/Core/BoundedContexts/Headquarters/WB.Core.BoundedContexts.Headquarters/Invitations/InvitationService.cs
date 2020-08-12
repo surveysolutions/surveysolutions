@@ -6,10 +6,8 @@ using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -20,15 +18,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly ITokenGenerator tokenGenerator;
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
         private readonly IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage;
+        private readonly IAggregateRootPrototypePromoterService promoterService;
         private static CancellationTokenSource cancellationTokenSource;
 
         public InvitationService(
             IPlainStorageAccessor<Invitation> invitationStorage,
             IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage, 
+            IAggregateRootPrototypePromoterService promoterService,
             ITokenGenerator tokenGenerator)
         {
             this.invitationStorage = invitationStorage;
             this.invitationsDistributionStatusStorage = invitationsDistributionStatusStorage;
+            this.promoterService = promoterService;
             this.tokenGenerator = tokenGenerator;
         }
         
@@ -69,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
                 else
                 {
-                    var token = tokenGenerator.Generate(assignment.QuestionnaireId.GetHashCode());
+                    var token = tokenGenerator.Generate(assignment.QuestionnaireId);
                     invitation.SetToken(token, TokenKind.AssignmentResolvedByPassword);
                 }
             }
@@ -322,6 +323,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var invitation = this.GetInvitation(invitationId);
             invitation.InterviewWasCreated(interviewId);
             invitationStorage.Store(invitation, invitationId);
+            promoterService.MaterializePrototypeIfRequired(Guid.Parse(interviewId));
         }
 
         public bool IsValidTokenAndPassword(string token, string password)

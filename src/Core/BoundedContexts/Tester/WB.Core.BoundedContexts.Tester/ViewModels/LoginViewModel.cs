@@ -82,35 +82,43 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             string errorMessage = null;
 
-            try
+            if (!string.IsNullOrEmpty(LoginName))
             {
-                if (await this.designerApiService.Authorize(login: LoginName, password: Password))
+                try
                 {
-                    this.userStorage.RemoveAll();
-                    this.dashboardLastUpdateStorage.RemoveAll();
-                    this.questionnairesStorage.RemoveAll();
-                    this.principal.SignIn(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
-                    await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();   
+                    if (await this.designerApiService.Authorize(login: LoginName, password: Password))
+                    {
+                        this.userStorage.RemoveAll();
+                        this.dashboardLastUpdateStorage.RemoveAll();
+                        this.questionnairesStorage.RemoveAll();
+                        this.principal.SignIn(userName: this.LoginName, password: this.Password,
+                            staySignedIn: this.StaySignedIn);
+                        await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
+                    }
                 }
-            }
-            catch (RestException ex)
-            {
-                switch (ex.StatusCode)
+                catch (RestException ex)
                 {
-                    case HttpStatusCode.NotFound:
-                        errorMessage = TesterUIResources.Login_Error_NotFound;
-                        break;
-                    default:
-                        errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
-                        break;
-                }
+                    switch (ex.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            errorMessage = TesterUIResources.Login_Error_NotFound;
+                            break;
+                        default:
+                            errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
+                            break;
+                    }
 
-                if (string.IsNullOrEmpty(errorMessage))
-                    throw;
+                    if (string.IsNullOrEmpty(errorMessage))
+                        throw;
+                }
+                finally
+                {
+                    IsInProgress = false;
+                }
             }
-            finally
+            else
             {
-                IsInProgress = false;    
+                errorMessage = TesterUIResources.Login_Error_EmptyName;
             }
 
             if (!string.IsNullOrEmpty(errorMessage))

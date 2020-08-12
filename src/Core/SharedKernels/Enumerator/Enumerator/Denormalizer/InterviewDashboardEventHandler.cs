@@ -67,9 +67,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             this.answerToStringConverter = answerToStringConverter;
         }
 
-        public override object[] Writers => new object[] { this.interviewViewRepository };
-        public override object[] Readers => new object[] { this.interviewViewRepository};
-
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
             var payload = evnt.Payload;

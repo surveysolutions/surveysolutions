@@ -13,6 +13,7 @@ using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Ddi;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Events.Interview.Dtos;
@@ -49,7 +50,8 @@ namespace WB.Services.Export.Tests
             int numberInvalidEntities = 0,
             int numberUnansweredQuestions = 0,
             int numberCommentedQuestions = 0,
-            long? interviewDuration = null)
+            long? interviewDuration = null, 
+            int? notAnsweredCount = null)
             => new InterviewDiagnosticsInfo
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -64,7 +66,8 @@ namespace WB.Services.Export.Tests
                 NumberInvalidEntities = numberInvalidEntities,
                 NumberUnansweredQuestions = numberUnansweredQuestions,
                 NumberCommentedQuestions = numberCommentedQuestions,
-                InterviewDuration = interviewDuration
+                InterviewDuration = interviewDuration,
+                NotAnsweredCount = notAnsweredCount
             };
 
         public static DiagnosticsExporter DiagnosticsExporter(ICsvWriter csvWriter = null,
@@ -92,17 +95,17 @@ namespace WB.Services.Export.Tests
             return new TenantInfo(baseUrl, id, name);
         }
 
-        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = null)
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = "")
         {
             return new QuestionnaireExportStructure
-            {
-                QuestionnaireId = questionnaireId
-            };
+            (
+                questionnaireId
+            );
         }
 
         public static HeaderStructureForLevel HeaderStructureForLevel()
         {
-            return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
+            return new HeaderStructureForLevel( new ValueVector<Guid>(), "", "" );
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, long version = 5, string variableName = null, params IQuestionnaireEntity[] children)
@@ -187,7 +190,7 @@ namespace WB.Services.Export.Tests
         {
             var defaultQuestionnaireStorage = new Mock<IQuestionnaireStorage>();
             var questionnaireDocument = Create.QuestionnaireDocument(Guid.Parse("11111111111111111111111111111111"), 555);
-            defaultQuestionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            defaultQuestionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
             
             var defaultInterviewsSource = new Mock<IInterviewsToExportSource>();
@@ -199,12 +202,14 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
-                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()) == Task.FromResult(questionnaireExportStructure)),
                 questionnaireStorage ?? defaultQuestionnaireStorage.Object,
                 Mock.Of<IProductVersion>(),
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>());
+                assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
+                Mock.Of<IQuestionnaireBackupExporter>(),
+                Mock.Of<IDdiMetadataFactory>());
         }
 
         public static CommentsExporter CommentsExporter()
@@ -473,10 +478,11 @@ namespace WB.Services.Export.Tests
                 .Options;
             var dbContext = new TenantDbContext(
                 Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
-                {
-                    Id = TenantId.None,
-                    Name = tenantName ?? "none"
-                }),
+                (
+                    "",
+                    TenantId.None,
+                    tenantName ?? "none"
+                )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()),
                 options);
 
@@ -488,14 +494,13 @@ namespace WB.Services.Export.Tests
         {
             var options = new DbContextOptionsBuilder<TenantDbContext>().Options;
             var dbContext = new TenantDbContext(
-                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
-                {
-                    Id = TenantId.None,
-                    Name = tenantName ?? "none"
-                }),
+                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo(
+                    "",
+                    TenantId.None,
+                    tenantName ?? "none"
+                )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()
                 {
-                    
                 }),
                 options);
 
@@ -622,8 +627,9 @@ namespace WB.Services.Export.Tests
         public static IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(new QuestionnaireId(questionnaire.Id),
-                    CancellationToken.None))
+            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(questionnaire.QuestionnaireId,
+                    It.IsAny<Guid?>(),
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync(questionnaire);
             return questionnaireStorage.Object;
         }
@@ -716,6 +722,14 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ILogger<PdfExporter>>());
         }
 
+        public static QuestionnaireBackupExporter QuestionnaireBackupExporter(IFileSystemAccessor fileSystem = null,
+            ITenantApi<IHeadquartersApi> tenantApi = null)
+        {
+            return new QuestionnaireBackupExporter(fileSystem ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ILogger<QuestionnaireBackupExporter>>(),
+                tenantApi?? Mock.Of<ITenantApi<IHeadquartersApi>>());
+        }
+
         internal static IInterviewsDoFilesExporter InterviewsDoFilesExporter(IFileSystemAccessor fileSystemAccessor, QuestionnaireLabelFactory questionnaireLabelFactory = null)
         {
             return new InterviewsDoFilesExporter(
@@ -727,6 +741,14 @@ namespace WB.Services.Export.Tests
         private static IQuestionnaireLabelFactory QuestionnaireLabelFactory()
         {
             return new QuestionnaireLabelFactory();
+        }
+
+        public static ExportExportFileNameService ExportExportFileNameService(IFileSystemAccessor fileSystemAccessor = null,
+            IQuestionnaireStorage questionnaireStorage = null)
+        {
+            return new ExportExportFileNameService(
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 
@@ -860,19 +882,19 @@ namespace WB.Services.Export.Tests
 
         public DataExportProcessArgs DataExportProcessArgs(string tenant = "testTenant")
         {
-            return new DataExportProcessArgs
-            {
-                ExportSettings = new ExportSettings
-                {
-                    Tenant = new TenantInfo("", "", tenant)
-                }
-            };
+            return new DataExportProcessArgs(
+                new ExportSettings
+                (
+                    exportFormat: DataExportFormat.Tabular,
+                    questionnaireId: new QuestionnaireId(Guid.Empty.FormatGuid() + "$" + 1),
+                    tenant: new TenantInfo("", "", tenant)
+                ));
         }
     }
 
     public static class EventExtensions
     {
-        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T : IEvent
+        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T :class, IEvent
         {
             return (PublishedEvent<T>)@event.AsPublishedEvent();
         }
