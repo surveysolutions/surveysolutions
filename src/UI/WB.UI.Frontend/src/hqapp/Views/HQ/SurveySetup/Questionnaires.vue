@@ -37,7 +37,7 @@
                 <button
                     type="button"
                     class="btn btn-danger"
-                    :disabled="delteBtnDisabled"
+                    :disabled="deleteBtnDisabled"
                     @click="deleteQuestionnaire">{{ $t("Common.Delete") }}</button>
                 <button
                     type="button"
@@ -320,7 +320,7 @@ export default {
             const rt =this.$t('Dashboard.TypeQuestionnaireName', {questionnaireTitle: this.deletedQuestionnaireId.title})
             return rt
         },
-        delteBtnDisabled(){
+        deleteBtnDisabled(){
             return this.deletedQuestionnaireId.title !== this.deletionQuestionnaireName
         },
     },
