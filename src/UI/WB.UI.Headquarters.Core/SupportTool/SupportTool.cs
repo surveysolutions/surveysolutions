@@ -20,9 +20,9 @@ namespace WB.UI.Headquarters.SupportTool
             var rootCommand = new RootCommand
             {
                 new MigrateCommand(this.host),
-                new UsersCommand(this.host)
+                new UsersCommand(this.host),
+                new VersionCommand(this.host)
             };
-
 
             // Parse the incoming args and invoke the handler
             return await rootCommand.InvokeAsync(args);
