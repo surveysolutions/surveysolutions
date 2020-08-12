@@ -18,6 +18,7 @@ using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.PdfInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
@@ -53,7 +54,8 @@ namespace WB.UI.Headquarters
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             registry.Bind<UpdateRequiredFilter>();
-            
+            registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
+
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
