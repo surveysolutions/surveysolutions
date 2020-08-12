@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
+using Npgsql;
+using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -9,96 +11,72 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     internal abstract class PostgresKeyValueStorageWithCache<TEntity> : PostgresKeyValueStorage<TEntity>
         where TEntity : class
     {
-        private readonly object lockObject = new object();
-
-        static MemoryCache memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
+        private readonly IMemoryCache memoryCache;
+        
+        private static readonly string CachePrefix = $"pkvs::{typeof(TEntity).Name}::";
 
         public PostgresKeyValueStorageWithCache(string connectionString,
-            string schemaName, 
-            ILogger logger, 
-            IEntitySerializer<TEntity> serializer) 
+            string schemaName,
+            ILogger logger,
+            IMemoryCache memoryCache,
+            IEntitySerializer<TEntity> serializer)
             : base(connectionString, schemaName, logger, serializer)
         {
+            this.memoryCache = memoryCache;
         }
 
         public override TEntity GetById(string id)
         {
-            lock (lockObject)
+            return memoryCache.GetOrCreate(CachePrefix + id, cache =>
             {
-                if (memoryCache.Get(id) is TEntity value)
-                    return value;
-
-                value = base.GetById(id);
-                if (value != null)
-                    memoryCache.Set(id, value, DateTimeOffset.Now.AddSeconds(10));
-
-                return value;
-            }
+                lock (CachePrefix)
+                {
+                    cache.SlidingExpiration = TimeSpan.FromSeconds(10);
+                    return base.GetById(id);
+                }
+            });
         }
 
         public override void Remove(string id)
         {
-            lock (lockObject)
+            try
             {
-                try
-                { 
-                    base.Remove(id);
-                }
-                finally 
-                {
-                    memoryCache.Remove(id);
-                }
+                base.Remove(id);
+            }
+            finally
+            {
+                memoryCache.Remove(CachePrefix + id);
             }
         }
 
         public override void Store(TEntity view, string id)
         {
-            lock (lockObject)
+            try
             {
-                try
-                {
-                    base.Store(view, id);
-                    memoryCache.Set(id, view, DateTimeOffset.Now.AddSeconds(10));
-                }
-                catch
-                {
-                    memoryCache.Remove(id);
-                    throw;
-                }
+                base.Store(view, id);
+            }
+            finally
+            {
+                memoryCache.Remove(CachePrefix + id);
             }
         }
         
-        public override void BulkStore(List<Tuple<TEntity, string>> bulk)
+        
+        protected void BulkStore(List<Tuple<TEntity, string>> bulk, NpgsqlConnection connection)
         {
-            lock (lockObject)
+            using var writer = connection.BeginBinaryImport($"COPY {this.tableName}(id, value) FROM STDIN BINARY;");
+            foreach (var item in bulk)
             {
-                try
-                {
-                    base.BulkStore(bulk);
-                }
-                finally
-                {
-                    bulk.ForEach(i => memoryCache.Remove(i.Item2));
-                }
+                writer.StartRow();
+                writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
+                var serializedValue = this.serializer.Serialize(item.Item1);
+                writer.Write(serializedValue, NpgsqlDbType.Jsonb); // write value
+                this.memoryCache.Remove(CachePrefix + item.Item2);
             }
-        }
 
-        public override void Clear()
-        {
-            lock (lockObject)
-            {
-                try
-                {
-                    base.Clear();
-                }
-                finally
-                {
-                    memoryCache.Dispose();
-                    memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
-                }
-            }
+            writer.Complete();
         }
-
+        
         public override string GetReadableStatus()
         {
             return "Postgres with Cache K/V :/";

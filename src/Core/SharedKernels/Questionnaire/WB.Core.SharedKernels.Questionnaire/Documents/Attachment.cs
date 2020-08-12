@@ -5,8 +5,8 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
     public class Attachment
     {
         public Guid AttachmentId { get; set; }
-        public string Name { get; set; }
-        public string ContentId { get; set; }
+        public string Name { get; set; } = String.Empty;
+        public string ContentId { get; set; } = String.Empty;
 
         public Attachment Clone()
         {

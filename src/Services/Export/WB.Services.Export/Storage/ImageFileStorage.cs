@@ -23,12 +23,13 @@ namespace WB.Services.Export.Storage
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
-        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]?> GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(interviewId, fileName);
             if (!fileSystemAccessor.IsFileExists(filePath))
-                return null;
-            return Task.FromResult(fileSystemAccessor.ReadAllBytes(filePath));
+                return Task.FromResult((byte[]?)null);
+            
+            return Task.FromResult((byte[]?)fileSystemAccessor.ReadAllBytes(filePath));
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
@@ -92,7 +93,7 @@ namespace WB.Services.Export.Storage
             return fileSystemAccessor.CombinePath(GetPathToInterviewDirectory(interviewId), fileName);
         }
 
-        private string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory = null)
+        private string GetPathToInterviewDirectory(Guid interviewId, string? baseDirectory = null)
         {
             return fileSystemAccessor.CombinePath(baseDirectory ?? basePath, interviewId.FormatGuid());
         }

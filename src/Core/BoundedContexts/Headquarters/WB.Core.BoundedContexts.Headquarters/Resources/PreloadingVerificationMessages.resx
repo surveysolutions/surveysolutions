@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A</value>
+    <value>[PL0002] N/A. Contact the support team at support@mysurvey.solutions</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>Column cannot be mapped to any question in the questionnaire.</value>
@@ -139,7 +139,7 @@
     <value>Roster Id is inconsistent with roster size.</value>
   </data>
     <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>Provided question value not allowed.</value>
+    <value>Question value not allowed.</value>
   </data>
     <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Invalid Date or Time value entered in the date question.</value>
@@ -212,7 +212,7 @@
     <value>Password-protected archives are not supported</value>
   </data>
     <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
-    <value>Roster by list question should have column for text list answers</value>
+    <value>List roster should have a column for text list answers</value>
   </data>
   <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
     <value>Required column {0} is missing.</value>
@@ -221,7 +221,7 @@
     <value>Protected variable is not found in provided questionnaire.</value>
   </data>
   <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
-    <value>Variable has type that does not support protection.</value>
+    <value>Variable type cannot be protected.</value>
   </data>
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
     <value>Inconsistent roster code for numeric roster. Sequence of roster codes should be 0, 1, ... to count of roster instances</value>
@@ -249,5 +249,11 @@
   </data>
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
     <value>Password is not unique. Password by assignment for web mode with quantity 1 should be unique</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>All assignments for web interviews must be made to an interviewer</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
   </data>
 </root>

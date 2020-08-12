@@ -11,6 +11,11 @@ namespace WB.Core.GenericSubdomains.Portable
             return string.IsNullOrEmpty(input);
         }
 
+        public static string NullIfEmpty(this string input)
+        {
+            return string.IsNullOrEmpty(input) ? null : input;
+        }
+        
         public static string EmptyIfNull(this string input)
         {
             if (input == null)

@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersion
     {
         public virtual Guid QuestionnaireId { get; set; }
         public virtual int Version { get; set; }
-        public virtual string Description { get; set; }
+        public virtual string? Description { get; set; }
     }
 }

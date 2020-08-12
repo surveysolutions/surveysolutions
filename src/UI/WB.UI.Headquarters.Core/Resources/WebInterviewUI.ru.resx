@@ -243,6 +243,9 @@
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
     <value>Опции будут доступны после ответа на соответствующий вопрос</value>
   </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>Максимальное число опций ({{value}}) для вопроса выбрано</value>
+  </data>
   <data name="ConfirmRosterRemove" xml:space="preserve">
     <value>Вы уверены, что хотите удалить зависимый список?</value>
   </data>
@@ -478,5 +481,8 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="CommentOnPreviousAnswer" xml:space="preserve">
     <value>На предыдущий ответ</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введите пароль</value>
   </data>
 </root>

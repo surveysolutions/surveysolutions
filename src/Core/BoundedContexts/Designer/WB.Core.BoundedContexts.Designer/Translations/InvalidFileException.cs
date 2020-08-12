@@ -28,6 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
         }
 
-        public List<ImportValidationError> FoundErrors { get; set; }
+        public List<ImportValidationError>? FoundErrors { get; set; }
     }
 }

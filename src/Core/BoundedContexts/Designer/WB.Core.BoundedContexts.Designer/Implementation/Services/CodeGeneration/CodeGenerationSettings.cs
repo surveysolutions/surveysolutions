@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             string[] namespaces, 
             bool isLookupTablesFeatureSupported, 
             Func<QuestionnaireExpressionStateModel, string> expressionStateBodyGenerator,
-            Func<LinkedFilterConditionDescriptionModel, string> linkedFilterMethodGenerator = null)
+            Func<LinkedFilterConditionDescriptionModel, string>? linkedFilterMethodGenerator = null)
         {
             this.AdditionInterfaces = additionInterfaces;
             this.Namespaces = namespaces;

@@ -181,7 +181,7 @@
     <value>Company logo was not updated. Please provide a valid image</value>
   </data>
   <data name="ChangeStateConfirm" xml:space="preserve">
-    <value>Are you sure you want to change protection state? You will need to regenerate exported data in order to open it.</value>
+    <value>Are you sure you want to change the export file security settings? You will need to create regenerate exported data in order to open it.</value>
   </data>
   <data name="GlobalNoteSettings" xml:space="preserve">
     <value>Global note</value>

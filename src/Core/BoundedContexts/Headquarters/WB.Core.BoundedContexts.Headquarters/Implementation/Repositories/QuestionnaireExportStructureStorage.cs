@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.Infrastructure;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         {
             return cache.GetOrCreateNullSafe(id.ToString(), entry =>
             {
-                entry.SlidingExpiration = TimeSpan.FromHours(1);
+                entry.SlidingExpiration = TimeSpan.FromMinutes(5);
                 return this.exportViewFactory.CreateQuestionnaireExportStructure(id);
             });
         }

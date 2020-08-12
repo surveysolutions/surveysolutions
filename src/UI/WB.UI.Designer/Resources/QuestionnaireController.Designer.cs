@@ -406,7 +406,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permissions to delete this questionnaire..
+        ///   Looks up a localized string similar to You don&apos;t have permission to delete this questionnaire..
         /// </summary>
         public static string ForbiddenDelete {
             get {
@@ -415,7 +415,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t  have permissions to restore operation for this questionnaire..
+        ///   Looks up a localized string similar to You don&apos;t  have permission to restore operation for this questionnaire..
         /// </summary>
         public static string ForbiddenRevert {
             get {
@@ -514,7 +514,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not supported browser used.
+        ///   Looks up a localized string similar to Internet browser is not supported. Please use another browser..
         /// </summary>
         public static string NotSupportedBrowserUsed {
             get {

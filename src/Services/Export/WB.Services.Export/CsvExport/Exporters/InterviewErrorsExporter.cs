@@ -81,7 +81,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 Guid lastRoster = parentRosters.Last();
                 var rosterName = questionnaire.GetRosterVariableName(lastRoster);
 
-                exportRow.Add(rosterName);
+                exportRow.Add(rosterName ?? "");
             }
             else if(maxRosterDepthInQuestionnaire > 0)
             {
@@ -94,7 +94,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
 
             exportRow.Add(error.EntityType == EntityType.Question
-                ? questionnaire.GetQuestionVariableName(error.Identity.Id)
+                ? questionnaire.GetQuestionVariableName(error.Identity.Id) ?? ""
                 : "");
             exportRow.Add(((int)error.EntityType).ToString(CultureInfo.InvariantCulture));
 

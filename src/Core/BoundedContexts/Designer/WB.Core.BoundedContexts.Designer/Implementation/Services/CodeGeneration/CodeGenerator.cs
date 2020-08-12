@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
 
-        public static string GetQuestionIdName(string variableName)
+        public static string GetQuestionIdName(string? variableName)
         {
             return PrivateFieldsPrefix + variableName + IdSuffix;
         }

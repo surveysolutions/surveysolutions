@@ -17,7 +17,7 @@ namespace WB.UI.Designer.Services
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        private static string ffmpegPath;
+        private static string? ffmpegPath;
 
         private string ConverterPath
         {

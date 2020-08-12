@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             BecauseOf();
         }
 
-        private void BecauseOf() => questionnaire.MoveGroup(groupInGroupId, null, 0, responsibleId);
+        private void BecauseOf() => questionnaire.MoveGroup(groupInGroupId, null, 1, responsibleId);
 
 
         [NUnit.Framework.Test] public void should_contains_group () =>

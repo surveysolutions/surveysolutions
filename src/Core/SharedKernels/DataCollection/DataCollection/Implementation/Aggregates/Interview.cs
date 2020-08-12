@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
+using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -27,7 +29,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Interview : AggregateRootMappedByConvention
+    public class Interview : EventSourcedAggregateRoot
     {
         public Interview(IInterviewTreeBuilder treeBuilder)
         {
@@ -141,12 +143,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository optionsRepository
+            IQuestionOptionsRepository optionsRepository,
+            IClock clock
             )
         {
             this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
             this.questionOptionsRepository = optionsRepository ?? throw new ArgumentNullException(nameof(optionsRepository));
+            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         #region Apply (state restore) methods
@@ -737,6 +741,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
         private IQuestionOptionsRepository questionOptionsRepository;
+        protected readonly IClock clock;
 
         protected virtual IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
@@ -1957,6 +1962,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewApproved(userId, comment, originDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment, previousStatus: this.properties.Status, originDate:originDate));
+            this.ApplyEvent(new InterviewClosedBySupervisor(userId, originDate));
         }
 
         public void Reject(Guid userId, string comment, DateTimeOffset originDate)
@@ -1983,7 +1989,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate:originDate));
-            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+
+            if (interviewerId != properties.InterviewerId)
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
         }
 
         public void HqApprove(Guid userId, string comment, DateTimeOffset originDate)
@@ -2070,6 +2078,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate:originDate));
             }
+        }
+
+        public void HqRejectInterviewToInterviewer(Guid userId, Guid interviewerId, Guid supervisorId, string comment, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (!isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+
+            this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
+
+            if (supervisorId != properties.SupervisorId)
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
+            if (interviewerId != properties.InterviewerId)
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, originDate));
+        }
+
+        public void HqRejectInterviewToSupervisor(Guid userId, Guid supervisorId, string comment, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+            else
+            {                    
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment, originDate));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, originDate: originDate));
+            }
+            
+            if (supervisorId != properties.SupervisorId)
+                this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, originDate));
         }
 
         public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command) 
@@ -2389,6 +2443,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)
         {
+            var now = this.clock.DateTimeOffsetNow();
             foreach (var diffByQuestion in diffByQuestions)
             {
                 var changedQuestion = diffByQuestion.ChangedNode;
@@ -2400,100 +2455,100 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsText)
                 {
                     this.ApplyEvent(new TextQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeTextQuestion().GetAnswer().Value));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeTextQuestion().GetAnswer().Value));
                 }
 
                 else if (changedQuestion.IsTextList)
                 {
                     this.ApplyEvent(new TextListQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().ToTupleArray()));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().ToTupleArray()));
                 }
 
                 else if (changedQuestion.IsDouble)
                 {
                     this.ApplyEvent(new NumericRealQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, (decimal)changedQuestion.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value));
+                        changedQuestion.Identity.RosterVector, now, (decimal)changedQuestion.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value));
                 }
 
                 else if (changedQuestion.IsInteger)
                 {
                     this.ApplyEvent(new NumericIntegerQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value));
                 }
 
                 else if (changedQuestion.IsDateTime)
                 {
                     this.ApplyEvent(new DateTimeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value));
                 }
 
                 else if (changedQuestion.IsGps)
                 {
                     var gpsAnswer = changedQuestion.GetAsInterviewTreeGpsQuestion().GetAnswer().Value;
                     this.ApplyEvent(new GeoLocationQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, gpsAnswer.Latitude, gpsAnswer.Longitude,
+                        changedQuestion.Identity.RosterVector, now, gpsAnswer.Latitude, gpsAnswer.Longitude,
                         gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Timestamp));
                 }
 
                 else if (changedQuestion.IsQRBarcode)
                 {
                     this.ApplyEvent(new QRBarcodeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText));
                 }
 
                 else if (changedQuestion.IsMultimedia)
                 {
                     this.ApplyEvent(new PictureQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName));
                 }
 
                 else if (changedQuestion.IsYesNo)
                 {
                     this.ApplyEvent(new YesNoQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeYesNoQuestion().GetAnswer().ToAnsweredYesNoOptions().ToArray()));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeYesNoQuestion().GetAnswer().ToAnsweredYesNoOptions().ToArray()));
                 }
 
                 else if (changedQuestion.IsSingleFixedOption || changedQuestion.IsCascading)
                 {
                     this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue));
                 }
 
                 else if (changedQuestion.IsMultiFixedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToDecimals().ToArray()));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToDecimals().ToArray()));
                 }
 
                 else if (changedQuestion.IsSingleLinkedOption)
                 {
                     this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue));
                 }
 
                 else if (changedQuestion.IsMultiLinkedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, 
+                        changedQuestion.Identity.RosterVector, now, 
                         changedQuestion.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().ToRosterVectorArray().Select(x => x.Select(Convert.ToDecimal).ToArray()).ToArray()));
                 }
 
                 else if (changedQuestion.IsSingleLinkedToList)
                 {
                     this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue));
                 }
 
                 else if (changedQuestion.IsMultiLinkedToList)
                 {
                     this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, changedQuestion.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToDecimals().ToArray()));
+                        changedQuestion.Identity.RosterVector, now, changedQuestion.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToDecimals().ToArray()));
                 }
                 else if (changedQuestion.IsArea)
                 {
                     var answer = changedQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTimeOffset.Now, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
+                        changedQuestion.Identity.RosterVector, now, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
                         answer.Coordinates, answer.DistanceToEditor, answer.NumberOfPoints));
                 }
 
@@ -2502,7 +2557,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     var audioAnswer = changedQuestion.GetAsInterviewTreeAudioQuestion().GetAnswer();
 
                     this.ApplyEvent(new AudioQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                       changedQuestion.Identity.RosterVector, DateTimeOffset.Now, 
+                       changedQuestion.Identity.RosterVector, now, 
                        audioAnswer.FileName, audioAnswer.Length));
                 }
             }
@@ -2604,11 +2659,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var targetList = sectionId != null
                 ? this.Tree.GetGroup(sectionId).Children
-                : this.Tree.GetAllNodesInEnumeratorOrder();
-
-            IEnumerable<IInterviewTreeNode> result = targetList.Except(x => (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
-                                                                 || questionnaire.IsVariable(x.Identity.Id)
-                                                     );
+                : this.Tree.GetAllNodesInEnumeratorOrder().Where(x => 
+                    !questionnaire.IsCoverPage(x.Identity.Id) && (x.Parent == null || !questionnaire.IsCoverPage(x.Parent.Identity.Id)));
+            
+            IEnumerable<IInterviewTreeNode> result = targetList.Except(x => 
+                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                || questionnaire.IsVariable(x.Identity.Id)
+            );
 
             return result.Select(x => x.Identity);
         }

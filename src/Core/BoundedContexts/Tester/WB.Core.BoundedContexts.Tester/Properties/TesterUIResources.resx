@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>list have not been updated</value>
+    <value>list has not been updated</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
     <value>list was updated {0}</value>
@@ -149,6 +149,9 @@
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
+  </data>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Please enter correct login</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionnaires</value>
@@ -217,6 +220,6 @@
     <value>Application version</value>
   </data>
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Interview data can't be applied to new version of questionnaire. We will open empty interview</value>
+    <value>Interview data can't be applied to a new version of the questionnaire. We will open a empty interview</value>
   </data>
 </root>

@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="~/css/markup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-4feee32528.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-8a3dad4f48.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-4feee32528.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-8a3dad4f48.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-4d3d6b7349.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-19473b109e.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-4d3d6b7349.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-19473b109e.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
     <!-- endinject -->
     @{
         var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
@@ -50,7 +50,6 @@
     <!-- app:js -->  
     <script defer src="~/js/app/app.js"></script>  
     <script defer src="~/js/app/ui-js.js"></script>  
-    <script defer src="~/js/app/decorators/exceptionhandlerdecorator.js"></script>  
     <script defer src="~/js/app/controllers/addClassification.js"></script>  
     <script defer src="~/js/app/controllers/alert.js"></script>  
     <script defer src="~/js/app/controllers/attachments.js"></script>  
@@ -77,12 +76,8 @@
     <script defer src="~/js/app/controllers/translations.js"></script>  
     <script defer src="~/js/app/controllers/tree.js"></script>  
     <script defer src="~/js/app/controllers/variable.js"></script>  
+    <script defer src="~/js/app/decorators/exceptionhandlerdecorator.js"></script>  
     <script defer src="~/js/app/filters/escapeFilter.js"></script>  
-    <script defer src="~/js/app/directives/animations.js"></script>  
-    <script defer src="~/js/app/directives/directives.js"></script>  
-    <script defer src="~/js/app/directives/help.js"></script>  
-    <script defer src="~/js/app/directives/itemBreadcrumbs.js"></script>  
-    <script defer src="~/js/app/directives/matchOptionsPattern.js"></script>  
     <script defer src="~/js/app/modules/ng-context-menu.js"></script>  
     <script defer src="~/js/app/modules/perfect_scrollbar.js"></script>  
     <script defer src="~/js/app/modules/positionCalculator.js"></script>  
@@ -103,6 +98,11 @@
     <script defer src="~/js/app/services/utilityService.js"></script>  
     <script defer src="~/js/app/services/verificationService.js"></script>  
     <script defer src="~/js/app/services/webTesterService.js"></script>  
+    <script defer src="~/js/app/directives/animations.js"></script>  
+    <script defer src="~/js/app/directives/directives.js"></script>  
+    <script defer src="~/js/app/directives/help.js"></script>  
+    <script defer src="~/js/app/directives/itemBreadcrumbs.js"></script>  
+    <script defer src="~/js/app/directives/matchOptionsPattern.js"></script>  
     <script defer src="~/js/app/extensions/ace/mode-csharp-extended.js"></script>  
     <script defer src="~/js/app/extensions/ace/mode-text-extended.js"></script>  
     <script defer src="~/js/app/extensions/ace/theme-github-extended.js"></script>  

@@ -1,18 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
     [Table("metadata")]
     public class Metadata
     {
-        [Key]
-        public string Id { get; set; }
+        [Key] public string Id { get; set; } = null!;
 
-        public string Value { get; set; }
+        public string Value { get; set; } = null!;
 
         private long? asLong;
 

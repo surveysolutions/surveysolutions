@@ -2,27 +2,19 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Masking.Serilog;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.WindowsServices;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
-using Serilog.Exceptions;
-using Serilog.Formatting.Compact;
 using WB.Infrastructure.AspNetCore;
-using WB.Services.Export.Host.Infra;
 using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Export.Host
 {
     class Program
     {
-
         static async Task Main(string[] args)
         {
             try
@@ -58,91 +50,21 @@ namespace WB.Services.Export.Host
                 throw;
             }
         }
-
-        private static void ConfigureSerilog(LoggerConfiguration logConfig, IConfiguration configuration)
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
-            var connectionString = GetConnectionString(configuration);
-
-            logConfig
-                .ReadFrom.Configuration(configuration)
-                .ConfigureSurveySolutionsLogging(Directory.GetCurrentDirectory(), "export-service")
-                .Enrich.WithProperty("workerId", "root")
-                .WriteTo.Postgres(connectionString, LogEventLevel.Error);
-
-            var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
-            if (!string.IsNullOrWhiteSpace(hook))
-            {
-                var workerId = configuration.GetSection("job")["workerId"];
-                logConfig = logConfig.WriteTo.Slack(hook, LogEventLevel.Fatal, workerId ?? "console");
-            }
-
-            var metadata = assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
-
-            foreach (var assemblyMetadataAttribute in metadata)
-            {
-                logConfig.Enrich.WithProperty(assemblyMetadataAttribute.Key, assemblyMetadataAttribute.Value);
-            }
-        }
-
-        private static string GetConnectionString(IConfiguration configuration)
-        {
-            var webConfig = configuration["webConfigs"];
-
-            // should we go to web config for connection string?
-            if (webConfig != null)
-            {
-                return WebConfigReader.ReadConnectionStringFromWebConfig(webConfig);
-            }
-
-            return configuration.GetConnectionString("DefaultConnection");
-        }
-
-        public static IHostBuilder CreateWebHostBuilder(string[] args)
+         
+        public static IHostBuilder CreateWebHostBuilder(string[] args, bool useWebDefaults = true)
         {
             return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-                .ConfigureLogging((hosting, logging) =>
+                .ConfigureSurveySolutionsLogging("export-service", (host, logConfig) =>
+                    logConfig
+                        .Enrich.WithProperty("workerId", "root")
+                        .Destructure.ByMaskingProperties("Password", "ArchivePassword")
+                        .WriteTo.Postgres(host.Configuration.GetConnectionString("DefaultConnection"))
+                )
+                .ConfigureSurveySolutionsAppConfiguration<Startup>("Export_", args, useWebDefaults, (host, c) =>
                 {
-                    var logConfig = new LoggerConfiguration();
-                    logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
-                    logConfig.WriteTo.Console(LogEventLevel.Debug,
-                        "[{Timestamp:HH:mm:ss} {Level:u3}] {workerId} {tenantName} #{jobId} {Message:lj}{NewLine}{Exception}");
-                    logConfig.Destructure.ByMaskingProperties("Password", "ArchivePassword");
-
-                    ConfigureSerilog(logConfig, hosting.Configuration);
-
-                    Log.Logger = logConfig.CreateLogger();
-
-                    if (!hosting.HostingEnvironment.IsDevelopment())
-                    {
-                        logging.ClearProviders();
-                    }
-                })
-                .ConfigureWebHostDefaults(web =>
-                {
-                    if (!args.Contains("--kestrel"))
-                    {
-                        web.UseHttpSys();
-                    }
-
-                    web.UseStartup<Startup>();
-                    web.ConfigureAppConfiguration(c =>
-                    {
-                        c.AddIniFile("appsettings.ini", false, true);
-                        c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
-                        c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
-
-                        c.AddJsonFile($"appsettings.Cloud.json", true);
-                        c.AddIniFile($"appsettings.Cloud.ini", true);
-
-                        c.AddJsonFile($"appsettings.Production.json", true);
-                        c.AddIniFile($"appsettings.Production.ini", true);
-
-                        c.AddCommandLine(args);
-                    });
-
-                    web.UseSerilog();
+                    c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                    c.AddJsonFile($"appsettings.Cloud.json", true);
+                    c.AddJsonFile($"appsettings.Production.json", true);
                 });
         }
     }

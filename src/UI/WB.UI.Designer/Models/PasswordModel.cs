@@ -9,11 +9,11 @@ namespace WB.UI.Designer.Models
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password", Order = 3)]
         [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "The_password_and_confirmation_password_do_not_match")]
-        public string ConfirmPassword { get; set; }
+        public string? ConfirmPassword { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_required")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Order = 2)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }

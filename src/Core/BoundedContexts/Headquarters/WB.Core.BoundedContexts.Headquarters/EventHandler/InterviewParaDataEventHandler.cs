@@ -578,7 +578,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var cachedUserDocument = this.handlerCache.GetOrCreate($"Users:{originatorId}", entry =>
             {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(10);
+                entry.SlidingExpiration = TimeSpan.FromMinutes(2);
                 return this.userReader.GetUser(originatorId);
             });
 

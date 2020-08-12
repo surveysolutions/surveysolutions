@@ -34,8 +34,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public ImportCategoricalOptionsResult ImportOptions(Stream file, string questionnaireId, Guid categoricalQuestionId)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            if (document == null)
+                return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionnaireCantBeFound, questionnaireId));
+            
             var question = document?.Find<ICategoricalQuestion>(categoricalQuestionId);
-
             if (question == null)
                 return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
 
@@ -43,10 +45,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             
             var cfg = this.CreateCsvConfiguration();
 
-            var isCascadingQuestion = question.CascadeFromQuestionId.HasValue;
-            if (isCascadingQuestion)
+            if (question.CascadeFromQuestionId != null)
             {
-                var parentCascadingQuestion = document.Find<ICategoricalQuestion>(question.CascadeFromQuestionId.Value);
+                var parentCascadingQuestion = document!.Find<ICategoricalQuestion>(question.CascadeFromQuestionId.Value);
 
                 if (parentCascadingQuestion == null)
                     return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound,
@@ -110,11 +111,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var result = new Dictionary<string, (int value, int? parentValue)[]>();
 
-            ICategoricalQuestion cascadingQuestion = null;
+            ICategoricalQuestion? cascadingQuestion = null;
 
             while (parentQuestionId != null)
             {
                 cascadingQuestion = document.Find<ICategoricalQuestion>(parentQuestionId.Value);
+                if(cascadingQuestion == null)
+                    throw new InvalidOperationException($"Question was not found ({parentQuestionId}).");
 
                 result.Add(cascadingQuestion.VariableName,
                     cascadingQuestion.CategoriesId.HasValue
@@ -131,6 +134,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
             var question = document?.Find<IQuestion>(categoricalQuestionId);
+            if (question == null)
+                throw new InvalidOperationException(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
 
             var options = question.Answers?.Select(option => new QuestionnaireCategoricalOption
             {
@@ -168,50 +173,53 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private class CascadingOptionMap : CategoricalOptionMap
         {
             public CascadingOptionMap(): this(null, null) { }
-            public CascadingOptionMap(Dictionary<string, (int value, int? parentValue)[]> allValuesByAllParents, List<QuestionnaireCategoricalOption> allImportedOptions)
+            public CascadingOptionMap(Dictionary<string, (int value, int? parentValue)[]>? allValuesByAllParents, List<QuestionnaireCategoricalOption>? allImportedOptions)
             {
                 var values = allValuesByAllParents?.Values?.FirstOrDefault()?.Select(x => x.value);
-
                 var nearestParentValues = values == null ? new HashSet<int>() : new HashSet<int>(values);
 
                 Map(m => m.ParentValue).Index(2).TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(nearestParentValues));
+                
                 Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>
-                {
-                    if (!x.TryGetField(1, out string title) || !x.TryGetField(2, out int? parentValue) || !parentValue.HasValue) return null;
+                  {
+                      if (!x.TryGetField(1, out string title) || !x.TryGetField(2, out int? parentValue) || !parentValue.HasValue) return null;
 
-                    if (allImportedOptions.Any(y => y.ParentValue == parentValue && y.Title == title))
-                        throw new CsvReaderException(x.Context.Row, 2,
-                            string.Format(ExceptionMessages.ImportOptions_DuplicateByTitleAndParentIds, title, parentValue));
+                      if (allImportedOptions.Any(y => y.ParentValue == parentValue && y.Title == title))
+                          throw new CsvReaderException(x.Context.Row, 2,
+                              string.Format(ExceptionMessages.ImportOptions_DuplicateByTitleAndParentIds, title, parentValue));
 
-                    if (!x.TryGetField(0, out int value)) return null;
+                      if (!x.TryGetField(0, out int value)) return null;
 
-                    var valueWithParentValues = new List<int> {value};
+                      var valueWithParentValues = new List<int> { value };
 
-                    foreach (var parentValues in allValuesByAllParents)
-                    {
-                        var parentValuesById = parentValues.Value.Where(y => y.value == parentValue).ToArray();
-                        if (parentValuesById.Length > 1)
-                        {
-                            throw new CsvReaderException(x.Context.Row, 2,
-                                string.Format(ExceptionMessages.ImportOptions_DuplicatedParentValues,
-                                    parentValues.Key, parentValuesById.Length, parentValue));
-                        }
+                      if (allValuesByAllParents != null)
+                      {
+                          foreach (var parentValues in allValuesByAllParents)
+                          {
+                              var parentValuesById = parentValues.Value.Where(y => y.value == parentValue).ToArray();
+                              if (parentValuesById.Length > 1)
+                              {
+                                  throw new CsvReaderException(x.Context.Row, 2,
+                                      string.Format(ExceptionMessages.ImportOptions_DuplicatedParentValues,
+                                          parentValues.Key, parentValuesById.Length, parentValue));
+                              }
 
-                        valueWithParentValues.Add(parentValue.Value);
+                              valueWithParentValues.Add(parentValue.Value);
 
-                        parentValue = parentValuesById.FirstOrDefault().parentValue;
+                              parentValue = parentValuesById.FirstOrDefault().parentValue;
 
-                        if (!parentValue.HasValue) break;
-                    }
+                              if (!parentValue.HasValue) break;
+                          }
+                      }
 
-                    if (allImportedOptions.Any(y => y.ValueWithParentValues.SequenceEqual(valueWithParentValues)))
-                        throw new CsvReaderException(x.Context.Row, 0, string.Format(ExceptionMessages.ImportOptions_ValueIsNotUnique, title, value));
+                      if (allImportedOptions.Any(y => y.ValueWithParentValues.SequenceEqual(valueWithParentValues)))
+                          throw new CsvReaderException(x.Context.Row, 0, string.Format(ExceptionMessages.ImportOptions_ValueIsNotUnique, title, value));
 
-                    return valueWithParentValues.ToArray();
-                });
+                      return valueWithParentValues.ToArray();
+                  });
             }
 
-            private class ConvertToInt32AndCheckParentOptionValueOrThrow : ConvertToInt32OrThrow
+            private class ConvertToInt32AndCheckParentOptionValueOrThrow : ConvertToInt32OrThrowConverter
             {
                 private readonly HashSet<int> cascadingParentValues;
 
@@ -238,11 +246,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             public CategoricalOptionMap()
             {
-                Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrow>();
-                Map(m => m.Title).Index(1).TypeConverter<ValidateTitleOrThrow>();
+                Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrowConverter>();
+                Map(m => m.Title).Index(1).TypeConverter<ValidateTitleOrThrowConverter>();
             }
 
-            private class ValidateTitleOrThrow : DefaultTypeConverter
+            private class ValidateTitleOrThrowConverter : DefaultTypeConverter
             {
                 public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
                 {
@@ -257,7 +265,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
 
-            protected class ConvertToInt32OrThrow : DefaultTypeConverter
+            protected class ConvertToInt32OrThrowConverter : DefaultTypeConverter
             {
                 public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
                 {

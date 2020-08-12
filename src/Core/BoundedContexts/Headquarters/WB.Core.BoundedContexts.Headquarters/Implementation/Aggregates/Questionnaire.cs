@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,8 +29,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
         private readonly IReusableCategoriesStorage categoriesStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
 
         private Guid Id { get; set; }
 
@@ -39,7 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations,
-            IReusableCategoriesStorage categoriesStorage)
+            IReusableCategoriesStorage categoriesStorage,
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
@@ -47,6 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
             this.categoriesStorage = categoriesStorage;
+            this.pdfStorage = pdfStorage;
+            this.questionnaireBackupStorage = questionnaireBackupStorage;
         }
 
         public void SetId(Guid id) => this.Id = id;
@@ -68,7 +75,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 isSupportAssignments: true,
                 isSupportExportVariables: true,
                 comment: command.Comment,
-                userId: command.CreatedBy);
+                userId: command.CreatedBy, 
+                false);
         }
 
         public void CloneQuestionnaire(CloneQuestionnaire command)
@@ -86,8 +94,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             sourceQuestionnaireClone.Title = command.NewTitle;
 
             CloneTranslations(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
-            CloneCategories(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion,
-                command.NewQuestionnaireVersion);
+            CloneCategories(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
+            ClonePdfs(sourceQuestionnaireClone, sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
+            CloneQuestionnaireBackup(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
                 sourceQuestionnaireClone,
@@ -98,7 +107,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 questionnaireBrowseItem.AllowAssignments,
                 questionnaireBrowseItem.AllowExportVariables,
                 comment: command.Comment,
-                userId: command.UserId);
+                userId: command.UserId,
+                questionnaireBrowseItem.IsAudioRecordingEnabled);
+        }
+
+        private void CloneQuestionnaireBackup(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, sourceQuestionnaireVersion);
+            var clonedQuestionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, newQuestionnaireVersion);
+
+            var backup = this.questionnaireBackupStorage.GetById(questionnaireIdentity.ToString());
+            if (backup != null)
+            {
+                this.questionnaireBackupStorage.Store(backup, clonedQuestionnaireIdentity.ToString());
+            }
+        }
+
+        private void ClonePdfs(QuestionnaireDocument questionnaire, Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, sourceQuestionnaireVersion);
+            var clonnedQuestionnaireIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, newQuestionnaireVersion);
+
+            var mainPdfFile = this.pdfStorage.HasNotEmptyValue(questionnaireIdentity.ToString());
+            if (mainPdfFile)
+            {
+                var pdf = this.pdfStorage.GetById(questionnaireIdentity.ToString());
+                if(pdf!= null)
+                    this.pdfStorage.Store(pdf, clonnedQuestionnaireIdentity.ToString());
+            }
+
+            foreach (var translation in questionnaire.Translations)
+            {
+                if (this.pdfStorage.HasNotEmptyValue($"{translation.Id:N}_{questionnaireIdentity}"))
+                {
+                    var pdf = this.pdfStorage.GetById($"{translation.Id:N}_{questionnaireIdentity}");
+                    if (pdf != null)
+                        this.pdfStorage.Store(pdf, $"{translation.Id:N}_{clonnedQuestionnaireIdentity}");
+                }
+            }
         }
 
         private void CloneCategories(Guid sourceQuestionnaireId, long sourceQuestionnaireVersion, long newQuestionnaireVersion) =>
@@ -132,9 +178,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             long questionnaireContentVersion,
             long questionnaireVersion,
             bool isSupportAssignments,
-            bool isSupportExportVariables, 
+            bool isSupportExportVariables,
             string comment,
-            Guid userId)
+            Guid userId,
+            bool isAudioRecordingEnabled)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -146,7 +193,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus,
-                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, userId),
+                    questionnaireContentVersion, isSupportAssignments, isSupportExportVariables, comment, userId)
+                {
+                    IsAudioRecordingEnabled = isAudioRecordingEnabled
+                },
                 projectionId);
         }
 

@@ -40,10 +40,8 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                 true, schemaName: new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
             UnitOfWork = NewUnitOfWork();
-            cumulativeReportStatusChangeStorage = new PostgreReadSideStorage<CumulativeReportStatusChange>(
-                UnitOfWork, 
-                Mock.Of<ILogger>(), 
-                Mock.Of<IServiceLocator>());
+            cumulativeReportStatusChangeStorage =
+                IntegrationCreate.PostgresReadSideRepository<CumulativeReportStatusChange>(UnitOfWork);
             
             var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
             

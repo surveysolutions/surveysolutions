@@ -193,7 +193,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 else if (ex.Call.Response != null)
                 {
                     var reasonPhrase = GetReasonPhrase(ex);
-                    throw new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                    var restException = new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+
+                    if (ex.Call.Response.Headers.Contains("version"))
+                        restException.Data["target-version"] = ex.Call.Response.Headers.GetValues("version").FirstOrDefault();
+                    
+                    throw restException;
                 }
                 else
                 {
@@ -218,7 +223,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        private string GetReasonPhrase(ExtendedMessageHandlerException ex)
+        private T GetReasonObject<T>(ExtendedMessageHandlerException ex) where T: class
         {
             try
             {
@@ -226,11 +231,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 var responseContent = responseMessage.Content.ReadAsByteArrayAsync().Result;
                 var restContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
                 var decompressedContent = DecompressedContentFromHttpResponseMessage(restContentCompressionType, responseContent);
-                var jsonFromHttpResponseMessage = this.synchronizationSerializer.Deserialize<ResponseWithErrorMessage>(decompressedContent);
-                if (jsonFromHttpResponseMessage != null)
-                    return jsonFromHttpResponseMessage.Message;
+                return this.synchronizationSerializer.Deserialize<T>(decompressedContent);
             }
-            catch { } // if cant get message from response
+            catch
+            {
+                return null;
+            } 
+        }
+        
+        private string GetReasonPhrase(ExtendedMessageHandlerException ex)
+        {
+            var reasonObject = GetReasonObject<ResponseWithErrorMessage>(ex);
+            if (reasonObject != null)
+                return reasonObject.Message;
 
             return ex.Call.Response.ReasonPhrase;
         }

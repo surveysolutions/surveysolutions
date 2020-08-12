@@ -79,11 +79,7 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 var content = await webTesterApi.GetAttachmentContentAsync(designerToken.ToString(), documentAttachment.ContentId);
                 
-                attachments.Add(new QuestionnaireAttachment
-                {
-                    Id = documentAttachment.AttachmentId,
-                    Content = content
-                });
+                attachments.Add(new QuestionnaireAttachment(documentAttachment.AttachmentId, content));
             }
 
             var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
@@ -94,7 +90,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 foreach (var attachment in attachments)
                 {
-                    this.attachmentsStorage.Store(attachment,attachment.Content.Id, designerToken);
+                    this.attachmentsStorage.Store(attachment, attachment.Content.Id, designerToken);
                 }
                 
                 this.categoriesManagementService.RemoveCategories(questionnaireIdentity);

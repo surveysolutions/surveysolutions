@@ -22,7 +22,21 @@
 </template>
 
 <script>
-import {map, join} from 'lodash'
+import {map, join, uniqBy, filter, some, orderBy} from 'lodash'
+import * as toastr from 'toastr'
+import gql from 'graphql-tag'
+const query = gql`query UserMaps {
+  maps {
+    totalCount,
+    filteredCount,
+    nodes {
+      fileName
+      users {
+          userName
+      }
+    }
+  }
+}`
 
 export default {
     data: function() {
@@ -86,9 +100,9 @@ export default {
                                     '<a href=\'' +
                                     self.$hq.basePath +
                                     'Maps/Details?mapname=' +
-                                    encodeURIComponent(map) +
+                                    encodeURIComponent(map.fileName) +
                                     '\'>' +
-                                    map +
+                                    map.fileName +
                                     '</a>'
                                 )
                             })
@@ -97,9 +111,74 @@ export default {
                         },
                     },
                 ],
-                ajax: {
-                    url: this.$config.model.dataUrl,
-                    type: 'GET',
+                ajax (data, callback, settings) {
+                    const order = {}
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
+
+                    order[column.data] = order_col.dir.toUpperCase()
+
+                    const variables = {
+                    }
+
+                    const where = {
+                        AND: [],
+                    }
+
+                    const search = data.search.value
+
+                    if(search && search != '') {
+                        where.AND.push({ OR: [
+                            {fileName_starts_with: search.toLowerCase() },
+                            {
+                                users_some:
+                                {
+                                    userName_starts_with: search.toLowerCase(),
+                                }}],
+                        })
+                    }
+
+                    if(where.AND.length > 0) {
+                        variables.where = where
+                    }
+
+                    self.$apollo.query({
+                        query,
+                        variables: variables,
+                        fetchPolicy: 'network-only',
+                    }).then(response => {
+                        const nodes = response.data.maps.nodes
+
+                        const interviewers = uniqBy(map(nodes, 'users').flat(), 'userName')
+                        const sortedInterviewers = orderBy(interviewers, [column.data], [order_col.dir])
+
+                        const rows = map(sortedInterviewers, function(inter){
+                            return {
+                                userName: inter.userName,
+                                maps: filter(nodes, function(map){
+                                    return some(map.users, { userName: inter.userName})
+                                }),
+                            }
+                        })
+
+                        self.totalRows = interviewers.length
+                        self.filteredCount = interviewers.length
+                        callback({
+                            recordsTotal: self.totalRows,
+                            recordsFiltered: self.filteredCount,
+                            draw: ++this.draw,
+                            data: rows,
+                        })
+                    }).catch(err => {
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                            error: err.toString(),
+                        })
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 },
                 responsive: false,
                 order: [[0, 'asc']],

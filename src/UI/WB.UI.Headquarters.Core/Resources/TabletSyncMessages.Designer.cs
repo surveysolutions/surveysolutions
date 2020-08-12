@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible with server one. Update your Interviewer app.
+        ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible, please update your Interviewer app..
         /// </summary>
         public static string InterviewerApplicationShouldBeUpdated {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible with server one. Uninstall your application and download new version of Interviewer app.
+        ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible. Uninstall your application and download new version of Interviewer app.
         /// </summary>
         public static string InterviewerIsNotCompatibleWithThisVersion {
             get {

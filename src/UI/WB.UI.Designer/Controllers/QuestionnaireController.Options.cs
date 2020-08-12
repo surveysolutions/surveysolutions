@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Controllers
         #region [Edit options]
         private const string OptionsSessionParameterName = "options";
 
-        public EditOptionsViewModel questionWithOptionsViewModel
+        public EditOptionsViewModel? questionWithOptionsViewModel
         {
             get
             {
@@ -48,8 +48,12 @@ namespace WB.UI.Designer.Controllers
         public IActionResult EditOptions(QuestionnaireRevision id, Guid questionId, bool? isCascading = false)
         {
             this.SetupViewModel(id, questionId, isCascading ?? false);
+            if (this.questionWithOptionsViewModel == null)
+                return NotFound();
+            
             return this.View("EditOptions", this.questionWithOptionsViewModel);
         }
+
         public IActionResult EditCascadingOptions(QuestionnaireRevision id, Guid questionId)
             => this.EditOptions(id, questionId, true);
         
@@ -59,34 +63,50 @@ namespace WB.UI.Designer.Controllers
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
-            var options = editQuestionView?.Options.Select(
+            var options = editQuestionView != null 
+                ? editQuestionView.Options.Select(
                               option => new QuestionnaireCategoricalOption
                               {
-                                  Value = (int)option.Value,
-                                  ParentValue = (int?)option.ParentValue,
+                                  Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
+                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?) null,
                                   Title = option.Title
-                              }) ??
-                          new QuestionnaireCategoricalOption[0];
+                              }) 
+                : new QuestionnaireCategoricalOption[0];
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel
-            {
-                QuestionnaireId = id.QuestionnaireId.FormatGuid(),
-                QuestionId = questionId,
-                QuestionTitle = editQuestionView.Title,
-                Options = options.ToArray(),
-                IsCascading = isCascading
-            };
+            (
+                questionnaireId : id.QuestionnaireId.FormatGuid(),
+                questionId : questionId,
+                questionTitle : editQuestionView?.Title,
+                options : options.ToArray(),
+                isCascading : isCascading
+            );
         }
 
         public IActionResult ResetOptions()
         {
-            this.SetupViewModel(
-                new QuestionnaireRevision(this.questionWithOptionsViewModel.QuestionnaireId),
-                this.questionWithOptionsViewModel.QuestionId,
-                this.questionWithOptionsViewModel.IsCascading);
+            if (this.questionWithOptionsViewModel == null)
+                return NotFound();
 
-            return this.Ok();
-            
+            return RedirectToAction("EditOptions",
+                new
+                {
+                    id = this.questionWithOptionsViewModel.QuestionnaireId,
+                    questionId = this.questionWithOptionsViewModel.QuestionId
+                });
+        }
+
+        public IActionResult ResetCascadingOptions()
+        {
+            if (this.questionWithOptionsViewModel == null)
+                return NotFound();
+
+            return RedirectToAction("EditCascadingOptions",
+                new
+                {
+                    id = this.questionWithOptionsViewModel.QuestionnaireId,
+                    questionId = this.questionWithOptionsViewModel.QuestionId
+                });
         }
 
         [HttpPost]
@@ -95,37 +115,56 @@ namespace WB.UI.Designer.Controllers
             List<string> errors = new List<string>();
             
             var withOptionsViewModel = this.questionWithOptionsViewModel;
-            if (csvFile == null)
-                errors.Add(Resources.QuestionnaireController.SelectTabFile);
-            else
+            if (withOptionsViewModel == null)
             {
-                try
-                {
-                    var importResult = this.categoricalOptionsImportService.ImportOptions(
-                        csvFile.OpenReadStream(),
-                        withOptionsViewModel.QuestionnaireId,
-                        withOptionsViewModel.QuestionId);
-
-                    if (importResult.Succeeded)
-                        withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
-                    else
-                        errors.AddRange(importResult.Errors);
-                }
-                catch (Exception e)
-                {
-                    errors.Add(Resources.QuestionnaireController.TabFilesOnly);
-                    this.logger.LogError(e, e.Message);
-                }
+                this.Error(Resources.QuestionnaireController.Error);
+                return this.View(questionWithOptionsViewModel);
             }
 
-            this.questionWithOptionsViewModel = withOptionsViewModel;
+            if (csvFile == null)
+            {
+                this.Error(Resources.QuestionnaireController.SelectTabFile);
+                return this.View(questionWithOptionsViewModel);
+            }
 
-            return this.Json(errors);
+            try
+            {
+                var importResult = this.categoricalOptionsImportService.ImportOptions(
+                    csvFile.OpenReadStream(),
+                    withOptionsViewModel.QuestionnaireId,
+                    withOptionsViewModel.QuestionId);
+
+                if (importResult.Succeeded)
+                {
+                    withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
+                }
+                else
+                {
+                    foreach (var importError in importResult.Errors)
+                        this.Error(importError, true);
+                }
+
+                this.questionWithOptionsViewModel = withOptionsViewModel;
+            }
+            catch (Exception e)
+            {
+                this.Error(Resources.QuestionnaireController.TabFilesOnly);
+                this.logger.LogError(e, e.Message);
+            }
+
+            return this.View(questionWithOptionsViewModel);
         }
+
+        [HttpPost]
+        public IActionResult EditCascadingOptions(IFormFile csvFile)
+            => this.EditOptions(csvFile);
 
         [HttpPost]
         public async Task<IActionResult> ApplyOptions()
         {
+            if (this.questionWithOptionsViewModel == null)
+                return Json(GetNotFoundResponseObject());
+
             var questionnaireCategoricalOptions = this.questionWithOptionsViewModel.Options.ToArray();
 
             var command = this.questionWithOptionsViewModel.IsCascading
@@ -144,6 +183,33 @@ namespace WB.UI.Designer.Controllers
 
             return Json(commandResult);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyCascadingOptions()
+        {
+            if (this.questionWithOptionsViewModel == null)
+                return Json(GetNotFoundResponseObject());
+
+            var commandResult = await this.ExecuteCommand(
+                new UpdateCascadingComboboxOptions(
+                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                        this.questionWithOptionsViewModel.QuestionId,
+                        this.User.GetId(),
+                        this.questionWithOptionsViewModel.Options.ToArray()));
+
+            return Json(commandResult);
+        }
+
+        private object GetNotFoundResponseObject()
+        {
+            dynamic commandResult = new ExpandoObject();
+            commandResult.IsSuccess = false;
+            commandResult.Error = "Not Found";
+
+            return commandResult;
+        }
+
+
 
         private async Task<object> ExecuteCommand(QuestionCommand command)
         {
@@ -173,11 +239,17 @@ namespace WB.UI.Designer.Controllers
         public IActionResult ExportLookupTable(Guid id, Guid lookupTableId)
         {
             var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            if (lookupTableContentFile == null)
+                return NotFound();
+
             return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
         public IActionResult ExportOptions()
         {
+            if (this.questionWithOptionsViewModel == null)
+                return NotFound();
+
             var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
             var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
 
@@ -188,10 +260,19 @@ namespace WB.UI.Designer.Controllers
 
         public class EditOptionsViewModel
         {
+            public EditOptionsViewModel(string questionnaireId, Guid questionId, QuestionnaireCategoricalOption[]? options = null, string? questionTitle = null, bool? isCascading = null)
+            {
+                QuestionnaireId = questionnaireId;
+                QuestionId = questionId;
+                Options = options ?? new QuestionnaireCategoricalOption[0];
+                QuestionTitle = questionTitle;
+                IsCascading = isCascading ?? false;
+            }
+
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
             public QuestionnaireCategoricalOption[] Options { get; set; }
-            public string QuestionTitle { get; set; }
+            public string? QuestionTitle { get; set; }
             public bool IsCascading { get; set; }
         }
 

@@ -8,7 +8,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     /// Marker interface to find Event handlers
     /// </summary>
     /// <typeparam name="TEvent"></typeparam>
-    public interface IEventHandler<TEvent> where TEvent : IEvent
+    public interface IEventHandler<TEvent> where TEvent : class, IEvent
     {
         [Handler]
         void Handle(PublishedEvent<TEvent> @event);
@@ -18,7 +18,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     /// Marker interface to find Event handlers
     /// </summary>
     /// <typeparam name="TEvent"></typeparam>
-    public interface IAsyncEventHandler<TEvent> where TEvent : IEvent
+    public interface IAsyncEventHandler<TEvent> where TEvent : class, IEvent
     {
         [Handler]
         Task Handle(PublishedEvent<TEvent> @event, CancellationToken cancellationToken = default);

@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.Property(e => e.Index).HasColumnName("index");
 
-            builder.Property(e => e.Parent).HasColumnName("parent");
+            builder.Property(e => e.Parent).HasColumnName("parent").IsRequired(false);
 
             builder.Property(e => e.Title)
                 .IsRequired()

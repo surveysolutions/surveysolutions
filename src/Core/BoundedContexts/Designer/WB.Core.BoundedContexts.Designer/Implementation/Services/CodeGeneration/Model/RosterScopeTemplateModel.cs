@@ -42,13 +42,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; }
 
-        public IEnumerable<HierarchyReferenceModel> AllParentsQuestionsToTop  { set; get; }
+        public IEnumerable<HierarchyReferenceModel> AllParentsQuestionsToTop  { set; get; } = new HierarchyReferenceModel[0];
 
-        public IEnumerable<HierarchyReferenceModel> AllParentsVariablesToTop { set; get; }
+        public IEnumerable<HierarchyReferenceModel> AllParentsVariablesToTop { set; get; } = new HierarchyReferenceModel[0];
 
-        public IEnumerable<HierarchyReferenceModel> AllParentsRostersToTop { set; get; }
+        public IEnumerable<HierarchyReferenceModel> AllParentsRostersToTop { set; get; } = new HierarchyReferenceModel[0];
 
-        public string ParentTypeName { set; get; }
+        public string? ParentTypeName { set; get; }
 
         public List<RosterTemplateModel> RostersInScope { set; get; }
 
@@ -56,6 +56,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<string> LinkedQuestionsIdNames { get; }
 
-        public string IdName => RostersInScope.FirstOrDefault()?.IdName;
+        public string? IdName => RostersInScope.FirstOrDefault()?.IdName;
     }
 }

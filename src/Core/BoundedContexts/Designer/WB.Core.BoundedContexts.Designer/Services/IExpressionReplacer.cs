@@ -28,6 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         /// Decode expression with stata captions instead of public keys
         /// </param>
         /// <returns></returns>
-        string ReplaceGuidsWithStataCaptions(string expression, Guid questionnaireKey);
+        string? ReplaceGuidsWithStataCaptions(string expression, Guid questionnaireKey);
     }
 }

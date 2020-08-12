@@ -25,13 +25,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
            questionnaire.Macros.ContainsKey(entityId).Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_add_macro_with_empty_name () =>
-           questionnaire.Macros[entityId].Name.Should().BeNull();
+           questionnaire.Macros[entityId].Name.Should().BeEmpty();
 
         [NUnit.Framework.Test] public void should_add_macro_with_empty_content () =>
-           questionnaire.Macros[entityId].Content.Should().BeNull();
+           questionnaire.Macros[entityId].Content.Should().BeEmpty();
 
         [NUnit.Framework.Test] public void should_add_macro_with_empty_description () =>
-           questionnaire.Macros[entityId].Description.Should().BeNull();
+           questionnaire.Macros[entityId].Description.Should().BeEmpty();
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

@@ -27,20 +27,40 @@ namespace Ncqrs.Tests.Domain
         public class UnhandledEvent : IEvent
         { }
 
+        public class MyAggregateRootOverride : MyAggregateRoot
+        {
+            public long NewApply = 0;
+            
+            public MyAggregateRootOverride()
+            {
+                
+            }
+
+            public MyAggregateRootOverride(Guid id) :base(id)
+            {
+                
+            }
+
+            protected new void Apply(HandledEvent e)
+            {
+                NewApply += 1;
+            } 
+        }
+        
         public class MyAggregateRoot : EventSourcedAggregateRoot
         {
-            private readonly List<UncommittedEvent> _uncomittedEvents = new List<UncommittedEvent>();
-            public int FooEventHandlerInvokeCount = 0;
+            public MyAggregateRoot(Guid id) : base(id)
+            {
+                
+            }
 
             public MyAggregateRoot()
             {
-                RegisterHandler(new TypeThresholdedActionBasedDomainEventHandler(OnFoo, typeof(HandledEvent), "", false));
+                
             }
-
-            public MyAggregateRoot(Guid id) : base(id)
-            {
-                RegisterHandler(new TypeThresholdedActionBasedDomainEventHandler(OnFoo, typeof(HandledEvent), "", false));
-            }
+            
+            private readonly List<UncommittedEvent> _uncomittedEvents = new List<UncommittedEvent>();
+            public int FooEventHandlerInvokeCount = 0;
 
             public void MethodThatCausesAnEventThatHasAHandler()
             {
@@ -54,7 +74,7 @@ namespace Ncqrs.Tests.Domain
                 ApplyEvent(e);
             }
 
-            private void OnFoo(object e)
+            protected void Apply(HandledEvent e)
             {
                 FooEventHandlerInvokeCount++;
             }
@@ -128,8 +148,17 @@ namespace Ncqrs.Tests.Domain
             theAggregate.InitializeFromHistory(aggId, stream);
 
             theAggregate.FooEventHandlerInvokeCount.Should().Be(3);
-        }                
+        }
 
+        [Test]
+        public void should_apply_new_override_methods()
+        {
+            var agg = new MyAggregateRootOverride();
+            agg.ApplyEvent(new HandledEvent());
+
+            Assert.That(agg.NewApply, Is.EqualTo(1));
+        }
+        
         [Test]
         public void Accepting_the_changes_should_set_the_initial_version_to_the_new_version()
         {

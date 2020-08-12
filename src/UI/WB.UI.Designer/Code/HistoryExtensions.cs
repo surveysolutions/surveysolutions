@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Code
                             case QuestionnaireItemType.Questionnaire:
                             case QuestionnaireItemType.Person:
                             case QuestionnaireItemType.Metadata:
-                                text = string.Format(QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}"), recordLink);
+                                text = string.Format(QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}") ?? string.Empty, recordLink);
                                 break;
                         }
                     }
@@ -102,11 +102,12 @@ namespace WB.UI.Designer.Code
                     break;
                 case QuestionnaireActionType.ImportToHq:
                 {
-                    var siteHost = record.TargetNewTitle ?? record.TargetTitle;
                     
-                    var indexOfOurDomain = siteHost?.IndexOf(".mysurvey.solutions");
+                    string siteHost = (record.TargetNewTitle ?? record.TargetTitle) ?? String.Empty;
+
+                    var indexOfOurDomain = siteHost.IndexOf(".mysurvey.solutions");
                     siteHost = indexOfOurDomain > 0
-                        ? siteHost.Substring(0, indexOfOurDomain.Value)
+                        ? siteHost.Substring(0, indexOfOurDomain)
                         : siteHost;
 
                     if(record.HqVersion != null)
@@ -132,7 +133,7 @@ namespace WB.UI.Designer.Code
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
             var targetType = historicalRecordReference?.Type.ToString() ?? "Section";
             return string.Format(
-                QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}_To_{targetType}"),
+                QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}_To_{targetType}") ?? string.Empty,
                 recordLink,
                 historicalRecordReference == null ? HtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
@@ -141,7 +142,7 @@ namespace WB.UI.Designer.Code
                     historicalRecordReference.Type));
         }
 
-        private static string GetResource(QuestionnaireItemType itemType, QuestionnaireActionType actionType) =>
+        private static string? GetResource(QuestionnaireItemType itemType, QuestionnaireActionType actionType) =>
             QuestionnaireHistoryResources.ResourceManager.GetString($"{itemType}_{actionType}");
 
         private static string  ToCloneMessage(IHtmlHelper helper, IUrlHelper urlHelper, Guid questionnaireId,
@@ -150,7 +151,7 @@ namespace WB.UI.Designer.Code
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
 
             return string.Format(
-                GetResource(record.TargetType, record.ActionType),
+                GetResource(record.TargetType, record.ActionType) ?? string.Empty,
                 recordLink,
                 historicalRecordReference == null ? HtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
@@ -169,7 +170,7 @@ namespace WB.UI.Designer.Code
         }
 
         private static HtmlString BuildQuestionnaireItemLink(IHtmlHelper helper, IUrlHelper urlHelper,
-            Guid questionnaireId, Guid itemId, Guid? chapterId, string title, bool isExist, QuestionnaireItemType type)
+            Guid questionnaireId, Guid itemId, Guid? chapterId, string? title, bool isExist, QuestionnaireItemType type)
         {
             title = title?.Replace("Empty macro added", "")?.Replace("Empty lookup table added", "");
 

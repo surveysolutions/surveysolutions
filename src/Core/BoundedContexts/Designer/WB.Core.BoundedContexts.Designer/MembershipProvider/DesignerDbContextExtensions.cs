@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public static class DesignerDbContextExtensions
     {
-        public static DesignerIdentityUser FindByNameOrEmail(this DbSet<DesignerIdentityUser> users, string nameOrEmail)
+        public static DesignerIdentityUser? FindByNameOrEmail(this DbSet<DesignerIdentityUser> users, string nameOrEmail)
         {
             if (string.IsNullOrWhiteSpace(nameOrEmail)) return null;
 
@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             return result;
         }
 
-        public static async Task<DesignerIdentityUser> FindByNameOrEmailAsync(this UserManager<DesignerIdentityUser> users, string nameOrEmail)
+        public static async Task<DesignerIdentityUser?> FindByNameOrEmailAsync(this UserManager<DesignerIdentityUser> users, string? nameOrEmail)
         {
             if (string.IsNullOrWhiteSpace(nameOrEmail)) return null;
 

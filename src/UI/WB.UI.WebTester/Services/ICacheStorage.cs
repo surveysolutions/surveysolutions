@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace WB.UI.WebTester.Services
 {
-    public interface ICacheStorage<TEntity, in TKey> where TEntity: class
+    public interface ICacheStorage<TEntity, in TKey> where TKey: notnull where TEntity : class 
     {
-        TEntity Get(TKey id, Guid area = default(Guid));
+        TEntity? Get(TKey id, Guid area = default(Guid));
 
         IEnumerable<TEntity> GetArea(Guid area);
 

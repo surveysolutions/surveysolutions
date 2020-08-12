@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Unidecode.NET;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
@@ -9,7 +11,7 @@ using WB.Services.Export.Questionnaire.Services;
 
 namespace WB.Services.Export.Services.Processing
 {
-    internal class ExportExportFileNameService : IExportFileNameService
+    public class ExportExportFileNameService : IExportFileNameService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -30,7 +32,11 @@ namespace WB.Services.Export.Services.Processing
         public async Task<string> GetQuestionnaireDirectoryName(ExportSettings settings, CancellationToken cancellationToken)
         {
             var questionnaireId = settings.QuestionnaireId;
-            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, cancellationToken);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
+
+            if (questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
+
             var variableName = questionnaire.VariableName ?? questionnaire.Id;
 
             if (TryParseQuestionnaireVersion(questionnaireId, out var version))
@@ -51,11 +57,11 @@ namespace WB.Services.Export.Services.Processing
                 return true;
             }
 
-            version = null;
+            version = string.Empty;
             return false;
         }
 
-        public string GetFileNameForExportArchive(ExportSettings exportSettings, string withQuestionnaireName = null)
+        public async Task<string> GetFileNameForExportArchiveAsync(ExportSettings exportSettings, string? questionnaireNamePrefixOverride = null)
         {
             var statusSuffix = exportSettings.Status == null ? "All" : exportSettings.Status.ToString();
 
@@ -64,8 +70,21 @@ namespace WB.Services.Export.Services.Processing
             var toDatePrefix = exportSettings.ToDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
                 ? "" : $"_{exportSettings.ToDate.Value:yyyyMMddTHHmm}Z";
 
-            var archiveName = $"{withQuestionnaireName ?? exportSettings.QuestionnaireId.ToString()}_" +
-                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}.zip";
+            string translationName = string.Empty;
+            if (exportSettings.Translation.HasValue)
+            {
+                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(exportSettings.QuestionnaireId,
+                        exportSettings.Translation);
+                if (questionnaire == null)
+                    throw new InvalidOperationException("questionnaire must be not null.");
+                var translation = questionnaire.Translations.First(x => x.Id == exportSettings.Translation);
+                translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
+            }
+
+            string metaSuffix = exportSettings.IncludeMeta != false ? "" : "no-meta";
+
+            var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
+                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
 
             return archiveName;
         }

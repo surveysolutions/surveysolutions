@@ -30,6 +30,7 @@ namespace WB.UI.Headquarters.Models
         public string Comment { get; set; }
         
         public string Variable { get; set; }
+        public bool IsObserving { get; set; }
 
         public class User
         {

@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class KindOfDataItem
     {
+        public KindOfDataItem(string code, string title)
+        {
+            Code = code;
+            Title = title;
+        }
+
         public string Code { get; set; }
         public string Title { get; set; }
     }
@@ -15,10 +20,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public static List<KindOfDataItem> GetKindOfDataItems()
         {
             var codes = GetKindOfDataCodes();
-            return codes.Select(code => new KindOfDataItem()
+            return codes.Select(code =>
             {
-                Code = code,
-                Title = GetKindOfDataTitleByCode(code)
+                var item = new KindOfDataItem(code, GetKindOfDataTitleByCode(code));
+                return item;
             }).ToList();
         }
 

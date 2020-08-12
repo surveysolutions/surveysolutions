@@ -29,17 +29,17 @@ namespace WB.Services.Export.Tests.Ddi
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string[]>())).Returns<string[]>(Path.Combine);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructureFactory = new Mock<IQuestionnaireExportStructureFactory>();
             questionnaireExportStructureFactory.Setup(x =>
                     x.CreateQuestionnaireExportStructure(It.IsAny<QuestionnaireDocument>()))
-                .Returns(new QuestionnaireExportStructure());
+                .Returns(new QuestionnaireExportStructure(questionnaireDocument.Id));
 
             questionnaireExportStructureFactory.Setup(x =>
-                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()))
-                .Returns(Task.FromResult(new QuestionnaireExportStructure()));
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(new QuestionnaireExportStructure(questionnaireDocument.Id)));
 
             return new DdiMetadataFactory(
                 fileSystemAccessor.Object,
@@ -50,13 +50,11 @@ namespace WB.Services.Export.Tests.Ddi
                 questionnaireExportStructureFactory.Object);
         }
 
-        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
+        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", 
+            string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
         {
-            return new HeaderStructureForLevel()
+            return new HeaderStructureForLevel(levelScopeVector ?? new ValueVector<Guid>(), "Id", levelName)
             {
-                LevelScopeVector = levelScopeVector ?? new ValueVector<Guid>(),
-                LevelName = levelName,
-                LevelIdColumnName = "Id",
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems =
@@ -87,7 +85,7 @@ namespace WB.Services.Export.Tests.Ddi
             return new LabelItem(caption, title);
         }
 
-        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
+        /*protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
         {
             var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
             if (levels != null && levels.Length > 0)
@@ -95,6 +93,6 @@ namespace WB.Services.Export.Tests.Ddi
                 header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
             }
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
-        }
+        }*/
     }
 }

@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewSummary : InterviewBrief
     {
         private string responsibleName;
+        private string supervisorName;
 
         public InterviewSummary()
         {
@@ -19,6 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.InterviewCommentedStatuses = new List<InterviewCommentedStatus>();
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
             this.Comments = new HashSet<InterviewComment>();
+            this.GpsAnswers = new HashSet<InterviewGps>();
         }
 
         public InterviewSummary(IQuestionnaire questionnaire) : this()
@@ -42,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 this.AnswersToFeaturedQuestions.Add(result);
             }
 
-            this.QuestionnaireVariable = questionnaire.VariableName;
+            this.QuestionnaireVariable = questionnaire.VariableName ?? string.Empty;
         }
 
         public override Guid InterviewId
@@ -77,7 +79,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public virtual Guid SupervisorId { get; set; }
-        public virtual string SupervisorName { get; set; }
+
+        public virtual string SupervisorName
+        {
+            get => supervisorName;
+            set
+            {
+                supervisorName = value;
+                SupervisorNameLowerCase = value?.ToLower();
+            }
+        }
+
         public virtual string SupervisorNameLowerCase { get; set; }
 
         public virtual UserRoles ResponsibleRole { get; set; }
@@ -88,7 +100,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
-        public virtual bool ReceivedByInterviewer { get; set; }
+        public virtual DateTime? ReceivedByInterviewerAtUtc { get; set; }
+        public virtual bool ReceivedByInterviewer => ReceivedByInterviewerAtUtc.HasValue;
         public virtual bool IsAssignedToInterviewer { get; set; }
 
         public virtual int? AssignmentId { get; set; }
@@ -114,6 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
+        public virtual ISet<InterviewGps> GpsAnswers { get; protected set; }
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
 
         public virtual ISet<InterviewComment> Comments { get; protected set; }
@@ -123,6 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasResolvedComments { get; set; }
         public virtual string ResponsibleNameLowerCase { get; protected set; }
         public virtual bool HasSmallSubstitutions { get; set; }
+        public virtual int? NotAnsweredCount { get; set; }
 
         public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
         {

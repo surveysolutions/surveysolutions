@@ -360,15 +360,16 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         {
             var questionnaireDocument = SetupQuestionnaireDocumentWithAllEntities();
 
-            ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == Mock.Of<TenantInfo>(ti => ti.Name == "tenant_name"));
-            IQuestionnaireStorage questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireAsync(It.IsAny<QuestionnaireId>(), It.IsAny<CancellationToken>()) == Task.FromResult(questionnaireDocument));
+            ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == new TenantInfo("http://test","","tenant_name"));
+            IQuestionnaireStorage questionnaireStorage = 
+                Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireAsync(It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>()) == Task.FromResult(questionnaireDocument));
             object value = questionnaireDocument.QuestionnaireId;
             IMemoryCache memoryCache = Mock.Of<IMemoryCache>(mc => mc.TryGetValue(It.IsAny<object>(), out value) == true);
             ILogger<InterviewDataDenormalizer> logger = Mock.Of<ILogger<InterviewDataDenormalizer>>();
             var interviewReference = Create.Entity.InterviewReference();
             IInterviewReferencesStorage interviewReferencesStorage = Mock.Of<IInterviewReferencesStorage>(r 
                 => r.FindAsync(It.IsAny<Guid>()) == new ValueTask<InterviewReference>(Task.FromResult(interviewReference)));
-            IInterviewDataExportBulkCommandBuilder commandBuilder = new InterviewDataExportBulkCommandBuilder();
+            IInterviewDataExportBulkCommandBuilder commandBuilder = new InterviewDataExportBulkCommandBuilder(new InterviewDataExportBulkCommandBuilderSettings());
             Mock<ICommandExecutor> commandExecutor = new Mock<ICommandExecutor>();
             commandExecutor.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<DbCommand>(), It.IsAny<CancellationToken>()))
                 .Returns<DbCommand, CancellationToken>((c, ct) => Task.CompletedTask)

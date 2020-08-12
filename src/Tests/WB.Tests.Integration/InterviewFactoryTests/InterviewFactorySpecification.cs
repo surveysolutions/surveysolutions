@@ -78,8 +78,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             this.UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
-            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-            this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            this.interviewSummaryRepository = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
+            this.questionnaireItemsRepository = IntegrationCreate.PostgresReadSideRepository<QuestionnaireCompositeItem, int>(UnitOfWork);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(),
@@ -113,8 +113,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void StoreInterviewSummary(InterviewSummary interviewSummary, QuestionnaireIdentity questionnaireIdentity)
         {
-            var interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork,
-                Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            var interviewSummaryRepository = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
             interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
             interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
 
@@ -123,7 +122,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected IQuestionnaireStorage PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
         {
-            var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            var questionnaireItemsRepositoryLocal = 
+                IntegrationCreate.PostgresReadSideRepository<QuestionnaireCompositeItem, int>(UnitOfWork);
 
             var reusableCategoriesFillerIntoQuestionnaire = new Mock<IReusableCategoriesFillerIntoQuestionnaire>();
             reusableCategoriesFillerIntoQuestionnaire

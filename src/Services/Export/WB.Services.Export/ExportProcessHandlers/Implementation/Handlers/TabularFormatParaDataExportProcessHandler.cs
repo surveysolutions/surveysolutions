@@ -49,6 +49,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 
             logger.LogInformation("Start paradata export for {settings}", settings);
             var api = this.tenantApi.For(settings.Tenant);
+            if(api == null) throw new InvalidOperationException("Api must be not null.");
+
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
                 settings.Status, settings.FromDate, settings.ToDate);
             
@@ -73,9 +75,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 
                 async Task QueryParadata(IEnumerable<InterviewToExport> interviews)
                 {
+                    if (api == null) throw new InvalidOperationException("Api must be not null.");
                     var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray());
                     logger.LogTrace("Query headquarters for interviews history. Got {historyItemsCount} items with {historyItemsSum} records",
                         historyItems.Count, historyItems.Sum(h => h.Records.Count));
+
+                    if (writer == null) throw new InvalidOperationException("Writer must be not null.");
 
                     foreach (InterviewHistoryView paradata in historyItems)
                     {
@@ -83,7 +88,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                     }
 
                     totalInterviewsProcessed += historyItems.Count;
-                    state.Progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
+                    state.Progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport!.Count));
                 }
 
                 var options = new BatchOptions

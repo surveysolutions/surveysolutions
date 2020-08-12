@@ -140,10 +140,11 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                                 {
                                     if (string.Equals(reader.Name, "Include", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        if (reader.Value.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
+                                        var readerValue = reader.Value.Replace('\\', Path.DirectorySeparatorChar);
+                                        if (readerValue.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            Console.WriteLine($"Got resx file in csproj: {Path.Combine(fi.Directory.Name, reader.Value)}");
-                                            yield return Path.Combine(fi.Directory.FullName, reader.Value);
+                                            Console.WriteLine($"Got resx file in csproj: {Path.Combine(fi.Directory.Name, readerValue)}");
+                                            yield return Path.Combine(fi.Directory.FullName, readerValue);
                                         }
                                     }
                                 }

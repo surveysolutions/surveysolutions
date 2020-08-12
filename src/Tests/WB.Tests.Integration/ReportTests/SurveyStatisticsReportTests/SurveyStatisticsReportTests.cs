@@ -201,15 +201,14 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var interviewId = Guid.NewGuid();
 
-            var summary = new InterviewSummary(plainQuestionnaire)
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                ResponsibleId = Id.gC,
-                SupervisorId = Id.gE,
-                SupervisorName = teamLeadName
-            };
+               var summary = Create.Entity.InterviewSummary(
+                                            interviewId: interviewId,
+                                            status: InterviewStatus.Completed,
+                                            responsibleName: "responsible",
+                                            responsibleId: Id.gC,
+                                            teamLeadId: Id.gE,
+                                            teamLeadName: teamLeadName,
+                                            questionnaireVariable: questionnaire.VariableName);
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
             

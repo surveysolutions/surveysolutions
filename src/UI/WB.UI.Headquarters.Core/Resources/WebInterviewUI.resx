@@ -241,13 +241,16 @@
     <value>Entered value is too large. Less than 15 digits allowed</value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
-    <value>Entered value can not be parsed as decimal value</value>
+    <value>Entered value cannot be parsed as decimal value</value>
   </data>
   <data name="DecimalEnter" xml:space="preserve">
     <value>Enter decimal</value>
   </data>
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
     <value>Categories will be available after answering referenced question</value>
+  </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>The maximum number of selections ({{value}}) in this question has been made</value>
   </data>
   <data name="ConfirmRosterRemove" xml:space="preserve">
     <value>Are you sure you want to remove related roster?</value>
@@ -278,10 +281,10 @@
     <value>Enter number</value>
   </data>
   <data name="NumberCannotParse" xml:space="preserve">
-    <value>Entered value can not be parsed as integer value</value>
+    <value>Entered value cannot be parsed as integer value</value>
   </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
-    <value>Entered value can not be less than protected answer</value>
+    <value>Entered value cannot be less than protected answer</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Answer '{{answer}}' is incorrect because question is used as size of roster and specified answer is negative</value>
@@ -489,5 +492,8 @@ Contact support for assistance.</value>
   </data>
   <data name="PickLocation" xml:space="preserve">
     <value>Pick from map</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Enter password</value>
   </data>
 </root>

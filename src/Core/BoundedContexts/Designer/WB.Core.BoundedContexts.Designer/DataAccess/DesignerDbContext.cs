@@ -20,11 +20,15 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public class DesignerDbContext : IdentityDbContext<DesignerIdentityUser, DesignerIdentityRole, Guid>
     {
+#pragma warning disable 8618
         public DesignerDbContext(DbContextOptions options) : base(options)
+#pragma warning restore 8618
         {
         }
 
+#pragma warning disable 8618
         protected DesignerDbContext()
+#pragma warning restore 8618
         {
         }
 

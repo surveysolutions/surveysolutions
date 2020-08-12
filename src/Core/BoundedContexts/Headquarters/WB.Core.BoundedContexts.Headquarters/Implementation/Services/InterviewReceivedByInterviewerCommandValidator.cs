@@ -28,7 +28,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private static bool IsAllowedCommand(InterviewCommand command)
         {
             return command is CommentAnswerCommand
-                || command is ResolveCommentAnswerCommand;
+                || command is ResolveCommentAnswerCommand
+                || command is OpenInterviewBySupervisorCommand
+                || command is CloseInterviewBySupervisorCommand;
         }
     }
 }

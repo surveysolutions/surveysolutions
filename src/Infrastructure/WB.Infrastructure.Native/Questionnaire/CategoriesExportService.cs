@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using OfficeOpenXml;
+using System.IO;
+using ClosedXML.Excel;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
@@ -9,17 +10,17 @@ namespace WB.Infrastructure.Native.Questionnaire
     {
         public byte[] GetAsExcelFile(IEnumerable<CategoriesItem> items)
         {
-            using (ExcelPackage excelPackage = new ExcelPackage())
+            using (var excelPackage = new XLWorkbook())
             {
-                var worksheet = excelPackage.Workbook.Worksheets.Add("Categories");
+                var worksheet = excelPackage.Worksheets.Add("Categories");
 
-                worksheet.Cells["A1"].Value = "id";
-                worksheet.Cells["B1"].Value = "text";
-                worksheet.Cells["C1"].Value = "parentid";
+                worksheet.Cell("A1").Value = "id";
+                worksheet.Cell("B1").Value = "text";
+                worksheet.Cell("C1").Value = "parentid";
 
                 void FormatCell(string address)
                 {
-                    var cell = worksheet.Cells[address];
+                    var cell = worksheet.Cell(address);
                     cell.Style.Font.Bold = true;
                 }
 
@@ -33,19 +34,21 @@ namespace WB.Infrastructure.Native.Questionnaire
                 {
                     currentRowNumber++;
 
-                    worksheet.Cells[$"A{currentRowNumber}"].Value = row.Id;
-                    worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"B{currentRowNumber}"].Value = row.Text;
-                    worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                    worksheet.Cells[$"C{currentRowNumber}"].Value = row.ParentId;
-                    worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
+                    worksheet.Cell($"A{currentRowNumber}").Value = row.Id;
+                    worksheet.Cell($"A{currentRowNumber}").Style.Alignment.WrapText = true;
+                    worksheet.Cell($"B{currentRowNumber}").Value = row.Text;
+                    worksheet.Cell($"B{currentRowNumber}").Style.Alignment.WrapText = true;
+                    worksheet.Cell($"C{currentRowNumber}").Value = row.ParentId;
+                    worksheet.Cell($"C{currentRowNumber}").Style.Alignment.WrapText = true;
                 }
 
-                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-                worksheet.Column(3).AutoFit();
-                worksheet.Protection.AllowFormatColumns = true;
+                worksheet.Column(3).AdjustToContents();
+                worksheet.Protection.AllowElement(XLSheetProtectionElements.FormatColumns);
 
-                return excelPackage.GetAsByteArray();
+                using var stream = new MemoryStream();
+
+                excelPackage.SaveAs(stream);
+                return stream.ToArray();
             }
         }
     }

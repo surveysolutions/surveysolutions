@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     public interface IDeviceInformationService : IDisposable
     {
         Task<DeviceInfo> GetDeviceInfoAsync();
+        string GetApplicationVersionName();
     }
 }

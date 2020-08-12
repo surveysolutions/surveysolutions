@@ -17,7 +17,8 @@ namespace WB.Services.Scheduler.Tests.Helpers
                 Type = type,
                 Tag = tag,
                 Args = args,
-                ScheduleAt = scheduledAt
+                ScheduleAt = scheduledAt,
+                MaxRetryAttempts = 10
             };
         }
     }

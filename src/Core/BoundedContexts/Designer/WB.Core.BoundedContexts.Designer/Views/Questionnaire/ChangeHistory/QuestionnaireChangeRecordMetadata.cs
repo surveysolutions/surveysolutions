@@ -3,6 +3,6 @@
     public class QuestionnaireChangeRecordMetadata
     {
         public HeadquarterMetadata Hq { get; set; } = new HeadquarterMetadata();
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
     }
 }

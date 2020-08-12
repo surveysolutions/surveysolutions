@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
         public void should_store_interview_change_with_questionnaire_and_event_date_and_last_status_and_minus_one_value()
         {
             //act
-            denormalizer.Handle(@event.ToEnumerable(), @event.EventSourceId);
+            denormalizer.Handle(@event.ToEnumerable());
 
             //assert
             var minusKey = $"{@Id.g9.FormatGuid()}-minus";
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
         public void should_store_interview_change_with_questionnaire_and_event_date_and_new_status_and_plus_one_value()
         {
             //act
-            denormalizer.Handle(@event.ToEnumerable(), @event.EventSourceId);
+            denormalizer.Handle(@event.ToEnumerable());
 
             //assert
             var plusKey = $"{@Id.g9.FormatGuid()}-plus";

@@ -12,5 +12,7 @@ namespace Ncqrs
         /// </summary>
         /// <returns>The current UTC date and time.</returns>
         DateTime UtcNow();
+
+        DateTimeOffset DateTimeOffsetNow();
     }
 }

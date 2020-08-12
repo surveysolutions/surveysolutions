@@ -77,7 +77,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 {
                     this.logger.LogDebug("Loading pdf for {questionnaire} {translationId}", questionnaire.QuestionnaireId, translation.Id);
                     var translatedPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId, translation.Id);
-                    var translatedFilePath = Path.Combine(targetFolder, translation.Name.Unidecode() + " " + targetFileName);
+                    var fileName = this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode() + " " + targetFileName);
+                    var translatedFilePath = Path.Combine(targetFolder, fileName);
 
                     for (int i = 1; fileSystemAccessor.IsFileExists(translatedFilePath); i++)
                     {

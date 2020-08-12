@@ -56,10 +56,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             lookupTableServiceMock
                 .Setup(x => x.GetLookupTableContent(questionnaireId, tableId))
                 .Returns(new LookupTableContent
-                {
-                    VariableNames = Array.Empty<string>(),
-                    Rows = new[]{Create.LookupTableRow(1, Array.Empty<decimal?>())}
-                });
+                (
+                    variableNames : Array.Empty<string>(),
+                    rows : new[]{Create.LookupTableRow(1, Array.Empty<decimal?>())}
+                ));
 
             var verifier = CreateQuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);
 

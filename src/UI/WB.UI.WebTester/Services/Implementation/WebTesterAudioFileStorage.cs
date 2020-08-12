@@ -22,9 +22,12 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
         {
-            var interviewBinaryData = this.mediaStorage.Get(fileName, interviewId)?.Data;
+            var mediaFile = this.mediaStorage.Get(fileName, interviewId);
+            if (mediaFile == null)
+                throw new InvalidOperationException("Media file must not be null.");
 
-            return Task.FromResult(interviewBinaryData);
+
+            return Task.FromResult(mediaFile.Data);
         }
 
         public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
@@ -34,12 +37,8 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            mediaStorage.Store(new MultimediaFile
-            {
-                Filename = fileName,
-                Data = data,
-                MimeType = contentType
-            }, fileName, interviewId);
+            var file = new MultimediaFile(fileName, data, null, contentType);
+            mediaStorage.Store(file, fileName, interviewId);
         }
 
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)

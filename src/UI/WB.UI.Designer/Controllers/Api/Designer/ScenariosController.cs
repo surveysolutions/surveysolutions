@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class UpdateScenarioModel
         {
-            public string Title { get; set; }
+            public string? Title { get; set; }
         }
 
         [HttpPut]
@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (scenario == null || scenario.QuestionnaireId != questionnaireId)
                 return NotFound();
 
-            scenario.Title = model.Title;
+            scenario.Title = model.Title ?? "";
 
             await dbContext.SaveChangesAsync();
 
@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (scenario == null)
                 return NotFound(new { Message = "Scenario not found" });
 
-            scenario.Steps = content.Steps;
+            scenario.Steps = content.Steps ?? "";
             await this.dbContext.SaveChangesAsync();
 
             return Ok(scenario.Steps);

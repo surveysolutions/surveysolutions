@@ -10,9 +10,13 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
     public class Variable : IVariable
     {
         //used for deserialization, change carefuly
-        public Variable(Guid publicKey, VariableData variableData, List<IComposite> children = null)
+        public Variable(Guid publicKey, VariableData? variableData, List<IComposite>? children = null)
         {
             this.PublicKey = publicKey;
+            Expression = String.Empty;
+            Label = String.Empty;
+            Name = String.Empty;
+            
             if (variableData != null)
             {
                 this.Type = variableData.Type;
@@ -44,19 +48,19 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             }
         }
 
-        private IComposite parent;
+        private IComposite? parent;
 
-        public IComposite GetParent()
+        public IComposite? GetParent()
         {
             return this.parent;
         }
 
-        public void SetParent(IComposite parent)
+        public void SetParent(IComposite? parent)
         {
             this.parent = parent;
         }
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public T? Find<T>(Guid publicKey) where T : class, IComposite
         {
             return null;
         }
@@ -66,7 +70,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             return new T[0];
         }
 
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        public T? FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return null;
         }

@@ -168,4 +168,7 @@
   <data name="QuestionTypeText" xml:space="preserve">
     <value>Текстовый</value>
   </data>
+  <data name="CoverPageSection" xml:space="preserve">
+    <value>Обложка</value>
+  </data>
 </root>

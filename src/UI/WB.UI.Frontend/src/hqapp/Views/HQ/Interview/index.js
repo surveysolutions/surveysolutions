@@ -1,4 +1,5 @@
 import localStore from './store'
+import Vue from 'vue'
 
 const Review = () => import(/* webpackChunkName: "review" */'./Review')
 const Cover = () => import(/* webpackChunkName: "review" */'~/webinterview/components/Cover')
@@ -8,6 +9,7 @@ const Overview = () => import(/* webpackChunkName: "review" */'./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
+        this.config = Vue.$config.model || {}
     }
 
     get routes() {
@@ -20,6 +22,11 @@ export default class ReviewComponent {
                 props: {
                     navigateToPrefilled: true,
                     showHumburger: false,
+                },
+                beforeEnter: (to, from, next) => {
+                    if (this.config.coverPageId)
+                        to.params.sectionId = this.config.coverPageId
+                    next()
                 },
             },
             {
@@ -39,11 +46,37 @@ export default class ReviewComponent {
                     navigateToPrefilled: true,
                     showHumburger: false,
                 },
+                beforeEnter: (to, from, next) => {
+                    if (this.config.coverPageId)
+                        next({ name: 'cover', params: { interviewId: to.params.interviewId } })
+                    else
+                        next()
+                },
+            },
+            {
+                name: 'cover',
+                path: 'Section/' + (this.config.coverPageId || 'newcover'),
+                component: Cover,
+                props: {
+                    navigateToPrefilled: true,
+                    showHumburger: false,
+                },
+                beforeEnter: (to, from, next) => {
+                    if (this.config.coverPageId)
+                        to.params.sectionId = this.config.coverPageId
+                    next()
+                },
             },
             {
                 path: 'Section/:sectionId',
                 name: 'section',
                 component: ReviewSection,
+                beforeEnter: (to, from, next) => {
+                    if (this.config.coverPageId && to.params.sectionId == this.config.coverPageId)
+                        next({ name: 'cover' })
+                    else
+                        next()
+                },
             },
             ],
         }]

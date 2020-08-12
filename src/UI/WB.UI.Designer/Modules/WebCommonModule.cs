@@ -16,15 +16,6 @@ namespace WB.UI.Designer.Modules
     {
         public void Load(IDependencyRegistry registry)
         {
-            registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
-
-            //registry.Bind<ITokenVerifier, ApiValidationAntiForgeryTokenVerifier>();
-
-            //registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
-            //registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
-
-            //registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
-
             registry.Bind<IAuthenticationService, AuthenticationService>();
             registry.Bind<IRecaptchaService, RecaptchaService>();
             registry.Bind<IQuestionnaireHistoryVersionsService, QuestionnaireHistoryVersionsService>();

@@ -89,8 +89,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             foreach (var user in asigneeInterviewersBySupervisor.Users)
             {
-                user.IconClass = allUsers.FirstOrDefault(x => x.Id == user.UserId).Roles.FirstOrDefault().Id.ToString()
-                    .ToLower();
+                var hqUser = allUsers.FirstOrDefault(x => x.Id == user.UserId);
+                user.IconClass = hqUser.Roles.FirstOrDefault().Id.ToString().ToLower();
             }
         }
 

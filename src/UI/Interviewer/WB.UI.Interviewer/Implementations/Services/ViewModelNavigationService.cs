@@ -4,6 +4,7 @@ using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
@@ -62,10 +64,11 @@ namespace WB.UI.Interviewer.Implementations.Services
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId)
         {
             this.log.Trace($"Navigating to PrefilledQuestionsViewModel interviewId: {interviewId}");
-            return this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(
+            return this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
-                    InterviewId = interviewId
+                    InterviewId = interviewId,
+                    NavigationIdentity = NavigationIdentity.CreateForCoverScreen(),
                 });
         }
 
@@ -94,6 +97,16 @@ namespace WB.UI.Interviewer.Implementations.Services
                 {
                     InterviewId = interviewId,
                     NavigationIdentity = navigationIdentity
+                });
+        }
+
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        {
+            return this.NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
+                new CreateInterviewViewModelArg()
+                {
+                    AssignmentId = assignmentId,
+                    InterviewId = Guid.NewGuid()
                 });
         }
 

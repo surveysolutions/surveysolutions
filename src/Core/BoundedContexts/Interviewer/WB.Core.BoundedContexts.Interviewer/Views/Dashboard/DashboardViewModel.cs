@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
@@ -63,7 +64,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IRestService restService,
             IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient,
-            IGoogleApiService googleApiService) : base(principal, viewModelNavigationService, permissionsService,
+            IGoogleApiService googleApiService,
+            IMapInteractionService mapInteractionService) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
             this.messenger = messenger;
@@ -84,6 +86,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews = rejectedInterviewsViewModel;
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
+            this.mapInteractionService = mapInteractionService;
+
 
             SubscribeOnMessages();
 
@@ -170,6 +174,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
+
+        public IMvxCommand NavigateToMapDashboardCommand =>
+            new MvxAsyncCommand(async () => await mapInteractionService.OpenMapDashboardAsync());
 
         private Task NavigateToMaps()
         {
@@ -339,7 +346,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         #region Offline synchronization
 
         public IMvxCommand StartOfflineSyncCommand => new MvxCommand(this.StartOfflineSynchronization);
+        public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
+
         public Action OnOfflineSynchronizationStarted;
+        private IMapInteractionService mapInteractionService;
 
         private void StartOfflineSynchronization()
         {
@@ -360,6 +370,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override async Task OnStartDiscovery()
         {
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
+            
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }

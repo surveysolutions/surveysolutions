@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -20,9 +19,9 @@ namespace WB.Services.Export.Services.Processing
             this.RunningDataExportProcesses = runningDataExportProcesses;
         }
 
-        public string QuestionnaireId { get; set;  }
-        public List<DataExportView> DataExports { get; set; }
-        public DataExportProcessView[] RunningDataExportProcesses { get; set; }
+        public string QuestionnaireId { get; set;  } = String.Empty;
+        public List<DataExportView> DataExports { get; set; } = new List<DataExportView>();
+        public DataExportProcessView[] RunningDataExportProcesses { get; set; } = new DataExportProcessView[0];
     }
 
     public class DataExportUpdateRequestResult

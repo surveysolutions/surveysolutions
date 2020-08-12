@@ -2,11 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.Core;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -22,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
     public class LoadingInterviewViewModel : ProgressViewModel, IMvxViewModel<LoadingViewModelArg>
     {
         private readonly IPlainStorage<InterviewView> interviewsRepository;
+        private readonly IJsonAllTypesSerializer serializer;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
@@ -34,7 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             ICommandService commandService,
             ILogger logger,
             IUserInteractionService interactionService,
-            IPlainStorage<InterviewView> interviewsRepository)
+            IPlainStorage<InterviewView> interviewsRepository,
+            IJsonAllTypesSerializer serializer)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
@@ -42,6 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.logger = logger;
             this.interactionService = interactionService;
             this.interviewsRepository = interviewsRepository;
+            this.serializer = serializer;
         }
 
         protected Guid InterviewId { get; set; }
@@ -76,7 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             var interview = await LoadInterviewAsync(interviewId);
             if (interview == null)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                await this.viewModelNavigationService.NavigateToDashboardAsync()
+                    .ConfigureAwait(false);
                 return;
             }
 
@@ -85,9 +91,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
                 var restartInterviewCommand = new RestartInterviewCommand(interviewId,
                     this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
+                await this.commandService.ExecuteAsync(restartInterviewCommand)
+                    .ConfigureAwait(false);
             }
 
+            var interviewView = this.interviewsRepository.GetById(interviewId.FormatGuid());
+
+            if (interviewView != null && 
+                !string.IsNullOrEmpty(interviewView.LastVisitedSectionId))
+            {
+                var targetIdentity = this.serializer.Deserialize<Identity>(interviewView.LastVisitedSectionId);
+                    
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), 
+                    navigationIdentity: new NavigationIdentity
+                    {
+                        TargetScreen = interviewView.LastVisitedScreenType.GetValueOrDefault(ScreenType.Group),
+                        TargetGroup = targetIdentity
+                    }).ConfigureAwait(false);
+                return;
+            }
+             
             if (interview.HasEditableIdentifyingQuestions)
             {
                 await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());

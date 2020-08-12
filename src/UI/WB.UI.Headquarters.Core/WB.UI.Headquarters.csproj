@@ -9,59 +9,55 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <LangVersion>latest</LangVersion>
     <PublishSingleFile>false</PublishSingleFile>
-    <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.6.0" />
-    <PackageReference Include="AntiXSS.NetStandard" Version="0.1.111" />
+    <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.8.0" />
+    <PackageReference Include="AntiXSS.NetStandard" Version="0.1.125" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.0-preview.127" />
-    <PackageReference Include="HotChocolate.Types.Filters" Version="11.0.0-preview.127" />
-    <PackageReference Include="HotChocolate.Types.Selections" Version="11.0.0-preview.127" />
-    <PackageReference Include="HotChocolate.Types.Sorting" Version="11.0.0-preview.127" />
-    <PackageReference Include="Humanizer.Core.ar" Version="2.8.2" />
-    <PackageReference Include="Humanizer.Core.es" Version="2.8.2" />
-    <PackageReference Include="Humanizer.Core.fr" Version="2.8.2" />
-    <PackageReference Include="Humanizer.Core.id" Version="2.8.2" />
-    <PackageReference Include="Humanizer.Core.pt" Version="2.8.2" />
-    <PackageReference Include="Humanizer.Core.ru" Version="2.8.2" />
-    <PackageReference Include="Humanizer.Core.zh-CN" Version="2.8.2" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="3.5.0" />
-    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.0-preview.133" />
+    <PackageReference Include="HotChocolate.Types.Filters" Version="11.0.0-preview.133" />
+    <PackageReference Include="HotChocolate.Types.Selections" Version="11.0.0-preview.133" />
+    <PackageReference Include="HotChocolate.Types.Sorting" Version="11.0.0-preview.133" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.ar" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.es" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.fr" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.id" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.pt" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.ru" Version="2.8.26" />
+    <PackageReference Include="Humanizer.Core.zh-CN" Version="2.8.26" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="3.6.0" />
+    <PackageReference Include="Quartz" Version="3.1.0" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.1" />
 
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
 
     <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
-      
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.3" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.3.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.3.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.5.1" />
     <PackageReference Include="UAParser" Version="3.1.44" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.3.2" />
-    <PackageReference Include="SkiaSharp" Version="1.68.1.1" />
+    <PackageReference Include="SkiaSharp" Version="2.80.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,7 +66,11 @@
       <DependentUpon>appsettings.ini</DependentUpon>
     </Content>
   </ItemGroup>
-
+  
+    <ItemGroup> 
+        <Content Remove="Export.Service/**/*.*"></Content>
+        <Content Include="Export.Service/**/*.*" CopyToPublishDirectory="Always"></Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
@@ -98,29 +98,141 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Assignments.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\BatchUpload.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Common.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Dashboard.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Details.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Details.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Diagnostics.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Diagnostics.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\FieldsAndValidations.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\HQ.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Interviews.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Maps.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Pages.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>Pages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\PeriodicStatusReport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireClonning.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Reports.designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Settings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\TabletSyncMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Users.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\WebInterviewSettings.Designer.cs">
       <DesignTime>True</DesignTime>
       <DependentUpon>WebInterviewSettings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\WebInterviewUI.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Assignments.resx">
+      <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\BatchUpload.resx">
+      <LastGenOutput>BatchUpload.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Common.resx">
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Dashboard.resx">
+      <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Details.resx">
+      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Diagnostics.resx">
+      <LastGenOutput>Diagnostics.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldsAndValidations.resx">
       <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\HQ.resx">
+      <LastGenOutput>HQ.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Interviews.resx">
+      <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Maps.resx">
+      <LastGenOutput>Maps.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages.resx">
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PeriodicStatusReport.resx">
+      <LastGenOutput>PeriodicStatusReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireClonning.resx">
+      <LastGenOutput>QuestionnaireClonning.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Reports.resx">
+      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Settings.resx">
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TabletSyncMessages.resx">
+      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Users.resx">
+      <LastGenOutput>Users.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\WebInterviewSettings.resx">
       <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WebInterviewUI.resx">
+      <LastGenOutput>WebInterviewUI.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

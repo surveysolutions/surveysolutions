@@ -26,14 +26,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
 
             questionnaire.AddSingleOptionQuestion(parentQuestionId, rootGroupId, actorId,
                 options: new [] {
-                    new Option{Title = "one", Value = "1"},
-                    new Option{Title = "two", Value = "2"}
+                    new Option(title : "one", value : "1"),
+                    new Option(title : "two", value : "2")
                 });
 
             questionnaire.AddSingleOptionQuestion(updatedQuestionId, rootGroupId, actorId,
                 options: new [] {
-                    new Option{Title = "one",Value = "1"},
-                    new Option{Title = "two",Value = "2"}
+                    new Option(title : "one",value : "1"),
+                    new Option(title : "two",value : "2")
                 });
 
             //Act
@@ -52,8 +52,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
                     responsibleId: actorId,
                     options: new[]
                     {
-                        new Option{Title = "one",Value = "1"},
-                        new Option{Title = "two",Value = "2"}
+                        new Option(title : "one",value : "1"),
+                        new Option(title : "two",value : "2")
                     },
                     linkedToEntityId: null,
                     isFilteredCombobox: false,
@@ -109,13 +109,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadingOptions
 
             questionnaire.AddSingleOptionQuestion(parentQuestionId, rootGroupId, actorId,
                 options: new [] 
-                {   new Option{Title = "one", Value = "1"},
-                    new Option{Title = "two", Value = "2"}});
+                {   new Option(title : "one", value : "1"),
+                    new Option(title : "two", value : "2")
+                });
 
             questionnaire.AddSingleOptionQuestion(updatedQuestionId, rootGroupId, actorId,
                 options: new [] 
-                {   new Option{Title = "one",Value = "1"},
-                    new Option{Title = "two",Value = "2"}});
+                {   new Option(title : "one", value : "1"),
+                    new Option(title : "two", value : "2")});
 
             //Act
             questionnaire.UpdateSingleOptionQuestion(

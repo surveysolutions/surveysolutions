@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is compatibility issues between questionnaire versions. Some answers in early versions of questionnaire are no longer exist in latest questionnaire version. Such answers were ignored.
+        ///   Looks up a localized string similar to There are compatibility issues between questionnaire versions. Answers in earlier versions of the questionnaire that no longer exist in the latest questionnaire version were ignored..
         /// </summary>
         public static string QuestionnaireCompatibilityIssues_UnknownAnswer {
             get {

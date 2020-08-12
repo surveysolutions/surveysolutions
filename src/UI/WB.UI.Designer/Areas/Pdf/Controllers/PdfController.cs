@@ -90,7 +90,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
             }
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName, translation, false);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName, translation, false);
             if (questionnaire == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
@@ -110,7 +110,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("printpreview/{id}")]
         public IActionResult PrintPreview(Guid id, Guid? translation)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation: translation, useDefaultTranslation: true);
             if (questionnaire == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
@@ -135,7 +135,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 // MS edge brakes on long file name
-                string validTitle = questionnaireTitle.Length < 250 ? questionnaireTitle : questionnaireTitle.Substring(0, 250);
+                string? validTitle = (questionnaireTitle?.Length < 250 ? questionnaireTitle : questionnaireTitle?.Substring(0, 250) ?? "questionnaire");
 
                 return this.File(content, "application/pdf", $"{validTitle}.pdf");
             }
@@ -195,12 +195,13 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
         {
-            var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
+            var pathToWkHtmlToPdfExecutable = this.pdfSettings.Value.WKHtmlToPdfExecutablePath;
 
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
+            PdfQuestionnaireModel? questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetUserName(), translation, false);
             if (questionnaire == null)
             {
-                throw new ArgumentException();
+                generationProgress.Fail();
+                return;
             }
             questionnaire.TimezoneOffsetMinutes = timezoneOffsetMinutes;
 
@@ -217,7 +218,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         Content = questionnaireHtml,
                         PageFooterUrl = pageFooterUrl,
                         OutputPath = generationProgress.FilePath,
-                        PdfToolPath = pathToWkHtmlToPdfExecutable,
+                         
+                        PdfToolPath = pathToWkHtmlToPdfExecutable, 
+                        WkHtmlToPdfExeName = this.pdfSettings.Value.WkHtmlToPdfExeName,
                         ExecutionTimeout = this.pdfSettings.Value.PdfGenerationTimeoutInMilliseconds,
                         TempFilesPath = Path.GetTempPath(),
                         Size = PdfPageSize.A4,
@@ -244,17 +247,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, routeData);
         }
 
-        private string GetPathToWKHtmlToPdfExecutableOrThrow()
-        {
-            string path = Path.GetFullPath(pdfSettings.Value.WKHtmlToPdfExecutablePath);
-
-            if (!System.IO.File.Exists(path))
-                throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
-
-            return path;
-        }
-
-        private PdfQuestionnaireModel LoadQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
+        private PdfQuestionnaireModel? LoadQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
             return this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
         }

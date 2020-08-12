@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         public int Minor { get; set; }
         public int Patch { get; set; }
 
-        public static bool operator ==(QuestionnaireVersion left, QuestionnaireVersion right)
+        public static bool operator ==(QuestionnaireVersion? left, QuestionnaireVersion? right)
         {
             if (ReferenceEquals(left, null))
             {
@@ -24,9 +24,9 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
             return !(left == right);
         }
 
-        public static bool operator <(QuestionnaireVersion left, QuestionnaireVersion right)
+        public static bool operator <(QuestionnaireVersion? left, QuestionnaireVersion? right)
         {
-            if ((object) left == null)
+            if (left == null)
                 throw new ArgumentNullException("left");
 
             return left.CompareTo(right) < 0;
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         }
 
 
-        public static bool operator >(QuestionnaireVersion left, QuestionnaireVersion right)
+        public static bool operator >(QuestionnaireVersion? left, QuestionnaireVersion? right)
         {
             return right < left;
         }
@@ -51,14 +51,14 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
             return right <= left;
         }
         
-        public bool Equals(QuestionnaireVersion other)
+        public bool Equals(QuestionnaireVersion? other)
         {
             if (other == null)
                 return false;
 
-            return this.Major == other.Major &&
-                   this.Minor == other.Minor &&
-                   this.Patch == other.Patch;
+            return this.Major == other?.Major &&
+                   this.Minor == other?.Minor &&
+                   this.Patch == other?.Patch;
         }
 
         public override string ToString()
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         }
 
 
-        public int CompareTo(QuestionnaireVersion questionnaireVersion)
+        public int CompareTo(QuestionnaireVersion? questionnaireVersion)
         {
             if (questionnaireVersion == null)
                 return 1;
@@ -106,13 +106,13 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 
         public override bool Equals(object obj)
         {
-            QuestionnaireVersion other = obj as QuestionnaireVersion;
+            QuestionnaireVersion? other = obj as QuestionnaireVersion;
             if (other == null)
                 return false;
 
-            return this.Major == other.Major &&
-                   this.Minor == other.Minor &&
-                   this.Patch == other.Patch;
+            return this.Major == other?.Major &&
+                   this.Minor == other?.Minor &&
+                   this.Patch == other?.Patch;
         }
     }
 }

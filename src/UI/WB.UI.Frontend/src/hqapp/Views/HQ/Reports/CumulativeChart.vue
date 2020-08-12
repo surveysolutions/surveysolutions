@@ -33,12 +33,16 @@ const chartOptions = {
                 ticks: {
                     source: 'data',
                     autoSkipPadding: 10,
-                    maxRotation: 0,
+                    maxRotation: 45,
                     autoSkip: true,
                 },
                 time: {
                     bounds: 'ticks',
-                    minUnit: 'week',
+                    minUnit: 'day',
+                    displayFormats: {
+                        week: 'll',
+                        day: 'MMM D YYYY',
+                    },
                 },
             },
         ],

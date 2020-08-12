@@ -27,12 +27,12 @@ namespace WB.UI.WebTester.Infrastructure
             this.substitutionService = substitutionService;
         }
 
-        public PlainQuestionnaire Translate(PlainQuestionnaire questionnaire, long version, string language)
+        public PlainQuestionnaire Translate(PlainQuestionnaire questionnaire, long version, string? language)
         {
             return translationsCache.GetOrCreate($"{questionnaire.QuestionnaireIdentity}${language}", (entry) =>
             {
                 QuestionnaireDocument result = storage.GetTranslated(questionnaire.QuestionnaireDocument, version,
-                    language, out Translation translation);
+                    language, out Translation? translation);
                 var plainQuestionnaire = new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translation);
                 plainQuestionnaire.ExpressionStorageType = questionnaire.ExpressionStorageType;
                 plainQuestionnaire.WarmUpPriorityCaches();

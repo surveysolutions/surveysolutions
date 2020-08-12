@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -20,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
@@ -27,11 +29,14 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer;
+using WB.UI.Headquarters.Controllers.Services.Export;
 using WB.UI.Headquarters.Services;
 using AssignmentsController = WB.UI.Headquarters.Controllers.Api.PublicApi.AssignmentsController;
 
@@ -111,6 +116,9 @@ namespace WB.Tests.Web.TestFactories
             IAssignmentsImportService assignmentsImportService = null,
             ISerializer serializer = null)
         {
+            var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsService);
+            var scopeExecutor = Abc.Create.Service.InScopeExecutor(sl);
+            
             var result = new AssignmentsController(
                 assignmentViewFactory,
                 assignmentsService,
@@ -124,7 +132,10 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IUnitOfWork>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 assignmentsImportService ?? Mock.Of<IAssignmentsImportService>(),
-                serializer ?? Mock.Of<ISerializer>());
+                serializer ?? Mock.Of<ISerializer>(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IWebInterviewLinkProvider>(),
+                scopeExecutor);
 
             return result;
         }
@@ -140,6 +151,25 @@ namespace WB.Tests.Web.TestFactories
                 userManager ?? Create.Service.UserManager(),
                 userRepository);
             return result;
+        }
+
+        public QuestionnaireApiController QuestionnaireApiController(   IQuestionnaireStorage questionnaireStorage = null,
+            ISerializer serializer = null,
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage = null,
+            IReusableCategoriesStorage reusableCategoriesStorage = null,
+            ITranslationStorage translationStorage = null,
+            IQuestionnaireTranslator translator = null,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage = null)
+        {
+            return new QuestionnaireApiController(
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                serializer ?? Abc.Create.Service.NewtonJsonSerializer(),
+                pdfStorage ?? new TestPlainStorage<QuestionnairePdf>(),
+                reusableCategoriesStorage ?? Mock.Of<IReusableCategoriesStorage>(),
+                translationStorage ?? Mock.Of<ITranslationStorage>(),
+                translator ?? Mock.Of<IQuestionnaireTranslator>(),
+                questionnaireBackupStorage ?? new TestPlainStorage<QuestionnaireBackup>()
+            );
         }
     }
 }

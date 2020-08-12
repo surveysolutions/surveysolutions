@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             return memoryCache.GetOrCreate(nameof(UserViewFactory) + ":" + id, entry =>
                 {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(1);
+                    entry.SlidingExpiration = TimeSpan.FromMinutes(1);
 
                     var user = GetUser(new UserViewInputModel(id));
 
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
-                    IconClass = UserRoles.Interviewer.ToString().ToLower()
+                    IconClass = UserRoles.Interviewer.ToString().ToLower(),
                 });
 
             var result = new UsersView
@@ -243,6 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsArchived = x.IsArchived,
                 EnumeratorVersion = x.Profile.DeviceAppVersion,
                 EnumeratorBuild = x.Profile.DeviceAppBuildVersion,
+                LastLoginDate = x.LastLoginDate
             });
             
 
@@ -294,7 +295,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
                 interviewers = AppySupervisorFilter(supervisorId, interviewers);
 
-                return interviewers.Select(x => x.Id);
+                return interviewers
+                    .OrderBy(x => x.UserName)
+                    .Select(x => x.Id);
             };
 
             return query.Invoke(repository.Users).ToArray();

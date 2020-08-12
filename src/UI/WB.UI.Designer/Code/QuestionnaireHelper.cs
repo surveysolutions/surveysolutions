@@ -1,9 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using ICSharpCode.SharpZipLib.Zip;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 
@@ -12,15 +23,39 @@ namespace WB.UI.Designer.Code
     public class QuestionnaireHelper : IQuestionnaireHelper
     {
         private readonly IQuestionnaireListViewFactory viewFactory;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly ISerializer serializer;
+        private readonly IAttachmentService attachmentService;
+        private readonly ILookupTableService lookupTableService;
+        private readonly ITranslationsService translationsService;
+        private readonly ICategoriesService categoriesService;
+        private readonly ILogger<QuestionnaireHelper> logger;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public QuestionnaireHelper(
-            IQuestionnaireListViewFactory viewFactory)
+            IQuestionnaireListViewFactory viewFactory,
+            IQuestionnaireViewFactory questionnaireViewFactory, 
+            ISerializer serializer, 
+            IAttachmentService attachmentService, 
+            ILookupTableService lookupTableService, 
+            ITranslationsService translationsService, 
+            ICategoriesService categoriesService, 
+            ILogger<QuestionnaireHelper> logger, 
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.viewFactory = viewFactory;
+            this.questionnaireViewFactory = questionnaireViewFactory;
+            this.serializer = serializer;
+            this.attachmentService = attachmentService;
+            this.lookupTableService = lookupTableService;
+            this.translationsService = translationsService;
+            this.categoriesService = categoriesService;
+            this.logger = logger;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
-            int? pageIndex = null, string sortBy = null, int? sortOrder = null, string searchFor = null)
+            int? pageIndex = null, string? sortBy = null, int? sortOrder = null, string? searchFor = null)
         {
             QuestionnaireListView model = this.viewFactory.LoadFoldersAndQuestionnaires(new QuestionnaireListInputModel
             {
@@ -76,7 +111,8 @@ namespace WB.UI.Designer.Code
         public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId)
             => this.GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin, bool showPublic, string location)
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, 
+            bool isAdmin, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),
@@ -101,7 +137,7 @@ namespace WB.UI.Designer.Code
                     : (x.CreatedBy == viewerId ? QuestionnaireController.You : x.CreatorName)
             };
 
-        private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string location)
+        private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string? location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),
@@ -121,5 +157,86 @@ namespace WB.UI.Designer.Code
                 Location = location != null ? QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location : null,
                 Owner = GlobalHelper.EmptyString
             };
+
+
+        public Stream? GetBackupQuestionnaire(Guid id, out string questionnaireFileName)
+        {
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+            {
+                questionnaireFileName = String.Empty;
+                return null;
+            }
+
+            questionnaireFileName = fileSystemAccessor.MakeValidFileName(questionnaireView.Title);
+            
+            var questionnaireDocument = questionnaireView.Source;
+            string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
+
+            var output = new MemoryStream();
+
+            ZipOutputStream zipStream = new ZipOutputStream(output);
+
+            string questionnaireFolderName = $"{questionnaireFileName} ({id.FormatGuid()})";
+
+            zipStream.PutTextFileEntry($"{questionnaireFolderName}/{questionnaireFileName}.json", questionnaireJson);
+
+            for (int attachmentIndex = 0; attachmentIndex < questionnaireDocument.Attachments.Count; attachmentIndex++)
+            {
+                try
+                {
+                    Attachment attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
+
+                    var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
+
+                    if (attachmentContent?.Content != null)
+                    {
+                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
+
+                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachmentMeta?.FileName ?? "unknown-file-name"}", attachmentContent.Content);
+                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachmentContent.ContentType);
+                    }
+                    else
+                    {
+                        zipStream.PutTextFileEntry(
+                            $"{questionnaireFolderName}/Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
+                            $"Attachment '{attachmentReference.Name}' is missing.");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    this.logger.LogWarning($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({questionnaireFolderName}).", exception);
+                    zipStream.PutTextFileEntry(
+                        $"{questionnaireFolderName}/Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
+                        $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
+                }
+            }
+
+            Dictionary<Guid, string> lookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id);
+
+            foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
+            {
+                zipStream.PutTextFileEntry($"{questionnaireFolderName}/Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
+            }
+
+            foreach (var translation in questionnaireDocument.Translations)
+            {
+                TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
+            }
+
+            foreach (var categories in questionnaireDocument.Categories)
+            {
+                var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
+                if (excelFile?.Content == null)
+                    continue;
+                zipStream.PutFileEntry($"{questionnaireFolderName}/Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
+            }
+
+            zipStream.Finish();
+            output.Position = 0;
+
+            return output;
+        }
     }
 }

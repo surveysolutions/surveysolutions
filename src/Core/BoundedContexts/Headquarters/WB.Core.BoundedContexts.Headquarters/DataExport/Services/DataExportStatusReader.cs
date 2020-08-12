@@ -1,11 +1,9 @@
-﻿using NHibernate.Id.Insert;
+﻿#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -14,8 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native;
-
-// using WB.Infrastructure.Native.Logging.Slack;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -48,13 +44,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
-        public async Task<DataExportArchive> GetDataArchive(QuestionnaireIdentity questionnaireIdentity,
+        public async Task<DataExportArchive?> GetDataArchive(QuestionnaireIdentity questionnaireIdentity,
             DataExportFormat format,
-            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null,
+            bool? includeMeta = null)
         {
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
             var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName,
-                format, status, from, to);
+                format, status, from, to, translationId, includeMeta);
 
             if (result.StatusCode == HttpStatusCode.NotFound) return null;
 
@@ -75,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
         }
 
-        public async Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
+        public async Task<ExportDataAvailabilityView?> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
@@ -91,14 +88,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
         }
 
-        public async Task<DataExportProcessView> GetProcessStatus(long id)
+        public async Task<DataExportProcessView?> GetProcessStatus(long id)
         {
             DataExportProcessView processView = await this.exportServiceApi.GetJobsStatus(id);
             if (processView == null)
             {
                 return null;
             }
-
+            
             FillProcessViewMissingData(processView);
 
             processView.Id = id;
@@ -108,7 +105,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private void FillProcessViewMissingData(DataExportProcessView processView)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(processView.QuestionnaireIdentity, null);
+            if (questionnaire == null)
+            {
+                processView.Deleted = true;
+                return;
+            };
+
             processView.Title = questionnaire.Title;
+            if (processView.TranslationId.HasValue)
+            {
+                var translation = questionnaire.Translations.FirstOrDefault(x =>x.Id == processView.TranslationId);
+                processView.TranslationName = translation?.Name;
+            }
+            else
+            {
+                processView.TranslationName = questionnaire.DefaultLanguageName;
+            }
             
             if (processView.Error != null)
             {

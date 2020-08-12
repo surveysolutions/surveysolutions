@@ -1,28 +1,35 @@
 ﻿using System;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.UI.Designer.Api.WebTester
 {
     public interface IQuestionnaireCacheStorage
     {
-        Lazy<Questionnaire> Get(string cacheKey);
+        Lazy<Questionnaire>? Get(string cacheKey);
         void Add(string cacheKey, Lazy<Questionnaire> cacheEntry);
         void Remove(string cacheKey);
     }
 
     public class QuestionnaireCacheStorage : IQuestionnaireCacheStorage
     {
-        readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
+        private readonly IMemoryCache memoryCache;
 
-        public Lazy<Questionnaire> Get(string cacheKey)
+        public QuestionnaireCacheStorage(IMemoryCache memoryCache)
         {
-            return Cache.Get(cacheKey) as Lazy<Questionnaire>;
+            this.memoryCache = memoryCache;
+        }
+
+        private const string CachePrefix = "qcs::";
+
+        public Lazy<Questionnaire>? Get(string cacheKey)
+        {
+            return memoryCache.Get(CachePrefix + cacheKey) as Lazy<Questionnaire>;
         }
 
         public void Add(string cacheKey, Lazy<Questionnaire> cacheEntry)
         {
-            Cache.Add(cacheKey, cacheEntry, new CacheItemPolicy
+            memoryCache.Set(CachePrefix + cacheKey, cacheEntry, new MemoryCacheEntryOptions()
             {
                 SlidingExpiration = TimeSpan.FromMinutes(10)
             });
@@ -30,7 +37,7 @@ namespace WB.UI.Designer.Api.WebTester
 
         public void Remove(string cacheKey)
         {
-            Cache.Remove(cacheKey);
+            memoryCache.Remove(CachePrefix + cacheKey);
         }
     }
 }

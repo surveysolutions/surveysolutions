@@ -62,6 +62,13 @@
                             <div class="form-group">
                                 @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off", placeholder = Pages.Password })
                             </div>
+                            <div class="form-group">
+                                <input id="ShowPassword" type="checkbox" 
+                                       onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');">
+                                <label for="ShowPassword">
+                                    <span></span>@Pages.ShowPassword
+                                </label>
+                            </div>
                             if (this.Model.RequireCaptcha)
                             {
                                 <div class="form-group">

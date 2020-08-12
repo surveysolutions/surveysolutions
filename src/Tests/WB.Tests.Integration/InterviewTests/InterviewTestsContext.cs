@@ -9,6 +9,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using MvvmCross.Tests;
+using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -179,7 +180,8 @@ namespace WB.Tests.Integration.InterviewTests
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository()
+                Create.Storage.QuestionnaireQuestionOptionsRepository(),
+                new SystemClock()
                 );
 
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;

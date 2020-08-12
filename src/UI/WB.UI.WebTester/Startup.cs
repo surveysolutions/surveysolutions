@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
@@ -27,7 +28,7 @@ namespace WB.UI.WebTester
 {
     public class Startup
     {
-        private AutofacKernel autofacKernel;
+        private AutofacKernel? autofacKernel;
 
         public Startup(IConfiguration configuration)
         {
@@ -79,6 +80,9 @@ namespace WB.UI.WebTester
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if(autofacKernel == null)
+                throw new InvalidOperationException("Kernel must not be null.");
+
             var initTask = autofacKernel.InitAsync(true);
             initTask.Wait(TimeSpan.FromSeconds(5));
 
@@ -102,7 +106,7 @@ namespace WB.UI.WebTester
 
             app.UseCookiePolicy();
             app.UseSession();
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");

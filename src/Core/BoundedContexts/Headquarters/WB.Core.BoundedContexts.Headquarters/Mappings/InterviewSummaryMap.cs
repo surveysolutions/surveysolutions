@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Type;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.SupervisorName, pm => pm.Column("teamleadname"));
             Property(x => x.SupervisorNameLowerCase, pm => pm.Column("teamlead_name_lower_case"));
             Property(x => x.ResponsibleRole);
-            Property(x => x.UpdateDate);
+            Property(x => x.UpdateDate, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.WasCreatedOnClient);
             Property(x => x.WasRejectedBySupervisor);
             Property(x => x.WasCompleted);
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Key);
             Property(x => x.QuestionnaireIdentity);
             Property(x => x.InterviewDurationLong, ptp => ptp.Column("interviewduration"));
-            Property(x => x.LastResumeEventUtcTimestamp);
+            Property(x => x.LastResumeEventUtcTimestamp, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.ClientKey);
             Property(x => x.FirstInterviewerName);
             Property(x => x.FirstSupervisorName);
@@ -46,6 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.FirstAnswerDate);
             Property(x => x.HasResolvedComments);
             Property(x => x.ErrorsCount);
+            Property(x => x.NotAnsweredCount, ptp => ptp.Column("not_answered_count"));
             Property(x => x.CommentedEntitiesCount, clm =>
             {
                 clm.Lazy(true);
@@ -55,11 +57,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
             Property(x => x.AssignmentId);
 
-            Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
+            Property(x => x.ReceivedByInterviewerAtUtc, pm =>
             {
-                cm.Default(false);
-                cm.NotNullable(true);
-            }));
+                pm.Type<UtcDateTimeType>();
+                pm.Column(cm =>
+                {
+                    cm.Default(null);
+                    cm.NotNullable(false);
+                });
+            });
             Property(x => x.IsAssignedToInterviewer, pm => pm.Column(cm =>
             {
                 cm.Default(true);
@@ -99,6 +105,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 },
                 rel => { rel.OneToMany(); }
             );
+
+            Set(x => x.GpsAnswers, set =>
+                {
+                    set.Key(key => key.Column("interview_id"));
+                    set.Lazy(CollectionLazy.Lazy);
+                    set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    set.Inverse(true);
+                },
+                rel => rel.OneToMany());
 
             Set(x => x.StatisticsReport, listMap =>
             {

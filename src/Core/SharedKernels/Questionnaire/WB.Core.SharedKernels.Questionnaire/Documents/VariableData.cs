@@ -2,10 +2,6 @@
 {
     public class VariableData
     {
-        protected VariableData()
-        {
-        }
-
         public VariableData(VariableType type, string name, string expression, string label, bool doNotExport)
         {
             this.Type = type;

@@ -19,6 +19,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -59,12 +60,8 @@ namespace WB.UI.WebTester
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", new EventBusSettings
-            {
-                DisabledEventHandlerTypes = Array.Empty<Type>(),
-                EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
-                IgnoredAggregateRoots = new List<string>()
-            });
+            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", 
+                new EventBusSettings());
 
             registry.Bind<WebTesterStatefulInterview>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
@@ -73,7 +70,8 @@ namespace WB.UI.WebTester
 
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
-            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
+            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.Bind<IAggregateRootCache, WebTesterAggregateCache>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.Bind<IWebTesterTranslationService, WebTesterTranslationService>();
@@ -84,6 +82,7 @@ namespace WB.UI.WebTester
             registry.Bind<IVirtualPathService, VirtualPathService>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
+            registry.Bind<IAggregateRootPrototypeService, WebTesterAggregateRootPrototypeService>();
 
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
 
@@ -104,7 +103,7 @@ namespace WB.UI.WebTester
                 },
                 new RefitSettings
                 {                   
-                    ContentSerializer = new JsonContentSerializer(new JsonSerializerSettings { 
+                    ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings { 
                         TypeNameHandling = TypeNameHandling.All,
                         NullValueHandling = NullValueHandling.Ignore,
                         FloatParseHandling = FloatParseHandling.Decimal,

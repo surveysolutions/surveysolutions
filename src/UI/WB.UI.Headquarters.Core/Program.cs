@@ -1,17 +1,14 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using Serilog.Formatting.Json;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.AspNetCore;
+using WB.UI.Headquarters.Services.EmbeddedService;
 
 namespace WB.UI.Headquarters
 {
@@ -36,39 +33,12 @@ namespace WB.UI.Headquarters
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog((host, loggerConfig) =>
+                .ConfigureSurveySolutionsLogging("Headquarters", (host, logger) =>
                 {
-                    loggerConfig
-                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "Headquarters")
-                        .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
-                    
-                    if (host.HostingEnvironment.IsDevelopment())
-                    {
-                        // To debug logitems source add {SourceContext} to output template
-                        // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                        loggerConfig.WriteTo.Console();
-                    }
+                    logger.MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning);
                 })
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureAppConfiguration((hostingContext, c) =>
-                {
-                    c.AddIniFile("appsettings.ini", false, true);
-                    c.AddIniFile("appsettings.DEV_DEFAULTS.ini", true, true);
-                    c.AddIniFile("appsettings.cloud.ini", true, true);
-                    c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
-                    c.AddIniFile("appsettings.Production.ini", true, true);
-                    c.AddEnvironmentVariables("HQ_");
-                    c.AddCommandLine(args);
-
-                    if (hostingContext.HostingEnvironment.IsDevelopment())
-                    {
-                        c.AddUserSecrets<Startup>();
-                    }
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    //webBuilder.UseHttpSys();
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureSurveySolutionsAppConfiguration<Startup>("HQ_", args)
+                .ConfigureEmbeddedServices()
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

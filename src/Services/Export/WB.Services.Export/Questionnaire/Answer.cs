@@ -1,12 +1,13 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace WB.Services.Export.Questionnaire
 {
     public class Answer
     {
-        public string AnswerText { get; set; }
+        public string AnswerText { get; set; } = String.Empty;
 
-        public string AnswerValue { get; set; }
+        public string AnswerValue { get; set; } = String.Empty;
 
         public decimal GetParsedValue()
         {

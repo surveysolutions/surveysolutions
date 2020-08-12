@@ -122,7 +122,7 @@ namespace WB.Services.Export.Interview
             return new ValueVector<T>(values);
         }
 
-        public static implicit operator ValueVector<T>(string value)
+        public static implicit operator ValueVector<T>?(string value)
         {
             if (string.IsNullOrEmpty(value))
                 return null;

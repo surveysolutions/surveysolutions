@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(), 
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
-                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage),
+                new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage),
                 new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage));
         }
 

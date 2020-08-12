@@ -9,20 +9,12 @@
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:5301"
-    },
     "WB.UI.WebTester": {
       "commandName": "Project",
+      "launchUrl": "https://localhost:5301",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "launchUrl": "https://localhost:5301",
       "applicationUrl": "https://localhost:5301;http://localhost:5300"
     }
   }

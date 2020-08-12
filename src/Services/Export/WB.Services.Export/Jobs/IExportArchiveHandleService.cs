@@ -6,7 +6,7 @@ namespace WB.Services.Export.Jobs
 {
     public interface IExportArchiveHandleService
     {
-        Task<DataExportArchive> DownloadArchiveAsync(ExportSettings settings, string archiveName);
+        Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string questionnaireNamePrefixOverride);
 
         Task ClearAllExportArchives(TenantInfo tenant);
     }

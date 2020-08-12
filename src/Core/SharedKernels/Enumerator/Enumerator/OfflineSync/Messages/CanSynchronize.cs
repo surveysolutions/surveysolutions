@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     public class CanSynchronizeResponse : ICommunicationMessage
     {
         public bool CanSyncronize { get; set; }
-
         public SyncDeclineReason Reason { get; set; }
+        public string SupervisorVersion { get; set; }
     }
 }

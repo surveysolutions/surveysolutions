@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.SharedKernels.DataCollection;
+﻿using System;
+using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -20,12 +19,14 @@ namespace WB.UI.WebTester.Infrastructure
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             IInterviewTreeBuilder treeBuilder,
             IQuestionOptionsRepository optionsRepository,
-            IQuestionnaireStorage questionnaireStorage
+            IQuestionnaireStorage questionnaireStorage,
+            IClock clock
             ) 
             : base(
                 substitutionTextFactory, 
                 treeBuilder,
-                optionsRepository
+                optionsRepository,
+                clock
                 )
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
@@ -38,9 +39,13 @@ namespace WB.UI.WebTester.Infrastructure
         //    return this.appdomainsPerInterviewManager.GetFirstTopFilteredOptionsForQuestion(this.Id, questionIdentity, parentQuestionValue, filter, itemsCount, excludedOptionIds);
         //}
 
-        protected override IQuestionnaire GetQuestionnaireOrThrow(string language)
+        protected override IQuestionnaire GetQuestionnaireOrThrow(string? language)
         {
-            return this.questionnaireStorage.GetQuestionnaire(this.QuestionnaireIdentity, language);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(this.QuestionnaireIdentity, language);
+            if(questionnaire == null)
+                throw new InvalidOperationException("Questionnaire must not be null.");
+
+            return questionnaire;
         }
 
         public IQuestionnaire Questionnaire => GetQuestionnaireOrThrow(null);

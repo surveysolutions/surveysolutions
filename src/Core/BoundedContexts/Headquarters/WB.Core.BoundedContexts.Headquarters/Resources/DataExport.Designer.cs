@@ -520,7 +520,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions..
+        ///   Looks up a localized string similar to An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions with the log files *.log that are stored in the application folder. Additional information to this issue is available at the support page: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/..
         /// </summary>
         public static string Error_Unhandled {
             get {
@@ -790,6 +790,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire information.
+        /// </summary>
+        public static string QuestionnaireInformation {
+            get {
+                return ResourceManager.GetString("QuestionnaireInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude meta information about questionnaire.
+        /// </summary>
+        public static string QuestionnaireInformation_Exclude {
+            get {
+                return ResourceManager.GetString("QuestionnaireInformation_Exclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include meta information about questionnaire.
+        /// </summary>
+        public static string QuestionnaireInformation_Include {
+            get {
+                return ResourceManager.GetString("QuestionnaireInformation_Include", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation.
+        /// </summary>
+        public static string QuestionnaireTranslation {
+            get {
+                return ResourceManager.GetString("QuestionnaireTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Queued.
         /// </summary>
         public static string QueuedTitle {
@@ -858,6 +894,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string ToDate {
             get {
                 return ResourceManager.GetString("ToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation: {{language}}.
+        /// </summary>
+        public static string Translation_CardLabel {
+            get {
+                return ResourceManager.GetString("Translation_CardLabel", resourceCulture);
             }
         }
         

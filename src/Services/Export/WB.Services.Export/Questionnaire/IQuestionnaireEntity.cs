@@ -9,7 +9,7 @@ namespace WB.Services.Export.Questionnaire
 
         IEnumerable<IQuestionnaireEntity> Children { get; }
 
-        IQuestionnaireEntity GetParent();
+        IQuestionnaireEntity? GetParent();
         void SetParent(IQuestionnaireEntity parent);
         bool IsExportable { get { return true; } }
     }

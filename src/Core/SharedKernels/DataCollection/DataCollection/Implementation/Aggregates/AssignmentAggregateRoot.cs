@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class AssignmentAggregateRoot : AggregateRootMappedByConvention
+    public class AssignmentAggregateRoot : EventSourcedAggregateRoot
     {
         internal readonly AssignmentProperties properties = new AssignmentProperties();
 

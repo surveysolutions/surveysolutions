@@ -35,7 +35,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getBreadcrumbs")]
-        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string sectionId = null) 
+        public override BreadcrumbInfo GetBreadcrumbs(Guid interviewId, string? sectionId = null) 
             => base.GetBreadcrumbs(interviewId, sectionId);
 
         [HttpGet]
@@ -48,7 +48,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getEntitiesDetails")]
-        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
+        public override InterviewEntity[] GetEntitiesDetails(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string? sectionId = null) => base.GetEntitiesDetails(interviewId, ids, sectionId);
 
         [HttpGet]
         [Route("getFullSectionInfo")]
@@ -60,7 +60,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getNavigationButtonState")]
-        public override ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null) =>
+        public override ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire? questionnaire = null) =>
             base.GetNavigationButtonState(interviewId, sectionId, id, questionnaire);
 
         [HttpGet]
@@ -69,7 +69,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getPrefilledQuestions")]
-        public override InterviewEntityWithType[] GetPrefilledQuestions(Guid interviewId) => base.GetPrefilledQuestions(interviewId);
+        public override InterviewEntityWithType[] GetInterviewEntitiesWithTypes(Guid interviewId) => base.GetInterviewEntitiesWithTypes(interviewId);
 
         [HttpGet]
         [Route("getPrefilledEntities")]
@@ -85,7 +85,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpGet]
         [Route("getSidebarChildSectionsOf")]
-        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string sectionId = null) 
+        public override Sidebar GetSidebarChildSectionsOf(Guid interviewId, [FromQuery(Name = "ids[]")] string[] ids, string? sectionId = null) 
             => base.GetSidebarChildSectionsOf(interviewId, ids, sectionId);
 
         [HttpGet]

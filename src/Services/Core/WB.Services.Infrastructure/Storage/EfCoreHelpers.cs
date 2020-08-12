@@ -9,7 +9,7 @@ namespace WB.Services.Infrastructure.Storage
 {
     public static class EfCoreHelpers
     {
-        public static PropertyBuilder<TEnum> HasConversionOfEnumToString<TEnum>(this PropertyBuilder<TEnum> prop)
+        public static PropertyBuilder<TEnum> HasConversionOfEnumToString<TEnum>(this PropertyBuilder<TEnum> prop) where TEnum: Enum
         {
             return prop.HasConversion(
                 v => v.ToString().ToLowerInvariant(),

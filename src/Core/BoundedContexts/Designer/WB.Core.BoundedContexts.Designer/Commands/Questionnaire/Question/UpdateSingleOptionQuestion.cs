@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid? cascadeFromQuestionId,
             List<ValidationCondition> validationConditions,
             string linkedFilterExpression,
-            bool showAsList,
+            bool? showAsList,
             int? showAsListThreshold,
             Guid? categoriesId)
             : base(
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.Scope = scope;
             options?.ToList()
                 .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
-            this.Options = options;
+            this.Options = options ?? new Option[0];
             this.LinkedToEntityId = linkedToEntityId;
             this.LinkedFilterExpression = linkedFilterExpression;
             this.IsFilteredCombobox = isFilteredCombobox;
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public int? ShowAsListThreshold { get; set; }
 
-        public bool ShowAsList { get; set; }
+        public bool? ShowAsList { get; set; }
 
         public bool IsFilteredCombobox { get; set; }
 

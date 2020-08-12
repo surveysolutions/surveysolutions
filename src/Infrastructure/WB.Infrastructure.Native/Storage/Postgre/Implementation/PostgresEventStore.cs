@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -27,12 +28,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
         private readonly IUnitOfWork sessionProvider;
+        private readonly ILogger<PostgresEventStore> logger;
 
-        public PostgresEventStore(IEventTypeResolver eventTypeResolver,
-            IUnitOfWork sessionProvider)
+        public PostgresEventStore(
+            IEventTypeResolver eventTypeResolver,
+            IUnitOfWork sessionProvider,
+            ILogger<PostgresEventStore> logger)
         {
             this.eventTypeResolver = eventTypeResolver;
             this.sessionProvider = sessionProvider;
+            this.logger = logger;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
@@ -182,7 +187,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         sourceId = eventStream.SourceId,
                         sequence = eventStream.InitialVersion
                     }).ToList();
-                if(eventsFromDb.Count != 1 || eventsFromDb[0] != eventStream.InitialVersion)
+                if (eventsFromDb.Count != 1 || eventsFromDb[0] != eventStream.InitialVersion)
                 {
                     throw new InvalidOperationException(
                         $"Unexpected stream version. Expected {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
@@ -222,12 +227,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                                         eventsourceid = @eventSourceId
                                         and NOT (eventtype = ANY(@eventTypes))
                                         order by eventsequence desc
-                                        limit 1", 
+                                        limit 1",
                 new { eventSourceId, eventTypes = excludeTypeNames }
                 );
         }
 
-        public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
+        public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize, long limitSize = long.MaxValue)
         {
             // fix for KP-13687
             var sessionConnection = this.sessionProvider.Session.Connection;
@@ -242,7 +247,41 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                    LIMIT @batchSize",
                     new { minVersion = startWithGlobalSequence, batchSize = pageSize }, buffered: false);
 
-            return rawEventsData;
+            var enumerator = rawEventsData.GetEnumerator();
+            long limit = limitSize;
+            long eventsRead = 0;
+
+            try
+            {
+                while (enumerator.MoveNext())
+                {
+                    var ev = enumerator.Current;
+
+                    yield return ev;
+                    eventsRead++;
+
+                    limit -= ev.Value.Length;
+
+                    if (limit <= 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                try
+                {
+                    enumerator.Dispose();
+                }
+                catch (PostgresException ne) when (ne.SqlState == "57014")
+                {
+                    // 57014: canceling statement due to user request 
+                    // thrown by breaking IEnumerable enumeration.          
+                    this.logger.LogWarning($"Cancelling events reading due to set read limit: {limitSize} bytes. " +
+                        $"Read {eventsRead} instead of requested page size of: {pageSize}");
+                }
+            }
         }
 
         public async Task<List<CommittedEvent>> GetEventsInReverseOrderAsync(Guid aggregateRootId, int offset, int limit)

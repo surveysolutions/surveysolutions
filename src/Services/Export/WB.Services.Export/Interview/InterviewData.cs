@@ -24,10 +24,10 @@ namespace WB.Services.Export.Interview
         public Guid? SupervisorId { get; set; }
         public bool CreatedOnClient { get; set; }
         public bool ReceivedByInterviewer { get; set; }
-        public string CurrentLanguage { get; set; }
+        public string CurrentLanguage { get; set; } = String.Empty;
         public bool IsMissingAssignToInterviewer { get; set; }
 
-        public string InterviewKey { get; set; }
+        public string InterviewKey { get; set; } = String.Empty;
         public int? AssignmentId { get; set; }
     }
 }

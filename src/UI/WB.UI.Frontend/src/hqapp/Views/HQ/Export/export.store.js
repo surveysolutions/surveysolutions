@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { find, findIndex } from 'lodash'
+import { find, findIndex, chunk } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 
@@ -67,15 +67,20 @@ export default {
         async getJobsUpdate({ commit }, ids) {
             const api = Vue.$config.model.api
 
-            const response = await Vue.$http.post(api.exportStatusUrl, ids)
+            const chunks = chunk(ids, 20)
 
-            if (response.data == null) {
-                return
+            for (let i = 0; i < chunks.length; i++) {
+                const response = await Vue.$http.post(api.exportStatusUrl, chunks[i])
+
+                if (response.data == null) {
+                    return
+                }
+
+                response.data.forEach(job => {
+                    commit('UPDATE_JOB', job)
+                })
             }
 
-            response.data.forEach(job => {
-                commit('UPDATE_JOB', job)
-            })
         },
     },
 

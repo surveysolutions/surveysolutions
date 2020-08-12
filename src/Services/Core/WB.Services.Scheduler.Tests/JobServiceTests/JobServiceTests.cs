@@ -154,7 +154,7 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
         }
 
         [Test]
-        public void should_not_increase_error_count_on_communication_errors()
+        public void should_increase_error_count_on_communication_errors()
         {
             var job = Create.Entity.Job();
 
@@ -162,7 +162,7 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
             
             job.Handle(new FailJobEvent(job.Id, new HttpRequestException("error", new SocketException())));
 
-            Assert.That(job.FailedTimes, Is.EqualTo(failedTimes));
+            Assert.That(job.FailedTimes, Is.EqualTo(failedTimes + 1));
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
             job.Handle(new FailJobEvent(job.Id, new Exception()));
             Assert.That(job.FailedTimes, Is.EqualTo(3));
             Assert.That(job.Status, Is.EqualTo(JobStatus.Created));
-            Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(true));
+            Assert.That(job.ShouldDropTenantSchema, Is.EqualTo(false));
 
             job.Handle(new FailJobEvent(job.Id, new Exception()));
             Assert.That(job.FailedTimes, Is.EqualTo(4));

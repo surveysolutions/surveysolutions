@@ -56,7 +56,7 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
         protected static InterviewData CreateInterviewData()
         {
             var interviewData = new InterviewData() { InterviewId = Guid.NewGuid() };
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, RosterVector.Empty));
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(),  RosterVector.Empty));
             return interviewData;
         }
 

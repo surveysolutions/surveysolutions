@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.Ddi;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -30,9 +30,11 @@ namespace WB.Services.Export.CsvExport.Implementation
 
         private readonly IProductVersion productVersion;
         private readonly IPdfExporter pdfExporter;
+        private readonly IQuestionnaireBackupExporter questionnaireBackupExporter;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAssignmentActionsExporter assignmentActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
+        private readonly IDdiMetadataFactory ddiMetadataFactory;
 
         public TabularFormatExportService(
             ILogger<TabularFormatExportService> logger,
@@ -46,7 +48,9 @@ namespace WB.Services.Export.CsvExport.Implementation
             IProductVersion productVersion, 
             IPdfExporter pdfExporter,
             IFileSystemAccessor fileSystemAccessor,
-            IAssignmentActionsExporter assignmentActionsExporter)
+            IAssignmentActionsExporter assignmentActionsExporter,
+            IQuestionnaireBackupExporter questionnaireBackupExporter, 
+            IDdiMetadataFactory ddiMetadataFactory)
         {
             this.logger = logger;
             this.interviewsToExportSource = interviewsToExportSource;
@@ -60,6 +64,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.pdfExporter = pdfExporter;
             this.fileSystemAccessor = fileSystemAccessor;
             this.assignmentActionsExporter = assignmentActionsExporter;
+            this.questionnaireBackupExporter = questionnaireBackupExporter;
+            this.ddiMetadataFactory = ddiMetadataFactory;
         }
 
         public async Task ExportInterviewsInTabularFormatAsync(
@@ -75,7 +81,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             var toDate = settings.ToDate;
 
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireIdentity, token: cancellationToken);
-
+            if(questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
             QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
             var exportInterviewsProgress = new ExportProgress();
@@ -119,14 +126,20 @@ namespace WB.Services.Export.CsvExport.Implementation
             {
                 var assignmentIdsToExport = 
                     interviewsToExport.Where(x => x.AssignmentId.HasValue)
-                                      .Select(x => x.AssignmentId.Value)
+                                      .Select(x => x.AssignmentId!.Value)
                                       .Distinct()
                                       .ToList();
                 await this.assignmentActionsExporter.ExportAsync(assignmentIdsToExport, 
                     tenant, tempPath,  exportAssignmentActionsProgress, cancellationToken);
             }
-            
-            await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
+
+            if (settings.IncludeMeta != false)
+            {
+                await this.pdfExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
+                await this.questionnaireBackupExporter.ExportAsync(tenant, questionnaire, tempPath, cancellationToken);
+                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(tenant,
+                    questionnaire.QuestionnaireId, tempPath);
+            }
 
             exportWatch.Stop();
 
@@ -136,9 +149,12 @@ namespace WB.Services.Export.CsvExport.Implementation
             );
         }
         
-        public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
+        public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension, CancellationToken cancellationToken)
         {
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: cancellationToken);
+            if (questionnaire == null)
+                throw new InvalidOperationException("questionnaire must be not null.");
+
             QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
             var questionnaireUrl = $"https://designer.mysurvey.solutions/questionnaire/details/{questionnaire.PublicKey.ToString("N")}";

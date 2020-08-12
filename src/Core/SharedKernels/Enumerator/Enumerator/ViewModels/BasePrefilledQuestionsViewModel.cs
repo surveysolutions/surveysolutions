@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -84,10 +85,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
-            
-            var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.InterviewId).ToList();
 
-            var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
+            var navigationState = this.interviewViewModelFactory.GetNew<NavigationState>();
+            navigationState.Init(InterviewId, questionnaire.QuestionnaireId.FormatGuid());
+            var prefilledEntities = this.interviewViewModelFactory.GetPrefilledEntities(this.InterviewId, navigationState).ToList();
+
+            var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(prefilledEntities);
             
             this.startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.InterviewStarted += (sender, args) => this.Dispose();

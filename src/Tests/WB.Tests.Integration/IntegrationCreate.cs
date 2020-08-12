@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Microsoft.Extensions.Options;
 using Moq;
+using Ncqrs;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -24,6 +25,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -35,6 +37,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -159,7 +162,8 @@ namespace WB.Tests.Integration
             var interview = new Interview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                optionsRepository
+                optionsRepository,
+                new SystemClock()
                 );
             interview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -197,7 +201,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository()
+                Create.Storage.QuestionnaireQuestionOptionsRepository(),
+                new SystemClock()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -249,7 +254,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                optionsRepository
+                optionsRepository,
+                new SystemClock()
                  );
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
 
@@ -293,21 +299,26 @@ namespace WB.Tests.Integration
                         eventSequence: x.EventSequence)));
         }
 
-        public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null)
+        public static SequentialCommandService SequentialCommandService(
+            IEventSourcedAggregateRootRepository repository = null, 
+            ILiteEventBus eventBus = null)
         {
             var locatorMock = new Mock<IServiceLocator>();
 
-            locatorMock.Setup(x => x.GetInstance<IInScopeExecutor>())
-                .Returns(() => new NoScopeInScopeExecutor(locatorMock.Object));
-            locatorMock.Setup(x => x.GetInstance<ICommandExecutor>())
-                .Returns(new CommandExecutor(repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                    eventBus ?? Mock.Of<IEventBus>(),
-                    locatorMock.Object,
-                    Mock.Of<IPlainAggregateRootRepository>(),
-                    Mock.Of<IAggregateRootCacheCleaner>(),
-                    Mock.Of<ICommandsMonitoring>()));
+            locatorMock.Setup(expression: x => x.GetInstance<IInScopeExecutor>())
+                .Returns(valueFunction: () => new NoScopeInScopeExecutor(rootScope: locatorMock.Object));
+            locatorMock.Setup(expression: x => x.GetInstance<ICommandExecutor>())
+                .Returns(value: new CommandExecutor(eventSourcedRepository: repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                    eventBus: eventBus ?? Mock.Of<IEventBus>(),
+                    serviceLocator: locatorMock.Object,
+                    plainRepository: Mock.Of<IPlainAggregateRootRepository>(),
+                    aggregateRootCache: Create.Storage.NewAggregateRootCache(),
+                    commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
+                    prototypeService: Create.Service.MockOfAggregatePrototypeService(),
+                    promoterService: Mock.Of<IAggregateRootPrototypePromoterService>()
+                    ));
 
-            return new SequentialCommandService(locatorMock.Object, Stub.Lock());
+            return new SequentialCommandService(serviceLocator: locatorMock.Object, aggregateLock: Stub.Lock());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
@@ -328,10 +339,10 @@ namespace WB.Tests.Integration
         public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
         {
             return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
+            (
+                variableNames : variableNames,
+                rows : rows
+            );
         }
 
         public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
@@ -351,6 +362,7 @@ namespace WB.Tests.Integration
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
                 postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
                 Mock.Of<ILogger>(),
+                Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
         }
 
@@ -373,14 +385,13 @@ namespace WB.Tests.Integration
             if (executeSchemaUpdate)
             {
                 var update = new SchemaUpdate(cfg);
-                update.Execute(true, true);
+                update.Execute(false, true);
             }
             if (schemaName != null)
             {
                 cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             }
-
-            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultFlushMode, FlushMode.Always.ToString());
+            
             return cfg.BuildSessionFactory();
         }
 
@@ -424,16 +435,20 @@ namespace WB.Tests.Integration
         }
 
         public static DesignerEngineVersionService DesignerEngineVersionService()
-            => new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
+            => new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
             IUnitOfWork sessionProvider = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
-            return new PostgreReadSideStorage<TEntity>(
-                sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                Mock.Of<ILogger>(),
-                Mock.Of<IServiceLocator>());
+            return new PostgreReadSideStorage<TEntity>(sessionProvider ?? Mock.Of<IUnitOfWork>(), Create.Storage.NewMemoryCache());
+        }  
+        
+        public static PostgreReadSideStorage<TEntity, TK> PostgresReadSideRepository<TEntity, TK>(
+            IUnitOfWork sessionProvider = null)
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            return new PostgreReadSideStorage<TEntity, TK>(sessionProvider ?? Mock.Of<IUnitOfWork>(), Create.Storage.NewMemoryCache());
         }
 
         public static AnswerNotifier AnswerNotifier(IViewModelEventRegistry registry = null)

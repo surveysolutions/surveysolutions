@@ -42,13 +42,13 @@ namespace WB.UI.Designer.Api.Portal
             var roles = await this.accountRepository.GetRolesAsync(user);
             var fullName = await this.accountRepository.GetFullName(user.Id);
             return Ok(new PortalUserModel
-            {
-                Id = user.Id,
-                Login = user.UserName,
-                Email = user.Email,
-                Roles = roles.ToArray(),
-                FullName = fullName
-            });
+            (
+                id : user.Id,
+                login : user.UserName,
+                email : user.Email,
+                roles : roles.ToArray(),
+                fullName : fullName
+            ));
         }
 
         [Route("{userId}/questionnaires")]

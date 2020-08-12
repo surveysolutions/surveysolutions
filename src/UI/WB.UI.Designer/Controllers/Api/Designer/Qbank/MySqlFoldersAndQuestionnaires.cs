@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WB.UI.Designer.Api.Designer.Qbank
 {
@@ -12,8 +9,8 @@ namespace WB.UI.Designer.Api.Designer.Qbank
     {
         public int Id { get; set; }
         public int Classification_id { get; set; }
-        public string Classification_label { get; set; }
-        public string Value { get; set; }
+        public string Classification_label { get; set; } = String.Empty;
+        public string Value { get; set; } = String.Empty;
         public int Weight { get; set; }
     }
     /*
@@ -29,10 +26,10 @@ namespace WB.UI.Designer.Api.Designer.Qbank
     public class MySqlFoldersAndQuestionnaires
     {
         public int Id { get; set; }
-        public Guid? IdGuid { get; set; }
+        public Guid IdGuid { get; set; }
         public int Pid { get; set; }
-        public string Name { get; set; }
-        public string Description{ get; set; }
+        public string Name { get; set; } = String.Empty;
+        public string Description { get; set; } = string.Empty;
         public int Published { get; set; }
     }
 
@@ -61,15 +58,15 @@ namespace WB.UI.Designer.Api.Designer.Qbank
     {
         public int Id { get; set; }
         public int Quest_module_id { get; set; }
-        public string Name { get; set; }
-        public string Description{ get; set; }
-        public string Pre_text{ get; set; }
-        public string Post_text{ get; set; }
-        public string Literal_text{ get; set; }
+        public string? Name { get; set; }
+        public string? Description{ get; set; }
+        public string? Pre_text{ get; set; }
+        public string? Post_text{ get; set; }
+        public string? Literal_text{ get; set; }
         
         public int? Visual_rep_format{ get; set; }
-        public string Notes{ get; set; }
-        public string Instructions{ get; set; }
+        public string? Notes{ get; set; }
+        public string? Instructions{ get; set; }
         public int? Published { get; set; }
         public int? Weight { get; set; }
         public int? Classification_id { get; set; }
@@ -91,9 +88,9 @@ namespace WB.UI.Designer.Api.Designer.Qbank
     public class MySqlSections
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description{ get; set; }
-        public string Notes{ get; set; }
+        public string? Name { get; set; }
+        public string? Description{ get; set; }
+        public string? Notes{ get; set; }
         public int? Published { get; set; }
         public int? Weight { get; set; }
     }

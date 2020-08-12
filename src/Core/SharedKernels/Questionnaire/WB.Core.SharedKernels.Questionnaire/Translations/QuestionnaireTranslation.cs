@@ -24,13 +24,13 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             }
         }
 
-        public string GetTitle(Guid entityId)
+        public string? GetTitle(Guid entityId)
             => this.GetUniqueTranslationByType(entityId, TranslationType.Title);
 
-        public string GetInstruction(Guid questionId)
+        public string? GetInstruction(Guid questionId)
             => this.GetUniqueTranslationByType(questionId, TranslationType.Instruction);
 
-        public string GetAnswerOption(Guid questionId, string answerOptionValue, string answerParentValue)
+        public string? GetAnswerOption(Guid questionId, string? answerOptionValue, string? answerParentValue)
         {
             var translation =  this.GetTranslationByTypeAndIndex(questionId, $"{answerOptionValue}${answerParentValue}",
                 TranslationType.OptionTitle);
@@ -41,20 +41,20 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             return translation ?? this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
         }
 
-        public string GetSpecialValue(Guid questionId, string answerOptionValue)
+        public string? GetSpecialValue(Guid questionId, string? answerOptionValue)
             => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.SpecialValue);
 
-        public string GetValidationMessage(Guid entityId, int validationOneBasedIndex)
+        public string? GetValidationMessage(Guid entityId, int validationOneBasedIndex)
             => this.GetTranslationByTypeAndIndex(
                 entityId, validationOneBasedIndex.ToString(), TranslationType.ValidationMessage);
 
-        public string GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue)
+        public string? GetFixedRosterTitle(Guid rosterId, decimal fixedRosterTitleValue)
             => this.GetTranslationByTypeAndIndex(
                 rosterId, fixedRosterTitleValue.ToString("F0", CultureInfo.InvariantCulture), TranslationType.FixedRosterTitle);
 
         public bool IsEmpty() => !this.translations.Any();
 
-        public string GetCategoriesText(Guid categoriesId, int id, int? parentId)
+        public string? GetCategoriesText(Guid categoriesId, int id, int? parentId)
         {
             var translation = this.GetTranslationByTypeAndIndex(categoriesId, $"{id}${parentId}", TranslationType.Categories);
             
@@ -64,12 +64,12 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             return translation ?? this.GetTranslationByTypeAndIndex(categoriesId, id.ToString(), TranslationType.Categories);
         }
 
-        private string GetTranslationByTypeAndIndex(Guid questionOrCategoriesId, string answerOptionValue, TranslationType translationType) =>
+        private string? GetTranslationByTypeAndIndex(Guid questionOrCategoriesId, string? answerOptionValue, TranslationType translationType) =>
             this.translations.ContainsKey(questionOrCategoriesId)
                 ? this.translations[questionOrCategoriesId].SingleOrDefault(x => x.Type == translationType && x.TranslationIndex == answerOptionValue)?.Value
                 : null;
 
-        private string GetUniqueTranslationByType(Guid entityId, TranslationType translationType)
+        private string? GetUniqueTranslationByType(Guid entityId, TranslationType translationType)
             => this.translations.ContainsKey(entityId) 
                ? this.translations[entityId].SingleOrDefault(x => x.Type == translationType)?.Value
                : null;

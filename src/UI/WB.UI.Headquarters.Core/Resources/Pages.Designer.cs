@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -750,6 +750,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string DetailsQuestionPartialView_WriteCommentPlaceholder {
             get {
                 return ResourceManager.GetString("DetailsQuestionPartialView_WriteCommentPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Diagnostics {
+            get {
+                return ResourceManager.GetString("Diagnostics", resourceCulture);
             }
         }
         
@@ -1528,7 +1537,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locked interviewers (box is checked) cannot connect their tablets with the server and send interviews to the server..
+        ///   Looks up a localized string similar to Locked interviewers cannot connect their tablets with the server and send interviews..
         /// </summary>
         public static string Interviewer_LockWarning {
             get {
@@ -2077,7 +2086,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total number of success synchronizations.
+        ///   Looks up a localized string similar to Total number of successful synchronizations.
         /// </summary>
         public static string InterviewerProfile_NumberOfSuccessSynchronizations {
             get {
@@ -2221,7 +2230,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recent synchronizations activity.
+        ///   Looks up a localized string similar to Recent synchronization activity.
         /// </summary>
         public static string InterviewerProfile_Sync_Activity_Title {
             get {
@@ -2482,6 +2491,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last log in.
+        /// </summary>
+        public static string Interviewers_LastLoginDateTitle {
+            get {
+                return ResourceManager.GetString("Interviewers_LastLoginDateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date when the interviewer loged in last time.
+        /// </summary>
+        public static string Interviewers_LastLoginDateTooltip {
+            get {
+                return ResourceManager.GetString("Interviewers_LastLoginDateTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {{supervisor}}..
         /// </summary>
         public static string Interviewers_MoveAllToNewTeam {
@@ -2505,6 +2532,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_MoveToAnotherTeam {
             get {
                 return ResourceManager.GetString("Interviewers_MoveToAnotherTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you&apos;ve already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER..
+        /// </summary>
+        public static string Interviewers_MoveWebAssigment {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveWebAssigment", resourceCulture);
             }
         }
         
@@ -2644,7 +2680,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Devices/Interviewer report shows number of interviewer accounts on this server affected by each issue.
+        ///   Looks up a localized string similar to Issues for each interviewer.
         /// </summary>
         public static string InterviewersAndDevicesSubtitle {
             get {
@@ -3139,7 +3175,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload zip archive containing maps..
+        ///   Looks up a localized string similar to Upload a zip archive containing maps..
         /// </summary>
         public static string MapList_UploadDescription {
             get {
@@ -3148,7 +3184,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Files with same name will be overridden..
+        ///   Looks up a localized string similar to Note: Files with same name will be overwritten..
         /// </summary>
         public static string MapList_UploadDescriptionExtra {
             get {
@@ -3306,6 +3342,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print.
+        /// </summary>
+        public static string Print {
+            get {
+                return ResourceManager.GetString("Print", resourceCulture);
             }
         }
         
@@ -3706,6 +3751,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Password.
+        /// </summary>
+        public static string ShowPassword {
+            get {
+                return ResourceManager.GetString("ShowPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         public static string Status {
@@ -3914,7 +3968,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Surveys and Statuses report shows number of interviews in each status by surveys.
+        ///   Looks up a localized string similar to Shows the number of interviews in each status (columns) for each survey instrument (rows).
         /// </summary>
         public static string SurveysAndStatuses_HeadquartersDescription {
             get {

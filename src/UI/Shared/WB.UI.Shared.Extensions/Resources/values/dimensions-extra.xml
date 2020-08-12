@@ -14,4 +14,9 @@
     <dimen name="area_editor_compass_margin_bottom">300dp</dimen>
     
     <dimen name="button_corners_radius">6dp</dimen>
+
+    <dimen name="area_editor_text_size_regular">16dp</dimen>
+    <dimen name="area_editor_text_size_large">18dp</dimen>
+
+    <dimen name="area_editor_padding_regular">18dp</dimen>
 </resources>

@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.Should().Be("integer");
-            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.AllMultioptionYesNoCodes.Should().BeEmpty();
             question.Condition.Should().Be("integer condition");
             question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("integer validation");
             question.IsMultiOptionYesNoQuestion.Should().Be(false);

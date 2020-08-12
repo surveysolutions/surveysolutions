@@ -124,10 +124,10 @@
     <value>Lookup table with such id is absent.</value>
   </data>
   <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
-    <value>File with no data can not be loaded</value>
+    <value>File with no data cannot be loaded</value>
   </data>
   <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
-    <value>Value {0} can not be parsed as decimal number. Column {1}, row {2}.</value>
+    <value>Value {0} cannot be parsed as decimal number. Column {1}, row {2}.</value>
   </data>
   <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
     <value>Empty or invalid headers are not allowed</value>
@@ -139,19 +139,19 @@
     <value>Rowcode values must be unique</value>
   </data>
   <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
-    <value>Value {0} can not be parsed as long integer number. Column {1}, row {2}.</value>
+    <value>Value {0} cannot be parsed as long integer number. Column {1}, row {2}.</value>
   </data>
   <data name="LookupTables_too_many_columns" xml:space="preserve">
     <value>Too many columns in uploaded file. Max columns count is {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Max rows count limit ({0} rows) was exceeded.</value>
+    <value>Lookup table contains {1} rows, which exceeds the limit on the number of rows in a lookup table ({0} rows).</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
-    <value>Macro with such is is already exist.</value>
+    <value>Macro already exists.</value>
   </data>
   <data name="MacroIsAbsent" xml:space="preserve">
-    <value>Macro with such is is absent.</value>
+    <value>Macro is absent.</value>
   </data>
   <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
     <value>Headers with the same name are not allowed</value>
@@ -187,7 +187,7 @@
     <value>Questionnaire item with id {0} can't be found.</value>
   </data>
   <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
-    <value>Questionnaire's title can not be empty or contains whitespace only.</value>
+    <value>Questionnaire's title cannot be empty or contain whitespace only.</value>
   </data>
   <data name="SubSectionCantBeFound" xml:space="preserve">
     <value>Sub-section with public key {0} can't be found.</value>
@@ -205,13 +205,25 @@
     <value>Question cannot be pasted here.</value>
   </data>
   <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
-    <value>Last existing section can not be removed from questionnaire</value>
+    <value>Last existing section cannot be removed from questionnaire</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Cover section can not be removed from questionnaire</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Cover section must be first section in questionnaire</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
+    <value>Cover section can contain only questions and static texts</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>It is readonly Cover section. You can not edit or re-order questions in it.</value>
   </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>Couldn't remove user, because it doesn't exist in share list</value>
   </data>
   <data name="FailedToAddGroup" xml:space="preserve">
-    <value>Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}</value>
+    <value>Failed attempt to add group {0} into group {1}. But group {1} doesn't exist in document {2}</value>
   </data>
   <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
     <value>Trying to import template of deleted questionnaire</value>
@@ -220,13 +232,13 @@
     <value>Invalid title list</value>
   </data>
   <data name="InvalidValueOfFixedTitle" xml:space="preserve">
-    <value>Fixed set of items roster value is required</value>
+    <value>Non empty values for fixed roster titles are required</value>
   </data>
   <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
     <value>Only QuestionnaireDocuments are supported for now</value>
   </data>
   <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
-    <value>Questionnire {0} of version {1} can't be found</value>
+    <value>Questionnaire {0} of version {1} can't be found</value>
   </data>
   <data name="QuestionTypeIsNotSupported" xml:space="preserve">
     <value>Question type is not supported: {0}</value>
@@ -247,22 +259,22 @@
     <value>User {0} is an owner of this questionnaire. Please, input another email.</value>
   </data>
   <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
-    <value>Fixed set of items roster value should have only number characters</value>
+    <value>Fixed set of items roster value should only have numeric characters</value>
   </data>
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>Variable cannot be pasted here.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Categories in cascading question can not have empty ParentValue column.</value>
+    <value>Categories in cascading question cannot have empty ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Categories in cascading question can not have not numeric value in ParentValue column.</value>
+    <value>Categories in cascading question cannot have not numeric value in ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>There is at least one duplicate of "Title" and "Parent Value" pairs. The list should not contain any duplicates.</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>Category value should have only number characters</value>
+    <value>Category value should only have numeric characters</value>
   </data>
   <data name="AttachmentIdIsMissing" xml:space="preserve">
     <value>Missing attachment with id {0}</value>

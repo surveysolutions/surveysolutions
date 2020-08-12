@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to change protection state? You will need to regenerate exported data in order to open it..
+        ///   Looks up a localized string similar to Are you sure you want to change the export file security settings? You will need to create regenerate exported data in order to open it..
         /// </summary>
         public static string ChangeStateConfirm {
             get {
@@ -601,7 +601,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled then interviewer tablet will send partial collected data to server.
+        ///   Looks up a localized string similar to When enabled, interviewer tablet will send answers from non completed interviews to Headquarters.
         /// </summary>
         public static string PartialSynchronizationDescription {
             get {

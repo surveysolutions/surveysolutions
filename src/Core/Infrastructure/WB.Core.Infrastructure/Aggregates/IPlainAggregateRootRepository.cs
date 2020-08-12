@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿#nullable enable
+using System;
 
 namespace WB.Core.Infrastructure.Aggregates
 {
@@ -7,14 +7,14 @@ namespace WB.Core.Infrastructure.Aggregates
     {
         T Get<T>(Guid aggregateId) where T : class, IPlainAggregateRoot;
 
-        IPlainAggregateRoot Get(Type aggregateRootType, Guid aggregateId);
+        IPlainAggregateRoot? Get(Type aggregateRootType, Guid aggregateId);
 
         void Save(IPlainAggregateRoot aggregateRoot);
     }
 
     public interface IPlainAggregateRootRepository<T> where T : class, IPlainAggregateRoot
     {
-        T Get(Guid aggregateId);
+        T? Get(Guid aggregateId);
 
         void Save(T aggregateRoot);
     }

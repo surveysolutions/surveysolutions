@@ -7,9 +7,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     public class NewEditStaticTextView
     {
 
-        public NewEditStaticTextView()
+        public NewEditStaticTextView(Guid id, string? text = null, string? attachmentName = null, string? enablementCondition = null, 
+            Breadcrumb[]? breadcrumbs = null, List<ValidationCondition>? validationCondition = null, bool hideIfDisabled = false)
         {
-            this.ValidationConditions = new List<ValidationCondition>();
+            ParentGroupsIds = new Guid[0];
+            RosterScopeIds = new Guid[0];
+
+            ValidationConditions = validationCondition ?? new List<ValidationCondition>();
+            Id = id;
+            HideIfDisabled = hideIfDisabled;
+            Text = text ?? "";
+            AttachmentName = attachmentName ?? "";
+            EnablementCondition = enablementCondition ?? "";
+            Breadcrumbs = breadcrumbs ?? new Breadcrumb[0];
         }
 
         public Guid Id { get; set; }

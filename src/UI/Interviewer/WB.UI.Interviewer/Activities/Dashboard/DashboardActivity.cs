@@ -20,26 +20,25 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.OfflineSync.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
-using GoogleApiAvailability = Android.Gms.Common.GoogleApiAvailability;
+
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
-    [Activity(Label = "", 
-        Theme = "@style/GrayAppTheme", 
+    [Activity(Label = "",
+        Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>, 
-        ISyncBgService<SyncProgressDto>, 
-        ISyncServiceHost<SyncBgService>, 
-        GoogleApiClient.IConnectionCallbacks, 
+    public class DashboardActivity : BaseActivity<DashboardViewModel>,
+        ISyncBgService<SyncProgressDto>,
+        ISyncServiceHost<SyncBgService>,
+        GoogleApiClient.IConnectionCallbacks,
         GoogleApiClient.IOnConnectionFailedListener
     {
         private static Random rnd = new Random();
@@ -132,8 +131,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             for (int i = 0; i < this.fragmentStatePagerAdapter.Count; i++)
             {
-                var fragment = (MvxFragment) fragmentStatePagerAdapter.GetItem(i);
-                InterviewTabPanel viewModel = (InterviewTabPanel) fragment.ViewModel;
+                var fragment = (MvxFragment)fragmentStatePagerAdapter.GetItem(i);
+                InterviewTabPanel viewModel = (InterviewTabPanel)fragment.ViewModel;
                 if (viewModel.InterviewStatus == this.ViewModel.TypeOfInterviews)
                 {
                     this.viewPager.SetCurrentItem(i, false);
@@ -150,7 +149,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void StartedInterviewsOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
             => this.UpdateFragmentByViewModelPropertyChange<StartedInterviewsFragment>((ListViewModel)sender, propertyChangedEventArgs.PropertyName, 1);
-        
+
         private void UpdateFragmentByViewModelPropertyChange<TFragmentType>(ListViewModel listViewModel, string propertyName, int position)
         {
             if (propertyName != nameof(ListViewModel.ItemsCount)) return;
@@ -184,7 +183,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(SyncBgService)), 
+            this.BindService(new Intent(this, typeof(SyncBgService)),
                 new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
         }
 
@@ -209,7 +208,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             }
         }
 
-        public override void OnBackPressed() {}
+        public override void OnBackPressed() { }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -218,6 +217,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_offline_synchronization, Resource.Drawable.synchronize_offline_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_map_dashboard, Resource.Drawable.map_icon);
 
             if (ViewModel.SynchronizationWithHqEnabled)
             {
@@ -228,11 +228,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 menu.FindItem(Resource.Id.menu_synchronization).SetVisible(false);
             }
 
+            if (!ViewModel.DoesSupportMaps)
+            {
+                menu.FindItem(Resource.Id.menu_map_dashboard).SetVisible(false);
+            }
+
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
+            //menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -246,6 +252,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
+                    break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
                     break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();
@@ -276,30 +285,13 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected GoogleApiClient GoogleApi;
         const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
-        private BluetoothReceiver bluetoothReceiver;
 
         protected override void OnStop()
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
 
-            if (this.bluetoothReceiver != null)
-            {
-                UnregisterReceiver(this.bluetoothReceiver);
-                bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
-                bluetoothReceiver = null;
-            }
-
             base.OnStop();
-        }
-
-        private void OnBluetoothDisabled(object sender, EventArgs e)
-        {
-            this.UnregisterReceiver(this.bluetoothReceiver);
-            this.bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
-            this.bluetoothReceiver = null;
-
-            this.RestoreGoogleApiConnectionIfNeeded();
         }
 
         public void OnConnected(Bundle connectionHint)
@@ -330,21 +322,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void OnOfflineSynchronizationStarted()
         {
             if (!this.CheckPlayServices()) return;
-
-            var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
-            if (mBluetoothAdapter.IsEnabled)
-            {
-                bluetoothReceiver = new BluetoothReceiver();
-                IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
-                RegisterReceiver(bluetoothReceiver, filter);
-                bluetoothReceiver.BluetoothDisabled += OnBluetoothDisabled;
-
-                BluetoothAdapter.DefaultAdapter.Disable();
-            }
-            else
-            {
-                this.RestoreGoogleApiConnectionIfNeeded();
-            }
+            this.RestoreGoogleApiConnectionIfNeeded();
         }
 
         /// <summary>

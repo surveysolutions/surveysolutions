@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public class DesignerIdentityUser : IdentityUser<Guid>
     {
-        public virtual string PasswordSalt { get; set; }
+        public virtual string? PasswordSalt { get; set; }
 
         public virtual bool CanImportOnHq { get; set; }
 

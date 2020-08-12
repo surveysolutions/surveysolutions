@@ -6,9 +6,9 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 {
     public class InterviewReferenceEntityTypeConfiguration : IEntityTypeConfiguration<InterviewReference>
     {
-        private readonly string schema;
+        private readonly string? schema;
 
-        public InterviewReferenceEntityTypeConfiguration(string schema)
+        public InterviewReferenceEntityTypeConfiguration(string? schema)
         {
             this.schema = schema;
         }
@@ -22,9 +22,9 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
     public class DeletedQuestionnaireReferenceTypeConfiguration : IEntityTypeConfiguration<GeneratedQuestionnaireReference>
     {
-        private readonly string schema;
+        private readonly string? schema;
 
-        public DeletedQuestionnaireReferenceTypeConfiguration(string schema)
+        public DeletedQuestionnaireReferenceTypeConfiguration(string? schema)
         {
             this.schema = schema;
         }
@@ -39,9 +39,9 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
     public class MetadataTypeConfiguration : IEntityTypeConfiguration<Metadata>
     {
-        private readonly string schema;
+        private readonly string? schema;
 
-        public MetadataTypeConfiguration(string schema)
+        public MetadataTypeConfiguration(string? schema)
         {
             this.schema = schema;
         }
@@ -54,9 +54,9 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
     public class AssignmentTypeConfiguration : IEntityTypeConfiguration<Assignment.Assignment>
     {
-        private readonly string schema;
+        private readonly string? schema;
 
-        public AssignmentTypeConfiguration(string schema)
+        public AssignmentTypeConfiguration(string? schema)
         {
             this.schema = schema;
         }
@@ -78,9 +78,9 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
     public class AssignmentActionTypeConfiguration : IEntityTypeConfiguration<AssignmentAction>
     {
-        private readonly string schema;
+        private readonly string? schema;
 
-        public AssignmentActionTypeConfiguration(string schema)
+        public AssignmentActionTypeConfiguration(string? schema)
         {
             this.schema = schema;
         }

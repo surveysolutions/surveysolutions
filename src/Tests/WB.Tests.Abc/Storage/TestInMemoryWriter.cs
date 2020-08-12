@@ -68,16 +68,6 @@ namespace WB.Tests.Abc.Storage
         {
         }
 
-        public Type ViewType
-        {
-            get { return typeof(T); }
-        }
-
-        public string GetReadableStatus()
-        {
-            return "Test";
-        }
-
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
         {
             return query.Invoke(this.Dictionary.Values.AsQueryable());
@@ -162,13 +152,6 @@ namespace WB.Tests.Abc.Storage
 
         public void Flush()
         {
-        }
-
-        public Type ViewType => typeof(T);
-
-        public string GetReadableStatus()
-        {
-            return "Test";
         }
 
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)

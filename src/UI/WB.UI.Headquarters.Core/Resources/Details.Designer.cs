@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview has no responsible. Please, choose responsible interviewer.
+        ///   Looks up a localized string similar to Please choose a person responsible for the assignment..
         /// </summary>
         public static string ChooseResponsibleInterviewer {
             get {
@@ -192,6 +192,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change responsible for interview on reject. Please, choose responsible interviewer.
+        /// </summary>
+        public static string YouCanChangeResponsibleInterviewer {
+            get {
+                return ResourceManager.GetString("YouCanChangeResponsibleInterviewer", resourceCulture);
             }
         }
     }

@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireVersion = questionnaireVersion,
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(),
                 QuestionnaireTitle = questionnaire.Title,
-                QuestionnaireVariable = questionnaire.VariableName,
+                QuestionnaireVariable = questionnaire.VariableName ?? string.Empty,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible?.Roles.First() ?? UserRoles.Interviewer,
@@ -205,11 +205,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     state.WasCompleted = true;
                 }
-
-                if (@event.Payload.Status == InterviewStatus.Completed)
-                {
-                    LogInterviewTotalInterviewingTime(interview, @event.Payload.UtcTime ?? @event.EventTimeStamp);
-                }
             });
         }
 
@@ -231,7 +226,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.SupervisorId = @event.Payload.SupervisorId;
                 interview.SupervisorName = supervisorName;
                 interview.IsAssignedToInterviewer = false;
-                interview.ReceivedByInterviewer = false;
+                interview.ReceivedByInterviewerAtUtc = null;
 
                 if (interview.FirstSupervisorId == null)
                 {
@@ -324,7 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.ResponsibleRole = UserRoles.Interviewer;
                     interview.IsAssignedToInterviewer = true;
 
-                    interview.ReceivedByInterviewer = false;
+                    interview.ReceivedByInterviewerAtUtc = null;
 
                     if (interview.FirstInterviewerId == null)
                     {
@@ -342,7 +337,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.ResponsibleName = interview.SupervisorName;
                     interview.ResponsibleRole = UserRoles.Supervisor;
                     interview.IsAssignedToInterviewer = false;
-                    interview.ReceivedByInterviewer = false;
+                    interview.ReceivedByInterviewerAtUtc = null;
 
                     if (interview.FirstSupervisorId == null)
                     {
@@ -417,7 +412,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                interview.ReceivedByInterviewer = true;
+                interview.ReceivedByInterviewerAtUtc = @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp;
             });
         }
 
@@ -425,7 +420,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                interview.ReceivedByInterviewer = false;
+                interview.ReceivedByInterviewerAtUtc = null;
             });
         }
 

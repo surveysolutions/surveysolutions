@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -77,7 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             await serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
-            await serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
             await serviceLocator.GetInstance<SendInvitationsTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);

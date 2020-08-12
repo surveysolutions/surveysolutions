@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 if (navigationItem.TargetScreen == ScreenType.Group)
                 {
                     if (!this.CanNavigateTo(navigationItem)) return;
-
+                    
                     while (
                         this.navigationStack.Any(
                             x => x.TargetGroup != null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
@@ -168,9 +168,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var interview = this.interviewRepository.Get(this.InterviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            if (navigationIdentity.TargetGroup != null && questionnaire.IsFlatRoster(navigationIdentity.TargetGroup.Id))
+            if (navigationIdentity.TargetGroup != null)
             {
-                navigationIdentity.TargetGroup = interview.GetParentGroup(navigationIdentity.TargetGroup);
+                var targetGroupId = navigationIdentity.TargetGroup.Id;
+                if (questionnaire.IsFlatRoster(targetGroupId))
+                {
+                    navigationIdentity.TargetGroup = interview.GetParentGroup(navigationIdentity.TargetGroup);
+                }
+                else if (questionnaire.IsCoverPageSupported && questionnaire.IsCoverPage(targetGroupId))
+                {
+                    navigationIdentity.TargetScreen = ScreenType.Cover;
+                }
             };
 
             this.CurrentGroup = navigationIdentity.TargetGroup;

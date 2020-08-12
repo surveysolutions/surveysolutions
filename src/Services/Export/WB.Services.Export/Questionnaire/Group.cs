@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
-using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -16,7 +15,7 @@ namespace WB.Services.Export.Questionnaire
     [DebuggerDisplay("Group {PublicKey}; Variable {VariableName}")]
     public class Group : IQuestionnaireEntity
     {
-        public Group(List<IQuestionnaireEntity> children = null)
+        public Group(List<IQuestionnaireEntity>? children = null)
         {
             if (children == null)
                 this.Children = new List<IQuestionnaireEntity>();
@@ -35,23 +34,23 @@ namespace WB.Services.Export.Questionnaire
 
         public bool IsFixedRoster => this.IsRoster && this.RosterSizeSource == RosterSizeSourceType.FixedTitles;
 
-        public IQuestionnaireEntity Parent { get; private set; }
+        public IQuestionnaireEntity? Parent { get; private set; }
 
         public FixedRosterTitle[] FixedRosterTitles { get; set; } = Array.Empty<FixedRosterTitle>();
         
-        public string VariableName { get; set;  }
+        public string VariableName { get; set; } = String.Empty;
 
-        public string Title { get; set;  }
+        public string Title { get; set; }  = String.Empty;
 
         public Guid? RosterTitleQuestionId { get; set;  }
 
         public Guid PublicKey { get; set;  }
 
-        public IEnumerable<IQuestionnaireEntity> Children { get; set; } = new List<IQuestionnaireEntity>();
+        public IEnumerable<IQuestionnaireEntity> Children { get; set; } 
 
-        public bool HasAnyExportableQuestions => Children.Any(x => x is Question || x is Variable);
+        public bool HasAnyExportableChild => Children.Any(x => x.IsExportable);
 
-        public IQuestionnaireEntity GetParent()
+        public IQuestionnaireEntity? GetParent()
         {
             return Parent;
         }
@@ -78,7 +77,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private QuestionnaireDocument root;
+        private QuestionnaireDocument? root;
         public QuestionnaireDocument Root
         {
             get
@@ -102,11 +101,11 @@ namespace WB.Services.Export.Questionnaire
                     parent = parent.GetParent();
                 }
 
-                return null;
+                throw new InvalidOperationException("Questionnaire Document was not found.");
             }
         }
 
-        private string tableName;
+        private string? tableName;
         public virtual string TableName
         {
             get
@@ -116,9 +115,9 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private string enablementTableName, validityTableName;
-        public string EnablementTableName => enablementTableName ?? (enablementTableName = Root.DatabaseStructure.GetEnablementDataTableName(PublicKey));
-        public string ValidityTableName => validityTableName ?? (validityTableName = Root.DatabaseStructure.GetValidityDataTableName(PublicKey));
+        private string? enablementTableName, validityTableName;
+        public string EnablementTableName => enablementTableName ??= Root.DatabaseStructure.GetEnablementDataTableName(PublicKey);
+        public string ValidityTableName => validityTableName ??= Root.DatabaseStructure.GetValidityDataTableName(PublicKey);
 
         private bool? doesSupportDataTable, doesSupportEnablementTable, doesSupportValidityTable;
 
@@ -151,7 +150,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private string columnName;
+        private string? columnName;
         public string ColumnName
         {
             get

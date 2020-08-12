@@ -6,29 +6,26 @@ namespace WB.Services.Export.Infrastructure
 {
     public class TenantContext : ITenantContext
     {
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly ITenantApi<IHeadquartersApi>? tenantApi;
 
-        public TenantContext(ITenantApi<IHeadquartersApi> tenantApi)
+        public TenantContext(ITenantApi<IHeadquartersApi>? tenantApi, TenantInfo? tenant = null)
         {
             this.tenantApi = tenantApi;
+            if(tenant!= null)
+                Tenant = tenant;
         }
 
-        private TenantInfo tenant;
-
+        private TenantInfo? tenant;
         public TenantInfo Tenant
         {
-            get => tenant;
-            set
-            {
-                tenant = value;
-                Api = tenantApi?.For(value);
-            }
+            get => tenant ?? throw new InvalidOperationException("Tenant was not set.");
+            set => tenant = value;
         }
 
-        public IHeadquartersApi Api { get; private set; }
-        public void SetTenant(TenantInfo tenant)
+        private IHeadquartersApi? api = null;
+        public IHeadquartersApi Api
         {
-            this.Tenant = tenant;
+            get { return api ??= (tenantApi?.For(Tenant) ?? throw new InvalidOperationException("TenantApi must be not null")); }
         }
     }
 }

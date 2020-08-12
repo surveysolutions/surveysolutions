@@ -15,8 +15,6 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs
         class RegularDenormalizer : BaseDenormalizer,
             IEventHandler<InterviewCreated>
         {
-            public override object[] Writers { get; } 
-
             public void Handle(IPublishedEvent<InterviewCreated> evnt)
             {
             }
@@ -24,7 +22,7 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs
 
         class FunctionalDenormalizer : IFunctionalEventHandler
         {
-            public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+            public void Handle(IEnumerable<IPublishableEvent> publishableEvents)
             {
                 throw new NotImplementedException();
             }

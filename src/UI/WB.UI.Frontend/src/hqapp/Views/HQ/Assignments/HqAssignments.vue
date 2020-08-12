@@ -121,7 +121,8 @@
             :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
             <form onsubmit="return false;">
-                <div class="form-group">
+                <div class="form-group"
+                    :class="{'has-warning': showWebModeReassignWarning}">
                     <label
                         class="control-label"
                         for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
@@ -132,6 +133,10 @@
                         :ajax-params="{ }"
                         @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
+                    <span class="help-block"
+                        v-if="showWebModeReassignWarning">
+                        {{$t('Assignments.WebModeReassignToNonInterviewer', {count: selectedRows.length})}}
+                    </span>
                 </div>
                 <div class="form-group">
                     <label class="control-label"
@@ -256,6 +261,7 @@ import * as toastr from 'toastr'
 import { isEqual, map, join, assign, findIndex, includes } from 'lodash'
 import moment from 'moment'
 import {DateFormats} from '~/shared/helpers'
+import {RoleNames} from '~/shared/constants'
 
 export default {
     data() {
@@ -287,6 +293,12 @@ export default {
             const data = this.$refs.table.table.rows({selected: true}).data()
             return data[0].webMode
         },
+        anyWebModeAssignmentSelected() {
+            if(this.selectedRows.length === 0) return false
+            const data = this.$refs.table.table.rows({selected: true}).data()
+            const webModes = map(data, (r) => r.webMode)
+            return webModes.includes(true)
+        },
         singleCloseMessage() {
             if (this.isWebModeAssignmentSelected) {
                 return this.$t('Assignments.AssignmentCloseWebMode', {
@@ -301,6 +313,11 @@ export default {
                 collected: dataRow.interviewsCount,
             })
             return result
+        },
+        showWebModeReassignWarning() {
+            if(!this.newResponsibleId) return false
+
+            return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER
         },
         quantityValidations() {
             return {
@@ -490,7 +507,12 @@ export default {
                     title: this.$t('Assignments.ReceivedByTablet'),
                     searchable: false,
                     render(data) {
-                        return data != null ? self.$t('Common.Yes') : self.$t('Common.No')
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
                     },
                 },
                 {
@@ -598,7 +620,7 @@ export default {
             var queryString = {showArchive: this.showArchive.key.toString()}
 
             if (this.questionnaireId != null) {
-                queryString.QuestionnaireId = this.questionnaireId.value
+                queryString.questionnaireId = this.questionnaireId.value
             }
             if (this.questionnaireVersion != null) {
                 queryString.questionnaireVersion = this.questionnaireVersion.key
@@ -758,23 +780,12 @@ export default {
             } else onDone()
         },
 
-        async loadQuestionnaireId(onDone) {
-            let requestParams = null
 
+        loadQuestionnaireId(onDone) {
             const questionnaireId = this.$route.query.questionnaireId
             const version = this.$route.query.questionnaireVersion
 
-            if (questionnaireId != undefined && version != undefined) {
-                requestParams = assign(
-                    {questionnaireIdentity: questionnaireId + '$' + version, cache: false},
-                    this.ajaxParams
-                )
-                const response = await this.$http.get(this.config.api.questionnaireById, {params: requestParams})
-
-                if (response.data) {
-                    onDone(response.data.id, response.data.title, response.data.version)
-                }
-            } else onDone()
+            onDone(questionnaireId, version)
         },
 
         resetSelection() {
@@ -806,17 +817,20 @@ export default {
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0])
 
-        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
-            if (questionnaireId != undefined) {
-                self.questionnaireId = {
-                    key: questionnaireId,
-                    value: questionnaireTitle,
-                }
-                self.questionnaireVersion = {
-                    key: version,
-                    value: version,
+
+        self.loadQuestionnaireId((questionnaireId, version) => {
+            if (questionnaireId != null && questionnaireId != undefined) {
+                self.questionnaireId = self.$config.model.questionnaires.find(q => q.value == questionnaireId)
+
+                if (version != null && self.questionnaireId != null) {
+                    self.questionnaireVersion = self.questionnaireId.versions.find(v => v.key == version)
+                } else {
+                    if(version == null && self.questionnaireId.versions.length == 1) {
+                        self.questionnaireVersionSelected(self.questionnaireId.versions[0])
+                    }
                 }
             }
+
 
             self.loadResponsibleIdByName(responsibleId => {
                 if (responsibleId != undefined)

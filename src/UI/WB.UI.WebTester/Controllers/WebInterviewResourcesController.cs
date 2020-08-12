@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Web.Modules;
@@ -34,7 +35,7 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
-            if (attachment == null)
+            if (attachment?.Content?.Content == null)
             {
                 return NoContent();
             }
@@ -48,7 +49,7 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult GetContent([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
-            if (attachment == null)
+            if (attachment?.Content?.Content == null)
             {
                 return NotFound();
             }
@@ -76,15 +77,20 @@ namespace WB.UI.WebTester.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
-            var file = this.mediaStorage.Get(filename, interview.Id);
+            if (interview == null)
+            {
+                return NotFound();
+            }
 
-            if ((file?.Data?.Length ?? 0) == 0)
+            MultimediaFile? file = this.mediaStorage.Get(filename, interview.Id);
+
+            if (file == null || (file?.Data?.Length ?? 0) == 0)
                 return NoContent();
 
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
-                ? file.Data
-                : this.imageProcessingService.ResizeImage(file.Data, 200, 1920);
+                ? file!.Data
+                : this.imageProcessingService.ResizeImage(file!.Data, 200, 1920);
             
             return this.BinaryResponseMessageWithEtag(resultFile);
         }

@@ -20,12 +20,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             this.DeviceId = deviceId;
         }
 
-        public Guid? PublicKey { get; protected set; }
+        public UserViewInputModel()
+        {
+        }
 
-        public string UserEmail { get; protected set; }
+        public Guid? PublicKey { get; set; }
 
-        public string UserName { get; protected set; }
+        public string UserEmail { get;  set; }
 
-        public string DeviceId { get; private set; }
+        public string UserName { get;  set; }
+
+        public string DeviceId { get;  set; }
     }
 }

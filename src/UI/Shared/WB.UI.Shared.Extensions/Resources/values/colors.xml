@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-  <color name="screen_button_disabled">#C6C6C6</color>
-  <color name="screen_button_pressed">#0D6DBF</color>
-  <color name="screen_button">#2A81CB</color>
-
-  <color name="screen_button_bordered_disabled">#AA575757</color>
-  <color name="screen_button_bordered_pressed">#FF575757</color>
-  <color name="screen_button_bordered">#CC575757</color>
-
-  <color name="screen_button_border">#FFFFFF</color>
-
-  <color name="text_color_light">#FFFFFF</color>
+    <color name="screen_button_disabled">#C6C6C6</color>
+    <color name="screen_button_pressed">#0D6DBF</color>
+    <color name="screen_button">#2A81CB</color>
+    <color name="screen_button_bordered_disabled">#AA575757</color>
+    <color name="screen_button_bordered_pressed">#FF575757</color>
+    <color name="screen_button_bordered">#CC575757</color>
+    <color name="screen_button_border">#FFFFFF</color>
+    <color name="text_color_light">#FFFFFF</color>
+    <color name="toolbar_background_color">#AA575757</color>
+    <color name="drawer_panel_color">#FFFFFF</color>
+    <color name="dark_text_color">#000000</color>
 </resources>

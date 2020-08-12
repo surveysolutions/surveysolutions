@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
 
         private static UpdateVariable command;
         private static Questionnaire questionnaire;
-        private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid entityId = Guid.Parse("11111111111111111111111111111112");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "name";

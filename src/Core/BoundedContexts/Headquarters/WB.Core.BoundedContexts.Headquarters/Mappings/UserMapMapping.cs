@@ -10,12 +10,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
     {
         public UserMapMapping()
         {
-            this.Table("UserMaps");
+            Table("usermaps");
 
-            this.Id(x => x.Id, IdMapper => IdMapper.Generator(Generators.HighLow));
-
-            Property(x => x.Map, ptp => ptp.NotNullable(true));
+            Id(x => x.Id, IdMapper => IdMapper.Generator(Generators.HighLow));
             Property(x => x.UserName, ptp => ptp.NotNullable(true));
+            
+            ManyToOne(x => x.Map, mtm => mtm.Column("map"));
         }
     }
 }

@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,23 +12,23 @@
     <None Remove="Jobs\**" />
   </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Dapper" Version="2.0.30" />
+        <PackageReference Include="Dapper" Version="2.0.35" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.6" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
-        <PackageReference Include="Npgsql" Version="4.1.2" />
-        <PackageReference Include="prometheus-net" Version="3.4.0" />
-        <PackageReference Include="System.Reactive" Version="4.3.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+        <PackageReference Include="Npgsql" Version="4.1.4" />
+        <PackageReference Include="prometheus-net" Version="3.6.0" />
+        <PackageReference Include="System.Reactive" Version="4.4.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />

@@ -28,10 +28,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private class EntityWithMeta
         {
-            public EntityWithMeta(IComposite entity, EntityMeta meta = null)
+            public EntityWithMeta(IComposite entity, EntityMeta meta)
             {
                 Entity = entity;
-                Meta = meta ?? new EntityMeta();
+                Meta = meta ;
             }
 
             public IComposite Entity { get; private set; }
@@ -40,16 +40,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private class EntityMeta
         {
-            public RosterScope RosterScope { get; set; }
+            public EntityMeta(RosterScope rosterScope)
+            {
+                RosterScope = rosterScope;
+            }
+
+            public RosterScope RosterScope { get; }
         }
 
         private readonly List<EntityWithMeta> allItems;
         private IEnumerable<IComposite> entities => this.allItems.Select(x => x.Entity);
 
         public QuestionnaireDocument Questionnaire { get; private set; }
-        public string Translation { get; private set; }
+        public string? Translation { get; private set; }
 
-        public ReadOnlyQuestionnaireDocument(QuestionnaireDocument questionnaire, string translation = null)
+        public ReadOnlyQuestionnaireDocument(QuestionnaireDocument questionnaire, string? translation = null)
         {
             this.Translation = translation;
             this.Questionnaire = questionnaire;
@@ -66,12 +71,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Guid PublicKey => this.Questionnaire.PublicKey;
         public string VariableName => this.Questionnaire.VariableName;
 
-        public T Find<T>(Guid publicKey) where T : class, IComposite
+        public string? DefaultLanguageName => this.Questionnaire.DefaultLanguageName;
+
+        public T? Find<T>(Guid publicKey) where T : class, IComposite
         {
             return this.FindEntityWithMeta(publicKey)?.Entity as T;
         }
 
-        private EntityWithMeta FindEntityWithMeta(Guid publicKey)
+        private EntityWithMeta? FindEntityWithMeta(Guid publicKey)
         {
             return this.allItems.FirstOrDefault(x => x.Entity.PublicKey == publicKey);
         }
@@ -112,15 +119,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private EntityMeta BuildEntityMeta(IComposite entity)
         {
             return new EntityMeta
-            {
-                RosterScope = CalculateRosterScopeIds(entity)
-            };
+            (
+                rosterScope : CalculateRosterScopeIds(entity)
+            );
         }
 
         public IEnumerable<T> FindInGroup<T>(Guid groupId)
         {
             var group = Find<IGroup>(groupId);
-
+            if(group == null)
+              throw new InvalidOperationException("Group was not found.");
+            
             return group.TreeToEnumerableDepthFirst<IComposite>(x => x.Children)
                 .Where(x => x.PublicKey != groupId && x is T).Cast<T>();
         }
@@ -128,11 +137,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public Guid[] GetParentGroupsIds(IComposite entity)
         {
             List<IGroup> parents = new List<IGroup>();
-            var parent = (IGroup)entity.GetParent();
+            var parent = entity.GetParent() as IGroup;
             while (parent != null && !(parent is QuestionnaireDocument))
             {
                 parents.Add(parent);
-                parent = (IGroup)parent.GetParent();
+                parent = parent.GetParent() as IGroup;
             }
             return parents.Select(x => x.PublicKey).ToArray();
         }
@@ -152,7 +161,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public RosterScope GetRosterScope(Guid entityId)
         {
-            return FindEntityWithMeta(entityId).Meta.RosterScope;
+            var entity = FindEntityWithMeta(entityId);
+            
+            if(entity == null)
+                throw new InvalidOperationException("Entity was not found");
+
+            return entity.Meta.RosterScope;
         }
 
         private static RosterScope CalculateRosterScopeIds(IComposite questionnaireEntity)
@@ -165,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static IEnumerable<IGroup> GetAllParentsFromBottomToTop(IComposite questionnaireEntity)
         {
-            IComposite entity = questionnaireEntity;
+            IComposite? entity = questionnaireEntity;
             while (entity != null && !(entity is QuestionnaireDocument))
             {
                 if (entity is IGroup @group)
@@ -173,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     yield return group;
                 }
 
-                entity = (IGroup)entity.GetParent();
+                entity = entity.GetParent() as IGroup;
             }
         }
 
@@ -182,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return Find<IQuestion>(questionId)?.QuestionType == QuestionType.Numeric;
         }
 
-        public IGroup GetRoster(Guid rosterId)
+        public IGroup? GetRoster(Guid rosterId)
         {
             var roster = Find<IGroup>(rosterId);
             if (roster?.IsRoster ?? false)
@@ -190,14 +204,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return null;
         }
 
-        public string GetRosterSourceType(IGroup roster, ReadOnlyQuestionnaireDocument document)
+        public string? GetRosterSourceType(IGroup roster, ReadOnlyQuestionnaireDocument document)
         {
             return roster.RosterSizeQuestionId.HasValue
                 ? Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.QuestionType.ToString().ToLower()
                 : null;
         }
 
-        public bool IsRoster(IComposite entity)
+        public bool IsRoster(IComposite? entity)
         {
             return (entity as Group)?.IsRoster ?? false;
         }
@@ -267,26 +281,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public bool IsNumericRoster(IGroup @group)
         {
-            IQuestion question = GetRosterSizeQuestion(@group);
+            IQuestion? question = GetRosterSizeQuestion(@group);
             if (question == null) return false;
             return IsNumericRosterSizeQuestion(question);
         }
 
         public bool IsListRoster(IGroup @group)
         {
-            IQuestion question = GetRosterSizeQuestion(@group);
+            IQuestion? question = GetRosterSizeQuestion(@group);
             if (question == null) return false;
             return IsTextListQuestion(question);
         }
 
-        public bool IsMultiRoster(IGroup @group)
+        public bool IsMultiRoster(IGroup? @group)
         {
-            IQuestion question = GetRosterSizeQuestion(@group);
+            if (@group == null) return false;
+            IQuestion? question = GetRosterSizeQuestion(@group);
             if (question == null) return false;
             return IsCategoricalRosterSizeQuestion(question);
         }
 
-        public IQuestion GetRosterSizeQuestion(IGroup @group)
+        public IQuestion? GetRosterSizeQuestion(IGroup @group)
         {
             if (!IsRoster(@group)) return null;
             if (!IsRosterByQuestion(@group)) return null;
@@ -318,5 +333,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return true;
         }
+
+        public bool IsCoverPage(Guid publicKey) => Questionnaire.IsCoverPage(publicKey);
+        public bool IsCoverPageSupported => Questionnaire.IsCoverPageSupported;
     }
 }

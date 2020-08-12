@@ -6,7 +6,6 @@ using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,7 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class SqliteMultiFilesEventStorage : IEnumeratorEventStorage
     {
-        private SQLiteConnectionWithLock eventStoreInSingleFile;
         internal readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();
         private readonly SqliteSettings settings;
         private readonly IEnumeratorSettings enumeratorSettings;
@@ -30,10 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IEncryptionService encryptionService;
 
-        private string connectionStringToEventStoreInSingleFile;
         private static readonly object lockObject = new object();
         private readonly EventSerializer eventSerializer;
-        private BackwardCompatibleEventSerializer backwardCompatibleEventSerializer;
 
         public SqliteMultiFilesEventStorage(ILogger logger,
             SqliteSettings settings,
@@ -48,8 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             this.enumeratorSettings = enumeratorSettings;
             this.logger = logger;
             this.eventSerializer = new EventSerializer(eventTypesResolver);
-
-            this.InitializeEventStoreInSingleFile();
         }
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
@@ -92,26 +86,13 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            IEnumerable<CommittedEvent> events = null;
-
-            var eventSourceFilePath = this.GetEventSourceConnectionString(id);
-            if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
-            {
-                events = this.Read(this.GetOrCreateConnection(id), id, minVersion, this.eventSerializer, progress, cancellationToken);
-            }
-
-            return events ?? this.ReadFromEventStoreInSingleFile(id, minVersion, progress, cancellationToken) ?? new CommittedEvent[0];
+            return this.Read(this.GetOrCreateConnection(id), id, minVersion, this.eventSerializer, progress, cancellationToken) ?? new CommittedEvent[0];
         }
 
         public int? GetLastEventSequence(Guid id)
         {
-            var eventSourceFilePath = this.GetEventSourceConnectionString(id);
-            if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
-            {
-                var connection = this.GetOrCreateConnection(id);
-                return GetLastEventSequence(connection, id);
-            }
-            return GetLastEventSequence(this.eventStoreInSingleFile, id);
+            var connection = this.GetOrCreateConnection(id);
+            return GetLastEventSequence(connection, id);
         }
 
         private int? GetLastEventSequence(SQLiteConnectionWithLock connection, Guid id)
@@ -135,30 +116,25 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
-            => this.StoreToEventStoreInSingleFile(eventStream) ?? this.Store(this.GetOrCreateConnection(eventStream.SourceId), eventStream, this.eventSerializer);
+            => this.Store(this.GetOrCreateConnection(eventStream.SourceId), eventStream, this.eventSerializer);
 
         public void RemoveEventSourceById(Guid interviewId)
         {
-            var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
-            if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
+            lock (lockObject)
             {
-                lock (lockObject)
+                var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
+                if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
                 {
-                    if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
+                    SQLiteConnectionWithLock connection;
+                    if (this.connectionByEventSource.TryGetValue(interviewId, out connection))
                     {
-                        SQLiteConnectionWithLock connection;
-                        if (this.connectionByEventSource.TryGetValue(interviewId, out connection))
-                        {
-                            connection.Dispose();
-                            this.connectionByEventSource.Remove(interviewId);
-                        }
-
-                        this.fileSystemAccessor.DeleteFile(eventSourceFilePath);
+                        connection.Dispose();
+                        this.connectionByEventSource.Remove(interviewId);
                     }
+
+                    this.fileSystemAccessor.DeleteFile(eventSourceFilePath);
                 }
             }
-            
-            this.RemoveFromEventStoreInSingleFile(interviewId);
         }
 
         public void StoreEvents(CommittedEventStream events)
@@ -399,130 +375,11 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public void Dispose()
         {
-            this.DisposeEventStoreInSingleFile();
-
             foreach (var sqLiteConnectionWithLock in this.connectionByEventSource.Values)
             {
                 sqLiteConnectionWithLock.Dispose();
             }
         }
-
-        #region Obsolete
-        [Obsolete("Since v6.0")]
-        private void InitializeEventStoreInSingleFile()
-        {
-            this.backwardCompatibleEventSerializer = new BackwardCompatibleEventSerializer();
-
-            this.connectionStringToEventStoreInSingleFile = this.ToSqliteConnectionString(Path.Combine(this.settings.PathToDatabaseDirectory, "events-data.sqlite3"));
-
-            if (this.fileSystemAccessor.IsFileExists(this.connectionStringToEventStoreInSingleFile))
-                this.eventStoreInSingleFile = this.CreateConnection(this.connectionStringToEventStoreInSingleFile);
-        }
-
-        [Obsolete("Since v6.0")]
-        private IEnumerable<CommittedEvent> ReadFromEventStoreInSingleFile(Guid id, int minVersion, 
-            IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
-        {
-            return this.eventStoreInSingleFile != null
-                ? this.Read(this.eventStoreInSingleFile, id, minVersion, this.backwardCompatibleEventSerializer, progress, cancellationToken)
-                : null;
-        }
-
-        [Obsolete("Since v6.0")]
-        private CommittedEventStream StoreToEventStoreInSingleFile(UncommittedEventStream eventStream)
-            => this.eventStoreInSingleFile != null &&
-               this.GetTotalEventsByEventSourceId(this.eventStoreInSingleFile, eventStream.SourceId, 0) > 0
-                ? this.Store(this.eventStoreInSingleFile, eventStream, this.backwardCompatibleEventSerializer)
-                : null;
-
-        [Obsolete("Since v6.0")]
-        private void RemoveFromEventStoreInSingleFile(Guid interviewId)
-        {
-            if (this.eventStoreInSingleFile == null) return;
-
-            this.RemoveEventSourceById(this.eventStoreInSingleFile, interviewId);
-        }
-
-        [Obsolete("Since v6.0")]
-        private void DisposeEventStoreInSingleFile()
-        {
-            if (this.eventStoreInSingleFile == null) return;
-
-            var countOfEventsInSingleFile = this.GetTotalEventsInEventStoreInSingleFile();
-
-            this.eventStoreInSingleFile.Dispose();
-
-            if (countOfEventsInSingleFile == 0)
-                this.fileSystemAccessor.DeleteFile(this.connectionStringToEventStoreInSingleFile);
-        }
-
-        [Obsolete("Since v6.0")]
-        protected int GetTotalEventsInEventStoreInSingleFile()
-        {
-            using (this.eventStoreInSingleFile.Lock())
-            {
-                return this.eventStoreInSingleFile.Table<EventView>().Count();
-            }
-        }
-
-        [Obsolete("v 5.10.10")]
-        private class BackwardCompatibleEventSerializer : IEventSerializer
-        {
-            public string Serialize(IEvent @event)
-                => JsonConvert.SerializeObject(@event, OldJsonSerializerSettings());
-
-
-            public IEvent Deserialize(string eventAsString, string eventTypeAsString)
-               => JsonConvert.DeserializeObject<IEvent>(eventAsString, OldJsonSerializerSettings());
-
-            [Obsolete("v 5.10.10")]
-            private static readonly Func<JsonSerializerSettings> OldJsonSerializerSettings = () => new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Binder = new CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
-            };
-
-            [Obsolete("Since v6.0")]
-            private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
-            {
-                public override Type BindToType(string assemblyName, string typeName)
-                {
-                    var oldCapiAssemblyName = "WB.UI.Capi";
-                    var newCapiAssemblyName = "WB.Core.BoundedContexts.Interviewer";
-                    var newQuestionsAssemblyName = "WB.Core.SharedKernels.Questionnaire";
-                    var oldMainCoreAssemblyName = "Main.Core";
-
-                    if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal))
-                    {
-                        assemblyName = newCapiAssemblyName;
-                    }
-                    else if (String.Equals(assemblyName, oldMainCoreAssemblyName, StringComparison.Ordinal))
-                    {
-                        if (oldMainCoreTypeMap.ContainsKey(typeName))
-                            assemblyName = oldMainCoreTypeMap[typeName];
-                        else
-                            assemblyName = newQuestionsAssemblyName;
-                    }
-
-                    return base.BindToType(assemblyName, typeName);
-                }
-
-                private readonly Dictionary<string, string> oldMainCoreTypeMap = new Dictionary<string, string>()
-            {
-                {"Main.Core.Events.AggregateRootEvent", "WB.Core.Infrastructure"},
-                {"Main.Core.Events.User.NewUserCreated", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserChanged", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserLocked", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserLockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserUnlocked", "WB.Core.SharedKernels.DataCollection"},
-                {"Main.Core.Events.User.UserUnlockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
-            };
-            }
-        }
-
-        #endregion
 
         private IEnumerable<CommittedEvent> Read(SQLiteConnectionWithLock connection, Guid id, int minVersion, IEventSerializer serializer, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {

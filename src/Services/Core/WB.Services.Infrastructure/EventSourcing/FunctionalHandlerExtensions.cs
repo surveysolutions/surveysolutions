@@ -58,6 +58,7 @@ namespace WB.Services.Infrastructure.EventSourcing
 
             var handler = eventsHandler.GetEventHandlersMap();
             if (handler == null) { throw new ArgumentNullException(nameof(handler)); }
+            if (ev.Payload == null) { throw new ArgumentNullException(nameof(ev.Payload)); }
 
             if (handler.TryGetValue(ev.Payload.GetType(), out var method))
             {

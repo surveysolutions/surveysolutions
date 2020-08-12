@@ -27,7 +27,7 @@ namespace WB.Services.Export.Events.Interview
 
     public class InterviewKeyAssigned : InterviewPassiveEvent
     {
-        public InterviewKey Key { get; set; }
+        public InterviewKey Key { get; set; } = null!;
     }
 
     public class InterviewKey

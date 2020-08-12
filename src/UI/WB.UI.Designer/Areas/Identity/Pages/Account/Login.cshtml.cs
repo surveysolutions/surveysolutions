@@ -38,13 +38,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             this.recaptchaService = recaptchaService;
         }
 
-        [BindProperty]
-        public InputModel Input { get; set; }
+        [BindProperty] 
+        public InputModel Input { get; set; } = new InputModel();
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         [TempData]
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
         public bool ShouldShowCaptcha { get; set; }
 
@@ -53,16 +53,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Email_required))]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public string? Password { get; set; }
 
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string? returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -78,74 +78,77 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
-            this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(Input.Email);
-            if (ModelState.IsValid)
+            if (Input != null)
             {
-                if (this.ShouldShowCaptcha)
+                this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(Input.Email);
+                if (ModelState.IsValid)
                 {
-                    try
+                    if (this.ShouldShowCaptcha)
                     {
-                        var recaptcha = await this.recaptchaService.Validate(Request);
-                        if (!recaptcha.success)
+                        try
+                        {
+                            var recaptcha = await this.recaptchaService.Validate(Request);
+                            if (!recaptcha.success)
+                            {
+                                this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
+                                return Page();
+                            }
+                        }
+                        catch (ValidationException)
                         {
                             this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
                             return Page();
                         }
                     }
-                    catch (ValidationException)
+
+                    var user = await userManager.FindByNameOrEmailAsync(Input.Email);
+
+                    if (user != null)
                     {
-                        this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
+                        if (!user.EmailConfirmed)
+                        {
+                            this.ShowActivationLink = true;
+                            this.ErrorMessage = string.Format(ErrorMessages.ConfirmAccount, user.Email);
+                            return Page();
+                        }
+
+                        var result = await signInManager.PasswordSignInAsync(user,
+                            Input.Password,
+                            Input.RememberMe,
+                            lockoutOnFailure: false);
+
+                        if (result.Succeeded)
+                        {
+                            this.captchaService.ResetFailedLogin(Input.Email);
+                            logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+
+                        if (result.RequiresTwoFactor)
+                        {
+                            return RedirectToPage("./LoginWith2fa",
+                                new {ReturnUrl = returnUrl, RememberMe = Input.RememberMe});
+                        }
+
+                        if (result.IsLockedOut)
+                        {
+                            logger.LogWarning("User account locked out.");
+                            return RedirectToPage("./Lockout");
+                        }
+
+
+                        this.captchaService.RegisterFailedLogin(Input.Email);
+                        this.ErrorMessage = AccountResources.InvalidPassword;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                         return Page();
                     }
-                }
-
-                var user = await userManager.FindByNameOrEmailAsync(Input.Email);
-
-                if (user != null)
-                {
-                    if (!user.EmailConfirmed)
-                    {
-                        this.ShowActivationLink = true;
-                        this.ErrorMessage = string.Format(ErrorMessages.ConfirmAccount, user.Email);
-                        return Page();
-                    }
-
-                    var result = await signInManager.PasswordSignInAsync(user, 
-                        Input.Password,
-                        Input.RememberMe,
-                        lockoutOnFailure: false);
-
-                    if (result.Succeeded)
-                    {
-                        this.captchaService.ResetFailedLogin(Input.Email);
-                        logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
-                    }
-
-                    if (result.RequiresTwoFactor)
-                    {
-                        return RedirectToPage("./LoginWith2fa",
-                            new {ReturnUrl = returnUrl, RememberMe = Input.RememberMe});
-                    }
-
-                    if (result.IsLockedOut)
-                    {
-                        logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
-                    }
-
-
-                    this.captchaService.RegisterFailedLogin(Input.Email);
-                    this.ErrorMessage = AccountResources.InvalidPassword;
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
                 }
             }
 

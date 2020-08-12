@@ -51,6 +51,24 @@
 </template>
 
 <script>
+
+import {DateFormats, humanFileSize} from '~/shared/helpers'
+import moment from 'moment'
+import * as toastr from 'toastr'
+import gql from 'graphql-tag'
+const query = gql`query MapsList($order: MapsSort, $skip: Int, $take: Int, $where: MapsFilter) {
+  maps(order_by: $order, skip: $skip, take: $take, where: $where) {
+    totalCount
+    filteredCount
+    filteredCount
+    nodes {
+      fileName
+      importDate
+      size
+    }
+  }
+}`
+
 export default {
     data: function(){
         return {
@@ -135,20 +153,30 @@ export default {
                 },
                 {
                     name: this.$t('Pages.MapList_DeleteMap'),
-                    callback: () => this.deleteMap(rowData.fileName),
+                    callback: () => this.confirmDeleteMap(rowData.fileName),
                 },
             ]
         },
-        deleteMap(fileName) {
+        confirmDeleteMap(fileName) {
             const self = this
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    this.$http({
-                        method: 'delete',
-                        url: this.config.deleteMapLinkUrl,
-                        data: {map: fileName}})
-
-                    self.$refs.table.reload()
+                    self.$apollo.mutate({
+                        mutation: gql`
+                                mutation deleteMap($fileName: String!) {
+                                    deleteMap(fileName: $fileName) {
+                                        fileName
+                                    }
+                                }`,
+                        variables: {
+                            'fileName' : fileName,
+                        },
+                    }).then(response => {
+                        self.$refs.table.reload()
+                    }).catch(err => {
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 }
             })
         },
@@ -176,17 +204,77 @@ export default {
                         name: 'Size',
                         class: 'parameters',
                         title: this.$t('Pages.MapList_Size'),
+                        render(data) {
+                            return humanFileSize(data, false)
+                        },
                     },
                     {
                         data: 'importDate',
                         name: 'ImportDate',
                         class: 'date',
                         title: this.$t('Pages.MapList_Updated'),
+                        render(data) {
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        },
                     },
                 ],
-                ajax: {
-                    url: this.$config.model.dataUrl,
-                    type: 'GET',
+                pageLength: 20,
+                ajax (data, callback, settings) {
+                    const order = {}
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
+
+                    order[column.data] = order_col.dir.toUpperCase()
+
+                    const variables = {
+                        order: order,
+                        skip: data.start,
+                        take: data.length,
+                    }
+
+                    const where = {
+                        AND: [],
+                    }
+
+                    const search = data.search.value
+
+                    if(search && search != '') {
+                        where.AND.push({ OR: [
+                            { fileName_starts_with: search.toLowerCase() }],
+                        })
+                    }
+
+                    if(where.AND.length > 0) {
+                        variables.where = where
+                    }
+
+                    self.$apollo.query({
+                        query,
+                        variables: variables,
+                        fetchPolicy: 'network-only',
+                    }).then(response => {
+                        const data = response.data.maps
+                        self.totalRows = data.totalCount
+                        self.filteredCount = data.filteredCount
+                        callback({
+                            recordsTotal: data.totalCount,
+                            recordsFiltered: data.filteredCount,
+                            draw: ++this.draw,
+                            data: data.nodes,
+                        })
+                    }).catch(err => {
+                        callback({
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                            error: err.toString(),
+                        })
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 },
                 responsive: false,
                 order: [[0, 'asc']],

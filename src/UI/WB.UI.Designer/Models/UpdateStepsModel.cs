@@ -2,6 +2,6 @@
 {
     public class UpdateStepsModel
     {
-        public string Steps { get; set; }
+        public string? Steps { get; set; }
     }
 }

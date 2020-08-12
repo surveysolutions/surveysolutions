@@ -5,7 +5,7 @@ namespace WB.Services.Export.Questionnaire
 {
     public class RosterTitleQuestionDescription
     {
-        public RosterTitleQuestionDescription(Guid questionId, Dictionary<string, string> options = null)
+        public RosterTitleQuestionDescription(Guid questionId, Dictionary<string, string>? options = null)
         {
             this.QuestionId = questionId;
             this.Options = options ?? new Dictionary<string, string>();

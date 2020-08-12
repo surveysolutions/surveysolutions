@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
 
@@ -23,42 +23,44 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IJobService jobService;
-        private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ITenantContext tenantContext;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IJobService jobService,
-            IQuestionnaireStorage questionnaireStorage)
+            IJobService jobService, ITenantContext tenantContext)
         {
             this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
             this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
             this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
             this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
-            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
+            this.tenantContext = tenantContext;
         }
 
         [HttpPut]
         [Route("api/v1/job/regenerate")]
-        public async Task<DataExportUpdateRequestResult> RequestUpdate(
+        public async Task<DataExportUpdateRequestResult?> RequestUpdate(
             long processId,
-            string archivePassword,
-            string accessToken,
-            string refreshToken,
-            TenantInfo tenant)
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken)
         {
             var process = await this.exportProcessesService.GetProcessAsync(processId);
-            var args = new DataExportProcessArgs
+
+            if (process == null) return null;
+
+            var args = new DataExportProcessArgs(new ExportSettings
+                (
+                    tenant: tenantContext.Tenant,
+                    questionnaireId: process.ExportSettings.QuestionnaireId,
+                    exportFormat: process.ExportSettings.ExportFormat,
+                    fromDate: process.ExportSettings.FromDate,
+                    toDate: process.ExportSettings.ToDate,
+                    status: process.ExportSettings.Status,
+                    translation: process.ExportSettings.Translation,
+                    includeMeta: process.ExportSettings.IncludeMeta
+                ))
             {
-                ExportSettings = new ExportSettings
-                {
-                    Tenant = tenant,
-                    QuestionnaireId = process.ExportSettings.QuestionnaireId,
-                    ExportFormat = process.ExportSettings.ExportFormat,
-                    FromDate = process.ExportSettings.FromDate,
-                    ToDate = process.ExportSettings.ToDate,
-                    Status = process.ExportSettings.Status
-                },
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -81,23 +83,25 @@ namespace WB.Services.Export.Host.Controllers
             InterviewStatus? status,
             DateTime? from,
             DateTime? to,
-            string archivePassword,
-            string accessToken,
-            string refreshToken,
+            string? archivePassword,
+            string? accessToken,
+            string? refreshToken,
+            Guid? translationId,
             ExternalStorageType? storageType,
-            TenantInfo tenant)
+            bool? includeMeta)
         {
-            var args = new DataExportProcessArgs
+            var args = new DataExportProcessArgs(new ExportSettings
+            (
+                tenant: tenantContext.Tenant,
+                questionnaireId: new QuestionnaireId(questionnaireId),
+                exportFormat: format,
+                fromDate: from,
+                toDate: to,
+                translation: translationId,
+                status: status,
+                includeMeta: includeMeta
+            ))
             {
-                ExportSettings = new ExportSettings
-                {
-                    Tenant = tenant,
-                    QuestionnaireId = new QuestionnaireId(questionnaireId),
-                    ExportFormat = format,
-                    FromDate = from,
-                    ToDate = to,
-                    Status = status
-                },
                 ArchivePassword = archivePassword,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
@@ -119,13 +123,11 @@ namespace WB.Services.Export.Host.Controllers
             string questionnaireId,
             InterviewStatus? status,
             DateTime? fromDate,
-            DateTime? toDate,
-            TenantInfo tenant)
+            DateTime? toDate)
         {
-            return await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(tenant,
+            return await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(
                 new QuestionnaireId(questionnaireId), status, fromDate, toDate);
         }
-
 
         [HttpGet]
         [ResponseCache(NoStore = true)]
@@ -137,17 +139,20 @@ namespace WB.Services.Export.Host.Controllers
             DataExportFormat format,
             DateTime? fromDate,
             DateTime? toDate,
-            TenantInfo tenant)
+            Guid? translationId,
+            bool? includeMeta)
         {
             var exportSettings = new ExportSettings
-            {
-                QuestionnaireId = new QuestionnaireId(questionnaireId),
-                ExportFormat = format,
-                Status = status,
-                Tenant = tenant,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
+            (
+                questionnaireId: new QuestionnaireId(questionnaireId),
+                exportFormat: format,
+                status: status,
+                tenant: tenantContext.Tenant,
+                fromDate: fromDate,
+                toDate: toDate,
+                translation: translationId,
+                includeMeta: includeMeta
+            );
 
             var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);
 
@@ -156,7 +161,7 @@ namespace WB.Services.Export.Host.Controllers
                 return NotFound();
             }
 
-            if (result.Redirect != null)
+            if (!string.IsNullOrEmpty(result.Redirect))
             {
                 Response.Headers.Add("NewLocation", result.Redirect);
                 return Ok();
@@ -170,40 +175,40 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpDelete]
         [Route("api/v1/deleteArchives")]
-        public async Task<ActionResult> Delete(TenantInfo tenant)
+        public async Task<ActionResult> Delete()
         {
-            await this.archiveHandleService.ClearAllExportArchives(tenant);
+            await this.archiveHandleService.ClearAllExportArchives(tenantContext.Tenant);
             return Ok();
         }
 
         [HttpGet]
         [Route("api/v1/job/wasExportRecreated")]
-        public async Task<bool> WasExportFileRecreated(long processId, TenantInfo tenant)
+        public async Task<bool> WasExportFileRecreated(long processId)
         {
-            return await this.jobService.HasMostRecentFinishedJobIdWithSameTag(processId, tenant);
+            return await this.jobService.HasMostRecentFinishedJobIdWithSameTag(processId, tenantContext.Tenant);
         }
 
         [HttpGet]
         [Route("api/v1/job")]
-        public async Task<DataExportProcessView> GetDataExportStatus(long processId, TenantInfo tenant)
+        public async Task<DataExportProcessView?> GetDataExportStatus(long processId)
         {
-            return await this.jobsStatusReporting.GetDataExportStatusAsync(processId, tenant);
+            return await this.jobsStatusReporting.GetDataExportStatusAsync(processId);
         }
 
         [HttpGet]
         [Route("api/v1/jobs")]
-        public async Task<List<DataExportProcessView>> GetDataExportStatuses([FromQuery] long[] processIds, TenantInfo tenant)
+        public async Task<List<DataExportProcessView>> GetDataExportStatuses([FromQuery] long[] processIds)
         {
-            return await this.jobsStatusReporting.GetDataExportStatusesAsync(processIds, tenant);
+            return await this.jobsStatusReporting.GetDataExportStatusesAsync(processIds);
         }
 
         [HttpDelete]
         [Route("api/v1/job")]
-        public async Task<ActionResult> DeleteDataExportProcess(string processId, TenantInfo tenant)
+        public async Task<ActionResult> DeleteDataExportProcess(string processId)
         {
-            var job = await jobService.GetJobAsync(tenant, processId);
-            
-            if (job != null && job.Status == JobStatus.Running || job.Status != JobStatus.Created)
+            var job = await jobService.GetJobAsync(tenantContext.Tenant, processId);
+
+            if (job != null && (job.Status == JobStatus.Running || job.Status != JobStatus.Created))
             {
                 this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
             }
@@ -213,12 +218,12 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpDelete]
         [Route("api/v1/job/byId")]
-        public async Task<ActionResult> DeleteDataExportProcessById(long jobId, TenantInfo tenant)
+        public async Task<ActionResult> DeleteDataExportProcessById(long jobId)
         {
             var job = await jobService.GetJobAsync(jobId);
             if (job == null) return NotFound();
 
-            if (job.Tenant != tenant.Id.Id) return NotFound();
+            if (job.Tenant != tenantContext.Tenant.Id.Id) return NotFound();
 
             this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
 
@@ -227,9 +232,9 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [Route("api/v1/job/running")]
-        public async Task<List<long>> GetRunningJobsList(TenantInfo tenant)
+        public async Task<List<long>> GetRunningJobsList(CancellationToken token)
         {
-            var jobs = await this.exportProcessesService.GetAllProcesses(tenant);
+            var jobs = await this.exportProcessesService.GetAllProcessesAsync(cancellationToken: token);
 
             return jobs
                 .Where(j => j.Status.IsRunning)
@@ -240,36 +245,17 @@ namespace WB.Services.Export.Host.Controllers
         [HttpGet]
         [Route("api/v1/job/byQuery")]
         public async Task<IEnumerable<DataExportProcessView>> GetJobsByQuery(DataExportFormat? exportType,
-            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset, TenantInfo tenant)
+            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus,
+            bool? hasFile, int? limit, int? offset)
             => await this.jobsStatusReporting.GetDataExportStatusesAsync(exportType, interviewStatus,
-                questionnaireIdentity, exportStatus, hasFile, limit, offset, tenant);
+                questionnaireIdentity, exportStatus, hasFile, limit, offset);
 
         [HttpGet]
         [Route("api/v1/job/all")]
-        public async Task<List<long>> GetAllJobsList(TenantInfo tenant)
+        public async Task<List<long>> GetAllJobsList(CancellationToken token)
         {
-            var jobs = await this.exportProcessesService.GetAllProcesses(tenant, runningOnly: false);
-            var filteredJobList = new List<DataExportProcessArgs>();
-
-            foreach (var job in jobs)
-            {
-                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(job.ExportSettings.QuestionnaireId);
-
-                if (questionnaire != null)
-                {
-                    if (!questionnaire.IsDeleted)
-                    {
-                        filteredJobList.Add(job);
-                    }
-                }
-            }
-
-            List<long> result = filteredJobList
-                .GroupBy(x => x.NaturalId)
-                .Select(x => x.Max(s => s.ProcessId))
-                .ToList();
-
-            return result;
+            var jobs = await this.exportProcessesService.GetAllProcessesAsync(runningOnly: false, cancellationToken: token);
+            return jobs.Select(j => j.ProcessId).ToList();
         }
     }
 }

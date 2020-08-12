@@ -158,7 +158,10 @@
     <value>Обзор</value>
   </data>
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
-      <value>Показать детали опросника</value>
-      <comment>Показать детали опросника</comment>
+    <value>Показать детали опросника</value>
+    <comment>Показать детали опросника</comment>
+  </data>
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>Вы можете изменить ответственного. Для этого выберите его в списке ниже.</value>
   </data>
 </root>

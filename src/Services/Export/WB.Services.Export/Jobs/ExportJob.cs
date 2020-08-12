@@ -40,7 +40,7 @@ namespace WB.Services.Export.Jobs
 
             try
             {
-                this.tenantContext.SetTenant(pendingExportProcess.ExportSettings.Tenant);
+                this.tenantContext.Tenant = pendingExportProcess.ExportSettings.Tenant;
 
                 if (pendingExportProcess.ShouldDropTenantSchema)
                 {

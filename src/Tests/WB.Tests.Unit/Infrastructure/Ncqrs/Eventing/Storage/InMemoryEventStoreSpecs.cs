@@ -4,6 +4,7 @@ using FluentAssertions;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using Ncqrs.Eventing.Storage;
+using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing.Storage
@@ -27,7 +28,7 @@ namespace Ncqrs.Tests.Eventing.Storage
         public void When_getting_all_event_from_a_non_existing_event_source_the_result_should_be_empty()
         {
             var eventSourceId = Guid.NewGuid();
-            var store = new InMemoryEventStore();
+            var store = Create.Storage.InMemoryEventStore();
 
             var events = store.Read(eventSourceId, int.MinValue);
 
@@ -49,7 +50,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             stream2.Append(new UncommittedEvent(Guid.NewGuid(), eventSourceId, 4, 1, DateTime.UtcNow, new DummyEvent()));
             stream2.Append(new UncommittedEvent(Guid.NewGuid(), eventSourceId, 5, 1, DateTime.UtcNow, new DummyEvent()));
 
-            var store = new InMemoryEventStore();
+            var store = Create.Storage.InMemoryEventStore();
 
             store.Store(stream1);
             store.Store(stream2);

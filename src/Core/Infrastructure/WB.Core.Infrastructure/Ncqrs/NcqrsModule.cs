@@ -11,7 +11,7 @@ namespace WB.Core.Infrastructure.Ncqrs
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IDomainRepository, DomainRepository>();
-            registry.Bind<IClock, DateTimeBasedClock>();
+            registry.Bind<IClock, SystemClock>();
         }
     }
 }

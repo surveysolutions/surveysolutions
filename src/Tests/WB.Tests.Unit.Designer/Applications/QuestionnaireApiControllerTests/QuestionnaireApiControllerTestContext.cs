@@ -61,14 +61,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             return Create.QuestionnaireView(questionnaireDocument1);
         }
 
-        public static QuestionnaireInfoView CreateQuestionnaireInfoView()
-        {
-            return new QuestionnaireInfoView();
-        }
-
         public static NewChapterView CreateChapterInfoView()
         {
-            return new NewChapterView() {Chapter = new GroupInfoView()};
+            return new NewChapterView(chapter : new GroupInfoView());
         }
 
         public static QuestionnaireDocument CreateQuestionnaireDocument()
@@ -84,11 +79,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             };
         }
 
-        public static NewEditStaticTextView CreateStaticTextView()
-        {
-            return new NewEditStaticTextView();
-        }
-
+       
         internal static QuestionnaireVerificationMessage[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
         {
             return
@@ -107,12 +98,17 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             var options = Enumerable.Range(1, optionsCount).Select(x => new CategoricalOption { Title = x.ToString(CultureInfo.InvariantCulture), Value = x }).ToArray();
             
             return new NewEditQuestionView
-            {
-                Id = questionId,
-                Type = QuestionType.SingleOption,
-                Options = options,
-                IsFilteredCombobox = isFilteredCombobox,
-            };
+            (
+                id : questionId,
+                type : QuestionType.SingleOption,
+                options : options,
+                isFilteredCombobox : isFilteredCombobox,
+                parentGroupId: Guid.Parse("11111111111111111111111111111111"),
+                questionTypeOptions: new QuestionnaireInfoFactory.SelectOption[0] ,
+                isPreFilled:false,
+                questionScope:QuestionScope.Interviewer
+
+            );
         }
 
         protected static QuestionnaireRevision questionnaireId = Create.QuestionnaireRevision("22222222222222222222222222222222");

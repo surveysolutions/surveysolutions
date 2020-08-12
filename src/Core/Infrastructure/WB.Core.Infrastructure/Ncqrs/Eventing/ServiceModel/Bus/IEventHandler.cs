@@ -11,8 +11,8 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         where TEvent : WB.Core.Infrastructure.EventBus.IEvent
     {
         /// <summary>
-        /// Processes provided event. Acual event type could be a subtype of <typeparamref name="TEvent"/>. In such cache,
-        /// <paramref name="evnt"/> value would be also genericaly typed to a subtype, not the base <typeparamref name="TEvent"/> type.
+        /// Processes provided event. Actual event type could be a subtype of <typeparamref name="TEvent"/>. In such cache,
+        /// <paramref name="evnt"/> value would be also generically typed to a subtype, not the base <typeparamref name="TEvent"/> type.
         /// </summary>
         /// <param name="evnt">Object representing the event.</param>
         void Handle(IPublishedEvent<TEvent> evnt);

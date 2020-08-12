@@ -30,7 +30,8 @@
                     description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
-                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser
+                            && !($scope.activeQuestion.parentIsCover && !$scope.questionnaire.isCoverPageSupported)) {
                             if ($scope.questionForm.$dirty) {
                                 $scope.saveQuestion();
                                 $scope.questionForm.$setPristine();
@@ -63,6 +64,8 @@
 
                 $scope.activeQuestion.itemId = $state.params.itemId;
 
+                $scope.activeQuestion.chapterId = question.chapterId;
+
                 $scope.activeQuestion.variable = question.variableName || question.variable;
                 $scope.activeQuestion.variableLabel = question.variableLabel;
                 $scope.activeQuestion.mask = question.mask;
@@ -90,7 +93,7 @@
                 $scope.activeQuestion.defaultDate = question.defaultDate;
                 $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
 
-                var options = question.options || [];
+                var options = question.options || [];  
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
                 });
@@ -122,6 +125,14 @@
 
                 $scope.activeQuestion.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
                 $scope.activeQuestion.categoriesId = question.categoriesId;
+
+                $scope.activeQuestion.parentIsCover = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isCover: true }) != null
+                    : false;
+                $scope.activeQuestion.isReadOnly = $scope.questionnaire
+                    ? _.find($scope.questionnaire.chapters, { itemId: $scope.currentChapterId, isReadOnly: true }) != null
+                    : false;
+
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
@@ -195,7 +206,7 @@
                         windowClass: "add-classification-modal dragAndDrop",
                         controller: 'addClassificationCtrl',
                         resolve: {
-                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly || false,
                             hasOptions: $scope.activeQuestion.optionsCount > 0
                         }
                     });
@@ -220,6 +231,7 @@
                                             if (confirmResult === 'ok') {
                                                 $scope.activeQuestion.options = selectedClassification.categories;
                                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                                markFormAsChanged();
                                             }
                                         });
                                     } else {
@@ -231,6 +243,7 @@
                                         $scope.activeQuestion.isFilteredCombobox = true;
                                         $scope.activeQuestion.options = selectedClassification.categories;
                                         $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                        markFormAsChanged();
                                     }
                                 } else {
                                     if ($scope.activeQuestion.isFilteredCombobox) {
@@ -241,7 +254,7 @@
                                     }
                                     $scope.activeQuestion.options = selectedClassification.categories;
                                     $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
-
+                                    markFormAsChanged();
                                 }
                             };
 
@@ -424,7 +437,7 @@
                         title: $i18next.t('QuestionOpenEditorConfirm'),
                         okButtonTitle: $i18next.t('Save'),
                         cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -433,7 +446,7 @@
                                 var alertInstance = alertService.open({
                                     title: $i18next.t('QuestionOpenEditorSaved'),
                                     okButtonTitle: $i18next.t('Ok'),
-                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                                 });
 
                                 alertInstance.result.then(function(confirmResult) {
@@ -454,7 +467,7 @@
                         title: $i18next.t('QuestionOpenEditorConfirm'),
                         okButtonTitle: $i18next.t('Save'),
                         cancelButtonTitle: $i18next.t('Cancel'),
-                        isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                        isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                     });
 
                     modalInstance.result.then(function (confirmResult) {
@@ -463,7 +476,7 @@
                                 var alertInstance = alertService.open({
                                     title: $i18next.t('QuestionOpenEditorSaved'),
                                     okButtonTitle: $i18next.t('Ok'),
-                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly
                                 });
 
                                 alertInstance.result.then(function (confirmResult) {
@@ -478,6 +491,16 @@
             };
 
             var openOptionsEditor = function () {
+                if ($scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly)
+                {
+                    confirmService.open({
+                        title: $i18next.t('ReadOnlyQuestion'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
+                        isReadOnly: true
+                    }).result;
+                    return;
+                }
+                
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
@@ -485,6 +508,16 @@
             };
 
             var openCascadeOptionsEditor = function () {
+                if ($scope.questionnaire.isReadOnlyForUser || $scope.currentChapter.isReadOnly)
+                {
+                    confirmService.open({
+                        title: $i18next.t('ReadOnlyQuestion'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
+                        isReadOnly: true
+                    }).result;
+                    return;
+                }
+
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
@@ -761,8 +794,9 @@
                     $scope.activeQuestion.linkedToEntityId = itemId;
                     $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
 
+
                     var filter = linkedFilterExpression || optionsFilterExpression;
-                    if ($scope.activeQuestion.linkedToEntity.type == 'textlist') {
+                    if ($scope.activeQuestion.linkedToEntity !== undefined && $scope.activeQuestion.linkedToEntity.type === 'textlist') {
                         $scope.activeQuestion.linkedFilterExpression = null;
                         $scope.activeQuestion.optionsFilterExpression = filter;
                     } else {
@@ -803,8 +837,10 @@
             };
 
             $scope.doesQuestionSupportEnablementConditions = function () {
-                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
-                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
+                return $scope.activeQuestion
+                    && ($scope.activeQuestion.questionScope != 'Identifying')
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId)
+                    && !$scope.activeQuestion.parentIsCover;
             };
 
             $scope.isIntegerChange = function () {
@@ -814,7 +850,7 @@
             $scope.showAsListChange = function () {
                 $scope.activeQuestion.showAsListThreshold = null;
             };
-
+            
             $scope.loadQuestion();
         }
     );

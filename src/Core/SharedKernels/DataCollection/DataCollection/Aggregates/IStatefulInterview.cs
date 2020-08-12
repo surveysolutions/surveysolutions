@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -36,6 +37,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
+        
+        InterviewTreeVariable GetVariable(Identity identity);
 
         InterviewTreeGpsQuestion GetGpsQuestion(Identity identity);
 
@@ -124,8 +127,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
 
-        InterviewTreeSection FirstSection { get; }
-
         Guid CurrentResponsibleId { get; }
 
         Guid SupervisorId { get; }
@@ -203,5 +204,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsAnswerProtected(Identity questionIdentity, decimal value);
 
         bool? GetIsAudioRecordingEnabled();
+
+        Guid? GetAttachmentForEntity(Identity entityId);
     }
 }

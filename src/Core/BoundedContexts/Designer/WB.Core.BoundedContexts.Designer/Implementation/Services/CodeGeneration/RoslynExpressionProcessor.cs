@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class RoslynExpressionProcessor : IExpressionProcessor
     {
-        private static readonly string[] ForbiddenDateTimeStaticProperties = { "Now", "Today", "UtcNow" };
+        private static readonly string[] ForbiddenDateTimeStaticProperties = {"Now", "Today", "UtcNow"};
         public static readonly string ForbiddenDatetimeNow = "DateTime.Now";
 
         public IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression)
@@ -22,7 +23,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var tokens = tree
                 .GetRoot()
                 .ChildNodesAndTokens()
-                .TreeToEnumerable(node => this.IsMemberAccessor(node) ? Enumerable.Empty<SyntaxNodeOrToken>() : node.ChildNodesAndTokens())
+                .TreeToEnumerable(node =>
+                    this.IsMemberAccessor(node) ? Enumerable.Empty<SyntaxNodeOrToken>() : node.ChildNodesAndTokens())
                 .ToArray();
 
             var identifiers = tokens
@@ -58,7 +60,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             //    +--- . ---+   Now
             // System    DateTime
 
-            if (right.Kind() != SyntaxKind.IdentifierName || !ForbiddenDateTimeStaticProperties.Contains(right.ToFullString().Trim()))
+            if (right.Kind() != SyntaxKind.IdentifierName ||
+                !ForbiddenDateTimeStaticProperties.Contains(right.ToFullString().Trim()))
                 return false;
 
             var left = childNodesAndTokens.First();
@@ -77,10 +80,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return
                 tree
-                .GetRoot()
-                .ChildNodesAndTokens()
-                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
-                .Any(IsBitwiseAndExpression);
+                    .GetRoot()
+                    .ChildNodesAndTokens()
+                    .TreeToEnumerable(_ => _.ChildNodesAndTokens())
+                    .Any(IsBitwiseAndExpression);
         }
 
         public bool ContainsBitwiseOr(string expression)
@@ -91,10 +94,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return
                 tree
-                .GetRoot()
-                .ChildNodesAndTokens()
-                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
-                .Any(IsBitwiseOrExpression);
+                    .GetRoot()
+                    .ChildNodesAndTokens()
+                    .TreeToEnumerable(_ => _.ChildNodesAndTokens())
+                    .Any(IsBitwiseOrExpression);
         }
 
         private static string WrapToClass(string expression) => $"class a {{ bool b() {{ return ({expression}); }} }} ";
@@ -107,18 +110,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
             => nodeOrToken.IsToken
-            && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
-            && nodeOrToken.Parent.Kind() == SyntaxKind.IdentifierName;
+               && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
+               && nodeOrToken.Parent?.Kind() == SyntaxKind.IdentifierName;
 
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
-            => identifierToken.Parent.Parent is InvocationExpressionSyntax;
+            => identifierToken.Parent?.Parent is InvocationExpressionSyntax;
 
         private static bool IsConstructorCall(SyntaxNodeOrToken identifierToken)
-            => identifierToken.Parent.Parent is ObjectCreationExpressionSyntax;
+            => identifierToken.Parent?.Parent is ObjectCreationExpressionSyntax;
 
         private static bool IsLambdaParameter(SyntaxNodeOrToken identifierToken)
             => IsSimpleLambdaParameter(identifierToken)
-            || IsParenthesizedLambdaParameter(identifierToken);
+               || IsParenthesizedLambdaParameter(identifierToken);
 
         private static bool IsSimpleLambdaParameter(SyntaxNodeOrToken identifierToken)
         {
@@ -152,8 +155,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return lambdaParameters.Contains(identifierToken.ToString());
         }
 
-        private static TAncestor FindAncestor<TAncestor>(SyntaxNodeOrToken nodeOrToken)
-            where TAncestor : SyntaxNode
-            => (TAncestor) nodeOrToken.Parent.UnwrapReferences(ancestor => ancestor.Parent).FirstOrDefault(ancestor => ancestor is TAncestor);
+        private static TAncestor? FindAncestor<TAncestor>(SyntaxNodeOrToken nodeOrToken) where TAncestor: SyntaxNode
+        {
+            var referencedItem = nodeOrToken.Parent;
+            while (referencedItem != null)
+            {
+                if (referencedItem is TAncestor node)
+                    return node;
+                
+                referencedItem = referencedItem.Parent;
+            }
+
+            return null;
+        }
     }
 }
