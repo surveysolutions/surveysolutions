@@ -1,6 +1,11 @@
 FROM --platform=linux/amd64 node:14 AS js_builder
 
-COPY src/ /src
+COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
+COPY src/UI/WB.UI.Headquarters.Core/Resources src/UI/WB.UI.Headquarters.Core/Resources
+COPY src/UI/WB.UI.Headquarters.Core/Views src/UI/WB.UI.Headquarters.Core/Views
+COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources
+COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
+
 WORKDIR /src/UI/WB.UI.Frontend
 RUN yarn && yarn build --package
 
