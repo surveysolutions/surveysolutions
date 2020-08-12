@@ -235,6 +235,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             catch (Exception e)
             {
                 logger.Error("Error on shapefile loading", e);
+                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
 

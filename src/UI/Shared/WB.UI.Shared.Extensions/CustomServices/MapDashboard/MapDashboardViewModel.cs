@@ -607,6 +607,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             catch (Exception e)
             {
                 logger.Error("Error on shapefile loading", e);
+                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         });
 
