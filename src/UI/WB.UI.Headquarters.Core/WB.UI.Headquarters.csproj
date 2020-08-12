@@ -32,6 +32,9 @@
     <PackageReference Include="Humanizer.Core.pt" Version="2.8.26" />
     <PackageReference Include="Humanizer.Core.ru" Version="2.8.26" />
     <PackageReference Include="Humanizer.Core.zh-CN" Version="2.8.26" />
+    <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="0.1.1" />
+    <PackageReference Include="MigraDocCore.Rendering" Version="0.1.0" />
+    <PackageReference Include="PdfSharpCore" Version="1.2.4" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="3.5.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
