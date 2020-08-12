@@ -10,7 +10,7 @@
 
     <PackageGroup Id="AspNetCoreRuntime31Web">
       <ExePackage
-          Name="aspnetcore-runtime-3.1.0-win-x64.exe"
+          Name="aspnetcore-runtime-3.1.7-win-x64.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[AspNetCoreRuntime31Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[AspNetCoreRuntime31Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[AspNetCoreRuntime31Log]&quot;"
@@ -20,18 +20,18 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/a16689d1-0872-4ef9-a592-406d3038d8f7/cf4f84504385a599f0cb6a5c113ccb34/aspnetcore-runtime-3.1.0-win-x64.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/4957d824-3b3b-497a-b499-55022088ed93/b2ee157a32d7718897024d03b7126b59/aspnetcore-runtime-3.1.7-win-x64.exe"
           LogPathVariable="AspNetCoreRuntime31Log"
           Compressed="no">
         <!-- heat.exe payload "aspnetcore-runtime-3.1.0-win-x64.exe" -o "aspnetcore-runtime.wxs" -->
         <RemotePayload
           CertificatePublicKey="6608A9DBA86701156A4C17CE63BA99BE8B932F8D"
           CertificateThumbprint="62009AAABDAE749FD47D19150958329BF6FF4B34"
-          Description="Microsoft ASP.NET Core 3.1.0 - Shared Framework"
+          Description="Microsoft ASP.NET Core 3.1.7 - Shared Framework"
           Hash="2DFD4F9EA2E174A7199C40ED3A826886F1E19EF8"
-          ProductName="Microsoft ASP.NET Core 3.1.0 - Shared Framework"
+          ProductName="Microsoft ASP.NET Core 3.1.7 - Shared Framework"
           Size="7811768"
-          Version="3.1.0.19566" />
+          Version="3.1.7.20372" />
       </ExePackage>
     </PackageGroup>
   </Fragment>
@@ -45,7 +45,7 @@
 
     <PackageGroup Id="WindowsDesktopRuntime31Web">
       <ExePackage
-          Name="windowsdesktop-runtime-3.1.0-win-x64.exe"
+          Name="windowsdesktop-runtime-3.1.7-win-x64.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDesktopRuntime31Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDesktopRuntime31Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDesktopRuntime31Log]&quot;"
@@ -55,18 +55,18 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/a1510e74-b31a-4434-b8a0-8074ff31fb3f/b7de8ecba4a14d8312551cfdc745dea1/windowsdesktop-runtime-3.1.0-win-x64.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/5e4695fb-da51-4fa8-a090-07a64480888c/65aa842670d2280b5d05b8a070a9f495/windowsdesktop-runtime-3.1.7-win-x64.exe"
           LogPathVariable="WindowsDesktopRuntime31Log"
           Compressed="no">
         <!-- heat.exe payload "windowsdesktop-runtime-3.1.0-win-x64.exe" -o "windowsdesktop-runtime.wxs" -->
         <RemotePayload
           CertificatePublicKey="6608A9DBA86701156A4C17CE63BA99BE8B932F8D"
           CertificateThumbprint="62009AAABDAE749FD47D19150958329BF6FF4B34"
-          Description="Microsoft Windows Desktop Runtime - 3.1.0 (x64)"
+          Description="Microsoft Windows Desktop Runtime - 3.1.7 (x64)"
           Hash="C16F271754879BA78868947486F37871C9F0E40F"
-          ProductName="Microsoft Windows Desktop Runtime - 3.1.0 (x64)"
+          ProductName="Microsoft Windows Desktop Runtime - 3.1.7 (x64)"
           Size="54443856"
-          Version="3.1.0.28315" />
+          Version="3.1.7.29121" />
       </ExePackage>
     </PackageGroup>
   </Fragment>
@@ -80,7 +80,7 @@
 
     <PackageGroup Id="WindowsDotNetHosting311">
       <ExePackage
-          Name="dotnet-hosting-3.1.1-win.exe"
+          Name="dotnet-hosting-3.1.7-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting311Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting311Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting311Log]&quot;"
@@ -90,7 +90,7 @@
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/c9206d6d-a11a-4b0b-834b-6320c44d0a2d/993571f75a96b6a64f8bca001797c4f0/dotnet-hosting-3.1.1-win.exe"
+          DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/21a5322f-cf9c-40e0-af41-4cdf14b3fb17/ff1390906525099bcd6b322279e09938/dotnet-hosting-3.1.7-win.exe"
           LogPathVariable="WindowsDotNetHosting311Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
@@ -134,7 +134,7 @@
             Hash="17C869B0D792643A1344DFAD0F5DE3FEC3437CC6" 
             ProductName="Microsoft .NET Core 3.1.4 - Windows Server Hosting" 
             Size="64749160" 
-            Version="3.1.4.20222" />
+            Version="3.1.7.20372" />
       </ExePackage>
     </PackageGroup>
     </Fragment>
