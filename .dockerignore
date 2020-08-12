@@ -283,3 +283,10 @@ Dockerfile
 # .env file contains default environment variables for docker
 .env
 .git/
+
+
+src/UI/Interviewer/
+src/UI/Supervisor
+src/UI/Tester
+src/UI/WB.UI.Designer
+src/UI/WB.UI.WebTester
