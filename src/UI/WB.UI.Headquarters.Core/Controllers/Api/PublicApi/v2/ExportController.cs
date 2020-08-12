@@ -81,7 +81,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 (DataExportFormat) request.ExportType, interviewStatus, request.From, request.To, password,
                 request.AccessToken, request.RefreshToken, 
                 (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) request.StorageType,
-                request.TranslationId);
+                request.TranslationId,
+                request.IncludeMeta);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {request.InterviewStatus.ToString() ?? ""}",
@@ -264,6 +265,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             /// Translation Id of the questionnaire
             /// </summary>
             public Guid? TranslationId { get; set; }
+
+            public bool? IncludeMeta { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess
