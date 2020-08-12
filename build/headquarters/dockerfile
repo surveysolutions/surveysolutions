@@ -1,4 +1,5 @@
-FROM --platform=linux/amd64 node:14 AS js_builder
+FROM --platform=$BUILDPLATFORM node:14 AS js_builder
+ARG BUILDPLATFORM
 
 COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Headquarters.Core/Resources src/UI/WB.UI.Headquarters.Core/Resources
@@ -9,7 +10,7 @@ COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/
 WORKDIR /src/UI/WB.UI.Frontend
 RUN yarn && yarn build --package
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
+FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
 
 ARG GIT_BRANCH
 ARG HQ_BUILD
@@ -35,7 +36,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     --version-suffix $GIT_BRANCH \
     /p:BuildNumber=$EXPORT_BUILD
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
 ARG BUILD_DATE
 ARG VCS_REF
