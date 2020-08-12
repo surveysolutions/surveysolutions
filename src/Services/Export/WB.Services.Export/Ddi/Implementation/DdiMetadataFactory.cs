@@ -118,7 +118,7 @@ namespace WB.Services.Export.Ddi.Implementation
                     }
                 }
 
-                var targetFolder = this.fileSystemAccessor.Combine(basePath, "Questionnaire");
+                var targetFolder = this.fileSystemAccessor.CombinePath(basePath, "Questionnaire");
                 this.fileSystemAccessor.CreateDirectory(targetFolder);
 
                 var pathToWrite = this.fileSystemAccessor.CombinePath(targetFolder, ExportFileSettings.GetDDIFileName(
