@@ -29,7 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             string accessToken,
             string refreshToken,
             ExternalStorageType? storageType,
-            Guid? translationId);
+            Guid? translationId,
+            bool? includeMeta);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -52,7 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
              InterviewStatus? status,
              DateTime? fromDate,
              DateTime? toDate,
-             Guid? translationId);
+             Guid? translationId,
+             bool? includeMeta);
 
         [Get("/api/v1/job/wasExportRecreated")]
         Task<bool> WasExportRecreated(long processId);
