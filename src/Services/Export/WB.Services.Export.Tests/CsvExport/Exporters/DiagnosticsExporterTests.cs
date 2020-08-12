@@ -66,7 +66,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                     numberInvalidEntities: 9,
                     numberUnansweredQuestions: 1,
                     numberCommentedQuestions: 2,
-                    interviewDuration: 1758237000),
+                    interviewDuration: 1758237000,
+                    notAnsweredCount: 4),
             };
 
             var hqApi = new Mock<IHeadquartersApi>();
@@ -91,10 +92,10 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             await exporter.ExportAsync(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", Create.Tenant(), new ExportProgress(), CancellationToken.None);
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
-            Assert.That(fileData[0], Is.EqualTo(new[] { "interview__key", "interview__id", "interview__status", "responsible", "interviewers", "rejections__sup", "rejections__hq", "entities__errors", "questions__comments", "interview__duration" }));
-            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", interviewId1.FormatGuid() ,"60", "int1", "1", "2", "3", "5", "7", "00.00:00:00" }));
-            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", interviewId2.FormatGuid(), "125", "int2", "9", "8", "7", "5", "3", "00.00:00:02" }));
-            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", interviewId3.FormatGuid(), "65", "int1", "2", "4", "6", "9", "2", "00.00:02:55" }));
+            Assert.That(fileData[0], Is.EqualTo(new[] { "interview__key", "interview__id", "interview__status", "responsible", "interviewers", "rejections__sup", "rejections__hq", "entities__errors", "questions__comments", "interview__duration", "n_questions_unanswered" }));
+            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", interviewId1.FormatGuid() ,"60", "int1", "1", "2", "3", "5", "7", "00.00:00:00", "" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", interviewId2.FormatGuid(), "125", "int2", "9", "8", "7", "5", "3", "00.00:00:02", "" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", interviewId3.FormatGuid(), "65", "int1", "2", "4", "6", "9", "2", "00.00:02:55", "4" }));
         }
     }
 }

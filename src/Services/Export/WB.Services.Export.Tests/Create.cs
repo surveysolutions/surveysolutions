@@ -49,7 +49,8 @@ namespace WB.Services.Export.Tests
             int numberInvalidEntities = 0,
             int numberUnansweredQuestions = 0,
             int numberCommentedQuestions = 0,
-            long? interviewDuration = null)
+            long? interviewDuration = null, 
+            int? notAnsweredCount = null)
             => new InterviewDiagnosticsInfo
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -64,7 +65,8 @@ namespace WB.Services.Export.Tests
                 NumberInvalidEntities = numberInvalidEntities,
                 NumberUnansweredQuestions = numberUnansweredQuestions,
                 NumberCommentedQuestions = numberCommentedQuestions,
-                InterviewDuration = interviewDuration
+                InterviewDuration = interviewDuration,
+                NotAnsweredCount = notAnsweredCount
             };
 
         public static DiagnosticsExporter DiagnosticsExporter(ICsvWriter csvWriter = null,
