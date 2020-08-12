@@ -13,6 +13,7 @@ using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Ddi;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Events.Interview.Dtos;
@@ -207,7 +208,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
-                Mock.Of<IQuestionnaireBackupExporter>());
+                Mock.Of<IQuestionnaireBackupExporter>(),
+                Mock.Of<IDdiMetadataFactory>());
         }
 
         public static CommentsExporter CommentsExporter()
