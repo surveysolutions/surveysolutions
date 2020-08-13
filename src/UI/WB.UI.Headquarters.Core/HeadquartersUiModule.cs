@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters
             var services = registry;
 
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
-            registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
+            registry.Bind<IExportServiceApiConfigurator, ExportServiceApiConfigurator>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IApplicationRestarter, ApplicationRestarter>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
