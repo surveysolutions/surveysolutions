@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:local="http://schemas.android.com/apk/res-auto"
-            style="@style/Interview_Complete_Screen_Scroll">
-    <android.support.v4.widget.NestedScrollView
-        style="@style/VerticalFullWidthWrappingLayout"
+            style="@style/Interview_Complete_Screen_Scroll"
+        android:id="@+id/tv_coverNestedScrollView"
         local:MvxBind="HideKeyboardOnClick .">
     <LinearLayout
         style="@style/Interview_QuestionWithDivider"
@@ -85,5 +84,4 @@
                 Text FirstSectionTitle; "/>
         </LinearLayout>
     </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
