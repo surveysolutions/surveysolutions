@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
-        protected RestCredentials RestCredentials;
+        protected RestCredentials? RestCredentials;
         
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
@@ -223,7 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.UserAuthentication
                 });
 
-                this.RestCredentials = this.RestCredentials ?? new RestCredentials
+                this.RestCredentials ??= new RestCredentials
                 {
                     Login = this.principal.CurrentUserIdentity.Name,
                     Token = this.principal.CurrentUserIdentity.Token
@@ -485,7 +486,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 else
                 {
                     this.remoteLoginRequired = true;
-                    this.RestCredentials.Password = newPassword;
+                    if (this.RestCredentials != null)
+                    {
+                        this.RestCredentials.Password = newPassword;
+                    }
+
                     await this.SynchronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }
