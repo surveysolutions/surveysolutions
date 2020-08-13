@@ -531,7 +531,7 @@
     <value>ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ</value>
   </data>
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
-    <value>Загрузить шейпфайл</value>
+    <value>Загрузить шейп-файл</value>
   </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
     <value>Задачи</value>
@@ -567,7 +567,7 @@
     <value>Загруженая карта расположена вне границ видимой зоны</value>
   </data>
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
-    <value>Ошибка загрузки. Шейпфайл не может быть откыт</value>
+    <value>Ошибка загрузки. Шейп-файл не может быть открыт</value>
   </data>
   <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
     <value>Не удается получить ваше расположение. Выйдите на открытое пространство, включите GPS или увеличте значение таймаута в настройках.</value>
