@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
-        protected RestCredentials? RestCredentials;
+        protected RestCredentials RestCredentials = null!;
         
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
