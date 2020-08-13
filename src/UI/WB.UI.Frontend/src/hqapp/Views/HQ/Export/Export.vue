@@ -10,9 +10,16 @@
         </div>
         <div class="col-md-12">
             <div class="row"
-                v-if="exportServiceIsUnavailable">
+                v-if="!exportServiceInitializing && exportServiceIsUnavailable">
                 <div class="col-md-12 mb-30">
                     {{$t('DataExport.DataExport_ServiceIsNotAvailable')}}
+                </div>
+            </div>
+
+            <div class="row"
+                v-if="exportServiceInitializing">
+                <div class="col-md-12 mb-30">
+                    {{$t('Common.Loading')}}
                 </div>
             </div>
 
@@ -130,20 +137,6 @@
                                             class="format-data Binary">{{$t('DataExport.DataType_Binary')}}</span>
                                     </label>
                                 </div>
-                                <!-- <div class="radio-btn-row"
-                                    v-if="questionnaireVersion">
-                                    <input
-                                        class="radio-row"
-                                        type="radio"
-                                        name="dataType"
-                                        id="ddiData"
-                                        v-model="dataType"
-                                        value="ddiData"/>
-                                    <label for="ddiData">
-                                        <span class="tick"></span>
-                                        <span class="format-data">{{$t('DataExport.DataType_Ddi')}}</span>
-                                    </label>
-                                </div> -->
                                 <div class="radio-btn-row"
                                     v-if="hasInterviews">
                                     <input
