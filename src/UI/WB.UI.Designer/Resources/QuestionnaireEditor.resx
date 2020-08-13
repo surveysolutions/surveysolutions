@@ -1417,4 +1417,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Text label for the category (visible to the interviewer)</value>
   </data>
+    <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
+  </data>
 </root>
