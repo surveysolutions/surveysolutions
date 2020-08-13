@@ -61,6 +61,7 @@ using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
@@ -250,6 +251,7 @@ namespace WB.UI.Headquarters
             services.AddScoped<GlobalNotificationResultFilter>();
             services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
+            services.AddDataExportClient();
 
             services.AddGraphQL();
             
