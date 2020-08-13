@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes;
@@ -15,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
 using Color = MigraDocCore.DocumentObjectModel.Color;
@@ -31,21 +33,23 @@ namespace WB.UI.Headquarters.PdfInterview
 
         private static class PdfFonts
         {
-            public static Font HeaderLineTitle = new Font() { Size = 22, Bold = true,  };
-            public static Font SectionHeader = new Font() { Size = 20, Bold = true, Name = "RobotoBold", Color = new Color(63, 63,63 ) };
-            public static Font GroupHeader = new Font() { Size = 20, Name = "RobotoRegular" };
-            public static Font RosterTitle = new Font() { Size = 20, Name = "RobotoRegular", Italic = true };
-            public static Font QuestionTitle = new Font() { Size = 16, Name = "RobotoLight" };
-            public static Font QuestionAnswer = new Font() { Size = 14, Name = "Arial, sans-serif"};
-            public static Font QuestionNotAnswered = new Font() { Size = 11, Name = "TrebuchetMSBold"};
-            public static Font QuestionAnswerDate = new Font() { Size = 12, Italic = true, Name = "Arial, sans-serif", Color = new Color(219, 223, 226)};
-            public static Font QuestionAnswerTime = new Font() { Size = 12, Italic = true, Name = "Arial, sans-serif", Color = new Color(63, 63,63 )};
-            public static Font StaticTextTitle = new Font() { Size = 16, Name = "RobotoLight" };
-            public static Font ValidateErrorTitle = new Font() { Size = 10, Name = "TrebuchetMSBold", Color = new Color(231, 73, 36)};
-            public static Font ValidateErrorMessage = new Font() { Size = 12, Name = "Arial, Helvetica, sans-serif", Italic = true, Color = new Color(231, 73, 36) };
-            public static Font CommentAuthor = new Font() { Size = 10, Name = "TrebuchetMSBold", Color = new Color(128, 128, 128)};
-            public static Font CommentDateTime = new Font() { Size = 10, Name = "TrebuchetMSBold", Color = new Color(219, 223, 226)};
-            public static Font CommentMessage = new Font() { Size = 12, Name = "Arial, Helvetica, sans-serif", Italic = true};
+            public const string HeaderLineTitle = "HeaderLineTitle";
+            public const string SectionHeader = "SectionHeader";
+            public const string GroupHeader = "GroupHeader";
+            public const string RosterTitle = "RosterTitle";
+            public const string QuestionTitle = "QuestionTitle";
+            public const string QuestionAnswer = "QuestionAnswer";
+            public const string QuestionNotAnswered = "QuestionNotAnswered";
+            public const string QuestionAnswerDate = "QuestionAnswerDate";
+            public const string QuestionAnswerTime = "QuestionAnswerTime";
+            public const string StaticTextTitle = "StaticTextTitle";
+            public const string ValidateErrorTitle = "ValidateErrorTitle";
+            public const string ValidateErrorMessage = "ValidateErrorMessage";
+            public const string ValidateWarningTitle = "ValidateWarningTitle";
+            public const string ValidateWarningMessage = "ValidateWarningMessage";
+            public const string CommentAuthor = "CommentAuthor";
+            public const string CommentDateTime = "CommentDateTime";
+            public const string CommentMessage = "CommentMessage";
         }
         
         public PdfInterviewGenerator(IQuestionnaireStorage questionnaireStorage,
@@ -107,7 +111,48 @@ namespace WB.UI.Headquarters.PdfInterview
 
         private void DefineStyles(Document document)
         {
-            var style = document.Styles["ddd"];
+            var defaultPaddingStyle = document.Styles.AddStyle("defaultPaddingStyle", StyleNames.DefaultParagraphFont);
+            defaultPaddingStyle.ParagraphFormat.LeftIndent = Unit.FromPoint(500);
+
+            document.Styles.AddStyle(PdfFonts.HeaderLineTitle, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 22, Bold = true };
+            var sectionHeader = document.Styles.AddStyle(PdfFonts.SectionHeader, StyleNames.DefaultParagraphFont);
+            sectionHeader.Font = new Font() { Size = 20, Bold = true, Color = new Color(63, 63,63 ) };
+            sectionHeader.ParagraphFormat.Borders.Top = new Border() { Width = "1pt", Color = Colors.DarkGray };
+            sectionHeader.ParagraphFormat.LineSpacing = 0;
+            sectionHeader.ParagraphFormat.SpaceBefore = "40pt";
+            document.Styles.AddStyle(PdfFonts.GroupHeader, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 20 };
+            document.Styles.AddStyle(PdfFonts.RosterTitle, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 20, Italic = true };
+            document.Styles.AddStyle(PdfFonts.QuestionTitle, "defaultPaddingStyle").Font =
+                new Font() { Size = 16 };
+            document.Styles.AddStyle(PdfFonts.QuestionAnswer, "defaultPaddingStyle").Font =
+                new Font() { Size = 14 };
+            document.Styles.AddStyle(PdfFonts.QuestionNotAnswered, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 11 };
+            var questionDateStyle = document.Styles.AddStyle(PdfFonts.QuestionAnswerDate, StyleNames.DefaultParagraphFont);
+            questionDateStyle.Font = new Font() { Size = 12, Italic = true, Color = new Color(219, 223, 226)};
+            questionDateStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
+            var questionTimeStyle = document.Styles.AddStyle(PdfFonts.QuestionAnswerTime, StyleNames.DefaultParagraphFont);
+            questionTimeStyle.Font = new Font() { Size = 12, Italic = true, Color = new Color(63, 63,63 )};
+            questionTimeStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
+            document.Styles.AddStyle(PdfFonts.StaticTextTitle, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 16 };
+            document.Styles.AddStyle(PdfFonts.ValidateErrorTitle, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 10, Color = new Color(231, 73, 36)};
+            document.Styles.AddStyle(PdfFonts.ValidateErrorMessage, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 12, Italic = true, Color = new Color(231, 73, 36) };
+            document.Styles.AddStyle(PdfFonts.ValidateWarningTitle, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 10, Color = new Color(231, 73, 36)};
+            document.Styles.AddStyle(PdfFonts.ValidateWarningMessage, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 12, Italic = true, Color = new Color(31, 73, 36) };
+            document.Styles.AddStyle(PdfFonts.CommentAuthor, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 10, Color = new Color(128, 128, 128)};
+            document.Styles.AddStyle(PdfFonts.CommentDateTime, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 10, Color = new Color(219, 223, 226)};
+            document.Styles.AddStyle(PdfFonts.CommentMessage, StyleNames.DefaultParagraphFont).Font =
+                new Font() { Size = 12, Italic = true};
         }
 
         private static void WritePdfInterviewHeader(Section section, IQuestionnaire questionnaire, IStatefulInterview interview)
@@ -134,7 +179,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
             paragraph.AddTab();
             paragraph.AddTab();
-            paragraph.AddFormattedText(staticText.Title.Text, PdfFonts.StaticTextTitle);
+            paragraph.AddFormattedText(staticText.Title.Text.RemoveHtmlTags(), PdfFonts.StaticTextTitle);
 
             var attachment = questionnaire.GetAttachmentForEntity(staticText.Identity.Id);
             if (attachment != null)
@@ -148,6 +193,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 var image = paragraph.AddImage(imageSource);
                 image.Width = Unit.FromPoint(400);
             }
+            paragraph.AddLineBreak();
 
             WriteValidateData(paragraph, staticText, interview);
             
@@ -158,16 +204,18 @@ namespace WB.UI.Headquarters.PdfInterview
         private void WriteGroupData(Section section, InterviewTreeGroup @group)
         {
             var paragraph = section.AddParagraph();
-            var font = group is InterviewTreeSection 
+            var style = group is InterviewTreeSection 
                 ? PdfFonts.SectionHeader
                 : PdfFonts.GroupHeader;
+            paragraph.Style = style;
 
+            paragraph.AddFormattedText(group.Title.Text.RemoveHtmlTags(), style);
+            
             if (@group is InterviewTreeRoster roster)
             {
-                paragraph.AddFormattedText(roster.RosterTitle + " - ", PdfFonts.RosterTitle);
+                paragraph.AddFormattedText(" - " + roster.RosterTitle.RemoveHtmlTags(), PdfFonts.RosterTitle);
             }
             
-            paragraph.AddFormattedText(group.Title.Text, font);
             paragraph.AddLineBreak();
             paragraph.AddLineBreak();
         }
@@ -178,20 +226,19 @@ namespace WB.UI.Headquarters.PdfInterview
             Paragraph paragraph = section.AddParagraph();
 
             if (question.AnswerTimeUtc.HasValue)
-                paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("MMM DD"), PdfFonts.QuestionAnswerDate);
+                paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("MMM dd"), PdfFonts.QuestionAnswerDate);
             else
                 paragraph.AddTab();
 
             paragraph.AddTab();
             
-            paragraph.AddFormattedText(question.Title.Text, PdfFonts.QuestionTitle);
+            paragraph.AddFormattedText(question.Title.Text.RemoveHtmlTags(), PdfFonts.QuestionTitle);
             paragraph.AddLineBreak();
 
             if (question.AnswerTimeUtc.HasValue)
                 paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("HH:mm"), PdfFonts.QuestionAnswerTime);
-            else
-                paragraph.AddTab();
 
+            paragraph.AddTab();
             paragraph.AddTab();
 
             if (question.IsAnswered())
@@ -230,7 +277,8 @@ namespace WB.UI.Headquarters.PdfInterview
             {
                 paragraph.AddFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, PdfFonts.QuestionNotAnswered);
             }
-            
+            paragraph.AddLineBreak();
+
             WriteValidateData(paragraph, question, interview);
             WriteCommentsData(paragraph, question, interview);
 
@@ -240,32 +288,63 @@ namespace WB.UI.Headquarters.PdfInterview
         
         private void WriteValidateData(Paragraph paragraph, IInterviewTreeValidateable validateable, IStatefulInterview interview)
         {
-            foreach (var error in validateable.ValidationMessages)
+            if (validateable.FailedErrors != null && validateable.FailedErrors.Any())
             {
-                paragraph.AddTab();
-                paragraph.AddTab();
-                paragraph.AddFormattedText(error.Text, PdfFonts.ValidateErrorTitle);
                 paragraph.AddLineBreak();
                 paragraph.AddTab();
                 paragraph.AddTab();
-                paragraph.AddFormattedText(error.Text, PdfFonts.ValidateErrorMessage);
+                paragraph.AddFormattedText(WebInterviewUI.Error_plural, PdfFonts.ValidateErrorTitle);
                 paragraph.AddLineBreak();
+
+                foreach (var errorCondition in validateable.FailedErrors)
+                {
+                    var errorMessage = validateable.ValidationMessages[errorCondition.FailedConditionIndex];
+                    paragraph.AddTab();
+                    paragraph.AddTab();
+                    paragraph.AddFormattedText(errorMessage.Text.RemoveHtmlTags(), PdfFonts.ValidateErrorMessage);
+                    paragraph.AddLineBreak();
+                }
+            }
+
+            if (validateable.FailedWarnings != null && validateable.FailedWarnings.Any())
+            {
+                paragraph.AddLineBreak();
+                paragraph.AddTab();
+                paragraph.AddTab();
+                paragraph.AddFormattedText(WebInterviewUI.WarningsHeader, PdfFonts.ValidateWarningTitle);
+                paragraph.AddLineBreak();
+
+                foreach (var warningCondition in validateable.FailedWarnings)
+                {
+                    var warningMessage = validateable.ValidationMessages[warningCondition.FailedConditionIndex];
+                    paragraph.AddTab();
+                    paragraph.AddTab();
+                    paragraph.AddFormattedText(warningMessage.Text.RemoveHtmlTags(), PdfFonts.ValidateWarningMessage);
+                    paragraph.AddLineBreak();
+                }
             }
         }
 
         private void WriteCommentsData(Paragraph paragraph, InterviewTreeQuestion question, IStatefulInterview interview)
         {
-            foreach (var comment in question.AnswerComments)
+            if (question.AnswerComments != null && question.AnswerComments.Any())
             {
-                paragraph.AddTab();
-                paragraph.AddTab();
-                paragraph.AddFormattedText(comment.UserRole.ToUiString(), PdfFonts.CommentAuthor);
-                paragraph.AddFormattedText($" ({comment.CommentTime.ToString()})", PdfFonts.CommentDateTime);
                 paragraph.AddLineBreak();
-                paragraph.AddTab();
-                paragraph.AddTab();
-                paragraph.AddFormattedText(comment.Comment, PdfFonts.CommentMessage);
+                //paragraph.AddFormattedText(WebInterviewUI.Comment, PdfFonts.CommentMessage);
                 paragraph.AddLineBreak();
+
+                foreach (var comment in question.AnswerComments)
+                {
+                    paragraph.AddTab();
+                    paragraph.AddTab();
+                    paragraph.AddFormattedText(comment.UserRole.ToUiString(), PdfFonts.CommentAuthor);
+                    paragraph.AddFormattedText($" ({comment.CommentTime.ToString()})", PdfFonts.CommentDateTime);
+                    paragraph.AddLineBreak();
+                    paragraph.AddTab();
+                    paragraph.AddTab();
+                    paragraph.AddFormattedText(comment.Comment, PdfFonts.CommentMessage);
+                    paragraph.AddLineBreak();
+                }
             }
         }
     }
