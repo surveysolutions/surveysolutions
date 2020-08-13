@@ -1462,4 +1462,7 @@
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Текстовое название категории (отображается интервьюеру)</value>
   </data>
+    <data name="Forum" xml:space="preserve">
+    <value>Форум</value>
+  </data>
 </root>
