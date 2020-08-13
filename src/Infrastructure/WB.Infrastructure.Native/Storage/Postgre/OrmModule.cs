@@ -50,28 +50,46 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     this.connectionSettings.PlainStorageSchemaName);
 
                 status.Message = Modules.MigrateDb;
-                
-                DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                    this.connectionSettings.PlainStorageSchemaName,
-                    this.connectionSettings.PlainStoreUpgradeSettings,
-                    loggerProvider);
 
-                status.ClearMessage();
-
-                if (this.connectionSettings.ReadSideUpgradeSettings != null)
+                void MigrateReadside()
                 {
-                    status.Message = Modules.InitializingDb;
-                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.ReadSideSchemaName);
+                    if (this.connectionSettings.ReadSideUpgradeSettings != null)
+                    {
+                        status.Message = Modules.InitializingDb;
+                        DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                            this.connectionSettings.ReadSideSchemaName);
 
-                    status.Message = Modules.MigrateDb;
+                        status.Message = Modules.MigrateDb;
+                        DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                            this.connectionSettings.ReadSideSchemaName,
+                            this.connectionSettings.ReadSideUpgradeSettings,
+                            loggerProvider);
+
+                        status.ClearMessage();
+                    }
+                }
+
+                void MigratePlainstore()
+                {
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.ReadSideSchemaName, 
-                        this.connectionSettings.ReadSideUpgradeSettings,
+                        this.connectionSettings.PlainStorageSchemaName,
+                        this.connectionSettings.PlainStoreUpgradeSettings,
                         loggerProvider);
 
                     status.ClearMessage();
                 }
+
+                try
+                {
+                    MigratePlainstore();
+                }
+                catch
+                {
+                    MigrateReadside();
+                    MigratePlainstore();
+                }
+
+                MigrateReadside();
 
                 if (this.connectionSettings.LogsUpgradeSettings != null)
                 {
