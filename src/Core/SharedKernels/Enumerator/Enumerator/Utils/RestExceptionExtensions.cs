@@ -112,7 +112,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             break;
                         case HttpStatusCode.Forbidden:
                             if (restException.Message.Contains("relinked"))
+                            {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
+                                exceptionMessage =
+                                    EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                            }
                             else
                             {
                                 exceptionMessage = EnumeratorUIResources.Unauthorized;
