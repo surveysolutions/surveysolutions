@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                       + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
-        protected override Task<string> GetNewPasswordAsync() => Task.FromResult((string)null);
+        protected override Task<string?> GetNewPasswordAsync() => Task.FromResult(default(string));
 
         protected override void WriteToAuditLogStartSyncMessage()
             => this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Offline));
