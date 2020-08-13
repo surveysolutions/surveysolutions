@@ -10,6 +10,7 @@ function formatDate(data) {
 export default {
     state: {
         jobs: [],
+        exportServiceInitializing: true,
         exportServiceIsUnavailable: true,
         _exportStatusUpdateInProgres: false,
     },
@@ -85,7 +86,8 @@ export default {
     },
 
     mutations: {
-        SET_SERVICE_STATE(state, value, sdfad) {
+        SET_SERVICE_STATE(state, value) {
+            state.exportServiceInitializing = false
             state.exportServiceIsUnavailable = !value
         },
 
