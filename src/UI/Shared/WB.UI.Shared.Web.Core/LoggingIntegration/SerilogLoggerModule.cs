@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+﻿
 using WB.Core.Infrastructure.Modularity;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
+using ILoggerProvider = WB.Core.GenericSubdomains.Portable.Services.ILoggerProvider;
 
 namespace WB.UI.Shared.Web.LoggingIntegration
 {
@@ -12,13 +12,7 @@ namespace WB.UI.Shared.Web.LoggingIntegration
             registry.Bind<ILoggerProvider, SerilogLoggerProvider>();
             registry.Bind<Microsoft.Extensions.Logging.ILoggerProvider, Serilog.Extensions.Logging.SerilogLoggerProvider>();
 
-            registry.BindToMethod<ILogger>(context =>
-            {
-                if (context.MemberDeclaringType != null)
-                    return new SerilogLogger(context.MemberDeclaringType);
-
-                return new SerilogLogger();
-            });
+            registry.Bind<ILogger, SerilogLogger>();
         }
     }
 }

@@ -181,6 +181,8 @@ namespace WB.Core.BoundedContexts.Headquarters
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<ITranslationImporter, TranslationImporter>();
+            registry.Bind<ICategoriesImporter, CategoriesImporter>();
             registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();

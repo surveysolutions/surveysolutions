@@ -120,7 +120,7 @@ namespace WB.UI.Shared.Web.Captcha
 
                 DrawRandomLines(ctx, width, height);
 
-                ctx.ApplyProcessor(new LaplacianOfGaussianProcessor(false));
+                ctx.ApplyProcessor(new EdgeDetectorProcessor(EdgeDetectorKernel.LaplacianOfGaussian, false));
                 ctx.Invert();
 
                 DrawRandomPixels(ctx, width, height);

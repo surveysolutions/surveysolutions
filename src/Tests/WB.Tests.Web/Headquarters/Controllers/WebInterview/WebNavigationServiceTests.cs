@@ -127,7 +127,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             // assert
             Assert.That(textWithLink, Is.EqualTo(string.Format(questionTitleFormat,
-                $"~/{virtualDirectoryName}/{interview.Id.FormatGuid()}/section/{parentGroupId.FormatGuid()}#{navigateToQuestionId.FormatGuid()}")));
+                $"~/{virtualDirectoryName}/{interview.Id.FormatGuid()}/Section/{parentGroupId.FormatGuid()}#{navigateToQuestionId.FormatGuid()}")));
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             // assert
             Assert.That(textWithLink, Is.EqualTo(string.Format(questionTitleFormat,
-                $"~/{virtualDirectoryName}/{interview.Id.FormatGuid()}/section/{parentGroupId.FormatGuid()}#{firstRosterInstanceId}")));
+                $"~/{virtualDirectoryName}/{interview.Id.FormatGuid()}/Section/{parentGroupId.FormatGuid()}#{firstRosterInstanceId}")));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Identity.Create(questionId, RosterVector.Empty), questionnaire, interview, virtualDirectoryName);
 
             // assert
-            Assert.That(textWithLink, Is.EqualTo(string.Format(questionTitleFormat, $"~/{virtualDirectoryName}/{interview.Id.FormatGuid()}/cover")));
+            Assert.That(textWithLink, Is.EqualTo(string.Format(questionTitleFormat, $"~/{virtualDirectoryName}/{interview.Id.FormatGuid()}/Cover")));
         }
     }
 }

@@ -57,7 +57,8 @@ namespace WB.Services.Export.Host.Controllers
                     fromDate: process.ExportSettings.FromDate,
                     toDate: process.ExportSettings.ToDate,
                     status: process.ExportSettings.Status,
-                    translation: process.ExportSettings.Translation
+                    translation: process.ExportSettings.Translation,
+                    includeMeta: process.ExportSettings.IncludeMeta
                 ))
             {
                 ArchivePassword = archivePassword,
@@ -86,7 +87,8 @@ namespace WB.Services.Export.Host.Controllers
             string? accessToken,
             string? refreshToken,
             Guid? translationId,
-            ExternalStorageType? storageType)
+            ExternalStorageType? storageType,
+            bool? includeMeta)
         {
             var args = new DataExportProcessArgs(new ExportSettings
             (
@@ -96,7 +98,8 @@ namespace WB.Services.Export.Host.Controllers
                 fromDate: from,
                 toDate: to,
                 translation: translationId,
-                status: status
+                status: status,
+                includeMeta: includeMeta
             ))
             {
                 ArchivePassword = archivePassword,
@@ -136,7 +139,8 @@ namespace WB.Services.Export.Host.Controllers
             DataExportFormat format,
             DateTime? fromDate,
             DateTime? toDate,
-            Guid? translationId)
+            Guid? translationId,
+            bool? includeMeta)
         {
             var exportSettings = new ExportSettings
             (
@@ -146,7 +150,8 @@ namespace WB.Services.Export.Host.Controllers
                 tenant: tenantContext.Tenant,
                 fromDate: fromDate,
                 toDate: toDate,
-                translation: translationId
+                translation: translationId,
+                includeMeta: includeMeta
             );
 
             var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);
