@@ -190,10 +190,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken token = default)
         {
-            return Task.FromResult<RestStreamResult>(null);
+            return Task.FromResult(new RestStreamResult());
         }
 
-        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken token = default)
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials? credentials = null, CancellationToken token = default)
         {
             throw new NotSupportedException("Offline mode is not support this method");
         }
@@ -287,19 +287,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult("offline sync token");
         }
 
-        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken token = default)
+        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials? credentials = null, CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
-        public async Task<string> GetTenantId(RestCredentials credentials = null, CancellationToken token = default)
+        public async Task<string> GetTenantId(RestCredentials? credentials = null, CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetTenantIdRequest, GetTenantIdResponse>(
                 new GetTenantIdRequest(), token);
             return response.TenantId;
         }
 
-        public async Task CanSynchronizeAsync(RestCredentials credentials = null, string tenantId = null, CancellationToken token = default)
+        public async Task CanSynchronizeAsync(RestCredentials? credentials = null, string? tenantId = null, CancellationToken token = default)
         {
             var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
                 this.principal.CurrentUserIdentity.UserId,
@@ -339,7 +339,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             },token);
         }
 
-        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken token = default)
+        public Task LinkCurrentUserToDeviceAsync(RestCredentials? credentials = null, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
@@ -378,7 +378,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public async Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default)
+        public async Task<byte[]> GetApplicationAsync(IProgress<TransferProgress>? transferProgress = null, CancellationToken token = default)
         {
             var response = await this.syncClient.SendChunkedAsync<GetInterviewerAppRequest, GetInterviewerAppResponse>(
                 new GetInterviewerAppRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), 
@@ -387,8 +387,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Content;
         }
 
-        public Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default) 
-            => Task.FromResult<byte[]>(null);
+        public Task<byte[]?> GetApplicationPatchAsync(IProgress<TransferProgress>? transferProgress = null, CancellationToken token = default) 
+            => Task.FromResult(default(byte[]));
 
         public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
         {

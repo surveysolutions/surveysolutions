@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override bool HasUser() => this.interviewerPrincipal.DoesIdentityExist();
 
-        public override string GetUserName()
+        public override string? GetUserName()
             => this.interviewerPrincipal.GetExistingIdentityNameOrNull();
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
