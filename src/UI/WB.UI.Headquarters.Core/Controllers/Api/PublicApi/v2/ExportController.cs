@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Services;
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
     public class ExportController : ControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IExportServiceApi exportServiceApi;
         private readonly IExportSettings exportSettings;
@@ -34,7 +36,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         private readonly IExportFileNameService exportFileNameService;
         private readonly IVirtualPathService env;
 
-        public ExportController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+        public ExportController(
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IQuestionnaireStorage questionnaireStorage,
             IDataExportStatusReader dataExportStatusReader,
             IExportServiceApi exportServiceApi,
             IExportSettings exportSettings,
@@ -43,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             IVirtualPathService env)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionnaireStorage = questionnaireStorage;
             this.dataExportStatusReader = dataExportStatusReader;
             this.exportServiceApi = exportServiceApi;
             this.exportSettings = exportSettings;
@@ -72,6 +77,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             var password = this.exportSettings.EncryptionEnforced()
                 ? this.exportSettings.GetPassword()
                 : null;
+
+            if (request.TranslationId != null)
+            {
+                var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+                if (questionnaire == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, @"Questionnaire not found");
+                }
+
+                if (questionnaire.Translations.All(t => t.Id != request.TranslationId))
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, @"Translation not found");
+                }
+            }
 
             var interviewStatus = request.InterviewStatus == ExportInterviewType.All
                 ? (InterviewStatus?) null
