@@ -1,5 +1,7 @@
-FROM --platform=$BUILDPLATFORM node:14 AS js_builder
-ARG BUILDPLATFORM
+ARG NODEJS_VERSION
+ARG DOTNET_VERSION
+
+FROM node:${NODEJS_VERSION} AS js_builder
 
 COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Headquarters.Core/Resources src/UI/WB.UI.Headquarters.Core/Resources
@@ -10,16 +12,11 @@ COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/
 WORKDIR /src/UI/WB.UI.Frontend
 RUN yarn && yarn build --package
 
-FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 
 ARG GIT_BRANCH
 ARG HQ_BUILD
 ARG EXPORT_BUILD
-
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
-
-RUN echo "Docker is running on $BUILDPLATFORM, building for $TARGETPLATFORM"
 
 COPY libs /libs
 COPY src /src
@@ -36,7 +33,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     --version-suffix $GIT_BRANCH \
     /p:BuildNumber=$EXPORT_BUILD
 
-FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
 
 ARG BUILD_DATE
 ARG VCS_REF
