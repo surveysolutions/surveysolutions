@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
         }
 
-        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken token = default)
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials? credentials = null, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),

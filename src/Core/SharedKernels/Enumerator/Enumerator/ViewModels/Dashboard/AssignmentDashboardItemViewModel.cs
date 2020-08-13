@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
     {
         protected readonly IServiceLocator serviceLocator;
-        protected AssignmentDocument Assignment;
+        protected AssignmentDocument Assignment = null!;
         private int interviewsByAssignmentCount;
         private QuestionnaireIdentity questionnaireIdentity;
 

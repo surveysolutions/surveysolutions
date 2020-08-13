@@ -517,7 +517,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract string GetRequiredUpdate(string targetVersion, string appVersion);
 
-        protected virtual Task<string> GetNewPasswordAsync()
+        protected virtual Task<string?> GetNewPasswordAsync()
         {
             var message = EnumeratorUIResources.Synchronization_UserPassword_Update_Format.FormatString(
                 this.principal.CurrentUserIdentity.Name);
