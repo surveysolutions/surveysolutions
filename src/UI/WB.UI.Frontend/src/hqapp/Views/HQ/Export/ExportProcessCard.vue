@@ -32,6 +32,7 @@
         <div class="bottom-row"
             :class="{'is-failed': isFailed, 'is-successful': isSuccessfull }">
             <div class="export-destination"
+                :title="data.timeEstimation"
                 :class="data.dataDestination">
                 <p>
                     <span v-if="data.dataDestination != null">
@@ -41,6 +42,7 @@
                         }}
                     </span>
                 </p>
+
                 <div class="d-flex ai-center"
                     v-if="data.isRunning">
                     <span class="success-text status">{{data.processStatus}}</span>
@@ -53,7 +55,6 @@
                                 aria-valuenow="0"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
-                                :title="data.timeEstimation"
                                 v-bind:style="{ width: data.progress + '%' }" />
                         </div>
                     </div>
