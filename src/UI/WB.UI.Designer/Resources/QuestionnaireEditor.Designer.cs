@@ -1042,7 +1042,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Numeric integer code of the category (invisible to the interviewer).
+        ///   Looks up a localized string similar to Numeric integer code of the category (not visible to the interviewer).
         /// </summary>
         public static string HelpOptionValue {
             get {

@@ -1412,7 +1412,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Allows to override template for roster button and provide custom text for %rostertitle%</value>
   </data>
   <data name="HelpOptionValue" xml:space="preserve">
-    <value>Numeric integer code of the category (invisible to the interviewer)</value>
+    <value>Numeric integer code of the category (not visible to the interviewer)</value>
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Text label for the category (visible to the interviewer)</value>
