@@ -511,6 +511,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this item?.
+        /// </summary>
+        public static string DeleteItemCofirm {
+            get {
+                return ResourceManager.GetString("DeleteItemCofirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string Download {
@@ -1578,7 +1587,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No categories. Choose tab separated file. The file can contain up to {limit} categories..
+        ///   Looks up a localized string similar to No categories. Choose tab separated file. The file can contain up to {0} categories..
         /// </summary>
         public static string OptionsUploadLimit {
             get {
