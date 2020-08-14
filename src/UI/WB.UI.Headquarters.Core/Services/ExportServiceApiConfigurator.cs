@@ -3,16 +3,16 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Refit;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.AspNetCore;
 
 namespace WB.UI.Headquarters.Services
 {
-    class ExportServiceApiConfigurator : IExportServiceApiConfigurator
+    class ExportServiceApiConfigurator : IHttpClientConfigurator<IExportServiceApi>
     {
         private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
