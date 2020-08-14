@@ -144,7 +144,7 @@
                     </v-icon>
                 </template>
                 <template v-slot:no-data>
-                    {{ $t('OptionsUploadLimit', { limit: 15000 }) }}
+                    {{ $t('OptionsUploadLimit').replace('{0}', 15000) }}
                 </template>
             </v-data-table>
         </div>
@@ -244,7 +244,7 @@ export default {
 
         deleteItem(item) {
             const index = this.categories.indexOf(item);
-            confirm('Are you sure you want to delete this item?') &&
+            confirm(this.$t('DeleteItemCofirm')) &&
                 this.categories.splice(index, 1);
         },
 
