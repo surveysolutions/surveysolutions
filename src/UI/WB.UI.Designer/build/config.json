@@ -100,7 +100,7 @@
       "node_modules/angular-moment/angular-moment.js",
       "node_modules/xss/dist/xss.js",
       "node_modules/i18next/i18next.min.js",
-      "node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js",
+      "node_modules/i18next-http-backend/i18nextHttpBackend.min.js",
       "node_modules/ng-i18next/dist/ng-i18next.js",
       "node_modules/zebra_datepicker/dist/css/bootstrap/icons.png",
       "node_modules/zebra_datepicker/dist/css/bootstrap/zebra_datepicker.min.css",
@@ -109,9 +109,9 @@
   },
   "bundle": [
     {
-      "name": "i18next-xhr-backend",
+      "name": "i18next-http-backend",
       "inputFiles": [
-        "node_modules/i18next-xhr-backend/i18nextXHRBackend.js"
+        "node_modules/i18next-http-backend/i18nextHttpBackend.js"
       ]
     },
     {

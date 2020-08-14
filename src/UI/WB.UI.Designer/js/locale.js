@@ -1,6 +1,6 @@
 ﻿import Vue from 'vue'
 import i18next from 'i18next'
-import i18NextXHR from "i18next-xhr-backend"
+import i18NextApi from "i18next-http-backend"
 
 export default {
     initialize(browserLanguage) {
@@ -23,7 +23,7 @@ export default {
             interpolation: { escapeValue: false }
         }
         
-        i18next.use(i18NextXHR).init(options)
+        i18next.use(i18NextApi).init(options)
 
         Vue.$t = function() {
             return i18next.t.apply(i18next, arguments)
