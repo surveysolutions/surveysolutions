@@ -10,6 +10,7 @@ export default {
             debug: false,
             lng: locale,
             fallbackLocale: 'en',
+            fallbackLng: {'default': ['en']},
             backend: {
                 loadPath: function(languages) {
                     var key = 'QuestionnaireEditor.' + languages[0] + '.json'

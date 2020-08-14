@@ -43,9 +43,7 @@
                                             <label
                                                 class="control-label"
                                                 for="parent"
-                                                >{{
-                                                    $t('OptionsUploadParent')
-                                                }}</label
+                                                >{{ $t('OptionsUploadParent')}}</label
                                             >
                                             <input
                                                 v-model="editedItem.parentValue"
@@ -58,9 +56,7 @@
                                             <label
                                                 class="control-label"
                                                 for="title"
-                                                >{{
-                                                    $t('OptionsUploadTitle')
-                                                }}</label
+                                                >{{ $t('OptionsUploadTitle') }}</label
                                             >
                                             <input
                                                 v-model="editedItem.title"
@@ -73,15 +69,13 @@
                                             <button
                                                 type="button"
                                                 class="btn btn-lg update-button"
-                                                @click="save"
-                                            >
+                                                @click="save">
                                                 {{ $t('Save') }}
                                             </button>
                                             <button
                                                     type="reset"
                                                     class="btn btn-lg btn-link"
-                                                    @click="close"
-                                            >
+                                                    @click="close">
                                                 {{ $t('Cancel') }}
                                             </button>
                                         </div>
@@ -138,7 +132,7 @@
                             :href="$config.exportOptionsUrl"
                             >{{ $t('Export') }}</a
                         >&nbsp;
-                        <a class="btn btn-primary"  @click="editItem(editedItem)">New Item</a>
+                        <a class="btn btn-primary"  @click="editItem(editedItem)">{{ $t('NewItem') }}</a>
                     </v-toolbar>
                 </template>
                 <template v-slot:item.actions="{ item }">
@@ -160,9 +154,7 @@
             role="navigation"
         >
             <div class="container">
-                <button class="btn btn-lg btn-primary navbar-btn" type="button" @click="apply">{{
-                    $t('OptionsUploadApply')
-                }}</button>
+                <button class="btn btn-lg btn-primary navbar-btn" type="button" @click="apply">{{$t('OptionsUploadApply')}}</button>
                 <a class="btn btn-link navbar-btn" @click="cancel">{{
                     $t('Cancel')
                 }}</a>

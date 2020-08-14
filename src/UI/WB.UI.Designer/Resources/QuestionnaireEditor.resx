@@ -1097,7 +1097,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Edit cascading categories</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>No categories. Choose tab separated file. The file can contain up to {0} categories.</value>
+    <value>No categories. Choose tab separated file. The file can contain up to {limit} categories.</value>
   </data>
   <data name="OptionsUploadTitle" xml:space="preserve">
     <value>Title</value>
@@ -1416,5 +1416,8 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Text label for the category (visible to the interviewer)</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+    <value>New item</value>
   </data>
 </root>
