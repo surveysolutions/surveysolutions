@@ -20,7 +20,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -28,8 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     internal class QuestionnaireImportService : IQuestionnaireImportService
     {
         private readonly IStringCompressor zipUtils;
-        private readonly IDesignerUserCredentials designerUserCredentials;
-        private readonly IDesignerApiFactory designerApiFactory;
         private readonly IQuestionnaireImportStatuses questionnaireImportStatuses;
         private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
         private readonly ILogger logger;
@@ -40,8 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IStringCompressor zipUtils,
             ILogger logger,
             IAuthorizedUser authorizedUser,
-            IDesignerUserCredentials designerUserCredentials,
-            IDesignerApiFactory designerApiFactory,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
             IArchiveUtils archiveUtils)
@@ -49,8 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.zipUtils = zipUtils;
             this.logger = logger;
             this.authorizedUser = authorizedUser;
-            this.designerUserCredentials = designerUserCredentials;
-            this.designerApiFactory = designerApiFactory;
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.archiveUtils = archiveUtils;
@@ -78,8 +71,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             bool shouldMigrateAssignments, 
             QuestionnaireIdentity migrateFrom)
         {
-            var designerCredentials = designerUserCredentials.Get();
-            var designerApi = designerApiFactory.Get(new ScopeDesignerUserCredentials(designerCredentials));
             var userId = authorizedUser.Id;
             var userName = authorizedUser.UserName;
 
@@ -105,8 +96,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
-                    var questionnaireImportService = 
-                        (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
+                    var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
+                    var designerApi = serviceLocatorLocal.GetInstance<IDesignerApi>();
                     var result = await questionnaireImportService.ImportImpl(designerApi, serviceLocatorLocal, userId, userName, 
                         questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
                         shouldMigrateAssignments, migrateFrom, includePdf);
