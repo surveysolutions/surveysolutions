@@ -117,14 +117,14 @@ namespace WB.UI.Designer.Controllers
             var withOptionsViewModel = this.questionWithOptionsViewModel;
             if (withOptionsViewModel == null)
             {
-                this.Error(Resources.QuestionnaireController.Error);
-                return this.View(questionWithOptionsViewModel);
+                errors.Add(Resources.QuestionnaireController.Error);
+                return this.Json(errors);
             }
 
             if (csvFile == null)
             {
-                this.Error(Resources.QuestionnaireController.SelectTabFile);
-                return this.View(questionWithOptionsViewModel);
+                errors.Add(Resources.QuestionnaireController.SelectTabFile);
+                return this.Json(errors);
             }
 
             try
@@ -135,24 +135,17 @@ namespace WB.UI.Designer.Controllers
                     withOptionsViewModel.QuestionId);
 
                 if (importResult.Succeeded)
-                {
                     withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
-                }
                 else
-                {
-                    foreach (var importError in importResult.Errors)
-                        this.Error(importError, true);
-                }
-
-                this.questionWithOptionsViewModel = withOptionsViewModel;
+                    errors.AddRange(importResult.Errors);
             }
             catch (Exception e)
             {
-                this.Error(Resources.QuestionnaireController.TabFilesOnly);
+                errors.Add(Resources.QuestionnaireController.TabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
 
-            return this.View(questionWithOptionsViewModel);
+            return this.Json(errors);
         }
 
         [HttpPost]
