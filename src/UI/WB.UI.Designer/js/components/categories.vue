@@ -244,8 +244,21 @@ export default {
 
         deleteItem(item) {
             const index = this.categories.indexOf(item);
-            confirm(this.$t('DeleteItemCofirm')) &&
+            if (confirm(this.$t('DeleteItemCofirm'))) {            
                 this.categories.splice(index, 1);
+
+                $.post(this.$config.deleteOptionUrl, 
+                {optionIndex: index},
+                function (response) {
+                if (response.isSuccess || response.IsSuccess) {
+                    close();
+                } else {
+                    $(document).scrollTop(0);
+                    self.errors = [response.Error];
+                }
+            });
+                
+            }
         },
 
         close() {
@@ -265,6 +278,21 @@ export default {
             } else {
                 this.categories.push(this.editedItem);
             }
+
+            $.post(this.$config.addOrUpdateOptionUrl, 
+                {  optionIndex: this.editedIndex,
+                   optionValue: this.editedItem.value,
+                   optionTitle: this.editedItem.title,
+                },
+                function (response) {
+                if (response.isSuccess || response.IsSuccess) {
+                    close();
+                } else {
+                    $(document).scrollTop(0);
+                    self.errors = [response.Error];
+                }
+                });
+
             this.close();
         },
         closeWindow: function () {

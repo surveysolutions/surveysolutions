@@ -1,4 +1,4 @@
-﻿@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Extensions
 @using System.Globalization
 @{
     ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle}";
@@ -31,13 +31,15 @@
         }
         <link rel='preload' href='@locale' as="fetch" crossorigin="anonymous">
     @Html.RenderConfig(new {
-        applyUrl = Url.Action("ApplyOptions", "Questionnaire"),
-        editOptionsUrl = Url.Action("EditOptions", "Questionnaire"),
-        resetOptionsUrl = Url.Action("ResetOptions", "Questionnaire"),
-        getOptionsUrl = Url.Action("GetOptions", "Questionnaire"),
-        exportOptionsUrl = Url.Action("ExportOptions", "Questionnaire"),
-        isCascading = Model.IsCascading
-    })
+    applyUrl = Url.Action("ApplyOptions", "Questionnaire"),
+    editOptionsUrl = Url.Action("EditOptions", "Questionnaire"),
+    resetOptionsUrl = Url.Action("ResetOptions", "Questionnaire"),
+    getOptionsUrl = Url.Action("GetOptions", "Questionnaire"),
+    exportOptionsUrl = Url.Action("ExportOptions", "Questionnaire"),
+    addOrUpdateOptionUrl = Url.Action("AddOrUpdateOption", "Questionnaire"),
+    deleteOptionUrl = Url.Action("DeleteOption", "Questionnaire"),
+    isCascading = Model.IsCascading
+})
     <script>           
     var require = {
                 baseUrl: '/',
