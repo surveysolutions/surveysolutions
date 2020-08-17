@@ -31,8 +31,9 @@ namespace WB.UI.Headquarters.PdfInterview
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAttachmentContentService attachmentContentService;
 
-        private static class PdfFonts
+        private static class PdfStyles
         {
+            public const string Default = "DefaultPdfStyle";
             public const string HeaderLineTitle = "HeaderLineTitle";
             public const string SectionHeader = "SectionHeader";
             public const string GroupHeader = "GroupHeader";
@@ -63,6 +64,8 @@ namespace WB.UI.Headquarters.PdfInterview
             this.attachmentContentService = attachmentContentService;
         }
 
+        static IFontResolver PdfInterviewFontResolver = new PdfInterviewFontResolver();
+
         public byte[] Generate(Guid interviewId)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
@@ -71,7 +74,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            //GlobalFontSettings.FontResolver = new PdfInterviewFontResolver();
+            GlobalFontSettings.FontResolver = PdfInterviewFontResolver;
             ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Bgr24>();
             
             Document document = new Document();
@@ -111,48 +114,48 @@ namespace WB.UI.Headquarters.PdfInterview
 
         private void DefineStyles(Document document)
         {
-            var defaultPaddingStyle = document.Styles.AddStyle("defaultPaddingStyle", StyleNames.DefaultParagraphFont);
-            defaultPaddingStyle.ParagraphFormat.LeftIndent = Unit.FromPoint(500);
+            var defaultPaddingStyle = document.Styles.AddStyle(PdfStyles.Default, StyleNames.DefaultParagraphFont);
+            defaultPaddingStyle.Font.Name = "Noto Sans, Arial, sans-serif";
 
-            document.Styles.AddStyle(PdfFonts.HeaderLineTitle, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 22, Bold = true };
-            var sectionHeader = document.Styles.AddStyle(PdfFonts.SectionHeader, StyleNames.DefaultParagraphFont);
-            sectionHeader.Font = new Font() { Size = 20, Bold = true, Color = new Color(63, 63,63 ) };
+            document.Styles.AddStyle(PdfStyles.HeaderLineTitle, PdfStyles.Default).Font =
+                new Font() { Size = 20, Bold = true };
+            var sectionHeader = document.Styles.AddStyle(PdfStyles.SectionHeader, PdfStyles.Default);
+            sectionHeader.Font = new Font() { Size = 18, Bold = true, Color = new Color(63, 63,63 ) };
             sectionHeader.ParagraphFormat.Borders.Top = new Border() { Width = "1pt", Color = Colors.DarkGray };
             sectionHeader.ParagraphFormat.LineSpacing = 0;
             sectionHeader.ParagraphFormat.SpaceBefore = "40pt";
-            document.Styles.AddStyle(PdfFonts.GroupHeader, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 20 };
-            document.Styles.AddStyle(PdfFonts.RosterTitle, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 20, Italic = true };
-            document.Styles.AddStyle(PdfFonts.QuestionTitle, "defaultPaddingStyle").Font =
-                new Font() { Size = 16 };
-            document.Styles.AddStyle(PdfFonts.QuestionAnswer, "defaultPaddingStyle").Font =
+            document.Styles.AddStyle(PdfStyles.GroupHeader, PdfStyles.Default).Font =
+                new Font() { Size = 18 };
+            document.Styles.AddStyle(PdfStyles.RosterTitle, PdfStyles.Default).Font =
+                new Font() { Size = 18, Italic = true };
+            document.Styles.AddStyle(PdfStyles.QuestionTitle, PdfStyles.Default).Font =
                 new Font() { Size = 14 };
-            document.Styles.AddStyle(PdfFonts.QuestionNotAnswered, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 11 };
-            var questionDateStyle = document.Styles.AddStyle(PdfFonts.QuestionAnswerDate, StyleNames.DefaultParagraphFont);
-            questionDateStyle.Font = new Font() { Size = 12, Italic = true, Color = new Color(219, 223, 226)};
+            document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default).Font =
+                new Font() { Size = 12 };
+            document.Styles.AddStyle(PdfStyles.QuestionNotAnswered, PdfStyles.Default).Font =
+                new Font() { Size = 10 };
+            var questionDateStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerDate, PdfStyles.Default);
+            questionDateStyle.Font = new Font() { Size = 10, Italic = true, Color = new Color(219, 223, 226)};
             questionDateStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
-            var questionTimeStyle = document.Styles.AddStyle(PdfFonts.QuestionAnswerTime, StyleNames.DefaultParagraphFont);
-            questionTimeStyle.Font = new Font() { Size = 12, Italic = true, Color = new Color(63, 63,63 )};
+            var questionTimeStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerTime, PdfStyles.Default);
+            questionTimeStyle.Font = new Font() { Size = 10, Italic = true, Color = new Color(63, 63,63 )};
             questionTimeStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
-            document.Styles.AddStyle(PdfFonts.StaticTextTitle, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 16 };
-            document.Styles.AddStyle(PdfFonts.ValidateErrorTitle, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 10, Color = new Color(231, 73, 36)};
-            document.Styles.AddStyle(PdfFonts.ValidateErrorMessage, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 12, Italic = true, Color = new Color(231, 73, 36) };
-            document.Styles.AddStyle(PdfFonts.ValidateWarningTitle, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 10, Color = new Color(231, 73, 36)};
-            document.Styles.AddStyle(PdfFonts.ValidateWarningMessage, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 12, Italic = true, Color = new Color(31, 73, 36) };
-            document.Styles.AddStyle(PdfFonts.CommentAuthor, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 10, Color = new Color(128, 128, 128)};
-            document.Styles.AddStyle(PdfFonts.CommentDateTime, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 10, Color = new Color(219, 223, 226)};
-            document.Styles.AddStyle(PdfFonts.CommentMessage, StyleNames.DefaultParagraphFont).Font =
-                new Font() { Size = 12, Italic = true};
+            document.Styles.AddStyle(PdfStyles.StaticTextTitle, PdfStyles.Default).Font =
+                new Font() { Size = 14 };
+            document.Styles.AddStyle(PdfStyles.ValidateErrorTitle, PdfStyles.Default).Font =
+                new Font() { Size = 9, Color = new Color(231, 73, 36)};
+            document.Styles.AddStyle(PdfStyles.ValidateErrorMessage, PdfStyles.Default).Font =
+                new Font() { Size = 11, Italic = true, Color = new Color(231, 73, 36) };
+            document.Styles.AddStyle(PdfStyles.ValidateWarningTitle, PdfStyles.Default).Font =
+                new Font() { Size = 9, Color = new Color(231, 73, 36)};
+            document.Styles.AddStyle(PdfStyles.ValidateWarningMessage, PdfStyles.Default).Font =
+                new Font() { Size = 10, Italic = true, Color = new Color(31, 73, 36) };
+            document.Styles.AddStyle(PdfStyles.CommentAuthor, PdfStyles.Default).Font =
+                new Font() { Size = 9, Color = new Color(128, 128, 128)};
+            document.Styles.AddStyle(PdfStyles.CommentDateTime, PdfStyles.Default).Font =
+                new Font() { Size = 9, Color = new Color(219, 223, 226)};
+            document.Styles.AddStyle(PdfStyles.CommentMessage, PdfStyles.Default).Font =
+                new Font() { Size = 10, Italic = true};
         }
 
         private static void WritePdfInterviewHeader(Section section, IQuestionnaire questionnaire, IStatefulInterview interview)
@@ -161,12 +164,12 @@ namespace WB.UI.Headquarters.PdfInterview
             var status = interview.Status.ToLocalizeString();
 
             var paragraph = section.AddParagraph();
-            paragraph.AddFormattedText($"{questionnaire.Title} (v. {questionnaire.Version})", PdfFonts.HeaderLineTitle);
+            paragraph.AddFormattedText($"{questionnaire.Title} (v. {questionnaire.Version})", PdfStyles.HeaderLineTitle);
             paragraph.AddLineBreak();
-            paragraph.AddFormattedText(Common.InterviewKey + ": ", PdfFonts.HeaderLineTitle);
-            paragraph.AddFormattedText(interviewKey, PdfFonts.HeaderLineTitle);
+            paragraph.AddFormattedText(Common.InterviewKey + ": ", PdfStyles.HeaderLineTitle);
+            paragraph.AddFormattedText(interviewKey, PdfStyles.HeaderLineTitle);
             paragraph.AddLineBreak();
-            paragraph.AddFormattedText(Details.Status.Replace(@"{{ name }}", status), PdfFonts.HeaderLineTitle);
+            paragraph.AddFormattedText(Details.Status.Replace(@"{{ name }}", status), PdfStyles.HeaderLineTitle);
             paragraph.AddLineBreak();
             paragraph.AddLineBreak();
             paragraph.AddLineBreak();
@@ -179,7 +182,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
             paragraph.AddTab();
             paragraph.AddTab();
-            paragraph.AddFormattedText(staticText.Title.Text.RemoveHtmlTags(), PdfFonts.StaticTextTitle);
+            paragraph.AddFormattedText(staticText.Title.Text.RemoveHtmlTags(), PdfStyles.StaticTextTitle);
 
             var attachment = questionnaire.GetAttachmentForEntity(staticText.Identity.Id);
             if (attachment != null)
@@ -205,15 +208,16 @@ namespace WB.UI.Headquarters.PdfInterview
         {
             var paragraph = section.AddParagraph();
             var style = group is InterviewTreeSection 
-                ? PdfFonts.SectionHeader
-                : PdfFonts.GroupHeader;
+                ? PdfStyles.SectionHeader
+                : PdfStyles.GroupHeader;
             paragraph.Style = style;
 
+            paragraph.AddLineBreak();
             paragraph.AddFormattedText(group.Title.Text.RemoveHtmlTags(), style);
             
             if (@group is InterviewTreeRoster roster)
             {
-                paragraph.AddFormattedText(" - " + roster.RosterTitle.RemoveHtmlTags(), PdfFonts.RosterTitle);
+                paragraph.AddFormattedText(" - " + roster.RosterTitle.RemoveHtmlTags(), PdfStyles.RosterTitle);
             }
             
             paragraph.AddLineBreak();
@@ -226,17 +230,16 @@ namespace WB.UI.Headquarters.PdfInterview
             Paragraph paragraph = section.AddParagraph();
 
             if (question.AnswerTimeUtc.HasValue)
-                paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("MMM dd"), PdfFonts.QuestionAnswerDate);
-            else
-                paragraph.AddTab();
+                paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("MMM dd"), PdfStyles.QuestionAnswerDate);
 
             paragraph.AddTab();
+            paragraph.AddTab();
             
-            paragraph.AddFormattedText(question.Title.Text.RemoveHtmlTags(), PdfFonts.QuestionTitle);
+            paragraph.AddFormattedText(question.Title.Text.RemoveHtmlTags(), PdfStyles.QuestionTitle);
             paragraph.AddLineBreak();
 
             if (question.AnswerTimeUtc.HasValue)
-                paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("HH:mm"), PdfFonts.QuestionAnswerTime);
+                paragraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString("HH:mm"), PdfStyles.QuestionAnswerTime);
 
             paragraph.AddTab();
             paragraph.AddTab();
@@ -246,7 +249,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 if (question.IsAudio)
                 {
                     var audioQuestion = question.GetAsInterviewTreeAudioQuestion();
-                    paragraph.AddFormattedText(audioQuestion.GetAnswer().FileName, PdfFonts.QuestionAnswer);
+                    paragraph.AddFormattedText(audioQuestion.GetAnswer().FileName, PdfStyles.QuestionAnswer);
                 }
                 else if (question.IsMultimedia)
                 {
@@ -260,22 +263,22 @@ namespace WB.UI.Headquarters.PdfInterview
                 else if (question.IsArea)
                 {
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
-                    paragraph.AddFormattedText(areaQuestion.GetAnswer().Value.ToString(), PdfFonts.QuestionAnswer);
+                    paragraph.AddFormattedText(areaQuestion.GetAnswer().Value.ToString(), PdfStyles.QuestionAnswer);
                 }
                 else if (question.IsGps)
                 {
                     var gpsQuestion = question.GetAsInterviewTreeGpsQuestion();
                     var geoPosition = gpsQuestion.GetAnswer().Value;
-                    paragraph.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", PdfFonts.QuestionAnswer);
+                    paragraph.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", PdfStyles.QuestionAnswer);
                 }
                 else
                 {
-                    paragraph.AddFormattedText(question.GetAnswerAsString(), PdfFonts.QuestionAnswer);
+                    paragraph.AddFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer);
                 }
             }
             else
             {
-                paragraph.AddFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, PdfFonts.QuestionNotAnswered);
+                paragraph.AddFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, PdfStyles.QuestionNotAnswered);
             }
             paragraph.AddLineBreak();
 
@@ -293,7 +296,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 paragraph.AddLineBreak();
                 paragraph.AddTab();
                 paragraph.AddTab();
-                paragraph.AddFormattedText(WebInterviewUI.Error_plural, PdfFonts.ValidateErrorTitle);
+                paragraph.AddFormattedText(WebInterviewUI.Error_plural, PdfStyles.ValidateErrorTitle);
                 paragraph.AddLineBreak();
 
                 foreach (var errorCondition in validateable.FailedErrors)
@@ -301,7 +304,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     var errorMessage = validateable.ValidationMessages[errorCondition.FailedConditionIndex];
                     paragraph.AddTab();
                     paragraph.AddTab();
-                    paragraph.AddFormattedText(errorMessage.Text.RemoveHtmlTags(), PdfFonts.ValidateErrorMessage);
+                    paragraph.AddFormattedText(errorMessage.Text.RemoveHtmlTags(), PdfStyles.ValidateErrorMessage);
                     paragraph.AddLineBreak();
                 }
             }
@@ -311,7 +314,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 paragraph.AddLineBreak();
                 paragraph.AddTab();
                 paragraph.AddTab();
-                paragraph.AddFormattedText(WebInterviewUI.WarningsHeader, PdfFonts.ValidateWarningTitle);
+                paragraph.AddFormattedText(WebInterviewUI.WarningsHeader, PdfStyles.ValidateWarningTitle);
                 paragraph.AddLineBreak();
 
                 foreach (var warningCondition in validateable.FailedWarnings)
@@ -319,7 +322,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     var warningMessage = validateable.ValidationMessages[warningCondition.FailedConditionIndex];
                     paragraph.AddTab();
                     paragraph.AddTab();
-                    paragraph.AddFormattedText(warningMessage.Text.RemoveHtmlTags(), PdfFonts.ValidateWarningMessage);
+                    paragraph.AddFormattedText(warningMessage.Text.RemoveHtmlTags(), PdfStyles.ValidateWarningMessage);
                     paragraph.AddLineBreak();
                 }
             }
@@ -337,58 +340,35 @@ namespace WB.UI.Headquarters.PdfInterview
                 {
                     paragraph.AddTab();
                     paragraph.AddTab();
-                    paragraph.AddFormattedText(comment.UserRole.ToUiString(), PdfFonts.CommentAuthor);
-                    paragraph.AddFormattedText($" ({comment.CommentTime.ToString()})", PdfFonts.CommentDateTime);
+                    paragraph.AddFormattedText(comment.UserRole.ToUiString(), PdfStyles.CommentAuthor);
+                    paragraph.AddFormattedText($" ({comment.CommentTime.ToString()})", PdfStyles.CommentDateTime);
                     paragraph.AddLineBreak();
                     paragraph.AddTab();
                     paragraph.AddTab();
-                    paragraph.AddFormattedText(comment.Comment, PdfFonts.CommentMessage);
+                    paragraph.AddFormattedText(comment.Comment, PdfStyles.CommentMessage);
                     paragraph.AddLineBreak();
                 }
             }
         }
     }
     
-    public class PdfInterviewFontResolver : IFontResolver
+    public class PdfInterviewFontResolver : FontResolver
     {
-        public byte[] GetFont(string faceName)
+        public PdfInterviewFontResolver()
         {
-            using(var ms = new MemoryStream())
-            {
-                //FontFamily fontFamily = new FontFamily(faceName);
-                //fontFamily.
-                using(var fs = File.Open(faceName, FileMode.Open))
-                {
-                    fs.CopyTo(ms);
-                    ms.Position = 0;
-                    return ms.ToArray();
-                }
-            }
+            NullIfFontNotFound = true;
         }
 
-        public string DefaultFontName => "OpenSans";
-
-        public FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
+        public override FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
         {
-            if (familyName.Equals("OpenSans", StringComparison.CurrentCultureIgnoreCase))
+            var fontNames = familyName.Split(',');
+            foreach (var fontName in fontNames)
             {
-                if (isBold && isItalic)
-                {
-                    return new FontResolverInfo("OpenSans-BoldItalic.ttf");
-                }
-                else if (isBold)
-                {
-                    return new FontResolverInfo("OpenSans-Bold.ttf");
-                }
-                else if (isItalic)
-                {
-                    return new FontResolverInfo("OpenSans-Italic.ttf");
-                }
-                else
-                {
-                    return new FontResolverInfo("OpenSans-Regular.ttf");
-                }
+                var fontResolverInfo = base.ResolveTypeface(fontName.Trim(), isBold, isItalic);
+                if (fontResolverInfo != null)
+                    return fontResolverInfo;
             }
+
             return null;
         }
     }
