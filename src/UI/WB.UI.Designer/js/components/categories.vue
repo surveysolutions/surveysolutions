@@ -1,5 +1,5 @@
 ﻿<template>
-    <div>
+    <v-app>
         <v-dialog v-model="dialog" max-width="500">
             <v-card>
                 <div class="modal-content">
@@ -30,14 +30,12 @@
                                                 for="value"
                                                 >{{
                                                     $t('OptionsUploadValue')
-                                                }}</label
-                                            >
+                                                }}</label>
                                             <input
                                                 v-model="editedItem.value"
                                                 id="value"
-                                                type="text"
-                                                class="form-control"
-                                            />
+                                                type="number"
+                                                class="form-control"/>
                                         </div>
                                         <div class="form-group" v-if="$config.isCascading">
                                             <label
@@ -95,11 +93,10 @@
                 :headers="headers"
                 :items="categories"
                 :search="search"
-                :items-per-page="15"
+                :items-per-page="50"
                 :loading="loading"
                 class="elevation-1"
-                dense
-            >
+                dense>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
                         <v-text-field
@@ -165,7 +162,7 @@
                 >
             </div>
         </nav>
-    </div>
+    </v-app>
 </template>
 
 <script>
