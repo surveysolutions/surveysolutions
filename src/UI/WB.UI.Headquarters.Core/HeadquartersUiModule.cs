@@ -13,6 +13,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.AspNetCore;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
@@ -39,7 +40,6 @@ namespace WB.UI.Headquarters
             var services = registry;
 
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
-            registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IApplicationRestarter, ApplicationRestarter>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
@@ -65,10 +65,7 @@ namespace WB.UI.Headquarters
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
             ConfigureEventBus(registry);
-
-            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
-            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
-
+            
             var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
             var provider = config.CaptchaType;
 

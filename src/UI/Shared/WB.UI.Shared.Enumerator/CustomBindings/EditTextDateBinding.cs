@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.App;
+using Android.Support.V7.App;
 using Android.Widget;
 using MvvmCross.Platforms.Android.Binding.Target;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -25,7 +26,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             var dialog = new DatePickerDialogFragment(parsedDate, this.OnDateSet);
-            dialog.Show(Target.GetActivity().FragmentManager, "date");
+            dialog.Show(((AppCompatActivity)Target.GetActivity()).SupportFragmentManager, "date");
         }
 
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)

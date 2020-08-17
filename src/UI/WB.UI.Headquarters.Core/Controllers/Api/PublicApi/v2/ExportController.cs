@@ -185,7 +185,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             var result = await this.dataExportStatusReader.GetDataArchive(
                 exportProcess.QuestionnaireIdentity, exportProcess.Format, exportProcess.InterviewStatus,
-                exportProcess.FromDate, exportProcess.ToDate, exportProcess.TranslationId);
+                exportProcess.FromDate, exportProcess.ToDate, exportProcess.TranslationId, exportProcess.IncludeMeta);
 
             return result == null
                 ? BadRequest()
