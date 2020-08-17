@@ -253,6 +253,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable-anydpi-v21\alert_dialog_btn.xml" />
     <AndroidResource Include="Resources\drawable\default_input_button.xml" />
   </ItemGroup>
   <ItemGroup>
