@@ -177,6 +177,8 @@ function versionCheck() {
     Write-Host "Yarn version: $(&yarn --version)"
     Write-host "MsBuild version: $(&(GetPathToMSBuild) /version /nologo)"
     Write-Host "Dotnet CLI version: $(dotnet --version)"
+    Write-Host "Android Home: $ENV:ANDROID_HOME"
+    &$ENV:ANDROID_HOME/tools/sdk-manager --list
 
     $(& $nuget help | Select-Object -First 1) | Out-Host
 }
