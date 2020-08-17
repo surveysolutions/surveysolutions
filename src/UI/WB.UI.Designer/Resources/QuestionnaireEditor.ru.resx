@@ -1468,4 +1468,7 @@
   <data name="DeleteItemCofirm" xml:space="preserve">
     <value>Вы действительно хотите удалить этот элемент?</value>
   </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Форум</value>
+  </data>
 </root>

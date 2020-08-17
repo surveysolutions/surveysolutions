@@ -422,9 +422,12 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 designerUserCredentials = mockOfUserCredentials.Object;
             }
 
-            unitOfWork = unitOfWork ?? GetUnitOfWorkMock().Object;
+            unitOfWork ??= GetUnitOfWorkMock().Object;
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            serviceLocatorNestedMock.Setup(s => s.GetInstance<IDesignerApi>())
+                .Returns(designerApi);
+
             var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
             InScopeExecutor.Init(executor);
 
@@ -432,8 +435,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 Mock.Of<ILogger>(),
                 globalInfoProvider,
-                designerUserCredentials ?? Mock.Of<IDesignerUserCredentials>(),
-                Mock.Of<IDesignerApiFactory>(x => x.Get(It.IsAny<IDesignerUserCredentials>()) == designerApi),
                 new QuestionnaireImportStatuses(),
                 Mock.Of<IAssignmentsUpgradeService>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>());

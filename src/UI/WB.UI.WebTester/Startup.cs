@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
+using System.Net.Http;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,12 +11,17 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Refit;
 using Serilog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.AspNetCore;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.LoggingIntegration;
@@ -57,6 +62,27 @@ namespace WB.UI.WebTester
             services.AddHealthChecks()
                 .AddCheck<DesignerConnectionCheck>("designer-connection");
 
+            services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
+                    new RefitSettings
+                    {
+                        ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.All,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            FloatParseHandling = FloatParseHandling.Decimal,
+                            Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
+                            SerializationBinder = new OldToNewAssemblyRedirectSerializationBinder()
+                        })
+                    })
+#if DEBUG
+           .ConfigurePrimaryHttpMessageHandler(() =>
+               new HttpClientHandler
+               {
+                   ClientCertificateOptions = ClientCertificateOption.Manual,
+                   ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
+               })
+#endif
+           ;
         }
 
         // ConfigureContainer is where you can register things directly
@@ -73,7 +99,7 @@ namespace WB.UI.WebTester
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
                 new WebInterviewModule(), // init registers denormalizer
-                new WebTesterModule(Configuration["DesignerAddress"]),
+                new WebTesterModule(),
                 new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)); // stores app version in database but does not do it for web tester
         }
 
