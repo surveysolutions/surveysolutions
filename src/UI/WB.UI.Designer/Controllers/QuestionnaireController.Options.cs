@@ -15,8 +15,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -78,7 +76,7 @@ namespace WB.UI.Designer.Controllers
                 questionnaireId : id.QuestionnaireId.FormatGuid(),
                 questionId : questionId,
                 questionTitle : editQuestionView?.Title,
-                options : options.ToArray(),
+                options : options.ToList(),
                 isCascading : isCascading
             );
         }
@@ -110,6 +108,58 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        public IActionResult AddOrUpdateOption(int optionValue, string optionTitle ,int optionIndex)
+        {
+            List<string> errors = new List<string>();
+
+            var withOptionsViewModel = this.questionWithOptionsViewModel;
+            if (withOptionsViewModel == null)
+            {
+                errors.Add(Resources.QuestionnaireController.Error);
+                return this.Json(errors);
+            }
+
+            if (optionIndex > -1)
+            {
+                var option = withOptionsViewModel.Options[optionIndex];
+                option.Value = optionValue;
+                option.Title = optionTitle;
+            }
+            else
+            {
+                withOptionsViewModel.Options.Add(new QuestionnaireCategoricalOption()
+                {
+                    Value = optionValue, 
+                    Title = optionTitle,
+                });
+            }
+            
+            this.questionWithOptionsViewModel = withOptionsViewModel;
+            return this.Json(errors);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteOption(int optionIndex)
+        {
+            List<string> errors = new List<string>();
+
+            var withOptionsViewModel = this.questionWithOptionsViewModel;
+            if (withOptionsViewModel == null)
+            {
+                errors.Add(Resources.QuestionnaireController.Error);
+                return this.Json(errors);
+            }
+
+            if (optionIndex > -1)
+            {
+                withOptionsViewModel.Options.RemoveAt(optionIndex);
+            }
+
+            this.questionWithOptionsViewModel = withOptionsViewModel;
+            return this.Json(errors);
+        }
+
+        [HttpPost]
         public IActionResult EditOptions(IFormFile csvFile)
         {
             List<string> errors = new List<string>();
@@ -135,7 +185,7 @@ namespace WB.UI.Designer.Controllers
                     withOptionsViewModel.QuestionId);
 
                 if (importResult.Succeeded)
-                    withOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
+                    withOptionsViewModel.Options = importResult.ImportedOptions.ToList();
                 else
                     errors.AddRange(importResult.Errors);
             }
@@ -145,6 +195,7 @@ namespace WB.UI.Designer.Controllers
                 this.logger.LogError(e, e.Message);
             }
 
+            this.questionWithOptionsViewModel = withOptionsViewModel;
             return this.Json(errors);
         }
 
@@ -202,8 +253,6 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-
-
         private async Task<object> ExecuteCommand(QuestionCommand command)
         {
             dynamic commandResult = new ExpandoObject();
@@ -253,18 +302,18 @@ namespace WB.UI.Designer.Controllers
 
         public class EditOptionsViewModel
         {
-            public EditOptionsViewModel(string questionnaireId, Guid questionId, QuestionnaireCategoricalOption[]? options = null, string? questionTitle = null, bool? isCascading = null)
+            public EditOptionsViewModel(string questionnaireId, Guid questionId, List<QuestionnaireCategoricalOption>? options = null, string? questionTitle = null, bool? isCascading = null)
             {
                 QuestionnaireId = questionnaireId;
                 QuestionId = questionId;
-                Options = options ?? new QuestionnaireCategoricalOption[0];
+                Options = options ?? new List<QuestionnaireCategoricalOption>();
                 QuestionTitle = questionTitle;
                 IsCascading = isCascading ?? false;
             }
 
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
-            public QuestionnaireCategoricalOption[] Options { get; set; }
+            public List<QuestionnaireCategoricalOption> Options { get; set; }
             public string? QuestionTitle { get; set; }
             public bool IsCascading { get; set; }
         }
