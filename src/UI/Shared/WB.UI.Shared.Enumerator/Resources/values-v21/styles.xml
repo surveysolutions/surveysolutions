@@ -16,7 +16,6 @@
     <item name="colorAccent">@color/colorAccent</item>
 
     <item name="alertDialogTheme">@style/StyledDialog</item>
-    <item name="android:datePickerDialogTheme">@style/StyledDialog</item>
     <!-- elements -->
     <item name="buttonStyle">@style/ButtonAppTheme</item>
     <item name="checkboxStyle">@style/CheckBoxTheme </item>
@@ -32,7 +31,6 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/darkActionBar</item>
     <item name="colorAccent">@color/colorAccent</item>
-    <item name="android:colorAccent">@color/colorAccent</item>
   </style>
 
   <style name="GrayAppTheme" parent="AppTheme">
