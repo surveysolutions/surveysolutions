@@ -205,7 +205,8 @@
                                 variable: $scope.activeRoster.variableName,
                                 title: $scope.activeRoster.title,
                                 hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition)),
-                                type: 'Roster'
+                                type: 'Roster',
+                                hideIfDisabled: $scope.activeRoster.hideIfDisabled
                             });
                             if (_.isFunction(callback)) {
                                 callback();
