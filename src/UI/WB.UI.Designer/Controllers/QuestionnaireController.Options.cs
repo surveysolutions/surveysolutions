@@ -258,11 +258,11 @@ namespace WB.UI.Designer.Controllers
 
             if (this.questionWithOptionsViewModel.IsCategories)
             {
-                return Json(commandResult);
+                dynamic categoriesCommandResult = new ExpandoObject();
+                categoriesCommandResult.IsSuccess = true;
 
+                return Json(categoriesCommandResult);
             }
-
-
 
             var command = this.questionWithOptionsViewModel.IsCascading
                 ? (QuestionCommand) new UpdateCascadingComboboxOptions(
