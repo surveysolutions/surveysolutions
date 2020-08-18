@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Controllers
             if (interview == null)
                 return NotFound(interviewId);
 
-            var content = interviewGenerator.Generate(interviewId);
+            var content = interviewGenerator.Generate(interviewId, User);
             if (content == null)
                 return NotFound(interviewId);
 

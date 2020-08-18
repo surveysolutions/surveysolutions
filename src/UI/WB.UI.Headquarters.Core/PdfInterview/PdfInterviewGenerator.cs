@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
+using Main.Core.Entities.SubEntities;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes;
@@ -13,6 +16,7 @@ using PdfSharpCore.Utils;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -64,16 +68,18 @@ namespace WB.UI.Headquarters.PdfInterview
             this.attachmentContentService = attachmentContentService;
         }
 
-        static IFontResolver PdfInterviewFontResolver = new PdfInterviewFontResolver();
+        static readonly IFontResolver PdfInterviewFontResolver = new PdfInterviewFontResolver();
 
-        public byte[] Generate(Guid interviewId)
+        public byte[] Generate(Guid interviewId, IPrincipal user)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
                 return null;
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
+            if (questionnaire == null)
+                return null;
+            
             GlobalFontSettings.FontResolver = PdfInterviewFontResolver;
             ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Bgr24>();
             
@@ -82,25 +88,41 @@ namespace WB.UI.Headquarters.PdfInterview
             var section = document.AddSection();
             WritePdfInterviewHeader(section, questionnaire, interview);
 
-            var nodes = interview.GetAllInterviewNodes();
-            foreach (IInterviewTreeNode node in nodes)
+            var nodes = GetAllInterviewNodes(interview, user);
+            foreach (Identity node in nodes)
             {
-                switch (node)
+                if (questionnaire.IsQuestion(node.Id))
                 {
-                    case InterviewTreeStaticText staticText:
-                        WriteStaticTextData(section, staticText, interview, questionnaire);
-                        break;
-                    case InterviewTreeQuestion question:
-                        WriteQuestionData(section, question, interview);
-                        break;
-                    case InterviewTreeVariable variable:
-                        break;
-                    case InterviewTreeGroup @group:
-                        WriteGroupData(section, group);
-                        break;
-                    default: 
-                        throw new ArgumentException("Unknown tree node type" + node.GetType().Name);
+                    var question = interview.GetQuestion(node);
+                    WriteQuestionData(section, question, interview);
+                    continue;
                 }
+
+                if (questionnaire.IsStaticText(node.Id))
+                {
+                    var staticText = interview.GetStaticText(node);
+                    WriteStaticTextData(section, staticText, interview, questionnaire);
+                    continue;
+                }
+
+                if (questionnaire.IsSubSection(node.Id))
+                {
+                    var group = interview.GetGroup(node);
+                    WriteGroupData(section, group);
+                    continue;
+                }
+                
+                if (questionnaire.IsRosterGroup(node.Id))
+                {
+                    var roster = interview.GetRoster(node);
+                    WriteGroupData(section, roster);
+                    continue;
+                }
+
+                if (questionnaire.IsVariable(node.Id))
+                    continue;
+                
+                throw new ArgumentException("Unknown tree node type for entity " + node);
             }
             
             PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
@@ -110,6 +132,21 @@ namespace WB.UI.Headquarters.PdfInterview
             using var memoryStream = new MemoryStream();
             renderer.PdfDocument.Save(memoryStream);
             return memoryStream.ToArray();
+        }
+
+        private static IEnumerable<Identity> GetAllInterviewNodes(IStatefulInterview interview, IPrincipal user)
+        {
+            var enabledSectionIds = Enumerable.ToHashSet(interview.GetEnabledSections().Select(x => x.Identity));
+
+            foreach (var enabledSectionId in enabledSectionIds)
+            {
+                var interviewEntities = user.IsInRole(UserRoles.Interviewer.ToString())
+                    ? interview.GetUnderlyingInterviewerEntities(enabledSectionId)
+                    : interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId);
+                
+                foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
+                    yield return interviewEntity;
+            }
         }
 
         private void DefineStyles(Document document)
@@ -249,7 +286,8 @@ namespace WB.UI.Headquarters.PdfInterview
                 if (question.IsAudio)
                 {
                     var audioQuestion = question.GetAsInterviewTreeAudioQuestion();
-                    paragraph.AddFormattedText(audioQuestion.GetAnswer().FileName, PdfStyles.QuestionAnswer);
+                    var audioAnswer = audioQuestion.GetAnswer();
+                    paragraph.AddFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", PdfStyles.QuestionAnswer);
                 }
                 else if (question.IsMultimedia)
                 {
@@ -263,7 +301,8 @@ namespace WB.UI.Headquarters.PdfInterview
                 else if (question.IsArea)
                 {
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
-                    paragraph.AddFormattedText(areaQuestion.GetAnswer().Value.ToString(), PdfStyles.QuestionAnswer);
+                    var areaAnswer = areaQuestion.GetAnswer().Value;
+                    paragraph.AddFormattedText(areaAnswer.ToString(), PdfStyles.QuestionAnswer);
                 }
                 else if (question.IsGps)
                 {
