@@ -578,7 +578,7 @@
     <value>вверху этого блока или изменить секции используя {{-panel}} панель слева</value>
   </data>
   <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Язык обследования, типы устройств, взаимодействия и другие опции </value>
+    <value>Переменная опросника, название, настройки доступа и другие опции </value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>можно изменить используя {{-settingsBtn}} панель (вверху справа)</value>
@@ -1258,11 +1258,9 @@
   </data>
   <data name="OptionsWindowTitle" xml:space="preserve">
     <value>Редактировать категории</value>
-    <comment>Редактировать категории</comment>
   </data>
   <data name="CascadingOptionsWindowTitle" xml:space="preserve">
     <value>Редактировать каскадные категории </value>
-    <comment>Редактировать каскадные категории </comment>
   </data>
   <data name="ShowAsList" xml:space="preserve">
     <value>Отображать списком</value>
@@ -1311,15 +1309,12 @@
   </data>
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
     <value>{{count}} Сценарии:</value>
-    <comment>{{count}} Сценарии:</comment>
   </data>
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
     <value>На этой вкладке вы можите видеть ваши сценарии.</value>
-    <comment>На этой вкладке вы можите видеть ваши сценарии.</comment>
   </data>
   <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
     <value>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </value>
-    <comment>Сценарий это снимок текущего состояния на тестере, вы можите сохранить сценарий нажав "Сохранить сценарий" на тестере. </comment>
   </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
     <value>Сценарии</value>
@@ -1340,106 +1335,81 @@
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
     <value>Пожалуйста, выберите перевод</value>
-    <comment>Пожалуйста, выберите перевод</comment>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
     <value>Скачать PDF</value>
-    <comment>Скачать PDF</comment>
   </data>
   <data name="GeneratePdf" xml:space="preserve">
     <value>Сгенерировать pdf</value>
-    <comment>Сгенерировать pdf</comment>
   </data>
   <data name="Initializing" xml:space="preserve">
     <value>Инициализация</value>
-    <comment>Инициализация</comment>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Повторить экспорт в PDF</value>
-    <comment>Повторить экспорт в PDF</comment>
   </data>
   <data name="Translation_Original" xml:space="preserve">
     <value>Оригинальный</value>
-    <comment>Оригинальный</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Сохранить как</value>
-    <comment>Сохранить как</comment>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Просмотр ревизии №{{revision}}</value>
   </data>
   <data name="SideBarCategoriesName" xml:space="preserve">
     <value>имя для списка категорий</value>
-    <comment>имя для списка категорий</comment>
   </data>
   <data name="SideBarCategoriesCounter" xml:space="preserve">
     <value>{{count}} списков категорий</value>
-    <comment>{{count}} списков категорий</comment>
   </data>
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
     <value>Используйте вкладку для управления списками категорий.</value>
-    <comment>Используйте вкладку для управления списками категорий.</comment>
   </data>
   <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
     <value>Вы можете скачать и обновить списки категорий.</value>
-    <comment>Вы можете скачать и обновить списки категорий.</comment>
   </data>
   <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
-    <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>
-    <comment>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</comment>
+    <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>ent>
   </data>
   <data name="SideBarCategoriesTitle" xml:space="preserve">
     <value>Категории</value>
-    <comment>Категории</comment>
   </data>
   <data name="SideBarCategoriesUploadNew" xml:space="preserve">
     <value>Загрузить новый список категорий</value>
-    <comment>Загрузить новый список категорий</comment>
   </data>
   <data name="HotkeysCloseCategories" xml:space="preserve">
     <value>Закрыть панель категорий</value>
-    <comment>Закрыть панель категорий</comment>
   </data>
   <data name="SideBarCategoriesNoName" xml:space="preserve">
     <value>список категорий без имени</value>
-    <comment>список категорий без имени</comment>
   </data>
   <data name="BindToReusableCategories" xml:space="preserve">
     <value>Связать с категориями</value>
-    <comment>Связать с категориями</comment>
   </data>
   <data name="SelectCategories" xml:space="preserve">
     <value>Выбрать категории</value>
-    <comment>Выбрать категории</comment>
   </data>
   <data name="UserDefinedCategories" xml:space="preserve">
     <value>Категории определенные пользователем </value>
-    <comment>Определенные пользователем</comment>
   </data>
   <data name="SourceOfCategories" xml:space="preserve">
     <value>Источник категорий</value>
-    <comment>Источник категорий</comment>
   </data>
   <data name="RostersQuestion" xml:space="preserve">
     <value>Список или вопрос из ростера</value>
-    <comment>Вопрос из ростера</comment>
   </data>
   <data name="ReusableCategories" xml:space="preserve">
     <value>Из списка категорий</value>
-    <comment>Из списка категорий</comment>
   </data>
   <data name="QuestionRadioButtonList" xml:space="preserve">
     <value>Переключатели</value>
-    <comment>Переключатели</comment>
   </data>
   <data name="CategoriesObtained" xml:space="preserve">
     <value>Получено {0} строка из файла с категориями</value>
-    <comment>Получено {0} строка из файла с категориями</comment>
   </data>
   <data name="CategoriesObtained_plural" xml:space="preserve">
     <value>Получено {0} строк(и) из файла с категориями</value>
-    <comment>Получено {0} строк из файла с категориями</comment>
   </data>
   <data name="DeleteConfirmCategories" xml:space="preserve">
     <value>Вы уверены, что хотите удалить категории "{{trimmedTitle}}"? Источник категорий для зависимых категориальных вопросов будет сброшен в категории определенные пользователем</value>
