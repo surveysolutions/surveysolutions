@@ -8,5 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         ChapterItemType ItemType { get; }
 
         List<IQuestionnaireItem> Items { get; set; }
+        bool HasCondition { get; set; }
+        bool HideIfDisabled { get; set; }
     }
 }
