@@ -75,7 +75,8 @@
                             itemId: $scope.activeGroup.itemId,
                             variable: $scope.activeGroup.variableName,
                             title: $scope.activeGroup.title,
-                            hasCondition: ($scope.activeGroup.enablementCondition !== null && /\S/.test($scope.activeGroup.enablementCondition))
+                            hasCondition: ($scope.activeGroup.enablementCondition !== null && /\S/.test($scope.activeGroup.enablementCondition)),
+                            hideIfDisabled: $scope.activeGroup.hideIfDisabled
                         });
                         if (_.isFunction(callback)) {
                             callback();
