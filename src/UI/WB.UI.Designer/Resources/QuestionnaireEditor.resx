@@ -235,6 +235,9 @@
   <data name="SideBarLookupTableDropFile" xml:space="preserve">
     <value>Drop File here</value>
   </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Edit Categories</value>
+  </data>
   <data name="SideBarLookupTableFileName" xml:space="preserve">
     <value>file name</value>
   </data>

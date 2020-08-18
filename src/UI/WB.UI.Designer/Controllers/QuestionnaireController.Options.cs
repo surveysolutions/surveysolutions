@@ -54,7 +54,36 @@ namespace WB.UI.Designer.Controllers
 
         public IActionResult EditCascadingOptions(QuestionnaireRevision id, Guid questionId)
             => this.EditOptions(id, questionId, true);
-        
+
+        public IActionResult EditCategories(QuestionnaireRevision id, Guid categoriesId)
+        {
+            var categories = 
+               this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
+                Select(
+                    option => new QuestionnaireCategoricalOption
+                    {
+                        Value = option.Id ,
+                        ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
+                        Title = option.Text
+                    });
+
+           
+            this.questionWithOptionsViewModel = new EditOptionsViewModel
+            (
+               questionnaireId: id.QuestionnaireId.FormatGuid(),
+               categoriesId: categoriesId,
+               questionTitle: "",
+               options: categories.ToList(),
+               isCascading: true,
+               isCategories : true
+            );
+
+            if (this.questionWithOptionsViewModel == null)
+                return NotFound();
+
+            return this.View("EditOptions", this.questionWithOptionsViewModel);
+        }
+
         public IActionResult GetOptions() => this.Json(this.questionWithOptionsViewModel?.Options);
 
         private void SetupViewModel(QuestionnaireRevision id, Guid questionId, bool isCascading)
@@ -86,12 +115,28 @@ namespace WB.UI.Designer.Controllers
             if (this.questionWithOptionsViewModel == null)
                 return NotFound();
 
-            return RedirectToAction("EditOptions",
-                new
-                {
-                    id = this.questionWithOptionsViewModel.QuestionnaireId,
-                    questionId = this.questionWithOptionsViewModel.QuestionId
-                });
+            if (this.questionWithOptionsViewModel.IsCategories)
+            {
+                RedirectToAction("EditCategories",
+                    new
+                    {
+                        id = this.questionWithOptionsViewModel.QuestionnaireId,
+                        questionId = this.questionWithOptionsViewModel.QuestionId
+                    });
+            }
+
+            return this.questionWithOptionsViewModel.IsCascading 
+                ? RedirectToAction("EditCascadingOptions",
+                    new {
+                        id = this.questionWithOptionsViewModel.QuestionnaireId,
+                        questionId = this.questionWithOptionsViewModel.QuestionId
+                    })
+                    
+                : RedirectToAction("EditOptions",
+                new {
+                        id = this.questionWithOptionsViewModel.QuestionnaireId,
+                        questionId = this.questionWithOptionsViewModel.QuestionId
+                    });
         }
 
         public IActionResult ResetCascadingOptions()
@@ -211,6 +256,14 @@ namespace WB.UI.Designer.Controllers
 
             var questionnaireCategoricalOptions = this.questionWithOptionsViewModel.Options.ToArray();
 
+            if (this.questionWithOptionsViewModel.IsCategories)
+            {
+                return Json(commandResult);
+
+            }
+
+
+
             var command = this.questionWithOptionsViewModel.IsCascading
                 ? (QuestionCommand) new UpdateCascadingComboboxOptions(
                     Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
@@ -302,20 +355,38 @@ namespace WB.UI.Designer.Controllers
 
         public class EditOptionsViewModel
         {
-            public EditOptionsViewModel(string questionnaireId, Guid questionId, List<QuestionnaireCategoricalOption>? options = null, string? questionTitle = null, bool? isCascading = null)
+            public EditOptionsViewModel(string questionnaireId, 
+                Guid? questionId = null,
+                Guid? categoriesId = null,
+                List<QuestionnaireCategoricalOption>? options = null, 
+                string? questionTitle = null, bool? isCascading = null,
+                bool? isCategories = null)
             {
+                if(questionId == null && categoriesId == null)
+                    throw new InvalidOperationException($"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
+
                 QuestionnaireId = questionnaireId;
-                QuestionId = questionId;
+                if(questionId !=null)
+                    QuestionId = questionId.Value;
+                if (categoriesId != null)
+                    CategoriesId = categoriesId.Value;
+                
                 Options = options ?? new List<QuestionnaireCategoricalOption>();
                 QuestionTitle = questionTitle;
                 IsCascading = isCascading ?? false;
+                IsCategories = isCategories ?? false;
             }
 
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
+
+            public Guid CategoriesId { get; set; }
+
             public List<QuestionnaireCategoricalOption> Options { get; set; }
             public string? QuestionTitle { get; set; }
             public bool IsCascading { get; set; }
+
+            public bool IsCategories { get; set; }
         }
 
         #endregion
