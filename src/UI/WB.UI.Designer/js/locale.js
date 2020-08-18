@@ -8,22 +8,39 @@ export default {
        
         const options = {
             debug: false,
+            nsSeparator: '.',
             lng: locale,
             fallbackLocale: 'en',
-            fallbackLng: {'default': ['en']},
+            fallbackLng: 'en',
             backend: {
                 loadPath: function(languages) {
                     var key = 'QuestionnaireEditor.' + languages[0] + '.json'
                     return window.localization[key]
-                }
+                },
+                allowMultiLoading: true
             },
             load: 'languageOnly',
+            saveMissing: true,
             useCookie: false,
             useLocalStorage: false,
-            interpolation: { escapeValue: false }
+            interpolation: { escapeValue: false },
+
+            missingKeyHandler(lng, ns, key, fallbackValue) {
+                console.warn('Missing translation for language', lng, 'key',ns + '.' + fallbackValue)
+            },
+            
+            parseMissingKeyHandler(key) {
+                return '[' + key + ']'
+            }
         }
         
-        i18next.use(i18NextApi).init(options)
+        i18next
+          .use(i18NextApi)
+          .init(options,
+            (error, t) => {
+                if(error)
+                    console.error(error);
+        })
 
         Vue.$t = function() {
             return i18next.t.apply(i18next, arguments)
