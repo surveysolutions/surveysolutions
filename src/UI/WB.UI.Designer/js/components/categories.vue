@@ -93,7 +93,7 @@
                 :headers="headers"
                 :items="categories"
                 :search="search"
-                :items-per-page="50"
+                :items-per-page="15"
                 :loading="loading"
                 class="elevation-1"
                 dense>
@@ -337,7 +337,7 @@ export default {
                 self.update();
             });
 
-            this.update();
+            //this.update();
         },
         apply: function () {
             const self = this;

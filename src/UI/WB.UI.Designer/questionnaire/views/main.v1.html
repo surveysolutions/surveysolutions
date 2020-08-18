@@ -505,11 +505,17 @@
                                             </div>
 
                                             <div class="permanent-actions pull-right">
+                                                <a 
+                                                   href="javascript:void(0);"
+                                                   class="btn btn-link"
+                                                   ng-click="editCategories(questionnaire.questionnaireId, categories.categoriesId)" ng-i18next="SideBarEditCategories">
+                                                </a>
+
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + categories.categoriesId}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
 
-                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser" 
-                                                        class="btn btn-default" ngf-select="" ngf-max-size="10MB" 
+                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser"
+                                                        class="btn btn-default" ngf-select="" ngf-max-size="10MB"
                                                         accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                                         ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
                                                     <span ng-i18next>Update</span>

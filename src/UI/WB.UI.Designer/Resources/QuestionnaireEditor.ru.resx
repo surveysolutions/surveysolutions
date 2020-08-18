@@ -896,6 +896,9 @@
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>название перевода</value>
   </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Редактировать категории</value>
+  </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Родительское значение</value>
   </data>

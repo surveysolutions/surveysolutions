@@ -178,6 +178,21 @@
                 });
             };
 
+            $scope.editCategories = function (questionnaireId, categoriesId)
+            {
+                if ($scope.questionnaire.isReadOnlyForUser) {
+                    confirmService.open({
+                        title: $i18next.t('ReadOnlyQuestion'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
+                        isReadOnly: true
+                    }).result;
+                    return;
+                }
+
+                window.open("../../questionnaire/editcategories/" + questionnaireId + "?categoriesid=" + categoriesId,
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=650, left=100, top=100", true);
+            }
+
             $scope.foldback = function () {
                 $scope.isFolded = false;
                 $rootScope.$broadcast("closeCategories", {});
