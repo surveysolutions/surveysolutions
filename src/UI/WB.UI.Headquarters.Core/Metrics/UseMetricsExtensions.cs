@@ -23,6 +23,7 @@ namespace WB.UI.Headquarters.Metrics
             
             services.AddTransient<IOnDemandCollector, BrokenPackagesStatsCollector>();
             services.AddTransient<IOnDemandCollector, NHibernateStatsCollector>();
+            services.AddTransient<IOnDemandCollector, ThreadPoolStatsCollector>();
         }
   
         public static void UseMetrics(this IApplicationBuilder app, IConfiguration configuration)
