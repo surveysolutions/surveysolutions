@@ -44,9 +44,9 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
+            registry.BindInPerLifetimeScope<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
-            registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
+            registry.Bind<IFastBinaryFilesHttpHandler, BinaryFilesHttpHandler>();
             registry.Bind<IGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, SupervisorInterviewStateCalculationStrategy>();
 
