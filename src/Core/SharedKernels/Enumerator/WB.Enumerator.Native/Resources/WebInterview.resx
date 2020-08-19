@@ -193,6 +193,9 @@
   <data name="InterviewCompletionDateFormatText" xml:space="preserve">
     <value>Interview completion date: </value>
   </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Download answers</value>
+  </data>
   <data name="Start" xml:space="preserve">
     <value>Start new interview</value>
   </data>
