@@ -15,8 +15,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             this.restServiceSettings = restServiceSettings;
         }
 
+        private HttpClient httpClient;
+
         public HttpClient CreateClient(IHttpStatistician statistician = null)
         {
+            if (httpClient != null) return httpClient;
+
             var http = new HttpClient(new ExtendedMessageHandler(CreateMessageHandler(), statistician))
             {
                 Timeout = this.restServiceSettings.Timeout,
@@ -24,6 +28,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             };
 
             http.DefaultRequestHeaders.ConnectionClose = true;
+            httpClient = http;
             return http;
         }
 
