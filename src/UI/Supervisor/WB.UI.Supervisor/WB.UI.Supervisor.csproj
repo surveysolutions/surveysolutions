@@ -477,9 +477,6 @@
     <PackageReference Include="NLog">
       <Version>4.7.3</Version>
     </PackageReference>
-    <PackageReference Include="PCLStorage">
-      <Version>1.0.2</Version>
-    </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>
