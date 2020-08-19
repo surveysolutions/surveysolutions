@@ -24,6 +24,11 @@
                     {{ $t('WebInterview.InterviewCompletionDateFormatText') }}
                     <time :datetime="$config.model.completedDate"></time>
                 </li>
+                <li v-if="$config.model.printPdf"
+                    v-dateTimeFormatting>
+                    {{ $t('WebInterview.DownloadAnswers') }}
+                    <time :datetime="$config.model.printPdf"></time>
+                </li>
             </ul>
         </div>
     </div>
