@@ -1365,18 +1365,20 @@ export default {
                     disabled: !canBeAssigned,
                 })
 
+                const canBeApproved = rowData.actionFlags.indexOf('CANBEAPPROVED') >= 0
                 menu.push({
                     name: self.$t('Common.Approve'),
-                    className: 'success-text',
+                    className: canBeApproved ? 'success-text' : '',
                     callback: () => self.approveInterview(),
-                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
+                    disabled: !canBeApproved,
                 })
 
+                const canBeRejected = rowData.actionFlags.indexOf('CANBEREJECTED') >= 0
                 menu.push({
                     name: self.$t('Common.Reject'),
-                    className: 'error-text',
+                    className: canBeRejected ? 'error-text' : '',
                     callback: () => self.rejectInterview(),
-                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
+                    disabled: !canBeRejected,
                 })
 
                 if (!self.config.isSupervisor) {
@@ -1390,11 +1392,12 @@ export default {
                         className: 'context-menu-separator context-menu-not-selectable',
                     })
 
+                    const canBeDeleted = rowData.actionFlags.indexOf('CANBEDELETED') >= 0
                     menu.push({
                         name: self.$t('Common.Delete'),
-                        className: 'error-text',
+                        className: canBeDeleted ? 'error-text' : '',
                         callback: () => self.deleteInterview(),
-                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
+                        disabled: !canBeDeleted,
                     })
                 }
             }

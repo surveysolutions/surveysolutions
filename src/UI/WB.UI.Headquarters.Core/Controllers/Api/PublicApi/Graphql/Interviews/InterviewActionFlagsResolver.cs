@@ -48,7 +48,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     }
 
                     if (interviewSummary.Status == InterviewStatus.Completed 
-                        || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters)
+                        || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters
+                        || interviewSummary.Status == InterviewStatus.RejectedBySupervisor && interviewSummary.ReceivedByInterviewerAtUtc == null)
                     {
                         yield return InterviewActionFlags.CanBeApproved;
                     }
