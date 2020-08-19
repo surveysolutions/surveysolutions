@@ -16,13 +16,6 @@
                 </div>
             </div>
 
-            <div class="row"
-                v-if="exportServiceInitializing">
-                <div class="col-md-12 mb-30">
-                    {{$t('Common.Loading')}}
-                </div>
-            </div>
-
             <div class="row">
                 <div class="export d-flex"
                     ref="list">
@@ -322,7 +315,8 @@
                         <div
                             class="no-sets"
                             v-if="!exportServiceIsUnavailable && exportResults.length == 0">
-                            <p>{{$t('DataExport.NoDataSets')}}</p>
+                            <p v-if="exportServiceInitializing">{{$t('Common.Loading')}}</p>
+                            <p v-else>{{$t('DataExport.NoDataSets')}}</p>
                         </div>
                         <div v-else>
                             <h3 class="mb-20">
@@ -394,6 +388,9 @@ export default {
         },
         exportServiceIsUnavailable() {
             return this.$store.state.export.exportServiceIsUnavailable
+        },
+        exportServiceInitializing() {
+            return this.$store.state.export.exportServiceInitializing
         },
         isDropboxSetUp() {
             var settings = this.externalStoragesSettings['dropbox'] || null
