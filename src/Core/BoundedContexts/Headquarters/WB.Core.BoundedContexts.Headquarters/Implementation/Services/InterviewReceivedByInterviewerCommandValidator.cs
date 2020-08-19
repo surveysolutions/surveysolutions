@@ -30,7 +30,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return command is CommentAnswerCommand
                 || command is ResolveCommentAnswerCommand
                 || command is OpenInterviewBySupervisorCommand
-                || command is CloseInterviewBySupervisorCommand;
+                || command is CloseInterviewBySupervisorCommand
+                || command is ResumeInterviewCommand
+                || command is PauseInterviewCommand;
         }
     }
 }
