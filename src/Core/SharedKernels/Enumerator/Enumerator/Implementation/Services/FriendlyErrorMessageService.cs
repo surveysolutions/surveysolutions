@@ -1,6 +1,7 @@
 ﻿using System.Net;
 
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 

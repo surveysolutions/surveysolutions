@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class Url
     {

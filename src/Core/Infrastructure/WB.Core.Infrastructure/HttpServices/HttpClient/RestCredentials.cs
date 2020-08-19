@@ -2,7 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class RestCredentials
     {

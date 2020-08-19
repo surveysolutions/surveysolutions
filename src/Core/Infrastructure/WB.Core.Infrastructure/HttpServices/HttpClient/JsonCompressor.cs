@@ -2,10 +2,9 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class JsonCompressor : IStringCompressor
     {
