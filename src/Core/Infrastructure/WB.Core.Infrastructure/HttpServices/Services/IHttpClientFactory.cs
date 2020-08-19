@@ -1,9 +1,7 @@
-﻿using System.Net.Http;
-
-namespace WB.Core.GenericSubdomains.Portable.Services
+﻿namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public interface IHttpClientFactory
     {
-        HttpClient CreateClient(IHttpStatistician httpStatistician);
+        System.Net.Http.HttpClient CreateClient(IHttpStatistician httpStatistician);
     }
 }

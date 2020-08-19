@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Dynamic;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class ExtendedMessageHandlerException : Exception
     {

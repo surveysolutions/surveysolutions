@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class RestException : Exception
     {
