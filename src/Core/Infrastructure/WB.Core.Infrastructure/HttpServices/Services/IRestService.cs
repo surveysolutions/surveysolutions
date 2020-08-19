@@ -4,8 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
-namespace WB.Core.GenericSubdomains.Portable.Services
+namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public interface IRestService
     {

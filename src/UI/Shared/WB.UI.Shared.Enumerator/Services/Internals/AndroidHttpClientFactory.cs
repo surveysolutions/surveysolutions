@@ -2,6 +2,8 @@
 using System.Net.Http;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using Xamarin.Android.Net;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals

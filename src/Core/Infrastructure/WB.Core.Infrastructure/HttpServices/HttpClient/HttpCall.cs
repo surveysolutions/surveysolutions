@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class HttpCall
     {

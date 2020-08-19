@@ -3,6 +3,7 @@ using System.IO.Compression;
 
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.ZipUtilsTests

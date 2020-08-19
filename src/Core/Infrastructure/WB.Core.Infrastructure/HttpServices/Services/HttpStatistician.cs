@@ -1,11 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
+namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public class HttpStatistician : IHttpStatistician
     {
