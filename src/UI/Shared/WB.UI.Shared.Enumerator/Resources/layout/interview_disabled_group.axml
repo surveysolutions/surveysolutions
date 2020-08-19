@@ -4,7 +4,11 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
   <LinearLayout style="@style/Interview_Group"
-                android:background="@drawable/question_background_answered">
+                android:background="@drawable/question_background_answered"
+                local:MvxBind="HideKeyboardOnClick .;
+                             Tag Format('DisabledOverlay_{0}', Identity);
+                            "
+  >
     <Button style="@style/Interview_Group_Button"
             local:MvxBind="Html SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle); Enabled Enablement.Enabled; Tag Format('Group_{0}', Identity)"/>
   </LinearLayout>
