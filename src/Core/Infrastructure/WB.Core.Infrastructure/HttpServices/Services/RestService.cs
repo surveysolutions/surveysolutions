@@ -9,11 +9,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
-using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
+namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public class RestService : IRestService
     {
@@ -468,7 +470,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private T GetDecompressedJsonFromHttpResponseMessage<T>(RestResponse restResponse)
         {
             if (restResponse.ContentType != RestContentType.Json)
-                throw new RestException(message: Resources.CheckServerSettings, statusCode: HttpStatusCode.Redirect);
+                throw new RestException(message: GenericSubdomains.Portable.Properties.Resources.CheckServerSettings, statusCode: HttpStatusCode.Redirect);
 
             try
             {
@@ -478,7 +480,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
             catch (JsonDeserializationException ex)
             {
-                throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
+                throw new RestException(message: GenericSubdomains.Portable.Properties.Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
             }
         }
 
@@ -523,19 +525,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         internal class ExecuteRequestResult
         {
-            public ExecuteRequestResult(HttpClient httpClient, HttpResponseMessage httpResponseMessage)
+            public ExecuteRequestResult(System.Net.Http.HttpClient httpClient, HttpResponseMessage httpResponseMessage)
             {
                 Response = httpResponseMessage;
                 HttpClient = httpClient;
             }
 
-            public void Deconstruct(out HttpClient http, out HttpResponseMessage response)
+            public void Deconstruct(out System.Net.Http.HttpClient http, out HttpResponseMessage response)
             {
                 http = HttpClient;
                 response = Response;
             }
 
-            public HttpClient HttpClient { get; }
+            public System.Net.Http.HttpClient HttpClient { get; }
             public HttpResponseMessage Response { get; }
         }
 

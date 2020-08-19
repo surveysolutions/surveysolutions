@@ -1,4 +1,4 @@
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public enum RestExceptionType
     {

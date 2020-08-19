@@ -1,5 +1,4 @@
-﻿using Polly;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,9 +7,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Polly;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
+namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public class FastBinaryFilesHttpHandler : IFastBinaryFilesHttpHandler
     {
@@ -44,7 +46,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                    && response.Headers.AcceptRanges.Any();
         }
 
-        public Task<byte[]> DownloadBinaryDataAsync(HttpClient http, HttpResponseMessage response,
+        public Task<byte[]> DownloadBinaryDataAsync(System.Net.Http.HttpClient http, HttpResponseMessage response,
             IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
@@ -61,7 +63,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return responseMessage.Content.ReadAsByteArrayAsync();
         }
 
-        private async Task<byte[]> DownloadAsyncInMultipleChunks(HttpClient http, HttpResponseMessage response,
+        private async Task<byte[]> DownloadAsyncInMultipleChunks(System.Net.Http.HttpClient http, HttpResponseMessage response,
             IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var responseLength = response.Content.Headers.ContentLength ?? throw new ArgumentException("ContentLength required");

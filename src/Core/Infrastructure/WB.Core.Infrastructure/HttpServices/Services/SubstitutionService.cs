@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
+namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public class SubstitutionService : ISubstitutionService
     {
