@@ -118,8 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entrevue (s) seront approuvées. &lt;/h3&gt;               
-&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les statuts suivants uniquement: &lt;i&gt; {{status1}} &lt;/i&gt; et &lt;i&gt; {{status2}} &lt;/i&gt;. </value>
+      <value>{{count}} entrevue seront approuvées. </value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;
@@ -154,8 +153,8 @@
 </value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront approuvées. &lt;/h3&gt;  
-&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {{status1}} &lt;/i&gt; et &lt;i&gt; {{status2}} &lt;/i&gt;.</value>
+      <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront approuvées. &lt;/h3&gt;  
+&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {{status1}} &lt;/i&gt;, &lt;i&gt; {{status2}} &lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Affectation</value>
@@ -212,5 +211,14 @@
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Erreurs</value>
+  </data>
+  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+      <value>{{count}} entrevues seront approuvées.</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+      <value>Remarque!</value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+      <value>Vous pouvez approuver des entretiens avec les statuts suivants uniquement: {{status1}}, {{status2}}, {{status3}}</value>
   </data>
 </root>
