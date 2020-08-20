@@ -14,21 +14,21 @@ namespace WB.UI.Headquarters.Resources {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Interviews {
+    public class Interviews_es {
         
         private static System.Resources.ResourceManager resourceMan;
         
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Interviews() {
+        internal Interviews_es() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Interviews", typeof(Interviews).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Interviews_es", typeof(Interviews_es).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,21 +63,27 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string Assignment {
+            get {
+                return ResourceManager.GetString("Assignment", resourceCulture);
+            }
+        }
+        
         public static string AssignReceivedConfirm {
             get {
                 return ResourceManager.GetString("AssignReceivedConfirm", resourceCulture);
             }
         }
         
-        public static string AssignReceivedWarning {
-            get {
-                return ResourceManager.GetString("AssignReceivedWarning", resourceCulture);
-            }
-        }
-        
         public static string AssignToOtherTeamConfirmMessage {
             get {
                 return ResourceManager.GetString("AssignToOtherTeamConfirmMessage", resourceCulture);
+            }
+        }
+        
+        public static string ChooseResponsible {
+            get {
+                return ResourceManager.GetString("ChooseResponsible", resourceCulture);
             }
         }
         
@@ -93,9 +99,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string ChooseResponsible {
+        public static string ClientKeyTitle {
             get {
-                return ResourceManager.GetString("ChooseResponsible", resourceCulture);
+                return ResourceManager.GetString("ClientKeyTitle", resourceCulture);
             }
         }
         
@@ -129,45 +135,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string RejectToOriginal {
-            get {
-                return ResourceManager.GetString("RejectToOriginal", resourceCulture);
-            }
-        }
-        
-        public static string RejectToNewResponsible {
-            get {
-                return ResourceManager.GetString("RejectToNewResponsible", resourceCulture);
-            }
-        }
-        
-        public static string UnapproveConfirmMessageHQ {
-            get {
-                return ResourceManager.GetString("UnapproveConfirmMessageHQ", resourceCulture);
-            }
-        }
-        
-        public static string Assignment {
-            get {
-                return ResourceManager.GetString("Assignment", resourceCulture);
-            }
-        }
-        
-        public static string ClientKeyTitle {
-            get {
-                return ResourceManager.GetString("ClientKeyTitle", resourceCulture);
-            }
-        }
-        
         public static string Tooltip_Filter_Assignment {
             get {
                 return ResourceManager.GetString("Tooltip_Filter_Assignment", resourceCulture);
-            }
-        }
-        
-        public static string Tooltip_Filter_Questionnaire {
-            get {
-                return ResourceManager.GetString("Tooltip_Filter_Questionnaire", resourceCulture);
             }
         }
         
@@ -231,63 +201,21 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Tooltip_Table_ErrorsCount {
+        public static string UnapproveConfirmMessageHQ {
             get {
-                return ResourceManager.GetString("Tooltip_Table_ErrorsCount", resourceCulture);
-            }
-        }
-        
-        public static string Errors {
-            get {
-                return ResourceManager.GetString("Errors", resourceCulture);
-            }
-        }
-        
-        public static string Tooltip_Table_NotAnsweredCount {
-            get {
-                return ResourceManager.GetString("Tooltip_Table_NotAnsweredCount", resourceCulture);
-            }
-        }
-        
-        public static string NotAnsweredCount {
-            get {
-                return ResourceManager.GetString("NotAnsweredCount", resourceCulture);
-            }
-        }
-        
-        public static string ChooseQuestionsTitle {
-            get {
-                return ResourceManager.GetString("ChooseQuestionsTitle", resourceCulture);
-            }
-        }
-        
-        public static string FiltersByQuestions {
-            get {
-                return ResourceManager.GetString("FiltersByQuestions", resourceCulture);
-            }
-        }
-        
-        public static string QuestionsSelector {
-            get {
-                return ResourceManager.GetString("QuestionsSelector", resourceCulture);
-            }
-        }
-        
-        public static string QuestionsFilterNotAvailable {
-            get {
-                return ResourceManager.GetString("QuestionsFilterNotAvailable", resourceCulture);
-            }
-        }
-        
-        public static string ApproveConfirmMessage_plural {
-            get {
-                return ResourceManager.GetString("ApproveConfirmMessage_plural", resourceCulture);
+                return ResourceManager.GetString("UnapproveConfirmMessageHQ", resourceCulture);
             }
         }
         
         public static string Note {
             get {
                 return ResourceManager.GetString("Note", resourceCulture);
+            }
+        }
+        
+        public static string ApproveConfirmMessage_plural {
+            get {
+                return ResourceManager.GetString("ApproveConfirmMessage_plural", resourceCulture);
             }
         }
         
