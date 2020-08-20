@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
             return new InterviewSummaryCompositeDenormalizer(
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage), 
+                new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage, Create.Storage.NewMemoryCache()), 
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(), 
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
