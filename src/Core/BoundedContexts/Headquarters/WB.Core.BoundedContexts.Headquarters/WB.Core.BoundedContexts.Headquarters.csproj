@@ -23,6 +23,15 @@
     <Compile Remove="Services\WebInterview\**" />
     <EmbeddedResource Remove="Services\WebInterview\**" />
     <None Remove="Services\WebInterview\**" />
+    <EmbeddedResource Update="Resources\PdfInterview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfInterview.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Resources\PdfInterview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PdfInterview.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Remove="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
@@ -135,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfInterview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\PreloadingVerificationMessages.resx">
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
