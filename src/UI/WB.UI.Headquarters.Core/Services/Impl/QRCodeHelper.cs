@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.UI.Headquarters.Services.Impl
 {

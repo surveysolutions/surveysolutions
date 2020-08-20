@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
 {

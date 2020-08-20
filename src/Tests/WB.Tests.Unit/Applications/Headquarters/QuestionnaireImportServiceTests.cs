@@ -21,6 +21,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;

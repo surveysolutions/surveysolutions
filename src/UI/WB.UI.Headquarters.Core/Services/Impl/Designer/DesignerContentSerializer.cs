@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
