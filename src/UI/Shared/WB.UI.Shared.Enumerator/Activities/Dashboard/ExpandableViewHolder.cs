@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using Android.Support.Transitions;
 using Android.Views;
 using Android.Widget;
+using AndroidX.Transitions;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;

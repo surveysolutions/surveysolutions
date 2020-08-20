@@ -1,7 +1,7 @@
 using System;
 using Android.OS;
-using Android.Support.V4.Widget;
 using Android.Views;
+using AndroidX.Core.Widget;
 using Java.Lang;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using Object = Java.Lang.Object;
