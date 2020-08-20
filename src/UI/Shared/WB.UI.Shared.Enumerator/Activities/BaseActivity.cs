@@ -2,7 +2,6 @@ using Android.OS;
 using Android.Support.Graphics.Drawable;
 using Android.Views;
 using MvvmCross;
-using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -15,7 +14,7 @@ using WB.UI.Shared.Enumerator.Utils;
 namespace WB.UI.Shared.Enumerator.Activities
 {
     [MvxActivityPresentation]
-    public abstract class BaseActivity<TViewModel> : MvxAppCompatActivity<TViewModel> where TViewModel : class, IMvxViewModel
+    public abstract class BaseActivity<TViewModel> : MvvmCross.Platforms.Android.Views.MvxActivity<TViewModel> where TViewModel : class, IMvxViewModel
     {
         
         protected abstract int ViewResourceId { get; }
