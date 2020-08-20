@@ -8,29 +8,30 @@ namespace WB.UI.Shared.Web.Versions
 {
     public class ProductVersion : IProductVersion
     {
-        private readonly Assembly assembly;
-
         public ProductVersion(Assembly assembly)
         {
-            this.assembly = assembly;
-        }
-
-        public override string ToString()
-        {
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(this.assembly.Location);
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             if (!fileVersionInfo.ProductVersion.Contains("-"))
             {
                 // build is on release branch and has no version suffix
-                var version = Version.Parse(fileVersionInfo.FileVersion);
-
-                return FormatVersion(version);
+                this.version = FormatVersion(Version.Parse(fileVersionInfo.FileVersion));
             }
+
+            this.version =  fileVersionInfo.ProductVersion;
+            this.getVersion = Version.TryParse(this.version.Split(' ')[0], out var ver) ? ver : null;
             
-            return fileVersionInfo.ProductVersion;
+            this.buildNumber = fileVersionInfo.FilePrivatePart;
         }
 
-        public Version GetVersion() => new Version(this.ToString().Split(' ')[0]);
-        public int GetBuildNumber() => FileVersionInfo.GetVersionInfo(this.assembly.Location).FilePrivatePart;
+        private readonly string version;
+        private readonly int buildNumber;
+        private readonly Version getVersion;
+
+        public override string ToString() => version;
+
+        public Version GetVersion() => getVersion;
+
+        public int GetBuildNumber() => buildNumber;
 
         public static string FormatVersion(Version version)
         {

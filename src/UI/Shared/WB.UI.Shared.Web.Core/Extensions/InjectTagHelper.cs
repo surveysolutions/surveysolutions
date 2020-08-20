@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 namespace WB.UI.Shared.Web.Extensions
@@ -12,10 +14,12 @@ namespace WB.UI.Shared.Web.Extensions
     public class LocaleTagHelper : TagHelper
     {
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IMemoryCache memoryCache;
 
-        public LocaleTagHelper(IWebHostEnvironment webHostEnvironment)
+        public LocaleTagHelper(IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache)
         {
             this.webHostEnvironment = webHostEnvironment;
+            this.memoryCache = memoryCache;
         }
 
         public override int Order => 1;
@@ -32,20 +36,28 @@ namespace WB.UI.Shared.Web.Extensions
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var folder = Path.TrimEnd('/') + "/" + Component;
-            var files = webHostEnvironment.WebRootFileProvider.GetDirectoryContents(folder);
 
-            Dictionary<string, string> locales = new Dictionary<string, string>();
-
-            foreach (var file in files.OrderByDescending(f => f.LastModified))
+            var key = $"tag::{folder}";
+            var locales = this.memoryCache.GetOrCreate(key, entry =>
             {
-                var match = ComponentMatcher.Match(file.Name);
+                var files = webHostEnvironment.WebRootFileProvider.GetDirectoryContents(folder);
 
-                if (match.Success == false) continue;
+                Dictionary<string, string> localeFiles = new Dictionary<string, string>();
 
-                if(locales.ContainsKey(match.Groups["component"].Value)) continue;
-                
-                locales.Add(match.Groups["component"].Value, '/' + folder + '/' + file.Name);
-            }
+                foreach (var file in files.OrderByDescending(f => f.LastModified))
+                {
+                    var match = ComponentMatcher.Match(file.Name);
+
+                    if (match.Success == false) continue;
+
+                    if (localeFiles.ContainsKey(match.Groups["component"].Value)) continue;
+
+                    localeFiles.Add(match.Groups["component"].Value, '/' + folder + '/' + file.Name);
+                }
+
+                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                return localeFiles;
+            });
 
             output.TagName = "script";
             var current = System.Globalization.CultureInfo.CurrentUICulture.Name.Split('-')[0];
