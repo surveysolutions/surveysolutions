@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using Android.OS;
-using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
+using Google.Android.Material.Navigation;
 using MvvmCross.Core;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
