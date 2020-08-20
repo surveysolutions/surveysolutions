@@ -34,9 +34,7 @@ namespace WB.UI.Headquarters.Services
 
         public IExportServiceApi CreateClient()
         {
-            var baseUrl = headquarterOptions.Value.BaseUrl;
-
-            if (string.IsNullOrWhiteSpace(baseUrl))
+            if (!Uri.TryCreate(headquarterOptions.Value.BaseUrl, UriKind.RelativeOrAbsolute, out var baseUrl))
             {
                 var context = httpContextAccessor.HttpContext;
 
@@ -44,7 +42,7 @@ namespace WB.UI.Headquarters.Services
                 {
                     var request = context.Request;
 
-                    baseUrl = $"{request.Scheme}://{request.Host}{"/"}";
+                    baseUrl = new Uri($"{request.Scheme}://{request.Host}{"/"}");
                 }
             }
 
@@ -58,7 +56,7 @@ namespace WB.UI.Headquarters.Services
                     Authorization = new AuthenticationHeaderValue(@"Bearer", key),
 
                     // TODO: Make sure that BaseUri is properly registered in HQ, with fallback to Request.Uri
-                    Referrer = new Uri(baseUrl)
+                    Referrer = baseUrl
                 }
             };
 
