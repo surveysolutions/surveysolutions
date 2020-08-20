@@ -49,12 +49,13 @@
                 </div>
             </div>
             <div class="questionnaire-details-actions clearfix" >
-                <SwitchLanguage v-if="canChangeLanguage"
-                    :disabled="changeLanguageDisabled"/>
                 <div class="buttons-container">
+                    <SwitchLanguage v-if="canChangeLanguage"
+                        :disabled="changeLanguageDisabled"/>
+
                     <button id="btn_approve"
                         type="button"
-                        class="btn btn-success"
+                        class="btn btn-success marl"
                         v-if="showApproveButton"
                         @click="approve"
                         :disabled="changeStatusDisabled">
@@ -62,7 +63,7 @@
                     </button>
                     <button id="btn_reject"
                         type="button"
-                        class="btn btn-default btn-lg reject"
+                        class="btn btn-default btn-lg reject marl"
                         v-if="showRejectButton"
                         @click="reject"
                         :disabled="changeStatusDisabled">
@@ -70,7 +71,7 @@
                     </button>
                     <button  id="btn_unapprove"
                         type="button"
-                        class="btn btn-default btn-lg reject"
+                        class="btn btn-default btn-lg reject marl"
                         v-if="showUnapproveButton"
                         @click="reject">
                         {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}

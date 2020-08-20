@@ -70,7 +70,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     !interviewSummary.ReceivedByInterviewerAtUtc.HasValue && !interviewSummary.WasCompleted)
                     yield return InterviewActionFlags.CanBeDeleted;
 
-                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)
+                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed
+                    || interviewSummary.Status == InterviewStatus.RejectedBySupervisor && interviewSummary.ReceivedByInterviewerAtUtc == null)
                     yield return InterviewActionFlags.CanBeApproved;
 
                 if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)
