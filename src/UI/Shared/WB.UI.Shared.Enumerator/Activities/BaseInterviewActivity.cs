@@ -1,11 +1,10 @@
 ﻿using System;
 using Android.Content.Res;
 using Android.OS;
-using Android.Support.V4.Widget;
-using Android.Support.V7.App;
 using Android.Views;
+using AndroidX.AppCompat.App;
+using AndroidX.DrawerLayout.Widget;
 using MvvmCross;
-using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;

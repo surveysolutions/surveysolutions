@@ -3,15 +3,13 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using System;
 using System.Collections.Specialized;
 using System.Net;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using WB.Core.GenericSubdomains.Portable.Implementation;
+using MvvmCross.DroidX.RecyclerView;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Utils;
 

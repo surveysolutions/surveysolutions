@@ -2,9 +2,9 @@
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
