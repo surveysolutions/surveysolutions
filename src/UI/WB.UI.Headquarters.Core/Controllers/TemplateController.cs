@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
