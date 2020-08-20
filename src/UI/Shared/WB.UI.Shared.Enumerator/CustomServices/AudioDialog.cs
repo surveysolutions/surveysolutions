@@ -1,10 +1,9 @@
 using System;
 using System.Threading;
 using Android.App;
-using Android.Support.V7.App;
 using Android.Views;
+using AndroidX.AppCompat.App;
 using MvvmCross.Base;
-using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
 using WB.Core.SharedKernels.Enumerator.Services;

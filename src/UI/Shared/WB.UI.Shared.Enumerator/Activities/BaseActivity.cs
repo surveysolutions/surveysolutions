@@ -1,6 +1,6 @@
 using Android.OS;
-using Android.Support.Graphics.Drawable;
 using Android.Views;
+using AndroidX.VectorDrawable.Graphics.Drawable;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Plugin.Messenger;
@@ -25,6 +25,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             log = LogManager.GetLogger(this.GetType().Name);
             log.Trace("Create");
             base.OnCreate(bundle);
+            Xamarin.Essentials.Platform.Init(this, bundle);
             CrossCurrentActivity.Current.Init(this, bundle);
         }
 
@@ -45,7 +46,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {
             log.Trace($"OnRequestPermissionsResult permissions {string.Join(',', permissions)} grantResults {string.Join(',', grantResults)}");
-
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
