@@ -10,7 +10,7 @@
         </div>
         <div class="col-md-12">
             <div class="row"
-                v-if="!exportServiceInitializing && exportServiceIsUnavailable">
+                v-if="exportServiceIsUnavailable">
                 <div class="col-md-12 mb-30">
                     {{$t('DataExport.DataExport_ServiceIsNotAvailable')}}
                 </div>
