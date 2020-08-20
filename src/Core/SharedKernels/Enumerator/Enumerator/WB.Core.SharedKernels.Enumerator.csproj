@@ -18,9 +18,9 @@
     <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.7" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.2" />
-    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.4.2" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="7.0.0" />
+    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="7.0.0" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />

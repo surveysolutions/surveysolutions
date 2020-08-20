@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Gms.Maps;
 using Android.Runtime;
 using Android.Support.V4.Widget;
@@ -17,8 +16,7 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
 using MvvmCross.Converters;
-using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Logging;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
@@ -38,7 +36,7 @@ using BindingFlags = System.Reflection.BindingFlags;
 namespace WB.UI.Shared.Enumerator
 {
     public abstract class 
-        EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
+        EnumeratorSetup<TApplication> : MvvmCross.Platforms.Android.Core.MvxAndroidSetup<TApplication> 
         where TApplication : class, IMvxApplication, new()
     {
         protected EnumeratorSetup()
@@ -175,7 +173,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<RadioButton>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
             registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
-            MvxAppCompatSetupHelper.FillTargetFactories(registry);
+            
+            //MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);
             base.FillTargetFactories(registry);

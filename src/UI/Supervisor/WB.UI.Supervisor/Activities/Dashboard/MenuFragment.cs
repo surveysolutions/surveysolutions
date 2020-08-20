@@ -5,15 +5,12 @@ using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Base;
 using MvvmCross.Core;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Supervisor.Activities.Dashboard
 {

@@ -1,7 +1,5 @@
-﻿using Android.App;
-using Android.OS;
-using Android.Views;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+﻿using Android.OS;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
