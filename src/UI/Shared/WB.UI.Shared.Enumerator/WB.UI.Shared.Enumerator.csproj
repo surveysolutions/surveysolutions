@@ -63,6 +63,7 @@
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
     <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />
+    <Compile Include="CustomBindings\ViewBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ViewSetGpsLocationBinding.cs" />
     <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
