@@ -47,24 +47,25 @@
         <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="vertical">
-          <EditText
-            style="@style/Login_Login_Editor"
-            android:id="@+id/LoginPage_login"
-            android:singleLine="true"
-            android:inputType="textVisiblePassword|textNoSuggestions"
-            local:MvxBind="Text UserName; Enabled False; BackgroundStyle ValidationStyleBackground(True);" />
+            <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/LoginPage_login"
+                        style="@style/Login_Editor"
+                        local:MvxBind="Text UserName; Enabled False;" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-          <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                local:passwordToggleEnabled="true"
+            <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    local:passwordToggleEnabled="true"
                 local:hintEnabled="true"
                 local:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 local:MvxBind="Hint Localization('PasswordHint'); Error ErrorMessage">
             <com.google.android.material.textfield.TextInputEditText
-                    style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
                 android:inputType="textPassword"
+                style="@style/Login_Editor"
                 android:id="@+id/LoginPage_password"
                 local:MvxBind="Text Password;"/>
           </com.google.android.material.textfield.TextInputLayout>
