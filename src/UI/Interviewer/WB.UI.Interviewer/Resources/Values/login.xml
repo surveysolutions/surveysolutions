@@ -24,11 +24,7 @@
     </style>
     <style name="Login_Editor">
         <item name="android:layout_width">@dimen/Login_Element_width</item>
-        <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/textedit_color_selector</item>
-        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="Login_Endpoint_Editor" parent="Login_Editor">
@@ -36,10 +32,14 @@
     </style>
 
     <style name="Login_Login_Editor" parent="Login_Editor">
-        <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
+        
     </style>
 
-    <style name="Login_Password_Editor" parent="Login_Editor">
+    <style name="Login_Password_Editor" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:textColor">@color/textedit_color_selector</item>
+        <item name="android:layout_width">@dimen/Login_Element_width</item>
+        <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="Login_Button">
@@ -48,10 +48,11 @@
         <item name="android:padding">@dimen/Login_Button_padding</item>
     </style>
 
-    <style name="Login_Troubleshotting_Button" parent="Login_Button">
+    <style name="Login_Troubleshotting_Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:background">@drawable/transparent_input_button</item>
     </style>
 
     <style name="Login_Footer" parent="VerticalFullWidthWrappingLayout">

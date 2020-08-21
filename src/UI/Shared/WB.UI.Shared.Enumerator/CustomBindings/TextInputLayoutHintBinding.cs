@@ -1,5 +1,10 @@
-using Com.Google.Android.Exoplayer2.Util;
+using System;
+using System.Windows.Input;
+using Android.Views;
 using Google.Android.Material.TextField;
+using MvvmCross.Binding;
+using MvvmCross.Platforms.Android.Binding.Target;
+using MvvmCross.WeakSubscription;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -12,6 +17,36 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         protected override void SetValueToView(TextInputLayout control, string value)
         {
             control.Hint = value;
+        }
+    }
+    
+    public class TextInputLayoutEndIconClickBinding : BaseBinding<TextInputLayout, ICommand>
+    {
+        public TextInputLayoutEndIconClickBinding(TextInputLayout androidControl) : base(androidControl)
+        {
+        }
+
+        protected override void SetValueToView(TextInputLayout control, ICommand value)
+        {
+            control.SetEndIconOnClickListener(new IconClickListener(value));
+        }
+    }
+    
+    public class IconClickListener : Java.Lang.Object, View.IOnClickListener
+    {
+        private readonly ICommand value;
+
+        public IconClickListener(ICommand value)
+        {
+            this.value = value;
+        }
+
+        public void OnClick(View? v)
+        {
+            if (v != null)
+            {
+                value.Execute(null);
+            }
         }
     }
 }

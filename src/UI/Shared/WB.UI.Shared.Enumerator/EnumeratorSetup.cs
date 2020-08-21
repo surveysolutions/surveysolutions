@@ -133,6 +133,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<NumericEditText>("Disabled", (view) => new NumericDisableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Watermark", (view) => new TextViewWatermarkBinding(view));
             registry.RegisterCustomBindingFactory<TextInputLayout>("Hint", (view) => new TextInputLayoutHintBinding(view));
+            registry.RegisterCustomBindingFactory<TextInputLayout>("EndIconClick", (view) => new TextInputLayoutEndIconClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("IsSelectedYesNoOptionColor", (view) => new TextViewIsSelectedYesNoOptionColorBinding(view));
