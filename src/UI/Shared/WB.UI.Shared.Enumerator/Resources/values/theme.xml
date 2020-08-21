@@ -137,12 +137,13 @@
 
     <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabMode">scrollable</item>
+        <item name="tabTextColor">@color/disabledTextColor</item>
         <item name="tabIndicatorColor">@color/color_white_30_percent_transparent</item>
         <item name="tabIndicatorHeight">6dp</item>
         <item name="tabPaddingStart">12dp</item>
         <item name="tabPaddingEnd">12dp</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabSelectedTextColor">@color/group_title_text</item>
     </style>
 
     <style name="TabTextAppearance" parent="">

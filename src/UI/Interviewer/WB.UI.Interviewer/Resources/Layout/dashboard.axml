@@ -25,7 +25,8 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TabLayoutStyle"/>
+        style="@style/TabLayoutStyle"
+        local:MvxBind="ColorByInterviewStatus TypeOfInterviews;"/>
   </com.google.android.material.appbar.AppBarLayout>
 
   <FrameLayout android:layout_width="match_parent"
