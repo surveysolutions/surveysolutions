@@ -95,5 +95,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PageOf", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes / No.
+        /// </summary>
+        public static string YesNo {
+            get {
+                return ResourceManager.GetString("YesNo", resourceCulture);
+            }
+        }
     }
 }
