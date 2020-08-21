@@ -12,12 +12,12 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -41,8 +41,8 @@
                 <Button
                     style="@style/Area_LocationButton"
                     local:MvxBind="Click SwitchLocatorCommand; Clickable IsLocationServiceSwitchEnabled; Enabled IsLocationServiceSwitchEnabled; Visibility Visibility(Map != null)" />
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
     <LinearLayout
         android:clickable="true"

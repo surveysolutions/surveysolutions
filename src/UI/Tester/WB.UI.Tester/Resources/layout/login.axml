@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         <TextView
             style="@style/ToolbarTitle"
             local:MvxBind="Text Localization('LoginTitleText')" />
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:focusable="false"
@@ -45,13 +45,13 @@
                 android:inputType="textVisiblePassword|textNoSuggestions"
                 local:MvxBind="Text LoginName; Watermark Localization('LoginNameHint')" />
 
-          <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
             android:layout_width="@dimen/Login_Element_width"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
             local:passwordToggleEnabled="true"
             local:hintEnabled="false">
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:inputType="textPassword"
@@ -61,7 +61,7 @@
                   Watermark Localization('PasswordHint'); 
                   BackgroundStyle ValidationStyleBackground(IsUserValid);
                   OnDone LoginCommand"/>
-          </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
           <LinearLayout
                 android:layout_width="@dimen/Login_Element_width"
