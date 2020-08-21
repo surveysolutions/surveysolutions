@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-  <android.support.v7.widget.Toolbar
+  <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
     <TextView
         style="@style/ToolbarTitle"
         local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
-  </android.support.v7.widget.Toolbar>
+  </androidx.appcompat.widget.Toolbar>
   <ProgressBar style="@style/Progress_Indicator"
             local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />
   <ScrollView
@@ -73,17 +73,17 @@
           android:inputType="textUri"
           android:imeOptions="actionNext"
           local:MvxBind="Text UserName; Watermark Localization('LoginNameHint'); BackgroundStyle ValidationStyleBackground(IsUserValid);" />
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                local:passwordToggleEnabled="true"
                local:hintEnabled="false">
-          <android.support.design.widget.TextInputEditText
+          <com.google.android.material.textfield.TextInputEditText
               style="@style/Login_Password_Editor"
               android:inputType="textPassword"
               android:id="@+id/LoginPage_password"
               local:MvxBind="Text Password; Watermark Localization('PasswordHint');BackgroundStyle ValidationStyleBackground(IsUserValid);"/>
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

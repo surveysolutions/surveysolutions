@@ -7,7 +7,7 @@ using Android.Views;
 using Esri.ArcGISRuntime.UI.Controls;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toolbar = androidx.appcompat.widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 {
