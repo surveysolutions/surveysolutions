@@ -129,4 +129,7 @@
   <data name="Comments" xml:space="preserve">
     <value>Комментарии</value>
   </data>
+  <data name="YesNo" xml:space="preserve">
+    <value>Да / Нет</value>
+  </data>
 </root>
