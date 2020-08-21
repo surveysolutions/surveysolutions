@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Android.Gms.Maps;
 using Android.Runtime;
-using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;

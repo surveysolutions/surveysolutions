@@ -18,7 +18,7 @@
                   local:MvxItemTemplate="@layout/interview_breadcrumb_item">
       </FlowLayout>
     </LinearLayout>
-    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
                                        android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        android:background="?attr/colorPrimary"
@@ -27,7 +27,7 @@
                                        local:MvxBind="ColorByInterviewStatus Status;">
       <TextView style="@style/InterviewToolbarTitle"
                 local:MvxBind="Html CurrentStage.Stage.Name.PlainText" />
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                  local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;" />

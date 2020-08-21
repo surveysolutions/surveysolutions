@@ -1,8 +1,8 @@
 ﻿using Android.Content.Res;
 using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Support.V4.Content;
 using Android.Widget;
+using AndroidX.Core.Content;
 using MvvmCross.Binding;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
