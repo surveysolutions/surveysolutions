@@ -62,7 +62,7 @@
                     local:passwordToggleEnabled="true"
                 local:hintEnabled="true"
                 local:errorEnabled="true"
-                local:MvxBind="Hint Localization('PasswordHint'); Error ErrorMessage">
+                local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">
             <com.google.android.material.textfield.TextInputEditText
                 android:inputType="textPassword"
                 style="@style/Login_Editor"
