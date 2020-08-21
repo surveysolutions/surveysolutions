@@ -25,7 +25,6 @@ using WB.Infrastructure.Native.Monitoring;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public class InterviewSummaryDenormalizer :
-        //BaseDenormalizer,
         ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
