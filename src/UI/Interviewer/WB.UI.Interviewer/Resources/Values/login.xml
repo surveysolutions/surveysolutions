@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 
-  <style name="Login_Logo" parent="AppTheme">
+  <style name="Login_Logo">
     <item name="android:src">@drawable/login_logo</item>
     <item name="android:layout_width">@dimen/Login_Element_width</item>
     <item name="android:layout_height">@dimen/Login_Element_width</item>
     <item name="android:layout_gravity">center</item>
   </style>
-    <style name="Login_ErrorMessage" parent="AppTheme">
+    <style name="Login_ErrorMessage">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">Trebuchet</item>
@@ -22,7 +22,7 @@
         <item name="android:paddingLeft">@dimen/Login_ErrorMessage_Padding</item>
         <item name="android:paddingRight">@dimen/Login_ErrorMessage_Padding</item>
     </style>
-    <style name="Login_Editor" parent="AppTheme">
+    <style name="Login_Editor">
         <item name="android:layout_width">@dimen/Login_Element_width</item>
         <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
         <item name="android:layout_gravity">center</item>
@@ -40,10 +40,9 @@
     </style>
 
     <style name="Login_Password_Editor" parent="Login_Editor">
-        <item name="android:layout_marginBottom">@dimen/Login_Password_Editor_marginBottom</item>
     </style>
 
-    <style name="Login_Button" parent="AppTheme">
+    <style name="Login_Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/Login_Button_padding</item>
@@ -61,7 +60,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="Login_Footer_Message" parent="AppTheme">
+    <style name="Login_Footer_Message">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
@@ -69,12 +68,13 @@
         <item name="android:textStyle">italic</item>
     </style>
 
-    <style name="Login_OnlineSingin_Button" parent="Login_Button">
+    <style name="Login_OnlineSingin_Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
         <item name="android:textColor">@color/errorTextColor</item>
-        <item name="android:background">@drawable/transparent_input_button</item>
     </style>
-    <style name ="Login_Endpoint_Scan_Button" parent="AppTheme">
+    <style name ="Login_Endpoint_Scan_Button">
         <item name="android:layout_width">@dimen/Login_Scan_Button_width</item>
         <item name="android:layout_height">@dimen/Login_Scan_Button_height</item>
         <item name="android:paddingTop">@dimen/Login_Scan_Button_paddingTop</item>

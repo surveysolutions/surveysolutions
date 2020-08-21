@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="Diagnostic_Container" parent="AppTheme">
+  <style name="Diagnostic_Container">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>
     <item name="android:gravity">center</item>
@@ -58,14 +58,14 @@
   <style name="Diagnostics_Section_Description_Warning"  parent="Diagnostics_Section_Description">
     <item name="android:textColor">@color/errorTextColor</item>
   </style>
-  <style name="Diagnostics_Subsection_Title" parent="AppTheme">
+  <style name="Diagnostics_Subsection_Title">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_30</item>
     <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:paddingBottom">@dimen/Diagnostics_Title_padding</item>
   </style>
-  <style name="Diagnostics_Subsection_Value" parent="AppTheme">
+  <style name="Diagnostics_Subsection_Value">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
@@ -73,14 +73,14 @@
     <item name="android:textStyle">bold</item>
     <item name="android:paddingBottom">@dimen/Diagnostics_SubsectionValue_padding</item>
   </style>
-<style name="Diagnostic_FormContainer" parent="AppTheme">
+<style name="Diagnostic_FormContainer">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center</item>
     <item name="android:orientation">horizontal</item>
     <item name="android:paddingTop">@dimen/Diagnostics_Description_LineSpacing</item>
   </style>
-  <style name="Diagnostics_Green_Button" parent="AppTheme">
+  <style name="Diagnostics_Green_Button">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:padding">@dimen/Login_Button_padding</item>

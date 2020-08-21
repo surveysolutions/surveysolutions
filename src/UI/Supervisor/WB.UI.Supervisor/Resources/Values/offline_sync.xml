@@ -4,7 +4,7 @@
         <item name="android:layout_marginLeft">@dimen/Zero</item>
         <item name="android:background">@drawable/group_started</item>
     </style>
-    <style name="OfflineSync_Navigation" parent="AppTheme">
+    <style name="OfflineSync_Navigation">
         <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
     </style>
 </resources>

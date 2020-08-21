@@ -137,6 +137,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Directory.Build.props" />
+    <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\ActionBar.axml" />
     <AndroidResource Include="Resources\layout\Login.axml" />
     <AndroidResource Include="Resources\layout\Diagnostics.axml" />
@@ -179,7 +183,6 @@
     <AndroidResource Include="Resources\menu\troubleshooting.xml" />
     <AndroidResource Include="Resources\menu\relink.xml" />
     <AndroidResource Include="Resources\menu\finish.xml" />
-    <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\drawable\borderless_button.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />

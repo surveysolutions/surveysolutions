@@ -102,7 +102,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = this.GetUserName();
-            this.ErrorMessage = EnumeratorUIResources.Login_WrongPassword;
         }
 
         public override async void ViewCreated()
@@ -123,6 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (!this.IsUserValid)
             {
+                this.ErrorMessage = EnumeratorUIResources.Login_WrongPassword;
                 this.IncreaseCountOfFailedLoginAttempts();
                 return;
             }
@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             
             var restCredentials = new RestCredentials {Login = this.UserName};
             this.IsInProgress = true;
-            this.ErrorMessage = String.Empty;
+            this.ErrorMessage = null;
             
             try
             {
