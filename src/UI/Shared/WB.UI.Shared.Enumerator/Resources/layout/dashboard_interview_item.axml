@@ -131,7 +131,7 @@
           app:MvxBind="Text PrimaryAction.Label; 
           Click PrimaryAction.Command;
           Enabled PrimaryAction.IsEnabled;
-          BackgroundStyle InterviewStatusToButton(Status);
+          BackgroundColor InterviewStatusToButton(Status);
           Visible (IsExpanded || Not(HasExpandedView))"
             
           style="@style/Dashboard_InterviewItem_MainActionButton"
