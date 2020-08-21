@@ -65,8 +65,7 @@
                 android:id="@+id/LoginPage_password"
                 local:MvxBind="Text Password; 
                   Watermark Localization('PasswordHint'); 
-                  BackgroundStyle ValidationStyleBackground(IsUserValid);
-                  FocusValueChanged SignInCommand; "/>
+                  BackgroundStyle ValidationStyleBackground(IsUserValid);"/>
           </com.google.android.material.textfield.TextInputLayout>
 
           <LinearLayout android:layout_width="wrap_content"
