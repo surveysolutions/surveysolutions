@@ -11,7 +11,7 @@ using WB.UI.Shared.Enumerator.Activities;
 namespace WB.UI.Tester.Activities
 {
     [Activity(Label = "", Theme = "@style/BlueAppTheme", HardwareAccelerated = true,
-        WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
+        WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustResize,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
     public class InterviewActivity : BaseInterviewActivity<InterviewViewModel>
