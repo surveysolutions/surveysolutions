@@ -14,21 +14,21 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class EnumeratorUIResources {
+    public class EnumeratorUIResources_ru {
         
         private static System.Resources.ResourceManager resourceMan;
         
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal EnumeratorUIResources() {
+        internal EnumeratorUIResources_ru() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.Core.SharedKernels.Enumerator.Properties.EnumeratorUIResources", typeof(EnumeratorUIResources).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.Core.SharedKernels.Enumerator.Properties.EnumeratorUIResources_ru", typeof(EnumeratorUIResources_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -42,24 +42,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        public static string AccountIsLockedOnServer {
-            get {
-                return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
-            }
-        }
-        
-        public static string AccountIsNotAnInterviewer {
-            get {
-                return ResourceManager.GetString("AccountIsNotAnInterviewer", resourceCulture);
-            }
-        }
-        
-        public static string AccountIsNotApprovedOnServer {
-            get {
-                return ResourceManager.GetString("AccountIsNotApprovedOnServer", resourceCulture);
             }
         }
         
@@ -87,6 +69,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string DashboardItem_RejectedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_RejectedOn", resourceCulture);
+            }
+        }
+        
         public static string DashboardItem_StartedOn {
             get {
                 return ResourceManager.GetString("DashboardItem_StartedOn", resourceCulture);
@@ -99,39 +87,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string DashboardItem_AssignmentLeftComment {
-            get {
-                return ResourceManager.GetString("DashboardItem_AssignmentLeftComment", resourceCulture);
-            }
-        }
-        
-        public static string DashboardItem_AssignmentCreatedComment {
-            get {
-                return ResourceManager.GetString("DashboardItem_AssignmentCreatedComment", resourceCulture);
-            }
-        }
-        
         public static string Dashboard_CompletedLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_CompletedLinkText", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_Start {
-            get {
-                return ResourceManager.GetString("Dashboard_Start", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_AssignmentsTabTitle {
-            get {
-                return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_StartNewInterview {
-            get {
-                return ResourceManager.GetString("Dashboard_StartNewInterview", resourceCulture);
             }
         }
         
@@ -183,15 +141,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_RemoveInterviewQuestion {
-            get {
-                return ResourceManager.GetString("Dashboard_RemoveInterviewQuestion", resourceCulture);
-            }
-        }
-        
         public static string Dashboard_StartedLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_StartedLinkText", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_AssignmentsTabTitle {
+            get {
+                return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
             }
         }
         
@@ -201,51 +159,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Maps_Title {
+        public static string Login_FinishInstallation_Message {
             get {
-                return ResourceManager.GetString("Maps_Title", resourceCulture);
-            }
-        }
-        
-        public static string HostUnreachable {
-            get {
-                return ResourceManager.GetString("HostUnreachable", resourceCulture);
-            }
-        }
-        
-        public static string InternalServerError {
-            get {
-                return ResourceManager.GetString("InternalServerError", resourceCulture);
-            }
-        }
-        
-        public static string ApplicationIncompatibleWithServer {
-            get {
-                return ResourceManager.GetString("ApplicationIncompatibleWithServer", resourceCulture);
-            }
-        }
-        
-        public static string InvalidEndpoint {
-            get {
-                return ResourceManager.GetString("InvalidEndpoint", resourceCulture);
-            }
-        }
-        
-        public static string InvalidEndpointShort {
-            get {
-                return ResourceManager.GetString("InvalidEndpointShort", resourceCulture);
-            }
-        }
-        
-        public static string LocationPermissionRequired {
-            get {
-                return ResourceManager.GetString("LocationPermissionRequired", resourceCulture);
-            }
-        }
-        
-        public static string Login_Online_Signin_Explanation_message {
-            get {
-                return ResourceManager.GetString("Login_Online_Signin_Explanation_message", resourceCulture);
+                return ResourceManager.GetString("Login_FinishInstallation_Message", resourceCulture);
             }
         }
         
@@ -255,399 +171,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Login_WrongPassword {
-            get {
-                return ResourceManager.GetString("Login_WrongPassword", resourceCulture);
-            }
-        }
-        
-        public static string Maintenance {
-            get {
-                return ResourceManager.GetString("Maintenance", resourceCulture);
-            }
-        }
-        
-        public static string NoNetwork {
-            get {
-                return ResourceManager.GetString("NoNetwork", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_AboutApplication {
-            get {
-                return ResourceManager.GetString("Prefs_AboutApplication", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_ApplicationVersionTitle {
-            get {
-                return ResourceManager.GetString("Prefs_ApplicationVersionTitle", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_BufferSizeSummary {
-            get {
-                return ResourceManager.GetString("Prefs_BufferSizeSummary", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_BufferSizeTitle {
-            get {
-                return ResourceManager.GetString("Prefs_BufferSizeTitle", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_ConnectionSettings {
-            get {
-                return ResourceManager.GetString("Prefs_ConnectionSettings", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_DeviceIdTitle {
-            get {
-                return ResourceManager.GetString("Prefs_DeviceIdTitle", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_EndpointTitle {
-            get {
-                return ResourceManager.GetString("Prefs_EndpointTitle", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_GpsReceiveTimeoutSecSummary {
-            get {
-                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecSummary", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_GpsReceiveTimeoutSecTitle {
-            get {
-                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecTitle", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_HttpResponseTimeoutSummary {
-            get {
-                return ResourceManager.GetString("Prefs_HttpResponseTimeoutSummary", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_HttpResponseTimeoutTitle {
-            get {
-                return ResourceManager.GetString("Prefs_HttpResponseTimeoutTitle", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_InterviewSettings {
-            get {
-                return ResourceManager.GetString("Prefs_InterviewSettings", resourceCulture);
-            }
-        }
-        
-        public static string Prefs_Title {
-            get {
-                return ResourceManager.GetString("Prefs_Title", resourceCulture);
-            }
-        }
-        
-        public static string RequestCanceledByUser {
-            get {
-                return ResourceManager.GetString("RequestCanceledByUser", resourceCulture);
-            }
-        }
-        
-        public static string RequestTimeout {
-            get {
-                return ResourceManager.GetString("RequestTimeout", resourceCulture);
-            }
-        }
-        
-        public static string ServiceUnavailable {
-            get {
-                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Cancel {
-            get {
-                return ResourceManager.GetString("Synchronization_Cancel", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Done {
-            get {
-                return ResourceManager.GetString("Synchronization_Done", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Download_Description_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Download_Description_Format", resourceCulture);
-            }
-        }
-        
         public static string Synchronization_Download_Title {
             get {
                 return ResourceManager.GetString("Synchronization_Download_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Update_Interviews_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_Update_Interviews_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Fail_State_NewInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_State_NewInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Fail_State_InterviewsPartialDownloaded_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_State_InterviewsPartialDownloaded_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Fail_State_RejectedInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_State_RejectedInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Fail_State_UploadedInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_State_UploadedInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Fail_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Fail_UnexpectedException {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_UnexpectedException", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Interviews {
-            get {
-                return ResourceManager.GetString("Synchronization_Interviews", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_PartialInterviews {
-            get {
-                return ResourceManager.GetString("Synchronization_PartialInterviews", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_LockedAssignments_Text {
-            get {
-                return ResourceManager.GetString("Synchronization_LockedAssignments_Text", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_LinkToErrors {
-            get {
-                return ResourceManager.GetString("Synchronization_LinkToErrors", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Questionnaires {
-            get {
-                return ResourceManager.GetString("Synchronization_Questionnaires", resourceCulture);
-            }
-        }
-        
-        public static string UpdatingQuestionnaires {
-            get {
-                return ResourceManager.GetString("UpdatingQuestionnaires", resourceCulture);
-            }
-        }
-        
-        public static string TransferringAssignments {
-            get {
-                return ResourceManager.GetString("TransferringAssignments", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_Description {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_Description", resourceCulture);
-            }
-        }
-        
-        public static string Maps_Synchronization_Success_Description {
-            get {
-                return ResourceManager.GetString("Maps_Synchronization_Success_Description", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_State_NewInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_State_NewInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_State_InterviewsPartialDownloaded_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_State_InterviewsPartialDownloaded_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_State_RejectedInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_State_RejectedInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_State_UploadedInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_State_UploadedInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_State_PartialUploadInterviews_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_State_PartialUploadInterviews_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Success_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_Success_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_DoneWithErrors_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_DoneWithErrors_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Upload_CompletedAssignments_Text {
-            get {
-                return ResourceManager.GetString("Synchronization_Upload_CompletedAssignments_Text", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Upload_Description_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Upload_Description_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Upload_Interviews_Text {
-            get {
-                return ResourceManager.GetString("Synchronization_Upload_Interviews_Text", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Upload_Title_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Upload_Title_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_Receiving_Title_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_Receiving_Title_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UserAuthentication_Description {
-            get {
-                return ResourceManager.GetString("Synchronization_UserAuthentication_Description", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UserAuthentication_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_UserAuthentication_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UserPassword_Update_Format {
-            get {
-                return ResourceManager.GetString("Synchronization_UserPassword_Update_Format", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UserDoNotBelongToTeam {
-            get {
-                return ResourceManager.GetString("Synchronization_UserDoNotBelongToTeam", resourceCulture);
-            }
-        }
-        
-        public static string Unauthorized {
-            get {
-                return ResourceManager.GetString("Unauthorized", resourceCulture);
-            }
-        }
-        
-        public static string UnexpectedException {
-            get {
-                return ResourceManager.GetString("UnexpectedException", resourceCulture);
-            }
-        }
-        
-        public static string UpgradeRequired {
-            get {
-                return ResourceManager.GetString("UpgradeRequired", resourceCulture);
-            }
-        }
-        
-        public static string HeadquartersVersion {
-            get {
-                return ResourceManager.GetString("HeadquartersVersion", resourceCulture);
-            }
-        }
-        
-        public static string SupervisorVersion {
-            get {
-                return ResourceManager.GetString("SupervisorVersion", resourceCulture);
-            }
-        }
-        
-        public static string InterviewerVersion {
-            get {
-                return ResourceManager.GetString("InterviewerVersion", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UserLinkedToAnotherDevice_Status {
-            get {
-                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Status", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_SupervisorShouldDoOnlineSync_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync_Title", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_SupervisorShouldDoOnlineSync {
-            get {
-                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UserLinkedToAnotherDevice_Title {
-            get {
-                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Title", resourceCulture);
-            }
-        }
-        
-        public static string DashboardItem_RejectedOn {
-            get {
-                return ResourceManager.GetString("DashboardItem_RejectedOn", resourceCulture);
             }
         }
         
@@ -663,105 +189,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Login_FinishInstallation_Message {
+        public static string Synchronization_UserPassword_Update_Format {
             get {
-                return ResourceManager.GetString("Login_FinishInstallation_Message", resourceCulture);
+                return ResourceManager.GetString("Synchronization_UserPassword_Update_Format", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_Backup {
+        public static string AccountIsLockedOnServer {
             get {
-                return ResourceManager.GetString("Troubleshooting_Backup", resourceCulture);
+                return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_BackupErrorMessage {
+        public static string AccountIsNotAnInterviewer {
             get {
-                return ResourceManager.GetString("Troubleshooting_BackupErrorMessage", resourceCulture);
+                return ResourceManager.GetString("AccountIsNotAnInterviewer", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_BackupWasSaved {
+        public static string AccountIsNotApprovedOnServer {
             get {
-                return ResourceManager.GetString("Troubleshooting_BackupWasSaved", resourceCulture);
+                return ResourceManager.GetString("AccountIsNotApprovedOnServer", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_CurrentVersion_CheckForUpdates {
+        public static string ApplicationIncompatibleWithServer {
             get {
-                return ResourceManager.GetString("Troubleshooting_CurrentVersion_CheckForUpdates", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_InformationPackageIsSuccessfullySent {
-            get {
-                return ResourceManager.GetString("Troubleshooting_InformationPackageIsSuccessfullySent", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_InformationPackageSizeWarningFormat {
-            get {
-                return ResourceManager.GetString("Troubleshooting_InformationPackageSizeWarningFormat", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_NewVerisonExist {
-            get {
-                return ResourceManager.GetString("Troubleshooting_NewVerisonExist", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_NoNewVersion {
-            get {
-                return ResourceManager.GetString("Troubleshooting_NoNewVersion", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_RestorationErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_RestorationErrorMessage", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_Restore {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Restore", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_RestoreConfirmation {
-            get {
-                return ResourceManager.GetString("Troubleshooting_RestoreConfirmation", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_RestoredSuccessfully {
-            get {
-                return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_SendingOfInformationPackageErrorMessage", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_SendTabletInformation {
-            get {
-                return ResourceManager.GetString("Troubleshooting_SendTabletInformation", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_Title {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Title", resourceCulture);
-            }
-        }
-        
-        public static string Troubleshooting_Unknown_ErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Unknown_ErrorMessage", resourceCulture);
+                return ResourceManager.GetString("ApplicationIncompatibleWithServer", resourceCulture);
             }
         }
         
@@ -807,21 +261,75 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string MenuItem_Title_Search {
+        public static string Dashboard_RemoveInterviewQuestion {
             get {
-                return ResourceManager.GetString("MenuItem_Title_Search", resourceCulture);
+                return ResourceManager.GetString("Dashboard_RemoveInterviewQuestion", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_Old_AreYouSureYouWantToRestore {
+        public static string HostUnreachable {
             get {
-                return ResourceManager.GetString("Troubleshooting_Old_AreYouSureYouWantToRestore", resourceCulture);
+                return ResourceManager.GetString("HostUnreachable", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_Old_CreatingInformationPackage {
+        public static string InternalServerError {
             get {
-                return ResourceManager.GetString("Troubleshooting_Old_CreatingInformationPackage", resourceCulture);
+                return ResourceManager.GetString("InternalServerError", resourceCulture);
+            }
+        }
+        
+        public static string InvalidEndpoint {
+            get {
+                return ResourceManager.GetString("InvalidEndpoint", resourceCulture);
+            }
+        }
+        
+        public static string Login_Online_Signin_Explanation_message {
+            get {
+                return ResourceManager.GetString("Login_Online_Signin_Explanation_message", resourceCulture);
+            }
+        }
+        
+        public static string Login_WrongPassword {
+            get {
+                return ResourceManager.GetString("Login_WrongPassword", resourceCulture);
+            }
+        }
+        
+        public static string Maintenance {
+            get {
+                return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        public static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_AboutApplication {
+            get {
+                return ResourceManager.GetString("Prefs_AboutApplication", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_ApplicationVersionTitle {
+            get {
+                return ResourceManager.GetString("Prefs_ApplicationVersionTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_Title {
+            get {
+                return ResourceManager.GetString("Prefs_Title", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Fail_UnexpectedException {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_UnexpectedException", resourceCulture);
             }
         }
         
@@ -831,27 +339,297 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Troubleshooting_Old_InformationPackageIsSuccessfullySent {
+        public static string Troubleshooting_Old_CreatingInformationPackage {
             get {
-                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageIsSuccessfullySent", resourceCulture);
+                return ResourceManager.GetString("Troubleshooting_Old_CreatingInformationPackage", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_Old_InformationPackageSizeWarningFormat {
+        public static string Troubleshooting_Old_AreYouSureYouWantToRestore {
             get {
-                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageSizeWarningFormat", resourceCulture);
+                return ResourceManager.GetString("Troubleshooting_Old_AreYouSureYouWantToRestore", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_Old_SendingInformationPackage {
+        public static string Troubleshooting_NoNewVersion {
             get {
-                return ResourceManager.GetString("Troubleshooting_Old_SendingInformationPackage", resourceCulture);
+                return ResourceManager.GetString("Troubleshooting_NoNewVersion", resourceCulture);
             }
         }
         
-        public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceled {
+        public static string Troubleshooting_NewVerisonExist {
             get {
-                return ResourceManager.GetString("Troubleshooting_Old_SendingOfInformationPackageIsCanceled", resourceCulture);
+                return ResourceManager.GetString("Troubleshooting_NewVerisonExist", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_CurrentVersion_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("Troubleshooting_CurrentVersion_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_BackupWasSaved {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupWasSaved", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_BackupErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupErrorMessage", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Backup {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Backup", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_UserLinkedToAnotherDevice_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Title", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_UserLinkedToAnotherDevice_Status {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Status", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_UserAuthentication_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_UserAuthentication_Title", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_UserAuthentication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_UserAuthentication_Description", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Upload_Title_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Title_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Receiving_Title_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Receiving_Title_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_LinkToErrors {
+            get {
+                return ResourceManager.GetString("Synchronization_LinkToErrors", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Upload_Interviews_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Interviews_Text", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Upload_Description_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Description_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Upload_CompletedAssignments_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_CompletedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_State_UploadedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_UploadedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_State_RejectedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_RejectedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_State_NewInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_NewInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_Description", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Questionnaires {
+            get {
+                return ResourceManager.GetString("Synchronization_Questionnaires", resourceCulture);
+            }
+        }
+        
+        public static string UpdatingQuestionnaires {
+            get {
+                return ResourceManager.GetString("UpdatingQuestionnaires", resourceCulture);
+            }
+        }
+        
+        public static string TransferringAssignments {
+            get {
+                return ResourceManager.GetString("TransferringAssignments", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_LockedAssignments_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_LockedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Interviews {
+            get {
+                return ResourceManager.GetString("Synchronization_Interviews", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Fail_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_Title", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Fail_State_UploadedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_UploadedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Fail_State_RejectedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_RejectedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Fail_State_NewInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_NewInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_Title", resourceCulture);
+            }
+        }
+        
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        public static string UpgradeRequired {
+            get {
+                return ResourceManager.GetString("UpgradeRequired", resourceCulture);
+            }
+        }
+        
+        public static string HeadquartersVersion {
+            get {
+                return ResourceManager.GetString("HeadquartersVersion", resourceCulture);
+            }
+        }
+        
+        public static string SupervisorVersion {
+            get {
+                return ResourceManager.GetString("SupervisorVersion", resourceCulture);
+            }
+        }
+        
+        public static string InterviewerVersion {
+            get {
+                return ResourceManager.GetString("InterviewerVersion", resourceCulture);
+            }
+        }
+        
+        public static string UnexpectedException {
+            get {
+                return ResourceManager.GetString("UnexpectedException", resourceCulture);
+            }
+        }
+        
+        public static string Unauthorized {
+            get {
+                return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Unknown_ErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Unknown_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Title {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Title", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_SendTabletInformation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendTabletInformation", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendingOfInformationPackageErrorMessage", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_RestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_RestoreConfirmation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoreConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Restore {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Restore", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_RestorationErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestorationErrorMessage", resourceCulture);
             }
         }
         
@@ -861,9 +639,117 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Warning {
+        public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceled {
             get {
-                return ResourceManager.GetString("Warning", resourceCulture);
+                return ResourceManager.GetString("Troubleshooting_Old_SendingOfInformationPackageIsCanceled", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Old_SendingInformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingInformationPackage", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Old_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        public static string Troubleshooting_Old_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Download_Description_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_Description_Format", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_BufferSizeSummary {
+            get {
+                return ResourceManager.GetString("Prefs_BufferSizeSummary", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_BufferSizeTitle {
+            get {
+                return ResourceManager.GetString("Prefs_BufferSizeTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_ConnectionSettings {
+            get {
+                return ResourceManager.GetString("Prefs_ConnectionSettings", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_DeviceIdTitle {
+            get {
+                return ResourceManager.GetString("Prefs_DeviceIdTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_GpsReceiveTimeoutSecSummary {
+            get {
+                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecSummary", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_InterviewSettings {
+            get {
+                return ResourceManager.GetString("Prefs_InterviewSettings", resourceCulture);
+            }
+        }
+        
+        public static string RequestCanceledByUser {
+            get {
+                return ResourceManager.GetString("RequestCanceledByUser", resourceCulture);
+            }
+        }
+        
+        public static string RequestTimeout {
+            get {
+                return ResourceManager.GetString("RequestTimeout", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Cancel {
+            get {
+                return ResourceManager.GetString("Synchronization_Cancel", resourceCulture);
+            }
+        }
+        
+        public static string ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_HttpResponseTimeoutTitle {
+            get {
+                return ResourceManager.GetString("Prefs_HttpResponseTimeoutTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_HttpResponseTimeoutSummary {
+            get {
+                return ResourceManager.GetString("Prefs_HttpResponseTimeoutSummary", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_GpsReceiveTimeoutSecTitle {
+            get {
+                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_EndpointTitle {
+            get {
+                return ResourceManager.GetString("Prefs_EndpointTitle", resourceCulture);
             }
         }
         
@@ -939,27 +825,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Diagnostics_ServerUrl {
-            get {
-                return ResourceManager.GetString("Diagnostics_ServerUrl", resourceCulture);
-            }
-        }
-        
         public static string MenuItem_Title_Diagnostics {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Diagnostics", resourceCulture);
-            }
-        }
-        
-        public static string MenuItem_Title_MapsSynchronization {
-            get {
-                return ResourceManager.GetString("MenuItem_Title_MapsSynchronization", resourceCulture);
-            }
-        }
-        
-        public static string MenuItem_Title_Maps {
-            get {
-                return ResourceManager.GetString("MenuItem_Title_Maps", resourceCulture);
             }
         }
         
@@ -1077,6 +945,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Diagnostics_BandwidthTestConnectionAbsent_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionAbsent_Title", resourceCulture);
+            }
+        }
+        
+        public static string Diagnostics_BandwidthTestConnectionNotOK_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionNotOK_Title", resourceCulture);
+            }
+        }
+        
         public static string Diagnostics_BandwidthTestConnectionOK_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionOK_Title", resourceCulture);
@@ -1089,27 +969,21 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Diagnostics_BandwidthTestPing_Title {
-            get {
-                return ResourceManager.GetString("Diagnostics_BandwidthTestPing_Title", resourceCulture);
-            }
-        }
-        
         public static string Diagnostics_BandwidthTestNetworkName_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_BandwidthTestNetworkName_Title", resourceCulture);
             }
         }
         
-        public static string Diagnostics_BandwidthTestConnectionAbsent_Title {
+        public static string Diagnostics_BandwidthTestPing_Title {
             get {
-                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionAbsent_Title", resourceCulture);
+                return ResourceManager.GetString("Diagnostics_BandwidthTestPing_Title", resourceCulture);
             }
         }
         
-        public static string Diagnostics_BandwidthTestConnectionNotOK_Title {
+        public static string Diagnostics_ServerUrl {
             get {
-                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionNotOK_Title", resourceCulture);
+                return ResourceManager.GetString("Diagnostics_ServerUrl", resourceCulture);
             }
         }
         
@@ -1155,51 +1029,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Synchronization_Of_AssignmentsFormat {
-            get {
-                return ResourceManager.GetString("Synchronization_Of_AssignmentsFormat", resourceCulture);
-            }
-        }
-        
-        public static string AssignmentsSynchronization {
-            get {
-                return ResourceManager.GetString("AssignmentsSynchronization", resourceCulture);
-            }
-        }
-        
         public static string Synchronization_Check_Obsolete_Questionnaires_Description {
             get {
                 return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires_Description", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_DownloadApplication {
-            get {
-                return ResourceManager.GetString("Synchronization_DownloadApplication", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_UploadingApplication {
-            get {
-                return ResourceManager.GetString("Synchronization_UploadingApplication", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_DownloadApplication_Description {
-            get {
-                return ResourceManager.GetString("Synchronization_DownloadApplication_Description", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_SendingApplication_Description {
-            get {
-                return ResourceManager.GetString("Synchronization_SendingApplication_Description", resourceCulture);
-            }
-        }
-        
-        public static string Synchronization_CheckNewVersionOfApplication {
-            get {
-                return ResourceManager.GetString("Synchronization_CheckNewVersionOfApplication", resourceCulture);
             }
         }
         
@@ -1215,24 +1047,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Interview_Loading_Description {
-            get {
-                return ResourceManager.GetString("Interview_Loading_Description", resourceCulture);
-            }
-        }
-        
-        public static string Interview_Creating {
-            get {
-                return ResourceManager.GetString("Interview_Creating", resourceCulture);
-            }
-        }
-        
-        public static string Interview_Creating_Description {
-            get {
-                return ResourceManager.GetString("Interview_Creating_Description", resourceCulture);
-            }
-        }
-        
         public static string Interview_Loading_With_Percents {
             get {
                 return ResourceManager.GetString("Interview_Loading_With_Percents", resourceCulture);
@@ -1242,6 +1056,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_Fail_State_FailedToProcess_Format {
             get {
                 return ResourceManager.GetString("Synchronization_Fail_State_FailedToProcess_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_DoneWithErrors_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_DoneWithErrors_Title", resourceCulture);
             }
         }
         
@@ -1281,15 +1101,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Synchronization_UploadAuditLog {
+        public static string Synchronization_Done {
             get {
-                return ResourceManager.GetString("Synchronization_UploadAuditLog", resourceCulture);
+                return ResourceManager.GetString("Synchronization_Done", resourceCulture);
             }
         }
         
-        public static string Synchronization_ReceivingAuditLog {
+        public static string Dashboard_Start {
             get {
-                return ResourceManager.GetString("Synchronization_ReceivingAuditLog", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Start", resourceCulture);
             }
         }
         
@@ -1323,15 +1143,57 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_AssignmentCard_SubTitleCountdownFormat {
+        public static string Dashboard_Discard {
             get {
-                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdownFormat", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Discard", resourceCulture);
             }
         }
         
         public static string FailedToCreateInterview {
             get {
                 return ResourceManager.GetString("FailedToCreateInterview", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Open {
+            get {
+                return ResourceManager.GetString("Dashboard_Open", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ShowLocation {
+            get {
+                return ResourceManager.GetString("Dashboard_ShowLocation", resourceCulture);
+            }
+        }
+        
+        public static string DashboardItem_AssignmentLeftComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignmentLeftComment", resourceCulture);
+            }
+        }
+        
+        public static string DashboardItem_AssignmentCreatedComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignmentCreatedComment", resourceCulture);
+            }
+        }
+        
+        public static string AssignmentsSynchronization {
+            get {
+                return ResourceManager.GetString("AssignmentsSynchronization", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Of_AssignmentsFormat {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_AssignmentsFormat", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_AssignmentCard_SubTitleCountdownFormat {
+            get {
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdownFormat", resourceCulture);
             }
         }
         
@@ -1344,36 +1206,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
             get {
                 return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_Open {
-            get {
-                return ResourceManager.GetString("Dashboard_Open", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_ViewIssues {
-            get {
-                return ResourceManager.GetString("Dashboard_ViewIssues", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_Reopen {
-            get {
-                return ResourceManager.GetString("Dashboard_Reopen", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_ShowLocation {
-            get {
-                return ResourceManager.GetString("Dashboard_ShowLocation", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_Discard {
-            get {
-                return ResourceManager.GetString("Dashboard_Discard", resourceCulture);
             }
         }
         
@@ -1401,15 +1233,39 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server {
+        public static string Dashboard_Reopen {
             get {
-                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Reopen", resourceCulture);
             }
         }
         
-        public static string MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format {
+        public static string Dashboard_ViewIssues {
             get {
-                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format", resourceCulture);
+                return ResourceManager.GetString("Dashboard_ViewIssues", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_StartNewInterview {
+            get {
+                return ResourceManager.GetString("Dashboard_StartNewInterview", resourceCulture);
+            }
+        }
+        
+        public static string Maps_Title {
+            get {
+                return ResourceManager.GetString("Maps_Title", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_Maps {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Maps", resourceCulture);
+            }
+        }
+        
+        public static string MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server", resourceCulture);
             }
         }
         
@@ -1425,9 +1281,57 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format", resourceCulture);
+            }
+        }
+        
+        public static string Maps_Synchronization_Success_Description {
+            get {
+                return ResourceManager.GetString("Maps_Synchronization_Success_Description", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_DownloadApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadApplication", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_UploadingApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadingApplication", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_CheckNewVersionOfApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_CheckNewVersionOfApplication", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_DownloadApplication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadApplication_Description", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_SendingApplication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_SendingApplication_Description", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_SearchResult {
             get {
                 return ResourceManager.GetString("Dashboard_SearchResult", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_SearchWatermark {
+            get {
+                return ResourceManager.GetString("Dashboard_SearchWatermark", resourceCulture);
             }
         }
         
@@ -1443,21 +1347,27 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_Searching {
+        public static string MenuItem_Title_Search {
             get {
-                return ResourceManager.GetString("Dashboard_Searching", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_SearchWatermark {
-            get {
-                return ResourceManager.GetString("Dashboard_SearchWatermark", resourceCulture);
+                return ResourceManager.GetString("MenuItem_Title_Search", resourceCulture);
             }
         }
         
         public static string Dashboard_Search_ExitSearch {
             get {
                 return ResourceManager.GetString("Dashboard_Search_ExitSearch", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_UploadAuditLog {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadAuditLog", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_ReceivingAuditLog {
+            get {
+                return ResourceManager.GetString("Synchronization_ReceivingAuditLog", resourceCulture);
             }
         }
         
@@ -1491,6 +1401,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MenuItem_Title_MapsSynchronization {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_MapsSynchronization", resourceCulture);
+            }
+        }
+        
         public static string Prefs_AllowSyncWithHq {
             get {
                 return ResourceManager.GetString("Prefs_AllowSyncWithHq", resourceCulture);
@@ -1503,15 +1419,39 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string DashboardItem_Responsible {
+            get {
+                return ResourceManager.GetString("DashboardItem_Responsible", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_SupervisorShouldDoOnlineSync_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync_Title", resourceCulture);
+            }
+        }
+        
+        public static string LocationPermissionRequired {
+            get {
+                return ResourceManager.GetString("LocationPermissionRequired", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_SupervisorShouldDoOnlineSync {
+            get {
+                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync", resourceCulture);
+            }
+        }
+        
         public static string Prefs_AllowSyncWithHq_Summary_Disabled {
             get {
                 return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary_Disabled", resourceCulture);
             }
         }
         
-        public static string DashboardItem_Responsible {
+        public static string Synchronization_UserDoNotBelongToTeam {
             get {
-                return ResourceManager.GetString("DashboardItem_Responsible", resourceCulture);
+                return ResourceManager.GetString("Synchronization_UserDoNotBelongToTeam", resourceCulture);
             }
         }
         
@@ -1554,6 +1494,30 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string SelectResponsible_CancelButtonText {
             get {
                 return ResourceManager.GetString("SelectResponsible_CancelButtonText", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Searching {
+            get {
+                return ResourceManager.GetString("Dashboard_Searching", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Creating {
+            get {
+                return ResourceManager.GetString("Interview_Creating", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Loading_Description {
+            get {
+                return ResourceManager.GetString("Interview_Loading_Description", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Creating_Description {
+            get {
+                return ResourceManager.GetString("Interview_Creating_Description", resourceCulture);
             }
         }
         
@@ -1638,6 +1602,42 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Diagnostics_SendLogs_Success {
             get {
                 return ResourceManager.GetString("Diagnostics_SendLogs_Success", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Update_Interviews_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Update_Interviews_Title", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_State_InterviewsPartialDownloaded_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_InterviewsPartialDownloaded_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_PartialInterviews {
+            get {
+                return ResourceManager.GetString("Synchronization_PartialInterviews", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Success_State_PartialUploadInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_PartialUploadInterviews_Format", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Fail_State_InterviewsPartialDownloaded_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_InterviewsPartialDownloaded_Format", resourceCulture);
+            }
+        }
+        
+        public static string InvalidEndpointShort {
+            get {
+                return ResourceManager.GetString("InvalidEndpointShort", resourceCulture);
             }
         }
     }
