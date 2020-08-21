@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePrototypeProviderTests
 {
@@ -17,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
         {
             return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, 
                 new InterviewExpressionStateUpgrader(),
-                Mock.Of<ILogger<InterviewExpressionStatePrototypeProvider>>());
+                Mock.Of<ILoggerProvider>());
         }
 
         protected static Mock<IQuestionnaireAssemblyAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)

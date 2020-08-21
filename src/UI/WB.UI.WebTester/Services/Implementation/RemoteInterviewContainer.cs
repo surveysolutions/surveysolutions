@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Autofac;
-using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -48,7 +47,7 @@ namespace WB.UI.WebTester.Services.Implementation
                         identity, null);
                 var prototype =  new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
                     new InterviewExpressionStateUpgrader(),
-                    this.scope.Resolve<ILogger<InterviewExpressionStatePrototypeProvider>>());
+                    this.scope.Resolve<ILoggerProvider>());
 
                 if (questionnaire == null)
                     throw new InvalidOperationException("Questionnaire must not be null.");
