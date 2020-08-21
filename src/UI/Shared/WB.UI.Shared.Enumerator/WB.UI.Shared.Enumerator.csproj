@@ -62,6 +62,7 @@
     <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
+    <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />
     <Compile Include="CustomBindings\ViewSetGpsLocationBinding.cs" />
     <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
@@ -244,6 +245,7 @@
     <AndroidResource Include="Resources\anim\slide_from_left.xml" />
     <AndroidResource Include="Resources\anim\slide_from_right.xml" />
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
+    <AndroidResource Include="Resources\values\theme.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\question_title_text.xml">
@@ -907,14 +909,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values-v21\fonts.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-v21\styles.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\cmaps\78-EUC-H.bcmap" />
     <AndroidAsset Include="Assets\pdfjs\web\cmaps\78-EUC-V.bcmap" />
     <AndroidAsset Include="Assets\pdfjs\web\cmaps\78-H.bcmap" />
@@ -1408,6 +1402,7 @@
     <AndroidResource Include="Resources\drawable\lock_icon.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\values-v21" />
     <Folder Include="Services\Resources\" />
   </ItemGroup>
   <ItemGroup>

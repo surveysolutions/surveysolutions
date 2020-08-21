@@ -42,7 +42,7 @@
             style="@style/Login_ErrorMessage"
             android:id="@+id/LoginPage_error_message"
             android:layout_width="wrap_content"
-            local:MvxBind="Text ErrorMessage; Visible Or(Not(IsUserValid), IsOnlineLoginButtonVisible)" />
+            local:MvxBind="Text ErrorMessage; Visible IsOnlineLoginButtonVisible" />
 
         <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -58,14 +58,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 local:passwordToggleEnabled="true"
-                local:hintEnabled="false">
+                local:hintEnabled="true"
+                local:errorEnabled="true"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                local:MvxBind="Hint Localization('PasswordHint'); Error ErrorMessage">
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/Login_Password_Editor"
                 android:inputType="textPassword"
                 android:id="@+id/LoginPage_password"
-                local:MvxBind="Text Password; 
-                  Watermark Localization('PasswordHint'); 
-                  BackgroundStyle ValidationStyleBackground(IsUserValid);"/>
+                local:MvxBind="Text Password;"/>
           </com.google.android.material.textfield.TextInputLayout>
 
           <LinearLayout android:layout_width="wrap_content"

@@ -13,6 +13,7 @@ using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
+using Google.Android.Material.TextField;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
@@ -131,6 +132,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<NumericEditText>("Value", (view) => new NumericValueBinding(view));
             registry.RegisterCustomBindingFactory<NumericEditText>("Disabled", (view) => new NumericDisableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Watermark", (view) => new TextViewWatermarkBinding(view));
+            registry.RegisterCustomBindingFactory<TextInputLayout>("Hint", (view) => new TextInputLayoutHintBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("IsSelectedYesNoOptionColor", (view) => new TextViewIsSelectedYesNoOptionColorBinding(view));
