@@ -63,7 +63,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 local:MvxBind="Hint Localization('PasswordHint'); Error ErrorMessage">
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/Login_Password_Editor"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
                 android:inputType="textPassword"
                 android:id="@+id/LoginPage_password"
                 local:MvxBind="Text Password;"/>

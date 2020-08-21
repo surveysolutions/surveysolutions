@@ -256,6 +256,9 @@
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
       <Version>2.3.4.3</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Google.Android.Material">
+      <Version>1.1.0.2-rc3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\map_dashboard.axml">
