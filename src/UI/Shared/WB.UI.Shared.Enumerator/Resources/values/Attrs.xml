@@ -5,6 +5,7 @@
         <attr name="colorPrimary" format="color|reference" />
         <attr name="colorPrimaryDark" format="color|reference" />
         <attr name="colorAccent" format="color|reference" />
+        <attr name="colorError" format="color|reference" />
     </declare-styleable>
   <declare-styleable name="FlowLayout">
     <attr name="horizontalSpacing" format="dimension"/>

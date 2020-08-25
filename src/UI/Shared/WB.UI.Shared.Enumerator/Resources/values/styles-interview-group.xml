@@ -32,7 +32,6 @@
     <item name="android:textStyle">bold</item>
     <item name="android:gravity">left|center_vertical</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
-    <item name="android:stateListAnimator">@null</item>
     <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>
