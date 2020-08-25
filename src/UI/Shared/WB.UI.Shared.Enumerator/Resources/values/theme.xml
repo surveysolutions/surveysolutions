@@ -9,10 +9,10 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnSurface">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/darkActionBar</item>
         <item name="colorAccent">@color/group_started</item>
         <item name="colorError">@color/errorTextColor</item>
-        
         <item name="alertDialogTheme">@style/StyledDialog</item>
         <!-- elements -->
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
@@ -24,7 +24,6 @@
         <item name="spinnerStyle">@style/SpinnerTheme</item>
         <item name="spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
         <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
-
         <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
     </style>
 

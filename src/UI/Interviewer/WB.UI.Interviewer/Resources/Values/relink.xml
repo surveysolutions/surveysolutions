@@ -43,14 +43,13 @@
   <style name="Relink_Button">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:padding">@dimen/Login_Button_padding</item>
-    <item name="android:background">@drawable/group_with_invalid_answers</item>
     <item name="android:layout_centerHorizontal">true</item>
   </style>
 
-  <style name="Relink_Cancel_Button" parent="Relink_Button">
-    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
-    <item name="android:textColor">@android:color/black</item>
-    <item name="android:background">@drawable/transparent_input_button</item>
-  </style>
+    <style name="Relink_Cancel_Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 </resources>
