@@ -132,4 +132,14 @@
   <data name="YesNo" xml:space="preserve">
     <value>Да / Нет</value>
   </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Содержание</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Внимание</value>
+  </data>
+
 </root>
