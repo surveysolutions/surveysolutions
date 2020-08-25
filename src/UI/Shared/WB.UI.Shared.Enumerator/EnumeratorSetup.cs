@@ -13,6 +13,7 @@ using AndroidX.DrawerLayout.Widget;
 using AndroidX.RecyclerView.Widget;
 using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
+using Google.Android.Material.Button;
 using Google.Android.Material.TextField;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
@@ -147,8 +148,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<View>("BackgroundColor", textView => new ViewBackgroundColorBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
-            registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
-            registry.RegisterCustomBindingFactory<Button>("ToParentButtonGroupStyle", button => new ToParentGroupButtonBinding(button));
+            registry.RegisterCustomBindingFactory<MaterialButton>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
+            registry.RegisterCustomBindingFactory<MaterialButton>("ToParentButtonGroupStyle", button => new ToParentButtonGroupStyleButtonBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
             registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("OnDone", view => new TextViewOnDoneBinding(view));
