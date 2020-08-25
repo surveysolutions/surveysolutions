@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             return new InterviewSummaryCompositeDenormalizer(
                 new EventBusSettings(),
                 interviewStatuses,
-                new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
+                new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage, Create.Storage.NewMemoryCache()),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(), 

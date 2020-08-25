@@ -181,7 +181,8 @@ namespace WB.Tests.Abc.TestFactories
             => new CumulativeChartDenormalizer(
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
+                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>(),
+                Create.Storage.NewMemoryCache());
 
         public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
