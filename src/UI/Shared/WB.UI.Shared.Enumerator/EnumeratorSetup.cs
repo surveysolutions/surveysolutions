@@ -148,7 +148,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<View>("BackgroundColor", textView => new ViewBackgroundColorBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
-            registry.RegisterCustomBindingFactory<MaterialButton>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
+            registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
             registry.RegisterCustomBindingFactory<MaterialButton>("ToParentButtonGroupStyle", button => new ToParentButtonGroupStyleButtonBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
             registry.RegisterCustomBindingFactory<View>("HideKeyboardOnClick", view => new ViewHideKeyboardOnClickBinding(view));

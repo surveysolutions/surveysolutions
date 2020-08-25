@@ -153,12 +153,10 @@
     <item name="android:background">@android:color/transparent</item>
   </style>
 
-  <style name="Interview_Sidebar_Sections_ToggleButton" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:background">@drawable/sidebar_button</item>
+  <style name="Interview_Sidebar_Sections_ToggleButton" parent="Widget.MaterialComponents.Button.TextButton">
     <item name="android:textColor">@color/sections_list_text_color</item>
     <item name="android:textSize">@dimen/textsize_30</item>
     <item name="android:fontFamily">sans-serif-light</item>
-    <item name="android:stateListAnimator">@null</item>
   </style>
   
   <style name="Interview_Sidebar_Sections_Section_Title">
