@@ -9,5 +9,6 @@
           android:layout_marginBottom="@dimen/Interview_Question_Option_vertical_padding"
           local:MvxBind="Hidden Not(MaxAnswersCountMessage); 
                          Text MaxAnswersCountMessage; 
-                         HideKeyboardOnClick ." 
+                         HideKeyboardOnClick .;
+                         Tag Format('tv_MaxAnswers_Message_', Identity)" 
 />
