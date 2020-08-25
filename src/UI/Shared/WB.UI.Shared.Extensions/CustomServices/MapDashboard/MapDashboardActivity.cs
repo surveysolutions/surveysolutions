@@ -1,13 +1,12 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Support.V4.Widget;
-using Android.Support.V7.App;
 using Android.Views;
+using AndroidX.AppCompat.App;
+using AndroidX.AppCompat.Widget;
+using AndroidX.DrawerLayout.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using Toolbar = androidx.appcompat.widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 {
