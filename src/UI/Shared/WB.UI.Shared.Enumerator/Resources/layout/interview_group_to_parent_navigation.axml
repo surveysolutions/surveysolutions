@@ -4,7 +4,8 @@
                  style="@style/Interview_Previous_Group_Navigation_Layout"
                  local:MvxBind="HideKeyboardOnClick .">
   <Button style="@style/Interview_Previous_Group_Navigation_Button"
-          android:drawablePadding="@dimen/button_shadow_margin"
+          local:icon="@drawable/to_parent_icon"
+          local:strokeWidth="2dp"
           local:MvxBind="
             HideKeyboardOnClick .; 
             Click NavigateCommand; 

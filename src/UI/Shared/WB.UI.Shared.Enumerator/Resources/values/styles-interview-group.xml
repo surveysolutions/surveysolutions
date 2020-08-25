@@ -46,4 +46,34 @@
         <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
         <item name="android:background">@color/group_plain_roster_background</item>
     </style>
+
+    <style name="Interview_Previous_Group_Navigation_Button" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingRight">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+        <item name="android:paddingLeft">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+        <item name="android:paddingTop">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+        <item name="android:paddingBottom">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
+        <item name="android:textSize">@dimen/textsize_12</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    
+
+    <style name="Interview_Group_Navigation_Button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingRight">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+        <item name="android:paddingLeft">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+        <item name="android:paddingTop">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+        <item name="android:paddingBottom">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
+        <item name="android:textSize">@dimen/textsize_12</item>
+        <item name="android:textColor">@color/group_started</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
 </resources>
