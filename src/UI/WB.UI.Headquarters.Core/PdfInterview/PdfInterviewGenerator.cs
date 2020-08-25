@@ -366,7 +366,7 @@ namespace WB.UI.Headquarters.PdfInterview
             var row = table.AddRow();
             Paragraph paragraph = row[2].AddParagraph();
             paragraph.Style = PdfStyles.StaticTextTitle;
-            paragraph.AddFormattedText(staticText.Title.Text.RemoveHtmlTags(), PdfStyles.StaticTextTitle);
+            paragraph.AddWrapFormattedText(staticText.Title.Text.RemoveHtmlTags(), PdfStyles.StaticTextTitle);
 
             var attachmentInfo = questionnaire.GetAttachmentForEntity(staticText.Identity.Id);
             if (attachmentInfo != null)
@@ -387,15 +387,15 @@ namespace WB.UI.Headquarters.PdfInterview
                 }
                 else if (attachment.IsVideo())
                 {
-                    paragraph.AddFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
                 }
                 else if (attachment.IsAudio())
                 {
-                    paragraph.AddFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
                 }
                 else if (attachment.IsPdf())
                 {
-                    paragraph.AddFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
                 }
             }
 
@@ -408,7 +408,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var paragraph = section.AddParagraph();
             paragraph.Style = PdfStyles.GroupHeader;
-            paragraph.AddText(title);
+            paragraph.AddWrappedText(title);
             
             if (@group is InterviewTreeRoster roster)
             {
@@ -427,7 +427,7 @@ namespace WB.UI.Headquarters.PdfInterview
             var paragraph = section.AddParagraph();
             paragraph.Style = PdfStyles.SectionHeader;
             paragraph.AddBookmark(title);
-            paragraph.AddText(title);
+            paragraph.AddWrappedText(title);
 
             return GenerateQuestionsTable(section);
         }
@@ -476,7 +476,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 {
                     var audioQuestion = question.GetAsInterviewTreeAudioQuestion();
                     var audioAnswer = audioQuestion.GetAnswer();
-                    paragraph.AddFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", PdfStyles.QuestionAnswer);
                 }
                 else if (question.IsMultimedia)
                 {
@@ -486,12 +486,13 @@ namespace WB.UI.Headquarters.PdfInterview
                         () => imageFileStorage.GetInterviewBinaryData(interview.Id, fileName));
                     var image = paragraph.AddImage(imageSource);
                     image.Width = Unit.FromPoint(300);
+                    image.LockAspectRatio = true;
                 }
                 else if (question.IsArea)
                 {
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
                     var areaAnswer = areaQuestion.GetAnswer().Value;
-                    paragraph.AddFormattedText(areaAnswer.ToString(), PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText(areaAnswer.ToString(), PdfStyles.QuestionAnswer);
                 }
                 else if (question.IsGps)
                 {
@@ -511,8 +512,8 @@ namespace WB.UI.Headquarters.PdfInterview
                         {
                             var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, answerOption.Value, null);
                             var optionAnswer = answerOption.Yes ? Common.Yes : (answerOption.No ? Common.No : WebInterviewUI.Interview_Overview_NotAnswered);
-                            paragraph.AddFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
-                            paragraph.AddFormattedText(option.Title, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
+                            paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -523,7 +524,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     foreach (var checkedValue in multiOptionQuestion.GetAnswer().CheckedValues)
                     {
                         var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, checkedValue, null);
-                        paragraph.AddFormattedText(option.Title, PdfStyles.QuestionAnswer);
+                        paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer);
                         paragraph.AddLineBreak();
                     }
                 }
@@ -538,7 +539,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     {
                         foreach (var answer in checkedAnswers)
                         {
-                            paragraph.AddFormattedText(answer, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(answer, PdfStyles.QuestionAnswer);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -556,7 +557,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     {
                         foreach (var answer in refListOptions)
                         {
-                            paragraph.AddFormattedText(answer.Text, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(answer.Text, PdfStyles.QuestionAnswer);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -569,19 +570,19 @@ namespace WB.UI.Headquarters.PdfInterview
                     {
                         foreach (var answer in answers)
                         {
-                            paragraph.AddFormattedText(answer.Text, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(answer.Text, PdfStyles.QuestionAnswer);
                             paragraph.AddLineBreak();
                         }
                     }
                 }
                 else
                 {
-                    paragraph.AddFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer);
                 }
             }
             else
             {
-                paragraph.AddFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, PdfStyles.QuestionNotAnswered);
+                paragraph.AddWrapFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, PdfStyles.QuestionNotAnswered);
             }
 
             WriteValidateData(row[2], question, interview);
@@ -601,13 +602,13 @@ namespace WB.UI.Headquarters.PdfInterview
 
                 foreach (var errorCondition in validateable.FailedErrors)
                 {
-                    paragraph.AddFormattedText(PdfInterviewRes.Error, PdfStyles.ValidateErrorTitle);
+                    paragraph.AddWrapFormattedText(PdfInterviewRes.Error, PdfStyles.ValidateErrorTitle);
                     if (isNeedAddErrorNumber)
-                        paragraph.AddFormattedText($" [{errorCondition.FailedConditionIndex}]", PdfStyles.ValidateErrorTitle);
-                    paragraph.AddFormattedText(": ", PdfStyles.ValidateErrorTitle);
+                        paragraph.AddWrapFormattedText($" [{errorCondition.FailedConditionIndex}]", PdfStyles.ValidateErrorTitle);
+                    paragraph.AddWrapFormattedText(": ", PdfStyles.ValidateErrorTitle);
 
                     var errorMessage = validateable.ValidationMessages[errorCondition.FailedConditionIndex];
-                    paragraph.AddFormattedText(errorMessage.Text.RemoveHtmlTags(), PdfStyles.ValidateErrorMessage);
+                    paragraph.AddWrapFormattedText(errorMessage.Text.RemoveHtmlTags(), PdfStyles.ValidateErrorMessage);
 
                     if (validateable.FailedErrors.Last() != errorCondition)
                         paragraph.AddLineBreak();
@@ -623,13 +624,13 @@ namespace WB.UI.Headquarters.PdfInterview
 
                 foreach (var warningCondition in validateable.FailedWarnings)
                 {
-                    paragraph.AddFormattedText(PdfInterviewRes.Warning, PdfStyles.ValidateWarningTitle);
+                    paragraph.AddWrapFormattedText(PdfInterviewRes.Warning, PdfStyles.ValidateWarningTitle);
                     if (isNeedAddWarningNumber)
-                        paragraph.AddFormattedText($" [{warningCondition.FailedConditionIndex}]", PdfStyles.ValidateWarningTitle);
-                    paragraph.AddFormattedText(": ", PdfStyles.ValidateWarningTitle);
+                        paragraph.AddWrapFormattedText($" [{warningCondition.FailedConditionIndex}]", PdfStyles.ValidateWarningTitle);
+                    paragraph.AddWrapFormattedText(": ", PdfStyles.ValidateWarningTitle);
 
                     var warningMessage = validateable.ValidationMessages[warningCondition.FailedConditionIndex];
-                    paragraph.AddFormattedText(warningMessage.Text.RemoveHtmlTags(), PdfStyles.ValidateWarningMessage);
+                    paragraph.AddWrapFormattedText(warningMessage.Text.RemoveHtmlTags(), PdfStyles.ValidateWarningMessage);
                     
                     if (validateable.FailedWarnings.Last() != warningCondition)
                         paragraph.AddLineBreak();
@@ -643,14 +644,14 @@ namespace WB.UI.Headquarters.PdfInterview
             {
                 var commentsParagraph = tableCell.AddParagraph();
                 commentsParagraph.Style = PdfStyles.CommentTitle;
-                commentsParagraph.AddFormattedText(PdfInterviewRes.Comments.ToUpper(), PdfStyles.CommentTitle);
+                commentsParagraph.AddWrapFormattedText(PdfInterviewRes.Comments.ToUpper(), PdfStyles.CommentTitle);
 
                 foreach (var comment in question.AnswerComments)
                 {
                     commentsParagraph.AddLineBreak();
-                    commentsParagraph.AddFormattedText(comment.CommentTime.ToString(DateTimeFormat), PdfStyles.CommentDateTime);
-                    commentsParagraph.AddFormattedText($" {comment.UserRole.ToUiString()}: ", PdfStyles.CommentAuthor);
-                    commentsParagraph.AddFormattedText(comment.Comment, PdfStyles.CommentMessage);
+                    commentsParagraph.AddWrapFormattedText(comment.CommentTime.ToString(DateTimeFormat), PdfStyles.CommentDateTime);
+                    commentsParagraph.AddWrapFormattedText($" {comment.UserRole.ToUiString()}: ", PdfStyles.CommentAuthor);
+                    commentsParagraph.AddWrapFormattedText(comment.Comment, PdfStyles.CommentMessage);
                 }
             }
         }
@@ -658,35 +659,26 @@ namespace WB.UI.Headquarters.PdfInterview
 
     public static class ParagraphExtensions
     {
-        public static Text AddWrappedText(this Paragraph paragraph, string text)
+        public static void AddWrappedText(this Paragraph paragraph, string text)
         {
-            text = WrapText(text);
-            return paragraph.AddText(text);
-        }
-
-        public static FormattedText AddWrapFormattedText(this Paragraph paragraph, string text, string style)
-        {
-            text = WrapText(text);
-            return paragraph.AddFormattedText(text, style);
-        }
-
-        private static string WrapText(string text)
-        {
-            var strings = text.Split(' ');
-            foreach (var s in strings)
+            for (int i = 0; i < text.Length; i+=15)
             {
-                if (s.Length > 15)
-                {
-                    var wrapString = s;
-                    for (int i = 15; i < wrapString.Length; i += 15)
-                    {
-                        wrapString = wrapString.Insert(i, "\u200C");
-                    }
-                    text = text.Replace(s, wrapString);
-                }
+                var str = i + 15 > text.Length
+                    ? text.Substring(i)
+                    : text.Substring(i, 15);
+                paragraph.AddText(str);
             }
+        }
 
-            return text;
+        public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style)
+        {
+            for (int i = 0; i < text.Length; i+=15)
+            {
+                var str = i + 15 > text.Length
+                    ? text.Substring(i)
+                    : text.Substring(i, 15);
+                paragraph.AddFormattedText(str, style);
+            }
         }
     }
     
