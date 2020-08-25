@@ -25,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             control.SetBackgroundColor(new Color(color));
         }
 
-        private static int GetGroupBackgroundResourceIdByStatus(GroupStatus status)
+        private int GetGroupBackgroundResourceIdByStatus(GroupStatus status)
         {
             switch (status)
             {

@@ -71,7 +71,7 @@
         <item name="android:paddingBottom">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
         <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
         <item name="android:textSize">@dimen/textsize_12</item>
-        <item name="android:textColor">@color/group_started</item>
+        <item name="android:textColor">@color/group_title_text</item>
         <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">0.1</item>
         <item name="android:textAllCaps">true</item>

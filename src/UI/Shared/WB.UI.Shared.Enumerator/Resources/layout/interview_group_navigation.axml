@@ -3,7 +3,7 @@
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/Interview_Previous_Group_Navigation_Layout"
                  local:MvxBind="HideKeyboardOnClick .">
-  <Button style="@style/Interview_Previous_Group_Navigation_Button"
+  <Button style="@style/Interview_Group_Navigation_Button"
     local:MvxBind="
       HideKeyboardOnClick .; 
       Click NavigateCommand; 
