@@ -1,10 +1,7 @@
-using System;
+#nullable enable
 using System.Windows.Input;
 using Android.Views;
 using Google.Android.Material.TextField;
-using MvvmCross.Binding;
-using MvvmCross.Platforms.Android.Binding.Target;
-using MvvmCross.WeakSubscription;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
