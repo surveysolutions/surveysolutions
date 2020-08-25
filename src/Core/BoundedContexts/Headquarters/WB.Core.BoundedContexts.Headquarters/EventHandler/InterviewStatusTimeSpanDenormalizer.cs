@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>
     {
-        private readonly InterviewExportedAction[] beginStatusesForCompleteStatus = new[]
+        private static readonly InterviewExportedAction[] beginStatusesForCompleteStatus = new[]
         {
             InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor
         };
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
       
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCompleted> evnt)
         {
-            var lastAssignOfRejectStatus = state.InterviewCommentedStatuses.LastOrDefault(s => this.beginStatusesForCompleteStatus.Contains(s.Status));
+            var lastAssignOfRejectStatus = state.InterviewCommentedStatuses.LastOrDefault(s => beginStatusesForCompleteStatus.Contains(s.Status));
 
             if (lastAssignOfRejectStatus == null)
                 return state;
