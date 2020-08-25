@@ -4,11 +4,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using Toolbar = androidx.appcompat.widget.Toolbar;
+using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
