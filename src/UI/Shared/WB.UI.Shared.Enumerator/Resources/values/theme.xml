@@ -11,6 +11,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnSurface">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/darkActionBar</item>
+        <item name="colorOnPrimary">@color/group_title_text</item>
         <item name="colorAccent">@color/group_started</item>
         <item name="colorError">@color/errorTextColor</item>
         <item name="alertDialogTheme">@style/StyledDialog</item>
