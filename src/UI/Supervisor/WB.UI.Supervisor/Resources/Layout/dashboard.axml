@@ -18,15 +18,16 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/appbar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:id="@+id/appbar">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimaryDark"
-                local:layout_scrollFlags="enterAlways|scroll" 
+                local:layout_scrollFlags="enterAlways|scroll"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 local:MvxBind="ColorByInterviewStatus TypeOfInterviews; Title DashboardTitle">
             </androidx.appcompat.widget.Toolbar>
 

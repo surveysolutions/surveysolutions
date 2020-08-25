@@ -106,7 +106,7 @@ namespace WB.UI.Supervisor.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
-            return base.OnCreateOptionsMenu(menu);
+            return true;
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
