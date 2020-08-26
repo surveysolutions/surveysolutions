@@ -262,10 +262,6 @@
     <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_off_disabled_holo_light.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_off_disabled_holo_light.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -423,20 +419,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_edit_text_holo_light.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\theme_blue_light_item_background_holo_light.xml" />
@@ -488,48 +471,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_disabled_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_disabled_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_disabled_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_normal_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_pressed_holo_light.9.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_focused_holo_light.png" />
@@ -647,21 +588,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_activated_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_default_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_focused_holo_light.9.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview.axml">
@@ -1431,9 +1357,6 @@
     <AndroidResource Include="Resources\drawable\question_option_background_protected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_holo_light.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_holo_light.png" />
