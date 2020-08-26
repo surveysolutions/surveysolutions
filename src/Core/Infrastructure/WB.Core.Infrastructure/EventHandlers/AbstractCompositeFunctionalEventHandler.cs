@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -19,10 +19,12 @@ namespace WB.Core.Infrastructure.EventHandlers
         where TEntity : class, IReadSideRepositoryEntity
         where TStorage : class, IReadSideStorage<TEntity>
     {
+        private readonly EventBusSettings busSettings;
         public abstract ICompositeFunctionalPartEventHandler<TEntity, TStorage>[] Handlers { get; }
 
-        protected AbstractCompositeFunctionalEventHandler(TStorage readSideStorage) : base(readSideStorage)
+        protected AbstractCompositeFunctionalEventHandler(EventBusSettings busSettings, TStorage readSideStorage) : base(readSideStorage)
         {
+            this.busSettings = busSettings;
         }
 
         protected override bool Handles(IUncommittedEvent evt)
@@ -57,6 +59,9 @@ namespace WB.Core.Infrastructure.EventHandlers
 
             foreach (var functionalEventHandler in Handlers)
             {
+                if(busSettings.DisabledEventHandlerTypes.Contains(functionalEventHandler.GetType())) 
+                    continue;
+
                 if (!Handles(evt, functionalEventHandler))
                     continue;
                 
