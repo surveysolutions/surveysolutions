@@ -31,4 +31,9 @@
     <attr name="numbersOnly" format="boolean" />
     <attr name="useGroupSeparator" format="boolean" />
   </declare-styleable>
+    <declare-styleable name="Widget.MaterialComponents.Button.OutlinedButton">
+        <attr name="strokeColor" format="color|reference"/>              
+        <attr name="backgroundTint" format="color|reference"/>              
+        <attr name="rippleColor" format="color|reference"/>              
+    </declare-styleable>
 </resources>
