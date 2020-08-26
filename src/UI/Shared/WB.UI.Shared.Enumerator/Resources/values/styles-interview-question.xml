@@ -260,15 +260,12 @@
         <item name="android:layout_gravity">center_vertical</item>
   </style>
 
-    <style name="Interview_Question_Answer_YesNo_Option" parent="Interview_Entity_BasicFont">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:paddingLeft">@dimen/one</item>
-    <item name="android:paddingRight">@dimen/one</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:textColor">@drawable/question_option_text_color</item>
-    <item name="android:layout_gravity">center_vertical</item>
+  <style name="Interview_Question_Answer_YesNo_Option" parent="Interview_Entity_BasicFont">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingLeft">@dimen/Interview_Question_YesNo_paddingLeft</item>
+        <item name="android:gravity">center</item>
   </style> 
 
   <style name="Interview_Question_YesNo_Title" parent="Interview_Entity_BasicFont">
