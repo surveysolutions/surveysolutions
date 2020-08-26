@@ -87,9 +87,11 @@
     <item name="android:textAllCaps">true</item>
     <item name="android:background">@drawable/group_completed</item>
   </style>
-  <style name="Diagnostic_Transparent_Button" parent="Login_Button">
-    <item name="android:textColor">@color/btn_default</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:background">@drawable/transparent_input_button</item>
+  <style name="Diagnostic_Transparent_Button" parent="Widget.MaterialComponents.Button.TextButton">
+      <item name="android:layout_width">wrap_content</item>
+      <item name="android:layout_height">wrap_content</item>
+      <item name="android:textColor">@color/btn_default</item>
+      <item name="android:textAllCaps">true</item>
+      <item name="android:letterSpacing">0.1</item>
   </style>
 </resources>
