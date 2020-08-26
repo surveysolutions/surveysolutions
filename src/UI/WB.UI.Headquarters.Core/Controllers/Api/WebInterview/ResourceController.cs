@@ -4,8 +4,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -79,7 +77,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (file == null || file.Data.Length == 0)
                 return NotFound();
 
-            return this.File(file.Data, file.ContentType, fileName);
+            return this.File(file.Data, file.ContentType, fileDownloadName: fileName, enableRangeProcessing: true);
         }
     }
 }
