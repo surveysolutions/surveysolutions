@@ -262,10 +262,6 @@
     <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_off_disabled_holo_light.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\to_parent_icon.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -419,31 +415,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_item_background_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_background_transition_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\theme_blue_light_progress_horizontal_holo_light.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\theme_blue_light_progress_indeterminate_horizontal_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_control_selector_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_progress_horizontal_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
@@ -471,48 +446,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_disabled_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_activated_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_focused_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_longpressed_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_pressed_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_selector_disabled_holo_light.9.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progress_bg_holo_light.9.png" />
@@ -546,48 +479,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_disabled_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_focused_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_normal_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_pressed_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_primary_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_secondary_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_track_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_default_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_disabled_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_pressed_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_left.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_middle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_right.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview.axml">
@@ -1357,9 +1248,6 @@
     <AndroidResource Include="Resources\drawable\question_option_background_protected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_holo_light.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\img_placeholder.xml" />
