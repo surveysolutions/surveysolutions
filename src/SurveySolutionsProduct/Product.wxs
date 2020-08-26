@@ -359,44 +359,9 @@
                 <ServiceControl Id="SurveySolutionsExport_Uninstall"
                                 Name="SurveySolutionsExport"
                                 Stop="both"
-                                
                                 Remove="both"
                                 Wait="no"/>
             </Component>
-
-            <!--<Component Id="ExportServiceComponent" Guid="68E651FA-E7DF-4EB2-B0AA-1F22B2B48F74">
-                ~1~Reference file to register service@1@
-                ~1~Should be excluded from harvested results@1@
-                ~1~ xsl transformation Filter.xsl cleans file after harvesting@1@
-                <File Id="WB.Services.Export.Host.exe"
-                      Source="$(var.HarvestDir)\ExportService\WB.Services.Export.Host.exe"
-                      Vital="yes"
-                      KeyPath="yes" />
-                <ServiceInstall Id="ExportServiceInstall"
-                                Name="SurveySolutionsExport"
-                                DisplayName="Survey Solutions Export Service"
-                                Description="Provides Export functionality for Survey Solutions Platform"
-                                Type="ownProcess"
-                                Start="auto"
-                                ErrorControl="normal">
-                    <util:ServiceConfig
-                        FirstFailureActionType='restart'
-                        SecondFailureActionType='restart'
-                        ThirdFailureActionType='restart'
-                        RestartServiceDelayInSeconds="60"
-                        ResetPeriodInDays='1'/>
-                    <ServiceConfig 
-                        DelayedAutoStart="yes" 
-                        OnInstall="yes" 
-                        OnReinstall ="yes" />
-                </ServiceInstall>
-                <ServiceControl Id="ExportServiceControl"
-                                Name="SurveySolutionsExport"
-                                Start="install"
-                                Stop="both"
-                                Remove="uninstall" 
-                                Wait="no"></ServiceControl>
-            </Component>-->
         </Directory>
       </Directory>
     </DirectoryRef>
