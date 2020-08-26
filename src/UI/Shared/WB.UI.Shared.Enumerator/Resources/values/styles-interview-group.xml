@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <style name="Interview_GroupWithDivider" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:background">@drawable/group_background</item>
   </style>
 
   <style name="Interview_Group"  parent="VerticalFullWidthWrappingLayout">
