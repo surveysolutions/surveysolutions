@@ -504,7 +504,7 @@
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=650, left=100, top=100", true);
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
             };
 
             var openCascadeOptionsEditor = function () {
@@ -521,7 +521,7 @@
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=650, left=100, top=100", true);
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
             };
 
             $scope.removeOption = function (index) {

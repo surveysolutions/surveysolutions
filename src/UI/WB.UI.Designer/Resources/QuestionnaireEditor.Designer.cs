@@ -1587,7 +1587,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply.
+        ///   Looks up a localized string similar to Apply changes.
         /// </summary>
         public static string OptionsUploadApply {
             get {
@@ -1610,6 +1610,15 @@ namespace WB.UI.Designer.Resources {
         public static string OptionsUploadParent {
             get {
                 return ResourceManager.GetString("OptionsUploadParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revert changes.
+        /// </summary>
+        public static string OptionsUploadRevert {
+            get {
+                return ResourceManager.GetString("OptionsUploadRevert", resourceCulture);
             }
         }
         
