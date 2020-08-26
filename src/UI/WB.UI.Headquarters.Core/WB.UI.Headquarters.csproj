@@ -98,6 +98,10 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
     <EmbeddedResource Include="wwwroot\**\*" />
+    <None Remove="Content\images\logo.png" />
+    <EmbeddedResource Include="Content\images\logo.png" />
+    <None Remove="Content\images\headquarter_logo.png" />
+    <EmbeddedResource Include="Content\images\headquarter_logo.png" />
   </ItemGroup>
 
   <ItemGroup>
