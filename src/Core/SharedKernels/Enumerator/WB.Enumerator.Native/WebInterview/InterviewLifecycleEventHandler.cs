@@ -50,6 +50,7 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<TranslationSwitched>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewStatusChanged>,
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<AreaQuestionAnswered>,
@@ -282,6 +283,11 @@ namespace WB.Enumerator.Native.WebInterview
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
             this.aggregateRootCache.Evict(evnt.EventSourceId);
+            this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        }
+        
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        {
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
         }
 
