@@ -85,7 +85,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:padding">@dimen/Login_Button_padding</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:background">@drawable/group_completed</item>
+      <item name="backgroundTint">@color/group_completed</item>
   </style>
   <style name="Diagnostic_Transparent_Button" parent="Widget.MaterialComponents.Button.TextButton">
       <item name="android:layout_width">wrap_content</item>
