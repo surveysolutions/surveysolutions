@@ -863,11 +863,17 @@
   <data name="Export" xml:space="preserve">
     <value>Экспорт</value>
   </data>
+  <data name="Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
   <data name="OptionsCloseWindow" xml:space="preserve">
     <value>Закрыть?</value>
   </data>
   <data name="OptionsUploadApply" xml:space="preserve">
-    <value>Применить</value>
+    <value>Применить изменения</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Отменить изменения</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
     <value>Категории не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {0} категорий.</value>

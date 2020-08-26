@@ -12,9 +12,11 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.BootstrapSupport;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -261,24 +263,37 @@ namespace WB.UI.Designer.Controllers
                 dynamic categoriesCommandResult = new ExpandoObject();
                 categoriesCommandResult.IsSuccess = true;
 
+                //validate and save new categories
+                //execute command
+
+                /*var command = new AddOrUpdateCategories(
+                    this.questionWithOptionsViewModel.QuestionnaireId,
+                    this.User.GetId(),
+                    Guid.NewGuid(),
+                    this.questionWithOptionsViewModel.CategoriesName,
+                    this.questionWithOptionsViewModel.CategoriesId
+                    );*/
+
                 return Json(categoriesCommandResult);
             }
+            else
+            {
+                var command = this.questionWithOptionsViewModel.IsCascading
+                    ? (QuestionCommand) new UpdateCascadingComboboxOptions(
+                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                        this.questionWithOptionsViewModel.QuestionId,
+                        this.User.GetId(),
+                        questionnaireCategoricalOptions)
+                    : new UpdateFilteredComboboxOptions(
+                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                        this.questionWithOptionsViewModel.QuestionId,
+                        this.User.GetId(),
+                        questionnaireCategoricalOptions);
 
-            var command = this.questionWithOptionsViewModel.IsCascading
-                ? (QuestionCommand) new UpdateCascadingComboboxOptions(
-                    Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                    this.questionWithOptionsViewModel.QuestionId,
-                    this.User.GetId(),
-                    questionnaireCategoricalOptions)
-                : new UpdateFilteredComboboxOptions(
-                    Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                    this.questionWithOptionsViewModel.QuestionId,
-                    this.User.GetId(),
-                    questionnaireCategoricalOptions);
-            
-            var commandResult = await this.ExecuteCommand(command);
+                var commandResult = await this.ExecuteCommand(command);
 
-            return Json(commandResult);
+                return Json(commandResult);
+            }
         }
 
         [HttpPost]
@@ -359,8 +374,10 @@ namespace WB.UI.Designer.Controllers
                 Guid? questionId = null,
                 Guid? categoriesId = null,
                 List<QuestionnaireCategoricalOption>? options = null, 
-                string? questionTitle = null, bool? isCascading = null,
-                bool? isCategories = null)
+                string? questionTitle = null, 
+                bool? isCascading = null,
+                bool? isCategories = null,
+                string? categoriesName = null)
             {
                 if(questionId == null && categoriesId == null)
                     throw new InvalidOperationException($"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
@@ -368,9 +385,12 @@ namespace WB.UI.Designer.Controllers
                 QuestionnaireId = questionnaireId;
                 if(questionId !=null)
                     QuestionId = questionId.Value;
+
                 if (categoriesId != null)
                     CategoriesId = categoriesId.Value;
-                
+                if (categoriesName != null)
+                    CategoriesName = categoriesName;
+
                 Options = options ?? new List<QuestionnaireCategoricalOption>();
                 QuestionTitle = questionTitle;
                 IsCascading = isCascading ?? false;
@@ -380,6 +400,7 @@ namespace WB.UI.Designer.Controllers
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
 
+            public string? CategoriesName { get; set; }
             public Guid CategoriesId { get; set; }
 
             public List<QuestionnaireCategoricalOption> Options { get; set; }

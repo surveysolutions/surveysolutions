@@ -1087,11 +1087,17 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="Export" xml:space="preserve">
     <value>Export</value>
   </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
   <data name="OptionsCloseWindow" xml:space="preserve">
     <value>Close Window?</value>
   </data>
   <data name="OptionsUploadApply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Apply changes</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Revert changes</value>
   </data>
   <data name="OptionsWindowTitle" xml:space="preserve">
     <value>Edit categories</value>
