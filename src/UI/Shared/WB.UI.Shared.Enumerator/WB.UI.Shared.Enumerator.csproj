@@ -63,6 +63,7 @@
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
+    <Compile Include="CustomBindings\MaterialButtonToQuestionStateBinding.cs" />
     <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />
     <Compile Include="CustomBindings\ToParentButtonGroupStyleButtonBinding.cs" />
     <Compile Include="CustomBindings\ViewBackgroundColorBinding.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="Converters\GroupStateToColorConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionCornerOptionBackgroundConverter.cs" />
@@ -381,27 +381,6 @@
     <AndroidResource Include="Resources\drawable\question_combobox_popup_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_answered.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_disabled.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_pressed_answered.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_unpressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_unpressed_answered.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\question_list_item_background.xml">
