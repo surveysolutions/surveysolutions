@@ -19,13 +19,14 @@
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
         <item name="editTextStyle">@style/EditTextTheme</item>
         <item name="buttonBarButtonStyle">@style/AlertButtonStyle</item>
-        <item name="checkboxStyle">@style/CheckBoxTheme </item>
+        
         <item name="radioButtonStyle">@style/RadioButtonTheme</item>
         <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme</item>
         <item name="spinnerStyle">@style/SpinnerTheme</item>
         <item name="spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
         <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
         <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
     </style>
 
     <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -36,12 +37,19 @@
         <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
         <item name="android:textColorHint">@color/disabledTextColor</item>
     </style>
+
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CheckBox</item>
+    </style>
+
+    <style name="ThemeOverlay.App.CheckBox" parent="">
+        <item name="colorAccent">@color/group_started</item>
+    </style>
     
     <style name="BlueAppTheme" parent="AppTheme">
         <item name="colorPrimary">@color/colorBlueThemePrimary</item>
         <item name="colorPrimaryDark">@color/interviewActionBar</item>
         <item name="android:textColorHighlight">#9936aee5</item>
-        <item name="android:imageButtonStyle">@style/ImageButtonTheme_Blue_Light</item>
         <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
         <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
         <item name="android:dropDownListViewStyle">@style/Divider_ListStyle</item>
@@ -52,10 +60,6 @@
         <item name="android:textColorHighlight">#9936aee5</item>
         <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
         <item name="android:seekBarStyle">@style/SeekBarTheme_Blue_Light</item>
-    </style>
-    
-    <style name="ImageButtonTheme_Blue_Light" parent="android:Widget.ImageButton">
-        <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
     </style>
     
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -91,10 +95,6 @@
         <item name="android:maxHeight">@dimen/Theme_ProgressBar_height</item>
     </style>
     
-    <style name="CheckBoxTheme"  parent="android:Widget.Material.Light.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/theme_blue_light_btn_check_holo_light</item>
-    </style>
-
     <style name="SeekBarTheme_Blue_Light" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
         <item name="android:indeterminateDrawable">@drawable/theme_blue_light_scrubber_progress_horizontal_holo_light</item>
@@ -111,7 +111,6 @@
     </style>
 
     <style name="EditTextTheme" parent="android:Widget.EditText">
-        <item name="android:background">@drawable/theme_blue_light_edit_text_holo_light</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
