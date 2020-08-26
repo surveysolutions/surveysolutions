@@ -2,7 +2,7 @@
 <resources>
     <style name="OfflineSync_Retry" parent="Interview_Previous_Group_Navigation_Button">
         <item name="android:layout_marginLeft">@dimen/Zero</item>
-        <item name="android:background">@drawable/group_started</item>
+        <item name="backgroundTint">@color/group_started</item>
     </style>
     <style name="OfflineSync_Navigation">
         <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
