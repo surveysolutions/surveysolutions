@@ -51,31 +51,49 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             if (ReadSideStorageMapping.IsPrimaryKeyAlias<TEntity, TKey>())
             {
-                var cacheKey = CachePrefix + id.ToString();
+                var primaryKey = GetPrimaryKeyByAlias(id);
 
-                var primaryKey = memoryCache.GetOrCreateNullSafe(cacheKey, cache =>
-                {
-                    var item = this.unitOfWork.Session.Query<TEntity>().GetByPrimaryKeyAlias(id);
-                    if (item == null)
-                    {
-                        return null;
-                    }
-
-                    // getting primary key value to add to cache
-                    // we don't need there long sliding expiration, it's not a big deal to query 
-                    // metadata once a minute
-                    cache.SlidingExpiration = TimeSpan.FromMinutes(1);
-                    return this.unitOfWork.Session.SessionFactory.GetClassMetadata(typeof(TEntity))
-                        .GetIdentifier(item);
-                });
-
-                if (primaryKey == null) return null;
+                if (primaryKey == CacheNullValue) return null;
                 
                 // using cached primaryKey to make use of NHibernate first-level cache
                 return this.unitOfWork.Session.Get<TEntity>(primaryKey);
             }
 
             return this.unitOfWork.Session.Get<TEntity>(id);
+        }
+
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly object CacheNullValue = new object();
+
+        private object GetPrimaryKeyByAlias(TKey id)
+        {
+            var cacheKey = CachePrefix + id;
+            
+            var primaryKey = memoryCache.GetOrCreateNullSafe(cacheKey, cache =>
+            {
+                var item = this.unitOfWork.Session.Query<TEntity>().GetByPrimaryKeyAlias(id);
+                if (item == null)
+                {
+                    return CacheNullValue;
+                }
+
+                // getting primary key value to add to cache
+                // we don't need there long sliding expiration, it's not a big deal to query 
+                // metadata once a minute
+                cache.SlidingExpiration = TimeSpan.FromMinutes(1);
+                return this.unitOfWork.Session.SessionFactory.GetClassMetadata(typeof(TEntity))
+                    .GetIdentifier(item);
+            });
+            return primaryKey;
+        }
+
+        private void SetPrimaryKeyByAlias(TKey id, TEntity entity)
+        {
+            var key = this.unitOfWork.Session.SessionFactory.GetClassMetadata(typeof(TEntity))
+                .GetIdentifier(entity);
+
+            this.memoryCache.Set(CachePrefix + id, key,
+                new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(1)));
         }
 
         public virtual void Remove(TKey id)
@@ -107,6 +125,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             else
             {
                 session.SaveOrUpdate(entity);
+
+                SetPrimaryKeyByAlias(id, entity);
             }
         }
 
