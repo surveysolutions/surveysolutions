@@ -181,7 +181,8 @@ namespace WB.Tests.Abc.TestFactories
             => new CumulativeChartDenormalizer(
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
+                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>(),
+                Create.Storage.NewMemoryCache());
 
         public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -297,7 +298,7 @@ namespace WB.Tests.Abc.TestFactories
             new EnumeratorDenormalizerRegistry(Create.Service.ServiceLocatorService(DashboardDenormalizer()), Mock.Of<ILogger>());
 
         public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
-            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry();
+            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry(new EventBusSettings());
 
         public AsyncEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
             new AsyncEventQueue(new AsyncEventDispatcher(liteEventRegistry,
