@@ -141,4 +141,22 @@
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="Version" xml:space="preserve">
+    <value>version {0}</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Started</value>
+  </data>
+  <data name="Comma" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="InterviewStatistics" xml:space="preserve">
+    <value>{0} questions in {1} groups answered</value>
+  </data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve">
+    <value>{0} Errors</value>
+  </data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve">
+    <value>{0} Warnings</value>
+  </data>
 </root>
