@@ -11,7 +11,7 @@ export default {
     state: {
         jobs: [],
         exportServiceInitializing: true,
-        exportServiceIsUnavailable: true,
+        exportServiceIsUnavailable: false,
         _exportStatusUpdateInProgres: false,
     },
 
@@ -80,15 +80,19 @@ export default {
                 response.data.forEach(job => {
                     commit('UPDATE_JOB', job)
                 })
-            }
 
+                commit('SET_SERVICE_INITALIZED')
+            }
         },
     },
 
     mutations: {
         SET_SERVICE_STATE(state, value) {
-            state.exportServiceInitializing = false
             state.exportServiceIsUnavailable = !value
+        },
+
+        SET_SERVICE_INITALIZED(state) {
+            state.exportServiceInitializing = false
         },
 
         ADD_JOB(state, { id }) {

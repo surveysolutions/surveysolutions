@@ -14,8 +14,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
     public class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
-        private readonly ILogger logger;
-
+        private ILogger _logger;
+        private ILogger logger => _logger ??= loggerProvider.GetFor<InterviewExpressionStatePrototypeProvider>();
+        
+        private readonly ILoggerProvider loggerProvider;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
@@ -26,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
         {
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
-            logger = loggerProvider.GetFor<InterviewExpressionStatePrototypeProvider>();
+            this.loggerProvider = loggerProvider;
         }
 
         public ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
