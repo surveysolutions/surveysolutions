@@ -20,7 +20,8 @@ namespace WB.Services.Scheduler.Services.Implementation
         public async Task<int> ArchiveJobs(string tenantName)
         {
             int archiveCounter = 0;
-            while (true)
+
+            do
             {
                 var jobs = await this.context.Jobs
                     .Where(j => j.TenantName == tenantName)
@@ -28,7 +29,6 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                 if (jobs.Count == 0)
                 {
-                    logger.LogInformation("All {count} scheduled jobs for {tenant} is archived", archiveCounter, tenantName);
                     break;
                 }
 
@@ -52,7 +52,11 @@ namespace WB.Services.Scheduler.Services.Implementation
                 await this.context.SaveChangesAsync();
                 logger.LogInformation("Archived {count} scheduled jobs for tenant {tenant}", jobs.Count, tenantName);
                 archiveCounter += jobs.Count;
-            }
+
+            } while (true);
+
+            logger.LogInformation("All {count} scheduled jobs for {tenant} is archived",
+                archiveCounter, tenantName);
 
             return archiveCounter;
         }
