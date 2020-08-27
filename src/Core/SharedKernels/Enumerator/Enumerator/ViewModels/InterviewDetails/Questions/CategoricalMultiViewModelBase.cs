@@ -128,6 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateViewModelsAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
+            this.bottomInfoViewModel.Identity = entityIdentity;
         }
 
         private async Task SaveAnswer()

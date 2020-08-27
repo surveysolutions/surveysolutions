@@ -755,7 +755,7 @@
     <value>on top of this block or manage sections with {{-panel}} left panel</value>
   </data>
   <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Language of survey, device types, collaboration and other options</value>
+    <value>Questionnaire name, variable, collaboration and other options</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>can be found at {{-settingsBtn}} panel (top right corner)</value>

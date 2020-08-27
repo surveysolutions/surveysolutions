@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return GetInterviewerIdentity() != null;
         }
 
-        public string GetExistingIdentityNameOrNull()
+        public string? GetExistingIdentityNameOrNull()
         {
             return GetInterviewerIdentity()?.Name;
         }

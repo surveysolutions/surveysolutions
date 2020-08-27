@@ -15,8 +15,8 @@
         </div>
         <div class="qname-block">
             <div class="conditions-block">
-                <div class="enabling-group-marker condition-item" ng-if="item.hasCondition"></div>
-                <div class="validation-group-marker condition-item" ng-if="item.hasValidation"></div>
+                <div class="enabling-group-marker" ng-class="{'hide-if-disabled': item.hideIfDisabled}" ng-if="item.hasCondition"></div>
+                <div class="validation-group-marker" ng-if="item.hasValidation"></div>
             </div>
         </div>
     </a>

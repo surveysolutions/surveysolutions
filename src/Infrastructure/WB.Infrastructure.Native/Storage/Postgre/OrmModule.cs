@@ -17,13 +17,11 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Resources;
 using WB.Core.Infrastructure.Services;
-using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -39,10 +37,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.connectionSettings = connectionSettings;
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        { 
+        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        {
             try
             {
+                
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
                 
                 status.Message = Modules.InitializingDb;
@@ -50,6 +49,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     this.connectionSettings.PlainStorageSchemaName);
 
                 status.Message = Modules.MigrateDb;
+
+                await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
 
                 void MigrateReadside()
                 {
@@ -128,8 +129,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                 throw exc.AsInitializationException(connectionSettings.ConnectionString);
             }
-
-            return Task.CompletedTask;
         }
 
         public void Load(IIocRegistry registry)

@@ -18,6 +18,7 @@
     <item name="alertDialogTheme">@style/StyledDialog</item>
     <!-- elements -->
     <item name="buttonStyle">@style/ButtonAppTheme</item>
+    <item name="buttonBarButtonStyle">@style/AlertButtonStyle</item>
     <item name="checkboxStyle">@style/CheckBoxTheme </item>
     <item name="editTextStyle">@style/EditTextTheme</item>
     <item name="radioButtonStyle">@style/RadioButtonTheme</item>
@@ -27,6 +28,13 @@
     <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
   </style>
 
+    <style name="AlertButtonStyle" parent="android:Widget.Material.Button">
+        <item name="android:background">@drawable/alert_dialog_btn</item>
+        <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+        <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+    
   <style name="StyledDialog" parent="Theme.AppCompat.Light.Dialog">
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/darkActionBar</item>

@@ -130,20 +130,6 @@
                                             class="format-data Binary">{{$t('DataExport.DataType_Binary')}}</span>
                                     </label>
                                 </div>
-                                <!-- <div class="radio-btn-row"
-                                    v-if="questionnaireVersion">
-                                    <input
-                                        class="radio-row"
-                                        type="radio"
-                                        name="dataType"
-                                        id="ddiData"
-                                        v-model="dataType"
-                                        value="ddiData"/>
-                                    <label for="ddiData">
-                                        <span class="tick"></span>
-                                        <span class="format-data">{{$t('DataExport.DataType_Ddi')}}</span>
-                                    </label>
-                                </div> -->
                                 <div class="radio-btn-row"
                                     v-if="hasInterviews">
                                     <input
@@ -329,7 +315,8 @@
                         <div
                             class="no-sets"
                             v-if="!exportServiceIsUnavailable && exportResults.length == 0">
-                            <p>{{$t('DataExport.NoDataSets')}}</p>
+                            <p v-if="exportServiceInitializing">{{$t('Common.Loading')}}</p>
+                            <p v-else>{{$t('DataExport.NoDataSets')}}</p>
                         </div>
                         <div v-else>
                             <h3 class="mb-20">
@@ -401,6 +388,9 @@ export default {
         },
         exportServiceIsUnavailable() {
             return this.$store.state.export.exportServiceIsUnavailable
+        },
+        exportServiceInitializing() {
+            return this.$store.state.export.exportServiceInitializing
         },
         isDropboxSetUp() {
             var settings = this.externalStoragesSettings['dropbox'] || null
