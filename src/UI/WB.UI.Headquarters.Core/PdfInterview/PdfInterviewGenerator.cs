@@ -86,6 +86,7 @@ namespace WB.UI.Headquarters.PdfInterview
             //GlobalFontSettings.FontResolver = new PdfInterviewFontResolver();
             ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
             
+            PdfDocument pdfDocument = new PdfDocument();
             Document document = new Document();
             DefineStyles(document);
             var firstPageSection = document.AddSection();
@@ -141,15 +142,36 @@ namespace WB.UI.Headquarters.PdfInterview
                 throw new ArgumentException("Unknown tree node type for entity " + node);
             }
 
-            WritePageNumbers(document, questionnaire, interview);
+            WriteFooterToAllPages(document, questionnaire, interview);
             
             PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
             renderer.Document = document;
+            renderer.PdfDocument = pdfDocument;
             renderer.RenderDocument();
+
+            RenderBarCode(pdfDocument.Pages[0], interview);
 
             using var memoryStream = new MemoryStream();
             renderer.PdfDocument.Save(memoryStream);
             return memoryStream.ToArray();
+        }
+
+        private void RenderBarCode(PdfPage page, IStatefulInterview? interview)
+        {
+            var interviewKey = interview.GetInterviewKey().ToString();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+
+            BarCode barcode = BarCode.FromType(CodeType.Code3of9Standard, interviewKey);
+            barcode.TextLocation = new TextLocation();
+            barcode.Text = interviewKey;
+            barcode.StartChar = Convert.ToChar("*");
+            barcode.EndChar = Convert.ToChar("*");
+            barcode.Direction = CodeDirection.LeftToRight;
+            XFont fontBarcode = new XFont("Arial", 14, XFontStyle.Regular);
+            var position = new XPoint(Convert.ToDouble(60), Convert.ToDouble(0));
+            XSize size = new XSize(Convert.ToDouble(130), Convert.ToDouble(40));
+            barcode.Size = size;
+            gfx.DrawBarCode(barcode, XBrushes.Black, fontBarcode, position);
         }
 
         private void WriteSummaryHeader(Section section)
@@ -163,7 +185,7 @@ namespace WB.UI.Headquarters.PdfInterview
             tableOfContent.Style = PdfStyles.TableOfContent;
         }
 
-        private void WritePageNumbers(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
+        private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
             foreach (Section section in document.Sections)
             {
@@ -341,19 +363,22 @@ namespace WB.UI.Headquarters.PdfInterview
             gfxBARCODE.DrawBarCode(BarCode39, XBrushes.Black,fontBARCODE,new XPoint(Convert.ToDouble(str_dbl_X), Convert.ToDouble(str_dbl_Y)));
             */
             /*{
-                var barcodeTf = section.Elements.AddTextFrame();
-                var barcode = barcodeTf.Elements.AddBarcode();
+                //var barcodeTf = section.Elements.AddTextFrame();
+                var barcode = section.Elements.AddBarcode();
                 barcode.RelativeHorizontal = RelativeHorizontal.Page;
                 barcode.RelativeVertical = RelativeVertical.Page;
                 barcode.FillFormat = new FillFormat() {Visible = true};
                 barcode.Orientation = TextOrientation.Horizontal;
                 barcode.Code = interviewKey;
                 barcode.Text = true;
-                barcode.Type = BarcodeType.Barcode128;
+                barcode.Type = BarcodeType.Barcode39;
                 barcode.Width = "6cm";
                 barcode.Height = "2cm";
+                //barcode.Left = LeftPosition.Parse("2cm");
                 barcode.Left = LeftPosition.Parse("2cm");
                 barcode.Top = TopPosition.Parse("0cm");
+                barcode.LineFormat.Color = Colors.Black;
+                barcode.FillFormat.Color = Colors.Black;
                             //barcode.
             // barcode.BearerBars = true;
             // barcode.LineHeight = 20;
@@ -361,7 +386,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
             }*/
 
-            {
+            /*{
                 var barcode = section.Elements.AddTextFrame();
                 //barcode.Left = LeftPosition.Parse("2cm");
                 //barcode.Top = TopPosition.Parse("0cm");
@@ -374,7 +399,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 var barcodeText = barcode.AddParagraph(interviewKey);
                 barcodeText.Format.Font.Name = "Libre Barcode 128";
                 barcodeText.Format.Font.Size = Unit.FromPoint(30);
-            }
+            }*/
 
             var logoContent = GetEmbeddedResource("headquarter_logo.png");
             ImageSource.IImageSource logoImageSource = ImageSource.FromBinary("logo.png", () => logoContent);
