@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey, s => CreatePlainQuestionnaire(identity, language));
         }
 
-        public IQuestionnaire GetQuestionnaireOrThrow(QuestionnaireIdentity identity, string? language)
+        public IQuestionnaire GetQuestionnaireOrThrow(QuestionnaireIdentity identity, string language)
         {
             return this.GetQuestionnaire(identity, language) ?? throw new QuestionnaireException("Questionnaire not found");
         }
