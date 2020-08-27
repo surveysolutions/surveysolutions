@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions unanswered.
+        ///   Looks up a localized string similar to {0} questions not answered.
         /// </summary>
         public static string InterviewStatisticsUnanswered {
             get {
