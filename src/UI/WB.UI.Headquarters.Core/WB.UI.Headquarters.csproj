@@ -102,6 +102,8 @@
     <EmbeddedResource Include="Content\images\logo.png" />
     <None Remove="Content\images\headquarter_logo.png" />
     <EmbeddedResource Include="Content\images\headquarter_logo.png" />
+    <None Remove="Content\fonts\LibreBarcode128-Regular.ttf" />
+    <EmbeddedResource Include="Content\fonts\LibreBarcode128-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>

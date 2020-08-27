@@ -366,19 +366,41 @@ namespace WB.UI.Headquarters.PdfInterview
             BarCode39.Size.ToXPoint();
             gfxBARCODE.DrawBarCode(BarCode39, XBrushes.Black,fontBARCODE,new XPoint(Convert.ToDouble(str_dbl_X), Convert.ToDouble(str_dbl_Y)));
             */
-            
-            var barcode = section.Elements.AddBarcode();
-            barcode.Orientation = TextOrientation.Horizontal;
-            barcode.Code = interviewKey;
-            barcode.Text = true;
-            barcode.Type = BarcodeType.Barcode128;
-            barcode.Width = "6cm";
-            barcode.Height = "2cm";
-            barcode.Left = LeftPosition.Parse("2cm");
-            barcode.Top = TopPosition.Parse("0cm");
+            /*{
+                var barcodeTf = section.Elements.AddTextFrame();
+                var barcode = barcodeTf.Elements.AddBarcode();
+                barcode.RelativeHorizontal = RelativeHorizontal.Page;
+                barcode.RelativeVertical = RelativeVertical.Page;
+                barcode.FillFormat = new FillFormat() {Visible = true};
+                barcode.Orientation = TextOrientation.Horizontal;
+                barcode.Code = interviewKey;
+                barcode.Text = true;
+                barcode.Type = BarcodeType.Barcode128;
+                barcode.Width = "6cm";
+                barcode.Height = "2cm";
+                barcode.Left = LeftPosition.Parse("2cm");
+                barcode.Top = TopPosition.Parse("0cm");
+                            //barcode.
             // barcode.BearerBars = true;
             // barcode.LineHeight = 20;
             // barcode.LineRatio = 2;
+
+            }*/
+
+            {
+                var barcode = section.Elements.AddTextFrame();
+                //barcode.Left = LeftPosition.Parse("2cm");
+                //barcode.Top = TopPosition.Parse("0cm");
+                barcode.WrapFormat.DistanceTop = Unit.FromCentimeter(0);
+                barcode.WrapFormat.DistanceLeft = Unit.FromCentimeter(2);
+                barcode.RelativeHorizontal = RelativeHorizontal.Page;
+                barcode.RelativeVertical = RelativeVertical.Page;
+                barcode.Width = Unit.FromCentimeter(7);
+                barcode.Height = Unit.FromCentimeter(2);
+                var barcodeText = barcode.AddParagraph(interviewKey);
+                barcodeText.Format.Font.Name = "Libre Barcode 128";
+                barcodeText.Format.Font.Size = Unit.FromPoint(30);
+            }
 
             var logoContent = GetEmbeddedResource("headquarter_logo.png");
             ImageSource.IImageSource logoImageSource = ImageSource.FromBinary("logo.png", () => logoContent);
@@ -386,7 +408,7 @@ namespace WB.UI.Headquarters.PdfInterview
             image.Width = Unit.FromPoint(100);
             image.LockAspectRatio = true;
             image.Left = LeftPosition.Parse("132pt"); 
-            //image.Left = LeftPosition.Parse("0pt"); 
+            //image.Left = LeftPosition.Parse("0pt");
             image.Top = TopPosition.Parse("0pt");
             
             /*var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
@@ -874,7 +896,7 @@ namespace WB.UI.Headquarters.PdfInterview
         }
     }
     
-    public class PdfInterviewFontResolver : FontResolver
+    /*public class PdfInterviewFontResolver : FontResolver
     {
         static PdfInterviewFontResolver()
         {
@@ -887,6 +909,11 @@ namespace WB.UI.Headquarters.PdfInterview
 
         public override FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
         {
+            if (familyName == "LibreBarcode128")
+            {
+                return new FontResolverInfo("LibreBarcode128");
+            }
+            
             var fontNames = familyName.Split(',');
             foreach (var fontName in fontNames)
             {
@@ -897,5 +924,51 @@ namespace WB.UI.Headquarters.PdfInterview
 
             return null;
         }
+        
+        override 
+    }*/
+    
+    public class PdfInterviewFontResolver : IFontResolver
+    {
+        static FontResolver fontResolver = new FontResolver()
+        {
+            NullIfFontNotFound = true
+        };
+
+        public FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
+        {
+            if (familyName == "Libre Barcode 128")
+            {
+                return new FontResolverInfo("LibreBarcode128-Regular.ttf", false, false);
+            }
+            
+            var fontNames = familyName.Split(',');
+            foreach (var fontName in fontNames)
+            {
+                var fontResolverInfo = fontResolver.ResolveTypeface(fontName.Trim(), isBold, isItalic);
+                if (fontResolverInfo != null)
+                    return fontResolverInfo;
+            }
+
+            return null;
+        }
+
+        public byte[] GetFont(string faceName)
+        {
+            if (faceName == "LibreBarcode128-Regular.ttf")
+            {
+                System.Reflection.Assembly a = typeof(PdfInterviewGenerator).Assembly;
+                using Stream resFileStream = a.GetManifestResourceStream($"WB.UI.Headquarters.Content.fonts.LibreBarcode128-Regular.ttf");
+                if (resFileStream == null) return null;
+                byte[] ba = new byte[resFileStream.Length];
+                resFileStream.Read(ba, 0, ba.Length);
+                return ba;
+            }
+
+            return fontResolver.GetFont(faceName);
+        }
+
+        public string DefaultFontName => fontResolver.DefaultFontName;
     }
+
 }
