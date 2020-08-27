@@ -46,9 +46,9 @@
                                 @click="showOverview">{{$t("Details.Overview")}}</button>
                             <a id="btn_Print"
                                 class="btn btn-link gray-action-unit"
-                                v-bind:href="this.$config.model.printUrl"
+                                v-bind:href="this.$config.model.pdfUrl"
                                 target="_blank"
-                                download>{{$t("Pages.Print")}}</a>
+                                download>{{$t("Pages.Pdf")}}</a>
                         </li>
                     </ul>
                 </div>

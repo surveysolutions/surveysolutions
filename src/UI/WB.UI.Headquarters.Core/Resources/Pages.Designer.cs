@@ -2500,7 +2500,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date when the interviewer loged in last time.
+        ///   Looks up a localized string similar to Date when the interviewer logged in to website last time.
         /// </summary>
         public static string Interviewers_LastLoginDateTooltip {
             get {
@@ -3342,6 +3342,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pdf.
+        /// </summary>
+        public static string Pdf {
+            get {
+                return ResourceManager.GetString("Pdf", resourceCulture);
             }
         }
         

@@ -21,6 +21,7 @@ using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using WB.UI.Headquarters.PdfInterview;
 using UsersController = WB.UI.Headquarters.Controllers.Api.PublicApi.UsersController;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
@@ -82,7 +83,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<InterviewsPublicApiController>>(),
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
-                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>());
+                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
+                pdfInterviewGenerator: Mock.Of<IPdfInterviewGenerator>());
 
             return controller;
         }
