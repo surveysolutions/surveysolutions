@@ -79,11 +79,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complete date: .
+        ///   Looks up a localized string similar to Completed.
         /// </summary>
-        public static string CompleteDate {
+        public static string Completed {
             get {
-                return ResourceManager.GetString("CompleteDate", resourceCulture);
+                return ResourceManager.GetString("Completed", resourceCulture);
             }
         }
         
@@ -97,16 +97,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate file date: .
+        ///   Looks up a localized string similar to Generated.
         /// </summary>
-        public static string GeneratedDate {
+        public static string Generated {
             get {
-                return ResourceManager.GetString("GeneratedDate", resourceCulture);
+                return ResourceManager.GetString("Generated", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions in {1} groups answered.
+        ///   Looks up a localized string similar to {0} questions in {1} sections answered.
         /// </summary>
         public static string InterviewStatistics {
             get {
@@ -115,7 +115,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Errors.
+        ///   Looks up a localized string similar to {0} questions with commented.
+        /// </summary>
+        public static string InterviewStatisticsCommented {
+            get {
+                return ResourceManager.GetString("InterviewStatisticsCommented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} errors.
         /// </summary>
         public static string InterviewStatisticsErrors {
             get {
@@ -124,7 +133,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Warnings.
+        ///   Looks up a localized string similar to {0} questions unanswered.
+        /// </summary>
+        public static string InterviewStatisticsUnanswered {
+            get {
+                return ResourceManager.GetString("InterviewStatisticsUnanswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} warnings.
         /// </summary>
         public static string InterviewStatisticsWarnings {
             get {
@@ -151,11 +169,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Summary.
+        ///   Looks up a localized string similar to Table of content.
         /// </summary>
-        public static string Summary {
+        public static string TableOfContent {
             get {
-                return ResourceManager.GetString("Summary", resourceCulture);
+                return ResourceManager.GetString("TableOfContent", resourceCulture);
             }
         }
         
