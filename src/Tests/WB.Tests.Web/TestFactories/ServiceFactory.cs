@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -72,6 +72,7 @@ namespace WB.Tests.Web.TestFactories
         {
             var mockOfVirtualPathService = new Mock<IVirtualPathService>();
             mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
+            mockOfVirtualPathService.Setup(x => x.GetRelatedToRootPath(It.IsAny<string>())).Returns<string>(x => x);
 
             return new WebNavigationService(mockOfVirtualPathService.Object);
         }

@@ -224,6 +224,12 @@
   <data name="Errors" xml:space="preserve">
     <value>Errors count</value>
   </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
+  </data>
+    <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
   <data name="ChooseQuestionsTitle" xml:space="preserve">
     <value>Choose identifying questions to use in the filter</value>
   </data>

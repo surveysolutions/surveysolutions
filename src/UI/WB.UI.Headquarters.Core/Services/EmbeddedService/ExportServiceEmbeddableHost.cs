@@ -96,7 +96,11 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
             exportHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
             {
-                ctx.Configuration["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl;
+                builder.AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    ["ConnectionStrings:DefaultConnection"] = configuration.GetConnectionString("DefaultConnection"),
+                    ["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl
+                });
             });
 
             exportHostBuilder.ConfigureWebHost(w =>

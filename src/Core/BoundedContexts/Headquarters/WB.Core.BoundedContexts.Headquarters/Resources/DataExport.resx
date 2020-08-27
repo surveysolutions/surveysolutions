@@ -348,6 +348,15 @@
   <data name="DataFormat_Tab" xml:space="preserve">
     <value>Tab separated data</value>
   </data>
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Questionnaire information</value>
+  </data>
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Include meta information about questionnaire</value>
+  </data>
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Exclude meta information about questionnaire</value>
+  </data>
   <data name="AddToQueue" xml:space="preserve">
     <value>Add to queue</value>
   </data>

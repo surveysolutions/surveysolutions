@@ -16,7 +16,7 @@
         </div>
         <div class="qname-block">
             <div class="conditions-block">
-                <div class="enabling-group-marker condition-item" ng-if="item.hasCondition"></div>
+                <div class="enabling-group-marker" ng-class="{'hide-if-disabled': item.hideIfDisabled}" ng-if="item.hasCondition"></div>
             </div>
             <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
         </div>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation

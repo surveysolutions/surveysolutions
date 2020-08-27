@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mime;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -112,7 +113,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             break;
                         case HttpStatusCode.Forbidden:
                             if (restException.Message.Contains("relinked"))
+                            {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
+                                exceptionMessage =
+                                    EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                            }
                             else
                             {
                                 exceptionMessage = EnumeratorUIResources.Unauthorized;

@@ -752,7 +752,7 @@
     <value>on top of this block or manage sections with {{-panel}} left panel</value>
   </data>
   <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Language of survey, device types, collaboration and other options</value>
+    <value>Questionnaire name, variable, collaboration and other options</value>
   </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>can be found at {{-settingsBtn}} panel (top right corner)</value>
@@ -1416,5 +1416,8 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Text label for the category (visible to the interviewer)</value>
+  </data>
+    <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
   </data>
 </root>
