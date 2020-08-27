@@ -28,5 +28,7 @@ namespace WB.Services.Export.Services.Processing
         public DateTime DataFileLastUpdateDate { get; set; }
         public string DataDestination { get; set; } = String.Empty;
         public Guid? TranslationId { get; set; }
+
+        public bool? IncludeMeta { set; get; }
     }
 }

@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class LastCreatedInterviewStorage : ILastCreatedInterviewStorage
     {
-        private static string lastId;
+        private static string? lastId;
 
         public void Store(string interviewId)
         {

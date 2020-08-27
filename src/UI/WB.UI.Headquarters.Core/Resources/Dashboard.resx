@@ -232,4 +232,10 @@
   <data name="ImportedByText" xml:space="preserve">
     <value>{{role}} user {{name}}</value>
   </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>{{receivedInterviews}} interviews and {{receivedAssignments}} assignments for new interviews have been received by the interviewers/supervisors working disconnected. After you confirm the deletion of the survey the server will no longer accept the information based on these interviews/assignments, and they will disappear at next synchronization without a possibility of recovery even if contain newly entered/edited information. It is your responsibility to warn/notify the interviewers to no longer fill out those interviews/assignments, because they will not be notified automatically. Do you want to continue?</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Please type '{{questionnaireTitle}}' to confirm</value> 
+  </data>
 </root>

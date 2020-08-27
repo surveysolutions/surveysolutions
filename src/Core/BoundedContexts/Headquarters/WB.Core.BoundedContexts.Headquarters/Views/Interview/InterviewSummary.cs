@@ -137,6 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasResolvedComments { get; set; }
         public virtual string ResponsibleNameLowerCase { get; protected set; }
         public virtual bool HasSmallSubstitutions { get; set; }
+        public virtual int? NotAnsweredCount { get; set; }
 
         public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
         {

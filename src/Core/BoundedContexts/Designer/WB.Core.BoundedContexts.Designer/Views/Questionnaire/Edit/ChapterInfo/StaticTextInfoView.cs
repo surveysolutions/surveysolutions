@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
@@ -20,6 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public string? AttachmentName { get; set; }
 
         public bool HasCondition { get; set; }
+        
+        public bool HideIfDisabled { get; set; }
         public bool HasValidation { get; set; }
 
         public List<IQuestionnaireItem> Items

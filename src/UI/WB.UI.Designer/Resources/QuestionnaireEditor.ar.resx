@@ -207,9 +207,6 @@
   <data name="EmptySectionLine2" xml:space="preserve">
     <value>يمكنك البدء باستخدام أزرار {{-addQuestionBtn}} و {{-addSubsectionBtn}}</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>لغة المسح وأنواع الأجهزة والتعاون والخيارات الأخرى</value>
-  </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>يمكن العثور عليها في  {{-settingsBtn}} لوحة (الزاوية اليسرى العليا)</value>
   </data>

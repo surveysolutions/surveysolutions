@@ -14,6 +14,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabularFormatExportService tabularFormatExportService;
 
+        private readonly string tabExtension = ".tab";
+
         protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             ITabularFormatExportService tabularFormatExportService)
         {

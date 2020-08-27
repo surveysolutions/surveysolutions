@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerSettings interviewerSettings;
-        private LocalSynchronizationViewModel synchronization;
+        private LocalSynchronizationViewModel synchronization = null!;
 
         public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, 
             () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);

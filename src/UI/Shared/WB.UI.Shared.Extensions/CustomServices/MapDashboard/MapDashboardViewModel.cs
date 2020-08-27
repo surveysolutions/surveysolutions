@@ -107,6 +107,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
 
             try
             {
+                this.AvailableShapefiles =
+                    new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
+
                 var localMaps = this.mapService.GetAvailableMaps(true);
                 var defaultMap = this.mapService.PrepareAndGetDefaultMap();
 
@@ -576,6 +579,37 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                 }
             }
         }
+
+        private MvxObservableCollection<ShapefileDescription> availableShapefiles = new MvxObservableCollection<ShapefileDescription>();
+        public MvxObservableCollection<ShapefileDescription> AvailableShapefiles
+        {
+            get => this.availableShapefiles;
+            protected set => this.RaiseAndSetIfChanged(ref this.availableShapefiles, value);
+        }
+
+
+        public IMvxAsyncCommand LoadShapefile => new MvxAsyncCommand(async () =>
+        {
+            if (AvailableShapefiles.Count < 1)
+                return;
+
+            try
+            {
+                var newFeatureLayer = await MapUtilityService.GetShapefileAsFeatureLayer(AvailableShapefiles.First().FullPath);
+
+                // Add the feature layer to the map
+                this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
+
+                // Zoom the map to the extent of the shapefile
+                await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
+
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on shapefile loading", e);
+                userInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
+            }
+        });
 
         private string selectedMap;
         public string SelectedMap

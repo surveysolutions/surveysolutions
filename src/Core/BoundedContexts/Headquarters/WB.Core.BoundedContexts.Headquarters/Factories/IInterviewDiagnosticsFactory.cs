@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Factories
         public int NumberUnansweredQuestions { get; set; }
         public int NumberCommentedQuestions { get; set; }
         public long? InterviewDuration { get; set; }
+        
+        public int? NotAnsweredCount { get; set; }
     }
 
     public interface IInterviewDiagnosticsFactory

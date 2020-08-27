@@ -6,16 +6,18 @@ namespace WB.UI.Headquarters.Filters
 {
     public class BrowsersRestrictionAttribute : ActionFilterAttribute
     {
+        static readonly Parser parser = Parser.GetDefault();
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (!filterContext.ActionDescriptor.DisplayName.Contains("OutdatedBrowser") && filterContext.HttpContext.Request.Headers.ContainsKey("User-Agent"))
             {
                 string userAgentString = filterContext.HttpContext.Request.Headers["User-Agent"].ToString();
-                var parser = Parser.GetDefault();
+               
                 var userAgent = parser.ParseUserAgent(userAgentString);
                 if (IsInternetExplorer(userAgent) && IsAllowGetMajorVersion(userAgent))
                 {
-                    filterContext.Result = new RedirectToActionResult("OutdatedBrowser", "WebInterview", new{});
+                    filterContext.Result = new RedirectToActionResult("OutdatedBrowser", "WebInterview", new { });
                 }
             }
         }

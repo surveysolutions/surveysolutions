@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using PCLStorage;
+
 using WB.Core.Infrastructure.FileSystem;
 using FileAccess = System.IO.FileAccess;
 
@@ -186,22 +184,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
                     return;
             }
 
-            // NOTE: File.Copy throw exception when copy files to backup in public storage
-            //var destFileName = this.CombinePath(backupFolderPath, sourceFileName);
-            //File.Copy(sourcePath, destFileName, overrideAll);
-
-            var sourceFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(sourcePath);
-            var destFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(backupFolderPath);
-            if (!overrideAll && (await destFolder.GetFilesAsync()).Any(f => f.Name == sourceFileName))
+            if (!overrideAll && Directory.EnumerateFiles(backupFolderPath).Any(f => Path.GetFileName(f) == sourceFileName))
                 return;
-
-            var destFile = await destFolder.CreateFileAsync(sourceFile.Name, CreationCollisionOption.ReplaceExisting);
-
-            using (var outFileStream = await destFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
-            using (var sourceStream = await sourceFile.OpenAsync(PCLStorage.FileAccess.Read))
-            {
-                await sourceStream.CopyToAsync(outFileStream);
-            }
+            
+            await using var destFile = File.Create(Path.Combine(backupFolderPath, Path.GetFileName(sourcePath)));
+            await using var outFile = File.OpenRead(sourcePath);
+            await outFile.CopyToAsync(destFile);
         }
 
         public string ChangeExtension(string path1, string newExtension)
