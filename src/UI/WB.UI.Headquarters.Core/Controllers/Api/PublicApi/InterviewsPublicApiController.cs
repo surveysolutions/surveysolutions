@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.PdfInterview;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
@@ -41,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ILogger<InterviewsPublicApiController> logger;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
+        private readonly IPdfInterviewGenerator pdfInterviewGenerator;
 
         public InterviewsPublicApiController(
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -53,7 +55,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IAuthorizedUser authorizedUser,
             ILogger<InterviewsPublicApiController> logger,
             IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewDiagnosticsFactory diagnosticsFactory)
+            IInterviewDiagnosticsFactory diagnosticsFactory,
+            IPdfInterviewGenerator pdfInterviewGenerator)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -66,6 +69,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.logger = logger;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
+            this.pdfInterviewGenerator = pdfInterviewGenerator;
         }
 
 
@@ -178,6 +182,24 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             return interview;
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/pdf")]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        public IActionResult Pdf(Guid id)
+        {
+            var interview = statefulInterviewRepository.Get(id.ToString());
+            if (interview == null)
+                return NotFound(id);
+
+            var content = pdfInterviewGenerator.Generate(id, User);
+            if (content == null)
+                return NotFound(id);
+
+            return this.File(content, 
+                "application/pdf", 
+                fileDownloadName: interview.GetInterviewKey() + ".pdf");
         }
 
         /// <summary>

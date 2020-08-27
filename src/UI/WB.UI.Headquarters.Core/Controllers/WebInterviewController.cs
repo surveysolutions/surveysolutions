@@ -874,7 +874,7 @@ namespace WB.UI.Headquarters.Controllers
                 SurveyName = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(),
                     questionnaire.Title),
-                PrintUrl = Url.Action("PdfPrint", "InterviewPdf", new{ interviewId = interview.Id }),
+                PdfUrl = Url.Action("PdfPrint", "InterviewPdf", new{ interviewId = interview.Id }),
             };
         }
 
