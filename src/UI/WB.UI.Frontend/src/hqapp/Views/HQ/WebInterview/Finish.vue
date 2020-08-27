@@ -27,7 +27,7 @@
                 <li v-if="$config.model.printPdf"
                     v-dateTimeFormatting>
                     {{ $t('WebInterview.DownloadAnswers') }}
-                    <time :datetime="$config.model.printPdf"></time>
+                    <time :datetime="$config.model.pdfUrl"></time>
                 </li>
             </ul>
         </div>
