@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Enumerator.Native.WebInterview
 {
@@ -50,6 +51,7 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<TranslationSwitched>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewStatusChanged>,
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<AreaQuestionAnswered>,
@@ -283,6 +285,14 @@ namespace WB.Enumerator.Native.WebInterview
         {
             this.aggregateRootCache.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        }
+        
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        {
+            if (!evnt.IsPrototype())
+            {
+                this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            }
         }
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)

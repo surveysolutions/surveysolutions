@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;</value>
+      <value>{{count}} entrevista (s) será aprobada. </value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;</value>
+      <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt;,  &lt;i&gt; {{status2}} &lt;/ i&gt; y &lt;i&gt;{{status3}}&lt;/i&gt;</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt;, &lt;i&gt; {{status2}} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {{status3}} &lt;/ i&gt;</value>
@@ -197,5 +197,14 @@
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {{status1}} &lt;/ i&gt;. </value>
+  </data>
+  <data name="Note" xml:space="preserve">
+      <value> ¡Nota!</value>
+  </data>
+  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+      <value>{{count}} entrevistas será aprobada.  </value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+      <value>Solo puede aprobar entrevistas con los siguientes estados: {{status1}},  {{status2}}, {{status3}}</value>
   </data>
 </root>
