@@ -211,7 +211,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public DateTime? AnswerTimeUtc => this.InterviewQuestion?.AnswerTimeUtc;
+        public DateTime? AnswerTimeUtc => this.InterviewQuestion?.AnswerTime?.UtcDateTime;
+        public DateTimeOffset? AnswerTime => this.InterviewQuestion?.AnswerTime;
 
         public bool IsPlausible => this.FailedWarnings.Count == 0;
 
@@ -319,7 +320,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.InterviewQuestion.InterviewQuestionType.ToString("D");
         }
 
-        public void SetAnswer(AbstractAnswer answer, DateTime? answerTimeUtc)
+        public void SetAnswer(AbstractAnswer answer, DateTimeOffset? answerTime)
         {
             if (answer == null)
             {
@@ -385,7 +386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         throw new InvalidOperationException();
                 }
 
-                this.InterviewQuestion.SetAnswerTime(answerTimeUtc);
+                this.InterviewQuestion.SetAnswerTime(answerTime);
             }
 
             this.MarkCommentsAsCommentsOnPreviousAnswer();
@@ -849,12 +850,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return Equals(Answer, question?.Answer);
         }
 
-        public void SetAnswerTime(DateTime? answerTimeUtc)
+        public void SetAnswerTime(DateTimeOffset? answerTime)
         {
-            this.AnswerTimeUtc = answerTimeUtc;
+            this.AnswerTime = answerTime;
         }
 
-        public DateTime? AnswerTimeUtc { get; set; }
+        public DateTimeOffset? AnswerTime { get; set; }
 
         public abstract AbstractAnswer Answer { get; }
     }
