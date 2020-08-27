@@ -95,7 +95,7 @@
                 :items="categories"
                 :search="search"
                 :items-per-page="15"
-                :footer-props="{'items-per-page-options':[15, 25, 50, -1]}"
+                :footer-props="{'items-per-page-options':[15, 25, 50]}"
                 :loading="loading"
                 class="elevation-1"
                 style="overflow-wrap:anywhere;"
@@ -105,10 +105,9 @@
                         <v-text-field
                             v-model="search"
                             append-icon="mdi-magnify"
-                            :label="$t('Search')"
+                            :label="$t('Filter')"
                             single-line
-                            hide-details
-                        >
+                            hide-details>
                         </v-text-field>
                         <v-spacer></v-spacer>
                         <button
@@ -168,10 +167,15 @@
                     </button>
                 </div>
                <textarea name="stringifiedOptions"
-                      class="form-control mono"
-                      style="height:580px;"
-                      v-model="stringified"                      
-                      msd-elastic></textarea>
+                    spellcheck="false" 
+                    wrap="off" 
+                    autocorrect="off" 
+                    autocapitalize="off"
+                    class="form-control mono"
+                    style="height:590px; overflow-wrap: break-word; resize: none;"
+                    v-model="stringified"
+                    rows="15000"
+                    msd-elastic></textarea>
                
           </div>
         </div>
@@ -316,6 +320,7 @@ export default {
                 {  optionIndex: this.editedIndex,
                    optionValue: this.editedItem.value,
                    optionTitle: this.editedItem.title,
+                   parentValue: this.editedItem.parentValue
                 },
                 function (response) {
                 if (response.isSuccess || response.IsSuccess) {
@@ -346,7 +351,7 @@ export default {
 
             const self = this;
             $.ajax({
-                url: this.$config.editOptionsUrl,
+                url: this.$config.isCascading ? this.$config.editCategoriesUrl : this.$config.editOptionsUrl,
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -397,12 +402,18 @@ export default {
             this.showTable = false;
 
             var stringifiedOptions = "";
+            var isCascading = this.$config.isCascading;
             var options = this.categories;
-
+            
             var maxLength = _.max(_.map(options, function (o) { return o.title.length; })) + 3;
             _.each(options, function (option) {
                 if (!_.isEmpty(option)) {
-                    stringifiedOptions += (option.title || "") + Array(maxLength + 1 - (option.title || "").length).join('.') + (option.value === 0 ? "0" : (option.value || ""));
+                    stringifiedOptions += (option.title || "") + Array(maxLength + 1 - (option.title || "").length).join('.'); 
+                    
+                    if(isCascading)
+                        stringifiedOptions += (option.parentValue === 0 ? "0" : (option.parentValue || "")) + "/";
+                    
+                    stringifiedOptions += (option.value === 0 ? "0" : (option.value || ""));
                     stringifiedOptions += "\n";
                 }
             });
@@ -412,22 +423,25 @@ export default {
         },
         showAsTable: function(){
             this.showTable = true;
+            
+            var isCascading = this.$config.isCascading;
 
             var regex = new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/);
 
-            var optionsStringList = (this.stringified || "").split("\n");
-            
+            var optionsStringList = (this.stringified || "").split("\n");            
+
             optionsStringList = _.filter(optionsStringList, function (line) { return !_.isEmpty(_.trim(line)); });            
 
             var options = _.map(optionsStringList, function(item) {
                 var matches = item.match(regex);
                 return {
-                    //id: utilityService.guid(),
                     value: matches[2] * 1,
+                    //parentValue: matches[2] * 1,
                     title: matches[1]
                 };
             });
 
+            this.stringified = "";
             this.categories = options;
         },
     },

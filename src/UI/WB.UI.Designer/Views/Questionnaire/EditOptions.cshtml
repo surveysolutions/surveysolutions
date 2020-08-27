@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="~/css/popup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-3fce3bfa73.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-7a2f4dd72e.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-3fce3bfa73.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-7a2f4dd72e.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-b50307087b.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-9816ae3604.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-b50307087b.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-9816ae3604.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
     <!-- endinject -->
        @{
             var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
@@ -33,12 +33,14 @@
     @Html.RenderConfig(new {
     applyUrl = Url.Action("ApplyOptions", "Questionnaire"),
     editOptionsUrl = Url.Action("EditOptions", "Questionnaire"),
+    editCategoriesUrl = Url.Action("EditCategories", "Questionnaire"),
     resetOptionsUrl = Url.Action("ResetOptions", "Questionnaire"),
     getOptionsUrl = Url.Action("GetOptions", "Questionnaire"),
     exportOptionsUrl = Url.Action("ExportOptions", "Questionnaire"),
     addOrUpdateOptionUrl = Url.Action("AddOrUpdateOption", "Questionnaire"),
     deleteOptionUrl = Url.Action("DeleteOption", "Questionnaire"),
-    isCascading = Model.IsCascading
+    isCascading = Model.IsCascading,
+    isCategories = Model.IsCategories
 })
     <script>           
     var require = {

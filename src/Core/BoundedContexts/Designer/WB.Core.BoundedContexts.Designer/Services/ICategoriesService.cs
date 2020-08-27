@@ -13,6 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType);
         void Store(Guid questionnaireId, Guid categoriesId, List<CategoriesRow> categoriesRows);
+
+        List<CategoriesRow> GetRowsFromFile(Stream file, CategoriesFileType fileType);
         byte[] GetTemplateAsExcelFile();
         IQueryable<CategoriesItem> GetCategoriesById(Guid questionnaireId, Guid id);
         CategoriesFile? GetAsExcelFile(Guid questionnaireId, Guid categoriesId);

@@ -132,16 +132,28 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
         {
             if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
+            
+            try
+            {
+                var categoriesRows = GetRowsFromFile(file, fileType);
+                this.Store(questionnaireId, categoriesId, categoriesRows);
+
+            }
+            catch (Exception e) when (e is NullReferenceException || e is InvalidDataException || e is COMException)
+            {
+                throw new InvalidFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
+            }
+        }
+
+        public List<CategoriesRow> GetRowsFromFile(Stream file, CategoriesFileType fileType)
+        {
             if (file == null) throw new ArgumentNullException(nameof(file));
 
             var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
 
             try
             {
-                var categoriesRows = extractService.Extract(file);
-
-                this.Store(questionnaireId, categoriesId, categoriesRows);
-
+                return extractService.Extract(file);
             }
             catch (Exception e) when (e is NullReferenceException || e is InvalidDataException || e is COMException)
             {
