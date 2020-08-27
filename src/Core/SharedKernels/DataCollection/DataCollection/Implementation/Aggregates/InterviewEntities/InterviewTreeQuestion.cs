@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public DateTime? AnswerTimeUtc => this.InterviewQuestion?.AnswerTime?.UtcDateTime;
+        public DateTime? AnswerTimeUtc => this.AnswerTime?.UtcDateTime;
         public DateTimeOffset? AnswerTime => this.InterviewQuestion?.AnswerTime;
 
         public bool IsPlausible => this.FailedWarnings.Count == 0;
