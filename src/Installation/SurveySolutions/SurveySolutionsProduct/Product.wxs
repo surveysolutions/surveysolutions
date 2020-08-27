@@ -163,14 +163,6 @@
     <Binary Id="CustomActionBinary"
             SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
 
-    <!--custom action to set settings and migrate old ones-->
-    <CustomAction Id="WriteExportServiceSettings"
-                  BinaryKey="CustomActionBinary"
-                  DllEntry="WriteExportIniSettings"
-                  Execute="deferred"
-                  Return="check" 
-                  Impersonate="no"/>
-
     <CustomAction Id="SetSiteSettingsDataValue"
                   Return="check"
                   Property="WriteSiteSettings"
@@ -201,13 +193,6 @@
       </Custom>
       <Custom Action="OpenURL" After="SetOpenURL">
         <![CDATA[NOT Installed]]>
-      </Custom>
-
-      <Custom Action="SetExportSettingsDataValue" Before="WriteExportServiceSettings">
-        <![CDATA[NOT Installed]]>
-      </Custom>
-      <Custom Action="WriteExportServiceSettings" After="InstallFiles" >
-          <![CDATA[NOT Installed]]>
       </Custom>
 
       <Custom Action="SetSiteSettingsDataValue" Before="WriteSiteSettings">
