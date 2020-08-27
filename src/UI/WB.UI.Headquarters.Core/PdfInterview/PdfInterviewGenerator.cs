@@ -44,9 +44,8 @@ namespace WB.UI.Headquarters.PdfInterview
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAttachmentContentService attachmentContentService;
 
-        //private const string DateTimeFormat = "MMM dd, yyyy HH:mm";
-        private const string DateTimeFormat = "yyyy-MM-dd HH:mm";
-        private const string TimeFormat = "HH:mm";
+        private const string DateTimeFormat = "yyyy-MM-dd HH:mm zzz";
+        private const string TimeFormat = "HH:mm zzz";
         private const string DateFormat = "yyyy-MM-dd";
         
         private static class PdfStyles
@@ -602,12 +601,12 @@ namespace WB.UI.Headquarters.PdfInterview
         {
             var row = table.AddRow();
 
-            if (question.AnswerTimeUtc.HasValue)
+            if (question.AnswerTime.HasValue)
             {
                 var firstCellParagraph = row[0].AddParagraph();
-                firstCellParagraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString(TimeFormat), PdfStyles.QuestionAnswerTime);
+                firstCellParagraph.AddFormattedText(question.AnswerTime.Value.ToString(TimeFormat), PdfStyles.QuestionAnswerTime);
                 firstCellParagraph.AddLineBreak();
-                firstCellParagraph.AddFormattedText(question.AnswerTimeUtc.Value.ToString(DateFormat), PdfStyles.QuestionAnswerDate);
+                firstCellParagraph.AddFormattedText(question.AnswerTime.Value.ToString(DateFormat), PdfStyles.QuestionAnswerDate);
             }
             
             Paragraph paragraph = row[2].AddParagraph();
