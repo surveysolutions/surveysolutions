@@ -832,6 +832,9 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
   <data name="SelectParentQuestion" xml:space="preserve">
     <value>Select parent question</value>
   </data>
