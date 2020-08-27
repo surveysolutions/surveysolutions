@@ -118,14 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
-
-&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსებიდან: &lt;i&gt; {{status1}} &lt;/ i&gt; და &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
+      <value>{{count}} ინტერვიუ (ებ) ი დამტკიცდება. </value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
+      <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
 
-&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსიდან: &lt;i&gt; {{status1}} &lt;/ i&gt; და &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
+&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსიდან: &lt;i&gt; {{status1}} &lt;/ i&gt;, &lt;i&gt; {{status2}} &lt;/ i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;. </value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ინტერვიუ შერჩეულია დავალებისთვის (s). &lt;/ h3&gt;
@@ -177,5 +175,11 @@
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ინტერვიუ (s) დაუშვებელია. &lt;/ h3&gt;
 
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ შემდეგნაირად შეუძლებელია: &lt;i&gt; {{status1}} &lt;/ i&gt;. </value>
+  </data>
+  <data name="Note" xml:space="preserve">
+      <value>შენიშვნა! </value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+      <value>ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსებიდან: {{status1}}, {{status2}}, {{status3}}</value>
   </data>
 </root>
