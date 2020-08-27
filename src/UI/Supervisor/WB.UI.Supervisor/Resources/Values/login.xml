@@ -71,6 +71,8 @@
     </style>
 
     <style name="Login_OnlineSingin_Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
         <item name="android:textColor">@color/errorTextColor</item>
     </style>
