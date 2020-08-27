@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 Stub.MvxMainThreadAsyncDispatcher(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                filteredOptionsViewModel ??  Abc.SetUp.FilteredOptionsViewModel(),
                 Create.ViewModel.ThrottlingViewModel());
 
             return cascadingSingleOptionQuestionViewModel;
