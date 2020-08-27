@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -37,8 +38,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         
         private readonly IMvxMessenger messenger;
 
-        private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-        private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken? startingLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken? stopLongOperationMessageSubscriptionToken;
 
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
@@ -146,8 +147,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void UnsubscribeFromMessages()
         {
-            startingLongOperationMessageSubscriptionToken.Dispose();
-            stopLongOperationMessageSubscriptionToken.Dispose();
+            startingLongOperationMessageSubscriptionToken?.Dispose();
+            stopLongOperationMessageSubscriptionToken?.Dispose();
         }
 
         public bool SynchronizationWithHqEnabled
@@ -158,14 +159,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private Guid? LastVisitedInterviewId { set; get; }
 
-        private IMvxCommand synchronizationCommand;
+        private IMvxCommand? synchronizationCommand;
         public IMvxCommand SynchronizationCommand
         {
             get
             {
-                return synchronizationCommand ??
-                       (synchronizationCommand = new MvxCommand(this.RunSynchronization,
-                           () => !this.Synchronization.IsSynchronizationInProgress));
+                return synchronizationCommand ??= new MvxCommand(this.RunSynchronization,
+                    () => !this.Synchronization.IsSynchronizationInProgress);
             }
         }
 
@@ -348,7 +348,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand StartOfflineSyncCommand => new MvxCommand(this.StartOfflineSynchronization);
         public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
 
-        public Action OnOfflineSynchronizationStarted;
+        public Action? OnOfflineSynchronizationStarted;
         private IMapInteractionService mapInteractionService;
 
         private void StartOfflineSynchronization()

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.UI.Headquarters.Services.Impl
 {

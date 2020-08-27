@@ -83,7 +83,7 @@ namespace WB.Services.Export.Jobs
         }
 
         public async Task<IEnumerable<DataExportProcessView>> GetDataExportStatusesAsync(
-            DataExportFormat? exportType, InterviewStatus? interviewStatus, string questionnaireIdentity,
+            DataExportFormat? exportType, InterviewStatus? interviewStatus, string? questionnaireIdentity,
             DataExportJobStatus? exportStatus, bool? hasFile, int? limit, int? offset)
         {
             var allProcesses = await this.dataExportProcessesService.GetAllProcessesAsync(false);
@@ -107,7 +107,7 @@ namespace WB.Services.Export.Jobs
         }
 
         private bool IsInFilter(DataExportProcessView process, DataExportFormat? exportType,
-            InterviewStatus? interviewStatus, string questionnaireIdentity, DataExportJobStatus? exportStatus,
+            InterviewStatus? interviewStatus, string? questionnaireIdentity, DataExportJobStatus? exportStatus,
             bool? hasFile)
         {
             var hasFormat = !exportType.HasValue || process.Format == exportType;

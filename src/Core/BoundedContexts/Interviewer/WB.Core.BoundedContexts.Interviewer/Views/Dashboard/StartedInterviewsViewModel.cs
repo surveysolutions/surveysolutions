@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override string TabTitle => EnumeratorUIResources.Dashboard_StartedLinkText;
         public override string TabDescription => EnumeratorUIResources.Dashboard_StartedTabText;
         
-        public event EventHandler<InterviewRemovedArgs> OnInterviewRemoved;
+        public event EventHandler<InterviewRemovedArgs>? OnInterviewRemoved;
 
         public StartedInterviewsViewModel(IPlainStorage<InterviewView> interviewViewRepository, 
             IInterviewViewModelFactory viewModelFactory,
@@ -47,7 +47,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.UiItems.Remove(dashboardItem);
 
-            this.OnInterviewRemoved(sender, new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
+            if (this.OnInterviewRemoved != null)
+            {
+                this.OnInterviewRemoved(sender,
+                    new InterviewRemovedArgs(dashboardItem.AssignmentId, dashboardItem.InterviewId));
+            }
         }
     }
 }

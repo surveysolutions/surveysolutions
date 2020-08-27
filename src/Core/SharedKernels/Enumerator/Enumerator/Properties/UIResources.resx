@@ -542,6 +542,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
     <value>Loaded map is outside of visible boundaries</value>
   </data>
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>Error occured on loading. Shapefile cannot be opened</value>
+  </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
   </data>
@@ -586,6 +589,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>MAPS AVAILABLE ON DEVICE</value>
+  </data>
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Load shapefile</value>
   </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
     <value>Assignments</value>
