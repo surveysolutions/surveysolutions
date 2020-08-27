@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         [Get("/api/v1/job/byQuery")]
         Task<IEnumerable<DataExportProcessView>> GetJobsByQuery(DataExportFormat? exportType, InterviewStatus? interviewStatus,
-            string questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit = null, int? offset = null);
+            string? questionnaireIdentity, DataExportJobStatus? exportStatus, bool? hasFile, int? limit = null, int? offset = null);
 
         [Get("/api/v1/jobs")]
         Task<List<DataExportProcessView>> GetJobsStatuses([Query(CollectionFormat.Multi)]long[] processIds);

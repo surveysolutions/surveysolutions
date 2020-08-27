@@ -54,7 +54,7 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import parseInt from 'lodash'
 
-const interviewsQuestionnaireDeletionQuery = gql`query hqInterviews($questionnaireId: Uuid, $questionnaireVersion: Long) {
+const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questionnaireId: Uuid, $questionnaireVersion: Long) {
   interviews(where: {
        questionnaireId: $questionnaireId,
        questionnaireVersion: $questionnaireVersion,
@@ -64,7 +64,7 @@ const interviewsQuestionnaireDeletionQuery = gql`query hqInterviews($questionnai
   }
 }`
 
-const assignmentsQuestionnaireDeletionQuery = gql`query ($questionnaireId: Uuid, $version: Long) {
+const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($questionnaireId: Uuid, $version: Long) {
   assignments(where: {
     receivedByTabletAtUtc_not: null
     questionnaireId: {

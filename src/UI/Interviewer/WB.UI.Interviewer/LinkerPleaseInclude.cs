@@ -12,6 +12,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.LinkerInclusion

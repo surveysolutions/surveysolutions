@@ -240,7 +240,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.statefulInterviewRepository.Get(interviewId) != null;
             }
 
-            if (invitation.Assignment == null)
+            if (invitation?.Assignment == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 

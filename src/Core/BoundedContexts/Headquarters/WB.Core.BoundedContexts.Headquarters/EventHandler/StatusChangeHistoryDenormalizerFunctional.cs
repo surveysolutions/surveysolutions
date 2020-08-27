@@ -52,14 +52,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
-        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetActionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
+
+        private static readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetActionShouldBeRecorded =
+            new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
         private InterviewSummary RecordFirstAnswerIfNeeded(Guid eventIdentifier, InterviewSummary interviewSummary, Guid interviewId, Guid userId, DateTime answerTime)
         {
             if(!interviewSummary.InterviewCommentedStatuses.Any())
                    return interviewSummary;
 
-            if (!this.listOfActionsAfterWhichFirstAnswerSetActionShouldBeRecorded.Contains(interviewSummary.InterviewCommentedStatuses.Last().Status))
+            if (!listOfActionsAfterWhichFirstAnswerSetActionShouldBeRecorded.Contains(interviewSummary.InterviewCommentedStatuses.Last().Status))
                 return interviewSummary;
 
             var responsible = this.users.GetUser(userId);

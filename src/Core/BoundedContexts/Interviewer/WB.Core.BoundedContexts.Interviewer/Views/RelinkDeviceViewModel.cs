@@ -6,6 +6,7 @@ using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -37,18 +38,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         protected override bool IsAuthenticationRequired => false;
 
-        private string errorMessage;
-        public string ErrorMessage
+        private string? errorMessage;
+        public string? ErrorMessage
         {
             get => this.errorMessage;
-            set { this.errorMessage = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.errorMessage, value);
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set { this.isInProgress = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.isInProgress, value);
         }
 
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
@@ -60,7 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxAsyncCommand RelinkCommand => new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress);
 
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private InterviewerIdentity userIdentityToRelink;
+        private InterviewerIdentity? userIdentityToRelink;
 
         public override void Prepare(RelinkDeviceViewModelArg parameter)
         {
@@ -84,6 +85,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
         {
+            if (this.userIdentityToRelink == null)
+            {
+                throw new ArgumentNullException(nameof(userIdentityToRelink));
+            }
             this.IsInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource();
             try
@@ -119,7 +124,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.cancellationTokenSource.Cancel();
             return this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel, FinishInstallationViewModelArg>(
-                new FinishInstallationViewModelArg(this.userIdentityToRelink.Name));
+                new FinishInstallationViewModelArg(this.userIdentityToRelink?.Name));
         }
     }
 }

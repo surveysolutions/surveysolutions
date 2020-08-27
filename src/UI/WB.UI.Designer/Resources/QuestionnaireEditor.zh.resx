@@ -225,9 +225,6 @@
   <data name="EmptySectionLine3" xml:space="preserve">
     <value>在此区域的上端，或使用{{-panel}}作面板的管理菜单</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>调研使用的语言、设备类型、协作和其它选项</value>
-  </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>可以在 {{-settingsBtn}}面板（右上角）找到</value>
   </data>
