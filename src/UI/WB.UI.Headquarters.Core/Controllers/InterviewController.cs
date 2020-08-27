@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                             Url.Action("Profile", "Interviewer", new { id = interviewSummary.ResponsibleId }) :
                                             "javascript:void(0);",
                 InterviewsUrl = Url.Action("Index", "Interviews"),
-                PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ interviewId = id }),
+                PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ id = id }),
             });
         }
 
