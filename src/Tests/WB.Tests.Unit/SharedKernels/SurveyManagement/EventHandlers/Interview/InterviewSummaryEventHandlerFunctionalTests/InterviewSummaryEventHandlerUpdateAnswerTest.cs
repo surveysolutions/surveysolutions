@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 new ReusableCategoriesFillerIntoQuestionnaire(new ReusableCategoriesStorage(reusableCategoriesStorage)));
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
 
-            var interviewSummaryEventHandler = new InterviewSummaryDenormalizer(Mock.Of<IUserViewFactory>(), questionnaireStorage);
+            var interviewSummaryEventHandler = new InterviewSummaryDenormalizer(Mock.Of<IUserViewFactory>(), questionnaireStorage, Create.Storage.NewMemoryCache());
 
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
@@ -292,7 +292,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             return new InterviewSummaryDenormalizer(
                 new Mock<IUserViewFactory>().Object,
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == plainQuestionnaire));
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == plainQuestionnaire),
+                Create.Storage.NewMemoryCache());
         }
 
         protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)

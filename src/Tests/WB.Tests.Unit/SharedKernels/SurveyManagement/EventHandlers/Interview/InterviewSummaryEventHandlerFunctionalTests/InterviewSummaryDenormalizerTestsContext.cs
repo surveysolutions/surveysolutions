@@ -41,7 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                         Mock.Of<IQuestionnaireStorage>(
                             _ =>
                                 _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) ==
-                                doc));
+                                doc),
+                    memoryCache: Create.Storage.NewMemoryCache());
         }
 
 

@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالات التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
-  </data>
-  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} &lt;/ i&gt;. </value>
-  </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt;المقابلات (المقابلة) التي تم اختيارها لإعادة تعيينها. &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك تعيين مقابلات مع الحالات التالية فقط: &lt;i&gt; {{status1}} &lt;/ i&gt; و &lt;i&gt; {{status2}} (فقط على باحث اخر) &lt;/ i&gt; و &lt;i&gt; {{status3}} &lt;/ I&gt;. </value>
   </data>
