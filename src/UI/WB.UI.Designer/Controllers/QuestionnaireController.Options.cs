@@ -14,6 +14,9 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.BootstrapSupport;
@@ -123,7 +126,7 @@ namespace WB.UI.Designer.Controllers
                     new
                     {
                         id = this.questionWithOptionsViewModel.QuestionnaireId,
-                        questionId = this.questionWithOptionsViewModel.QuestionId
+                        categoriesId = this.questionWithOptionsViewModel.CategoriesId
                     });
             }
 
@@ -155,7 +158,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrUpdateOption(int optionValue, string optionTitle ,int optionIndex)
+        public IActionResult AddOrUpdateOption(int optionValue, string optionTitle ,int optionIndex, int? parentValue)
         {
             List<string> errors = new List<string>();
 
@@ -171,6 +174,7 @@ namespace WB.UI.Designer.Controllers
                 var option = withOptionsViewModel.Options[optionIndex];
                 option.Value = optionValue;
                 option.Title = optionTitle;
+                option.ParentValue = parentValue;
             }
             else
             {
@@ -178,6 +182,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     Value = optionValue, 
                     Title = optionTitle,
+                    ParentValue = parentValue
                 });
             }
             
@@ -207,7 +212,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditOptions(IFormFile csvFile)
+        public IActionResult EditOptions(IFormFile? csvFile)
         {
             List<string> errors = new List<string>();
             
@@ -232,7 +237,10 @@ namespace WB.UI.Designer.Controllers
                     withOptionsViewModel.QuestionId);
 
                 if (importResult.Succeeded)
+                {
                     withOptionsViewModel.Options = importResult.ImportedOptions.ToList();
+                    this.questionWithOptionsViewModel = withOptionsViewModel;
+                }
                 else
                     errors.AddRange(importResult.Errors);
             }
@@ -241,8 +249,76 @@ namespace WB.UI.Designer.Controllers
                 errors.Add(Resources.QuestionnaireController.TabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
+            
+            return this.Json(errors);
+        }
 
-            this.questionWithOptionsViewModel = withOptionsViewModel;
+        [HttpPost]
+        public IActionResult EditCategories(IFormFile? csvFile)
+        {
+            List<string> errors = new List<string>();
+
+            var withOptionsViewModel = this.questionWithOptionsViewModel;
+            if (withOptionsViewModel == null)
+            {
+                errors.Add(Resources.QuestionnaireController.Error);
+                return this.Json(errors);
+            }
+
+            if (csvFile == null)
+            {
+                errors.Add(Resources.QuestionnaireController.SelectTabFile);
+                return this.Json(errors);
+            }
+
+            try
+            {
+                var extension = this.fileSystemAccessor.GetFileExtension(csvFile.FileName);
+
+                var excelExtensions = new[] {".xlsx", ".ods", ".xls"};
+                var tsvExtensions = new[] {".txt", ".tab", ".tsv"};
+
+                if (!excelExtensions.Union(tsvExtensions).Contains(extension))
+                    throw new ArgumentException(ExceptionMessages.ImportOptions_Tab_Or_Excel_Only);
+
+                var fileType = excelExtensions.Contains(extension)
+                    ? CategoriesFileType.Excel
+                    : CategoriesFileType.Tsv;
+
+                var rows = this.categoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
+
+                withOptionsViewModel.Options =
+                    rows
+                        .Select(x => new QuestionnaireCategoricalOption()
+                        {
+                            Title = x.Text,
+                            Value = int.Parse(x.Id!),
+                            ParentValue = string.IsNullOrEmpty(x.ParentId)
+                                ? (int?) null
+                                : int.Parse(x.ParentId)
+                        })
+                        .ToList();
+
+                this.questionWithOptionsViewModel = withOptionsViewModel;
+            }
+            catch (InvalidFileException e)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(e.Message);
+                e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
+
+                errors.Add(sb.ToString());
+            }
+            catch (ArgumentException ex)
+            {
+                errors.Add(ex.Message);
+            }
+            catch (Exception e)
+            {
+                errors.Add(Resources.QuestionnaireController.TabFilesOnly);
+                this.logger.LogError(e, e.Message);
+            }
+            
             return this.Json(errors);
         }
 
@@ -260,20 +336,35 @@ namespace WB.UI.Designer.Controllers
 
             if (this.questionWithOptionsViewModel.IsCategories)
             {
-                dynamic categoriesCommandResult = new ExpandoObject();
-                categoriesCommandResult.IsSuccess = true;
+                var questionnaireId = Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId);
+                var categoriesId = Guid.NewGuid();
+                
+                try
+                {
+                    this.categoriesService.Store(questionnaireId,
+                        categoriesId,
+                        this.questionWithOptionsViewModel.Options.Select(x => new CategoriesRow()).ToList());
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogError(e, "Error on categories saving", e);
 
-                //validate and save new categories
-                //execute command
+                    dynamic commandResult = new ExpandoObject();
+                    commandResult.IsSuccess = false;
+                    commandResult.Error = "Error occurred: " + e.Message;
 
-                /*var command = new AddOrUpdateCategories(
-                    this.questionWithOptionsViewModel.QuestionnaireId,
+                    return Json(commandResult); 
+                }
+                
+
+                var command = new AddOrUpdateCategories(
+                    questionnaireId,
                     this.User.GetId(),
-                    Guid.NewGuid(),
-                    this.questionWithOptionsViewModel.CategoriesName,
-                    this.questionWithOptionsViewModel.CategoriesId
-                    );*/
+                    categoriesId,
+                    this.questionWithOptionsViewModel.CategoriesName??"",
+                    this.questionWithOptionsViewModel.CategoriesId);
 
+                var categoriesCommandResult = await this.ExecuteCommand(command);
                 return Json(categoriesCommandResult);
             }
             else
@@ -321,7 +412,7 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-        private async Task<object> ExecuteCommand(QuestionCommand command)
+        private async Task<object> ExecuteCommand(QuestionnaireCommand command)
         {
             dynamic commandResult = new ExpandoObject();
             commandResult.IsSuccess = true;
@@ -341,7 +432,7 @@ namespace WB.UI.Designer.Controllers
                 commandResult = new ExpandoObject();
                 commandResult.IsSuccess = false;
                 commandResult.HasPermissions = domainEx != null && domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit;
-                commandResult.Error = domainEx != null ? domainEx.Message : "Something goes wrong";
+                commandResult.Error = domainEx != null ? domainEx.Message : "Something went wrong";
             }
             return commandResult;
         }

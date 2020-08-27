@@ -646,6 +646,9 @@
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
   <data name="SelectParentQuestion" xml:space="preserve">
     <value>Выберите родительский вопрос</value>
   </data>
