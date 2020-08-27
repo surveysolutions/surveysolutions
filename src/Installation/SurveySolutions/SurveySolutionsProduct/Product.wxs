@@ -263,7 +263,6 @@
         <ComponentRef Id="InterviewerTabletAppFileComponent"/>
         <ComponentRef Id="InterviewerExtTabletAppFileComponent"/>
         <!--<ComponentRef Id="StopService"/>-->
-        <ComponentRef Id="ServiceConfigPreserve"/>
         <ComponentRef Id="UninstallExportServiceComponent"/>
     </ComponentGroup>
 
@@ -319,9 +318,6 @@
             </Directory>
         <Directory Id="EXPORTSERVICEFOLDER" Name="ExportService">
             <!--creating components to track files to delete on uninstall-->
-            <Component Id="ServiceConfigPreserve" Guid="035F0D52-04C7-4DB4-A9C7-C447F405CAAB" NeverOverwrite="yes">
-                <File Id="ServiceConfigFile" Source="appsettings.production.ini" PatchIgnore="yes"/>
-            </Component>
 
             <!--Explicit extra service stop-->
             <!--<Component Id='StopService' Guid='4229CEE8-BBA2-4F02-AD3D-A9ED064FDACE' KeyPath='yes'>

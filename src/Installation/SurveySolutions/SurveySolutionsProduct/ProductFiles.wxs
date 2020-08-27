@@ -2,7 +2,6 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFILESFOLDER">
-            <Directory Id="dirAC9381ECDA1BE1937C13321880076889" Name="ExportService" />
             <Directory Id="dirBC2EE47B4B5C4027A43DC102365B0F4A" Name="Site" />
         </DirectoryRef>
     </Fragment>
