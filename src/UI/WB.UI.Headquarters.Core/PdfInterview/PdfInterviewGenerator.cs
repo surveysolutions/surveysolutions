@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.PdfInterview
         //private const string DateTimeFormat = "MMM dd, yyyy HH:mm";
         private const string DateTimeFormat = "yyyy-MM-dd HH:mm";
         private const string TimeFormat = "HH:mm";
-        private const string DateFormat = "MMM dd, yyyy";
+        private const string DateFormat = "yyyy-MM-dd";
         
         private static class PdfStyles
         {
@@ -101,8 +101,8 @@ namespace WB.UI.Headquarters.PdfInterview
             var nodes = GetAllInterviewNodes(interview, user).ToList();
             int answeredQuestions = nodes.Count(node => questionnaire.IsQuestion(node.Id) && interview.WasAnswered(node)); 
             int groupCount = nodes.Count(node => questionnaire.IsSubSection(node.Id)); 
-            int errorsCount = nodes.Count(node => interview.IsEntityValid(node));
-            int warningsCount = nodes.Count(node => interview.IsEntityPlausible(node));
+            int errorsCount = nodes.Count(node => !interview.IsEntityValid(node));
+            int warningsCount = nodes.Count(node => !interview.IsEntityPlausible(node));
 
             GlobalFontSettings.FontResolver = PdfInterviewFontResolver;
             //var fontResolver = new FontResolver();
@@ -191,30 +191,30 @@ namespace WB.UI.Headquarters.PdfInterview
         {
             foreach (Section section in document.Sections)
             {
-                //section.Footers.Primary.Format.SpaceAfter = "10pt";
-                section.Footers.Primary.Format.LeftIndent = "0pt";
-                section.Footers.Primary.Format.RightIndent = "0pt";
+                //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
+                section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
+                section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.Borders.Top = new Border()
                 {
                     Style = BorderStyle.Dot,
-                    Width = "1pt"
+                    Width = Unit.FromPoint(1)
                 };
                 
                 Paragraph leftFooter = section.Footers.Primary.AddParagraph();
                 leftFooter.AddPageField();
                 leftFooter.AddText(PdfInterviewRes.PageOf);
                 leftFooter.AddNumPagesField();
-                leftFooter.Format.Font.Size = "6pt";
+                leftFooter.Format.Font.Size = Unit.FromPoint(6);
                 leftFooter.Format.Alignment = ParagraphAlignment.Left;            
                 
                 Paragraph centerFooter = section.Footers.Primary.AddParagraph();
                 centerFooter.AddText(questionnaire.Title);
-                centerFooter.Format.Font.Size = "6pt";
+                centerFooter.Format.Font.Size = Unit.FromPoint(6);
                 centerFooter.Format.Alignment = ParagraphAlignment.Center;            
 
                 Paragraph rightFooter = section.Footers.Primary.AddParagraph();
                 rightFooter.AddText(interview.GetInterviewKey().ToString());
-                rightFooter.Format.Font.Size = "6pt";
+                rightFooter.Format.Font.Size = Unit.FromPoint(6);
                 rightFooter.Format.Alignment = ParagraphAlignment.Right;            
             }
         }
@@ -280,7 +280,7 @@ namespace WB.UI.Headquarters.PdfInterview
             //sectionHeader.ParagraphFormat.Borders.Top = new Border() { Width = "1pt", Color = Colors.DarkGray };
             sectionHeader.ParagraphFormat.LineSpacing = 0;
             sectionHeader.ParagraphFormat.LineSpacingRule = LineSpacingRule.Single;
-            //sectionHeader.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
+            sectionHeader.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
             //sectionHeader.ParagraphFormat.SpaceBefore = "40pt";
             sectionHeader.ParagraphFormat.SpaceAfter = "15pt";
 
@@ -352,7 +352,20 @@ namespace WB.UI.Headquarters.PdfInterview
             var interviewKey = interview.GetInterviewKey().ToString();
             //QuestionnaireDocument d; d.Metadata.
 
-            /*var barcode = section.Elements.AddBarcode();
+            /*Code3of9Standard BarCode39 = new PdfSharp.Drawing.BarCodes.Code3of9Standard();
+            BarCode39.TextLocation = new PdfSharp.Drawing.BarCodes.TextLocation();
+            BarCode39.Text = txtDOCU;//value of code to draw on page
+            BarCode39.StartChar = Convert.ToChar("*");
+            BarCode39.EndChar = Convert.ToChar("*");
+            BarCode39.Direction = PdfSharp.Drawing.BarCodes.CodeDirection.LeftToRight;
+            PdfPage Page_BARCODE = PDFdoc.Pages[Itxt];
+            XGraphics gfxBARCODE = XGraphics.FromPdfPage(Page_BARCODE);
+            XFont fontBARCODE = new XFont("Arial", 14, XFontStyle.Regular);
+            BarCode39.Size.ToXPoint();
+            gfxBARCODE.DrawBarCode(BarCode39, XBrushes.Black,fontBARCODE,new XPoint(Convert.ToDouble(str_dbl_X), Convert.ToDouble(str_dbl_Y)));
+            */
+            
+            var barcode = section.Elements.AddBarcode();
             barcode.Orientation = TextOrientation.Horizontal;
             barcode.Code = interviewKey;
             barcode.Text = true;
@@ -360,15 +373,18 @@ namespace WB.UI.Headquarters.PdfInterview
             barcode.Width = "6cm";
             barcode.Height = "2cm";
             barcode.Left = LeftPosition.Parse("2cm");
-            barcode.Top = TopPosition.Parse("0cm");*/
+            barcode.Top = TopPosition.Parse("0cm");
+            // barcode.BearerBars = true;
+            // barcode.LineHeight = 20;
+            // barcode.LineRatio = 2;
 
             var logoContent = GetEmbeddedResource("headquarter_logo.png");
             ImageSource.IImageSource logoImageSource = ImageSource.FromBinary("logo.png", () => logoContent);
             var image = section.AddImage(logoImageSource);
             image.Width = Unit.FromPoint(100);
             image.LockAspectRatio = true;
-            //image.Left = LeftPosition.Parse("132pt"); 
-            image.Left = LeftPosition.Parse("0pt"); 
+            image.Left = LeftPosition.Parse("132pt"); 
+            //image.Left = LeftPosition.Parse("0pt"); 
             image.Top = TopPosition.Parse("0pt");
             
             /*var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
@@ -398,6 +414,7 @@ namespace WB.UI.Headquarters.PdfInterview
             var columnRight = table.AddColumn(Unit.FromCentimeter(5));
 
             var row = table.AddRow();
+            row = table.AddRow();
 
             var interviewKeyTitle = row[0].AddParagraph();
             interviewKeyTitle.Format.Font.Size = "8pt"; 
@@ -409,8 +426,8 @@ namespace WB.UI.Headquarters.PdfInterview
             interviewKeyValue.AddText(interviewKey);
             
             var interviewStats = row[0].AddParagraph();
-            interviewStats.Format.SpaceBefore = "16pt";
-            interviewStats.Format.Font.Size = "8pt";
+            interviewStats.Format.SpaceBefore = Unit.FromPoint(16);
+            interviewStats.Format.Font.Size = Unit.FromPoint(8);
             var formattedText = interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatistics, answeredQuestions, groupCount));
             if (errorsCount > 0 || warningsCount > 0)
             {
@@ -572,10 +589,10 @@ namespace WB.UI.Headquarters.PdfInterview
             table.Borders.Bottom.Width = 0;
             table.Rows.HeightRule = RowHeightRule.Auto;
 
-            var column = table.AddColumn("2cm");
+            var column = table.AddColumn(Unit.FromCentimeter(2));
             column.Format.Alignment = ParagraphAlignment.Right;
-            column = table.AddColumn("1cm");
-            column = table.AddColumn("15cm");
+            column = table.AddColumn(Unit.FromCentimeter(1));
+            column = table.AddColumn(Unit.FromCentimeter(15));
             column.Format.Alignment = ParagraphAlignment.Left;
             return table;
         }
