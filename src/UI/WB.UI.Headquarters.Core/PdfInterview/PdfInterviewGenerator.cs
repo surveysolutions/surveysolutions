@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -59,9 +61,15 @@ namespace WB.UI.Headquarters.PdfInterview
             this.attachmentContentService = attachmentContentService;
         }
 
-        static readonly IFontResolver PdfInterviewFontResolver = new PdfInterviewFontResolver();
+        static PdfInterviewGenerator()
+        {
+            IFontResolver pdfInterviewFontResolver = new PdfInterviewFontResolver();
+            GlobalFontSettings.FontResolver = pdfInterviewFontResolver;
+            
+            ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
+        }
 
-        public byte[] Generate(Guid interviewId, IPrincipal user)
+        public Stream Generate(Guid interviewId, IPrincipal user)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
@@ -80,11 +88,11 @@ namespace WB.UI.Headquarters.PdfInterview
             int warningsCount = nodes.Count(node => !interview.IsEntityPlausible(node));
             int commentedCount = questions.Count(node => interview.GetQuestionComments(node).Any());
 
-            GlobalFontSettings.FontResolver = PdfInterviewFontResolver;
+            //GlobalFontSettings.FontResolver = PdfInterviewFontResolver;
             //var fontResolver = new FontResolver();
             //GlobalFontSettings.FontResolver = fontResolver;
             //GlobalFontSettings.FontResolver = new PdfInterviewFontResolver();
-            ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
+            //ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
             
             PdfDocument pdfDocument = new PdfDocument();
             Document document = new Document();
@@ -151,9 +159,9 @@ namespace WB.UI.Headquarters.PdfInterview
 
             RenderBarCode(pdfDocument.Pages[0], interview);
 
-            using var memoryStream = new MemoryStream();
+            var memoryStream = new MemoryStream();
             renderer.PdfDocument.Save(memoryStream);
-            return memoryStream.ToArray();
+            return memoryStream;
         }
 
         private void RenderBarCode(PdfPage page, IStatefulInterview? interview)
@@ -402,7 +410,7 @@ namespace WB.UI.Headquarters.PdfInterview
             }*/
 
             var logoContent = GetEmbeddedResource("headquarter_logo.png");
-            ImageSource.IImageSource logoImageSource = ImageSource.FromBinary("logo.png", () => logoContent);
+            ImageSource.IImageSource logoImageSource = ImageSource.FromStream("logo.png", () => logoContent);
             var image = section.AddImage(logoImageSource);
             image.Width = Unit.FromPoint(100);
             image.LockAspectRatio = true;
@@ -432,12 +440,12 @@ namespace WB.UI.Headquarters.PdfInterview
 
             Table table = section.AddTable();
             table.TopPadding = Unit.FromPoint(10);
-            var columnLeft = table.AddColumn(Unit.FromCentimeter(5));
-            var columnCenter = table.AddColumn(Unit.FromCentimeter(7));
-            var columnRight = table.AddColumn(Unit.FromCentimeter(5));
+            table.AddColumn(Unit.FromCentimeter(5));
+            table.AddColumn(Unit.FromCentimeter(7));
+            table.AddColumn(Unit.FromCentimeter(5));
 
+            table.AddRow();
             var row = table.AddRow();
-            row = table.AddRow();
 
             var interviewKeyTitle = row[0].AddParagraph();
             interviewKeyTitle.Format.Font.Size = "8pt"; 
@@ -561,14 +569,11 @@ namespace WB.UI.Headquarters.PdfInterview
             row.Borders.Top = new Border() { Style = BorderStyle.Single, Width = "1pt"};
         }
         
-        public static byte[] GetEmbeddedResource(String filename)
+        private static Stream GetEmbeddedResource(String filename)
         {
             System.Reflection.Assembly a = typeof(PdfInterviewGenerator).Assembly;
-            using Stream resFileStream = a.GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
-            if (resFileStream == null) return null;
-            byte[] ba = new byte[resFileStream.Length];
-            resFileStream.Read(ba, 0, ba.Length);
-            return ba;
+            Stream resFileStream = a.GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
+            return resFileStream;
         }
 
         private void WriteStaticTextData(Table table, InterviewTreeStaticText staticText,
