@@ -40,11 +40,14 @@ namespace WB.Infrastructure.AspNetCore
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
                 .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService", LogEventLevel.Error)
+                .MinimumLevel.Override("WB.UI.Headquarters.Code.Authentication.TenantTokenAuthenticationHandler", LogEventLevel.Information)
                 .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
                     restrictedToMinimumLevel: LogEventLevel.Information)
                 .WriteTo
                     .File(new RenderedCompactJsonFormatter(), Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                         retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
+                .ReadFrom.Configuration(host.Configuration, "Logging")
                 ;    
         }
 
@@ -66,11 +69,12 @@ namespace WB.Infrastructure.AspNetCore
                 {
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                    loggerConfig.WriteTo.Console(
+                    loggerConfig.WriteTo
+                        .Console(LogEventLevel.Debug,
                         outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {AppType:w3} {Message:lj}{NewLine}{Exception}"
                     );
                 }
-            });
+            }, preserveStaticLogger: true);
         }
         
         private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";

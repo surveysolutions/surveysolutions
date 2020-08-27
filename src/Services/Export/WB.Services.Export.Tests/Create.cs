@@ -13,6 +13,7 @@ using WB.Services.Export.Assignment;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Ddi;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Events.Interview.Dtos;
@@ -49,7 +50,8 @@ namespace WB.Services.Export.Tests
             int numberInvalidEntities = 0,
             int numberUnansweredQuestions = 0,
             int numberCommentedQuestions = 0,
-            long? interviewDuration = null)
+            long? interviewDuration = null, 
+            int? notAnsweredCount = null)
             => new InterviewDiagnosticsInfo
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -64,7 +66,8 @@ namespace WB.Services.Export.Tests
                 NumberInvalidEntities = numberInvalidEntities,
                 NumberUnansweredQuestions = numberUnansweredQuestions,
                 NumberCommentedQuestions = numberCommentedQuestions,
-                InterviewDuration = interviewDuration
+                InterviewDuration = interviewDuration,
+                NotAnsweredCount = notAnsweredCount
             };
 
         public static DiagnosticsExporter DiagnosticsExporter(ICsvWriter csvWriter = null,
@@ -205,7 +208,8 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IPdfExporter>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 assignmentsActionsExporter ?? Mock.Of<IAssignmentActionsExporter>(),
-                Mock.Of<IJsonExporter>());
+                Mock.Of<IQuestionnaireBackupExporter>(),
+                Mock.Of<IDdiMetadataFactory>());
         }
 
         public static CommentsExporter CommentsExporter()
@@ -718,10 +722,12 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ILogger<PdfExporter>>());
         }
 
-        public static JsonExporter JsonExporter(IFileSystemAccessor fileSystem = null)
+        public static QuestionnaireBackupExporter QuestionnaireBackupExporter(IFileSystemAccessor fileSystem = null,
+            ITenantApi<IHeadquartersApi> tenantApi = null)
         {
-            return new JsonExporter(fileSystem ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ILogger<JsonExporter>>());
+            return new QuestionnaireBackupExporter(fileSystem ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ILogger<QuestionnaireBackupExporter>>(),
+                tenantApi?? Mock.Of<ITenantApi<IHeadquartersApi>>());
         }
 
         internal static IInterviewsDoFilesExporter InterviewsDoFilesExporter(IFileSystemAccessor fileSystemAccessor, QuestionnaireLabelFactory questionnaireLabelFactory = null)

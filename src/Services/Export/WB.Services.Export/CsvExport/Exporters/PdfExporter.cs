@@ -38,7 +38,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireDocument questionnaire,
             string basePath, CancellationToken cancellationToken)
         {
-            var targetFolder = Path.Combine(basePath, "Pdf");
+            var targetFolder = Path.Combine(basePath, "Questionnaire");
+            Directory.CreateDirectory(targetFolder);
+
+            targetFolder = Path.Combine(targetFolder, "Pdf");
             IHeadquartersApi hqApi = tenantApi.For(tenant);
 
             this.logger.LogDebug("Loading main pdf for {questionnaire}", questionnaire.QuestionnaireId);

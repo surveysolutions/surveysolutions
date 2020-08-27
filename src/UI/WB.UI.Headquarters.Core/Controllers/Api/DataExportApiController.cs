@@ -159,7 +159,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 processView.InterviewStatus,
                 processView.FromDate,
                 processView.ToDate,
-                processView.TranslationId);
+                processView.TranslationId,
+                processView.IncludeMeta);
         }
 
         [HttpGet]
@@ -169,10 +170,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             InterviewStatus? status = null,
             DateTime? from = null,
             DateTime? to = null,
-            Guid? translationId = null)
+            Guid? translationId = null,
+            bool? includeMeta = null)
         {
             DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(
-                new QuestionnaireIdentity(id, version), format, status, from, to, translationId);
+                new QuestionnaireIdentity(id, version), format, status, from, to, translationId, includeMeta);
             if (result == null)
             {
                 return NotFound();
@@ -217,7 +219,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             InterviewStatus? status = null,
             DateTime? from = null,
             DateTime? to = null,
-            Guid? translationId = null)
+            Guid? translationId = null,
+            bool? includeMeta = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
@@ -226,7 +229,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound("Questionnaire not found");
 
             return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to, 
-                translation: translationId);
+                translation: translationId, includeMeta: includeMeta);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -238,7 +241,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             string accessToken = null,
             string refresh_token = null,
             ExternalStorageType? externalStorageType = null,
-            Guid? translation = null)
+            Guid? translation = null,
+            bool? includeMeta = null)
         {
             long jobId = 0;
             try
@@ -253,7 +257,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     accessToken,
                     refresh_token,
                     externalStorageType,
-                    translation);
+                    translation,
+                    includeMeta);
 
                 jobId = result?.JobId ?? 0;
 

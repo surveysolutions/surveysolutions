@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected Guid interviewId;
         protected NavigationState navigationState;
 
-        public virtual void Configure(string interviewId, NavigationState navigationState)
+        public virtual void Configure(string interviewId, NavigationState navigationState, Identity anchoredElementIdentity)
         {
             this.navigationState = navigationState;
             this.interviewId = Guid.Parse(interviewId);
@@ -147,7 +147,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.DoesShowCommentsBlock = CountOfCommentedQuestions > 0 || interview.WasCompleted || interview.WasRejected;
 
             this.SupervisorNote = interview.GetLastSupervisorComment();
+            
+            this.SetScrollTo(anchoredElementIdentity);
         }
+        
+        private void SetScrollTo(Identity scrollTo)
+        {
+            if (scrollTo != null)
+            {
+                ScrollToIdentity = scrollTo;
+            }
+        }
+
+        public Identity ScrollToIdentity { get; set; }
 
         private CompositeCollection<ICompositeEntity> GetEditablePrefilledData(string interviewId, NavigationState navigationState)
         {
@@ -181,6 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                     return new CoverPrefilledEntity
                     {
+                        Identity = entityIdentity,
                         Title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity),
                         Answer = entity.QuestionType.HasValue
                             ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)

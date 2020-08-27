@@ -69,24 +69,6 @@ foreach($file in $files) {
 }
 # $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
 $productFileVersion = $versionOfProduct.FileVersion
-# https://github.com/dotnet/core/issues/4011#issuecomment-567610911
-$envBundle = [xml] @"
-<environmentVariables>
-<environmentVariable name="DOTNET_BUNDLE_EXTRACT_BASE_DIR" value=".\.net-app" />
-</environmentVariables>
-"@
-
- $hqConfig = "$HQsitePath\Site\Web.config"
- [xml]$xml = Get-Content $hqConfig
- $aspNetCores = $xml.SelectNodes("//aspNetCore")
-
- foreach($aspNetCore in $aspNetCores) 
- {
-     $envNode = $xml.ImportNode($envBundle.DocumentElement, $true)
-     $aspNetCore.AppendChild($envNode)
- }
-
- $xml.save($hqConfig)
 
 $installationArgs = @(
     $InstallationProject;
@@ -100,12 +82,6 @@ $installationArgs = @(
 )
 
 $pathToMsBuild = GetPathToMSBuild
-
-
-#Log-Block "Restore nuget" {
-#        nuget restore $MainInstallationSolution
-#    }
-
 
 Log-Message "Calling build from $pathToMsBuild with params: $installationArgs" 
 

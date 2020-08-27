@@ -10,9 +10,16 @@
         </div>
         <div class="col-md-12">
             <div class="row"
-                v-if="exportServiceIsUnavailable">
+                v-if="!exportServiceInitializing && exportServiceIsUnavailable">
                 <div class="col-md-12 mb-30">
                     {{$t('DataExport.DataExport_ServiceIsNotAvailable')}}
+                </div>
+            </div>
+
+            <div class="row"
+                v-if="exportServiceInitializing">
+                <div class="col-md-12 mb-30">
+                    {{$t('Common.Loading')}}
                 </div>
             </div>
 
@@ -131,20 +138,6 @@
                                     </label>
                                 </div>
                                 <div class="radio-btn-row"
-                                    v-if="questionnaireVersion">
-                                    <input
-                                        class="radio-row"
-                                        type="radio"
-                                        name="dataType"
-                                        id="ddiData"
-                                        v-model="dataType"
-                                        value="ddiData"/>
-                                    <label for="ddiData">
-                                        <span class="tick"></span>
-                                        <span class="format-data">{{$t('DataExport.DataType_Ddi')}}</span>
-                                    </label>
-                                </div>
-                                <div class="radio-btn-row"
                                     v-if="hasInterviews">
                                     <input
                                         class="radio-row"
@@ -160,6 +153,45 @@
                                     </label>
                                 </div>
                             </div>
+
+
+                            <div
+                                class="mb-30"
+                                v-if="dataType == 'surveyData' && questionnaireVersion">
+                                <h3>{{$t('DataExport.QuestionnaireInformation')}}</h3>
+                                <div class="radio-btn-row">
+                                    <input
+                                        class="radio-row"
+                                        type="radio"
+                                        name="includeMeta"
+                                        id="metaInclude"
+                                        v-model="includeMeta"
+                                        value="True"/>
+                                    <label for="metaInclude">
+                                        <span class="tick"></span>
+                                        <span
+                                            class="format-data">{{$t('DataExport.QuestionnaireInformation_Include')}}</span>
+                                    </label>
+                                </div>
+                                <div class="radio-btn-row">
+                                    <input
+                                        class="radio-row"
+                                        type="radio"
+                                        name="includeMeta"
+                                        id="metaExclude"
+                                        v-model="includeMeta"
+                                        value="False"/>
+                                    <label for="metaExclude"
+                                        class>
+                                        <span class="tick"></span>
+                                        <span
+                                            class="format-data no-meta">{{$t('DataExport.QuestionnaireInformation_Exclude')}}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+
                             <div
                                 class="mb-30"
                                 v-if="dataType == 'surveyData' && questionnaireVersion">
@@ -338,6 +370,7 @@ export default {
         return {
             dataType: 'surveyData',
             dataFormat: 'Tabular',
+            includeMeta: 'True',
             dataDestination: 'zip',
             questionnaireId: null,
             questionnaireVersion: null,
@@ -399,6 +432,7 @@ export default {
         resetForm() {
             this.dataType = 'surveyData'
             this.dataFormat = 'Tabular'
+            this.includeMeta = 'True'
             this.dataDestination = 'zip'
             this.questionnaireId = null
             this.questionnaireVersion = null
@@ -423,7 +457,8 @@ export default {
                     self.dataFormat,
                     self.dataDestination,
                     self.status,
-                    self.questionnaireTranslation
+                    self.questionnaireTranslation,
+                    this.includeMeta
                 )
 
                 self.$store.dispatch('showProgress')
@@ -455,7 +490,8 @@ export default {
                 this.dataFormat,
                 this.dataDestination,
                 this.status,
-                this.questionnaireTranslation
+                this.questionnaireTranslation,
+                this.includeMeta
             )
 
             var state = {
@@ -495,7 +531,7 @@ export default {
             window.location = storageSettings.authorizationUri + '?' + decodeURIComponent($.param(request))
         },
 
-        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption, translation) {
+        getExportParams(questionnaireId, questionnaireVersion, dataType, dataFormat, dataDestination, statusOption, translation, includeMeta) {
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -522,6 +558,7 @@ export default {
                 format: format,
                 status: status,
                 translationId: tr,
+                includeMeta: includeMeta,
             }
         },
 

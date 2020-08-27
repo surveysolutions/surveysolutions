@@ -24,5 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public int RostersCount { get; set; }
         public string Variable { get; set; } = string.Empty;
         public bool HasCondition { get; set; }
+        
+        public bool HideIfDisabled { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
     {
         Guid SupervisorId { get; }
 
-        string SecurityStamp { get; }
+        string? SecurityStamp { get; }
     }
 }

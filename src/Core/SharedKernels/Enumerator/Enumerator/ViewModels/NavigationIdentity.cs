@@ -34,9 +34,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return new NavigationIdentity(ScreenType.Complete, targetGroup: null);
         }
 
-        public static NavigationIdentity CreateForCoverScreen()
+        public static NavigationIdentity CreateForCoverScreen(Identity anchoredElementIdentity = null)
         {
-            return new NavigationIdentity(ScreenType.Cover, targetGroup: null);
+            return new NavigationIdentity(ScreenType.Cover, targetGroup: null, anchoredElementIdentity: anchoredElementIdentity);
         }
 
         public static NavigationIdentity CreateForOverviewScreen()
