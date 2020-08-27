@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Enumerator.Native.WebInterview
 {
@@ -288,7 +289,10 @@ namespace WB.Enumerator.Native.WebInterview
         
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            if (!evnt.IsPrototype())
+            {
+                this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            }
         }
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
