@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GeneratedDate" xml:space="preserve">
-    <value>Дата генерации:</value>
+  <data name="Generated" xml:space="preserve">
+    <value>Сгенерирован</value>
   </data>
-  <data name="CompleteDate" xml:space="preserve">
-    <value>Дата завершения: </value>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено</value>
   </data>
   <data name="PageOf" xml:space="preserve">
     <value> из </value>
@@ -132,7 +132,7 @@
   <data name="YesNo" xml:space="preserve">
     <value>Да / Нет</value>
   </data>
-  <data name="Summary" xml:space="preserve">
+  <data name="TableOfContent" xml:space="preserve">
     <value>Содержание</value>
   </data>
   <data name="Error" xml:space="preserve">
@@ -147,17 +147,25 @@
   <data name="Started" xml:space="preserve">
     <value>Начато</value>
   </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
   <data name="Comma" xml:space="preserve">
     <value>, </value>
   </data>
   <data name="InterviewStatistics" xml:space="preserve">
-    <value>{0} вопроса в {1} группах отвечены</value>
+    <value>{0} вопроса в {1} секциях отвечены</value>
   </data>
   <data name="InterviewStatisticsErrors" xml:space="preserve">
-    <value>{0} Ошибок</value>
+    <value>{0} с ошибками</value>
   </data>
   <data name="InterviewStatisticsWarnings" xml:space="preserve">
-    <value>{0} Замечаний</value>
+    <value>{0} с замечаниями</value>
   </data>
-
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
+    <value>{0} вопросов не отвеченных</value>
+  </data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve">
+    <value>{0} вопросов с комментариями</value>
+  </data>
 </root>

@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GeneratedDate" xml:space="preserve">
-    <value>Generate file date: </value>
+  <data name="Generated" xml:space="preserve">
+    <value>Generated</value>
   </data>  
-  <data name="CompleteDate" xml:space="preserve">
-    <value>Complete date: </value>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
   </data> 
   <data name="PageOf" xml:space="preserve">
     <value> of </value>
@@ -132,8 +132,8 @@
   <data name="YesNo" xml:space="preserve">
     <value>Yes / No</value>
   </data>
-  <data name="Summary" xml:space="preserve">
-    <value>Summary</value>
+  <data name="TableOfContent" xml:space="preserve">
+    <value>Table of content</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
@@ -147,16 +147,25 @@
   <data name="Started" xml:space="preserve">
     <value>Started</value>
   </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
   <data name="Comma" xml:space="preserve">
     <value>, </value>
   </data>
   <data name="InterviewStatistics" xml:space="preserve">
-    <value>{0} questions in {1} groups answered</value>
+    <value>{0} questions in {1} sections answered</value>
+  </data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
+    <value>{0} questions unanswered</value>
   </data>
   <data name="InterviewStatisticsErrors" xml:space="preserve">
-    <value>{0} Errors</value>
+    <value>{0} errors</value>
   </data>
   <data name="InterviewStatisticsWarnings" xml:space="preserve">
-    <value>{0} Warnings</value>
+    <value>{0} warnings</value>
+  </data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve">
+    <value>{0} questions with commented</value>
   </data>
 </root>
