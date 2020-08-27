@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Principal;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes;
@@ -31,6 +32,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Sanitizer;
+using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
 using Color = MigraDocCore.DocumentObjectModel.Color;
@@ -45,6 +47,7 @@ namespace WB.UI.Headquarters.PdfInterview
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAttachmentContentService attachmentContentService;
+        private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
 
         private const string DateTimeFormat = "yyyy-MM-dd HH:mm zzz";
         private const string TimeFormat = "HH:mm zzz";
@@ -53,12 +56,14 @@ namespace WB.UI.Headquarters.PdfInterview
         public PdfInterviewGenerator(IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageFileStorage imageFileStorage,
-            IAttachmentContentService attachmentContentService)
+            IAttachmentContentService attachmentContentService,
+            IOptions<GoogleMapsConfig> googleMapsConfig)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.imageFileStorage = imageFileStorage;
             this.attachmentContentService = attachmentContentService;
+            this.googleMapsConfig = googleMapsConfig;
         }
 
         static PdfInterviewGenerator()
@@ -716,7 +721,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 {
                     var gpsQuestion = question.GetAsInterviewTreeGpsQuestion();
                     var geoPosition = gpsQuestion.GetAnswer().Value;
-                    var mapsUrl = $"https://www.google.com/maps/search/?api=1&query={geoPosition.Latitude},{geoPosition.Longitude}";
+                    var mapsUrl = $"{googleMapsConfig.Value.BaseUrl}/maps/search/?api=1&query={geoPosition.Latitude},{geoPosition.Longitude}";
                     var hyperlink = paragraph.AddHyperlink(mapsUrl, HyperlinkType.Web);
                     hyperlink.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", PdfStyles.QuestionAnswer);
                 }
