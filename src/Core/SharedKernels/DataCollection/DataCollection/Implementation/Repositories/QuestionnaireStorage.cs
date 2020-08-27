@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -47,6 +48,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
 
             return plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey, s => CreatePlainQuestionnaire(identity, language));
+        }
+
+        public IQuestionnaire GetQuestionnaireOrThrow(QuestionnaireIdentity identity, string? language)
+        {
+            return this.GetQuestionnaire(identity, language) ?? throw new QuestionnaireException("Questionnaire not found");
         }
 
         private PlainQuestionnaire CreatePlainQuestionnaire(QuestionnaireIdentity identity, string language)
