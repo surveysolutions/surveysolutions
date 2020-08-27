@@ -61,15 +61,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to , .
-        /// </summary>
-        public static string Comma {
-            get {
-                return ResourceManager.GetString("Comma", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Comments.
         /// </summary>
         public static string Comments {
