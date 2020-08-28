@@ -1,9 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,13 +16,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CascadingSingleOptionQuestionViewModel : BaseComboboxQuestionViewModel, 
-         IViewModelEventHandler<SingleOptionQuestionAnswered>
+         IAsyncViewModelEventHandler<SingleOptionQuestionAnswered>
     {
         private readonly ThrottlingViewModel throttlingModel;
 
         private readonly IQuestionnaireStorage questionnaireRepository;
 
-        private Identity parentQuestionIdentity;
+        private Identity parentQuestionIdentity = null!;
         private int? answerOnParentQuestion;
 
         private bool showCascadingAsList;
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             base.Init(interviewId, entityIdentity, navigationState);
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             showCascadingAsList = questionnaire.ShowCascadingAsList(entityIdentity.Id);
             showCascadingAsListThreshold = Math.Min(defaultCascadingAsListThreshold, questionnaire.GetCascadingAsListThreshold(entityIdentity.Id) ?? defaultCascadingAsListThreshold);
@@ -74,12 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
-            if (RenderAsComboBox) return;
-            var singleOptionQuestionOptionViewModels = filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, isSelected: Answer.HasValue && model.Value == Answer.Value))
-                .ToList();
-
-            singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
+           UpdateOptions();
         }
 
         public override async Task SaveAnswerAsync(int optionValue)
@@ -90,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await base.SaveAnswerAsync(optionValue);
         }
 
-        public void Handle(SingleOptionQuestionAnswered @event)
+        public async Task HandleAsync(SingleOptionQuestionAnswered @event)
         {
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
 
@@ -99,17 +94,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
+            
+            await this.RaisePropertyChanged(nameof(RenderAsComboBox));
 
-           
-            this.RaisePropertyChanged(() => RenderAsComboBox);
+            await this.InvokeOnMainThreadAsync(this.UpdateOptions);
 
-            this.InvokeOnMainThread(() => this.UpdateOptions(forced: true));
-
-            this.RaisePropertyChanged(() => Options);
-            this.RaisePropertyChanged(() => Children);
+            await this.RaisePropertyChanged(nameof(Options));
+            await this.RaisePropertyChanged(nameof(Children));
         }
 
-        public bool RenderAsComboBox
+        private bool RenderAsComboBox
         {
             get {
 
@@ -137,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private void UpdateOptions(bool forced = false)
+        private void UpdateOptions()
         {
             this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
             this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
@@ -149,17 +143,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.comboboxCollection.Remove(this.comboboxViewModel);
 
-            if (!RenderAsComboBox)
+            if (RenderAsComboBox)
+            {
+                this.comboboxCollection.Add(this.comboboxViewModel);
+            }
+            else
             {
                 var singleOptionQuestionOptionViewModels = filteredOptionsViewModel.GetOptions()
                     .Select(model => this.ToViewModel(model, isSelected: Answer.HasValue && model.Value == Answer.Value))
                     .ToList();
 
                 singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
-            }
-            else
-            {
-                this.comboboxCollection.Add(this.comboboxViewModel);
             }
         }
 
@@ -214,16 +208,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        private int? previousOptionToReset = null;
-        private int? selectedOptionToSave = null;
+        private int? previousOptionToReset;
+        private int? selectedOptionToSave;
 
         private async Task SaveAnswer()
         {
             if (this.selectedOptionToSave == this.previousOptionToReset)
                 return;
 
-            var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
-            var previousOption = this.GetOptionByValue(this.previousOptionToReset);
+            var selectedOption = this.FindOptionByValue(this.selectedOptionToSave);
+            var previousOption = this.FindOptionByValue(this.previousOptionToReset);
 
             if (selectedOption == null)
                 return;
@@ -261,7 +255,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private SingleOptionQuestionOptionViewModel GetOptionByValue(int? value)
+        private SingleOptionQuestionOptionViewModel? FindOptionByValue(int? value)
         {
             return value.HasValue
                 ? this.Options.FirstOrDefault(x => x.Value == value.Value)
