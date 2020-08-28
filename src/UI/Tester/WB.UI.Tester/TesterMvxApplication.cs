@@ -1,5 +1,4 @@
 using MvvmCross.ViewModels;
-using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester
 {
