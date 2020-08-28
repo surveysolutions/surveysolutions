@@ -4,6 +4,8 @@
     {
         public const string Default = "DefaultPdfStyle";
         public const string HeaderLineTitle = "HeaderLineTitle";
+        public const string HeaderLineDate = "HeaderLineDate";
+        public const string HeaderLineTime = "HeaderLineTime";
         public const string HeaderLineValue = "HeaderLineValue";
         public const string SectionHeader = "SectionHeader";
         public const string GroupHeader = "GroupHeader";
