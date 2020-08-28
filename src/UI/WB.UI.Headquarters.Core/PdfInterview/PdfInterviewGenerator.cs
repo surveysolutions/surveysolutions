@@ -89,26 +89,18 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var nodes = GetAllInterviewNodes(interview, user).ToList();
             var identifyedEntities = questionnaire.GetPrefilledEntities().Select(id => new Identity(id, RosterVector.Empty)).ToList();
-            var questions = nodes.Where(node => questionnaire.IsQuestion(node.Id)).ToList();
-            int answeredQuestions = questions.Count(node => interview.WasAnswered(node)); 
-            int unansweredQuestions = questions.Count(node => !interview.WasAnswered(node) && interview.IsEnabled(node)); 
-            int sectionsCount = questionnaire.GetAllSections().Count(nodeId => interview.IsEnabled(new Identity(nodeId, RosterVector.Empty))); 
-            int errorsCount = nodes.Count(node => !interview.IsEntityValid(node));
-            int warningsCount = nodes.Count(node => !interview.IsEntityPlausible(node));
-            int commentedCount = questions.Count(node => interview.GetQuestionComments(node).Any());
-            nodes.RemoveAll(node => identifyedEntities.Contains(node));
            
             PdfDocument pdfDocument = new PdfDocument();
             Document document = new Document();
             DefineStyles(document);
             var firstPageSection = document.AddSection();
             firstPageSection.PageSetup.PageFormat = PageFormat.A4;
-            WritePdfInterviewHeader(firstPageSection, questionnaire, interview, 
-                answeredQuestions, unansweredQuestions, sectionsCount, errorsCount, warningsCount, commentedCount);
+            WritePdfInterviewHeader(firstPageSection, nodes, questionnaire, interview);
             DrawDoubleLines(firstPageSection);
             WritePrefilledData(identifyedEntities, questionnaire, interview, document);
             DrawDoubleLines(firstPageSection);
             var tableOfContents = WriteTableOfContents(firstPageSection);
+            nodes.RemoveAll(node => identifyedEntities.Contains(node));
             WriteInterviewData(nodes, questionnaire, interview, document, tableOfContents);
 
             SetPagesMargins(document);
@@ -131,7 +123,7 @@ namespace WB.UI.Headquarters.PdfInterview
             var table = section.AddTable();
             table.AddColumn(Unit.FromPoint(525));
             var row = table.AddRow();
-            row.Format.Font.Size = "1pt";
+            row.Format.Font.Size = Unit.FromPoint(1);
             row.Borders.Bottom = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1)};
             row.Borders.Top = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1)};
         }
@@ -188,6 +180,7 @@ namespace WB.UI.Headquarters.PdfInterview
             Document document, Paragraph tableOfContents)
         {
             Table table = null;
+            DateTimeOffset? prevDateTime = null;
 
             foreach (Identity node in nodes)
             {
@@ -195,7 +188,14 @@ namespace WB.UI.Headquarters.PdfInterview
                 {
                     var row = table.AddRow();
                     var question = interview.GetQuestion(node);
-                    WriteQuestionTime(row[0].AddParagraph(), question, interview);
+                    if (question.AnswerTime.HasValue)
+                    {
+                        if (question.AnswerTime != null && prevDateTime?.Date != question.AnswerTime.Value.Date)
+                            WriteQuestionDate(row[0].AddParagraph(), question);
+                        WriteQuestionTime(row[1].AddParagraph(), question);
+                        prevDateTime = question.AnswerTime;
+                    }
+
                     WriteQuestionData(row[2].AddParagraph(), question, interview);
                     if (question.FailedErrors != null && question.FailedErrors.Any())
                         WriteErrorsData(row[2].AddParagraph(), question, interview);
@@ -380,37 +380,39 @@ namespace WB.UI.Headquarters.PdfInterview
             sectionHeader.ParagraphFormat.LineSpacingRule = LineSpacingRule.Single;
             sectionHeader.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
             //sectionHeader.ParagraphFormat.SpaceBefore = "40pt";
-            sectionHeader.ParagraphFormat.SpaceAfter = "15pt";
+            sectionHeader.ParagraphFormat.SpaceAfter = Unit.FromPoint(15);
 
             var groupHeader = document.Styles.AddStyle(PdfStyles.GroupHeader, PdfStyles.Default);
-            groupHeader.Font.Size = "11pt";
-            groupHeader.ParagraphFormat.LeftIndent = "70pt";
-            groupHeader.ParagraphFormat.SpaceAfter = "15pt";
+            groupHeader.Font.Size = Unit.FromPoint(12);
+            groupHeader.ParagraphFormat.LeftIndent = Unit.FromPoint(49);
+            groupHeader.ParagraphFormat.SpaceBefore = Unit.FromPoint(15);
+            groupHeader.ParagraphFormat.SpaceAfter = Unit.FromPoint(15);
             
             document.Styles.AddStyle(PdfStyles.RosterTitle, PdfStyles.Default).Font =
-                new Font() { Size = "11pt", Italic = true };
+                new Font() { Size = Unit.FromPoint(12), Italic = true };
 
             var questionStyle = document.Styles.AddStyle(PdfStyles.QuestionTitle, PdfStyles.Default);
-            questionStyle.Font.Size = "7pt";
+            questionStyle.Font.Size = Unit.FromPoint(8);
             questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
             
             document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default).Font =
-                new Font() { Size = "7pt", Bold = true };
+                new Font() { Size = Unit.FromPoint(10), Bold = true };
             
             var notAnswered = document.Styles.AddStyle(PdfStyles.QuestionNotAnswered, PdfStyles.Default);
-            notAnswered.Font = new Font() { Size = "7pt", Color = new Color(45, 156, 219), Italic = true };
-            notAnswered.ParagraphFormat.LineSpacing = 1.5;
+            notAnswered.Font = new Font() { Size = Unit.FromPoint(10), Color = new Color(45, 156, 219), Italic = true };
+            //notAnswered.ParagraphFormat.LineSpacing = 1.5;
+            notAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
             
             var questionDateStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerDate, PdfStyles.Default);
-            questionDateStyle.Font = new Font() { Size = "7pt" };
+            questionDateStyle.Font.Size = Unit.FromPoint(8);
             questionDateStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             
             var questionTimeStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerTime, PdfStyles.Default);
-            questionTimeStyle.Font = new Font() { Size = "7pt" };
+            questionTimeStyle.Font.Size = Unit.FromPoint(8);
             questionTimeStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             
             document.Styles.AddStyle(PdfStyles.StaticTextTitle, PdfStyles.Default).Font =
-                new Font() { Size = "7pt" };
+                new Font() { Size = Unit.FromPoint(8) };
             document.Styles.AddStyle(PdfStyles.ValidateErrorTitle, PdfStyles.Default).Font =
                 new Font() { Size = "7pt", Italic = true, Color = new Color(231, 73, 36)};
             document.Styles.AddStyle(PdfStyles.ValidateErrorMessage, PdfStyles.Default).Font =
@@ -441,7 +443,7 @@ namespace WB.UI.Headquarters.PdfInterview
             commentMessage.Font.Size = "7pt";
 
             var yesNoTitle = document.Styles.AddStyle(PdfStyles.YesNoTitle, PdfStyles.Default);
-            yesNoTitle.Font.Size = "7pt";
+            yesNoTitle.Font.Size = Unit.FromPoint(9);
             
             var headerLineTitle = document.Styles.AddStyle(PdfStyles.HeaderLineTitle, PdfStyles.Default);
             headerLineTitle.Font.Bold = true;
@@ -456,9 +458,16 @@ namespace WB.UI.Headquarters.PdfInterview
             headerTime.Font.Size = Unit.FromPoint(12);
         }
 
-        private void WritePdfInterviewHeader(Section section, IQuestionnaire questionnaire, IStatefulInterview interview,
-            int answeredQuestions, int unansweredQuestions, int sectionsCount, int errorsCount, int warningsCount, int commentsCount)
+        private void WritePdfInterviewHeader(Section section, List<Identity> nodes, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
+            var questions = nodes.Where(node => questionnaire.IsQuestion(node.Id)).ToList();
+            int answeredQuestions = questions.Count(node => interview.WasAnswered(node)); 
+            int unansweredQuestions = questions.Count(node => !interview.WasAnswered(node) && interview.IsEnabled(node)); 
+            int sectionsCount = questionnaire.GetAllSections().Count(nodeId => interview.IsEnabled(new Identity(nodeId, RosterVector.Empty))); 
+            int errorsCount = nodes.Count(node => !interview.IsEntityValid(node));
+            int warningsCount = nodes.Count(node => !interview.IsEntityPlausible(node));
+            int commentedCount = questions.Count(node => interview.GetQuestionComments(node).Any());
+
             var textFrame = section.AddTextFrame();
             textFrame.RelativeVertical = RelativeVertical.Page;
             textFrame.RelativeHorizontal = RelativeHorizontal.Page;
@@ -564,15 +573,15 @@ namespace WB.UI.Headquarters.PdfInterview
             interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsErrors, errorsCount))
                 .Color = errorsCount > 0 ? new Color(231, 73, 36) : new Color(33, 150, 83);
             interviewStats.AddLineBreak();
-            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsCommented, commentsCount))
-                .Color = commentsCount > 0 ? new Color(71, 27, 195) : new Color(182, 182, 182);
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsCommented, commentedCount))
+                .Color = commentedCount > 0 ? new Color(71, 27, 195) : new Color(182, 182, 182);
 
             row[0].Borders.Right = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
             row[2].Borders.Left = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
             table.AddRow();
         }
         
-        private static Stream GetEmbeddedResource(String filename)
+        private static Stream? GetEmbeddedResource(String filename)
         {
             return typeof(PdfInterviewGenerator).Assembly
                 .GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
@@ -584,9 +593,10 @@ namespace WB.UI.Headquarters.PdfInterview
             paragraph.Style = PdfStyles.StaticTextTitle;
             paragraph.AddWrapFormattedText(staticText.Title.Text.RemoveHtmlTags(), PdfStyles.StaticTextTitle);
 
-            var attachmentInfo = questionnaire.GetAttachmentForEntity(staticText.Identity.Id);
-            if (attachmentInfo != null)
+            var attachmentId = interview.GetAttachmentForEntity(staticText.Identity);
+            if (attachmentId != null)
             {
+                var attachmentInfo = questionnaire.GetAttachmentById(attachmentId.Value);
                 var attachment = attachmentContentService.GetAttachmentContent(attachmentInfo.ContentId);
                 if (attachment == null)
                     throw new ArgumentException("Unknown attachment");
@@ -649,31 +659,41 @@ namespace WB.UI.Headquarters.PdfInterview
         private static Table GenerateQuestionsTable(Section section)
         {
             var table = section.AddTable();
-            table.Style = "Table";
-            table.Borders.Color = Colors.Black;
-            table.Borders.Width = 0;
-            table.Borders.Left.Width = 0;
-            table.Borders.Right.Width = 0;
-            table.Borders.Top.Width = 0;
-            table.Borders.Bottom.Width = 0;
-            table.Rows.HeightRule = RowHeightRule.Auto;
+            // table.Borders.Width = 0;
+            // table.Borders.Left.Width = 0;
+            // table.Borders.Right.Width = 0;
+            // table.Borders.Top.Width = 0;
+            // table.Borders.Bottom.Width = 0;
+            // table.Rows.HeightRule = RowHeightRule.Auto;
 
+            //column.Format.Alignment = ParagraphAlignment.Right;
+            var column = table.AddColumn(Unit.FromPoint(49));
+            column = table.AddColumn(Unit.FromPoint(60));
+            column = table.AddColumn(Unit.FromPoint(416));
+            //column.Format.Alignment = ParagraphAlignment.Left;
+            /*
             var column = table.AddColumn(Unit.FromCentimeter(2));
             column.Format.Alignment = ParagraphAlignment.Right;
             column = table.AddColumn(Unit.FromCentimeter(1));
             column = table.AddColumn(Unit.FromCentimeter(15));
             column.Format.Alignment = ParagraphAlignment.Left;
+            */
             return table;
         }
 
-        private void WriteQuestionTime(Paragraph paragraph, InterviewTreeQuestion question,
-            IStatefulInterview interview)
+        private void WriteQuestionTime(Paragraph paragraph, InterviewTreeQuestion question)
         {
             if (question.AnswerTime.HasValue)
             {
                 paragraph.AddFormattedText(question.AnswerTime.Value.ToString(TimeFormat),
                     PdfStyles.QuestionAnswerTime);
-                paragraph.AddLineBreak();
+            }
+        }
+        
+        private void WriteQuestionDate(Paragraph paragraph, InterviewTreeQuestion question)
+        {
+            if (question.AnswerTime.HasValue)
+            {
                 paragraph.AddFormattedText(question.AnswerTime.Value.ToString(DateFormat),
                     PdfStyles.QuestionAnswerDate);
             }
