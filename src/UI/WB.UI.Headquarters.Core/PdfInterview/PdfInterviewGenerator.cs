@@ -48,6 +48,7 @@ namespace WB.UI.Headquarters.PdfInterview
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAttachmentContentService attachmentContentService;
         private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
+        private readonly IOptions<HeadquartersConfig> headquartersConfig;
 
         private const string DateTimeFormat = "yyyy-MM-dd HH:mm zzz";
         private const string TimeFormat = "HH:mm zzz";
@@ -57,13 +58,15 @@ namespace WB.UI.Headquarters.PdfInterview
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageFileStorage imageFileStorage,
             IAttachmentContentService attachmentContentService,
-            IOptions<GoogleMapsConfig> googleMapsConfig)
+            IOptions<GoogleMapsConfig> googleMapsConfig,
+            IOptions<HeadquartersConfig> headquartersConfig)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.imageFileStorage = imageFileStorage;
             this.attachmentContentService = attachmentContentService;
             this.googleMapsConfig = googleMapsConfig;
+            this.headquartersConfig = headquartersConfig;
         }
 
         static PdfInterviewGenerator()
@@ -93,12 +96,7 @@ namespace WB.UI.Headquarters.PdfInterview
             int warningsCount = nodes.Count(node => !interview.IsEntityPlausible(node));
             int commentedCount = questions.Count(node => interview.GetQuestionComments(node).Any());
 
-            //GlobalFontSettings.FontResolver = PdfInterviewFontResolver;
-            //var fontResolver = new FontResolver();
-            //GlobalFontSettings.FontResolver = fontResolver;
-            //GlobalFontSettings.FontResolver = new PdfInterviewFontResolver();
-            //ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
-            
+           
             PdfDocument pdfDocument = new PdfDocument();
             Document document = new Document();
             DefineStyles(document);
@@ -414,42 +412,74 @@ namespace WB.UI.Headquarters.PdfInterview
                 barcodeText.Format.Font.Size = Unit.FromPoint(30);
             }*/
 
-            var logoContent = GetEmbeddedResource("headquarter_logo.png");
+            var textFrame = section.AddTextFrame();
+            textFrame.RelativeVertical = RelativeVertical.Page;
+            textFrame.RelativeHorizontal = RelativeHorizontal.Page;
+            textFrame.Top = TopPosition.Parse("20pt");
+            //textFrame.Left = LeftPosition.Parse("590pt"); 
+            textFrame.Width = Unit.FromPoint(590);
+            textFrame.Height = Unit.FromPoint(60);
+            //textFrame.FillFormat.Color = Colors.Red;
+
+            var headerTable = textFrame.AddTable();
+            headerTable.AddColumn(Unit.FromPoint(205));
+            headerTable.AddColumn(Unit.FromPoint(20));
+            headerTable.AddColumn(Unit.FromPoint(120));
+            headerTable.AddColumn(Unit.FromPoint(215));
+            var headerRow = headerTable.AddRow();
+
+
+            var logoContent = GetEmbeddedResource("pdf_logo.png");
             ImageSource.IImageSource logoImageSource = ImageSource.FromStream("logo.png", () => logoContent);
-            var image = section.AddImage(logoImageSource);
-            image.Width = Unit.FromPoint(100);
+            //var image = section.AddImage(logoImageSource);
+            var image = headerRow[1].AddImage(logoImageSource);
+            image.Width = Unit.FromPoint(40);
+            image.Height = Unit.FromPoint(40);
             image.LockAspectRatio = true;
-            image.Left = LeftPosition.Parse("132pt"); 
+            //image.Left = LeftPosition.Parse("132pt"); 
             //image.Left = LeftPosition.Parse("0pt");
-            image.Top = TopPosition.Parse("0pt");
+            image.Top = TopPosition.Parse("5pt");
+
+            var surveySolutions = headerRow[2].AddParagraph();
+            headerRow[2].VerticalAlignment = VerticalAlignment.Center;
+            surveySolutions.AddFormattedText("Survey Solutions", isBold: true, size: Unit.FromPoint(11));
+            surveySolutions.AddLineBreak();
+            surveySolutions.AddFormattedText("Pdf", size: Unit.FromPoint(8));
             
-            /*var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-            if (questionnaireDocument != null && !string.IsNullOrEmpty(questionnaireDocument.Title))
+
+            if (!string.IsNullOrEmpty(headquartersConfig.Value.BaseUrl))
             {
-                var textFrame = section.AddTextFrame();
+                /*var textFrame = section.AddTextFrame();
                 textFrame.RelativeVertical = RelativeVertical.Page;
                 textFrame.RelativeHorizontal = RelativeHorizontal.Page;
                 textFrame.Top = TopPosition.Parse("0pt");
-                textFrame.Left = LeftPosition.Parse("750pt"); 
-                textFrame.Width = Unit.FromPoint(240);
-                textFrame.Height = Unit.FromPoint(40);
-                var leftTopText = textFrame.AddParagraph();
+                textFrame.Left = LeftPosition.Parse("+550pt"); 
+                textFrame.Width = Unit.FromPoint(500);
+                textFrame.Height = Unit.FromPoint(60);
+                textFrame.FillFormat.Color = Colors.Red;*/
+                // var headerTable = textFrame.AddTable();
+                // headerTable.AddColumn(Unit.FromPoint(300));
+                // headerTable.AddColumn(Unit.FromPoint(300));
+                // headerTable.AddRow();
+                var leftTopText = headerRow[3].AddParagraph();
+                //var leftTopText = textFrame.AddParagraph();
                 //var leftTopText = section.AddParagraph();
                 leftTopText.Format.Alignment = ParagraphAlignment.Right;
                 leftTopText.Format.Font.Size = Unit.FromPoint(11);
                 leftTopText.Format.Font.Bold = true;
-                leftTopText.AddText(questionnaireDocument.Title);
-            }*/
+                //leftTopText.Format.Borders.Color = Colors.Black;
+                //leftTopText.Format.Borders.Width = "1pt";
+                leftTopText.AddText(headquartersConfig.Value.BaseUrl);
+            }
 
 
 
             Table table = section.AddTable();
             table.TopPadding = Unit.FromPoint(10);
-            table.AddColumn(Unit.FromCentimeter(5));
+            table.AddColumn(Unit.FromCentimeter(5)).LeftPadding = Unit.FromPoint(0);
             table.AddColumn(Unit.FromCentimeter(7));
-            table.AddColumn(Unit.FromCentimeter(5));
+            table.AddColumn(Unit.FromCentimeter(5)).RightPadding = Unit.FromPoint(0);
 
-            table.AddRow();
             var row = table.AddRow();
 
             var interviewKeyTitle = row[0].AddParagraph();
