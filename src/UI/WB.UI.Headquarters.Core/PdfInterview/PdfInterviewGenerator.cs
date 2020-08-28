@@ -106,6 +106,28 @@ namespace WB.UI.Headquarters.PdfInterview
                 answeredQuestions, unansweredQuestions, sectionsCount, errorsCount, warningsCount, commentedCount);
             WriteSummaryHeader(firstPageSection);
 
+            //WritePrefilledData(nodes, questionnaire, interview, document, firstPageSection);
+            WriteInterviewData(nodes, questionnaire, interview, document, firstPageSection);
+
+            SetPagesMargins(document);
+            WriteFooterToAllPages(document, questionnaire, interview);
+            
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
+            renderer.Document = document;
+            renderer.PdfDocument = pdfDocument;
+            renderer.RenderDocument();
+
+            RenderBarCode(pdfDocument.Pages[0], interview);
+
+            var memoryStream = new MemoryStream();
+            renderer.PdfDocument.Save(memoryStream);
+            return memoryStream;
+        }
+
+        private void WritePrefilledData(List<Identity> nodes, IQuestionnaire questionnaire,
+            IStatefulInterview interview,
+            Document document, Section firstPageSection)
+        {
             Table table = null;
 
             foreach (Identity node in nodes)
@@ -127,19 +149,19 @@ namespace WB.UI.Headquarters.PdfInterview
                 if (questionnaire.IsSubSection(node.Id))
                 {
                     var group = interview.GetGroup(node);
-                    if (group is InterviewTreeSection interviewTreeSection)
+                    if (@group is InterviewTreeSection interviewTreeSection)
                     {
                         table = WriteSectionData(document.LastSection, interviewTreeSection);
                         WritePageOfContentRecord(firstPageSection, interviewTreeSection);
                     }
                     else
                     {
-                        table = WriteGroupData(document.LastSection, group);
+                        table = WriteGroupData(document.LastSection, @group);
                     }
 
                     continue;
                 }
-                
+
                 if (questionnaire.IsRosterGroup(node.Id))
                 {
                     var roster = interview.GetRoster(node);
@@ -149,22 +171,70 @@ namespace WB.UI.Headquarters.PdfInterview
 
                 if (questionnaire.IsVariable(node.Id))
                     continue;
-                
+
                 throw new ArgumentException("Unknown tree node type for entity " + node);
             }
+        }
 
-            WriteFooterToAllPages(document, questionnaire, interview);
-            
-            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
-            renderer.Document = document;
-            renderer.PdfDocument = pdfDocument;
-            renderer.RenderDocument();
+        private void WriteInterviewData(List<Identity> nodes, IQuestionnaire questionnaire, IStatefulInterview interview,
+            Document document, Section firstPageSection)
+        {
+            Table table = null;
 
-            RenderBarCode(pdfDocument.Pages[0], interview);
+            foreach (Identity node in nodes)
+            {
+                if (questionnaire.IsQuestion(node.Id))
+                {
+                    var question = interview.GetQuestion(node);
+                    WriteQuestionData(table, question, interview);
+                    continue;
+                }
 
-            var memoryStream = new MemoryStream();
-            renderer.PdfDocument.Save(memoryStream);
-            return memoryStream;
+                if (questionnaire.IsStaticText(node.Id))
+                {
+                    var staticText = interview.GetStaticText(node);
+                    WriteStaticTextData(table, staticText, interview, questionnaire);
+                    continue;
+                }
+
+                if (questionnaire.IsSubSection(node.Id))
+                {
+                    var group = interview.GetGroup(node);
+                    if (@group is InterviewTreeSection interviewTreeSection)
+                    {
+                        table = WriteSectionData(document.LastSection, interviewTreeSection);
+                        WritePageOfContentRecord(firstPageSection, interviewTreeSection);
+                    }
+                    else
+                    {
+                        table = WriteGroupData(document.LastSection, @group);
+                    }
+
+                    continue;
+                }
+
+                if (questionnaire.IsRosterGroup(node.Id))
+                {
+                    var roster = interview.GetRoster(node);
+                    table = WriteGroupData(document.LastSection, roster);
+                    continue;
+                }
+
+                if (questionnaire.IsVariable(node.Id))
+                    continue;
+
+                throw new ArgumentException("Unknown tree node type for entity " + node);
+            }
+        }
+
+        private void SetPagesMargins(Document document)
+        {
+            foreach (Section section in document.Sections)
+            {
+                section.PageSetup.LeftMargin = Unit.FromPoint(37);
+                section.PageSetup.RightMargin = Unit.FromPoint(33);
+                section.PageSetup.TopMargin = Unit.FromPoint(31);
+            }
         }
 
         private void RenderBarCode(PdfPage page, IStatefulInterview? interview)
@@ -179,8 +249,8 @@ namespace WB.UI.Headquarters.PdfInterview
             barcode.EndChar = Convert.ToChar("*");
             barcode.Direction = CodeDirection.LeftToRight;
             XFont fontBarcode = new XFont("Arial", 14, XFontStyle.Regular);
-            var position = new XPoint(Convert.ToDouble(60), Convert.ToDouble(0));
-            XSize size = new XSize(Convert.ToDouble(130), Convert.ToDouble(40));
+            var position = new XPoint(Convert.ToDouble(37), Convert.ToDouble(0));
+            XSize size = new XSize(Convert.ToDouble(149), Convert.ToDouble(53));
             barcode.Size = size;
             gfx.DrawBarCode(barcode, XBrushes.Black, fontBarcode, position);
         }
@@ -262,30 +332,26 @@ namespace WB.UI.Headquarters.PdfInterview
             defaultPaddingStyle.Font.Name = defaultFonts;
             defaultPaddingStyle.Font.Bold = false;
             defaultPaddingStyle.Font.Italic = false;
+            defaultPaddingStyle.Font.Color = Colors.Black;
             defaultPaddingStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.AtLeast;
             //defaultPaddingStyle.ParagraphFormat.AddTabStop("8cm", TabAlignment.Center); 
 
             var tableOfContent = document.Styles.AddStyle(PdfStyles.TableOfContent, PdfStyles.Default);
-            tableOfContent.ParagraphFormat.Font.Size = "8pt";
+            tableOfContent.ParagraphFormat.Font.Size = Unit.FromPoint(8);
             tableOfContent.ParagraphFormat.Font.Color = Colors.Black;
-            tableOfContent.ParagraphFormat.SpaceBefore = "8pt";
-            tableOfContent.ParagraphFormat.LeftIndent = "8pt";
-            tableOfContent.ParagraphFormat.LineSpacing = "16pt";
-            tableOfContent.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
-            tableOfContent.ParagraphFormat.AddTabStop("1.5cm", TabAlignment.Left);
+            //tableOfContent.ParagraphFormat.SpaceBefore = "8pt";
+            //tableOfContent.ParagraphFormat.LeftIndent = "8pt";
+            // tableOfContent.ParagraphFormat.LineSpacing = Unit.FromPoint(14);
+            // tableOfContent.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
+            tableOfContent.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
+            tableOfContent.ParagraphFormat.AddTabStop(Unit.FromPoint(37), TabAlignment.Left);
 
-            var headerLineTitle = document.Styles.AddStyle(PdfStyles.HeaderLineTitle, PdfStyles.Default);
-            headerLineTitle.Font.Bold = false;
-            headerLineTitle.Font.Size = 18;
-            headerLineTitle.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right);
-
-            
             document.Styles.AddStyle(PdfStyles.HeaderLineValue, PdfStyles.Default).Font =
                 new Font() { Size = 18, Bold = true };
             
             var sectionHeader = document.Styles.AddStyle(PdfStyles.SectionHeader, PdfStyles.Default);
-            sectionHeader.Font = new Font() { Size = "16pt", Color = Colors.Black };
-            sectionHeader.ParagraphFormat.LeftIndent = "8pt";
+            sectionHeader.Font.Size = Unit.FromPoint(18); 
+            //sectionHeader.ParagraphFormat.LeftIndent = "8pt";
             //sectionHeader.ParagraphFormat.Borders.Top = new Border() { Width = "1pt", Color = Colors.DarkGray };
             sectionHeader.ParagraphFormat.LineSpacing = 0;
             sectionHeader.ParagraphFormat.LineSpacingRule = LineSpacingRule.Single;
@@ -353,262 +419,145 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var yesNoTitle = document.Styles.AddStyle(PdfStyles.YesNoTitle, PdfStyles.Default);
             yesNoTitle.Font.Size = "7pt";
+            
+            var headerLineTitle = document.Styles.AddStyle(PdfStyles.HeaderLineTitle, PdfStyles.Default);
+            headerLineTitle.Font.Bold = true;
+            headerLineTitle.Font.Size = Unit.FromPoint(7);
+            headerLineTitle.ParagraphFormat.SpaceAfter = Unit.FromPoint(1);
+
+            var headerDate = document.Styles.AddStyle(PdfStyles.HeaderLineDate, PdfStyles.Default);
+            headerDate.Font.Bold = true;
+            headerDate.Font.Size = Unit.FromPoint(12);
+
+            var headerTime = document.Styles.AddStyle(PdfStyles.HeaderLineTime, PdfStyles.Default);
+            headerTime.Font.Size = Unit.FromPoint(12);
         }
 
         private void WritePdfInterviewHeader(Section section, IQuestionnaire questionnaire, IStatefulInterview interview,
             int answeredQuestions, int unansweredQuestions, int sectionsCount, int errorsCount, int warningsCount, int commentsCount)
         {
-            var interviewKey = interview.GetInterviewKey().ToString();
-            //QuestionnaireDocument d; d.Metadata.
-
-            /*Code3of9Standard BarCode39 = new PdfSharp.Drawing.BarCodes.Code3of9Standard();
-            BarCode39.TextLocation = new PdfSharp.Drawing.BarCodes.TextLocation();
-            BarCode39.Text = txtDOCU;//value of code to draw on page
-            BarCode39.StartChar = Convert.ToChar("*");
-            BarCode39.EndChar = Convert.ToChar("*");
-            BarCode39.Direction = PdfSharp.Drawing.BarCodes.CodeDirection.LeftToRight;
-            PdfPage Page_BARCODE = PDFdoc.Pages[Itxt];
-            XGraphics gfxBARCODE = XGraphics.FromPdfPage(Page_BARCODE);
-            XFont fontBARCODE = new XFont("Arial", 14, XFontStyle.Regular);
-            BarCode39.Size.ToXPoint();
-            gfxBARCODE.DrawBarCode(BarCode39, XBrushes.Black,fontBARCODE,new XPoint(Convert.ToDouble(str_dbl_X), Convert.ToDouble(str_dbl_Y)));
-            */
-            /*{
-                //var barcodeTf = section.Elements.AddTextFrame();
-                var barcode = section.Elements.AddBarcode();
-                barcode.RelativeHorizontal = RelativeHorizontal.Page;
-                barcode.RelativeVertical = RelativeVertical.Page;
-                barcode.FillFormat = new FillFormat() {Visible = true};
-                barcode.Orientation = TextOrientation.Horizontal;
-                barcode.Code = interviewKey;
-                barcode.Text = true;
-                barcode.Type = BarcodeType.Barcode39;
-                barcode.Width = "6cm";
-                barcode.Height = "2cm";
-                //barcode.Left = LeftPosition.Parse("2cm");
-                barcode.Left = LeftPosition.Parse("2cm");
-                barcode.Top = TopPosition.Parse("0cm");
-                barcode.LineFormat.Color = Colors.Black;
-                barcode.FillFormat.Color = Colors.Black;
-                            //barcode.
-            // barcode.BearerBars = true;
-            // barcode.LineHeight = 20;
-            // barcode.LineRatio = 2;
-
-            }*/
-
-            /*{
-                var barcode = section.Elements.AddTextFrame();
-                //barcode.Left = LeftPosition.Parse("2cm");
-                //barcode.Top = TopPosition.Parse("0cm");
-                barcode.WrapFormat.DistanceTop = Unit.FromCentimeter(0);
-                barcode.WrapFormat.DistanceLeft = Unit.FromCentimeter(2);
-                barcode.RelativeHorizontal = RelativeHorizontal.Page;
-                barcode.RelativeVertical = RelativeVertical.Page;
-                barcode.Width = Unit.FromCentimeter(7);
-                barcode.Height = Unit.FromCentimeter(2);
-                var barcodeText = barcode.AddParagraph(interviewKey);
-                barcodeText.Format.Font.Name = "Libre Barcode 128";
-                barcodeText.Format.Font.Size = Unit.FromPoint(30);
-            }*/
-
             var textFrame = section.AddTextFrame();
             textFrame.RelativeVertical = RelativeVertical.Page;
             textFrame.RelativeHorizontal = RelativeHorizontal.Page;
-            textFrame.Top = TopPosition.Parse("20pt");
-            //textFrame.Left = LeftPosition.Parse("590pt"); 
+            textFrame.Top = TopPosition.Parse("31pt");
             textFrame.Width = Unit.FromPoint(590);
-            textFrame.Height = Unit.FromPoint(60);
-            //textFrame.FillFormat.Color = Colors.Red;
+            textFrame.Height = Unit.FromPoint(40);
 
             var headerTable = textFrame.AddTable();
             headerTable.AddColumn(Unit.FromPoint(205));
-            headerTable.AddColumn(Unit.FromPoint(20));
+            headerTable.AddColumn(Unit.FromPoint(22));
             headerTable.AddColumn(Unit.FromPoint(120));
-            headerTable.AddColumn(Unit.FromPoint(215));
+            headerTable.AddColumn(Unit.FromPoint(221));
             var headerRow = headerTable.AddRow();
 
 
             var logoContent = GetEmbeddedResource("pdf_logo.png");
             ImageSource.IImageSource logoImageSource = ImageSource.FromStream("logo.png", () => logoContent);
-            //var image = section.AddImage(logoImageSource);
             var image = headerRow[1].AddImage(logoImageSource);
-            image.Width = Unit.FromPoint(40);
-            image.Height = Unit.FromPoint(40);
+            image.Width = Unit.FromPoint(14);
+            image.Height = Unit.FromPoint(35);
             image.LockAspectRatio = true;
-            //image.Left = LeftPosition.Parse("132pt"); 
-            //image.Left = LeftPosition.Parse("0pt");
-            image.Top = TopPosition.Parse("5pt");
 
             var surveySolutions = headerRow[2].AddParagraph();
-            headerRow[2].VerticalAlignment = VerticalAlignment.Center;
-            surveySolutions.AddFormattedText("Survey Solutions", isBold: true, size: Unit.FromPoint(11));
+            surveySolutions.AddFormattedText("Survey Solutions", isBold: true, size: Unit.FromPoint(10));
             surveySolutions.AddLineBreak();
-            surveySolutions.AddFormattedText("Pdf", size: Unit.FromPoint(8));
+            surveySolutions.AddFormattedText("Interview Transcript", size: Unit.FromPoint(10));
             
 
             if (!string.IsNullOrEmpty(headquartersConfig.Value.BaseUrl))
             {
-                /*var textFrame = section.AddTextFrame();
-                textFrame.RelativeVertical = RelativeVertical.Page;
-                textFrame.RelativeHorizontal = RelativeHorizontal.Page;
-                textFrame.Top = TopPosition.Parse("0pt");
-                textFrame.Left = LeftPosition.Parse("+550pt"); 
-                textFrame.Width = Unit.FromPoint(500);
-                textFrame.Height = Unit.FromPoint(60);
-                textFrame.FillFormat.Color = Colors.Red;*/
-                // var headerTable = textFrame.AddTable();
-                // headerTable.AddColumn(Unit.FromPoint(300));
-                // headerTable.AddColumn(Unit.FromPoint(300));
-                // headerTable.AddRow();
                 var leftTopText = headerRow[3].AddParagraph();
-                //var leftTopText = textFrame.AddParagraph();
-                //var leftTopText = section.AddParagraph();
                 leftTopText.Format.Alignment = ParagraphAlignment.Right;
-                leftTopText.Format.Font.Size = Unit.FromPoint(11);
-                leftTopText.Format.Font.Bold = true;
-                //leftTopText.Format.Borders.Color = Colors.Black;
-                //leftTopText.Format.Borders.Width = "1pt";
-                leftTopText.AddText(headquartersConfig.Value.BaseUrl);
+                leftTopText.Format.Font.Size = Unit.FromPoint(7);
+                leftTopText.AddText(string.Format(PdfInterviewRes.GeneratedBy, headquartersConfig.Value.BaseUrl));
+                leftTopText.AddLineBreak();
+                leftTopText.AddText(string.Format(PdfInterviewRes.GeneratedAt, DateTime.UtcNow.ToString(DateTimeFormat)));
             }
-
-
 
             Table table = section.AddTable();
-            table.TopPadding = Unit.FromPoint(10);
-            table.AddColumn(Unit.FromCentimeter(5)).LeftPadding = Unit.FromPoint(0);
-            table.AddColumn(Unit.FromCentimeter(7));
-            table.AddColumn(Unit.FromCentimeter(5)).RightPadding = Unit.FromPoint(0);
+            table.AddColumn(Unit.FromPoint(175)).LeftPadding = Unit.FromPoint(0);
+            table.AddColumn(Unit.FromPoint(175)).LeftPadding = Unit.FromPoint(15);
+            table.AddColumn(Unit.FromPoint(175)).LeftPadding = Unit.FromPoint(15);
 
+            table.AddRow().TopPadding = Unit.FromPoint(40);
             var row = table.AddRow();
 
-            var interviewKeyTitle = row[0].AddParagraph();
-            interviewKeyTitle.Format.Font.Size = "8pt"; 
-            interviewKeyTitle.Format.Font.Bold = true;
-            interviewKeyTitle.AddText(Common.InterviewKey);
+            row[0].AddParagraphFormattedText(Common.InterviewKey, PdfStyles.HeaderLineTitle);
 
             var interviewKeyValue = row[0].AddParagraph();
-            interviewKeyValue.Format.Font.Size = "18pt"; 
-            interviewKeyValue.AddText(interviewKey);
-            interviewKeyValue.Format.SpaceAfter = Unit.FromPoint(16);
-
-            // date generate
-            {
-                var generatedDateTime = DateTime.Now;
-                var title = row[0].AddParagraph();
-                title.Format.SpaceBefore = Unit.FromPoint(16);
-                title.Format.Font.Size = Unit.FromPoint(8); 
-                title.Format.Font.Bold = true;
-                title.AddText(PdfInterviewRes.Generated);
-
-                var dateValue = row[0].AddParagraph();
-                dateValue.Format.Font.Size = Unit.FromPoint(12); 
-                dateValue.Format.Font.Bold = true; 
-                dateValue.AddText(generatedDateTime.ToString(DateFormat));
-
-                var timeValue = row[0].AddParagraph();
-                timeValue.Format.Font.Size = Unit.FromPoint(12); 
-                timeValue.AddText(generatedDateTime.ToString(TimeFormat));
-            }
+            interviewKeyValue.Format.Font.Size = Unit.FromPoint(18); 
+            interviewKeyValue.AddText(interview.GetInterviewKey().ToString());
 
             if (interview.StartedDate.HasValue)
             {
                 var startedTitle = row[0].AddParagraph();
-                startedTitle.Format.SpaceBefore = Unit.FromPoint(16);
-                startedTitle.Format.Font.Size = Unit.FromPoint(8); 
-                startedTitle.Format.Font.Bold = true;
-                startedTitle.AddText(PdfInterviewRes.Started);
+                startedTitle.Style = PdfStyles.HeaderLineTitle;
+                startedTitle.Format.SpaceBefore = Unit.FromPoint(10);
+                startedTitle.AddFormattedText(PdfInterviewRes.Started, PdfStyles.HeaderLineTitle);
 
                 var startedValue = row[0].AddParagraph();
-                startedValue.Format.Font.Size = Unit.FromPoint(12); 
-                startedValue.Format.Font.Bold = true; 
-                startedValue.AddText(interview.StartedDate.Value.ToString(DateFormat));
-
-                var startedTimeValue = row[0].AddParagraph();
-                startedTimeValue.Format.Font.Size = Unit.FromPoint(12); 
-                startedTimeValue.AddText(interview.StartedDate.Value.ToString(TimeFormat));
+                startedValue.AddFormattedText(interview.StartedDate.Value.ToString(DateFormat), PdfStyles.HeaderLineDate);
+                startedValue.AddSpace(1);
+                startedValue.AddFormattedText(interview.StartedDate.Value.ToString(TimeFormat), PdfStyles.HeaderLineTime);
             }
 
             if (interview.CompletedDate.HasValue)
             {
                 var completedTitle = row[0].AddParagraph();
-                completedTitle.Format.SpaceBefore = Unit.FromPoint(16);
-                completedTitle.Format.Font.Size = Unit.FromPoint(8); 
-                completedTitle.Format.Font.Bold = true;
-                completedTitle.AddText(PdfInterviewRes.Completed);
+                completedTitle.Style = PdfStyles.HeaderLineTitle;
+                completedTitle.Format.SpaceBefore = Unit.FromPoint(10);
+                completedTitle.AddFormattedText(PdfInterviewRes.Completed, PdfStyles.HeaderLineTitle);
 
                 var completedValue = row[0].AddParagraph();
-                completedValue.Format.Font.Size = Unit.FromPoint(12); 
-                completedValue.Format.Font.Bold = true; 
-                completedValue.AddText(interview.CompletedDate.Value.ToString(DateFormat));
-
-                var completedTimeValue = row[0].AddParagraph();
-                completedTimeValue.Format.Font.Size = Unit.FromPoint(12); 
-                completedTimeValue.AddText(interview.CompletedDate.Value.ToString(TimeFormat));
+                completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(DateFormat), PdfStyles.HeaderLineDate);
+                completedValue.AddSpace(1);
+                completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(TimeFormat), PdfStyles.HeaderLineTime);
             }
             
-
+            row[1].AddParagraphFormattedText(Common.Questionnaire, PdfStyles.HeaderLineTitle);
             var questionnaireTitle = row[1].AddParagraph();
-            questionnaireTitle.Format.Font.Size = "8pt"; 
-            questionnaireTitle.Format.Font.Bold = true;
-            questionnaireTitle.AddText(Common.Questionnaire);
-            
-            var questionnaireValue = row[1].AddParagraph();
-            questionnaireValue.Format.Font.Size = "12pt"; 
-            questionnaireValue.Format.Font.Bold = true; 
-            questionnaireValue.AddText(questionnaire.Title);
-
+            questionnaireTitle.Format.SpaceBefore = Unit.FromPoint(4);
+            questionnaireTitle.AddFormattedText(questionnaire.Title, isBold: true, size: Unit.FromPoint(12));
             var questionnaireVersion = row[1].AddParagraph();
-            questionnaireVersion.Format.Font.Size = "6pt"; 
-            questionnaireVersion.AddText(String.Format(PdfInterviewRes.Version, questionnaire.Version));
+            questionnaireVersion.Format.SpaceBefore = Unit.FromPoint(4);
+            questionnaireVersion.AddFormattedText(String.Format(PdfInterviewRes.Version, questionnaire.Version), 
+                size: Unit.FromPoint(7));
 
+            row[2].AddParagraphFormattedText(PdfInterviewRes.InterviewVolume, PdfStyles.HeaderLineTitle);
             var interviewStats = row[2].AddParagraph();
-            interviewStats.Format.Font.Size = Unit.FromPoint(8);
-            var formattedText = interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatistics, answeredQuestions, sectionsCount));
+            interviewStats.Format.SpaceBefore = Unit.FromPoint(4);
+            interviewStats.Format.Font.Size = Unit.FromPoint(9);
+            //interviewStats.Format.LineSpacing = Unit.FromPoint(5);
+            interviewStats.Format.LineSpacingRule = LineSpacingRule.OnePtFive;
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsSections, sectionsCount), isBold: true);
+            interviewStats.AddLineBreak();
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsAnswered, answeredQuestions), isBold: true);
+            interviewStats.AddLineBreak();
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsUnanswered, unansweredQuestions));
+            interviewStats.AddLineBreak();
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsWarnings, warningsCount))
+                .Color = warningsCount > 0 ? new Color(255, 138, 0) : new Color(182, 182, 182);
+            interviewStats.AddLineBreak();
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsErrors, errorsCount))
+                .Color = errorsCount > 0 ? new Color(231, 73, 36) : new Color(33, 150, 83);
+            interviewStats.AddLineBreak();
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsCommented, commentsCount))
+                .Color = commentsCount > 0 ? new Color(71, 27, 195) : new Color(182, 182, 182);
 
-            if (unansweredQuestions > 0)
-            {
-                interviewStats.AddLineBreak();
-                formattedText = interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsUnanswered, unansweredQuestions));
-            }
-
-            if (errorsCount > 0)
-            {
-                interviewStats.AddLineBreak();
-                formattedText = interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsErrors, errorsCount));
-                formattedText.Color = new Color(231, 73, 36);
-            }
-
-            if (warningsCount > 0)
-            {
-                interviewStats.AddLineBreak();
-                formattedText = interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsWarnings, warningsCount));
-                formattedText.Color = new Color(255, 138, 0);
-            }
-
-            if (commentsCount > 0)
-            {
-                interviewStats.AddLineBreak();
-                formattedText = interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsCommented, commentsCount));
-                formattedText.Color = new Color(71, 27, 195);
-            }
-
-
-            row[0].Borders.Right = new Border() { Style = BorderStyle.Single, Width = "1pt" };
-            row[2].Borders.Left = new Border() { Style = BorderStyle.Single, Width = "1pt" };
+            row[0].Borders.Right = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
+            row[2].Borders.Left = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
+            table.AddRow();
 
             row = table.AddRow();
-            row.Borders.Bottom = new Border() { Style = BorderStyle.Single, Width = "1pt"};
-            row[0].AddParagraph().Format.Font.Size = "1pt";
-            row = table.AddRow();
-            row.Borders.Top = new Border() { Style = BorderStyle.Single, Width = "1pt"};
+            row.Format.Font.Size = "1pt";
+            row.Borders.Bottom = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1)};
+            row.Borders.Top = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1)};
         }
         
         private static Stream GetEmbeddedResource(String filename)
         {
-            System.Reflection.Assembly a = typeof(PdfInterviewGenerator).Assembly;
-            Stream resFileStream = a.GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
-            return resFileStream;
+            return typeof(PdfInterviewGenerator).Assembly
+                .GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
         }
 
         private void WriteStaticTextData(Table table, InterviewTreeStaticText staticText,
@@ -635,8 +584,8 @@ namespace WB.UI.Headquarters.PdfInterview
 
                     var image = paragraph.AddImage(imageSource);
                     image.LockAspectRatio = true;
-                    //image.WrapFormat = new WrapFormat() { Style = WrapStyle.Through }; 
                     image.Width = Unit.FromPoint(300);
+                    image.Height = Unit.FromPoint(300);
                 }
                 else if (attachment.IsVideo())
                 {
