@@ -69,7 +69,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
             if (!result.Status.IsSuccess)
             {
-                var status = ToConnectionStatus(result.Status);
+                var status = ToConnectionStatus(result);
                 throw new NearbyConnectionException("Failed to start advertising. " + status.StatusMessage, status.Status);
             }
 
@@ -135,10 +135,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             return NearbyStatus.NotConnected;
         }
 
-        private static async Task<Statuses> ExecuteNearbyActionWithTimeoutAsync(PendingResult nearbyAction)
+        private static async Task<IResult> ExecuteNearbyActionWithTimeoutAsync(PendingResult nearbyAction)
         {
             using (nearbyAction)
-            using (var awaitableResultCallback = new AwaitableResultCallback<Statuses>())
+            using (var awaitableResultCallback = new AwaitableResultCallback<IResult>())
             {
                 nearbyAction.SetResultCallback(awaitableResultCallback, 30, TimeUnit.Seconds);
 
@@ -200,9 +200,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             InitiatedConnection?.Invoke(this, info);
         }
 
-        private void LogNonSuccessfulResult(Statuses result, ActionArgs args, [CallerMemberName] string method = null)
+        private void LogNonSuccessfulResult(IResult result, ActionArgs args, [CallerMemberName] string method = null)
         {
-            if (result.IsSuccess) return;
+            if (result.Status.IsSuccess) return;
 
             NearbyStatus nearbyStatus = ToConnectionStatus(result);
             if (nearbyStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
@@ -217,7 +217,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                     ("StatusMessage", status.StatusMessage),
                     ("StatusCodeName", nearbyStatus.Status.ToString()),
                     ("HasResolution", status.HasResolution.ToString()),
-                    ("ResolutionPackage", status.HasResolution ? result.Resolution.CreatorPackage : "no"),
+                    ("ResolutionPackage", status.HasResolution ? result.Status.Resolution.CreatorPackage : "no"),
                     ("IsCanceled", status.IsCanceled.ToString()),
                     ("IsInterrupted", status.IsInterrupted.ToString()),
                     ("ConnectionStatusCode", status.Status.ToString())
@@ -226,7 +226,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
             var exception = new Exception();
 
-            foreach (var exceptionData in args.Data.Concat(FromStatuses(result)))
+            foreach (var exceptionData in args.Data.Concat(FromStatuses(result.Status)))
                 exception.Data[exceptionData.key] = exceptionData.data;
 
             logger.Error("Connection error", exception);
@@ -252,19 +252,19 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             public (string key, string data)[] Data { get; }
         }
 
-        private static NearbyStatus ToConnectionStatus(Statuses statuses)
+        private static NearbyStatus ToConnectionStatus(IResult statuses)
         {
-            ConnectionStatusCode status = Enum.IsDefined(typeof(ConnectionStatusCode), statuses.StatusCode)
-                ? (ConnectionStatusCode)statuses.StatusCode
+            ConnectionStatusCode status = Enum.IsDefined(typeof(ConnectionStatusCode), statuses.Status.StatusCode)
+                ? (ConnectionStatusCode)statuses.Status.StatusCode
                 : ConnectionStatusCode.Unknown;
 
             return new NearbyStatus
             {
-                IsSuccess = statuses.IsSuccess,
-                IsCanceled = statuses.IsCanceled,
-                StatusMessage = statuses.StatusMessage,
-                IsInterrupted = statuses.IsInterrupted,
-                StatusCode = statuses.StatusCode,
+                IsSuccess = statuses.Status.IsSuccess,
+                IsCanceled = statuses.Status.IsCanceled,
+                StatusMessage = statuses.Status.StatusMessage,
+                IsInterrupted = statuses.Status.IsInterrupted,
+                StatusCode = statuses.Status.StatusCode,
                 Status = status
             };
         }

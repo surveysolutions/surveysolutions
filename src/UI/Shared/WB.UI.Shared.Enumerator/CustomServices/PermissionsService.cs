@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V4.App;
+using AndroidX.Core.App;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
 using Plugin.Permissions.Abstractions;

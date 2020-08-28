@@ -13,20 +13,20 @@ namespace WB.UI.Shared.Enumerator.Converters
             {
                 case DashboardInterviewStatus.Assignment:
                 case DashboardInterviewStatus.New:
-                    return Resource.Drawable.default_input_button;
+                    return Resource.Color.group_started;
 
                 case DashboardInterviewStatus.InProgress:
-                    return Resource.Drawable.default_input_button;
+                    return Resource.Color.group_started;
 
                 case DashboardInterviewStatus.Completed:
-                    return Resource.Drawable.group_completed;
+                    return Resource.Color.group_completed;
 
                 case DashboardInterviewStatus.Rejected:
-                    return Resource.Drawable.group_with_invalid_answers;
+                    return Resource.Color.group_with_invalid_answers;
                 case DashboardInterviewStatus.ApprovedBySupervisor:
-                    return Resource.Drawable.interview_approved_by_sv;
+                    return Resource.Color.dashboard_approved_by_supervisor;
                 case DashboardInterviewStatus.RejectedByHeadquarters:
-                    return Resource.Drawable.interview_rejected_by_hq;
+                    return Resource.Color.dashboard_rejected_by_headquarter;
             }
 
             return Resource.Drawable.default_input_button;
