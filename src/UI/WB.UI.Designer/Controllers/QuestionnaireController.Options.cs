@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,11 @@ namespace WB.UI.Designer.Controllers
 
         public IActionResult EditCategories(QuestionnaireRevision id, Guid categoriesId)
         {
+            var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
+
+            if (categoriesView == null)
+                return NotFound();
+
             var categories = 
                this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
                 Select(
@@ -72,12 +78,11 @@ namespace WB.UI.Designer.Controllers
                         Title = option.Text
                     });
 
-           
             this.questionWithOptionsViewModel = new EditOptionsViewModel
             (
                questionnaireId: id.QuestionnaireId.FormatGuid(),
                categoriesId: categoriesId,
-               questionTitle: "",
+               categoriesName: categoriesView.Name,
                options: categories.ToList(),
                isCascading: true,
                isCategories : true
@@ -122,7 +127,7 @@ namespace WB.UI.Designer.Controllers
 
             if (this.questionWithOptionsViewModel.IsCategories)
             {
-                RedirectToAction("EditCategories",
+               return RedirectToAction("EditCategories",
                     new
                     {
                         id = this.questionWithOptionsViewModel.QuestionnaireId,
@@ -326,24 +331,43 @@ namespace WB.UI.Designer.Controllers
         public IActionResult EditCascadingOptions(IFormFile csvFile)
             => this.EditOptions(csvFile);
 
-        [HttpPost]
-        public async Task<IActionResult> ApplyOptions()
+        public class Category
         {
-            if (this.questionWithOptionsViewModel == null)
+            public int Value { set; get; }
+            public int? ParentValue { set; get; }
+            public string Title { set; get; } = String.Empty;
+        }
+
+        public class UpdateCategoriesModel
+        {
+            public List<Category> Categories { set; get; } = new List<Category>();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyOptions(UpdateCategoriesModel categoriesModel)
+        {
+            if(categoriesModel == null)
                 return Json(GetNotFoundResponseObject());
 
-            var questionnaireCategoricalOptions = this.questionWithOptionsViewModel.Options.ToArray();
-
+            if (this.questionWithOptionsViewModel == null)
+                return Json(GetNotFoundResponseObject());
+            
             if (this.questionWithOptionsViewModel.IsCategories)
             {
                 var questionnaireId = Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId);
                 var categoriesId = Guid.NewGuid();
                 
+                //remove double parse
                 try
                 {
                     this.categoriesService.Store(questionnaireId,
-                        categoriesId,
-                        this.questionWithOptionsViewModel.Options.Select(x => new CategoriesRow()).ToList());
+                        categoriesId, categoriesModel.Categories.Select((x,i) => new CategoriesRow()
+                        {
+                            Id = x.Value.ToString(),
+                            Text = x.Title,
+                            ParentId = x.ParentValue == null ? "" : x.ParentValue.ToString(),
+                            RowId = i
+                        }).ToList());
                 }
                 catch (Exception e)
                 {
@@ -355,13 +379,12 @@ namespace WB.UI.Designer.Controllers
 
                     return Json(commandResult); 
                 }
-                
 
                 var command = new AddOrUpdateCategories(
                     questionnaireId,
                     this.User.GetId(),
                     categoriesId,
-                    this.questionWithOptionsViewModel.CategoriesName??"",
+                    this.questionWithOptionsViewModel.CategoriesName ?? "",
                     this.questionWithOptionsViewModel.CategoriesId);
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
@@ -369,6 +392,13 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
+                var questionnaireCategoricalOptions = categoriesModel.Categories.Select(x=> new QuestionnaireCategoricalOption()
+                {
+                    Value = x.Value,
+                    ParentValue = x.ParentValue,
+                    Title = x.Title
+                }).ToArray();
+
                 var command = this.questionWithOptionsViewModel.IsCascading
                     ? (QuestionCommand) new UpdateCascadingComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
@@ -465,7 +495,7 @@ namespace WB.UI.Designer.Controllers
                 Guid? questionId = null,
                 Guid? categoriesId = null,
                 List<QuestionnaireCategoricalOption>? options = null, 
-                string? questionTitle = null, 
+                string? questionTitle = null,
                 bool? isCascading = null,
                 bool? isCategories = null,
                 string? categoriesName = null)

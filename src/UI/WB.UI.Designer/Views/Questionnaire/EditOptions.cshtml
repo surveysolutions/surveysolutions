@@ -1,7 +1,7 @@
 @using WB.UI.Designer.Extensions
 @using System.Globalization
 @{
-    ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle}";
+    ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle ?? @Model.CategoriesName}";
     Layout = null;
 }
 
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="~/css/popup.css">
     <!-- endinject -->
     <!-- manifest:json -->
-    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-b50307087b.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-635620ebd1.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-e7d9eca832.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-371e2e4990.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-9816ae3604.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-a63da5f11a.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-0f106fe676.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-b50307087b.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-635620ebd1.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-e7d9eca832.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-371e2e4990.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-9816ae3604.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-a63da5f11a.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-0f106fe676.zh.json""}"; }
+    <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-2907a391f2.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-59939c24fd.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-1887635b34.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-ac8bf00e25.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-94271767f7.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-c510dcb7a8.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-ee74b420a6.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-2907a391f2.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-59939c24fd.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-1887635b34.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-ac8bf00e25.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-94271767f7.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-c510dcb7a8.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-ee74b420a6.zh.json""}"; }
     <!-- endinject -->
        @{
             var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
