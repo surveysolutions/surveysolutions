@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 

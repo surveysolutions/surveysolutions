@@ -2,9 +2,7 @@
 using System.Globalization;
 using Android.Content;
 using Android.Graphics;
-using Android.OS;
-using Android.Support.V4.Graphics.Drawable;
-using Android.Support.V7.Widget;
+using AndroidX.AppCompat.Widget;
 using MvvmCross;
 using MvvmCross.Converters;
 using MvvmCross.Platforms.Android;

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="ActionBar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-    <item name="titleTextColor">@color/colorToolbarText</item>
-    <item name="android:textColorPrimary">@color/colorToolbarText</item>
-  </style>
-  <style name="Menu_Hint" parent="AppTheme">
+  <style name="Menu_Hint">
     <item name="android:textColor">@color/menu_hint_color</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textSize">@dimen/textsize_16</item>

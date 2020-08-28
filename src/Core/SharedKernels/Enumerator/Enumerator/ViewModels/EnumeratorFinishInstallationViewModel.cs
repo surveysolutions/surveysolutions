@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsUserValid
         {
             get => this.isUserValid;
-            set { this.isUserValid = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.isUserValid, value);
         }
 
         private string errorMessage;
@@ -127,9 +127,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            this.Endpoint = "http://192.168.88./headquarters";
-            this.UserName = "int";
-            this.Password = "1";
+            // this.Endpoint = "http://192.168.88./headquarters";
+            // this.UserName = "int";
+            // this.Password = "1";
 #endif
         }
 
@@ -233,12 +233,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     case SynchronizationExceptionType.InvalidUrl:
                     case SynchronizationExceptionType.ServiceUnavailable:
                         this.IsEndpointValid = false;
+                        this.EndpointValidationError = EnumeratorUIResources.InvalidEndpointShort;
                         break;
                     case SynchronizationExceptionType.UserIsNotInterviewer:
                     case SynchronizationExceptionType.UserLocked:
                     case SynchronizationExceptionType.UserNotApproved:
                     case SynchronizationExceptionType.Unauthorized:
                         this.IsUserValid = false;
+                        this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
@@ -266,6 +268,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
+        public string PasswordError
+        {
+            get => passwordError;
+            set => SetProperty(ref passwordError, value);
+        }
+
+        public string EndpointValidationError
+        {
+            get => endpointValidationError;
+            set => SetProperty(ref endpointValidationError, value);
+        }
+
         protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
@@ -273,6 +287,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
 
         private IMvxAsyncCommand scanAsyncCommand;
+        private string endpointValidationError;
+        private string passwordError;
+
         public IMvxAsyncCommand ScanCommand
         {
             get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }

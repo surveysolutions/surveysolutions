@@ -1,5 +1,3 @@
-using Android.App;
-using Android.Support.Graphics.Drawable;
 using Android.Views;
 
 namespace WB.UI.Shared.Enumerator.Activities

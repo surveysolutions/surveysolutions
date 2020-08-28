@@ -25,7 +25,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.SetupHintStyle(view.Text);
         }
 
-
         private void TextChangedHandler(object sender, TextChangedEventArgs e)
         {
             if (e.AfterCount > 0 && e.BeforeCount > 0 && this.Target.Typeface.IsBold)
@@ -33,7 +32,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (e.AfterCount == 0 && e.BeforeCount == 0 && this.Target.Typeface.IsItalic)
                 return;
-           
+
             this.SetupHintStyle(e.Text);
         }
 
@@ -65,6 +64,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     this.subscribed = false;
                 }
             }
+
             base.Dispose(isDisposing);
         }
     }
