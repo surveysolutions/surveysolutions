@@ -141,6 +141,9 @@
   <data name="Version" xml:space="preserve">
     <value>version {0}</value>
   </data>
+  <data name="InterviewPrefilledData" xml:space="preserve">
+    <value>Interview Prefilled Data</value>
+  </data>
   <data name="Started" xml:space="preserve">
     <value>Interview started</value>
   </data>
@@ -173,5 +176,14 @@
   </data>
   <data name="GeneratedAt" xml:space="preserve">
     <value>at {0}</value>
+  </data>
+  <data name="SurveySolutions" xml:space="preserve">
+    <value>Survey Solutions</value>
+  </data>
+  <data name="InterviewTranscript" xml:space="preserve">
+    <value>Interview Transcript</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Cover</value>
   </data>
 </root>

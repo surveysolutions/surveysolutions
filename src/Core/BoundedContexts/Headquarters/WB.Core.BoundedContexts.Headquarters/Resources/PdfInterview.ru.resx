@@ -141,6 +141,9 @@
   <data name="Version" xml:space="preserve">
     <value>версия {0}</value>
   </data>
+  <data name="InterviewPrefilledData" xml:space="preserve">
+    <value>Предзаполненные данные</value>
+  </data>
   <data name="Started" xml:space="preserve">
     <value>Начало интервью</value>
   </data>
@@ -173,6 +176,15 @@
   </data>
   <data name="GeneratedAt" xml:space="preserve">
     <value>в {0}</value>
+  </data>
+  <data name="SurveySolutions" xml:space="preserve">
+    <value>Survey Solutions</value>
+  </data>
+  <data name="InterviewTranscript" xml:space="preserve">
+    <value>Стенограмма интервью</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Обложка</value>
   </data>
 
 </root>
