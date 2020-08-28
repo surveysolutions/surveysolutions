@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Questionnaire;
@@ -43,7 +44,12 @@ namespace WB.UI.WebTester.Infrastructure
 
             return q == null ? null : this.translationService.Translate(q, identity.Version, language);
         }
-        
+
+        public IQuestionnaire GetQuestionnaireOrThrow(QuestionnaireIdentity identity, string? language)
+        {
+            return GetQuestionnaire(identity, language) ?? throw new QuestionnaireException("Questionnaire not found");
+        }
+
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
