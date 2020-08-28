@@ -5,6 +5,7 @@
 
             $scope.downloadBaseUrl = '../../categories';
             $scope.isReadOnlyForUser = false;
+            $scope.shouldUserSeeReloadPromt = false;
 
             var hideCategoriesPane = 'ctrl+shift+c';
 
@@ -188,6 +189,8 @@
                     }).result;
                     return;
                 }
+
+                $scope.shouldUserSeeReloadPromt = true;
 
                 window.open("../../questionnaire/editcategories/" + questionnaireId + "?categoriesid=" + categoriesId,
                     "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);

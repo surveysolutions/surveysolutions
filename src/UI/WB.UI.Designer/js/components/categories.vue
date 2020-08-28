@@ -173,10 +173,11 @@
                     autocapitalize="off"
                     class="form-control mono"
                     style="height:590px; overflow-wrap: break-word; resize: none;"
+                    
                     v-model="stringified"
                     rows="15000"
                     msd-elastic></textarea>
-               
+               <!-- v-validate="'stringifiedOptionsValidation'" -->
           </div>
         </div>
         <nav
@@ -188,6 +189,7 @@
             <div class="container">
                 <button class="btn btn-lg btn-primary navbar-btn" 
                     type="button" 
+                    :disabled="!showTable"
                     @click="apply">{{$t('OptionsUploadApply')}}</button>
                 <a class="btn btn-link navbar-btn" 
                     @click="cancel">{{$t('OptionsUploadRevert')}}</a>
@@ -203,7 +205,28 @@
 
 <script>
 import Vue from 'vue'
-//import _ from 'lodash'
+
+// VeeValidate.Validator.extend('stringifiedOptionsValidation', {
+//   getMessage(field, args, data) { 'The value is not valid.'},
+//   validate(value, args) {
+//       if (!_.isEmpty(value)) {
+//                     var options = (value || "").split("\n");
+//                     var matchPattern = true;
+//                     var invalidLines = [];
+//                     var regexToValidate = 
+//                       //this.$config.isCascading ? new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\/([-+]?\d+)\s*$/) : 
+//                       new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/); 
+//                     _.forEach(options, function (option, index) {
+//                         var currentLineValidationResult = regexToValidate.test((option || ""));
+//                         matchPattern = matchPattern && currentLineValidationResult;
+//                         if (!currentLineValidationResult)
+//                             invalidLines.push(index + 1);
+//                     });
+//                     return { valid: matchPattern, data: invalidLines}
+//                 } 
+//         return true;
+//   }
+// });
 
 export default {
     data() {
@@ -245,6 +268,7 @@ export default {
         hasErrors: function () {
             return this.errors.length > 0;
         },
+        
 
     },
     methods: {
@@ -282,19 +306,7 @@ export default {
         deleteItem(item) {
             const index = this.categories.indexOf(item);
             if (confirm(this.$t('DeleteItemCofirm'))) {            
-                this.categories.splice(index, 1);
-
-                $.post(this.$config.deleteOptionUrl, 
-                {optionIndex: index},
-                function (response) {
-                if (response.isSuccess || response.IsSuccess) {
-                    close();
-                } else {
-                    $(document).scrollTop(0);
-                    self.errors = [response.Error];
-                }
-            });
-                
+                this.categories.splice(index, 1);                
             }
         },
 
@@ -315,21 +327,6 @@ export default {
             } else {
                 this.categories.push(this.editedItem);
             }
-
-            $.post(this.$config.addOrUpdateOptionUrl, 
-                {  optionIndex: this.editedIndex,
-                   optionValue: this.editedItem.value,
-                   optionTitle: this.editedItem.title,
-                   parentValue: this.editedItem.parentValue
-                },
-                function (response) {
-                if (response.isSuccess || response.IsSuccess) {
-                    close();
-                } else {
-                    $(document).scrollTop(0);
-                    self.errors = [response.Error];
-                }
-                });
 
             this.close();
         },
@@ -386,12 +383,20 @@ export default {
         },
         apply: function () {
             const self = this;
-            $.post(this.$config.applyUrl, function (response) {
+            self.loading = false;
+            
+            var newCategories = Object.assign({}, self.categories);
+            $.post(this.$config.applyUrl, 
+                {                    
+                    categories: newCategories
+                },            
+                function (response) {
                 if (response.isSuccess || response.IsSuccess) {
                     close();
                 } else {
+                    self.loading = false;
                     $(document).scrollTop(0);
-                    self.errors = [response.Error];
+                    self.errors = [response.error];
                 }
             });
         },
@@ -422,11 +427,16 @@ export default {
 
         },
         showAsTable: function(){
+
+            var validationResult = true;//await this.$validator.validateAll()
+            if(validationResult)
+            {
+
             this.showTable = true;
             
             var isCascading = this.$config.isCascading;
 
-            var regex = new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/);
+            var regex = isCascading ? new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\/([-+]?\d+)\s*$/) : new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/);
 
             var optionsStringList = (this.stringified || "").split("\n");            
 
@@ -434,15 +444,33 @@ export default {
 
             var options = _.map(optionsStringList, function(item) {
                 var matches = item.match(regex);
-                return {
-                    value: matches[2] * 1,
-                    //parentValue: matches[2] * 1,
-                    title: matches[1]
-                };
+
+                if(isCascading){
+                    if(matches.length = 3)
+                    {
+                        return {
+                            value: matches[3] * 1,
+                            parentValue: matches[2] * 1,
+                            title: matches[1]
+                        }
+                    }
+                    else
+                        return {
+                            value: matches[2] * 1,                        
+                            title: matches[1]
+                        }
+                }
+                    
+                else
+                    return {
+                        value: matches[2] * 1,                        
+                        title: matches[1]
+                    }
             });
 
             this.stringified = "";
             this.categories = options;
+        }
         },
     },
 };
