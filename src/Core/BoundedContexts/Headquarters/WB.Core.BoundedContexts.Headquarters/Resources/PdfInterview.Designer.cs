@@ -79,6 +79,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cover.
+        /// </summary>
+        public static string Cover {
+            get {
+                return ResourceManager.GetString("Cover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -111,6 +120,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string GeneratedBy {
             get {
                 return ResourceManager.GetString("GeneratedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Prefilled Data.
+        /// </summary>
+        public static string InterviewPrefilledData {
+            get {
+                return ResourceManager.GetString("InterviewPrefilledData", resourceCulture);
             }
         }
         
@@ -169,6 +187,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview Transcript.
+        /// </summary>
+        public static string InterviewTranscript {
+            get {
+                return ResourceManager.GetString("InterviewTranscript", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview Volume.
         /// </summary>
         public static string InterviewVolume {
@@ -192,6 +219,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string Started {
             get {
                 return ResourceManager.GetString("Started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions.
+        /// </summary>
+        public static string SurveySolutions {
+            get {
+                return ResourceManager.GetString("SurveySolutions", resourceCulture);
             }
         }
         
