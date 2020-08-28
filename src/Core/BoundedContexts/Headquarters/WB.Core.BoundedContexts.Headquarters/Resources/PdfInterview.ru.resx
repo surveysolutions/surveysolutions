@@ -142,13 +142,19 @@
     <value>версия {0}</value>
   </data>
   <data name="Started" xml:space="preserve">
-    <value>Начато</value>
+    <value>Начало интервью</value>
   </data>
   <data name="Completed" xml:space="preserve">
-    <value>Завершено</value>
+    <value>Интервью завершено</value>
   </data>
-  <data name="InterviewStatistics" xml:space="preserve">
-    <value>{0} вопроса в {1} секциях отвечены</value>
+  <data name="InterviewVolume" xml:space="preserve">
+    <value>Интервью статистика</value>
+  </data>
+  <data name="InterviewStatisticsSections" xml:space="preserve">
+    <value>{0} секций</value>
+  </data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve">
+    <value>{0} отвеченных вопроса</value>
   </data>
   <data name="InterviewStatisticsErrors" xml:space="preserve">
     <value>{0} с ошибками</value>
@@ -157,9 +163,16 @@
     <value>{0} с замечаниями</value>
   </data>
   <data name="InterviewStatisticsUnanswered" xml:space="preserve">
-    <value>{0} вопросов не отвеченных</value>
+    <value>{0} не отвеченных вопросов</value>
   </data>
   <data name="InterviewStatisticsCommented" xml:space="preserve">
     <value>{0} вопросов с комментариями</value>
   </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Создано на {0}</value>
+  </data>
+  <data name="GeneratedAt" xml:space="preserve">
+    <value>в {0}</value>
+  </data>
+
 </root>

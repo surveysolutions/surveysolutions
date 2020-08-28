@@ -1,9 +1,17 @@
 ﻿using MigraDocCore.DocumentObjectModel;
+using MigraDocCore.DocumentObjectModel.Tables;
 
 namespace WB.UI.Headquarters.PdfInterview
 {
     public static class ParagraphExtensions
     {
+        public static FormattedText AddParagraphFormattedText(this Cell cell, string text, string styleName)
+        {
+            var paragraph = cell.AddParagraph();
+            paragraph.Style = styleName;
+            return paragraph.AddFormattedText(text);
+        }
+        
         public static FormattedText AddFormattedText(this Paragraph paragraph, string text, bool? isBold = null, bool? isItalic = null, Unit? size = null)
         {
             var formattedText = paragraph.AddFormattedText(text);
