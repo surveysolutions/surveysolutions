@@ -860,6 +860,17 @@ namespace WB.UI.Headquarters.Controllers
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
+            var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
+                .Any(key =>
+                    Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
+                    && cookieInterviewId == interview.Id
+                );
+
+            var pdfUrl = isExistsInterviewInCookie && interview.StartedDate.HasValue
+                && interview.StartedDate.Value.AddHours(1) > DateTime.UtcNow
+                ? Url.Action("PdfPrint", "InterviewPdf", new{ interviewId = interview.Id })
+                : null;
+            
             return new FinishWebInterview
             {
                 QuestionnaireTitle = questionnaire.Title,
@@ -874,7 +885,7 @@ namespace WB.UI.Headquarters.Controllers
                 SurveyName = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(),
                     questionnaire.Title),
-                PdfUrl = Url.Action("PdfPrint", "InterviewPdf", new{ interviewId = interview.Id }),
+                PdfUrl = pdfUrl,
             };
         }
 
