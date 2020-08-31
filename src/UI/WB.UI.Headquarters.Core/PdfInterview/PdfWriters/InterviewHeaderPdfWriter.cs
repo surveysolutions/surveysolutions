@@ -132,7 +132,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
 
             row[2].AddParagraphFormattedText(PdfInterviewRes.InterviewVolume, PdfStyles.HeaderLineTitle);
             var interviewStats = row[2].AddParagraph();
-            interviewStats.Format.SpaceBefore = Unit.FromPoint(4);
+            interviewStats.Format.SpaceBefore = Unit.FromPoint(2);
             interviewStats.Format.Font.Size = Unit.FromPoint(9);
             //interviewStats.Format.LineSpacing = Unit.FromPoint(5);
             interviewStats.Format.LineSpacingRule = LineSpacingRule.OnePtFive;

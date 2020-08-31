@@ -90,8 +90,8 @@ namespace WB.UI.Headquarters.PdfInterview
             if (identifyedEntities.Count > 0)
             {
                 WritePrefilledData(identifyedEntities, questionnaire, interview, document);
-                DrawDoubleLines(firstPageSection);
-                document.AddSection().PageSetup.PageFormat = PageFormat.A4;
+                //DrawDoubleLines(firstPageSection);
+                //document.AddSection().PageSetup.PageFormat = PageFormat.A4;
             }
 
             var tableOfContents = WriteTableOfContents(firstPageSection);
@@ -207,7 +207,8 @@ namespace WB.UI.Headquarters.PdfInterview
                         new WarningsPdfWriter(question).Write(row[2].AddParagraph());
                     if (question.AnswerComments != null && question.AnswerComments.Any())
                         new CommentsPdfWriter(question).Write(row[2].AddParagraph());
-
+                    row[2].AddParagraph();
+                    
                     continue;
                 }
 
@@ -222,6 +223,7 @@ namespace WB.UI.Headquarters.PdfInterview
                         new ErrorsPdfWriter(staticText).Write(row[2].AddParagraph());
                     if (staticText.FailedWarnings != null && staticText.FailedWarnings.Any())
                         new WarningsPdfWriter(staticText).Write(row[2].AddParagraph());
+                    row[2].AddParagraph();
                     
                     continue;
                 }
@@ -273,6 +275,8 @@ namespace WB.UI.Headquarters.PdfInterview
                 section.PageSetup.RightMargin = Unit.FromPoint(33);
                 section.PageSetup.TopMargin = Unit.FromPoint(31);
                 section.PageSetup.BottomMargin = Unit.FromPoint(31);
+                
+                section.PageSetup.FooterDistance = Unit.FromPoint(16);
             }
         }
 
@@ -310,7 +314,7 @@ namespace WB.UI.Headquarters.PdfInterview
             foreach (Section section in document.Sections)
             {
                 //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
-                section.Footers.Primary.Format.SpaceBefore = Unit.FromPoint(10);
+                //section.Footers.Primary.Format. SpaceBefore = Unit.FromPoint(10);
                 section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.Borders.Top = new Border()
@@ -343,7 +347,8 @@ namespace WB.UI.Headquarters.PdfInterview
             var title = text.RemoveHtmlTags();
             Hyperlink hyperlink = paragraph.AddHyperlink(title);
             hyperlink.AddPageRefField(title);
-            hyperlink.AddText($"\t{title}");
+            hyperlink.AddTab();
+            hyperlink.AddText(title);
             paragraph.AddLineBreak();
         }
 
