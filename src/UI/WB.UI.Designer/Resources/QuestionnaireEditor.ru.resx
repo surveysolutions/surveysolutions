@@ -1447,6 +1447,9 @@
   <data name="NewItem" xml:space="preserve">
     <value>Новый элемент</value>
   </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Редактирование элемента</value>
+  </data>
   <data name="DeleteItemCofirm" xml:space="preserve">
     <value>Вы действительно хотите удалить этот элемент?</value>
   </data>

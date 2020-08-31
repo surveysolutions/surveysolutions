@@ -8,8 +8,7 @@
                             type="button"
                             class="close"
                             aria-hidden="true"
-                            @click="close"
-                        >
+                            @click="close">
                             <!--&times;-->
                         </button>
                         <h3>{{ formTitle }}</h3>
@@ -26,15 +25,13 @@
                                         <div class="form-group">
                                             <label
                                                 class="control-label"
-                                                for="value"
-                                                >{{
-                                                    $t('OptionsUploadValue')
-                                                }}</label>
-                                            <input
+                                                for="value">
+                                                {{$t('OptionsUploadValue')}}
+                                            </label>
+                                            <v-text-field
                                                 v-model="editedItem.value"
                                                 id="value"
-                                                type="number"
-                                                class="form-control"/>
+                                                type="number"/>
                                         </div>
                                         <div class="form-group" v-if="$config.isCascading">
                                             <label
@@ -42,12 +39,10 @@
                                                 for="parent"
                                                 >{{ $t('OptionsUploadParent')}}</label
                                             >
-                                            <input
+                                            <v-text-field
                                                 v-model="editedItem.parentValue"
                                                 id="parent"
-                                                type="number"
-                                                class="form-control"
-                                            />
+                                                type="number"/>
                                         </div>
                                         <div class="form-group">
                                             <label
@@ -55,19 +50,20 @@
                                                 for="title"
                                                 >{{ $t('OptionsUploadTitle') }}</label
                                             >
-                                            <input
+                                            <v-text-field
                                                 v-model="editedItem.title"
                                                 id="title"
                                                 type="text"
                                                 maxlength="250"
-                                                class="form-control"
+                                                :counter="250"
                                             />
                                         </div>
                                         <div class="form-group">
                                             <button
                                                 type="button"
                                                 class="btn btn-lg update-button"
-                                                @click="save">
+                                                :disabled="categories.length >= 15000"
+                                                @click="save">                                                
                                                 {{ $t('Save') }}
                                             </button>
                                             <button
@@ -96,8 +92,8 @@
                 :search="search"
                 :items-per-page="15"
                 :footer-props="{'items-per-page-options':[15, 25, 50]}"
-                :loading="loading"
-                class="elevation-1"
+                :loading="loading"                
+                class="table-striped elevation-1"
                 style="overflow-wrap:anywhere;"
                 dense>
                 <template v-slot:top>
@@ -157,27 +153,28 @@
             </v-data-table>
           </div>
           <div v-if="!showTable">
-              <div style="height:32px;">
+              <div style="height:32px;padding:12px;">
+                  <div class="pull-left">Lines: {{ lineCount }}</div>
                   <v-spacer></v-spacer>
                     <button
                         type="button"
-                        class="btn btn-default pull-right"                        
+                        class="btn btn-default pull-right"
+                        :disabled="isShowListDisabled"                        
                         @click="showAsTable">
                         {{ $t('ShowList') }}
                     </button>
                 </div>
-               <textarea name="stringifiedOptions"
-                    spellcheck="false" 
-                    wrap="off" 
-                    autocorrect="off" 
-                    autocapitalize="off"
-                    class="form-control mono"
-                    style="height:590px; overflow-wrap: break-word; resize: none;"
-                    
-                    v-model="stringified"
-                    rows="15000"
-                    msd-elastic></textarea>
-               <!-- v-validate="'stringifiedOptionsValidation'" -->
+                <v-container fluid>
+                    <v-textarea
+                        rows="19"                        
+                        :rules="textRules"
+                        v-model="stringified"
+                        spellcheck="false" 
+                        wrap="off" 
+                        autocorrect="off"
+                        class="mono">
+                    </v-textarea>
+                </v-container>               
           </div>
         </div>
         <nav
@@ -206,35 +203,14 @@
 <script>
 import Vue from 'vue'
 
-// VeeValidate.Validator.extend('stringifiedOptionsValidation', {
-//   getMessage(field, args, data) { 'The value is not valid.'},
-//   validate(value, args) {
-//       if (!_.isEmpty(value)) {
-//                     var options = (value || "").split("\n");
-//                     var matchPattern = true;
-//                     var invalidLines = [];
-//                     var regexToValidate = 
-//                       //this.$config.isCascading ? new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\/([-+]?\d+)\s*$/) : 
-//                       new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/); 
-//                     _.forEach(options, function (option, index) {
-//                         var currentLineValidationResult = regexToValidate.test((option || ""));
-//                         matchPattern = matchPattern && currentLineValidationResult;
-//                         if (!currentLineValidationResult)
-//                             invalidLines.push(index + 1);
-//                     });
-//                     return { valid: matchPattern, data: invalidLines}
-//                 } 
-//         return true;
-//   }
-// });
-
 export default {
     data() {
         return {
-            errors: [],
+            errors: [],            
             categories: [],
             dialog: false,
             loading: true,
+            isShowListDisabled:false,
             search: '',
             showTable: true,
             stringified:'',
@@ -268,7 +244,27 @@ export default {
         hasErrors: function () {
             return this.errors.length > 0;
         },
+        lineCount: function() {
+              return this.stringified.length ? this.stringified.split(/\r\n|\r|\n/).length : 0;
+        },
         
+        textRules() {
+            return [
+                (value) => {
+                    if (this.lineCount > 15000) {
+                        this.isShowListDisabled = true;
+                        return "Max 15,000 lines";
+                    }
+                    else if (!this.validateText(value)){
+                        this.isShowListDisabled = true;
+                        return "Invalid categories list. Every line should be in format {title...value} or {title...parent_value/value}. Example: bob...4/32";
+                    }
+                    else {
+                        this.isShowListDisabled = false;
+                        return true;
+                    }}   
+        ]                    
+      }
 
     },
     methods: {
@@ -283,7 +279,7 @@ export default {
                     text: this.$t('OptionsUploadTitle'),
                     sortable: false,
                     value: 'title',
-                    width: '50%',
+                    width: '60%',
                 },
             ];
             if (this.$config.isCascading) {
@@ -294,8 +290,15 @@ export default {
                 });
             }
 
-            this.headers.push({ value: 'actions', sortable: false });
+            this.headers.push({ 
+                value: 'actions',
+                 sortable: false,
+                 width: '10%', });
         },
+        /* rowClasses(item){
+            if(item !== null && _.filter(this.categories, function(el){ return el.title == item.title})>1)
+              return "red--text"
+        }, */
 
         editItem(item) {
             this.editedIndex = this.categories.indexOf(item);
@@ -377,34 +380,48 @@ export default {
             const self = this;
             $.post(this.$config.resetOptionsUrl, function () {
                 self.update();
-            });
-
-            //this.update();
+            });            
         },
         apply: function () {
             const self = this;
-            self.loading = false;
-            
-            var newCategories = Object.assign({}, self.categories);
-            $.post(this.$config.applyUrl, 
-                {                    
-                    categories: newCategories
-                },            
-                function (response) {
-                if (response.isSuccess || response.IsSuccess) {
-                    close();
-                } else {
+
+            self.loading = true;            
+            var newCategories = _.map(self.categories, function(item){return {
+                value: item.value,
+                title: item.title,
+                parentValue: item.parentValue
+            }})             
+
+            $.ajax({
+                url: this.$config.applyUrl,
+                type: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                dataType: "json",
+                data: JSON.stringify({ categories: newCategories}),
+                processData: false,
+                contentType: false,})
+            .done(function (response) {
+                    if (response.isSuccess || response.IsSuccess) {
+                        close();
+                    } else {
+                        self.loading = false;
+                        $(document).scrollTop(0);
+                        self.errors = [response.error];
+                    }
+            })
+            .fail(function(){
                     self.loading = false;
                     $(document).scrollTop(0);
-                    self.errors = [response.error];
-                }
+                    self.errors = ["Error occurred."];
             });
+            
         },
         clearErrors: function () {
             this.errors = [];
         },
         showAsText: function(){
             this.showTable = false;
+            this.clearErrors();
 
             var stringifiedOptions = "";
             var isCascading = this.$config.isCascading;
@@ -419,24 +436,22 @@ export default {
                         stringifiedOptions += (option.parentValue === 0 ? "0" : (option.parentValue || "")) + "/";
                     
                     stringifiedOptions += (option.value === 0 ? "0" : (option.value || ""));
+                    
                     stringifiedOptions += "\n";
                 }
             });
+            _.trim(stringifiedOptions)
 
             this.stringified = stringifiedOptions;
 
         },
         showAsTable: function(){
 
-            var validationResult = true;//await this.$validator.validateAll()
-            if(validationResult)
-            {
-
             this.showTable = true;
             
             var isCascading = this.$config.isCascading;
 
-            var regex = isCascading ? new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\/([-+]?\d+)\s*$/) : new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/);
+            var regex = isCascading ? new RegExp(/^$|^(.+?)[\…\.\s]+([-+]?\d+)\/([-+]?\d+)\s*$/) : new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/);
 
             var optionsStringList = (this.stringified || "").split("\n");            
 
@@ -446,7 +461,7 @@ export default {
                 var matches = item.match(regex);
 
                 if(isCascading){
-                    if(matches.length = 3)
+                    if(matches.length > 3)
                     {
                         return {
                             value: matches[3] * 1,
@@ -470,8 +485,25 @@ export default {
 
             this.stringified = "";
             this.categories = options;
-        }
+        
         },
+        validateText(value){
+            if (!_.isEmpty(value)) {
+                    var options = (value || "").split("\n");
+                    var matchPattern = true;
+                    var invalidLines = [];
+                    var isCascading = this.$config.isCascading;
+                    var regex = isCascading ? new RegExp(/^$|^(.+?)[\…\.\s]+([-+]?\d+)\/([-+]?\d+)\s*$/) : new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/);
+                    _.forEach(options, function (option, index) {
+                        var currentLineValidationResult = regex.test((option || ""));
+                        matchPattern = matchPattern && currentLineValidationResult;
+                        if(matchPattern == false)
+                          return false;                        
+                    });
+                    return matchPattern; 
+                } 
+                return true;
+        }
     },
 };
 </script>
