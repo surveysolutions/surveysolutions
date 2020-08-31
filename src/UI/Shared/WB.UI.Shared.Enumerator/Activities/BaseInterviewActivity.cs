@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using Android.Content.Res;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using AndroidX.DrawerLayout.Widget;
+using AndroidX.RecyclerView.Widget;
 using MvvmCross;
+using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
@@ -110,6 +114,21 @@ namespace WB.UI.Shared.Enumerator.Activities
             sectionChangeSubscriptionToken.Dispose();
             interviewCompleteActivityToken.Dispose();
             Mvx.IoCProvider.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
+        }
+
+        protected override void OnViewModelSet()
+        {
+            base.OnViewModelSet();
+            ViewModel.WeakSubscribe<PropertyChangedEventArgs>(nameof(ViewModel.CurrentStage), OnNavigation);
+        }
+
+        private void OnNavigation(object sender, PropertyChangedEventArgs e)
+        {
+            if (ViewModel.CurrentStage.Stage is EnumerationStageViewModel)
+            {
+                var list = FindViewById<RecyclerView>(Resource.Id.interviewEntitiesList);
+                list?.SetItemAnimator(null);
+            }
         }
 
         protected void Navigate(string navigateTo)
