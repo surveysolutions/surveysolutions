@@ -24,10 +24,12 @@
                     {{ $t('WebInterview.InterviewCompletionDateFormatText') }}
                     <time :datetime="$config.model.completedDate"></time>
                 </li>
-                <li v-if="$config.model.printPdf"
-                    v-dateTimeFormatting>
-                    {{ $t('WebInterview.DownloadAnswers') }}
-                    <time :datetime="$config.model.pdfUrl"></time>
+                <li v-if="$config.model.pdfUrl">
+                    <a id="btn_Print"
+                        class="btn btn-link gray-action-unit"
+                        v-bind:href="this.$config.model.pdfUrl"
+                        target="_blank"
+                        download>{{$t("WebInterview.DownloadAnswers")}}</a>
                 </li>
             </ul>
         </div>
