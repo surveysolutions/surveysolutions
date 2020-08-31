@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WB.UI.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -29,11 +30,20 @@ namespace WB.UI.Headquarters.Controllers
             var content = interviewGenerator.Generate(interviewId, User);
             if (content == null)
                 return NotFound(interviewId);
+            
+            var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
+                .Any(key =>
+                    Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
+                    && cookieInterviewId == interview.Id
+                );
+            var hasAccess = isExistsInterviewInCookie && interview.StartedDate.HasValue
+                                                      && interview.StartedDate.Value.AddHours(1) > DateTime.UtcNow;
+            if (!hasAccess)
+                return Forbid();
 
             return this.File(content, 
                 "application/pdf", 
                 fileDownloadName: interview.GetInterviewKey() + ".pdf");
         }
-
     }
 }
