@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes;
+using MigraDocCore.DocumentObjectModel.Tables;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
