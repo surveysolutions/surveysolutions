@@ -79,13 +79,13 @@ namespace WB.UI.Headquarters.PdfInterview
             document.Styles.AddStyle(PdfStyles.StaticTextTitle, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(8) };
             document.Styles.AddStyle(PdfStyles.ValidateErrorTitle, PdfStyles.Default).Font =
-                new Font() { Size = Unit.FromPoint(8), Italic = true, Color = new Color(231, 73, 36)};
+                new Font() { Size = Unit.FromPoint(8), Italic = true, Color = PdfColors.Error };
             document.Styles.AddStyle(PdfStyles.ValidateErrorMessage, PdfStyles.Default).Font =
-                new Font() { Size = Unit.FromPoint(8), Color = new Color(231, 73, 36) };
+                new Font() { Size = Unit.FromPoint(8), Color = PdfColors.Error };
             document.Styles.AddStyle(PdfStyles.ValidateWarningTitle, PdfStyles.Default).Font =
-                new Font() { Size = Unit.FromPoint(8), Italic = true, Color = new Color(255, 138, 0)};
+                new Font() { Size = Unit.FromPoint(8), Italic = true, Color = PdfColors.Warning };
             document.Styles.AddStyle(PdfStyles.ValidateWarningMessage, PdfStyles.Default).Font =
-                new Font() { Size = Unit.FromPoint(8), Color = new Color(255, 138, 0) };
+                new Font() { Size = Unit.FromPoint(8), Color = PdfColors.Warning };
 
             var commentTitle = document.Styles.AddStyle(PdfStyles.CommentTitle, PdfStyles.Default);
             commentTitle.Font.Size = Unit.FromPoint(7);
@@ -94,13 +94,13 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var commentAuthor = document.Styles.AddStyle(PdfStyles.CommentAuthor, PdfStyles.Default);
             commentAuthor.Font.Size = Unit.FromPoint(8);
-            commentAuthor.Font.Color = new Color(71, 27, 195);
+            commentAuthor.Font.Color = PdfColors.Comment;
             commentAuthor.Font.Italic = true;
             //commentAuthor.ParagraphFormat.LeftIndent = "0.5cm";
 
             var commentDateTime = document.Styles.AddStyle(PdfStyles.CommentDateTime, PdfStyles.Default);
             commentDateTime.Font.Size = Unit.FromPoint(8);
-            commentDateTime.Font.Color = new Color(71, 27, 195);
+            commentDateTime.Font.Color = PdfColors.Comment;
             commentDateTime.Font.Italic = true;
             commentDateTime.ParagraphFormat.LeftIndent = Unit.FromPoint(20);
 

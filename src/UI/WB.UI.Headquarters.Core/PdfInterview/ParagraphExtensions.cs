@@ -35,14 +35,16 @@ namespace WB.UI.Headquarters.PdfInterview
             }
         }
 
-        public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style)
+        public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style, Color? color = null)
         {
             for (int i = 0; i < text.Length; i+=15)
             {
                 var str = i + 15 > text.Length
                     ? text.Substring(i)
                     : text.Substring(i, 15);
-                paragraph.AddFormattedText(str, style);
+                var formattedText = paragraph.AddFormattedText(str, style);
+                if (color.HasValue)
+                    formattedText.Color = color.Value;
             }
         }
     }

@@ -41,11 +41,15 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
 
             if (question.IsAnswered())
             {
+                var textColor = !question.IsValid
+                    ? PdfColors.Error
+                    : (!question.IsPlausible ? PdfColors.Warning : PdfColors.Default);
+                
                 if (question.IsAudio)
                 {
                     var audioQuestion = question.GetAsInterviewTreeAudioQuestion();
                     var audioAnswer = audioQuestion.GetAnswer();
-                    paragraph.AddWrapFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", answerStyle);
+                    paragraph.AddWrapFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", answerStyle, textColor);
                 }
                 else if (question.IsMultimedia)
                 {
@@ -61,7 +65,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                 {
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
                     var areaAnswer = areaQuestion.GetAnswer().Value;
-                    paragraph.AddWrapFormattedText(areaAnswer.ToString(), answerStyle);
+                    paragraph.AddWrapFormattedText(areaAnswer.ToString(), answerStyle, textColor);
                 }
                 else if (question.IsGps)
                 {
@@ -69,7 +73,8 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     var geoPosition = gpsQuestion.GetAnswer().Value;
                     var mapsUrl = $"{googleMapsConfig.Value.BaseUrl}/maps/search/?api=1&query={geoPosition.Latitude},{geoPosition.Longitude}";
                     var hyperlink = paragraph.AddHyperlink(mapsUrl, HyperlinkType.Web);
-                    hyperlink.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", answerStyle);
+                    var geoText = hyperlink.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", answerStyle);
+                    geoText.Color = textColor;
                 }
                 else if (question.IsYesNo)
                 {
@@ -82,7 +87,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                             var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, answerOption.Value, null);
                             var optionAnswer = answerOption.Yes ? Common.Yes : (answerOption.No ? Common.No : WebInterviewUI.Interview_Overview_NotAnswered);
                             paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
-                            paragraph.AddWrapFormattedText(option.Title, answerStyle);
+                            paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -93,7 +98,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     foreach (var checkedValue in multiOptionQuestion.GetAnswer().CheckedValues)
                     {
                         var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, checkedValue, null);
-                        paragraph.AddWrapFormattedText(option.Title, answerStyle);
+                        paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
                         paragraph.AddLineBreak();
                     }
                 }
@@ -108,7 +113,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     {
                         foreach (var answer in checkedAnswers)
                         {
-                            paragraph.AddWrapFormattedText(answer, answerStyle);
+                            paragraph.AddWrapFormattedText(answer, answerStyle, textColor);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -126,7 +131,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     {
                         foreach (var answer in refListOptions)
                         {
-                            paragraph.AddWrapFormattedText(answer.Text, answerStyle);
+                            paragraph.AddWrapFormattedText(answer.Text, answerStyle, textColor);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -139,14 +144,14 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     {
                         foreach (var answer in answers)
                         {
-                            paragraph.AddWrapFormattedText(answer.Text, answerStyle);
+                            paragraph.AddWrapFormattedText(answer.Text, answerStyle, textColor);
                             paragraph.AddLineBreak();
                         }
                     }
                 }
                 else
                 {
-                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText(question.GetAnswerAsString(), PdfStyles.QuestionAnswer, textColor);
                 }
             }
             else
