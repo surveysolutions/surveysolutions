@@ -14,15 +14,10 @@ namespace WB.UI.Headquarters.PdfInterview
             defaultStyle.Font.Italic = false;
             defaultStyle.Font.Color = Colors.Black;
             defaultStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.AtLeast;
-            //defaultPaddingStyle.ParagraphFormat.AddTabStop("8cm", TabAlignment.Center); 
 
             var tableOfContent = document.Styles.AddStyle(PdfStyles.TableOfContent, PdfStyles.Default);
             tableOfContent.ParagraphFormat.Font.Size = Unit.FromPoint(8);
             tableOfContent.ParagraphFormat.Font.Color = Colors.Black;
-            //tableOfContent.ParagraphFormat.SpaceBefore = "8pt";
-            //tableOfContent.ParagraphFormat.LeftIndent = "8pt";
-            // tableOfContent.ParagraphFormat.LineSpacing = Unit.FromPoint(14);
-            // tableOfContent.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
             tableOfContent.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
             tableOfContent.ParagraphFormat.AddTabStop(Unit.FromPoint(37), TabAlignment.Left);
 
@@ -50,7 +45,9 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var questionStyle = document.Styles.AddStyle(PdfStyles.QuestionTitle, PdfStyles.Default);
             questionStyle.Font.Size = Unit.FromPoint(8);
-            questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
+            questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
+            questionStyle.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
+            //questionStyle.ParagraphFormat.SpaceBefore = Unit.FromPoint(10);
 
             document.Styles.AddStyle(PdfStyles.IdentifyerQuestionAnswer, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(10), Bold = true };
@@ -58,10 +55,12 @@ namespace WB.UI.Headquarters.PdfInterview
             var identifyerNotAnswered = document.Styles.AddStyle(PdfStyles.IdentifyerQuestionNotAnswered, PdfStyles.Default);
             identifyerNotAnswered.Font = new Font() { Size = Unit.FromPoint(10), Color = new Color(45, 156, 219), Italic = true };
             //notAnswered.ParagraphFormat.LineSpacing = 1.5;
-            identifyerNotAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
+            identifyerNotAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
+            identifyerNotAnswered.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
 
-            document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default).Font =
-                new Font() { Size = Unit.FromPoint(8), Bold = true };
+            var questionAnswer = document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default);
+            questionAnswer.Font.Size = Unit.FromPoint(8);
+            questionAnswer.Font.Bold = true;
             
             var notAnswered = document.Styles.AddStyle(PdfStyles.QuestionNotAnswered, PdfStyles.Default);
             notAnswered.Font = new Font() { Size = Unit.FromPoint(8), Color = new Color(45, 156, 219), Italic = true };
