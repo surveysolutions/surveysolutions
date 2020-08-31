@@ -16,16 +16,19 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
     {
         private readonly InterviewTreeQuestion question;
         private readonly IStatefulInterview interview;
+        private readonly IQuestionnaire questionnaire;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
 
         public QuestionPdfWriter(InterviewTreeQuestion question,
             IStatefulInterview interview,
+            IQuestionnaire questionnaire,
             IImageFileStorage imageFileStorage,
             IOptions<GoogleMapsConfig> googleMapsConfig)
         {
             this.question = question;
             this.interview = interview;
+            this.questionnaire = questionnaire;
             this.imageFileStorage = imageFileStorage;
             this.googleMapsConfig = googleMapsConfig;
         }
@@ -49,17 +52,33 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                 {
                     var audioQuestion = question.GetAsInterviewTreeAudioQuestion();
                     var audioAnswer = audioQuestion.GetAnswer();
-                    paragraph.AddWrapFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", answerStyle, textColor);
+                    var audioText = paragraph.AddFormattedText(audioAnswer.FileName, answerStyle);
+                    audioText.Color = textColor;
+                    audioText.Italic = true;
+                    audioText = paragraph.AddFormattedText($" - {audioAnswer.Length}", answerStyle);
+                    audioText.Color = textColor;
+                    audioText.Italic = true;
+                    audioText.Bold = false;
                 }
                 else if (question.IsMultimedia)
                 {
+                    paragraph.Format.LineSpacingRule = LineSpacingRule.Single;
                     var multimediaQuestion = question.GetAsInterviewTreeMultimediaQuestion();
                     var fileName = multimediaQuestion.GetAnswer().FileName;
+                    var binaryData = imageFileStorage.GetInterviewBinaryData(interview.Id, fileName);
                     ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, 
-                        () => imageFileStorage.GetInterviewBinaryData(interview.Id, fileName));
+                        () => binaryData);
                     var image = paragraph.AddImage(imageSource);
                     image.Width = Unit.FromPoint(300);
-                    image.LockAspectRatio = true;
+                    image.Height = Unit.FromPoint(300);
+                    paragraph.AddLineBreak();
+                    var imageName = paragraph.AddFormattedText($"{fileName}", answerStyle);
+                    imageName.Color = textColor;
+                    imageName.Italic = true;
+                    var imageSize = paragraph.AddFormattedText($" - ({SizeInKb(binaryData.Length)} Kb)", answerStyle);
+                    imageSize.Color = textColor;
+                    imageSize.Italic = true;
+                    imageSize.Bold = false;
                 }
                 else if (question.IsArea)
                 {
@@ -82,10 +101,14 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     var yesNoAnswer = yesNoQuestion.GetAnswer();
                     if (yesNoAnswer.CheckedOptions.Any())
                     {
+                        var order = questionnaire.ShouldQuestionRecordAnswersOrder(question.Identity.Id);
+                        int index = 1;
                         foreach (var answerOption in yesNoAnswer.CheckedOptions)
                         {
                             var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, answerOption.Value, null);
                             var optionAnswer = answerOption.Yes ? Common.Yes : (answerOption.No ? Common.No : WebInterviewUI.Interview_Overview_NotAnswered);
+                            if (order)
+                                paragraph.AddWrapFormattedText($"#{index++} ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
                             paragraph.AddLineBreak();
@@ -95,9 +118,13 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                 else if (question.IsMultiFixedOption)
                 {
                     var multiOptionQuestion = question.GetAsInterviewTreeMultiOptionQuestion();
+                    var order = questionnaire.ShouldQuestionRecordAnswersOrder(question.Identity.Id);
+                    int index = 1;
                     foreach (var checkedValue in multiOptionQuestion.GetAnswer().CheckedValues)
                     {
                         var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, checkedValue, null);
+                        if (order)
+                            paragraph.AddWrapFormattedText($"#{index++}: ", PdfStyles.YesNoTitle);
                         paragraph.AddWrapFormattedText(option.Title, answerStyle, textColor);
                         paragraph.AddLineBreak();
                     }
@@ -160,5 +187,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                 paragraph.AddWrapFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, nonAnswerStyle);
             }
         }
+
+        private int SizeInKb(int bytes) => bytes / 1024;
     }
 }

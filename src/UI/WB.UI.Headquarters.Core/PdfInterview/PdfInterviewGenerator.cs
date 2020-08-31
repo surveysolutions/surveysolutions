@@ -91,10 +91,10 @@ namespace WB.UI.Headquarters.PdfInterview
             {
                 WritePrefilledData(identifyedEntities, questionnaire, interview, document);
                 //DrawDoubleLines(firstPageSection);
-                //document.AddSection().PageSetup.PageFormat = PageFormat.A4;
+                document.AddSection().PageSetup.PageFormat = PageFormat.A4;
             }
 
-            var tableOfContents = WriteTableOfContents(firstPageSection);
+            var tableOfContents = WriteTableOfContents(document.LastSection);
             nodes.RemoveAll(node => identifyedEntities.Contains(node));
             WriteInterviewData(nodes, questionnaire, interview, document, tableOfContents);
 
@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 if (questionnaire.IsQuestion(node.Id))
                 {
                     var question = interview.GetQuestion(node);
-                    new QuestionPdfWriter(question, interview, imageFileStorage, googleMapsConfig)
+                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig)
                         .Write(section.AddParagraph());
                     if (question.FailedErrors != null && question.FailedErrors.Any())
                         new ErrorsPdfWriter(question).Write(section.AddParagraph());
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.PdfInterview
                         prevDateTime = question.AnswerTime;
                     }
 
-                    new QuestionPdfWriter(question, interview, imageFileStorage, googleMapsConfig)
+                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig)
                         .Write(row[2].AddParagraph());
 
                     if (question.FailedErrors != null && question.FailedErrors.Any())
@@ -274,7 +274,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 section.PageSetup.LeftMargin = Unit.FromPoint(37);
                 section.PageSetup.RightMargin = Unit.FromPoint(33);
                 section.PageSetup.TopMargin = Unit.FromPoint(31);
-                section.PageSetup.BottomMargin = Unit.FromPoint(31);
+                section.PageSetup.BottomMargin = Unit.FromPoint(37);
                 
                 section.PageSetup.FooterDistance = Unit.FromPoint(16);
             }
@@ -319,7 +319,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.Borders.Top = new Border()
                 {
-                    Style = BorderStyle.Dot,
+                    Style = BorderStyle.DashLargeGap,
                     Width = Unit.FromPoint(1)
                 };
                 
@@ -358,6 +358,8 @@ namespace WB.UI.Headquarters.PdfInterview
             table.AddColumn(Unit.FromPoint(49));
             table.AddColumn(Unit.FromPoint(60));
             table.AddColumn(Unit.FromPoint(416));
+
+            table.Rows.HeightRule = RowHeightRule.Auto;
             return table;
         }
 

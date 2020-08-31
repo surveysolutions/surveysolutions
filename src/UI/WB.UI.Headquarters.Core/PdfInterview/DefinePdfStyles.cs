@@ -45,18 +45,18 @@ namespace WB.UI.Headquarters.PdfInterview
 
             var questionStyle = document.Styles.AddStyle(PdfStyles.QuestionTitle, PdfStyles.Default);
             questionStyle.Font.Size = Unit.FromPoint(8);
-            questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
-            questionStyle.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
+            questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
+            //questionStyle.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
             //questionStyle.ParagraphFormat.SpaceBefore = Unit.FromPoint(10);
 
             document.Styles.AddStyle(PdfStyles.IdentifyerQuestionAnswer, PdfStyles.Default).Font =
-                new Font() { Size = Unit.FromPoint(10), Bold = true };
+                new Font() { Size = Unit.FromPoint(8), Bold = true };
             
             var identifyerNotAnswered = document.Styles.AddStyle(PdfStyles.IdentifyerQuestionNotAnswered, PdfStyles.Default);
-            identifyerNotAnswered.Font = new Font() { Size = Unit.FromPoint(10), Color = new Color(45, 156, 219), Italic = true };
+            identifyerNotAnswered.Font = new Font() { Size = Unit.FromPoint(8), Color = new Color(45, 156, 219), Italic = true };
             //notAnswered.ParagraphFormat.LineSpacing = 1.5;
-            identifyerNotAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.Exactly;
-            identifyerNotAnswered.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
+            identifyerNotAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
+            //identifyerNotAnswered.ParagraphFormat.LineSpacing = Unit.FromPoint(12);
 
             var questionAnswer = document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default);
             questionAnswer.Font.Size = Unit.FromPoint(8);
@@ -69,11 +69,11 @@ namespace WB.UI.Headquarters.PdfInterview
             
             var questionDateStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerDate, PdfStyles.Default);
             questionDateStyle.Font.Size = Unit.FromPoint(8);
-            questionDateStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
+            //questionDateStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             
             var questionTimeStyle = document.Styles.AddStyle(PdfStyles.QuestionAnswerTime, PdfStyles.Default);
             questionTimeStyle.Font.Size = Unit.FromPoint(8);
-            questionTimeStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
+            //questionTimeStyle.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             
             document.Styles.AddStyle(PdfStyles.StaticTextTitle, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(8) };
