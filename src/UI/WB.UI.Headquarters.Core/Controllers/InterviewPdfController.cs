@@ -36,8 +36,8 @@ namespace WB.UI.Headquarters.Controllers
                     Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
                     && cookieInterviewId == interview.Id
                 );
-            var hasAccess = isExistsInterviewInCookie && interview.StartedDate.HasValue
-                                                      && interview.StartedDate.Value.AddHours(1) > DateTime.UtcNow;
+            var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
+                                                      && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
             if (!hasAccess)
                 return Forbid();
 

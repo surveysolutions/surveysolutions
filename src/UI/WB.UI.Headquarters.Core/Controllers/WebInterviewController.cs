@@ -866,8 +866,8 @@ namespace WB.UI.Headquarters.Controllers
                     && cookieInterviewId == interview.Id
                 );
 
-            var pdfUrl = isExistsInterviewInCookie && interview.StartedDate.HasValue
-                && interview.StartedDate.Value.AddHours(1) > DateTime.UtcNow
+            var pdfUrl = isExistsInterviewInCookie && interview.CompletedDate.HasValue
+                && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow
                 ? Url.Action("PdfPrint", "InterviewPdf", new{ interviewId = interview.Id })
                 : null;
             
