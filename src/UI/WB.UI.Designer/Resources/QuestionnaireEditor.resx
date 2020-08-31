@@ -1432,6 +1432,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="NewItem" xml:space="preserve">
     <value>New item</value>
   </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit item</value>
+  </data>
   <data name="DeleteItemCofirm" xml:space="preserve">
     <value>Are you sure you want to delete this item?</value>
   </data>

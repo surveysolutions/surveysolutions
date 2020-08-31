@@ -538,6 +538,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit item.
+        /// </summary>
+        public static string EditItem {
+            get {
+                return ResourceManager.GetString("EditItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add comment.
         /// </summary>
         public static string EditorAddComment {
@@ -583,7 +592,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language of survey, device types, collaboration and other options.
+        ///   Looks up a localized string similar to Questionnaire name, variable, collaboration and other options.
         /// </summary>
         public static string EmptySectionLine4 {
             get {

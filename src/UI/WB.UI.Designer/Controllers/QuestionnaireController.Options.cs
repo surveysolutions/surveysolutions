@@ -340,13 +340,13 @@ namespace WB.UI.Designer.Controllers
 
         public class UpdateCategoriesModel
         {
-            public List<Category> Categories { set; get; } = new List<Category>();
+            public Category[]? Categories { set; get; } 
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApplyOptions(UpdateCategoriesModel categoriesModel)
+        public async Task<IActionResult> ApplyOptions([FromBody]UpdateCategoriesModel? categoriesModel)
         {
-            if(categoriesModel == null)
+            if(categoriesModel?.Categories == null)
                 return Json(GetNotFoundResponseObject());
 
             if (this.questionWithOptionsViewModel == null)
