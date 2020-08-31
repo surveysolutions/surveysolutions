@@ -42,6 +42,8 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
 
                 if (attachment.IsImage())
                 {
+                    paragraph.Format.LineSpacingRule = LineSpacingRule.Single;
+                    
                     ImageSource.IImageSource imageSource = ImageSource.FromBinary(attachment.FileName, 
                         () => attachment.Content);
 
