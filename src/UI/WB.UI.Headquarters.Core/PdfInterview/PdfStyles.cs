@@ -11,6 +11,8 @@
         public const string GroupHeader = "GroupHeader";
         public const string RosterTitle = "RosterTitle";
         public const string QuestionTitle = "QuestionTitle";
+        public const string IdentifyerQuestionAnswer = "IdentifyerQuestionAnswer";
+        public const string IdentifyerQuestionNotAnswered = "IdentifyerQuestionNotAnswered";
         public const string QuestionAnswer = "QuestionAnswer";
         public const string QuestionNotAnswered = "QuestionNotAnswered";
         public const string QuestionAnswerDate = "QuestionAnswerDate";

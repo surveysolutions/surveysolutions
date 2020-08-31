@@ -97,8 +97,13 @@ namespace WB.UI.Headquarters.PdfInterview
             firstPageSection.PageSetup.PageFormat = PageFormat.A4;
             WritePdfInterviewHeader(firstPageSection, nodes, questionnaire, interview);
             DrawDoubleLines(firstPageSection);
-            WritePrefilledData(identifyedEntities, questionnaire, interview, document);
-            DrawDoubleLines(firstPageSection);
+
+            if (identifyedEntities.Count > 0)
+            {
+                WritePrefilledData(identifyedEntities, questionnaire, interview, document);
+                DrawDoubleLines(firstPageSection);
+            }
+
             var tableOfContents = WriteTableOfContents(firstPageSection);
             nodes.RemoveAll(node => identifyedEntities.Contains(node));
             WriteInterviewData(nodes, questionnaire, interview, document, tableOfContents);
@@ -211,12 +216,15 @@ namespace WB.UI.Headquarters.PdfInterview
                 if (questionnaire.IsStaticText(node.Id))
                 {
                     var row = table.AddRow();
+                        
                     var staticText = interview.GetStaticText(node);
                     WriteStaticTextData(row[2].AddParagraph(), staticText, interview, questionnaire);
                     if (staticText.FailedErrors != null && staticText.FailedErrors.Any())
                         WriteErrorsData(row[2].AddParagraph(), staticText, interview);
                     if (staticText.FailedWarnings != null && staticText.FailedWarnings.Any())
                         WriteWarningsData(row[2].AddParagraph(), staticText, interview);
+                    row[2].AddParagraph();
+                    
                     continue;
                 }
 
@@ -394,12 +402,20 @@ namespace WB.UI.Headquarters.PdfInterview
             var questionStyle = document.Styles.AddStyle(PdfStyles.QuestionTitle, PdfStyles.Default);
             questionStyle.Font.Size = Unit.FromPoint(8);
             questionStyle.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
-            
-            document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default).Font =
+
+            document.Styles.AddStyle(PdfStyles.IdentifyerQuestionAnswer, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(10), Bold = true };
             
+            var identifyerNotAnswered = document.Styles.AddStyle(PdfStyles.IdentifyerQuestionNotAnswered, PdfStyles.Default);
+            identifyerNotAnswered.Font = new Font() { Size = Unit.FromPoint(10), Color = new Color(45, 156, 219), Italic = true };
+            //notAnswered.ParagraphFormat.LineSpacing = 1.5;
+            identifyerNotAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
+
+            document.Styles.AddStyle(PdfStyles.QuestionAnswer, PdfStyles.Default).Font =
+                new Font() { Size = Unit.FromPoint(8), Bold = true };
+            
             var notAnswered = document.Styles.AddStyle(PdfStyles.QuestionNotAnswered, PdfStyles.Default);
-            notAnswered.Font = new Font() { Size = Unit.FromPoint(10), Color = new Color(45, 156, 219), Italic = true };
+            notAnswered.Font = new Font() { Size = Unit.FromPoint(8), Color = new Color(45, 156, 219), Italic = true };
             //notAnswered.ParagraphFormat.LineSpacing = 1.5;
             notAnswered.ParagraphFormat.LineSpacingRule = LineSpacingRule.OnePtFive;
             
@@ -702,9 +718,12 @@ namespace WB.UI.Headquarters.PdfInterview
         private void WriteQuestionData(Paragraph paragraph, InterviewTreeQuestion question,
             IStatefulInterview interview)
         {
+            var isPrefilled = interview.IsQuestionPrefilled(question.Identity);
             paragraph.Style = PdfStyles.QuestionTitle;
             paragraph.AddWrapFormattedText(question.Title.Text.RemoveHtmlTags(), PdfStyles.QuestionTitle);
             paragraph.AddLineBreak();
+
+            var answerStyle = isPrefilled ? PdfStyles.IdentifyerQuestionAnswer : PdfStyles.QuestionAnswer;
 
             if (question.IsAnswered())
             {
@@ -712,7 +731,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 {
                     var audioQuestion = question.GetAsInterviewTreeAudioQuestion();
                     var audioAnswer = audioQuestion.GetAnswer();
-                    paragraph.AddWrapFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText($"{audioAnswer.FileName} + ({audioAnswer.Length})", answerStyle);
                 }
                 else if (question.IsMultimedia)
                 {
@@ -728,7 +747,7 @@ namespace WB.UI.Headquarters.PdfInterview
                 {
                     var areaQuestion = question.GetAsInterviewTreeAreaQuestion();
                     var areaAnswer = areaQuestion.GetAnswer().Value;
-                    paragraph.AddWrapFormattedText(areaAnswer.ToString(), PdfStyles.QuestionAnswer);
+                    paragraph.AddWrapFormattedText(areaAnswer.ToString(), answerStyle);
                 }
                 else if (question.IsGps)
                 {
@@ -736,7 +755,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     var geoPosition = gpsQuestion.GetAnswer().Value;
                     var mapsUrl = $"{googleMapsConfig.Value.BaseUrl}/maps/search/?api=1&query={geoPosition.Latitude},{geoPosition.Longitude}";
                     var hyperlink = paragraph.AddHyperlink(mapsUrl, HyperlinkType.Web);
-                    hyperlink.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", PdfStyles.QuestionAnswer);
+                    hyperlink.AddFormattedText($"{geoPosition.Latitude}, {geoPosition.Longitude}", answerStyle);
                 }
                 else if (question.IsYesNo)
                 {
@@ -749,7 +768,7 @@ namespace WB.UI.Headquarters.PdfInterview
                             var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, answerOption.Value, null);
                             var optionAnswer = answerOption.Yes ? Common.Yes : (answerOption.No ? Common.No : WebInterviewUI.Interview_Overview_NotAnswered);
                             paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
-                            paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(option.Title, answerStyle);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -760,7 +779,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     foreach (var checkedValue in multiOptionQuestion.GetAnswer().CheckedValues)
                     {
                         var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, checkedValue, null);
-                        paragraph.AddWrapFormattedText(option.Title, PdfStyles.QuestionAnswer);
+                        paragraph.AddWrapFormattedText(option.Title, answerStyle);
                         paragraph.AddLineBreak();
                     }
                 }
@@ -775,7 +794,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     {
                         foreach (var answer in checkedAnswers)
                         {
-                            paragraph.AddWrapFormattedText(answer, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(answer, answerStyle);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -793,7 +812,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     {
                         foreach (var answer in refListOptions)
                         {
-                            paragraph.AddWrapFormattedText(answer.Text, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(answer.Text, answerStyle);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -806,7 +825,7 @@ namespace WB.UI.Headquarters.PdfInterview
                     {
                         foreach (var answer in answers)
                         {
-                            paragraph.AddWrapFormattedText(answer.Text, PdfStyles.QuestionAnswer);
+                            paragraph.AddWrapFormattedText(answer.Text, answerStyle);
                             paragraph.AddLineBreak();
                         }
                     }
@@ -818,7 +837,8 @@ namespace WB.UI.Headquarters.PdfInterview
             }
             else
             {
-                paragraph.AddWrapFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, PdfStyles.QuestionNotAnswered);
+                var nonAnswerStyle = isPrefilled ? PdfStyles.IdentifyerQuestionNotAnswered : PdfStyles.QuestionNotAnswered;
+                paragraph.AddWrapFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, nonAnswerStyle);
             }
         }
         
