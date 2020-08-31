@@ -414,36 +414,36 @@ namespace WB.UI.Headquarters.PdfInterview
             document.Styles.AddStyle(PdfStyles.StaticTextTitle, PdfStyles.Default).Font =
                 new Font() { Size = Unit.FromPoint(8) };
             document.Styles.AddStyle(PdfStyles.ValidateErrorTitle, PdfStyles.Default).Font =
-                new Font() { Size = "7pt", Italic = true, Color = new Color(231, 73, 36)};
+                new Font() { Size = Unit.FromPoint(8), Italic = true, Color = new Color(231, 73, 36)};
             document.Styles.AddStyle(PdfStyles.ValidateErrorMessage, PdfStyles.Default).Font =
-                new Font() { Size = "7pt", Color = new Color(231, 73, 36) };
+                new Font() { Size = Unit.FromPoint(8), Color = new Color(231, 73, 36) };
             document.Styles.AddStyle(PdfStyles.ValidateWarningTitle, PdfStyles.Default).Font =
-                new Font() { Size = "7pt", Italic = true, Color = new Color(255, 138, 0)};
+                new Font() { Size = Unit.FromPoint(8), Italic = true, Color = new Color(255, 138, 0)};
             document.Styles.AddStyle(PdfStyles.ValidateWarningMessage, PdfStyles.Default).Font =
-                new Font() { Size = "7pt", Color = new Color(255, 138, 0) };
+                new Font() { Size = Unit.FromPoint(8), Color = new Color(255, 138, 0) };
 
             var commentTitle = document.Styles.AddStyle(PdfStyles.CommentTitle, PdfStyles.Default);
-            commentTitle.Font.Size = "6pt";
-            commentTitle.ParagraphFormat.LeftIndent = "10pt";
-            commentTitle.ParagraphFormat.SpaceBefore = "5pt";
+            commentTitle.Font.Size = Unit.FromPoint(7);
+            commentTitle.ParagraphFormat.LeftIndent = Unit.FromPoint(20);
+            commentTitle.ParagraphFormat.SpaceBefore = Unit.FromPoint(5);
 
             var commentAuthor = document.Styles.AddStyle(PdfStyles.CommentAuthor, PdfStyles.Default);
-            commentAuthor.Font.Size = "7pt";
+            commentAuthor.Font.Size = Unit.FromPoint(8);
             commentAuthor.Font.Color = new Color(71, 27, 195);
             commentAuthor.Font.Italic = true;
             //commentAuthor.ParagraphFormat.LeftIndent = "0.5cm";
 
             var commentDateTime = document.Styles.AddStyle(PdfStyles.CommentDateTime, PdfStyles.Default);
-            commentDateTime.Font.Size = "7pt";
+            commentDateTime.Font.Size = Unit.FromPoint(8);
             commentDateTime.Font.Color = new Color(71, 27, 195);
             commentDateTime.Font.Italic = true;
-            commentDateTime.ParagraphFormat.LeftIndent = "10pt";
+            commentDateTime.ParagraphFormat.LeftIndent = Unit.FromPoint(20);
 
             var commentMessage = document.Styles.AddStyle(PdfStyles.CommentMessage, PdfStyles.Default);
-            commentMessage.Font.Size = "7pt";
+            commentMessage.Font.Size = Unit.FromPoint(8);
 
             var yesNoTitle = document.Styles.AddStyle(PdfStyles.YesNoTitle, PdfStyles.Default);
-            yesNoTitle.Font.Size = Unit.FromPoint(9);
+            yesNoTitle.Font.Size = Unit.FromPoint(8);
             
             var headerLineTitle = document.Styles.AddStyle(PdfStyles.HeaderLineTitle, PdfStyles.Default);
             headerLineTitle.Font.Bold = true;
