@@ -136,9 +136,9 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
             interviewStats.Format.Font.Size = Unit.FromPoint(9);
             //interviewStats.Format.LineSpacing = Unit.FromPoint(5);
             interviewStats.Format.LineSpacingRule = LineSpacingRule.OnePtFive;
-            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsSections, sectionsCount), isBold: true);
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsSections, sectionsCount), isBold: false);
             interviewStats.AddLineBreak();
-            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsAnswered, answeredQuestions), isBold: true);
+            interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsAnswered, answeredQuestions), isBold: false);
             interviewStats.AddLineBreak();
             interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsUnanswered, unansweredQuestions));
             interviewStats.AddLineBreak();
