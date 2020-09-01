@@ -448,9 +448,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<HardDeleteInterview>()
                     .SkipValidationFor<DeleteInterviewCommand>()
                     .SkipValidationFor<MoveInterviewToTeam>()
-                    .SkipValidationFor<ApproveInterviewCommand>()
                     .SkipValidationFor<RejectInterviewCommand>()
-                    .SkipValidationFor<HqApproveInterviewCommand>()
                     .SkipValidationFor<HqRejectInterviewCommand>()
                     .SkipValidationFor<UnapproveByHeadquartersCommand>()
             );

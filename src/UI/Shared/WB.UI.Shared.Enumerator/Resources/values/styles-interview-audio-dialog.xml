@@ -11,7 +11,7 @@
     <item name="android:fontFamily">Roboto Light</item>
     <item name="android:textSize">@dimen/textsize_24</item>
   </style>
-  <style name="Link_Button">
+  <style name="Link_Button" parent="Widget.MaterialComponents.Button.TextButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@android:color/black</item>
@@ -21,7 +21,6 @@
     <item name="android:layout_marginLeft">14dp</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:letterSpacing">0.1</item>
-    <item name="android:background">?attr/selectableItemBackground</item>
   </style>
 
   <style name="Done_Button">

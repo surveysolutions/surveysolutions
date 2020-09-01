@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 
-  <style name="Relink_Logo" parent="AppTheme">
+  <style name="Relink_Logo">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:src">@drawable/login_logo</item>
     <item name="android:layout_width">@dimen/Login_Element_width</item>
     <item name="android:layout_gravity">center_horizontal</item>
   </style>
 
-  <style name="Relink_RemoteErrorMessage" parent="AppTheme">
+  <style name="Relink_RemoteErrorMessage">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Trebuchet</item>
@@ -22,7 +22,7 @@
     <item name="android:gravity">center</item>
   </style>
 
-  <style name="Relink_FormContainer" parent="AppTheme">
+  <style name="Relink_FormContainer">
     <item name="android:layout_width">@dimen/Relink_FormContainer_Width</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center</item>
@@ -40,17 +40,16 @@
     <item name="android:textColor">#6A6A6A</item>
   </style>
 
-  <style name="Relink_Button" parent="AppTheme">
+  <style name="Relink_Button">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:padding">@dimen/Login_Button_padding</item>
-    <item name="android:background">@drawable/group_with_invalid_answers</item>
     <item name="android:layout_centerHorizontal">true</item>
   </style>
 
-  <style name="Relink_Cancel_Button" parent="Relink_Button">
-    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
-    <item name="android:textColor">@android:color/black</item>
-    <item name="android:background">@drawable/transparent_input_button</item>
-  </style>
+    <style name="Relink_Cancel_Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 </resources>

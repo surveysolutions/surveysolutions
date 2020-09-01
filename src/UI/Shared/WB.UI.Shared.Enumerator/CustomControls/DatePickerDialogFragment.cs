@@ -3,11 +3,12 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Support.V4.Content;
+using AndroidX.Core.Content;
+using DialogFragment = AndroidX.Fragment.App.DialogFragment;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
-    public class DatePickerDialogFragment : Android.Support.V4.App.DialogFragment
+    public class DatePickerDialogFragment : DialogFragment
     {
         private DateTime date;
         private readonly EventHandler<DatePickerDialog.DateSetEventArgs> handler;
