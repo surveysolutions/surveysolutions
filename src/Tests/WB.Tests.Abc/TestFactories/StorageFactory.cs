@@ -147,6 +147,8 @@ namespace WB.Tests.Abc.TestFactories
             var result = new Mock<IQuestionnaireStorage>();
             result.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
+            result.Setup(x => x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaire);
 

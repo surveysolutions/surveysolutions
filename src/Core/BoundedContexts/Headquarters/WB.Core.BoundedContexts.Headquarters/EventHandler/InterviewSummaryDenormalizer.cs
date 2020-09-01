@@ -3,7 +3,9 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -23,7 +25,6 @@ using WB.Infrastructure.Native.Monitoring;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public class InterviewSummaryDenormalizer :
-        //BaseDenormalizer,
         ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
@@ -54,14 +55,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, SubstitutionTitlesChanged>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IMemoryCache memoryCache;
         private readonly IUserViewFactory users;
 
         public InterviewSummaryDenormalizer(
             IUserViewFactory users,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IMemoryCache memoryCache)
         {
             this.users = users;
             this.questionnaireStorage = questionnaireStorage;
+            this.memoryCache = memoryCache;
         }
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
@@ -85,8 +89,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             interviewSummary.FirstAnswerDate = answerTime;
         }
        
-        
-
         private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate, DateTime answerDate)
         {
             var questionnaire = GetQuestionnaire(interviewSummary);
@@ -153,6 +155,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 AssignmentId = assignmentId,
                 LastResumeEventUtcTimestamp = creationTime
             };
+
+            memoryCache.SetQuestionnaireIdentity(eventSourceId, new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
 
             CommonMetrics.InterviewsCreatedCount.Inc();
 

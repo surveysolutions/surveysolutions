@@ -5,9 +5,9 @@
     </style>
     <style name="SendToSupervisor_Retry" parent="Interview_Previous_Group_Navigation_Button">
         <item name="android:layout_marginLeft">0dp</item>
-        <item name="android:background">@drawable/group_started</item>
+        <item name="backgroundTint">@color/group_started</item>
     </style>
-    <style name="SendToSupervisor_Navigation" parent="AppTheme">
+    <style name="SendToSupervisor_Navigation">
         <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
     </style>
 </resources>

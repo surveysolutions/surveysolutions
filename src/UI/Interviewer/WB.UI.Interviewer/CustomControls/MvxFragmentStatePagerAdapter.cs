@@ -4,10 +4,9 @@ using System.Linq;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V4.App;
+using AndroidX.Fragment.App;
 using Java.Lang;
-
-using MvvmCross.Droid.Support.V4;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using MvvmCross.ViewModels;
 using Object = Java.Lang.Object;
 

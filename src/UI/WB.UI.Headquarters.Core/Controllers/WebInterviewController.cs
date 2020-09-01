@@ -39,6 +39,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -71,6 +72,8 @@ namespace WB.UI.Headquarters.Controllers
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
         public static readonly string AskForEmail = "askForEmail";
+
+        private readonly IMemoryCache memoryCache;
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
@@ -116,7 +119,9 @@ namespace WB.UI.Headquarters.Controllers
             IOptions<CaptchaConfig> captchaConfig,
             IServiceLocator serviceLocator,
             IAggregateRootPrototypeService prototypeService, 
-            IQuestionnaireStorage questionnaireStorage, IAggregateRootPrototypePromoterService promoterService)
+            IQuestionnaireStorage questionnaireStorage, 
+            IAggregateRootPrototypePromoterService promoterService,
+            IMemoryCache memoryCache)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -136,6 +141,7 @@ namespace WB.UI.Headquarters.Controllers
             this.prototypeService = prototypeService;
             this.questionnaireStorage = questionnaireStorage;
             this.promoterService = promoterService;
+            this.memoryCache = memoryCache;
         }
 
         [Route("Error")]
@@ -232,7 +238,7 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         public IActionResult Start(string invitationId)
         {
-            var invitation = this.invitationService.GetInvitationByToken(invitationId);
+            var invitation = GetInvitation(invitationId);
 
             bool IsInterviewExists(string? interviewId)
             {
@@ -240,7 +246,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.statefulInterviewRepository.Get(interviewId) != null;
             }
 
-            if (invitation.Assignment == null)
+            if (invitation?.Assignment == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
@@ -385,7 +391,8 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string invitationId, [FromForm] string password)
         {
-            Invitation invitation = this.invitationService.GetInvitationByToken(invitationId);
+            var invitation = GetInvitation(invitationId);
+
             password ??= string.Empty;
             if (invitation == null)
                 return NotFound();
@@ -481,7 +488,8 @@ namespace WB.UI.Headquarters.Controllers
         [Route("Continue/{id}")]
         public IActionResult Continue(string id)
         {
-            var invitation = this.invitationService.GetInvitationByToken(id);
+            var invitation = GetInvitation(id);
+
             if (invitation == null)
                 return NotFound();
 
@@ -570,7 +578,7 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
             {
-                var invitation = this.invitationService.GetInvitationByToken(id);
+                var invitation = GetInvitation(id);
                 if (invitation == null)
                     return NotFound();
 
@@ -652,7 +660,7 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
             {
-                var invitation = this.invitationService.GetInvitationByToken(id);
+                var invitation = GetInvitation(id);
                 if (invitation == null)
                     return NotFound();
 
@@ -913,6 +921,27 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return false;
+        }
+
+        private Invitation? GetInvitation(string invitationId)
+        {
+            var key = "invitation::" + invitationId;
+
+            if (this.memoryCache.TryGetValue(key, out object result)) return (Invitation?) result;
+
+            var invitation = this.invitationService.GetInvitationByToken(invitationId);
+
+            // only cache public web mode invitations
+            if (invitation.Assignment.WebMode == true && invitation.Assignment.Quantity == null)
+            {
+                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed - Triggering lazy load
+                invitation.Assignment.Answers.Any();
+                this.memoryCache.Set(key, invitation, TimeSpan.FromSeconds(30));
+
+                return invitation;
+            }
+
+            return invitation;
         }
     }
 }
