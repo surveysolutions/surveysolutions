@@ -124,15 +124,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview Prefilled Data.
-        /// </summary>
-        public static string InterviewPrefilledData {
-            get {
-                return ResourceManager.GetString("InterviewPrefilledData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} questions answered.
         /// </summary>
         public static string InterviewStatisticsAnswered {

@@ -186,13 +186,32 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/pdf")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public IActionResult Pdf(Guid id)
         {
             var interview = statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
                 return NotFound(id);
 
+            if (User.IsInRole(UserRoles.Supervisor.ToString()) && interview.SupervisorId != User.UserId())
+                return Forbid();
+
+            if (User.IsInRole(UserRoles.Interviewer.ToString()))
+            {
+                if (interview.CurrentResponsibleId != User.UserId())
+                    return Forbid();
+                
+                var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
+                    .Any(key =>
+                        Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
+                        && cookieInterviewId == interview.Id
+                    );
+                var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
+                                                          && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
+                if (!hasAccess)
+                    return Forbid();
+            }
+                
             var content = pdfInterviewGenerator.Generate(id, User);
             if (content == null)
                 return NotFound(id);

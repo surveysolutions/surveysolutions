@@ -876,7 +876,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var pdfUrl = isExistsInterviewInCookie && interview.CompletedDate.HasValue
                 && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow
-                ? Url.Action("PdfPrint", "InterviewPdf", new{ interviewId = interview.Id })
+                ? Url.Action("Pdf", "InterviewsPublicApi", new{ id = interview.Id })
                 : null;
             
             return new FinishWebInterview
