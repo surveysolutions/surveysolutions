@@ -231,6 +231,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string InvalidEndpointShort {
+            get {
+                return ResourceManager.GetString("InvalidEndpointShort", resourceCulture);
+            }
+        }
+        
         public static string LocationPermissionRequired {
             get {
                 return ResourceManager.GetString("LocationPermissionRequired", resourceCulture);

@@ -11,12 +11,23 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 {
     public class DenormalizerRegistry : IDenormalizerRegistry
     {
-        private List<Type> batchProcessingDenormalizers = new List<Type>();
+        private readonly EventBusSettings eventBusSettings;
+        private readonly List<Type> batchProcessingDenormalizers = new List<Type>();
 
-        private Dictionary<Type, List<EventHandlerMethod>> sequentialDenormalizers = new Dictionary<Type, List<EventHandlerMethod>>();
+        private readonly Dictionary<Type, List<EventHandlerMethod>> sequentialDenormalizers = new Dictionary<Type, List<EventHandlerMethod>>();
+
+        public DenormalizerRegistry(EventBusSettings eventBusSettings)
+        {
+            this.eventBusSettings = eventBusSettings;
+        }
 
         public void RegisterFunctional<T>() where T : IFunctionalEventHandler
         {
+            if(eventBusSettings.DisabledEventHandlerTypes.Any(d => d == typeof(T)))
+            {
+                return;
+            }
+
             batchProcessingDenormalizers.Add(typeof(T));
         }
 
@@ -26,6 +37,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             var receivesIgnoredEventsAttribute = denormalizerType.GetCustomAttribute(typeof(ReceivesIgnoredEventsAttribute));
 
             var handlers = new List<EventHandlerMethod>();
+
             foreach (var @interface in denormalizerType.GetInterfaces())
             {
                 if (!@interface.IsGenericType || @interface.GetGenericTypeDefinition() != typeof(IEventHandler<>))

@@ -1,15 +1,9 @@
 using System;
-using Android.Content;
 using Android.OS;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.Core.Widget;
 using Java.Lang;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.UI.Shared.Enumerator.CustomControls;
 using Object = Java.Lang.Object;
 
 namespace WB.UI.Shared.Enumerator.Activities

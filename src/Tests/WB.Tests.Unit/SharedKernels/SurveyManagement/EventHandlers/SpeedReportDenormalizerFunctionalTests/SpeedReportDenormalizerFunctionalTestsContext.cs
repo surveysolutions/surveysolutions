@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -24,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetPrefilledQuestions() == new ReadOnlyCollection<Guid>(Array.Empty<Guid>()));
             var questionnaireStorage1 = questionnaireStorage ?? 
                                         Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
-            return new InterviewSummaryCompositeDenormalizer(
+            return new InterviewSummaryCompositeDenormalizer(new EventBusSettings(),
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage1),
+                new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage1, Create.Storage.NewMemoryCache()),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),

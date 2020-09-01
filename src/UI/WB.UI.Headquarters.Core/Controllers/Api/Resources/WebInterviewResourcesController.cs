@@ -44,6 +44,11 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
+            if (interview == null)
+            {
+                return NotFound();
+            }
+
             if (!interview.AcceptsInterviewerAnswers() && !this.authorizedUser.CanConductInterviewReview())
             {
                 return NotFound();
@@ -63,6 +68,11 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         public new IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview == null)
+            {
+                return NotFound();
+            }
 
             if (!interview.AcceptsInterviewerAnswers() && !this.authorizedUser.CanConductInterviewReview())
             {
@@ -94,6 +104,11 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             [FromQuery] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
+           
+            if (interview == null)
+            {
+                return NotFound();
+            }
 
             if (!interview.AcceptsInterviewerAnswers() 
                 && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null

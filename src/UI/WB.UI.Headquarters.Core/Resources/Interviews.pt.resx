@@ -118,8 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;
-&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar a entrevistas com o seguinte status somente: &lt;i&gt;{{status1}}&lt;/i&gt; e &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+      <value>{{count}} Interview vai ser aprovado.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; Interview(s) selecionado para reatribuir.&lt;/h3&gt;
@@ -151,7 +150,16 @@
 &lt;b&gt;Nota!&lt;/b&gt; Você pode reprovar entrevistas com somente o seguinte status: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;
-&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;
+&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+  </data>
+  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+      <value>{{count}} Interviews vai ser aprovado.</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+      <value>Nota!</value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+      <value>Você pode aprovar a entrevistas com o seguinte status somente: {{status1}},  {{status2}}, {{status3}}.</value>
   </data>
 </root>

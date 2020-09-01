@@ -1,6 +1,5 @@
-using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 
 namespace WB.UI.Shared.Enumerator.Activities.Dashboard
@@ -14,7 +13,7 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
             this.bindingContext = bindingContext;
         }
 
-        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+        public override AndroidX.RecyclerView.Widget.RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             var itemBindingContext =
                 new MvxAndroidBindingContext(parent.Context, this.bindingContext.LayoutInflaterHolder);
@@ -24,7 +23,7 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
             return vh;
         }
 
-        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        public override void OnBindViewHolder(AndroidX.RecyclerView.Widget.RecyclerView.ViewHolder holder, int position)
         {
             base.OnBindViewHolder(holder, position);
             var viewHolder = (ExpandableViewHolder)holder;

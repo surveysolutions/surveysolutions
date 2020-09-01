@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
+using Range = Moq.Range;
 
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
@@ -70,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_handling_SingleOptionQuestionAnswered_for_parent_question()
+        public async Task when_handling_SingleOptionQuestionAnswered_for_parent_question()
         {
             List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
             CascadingSingleOptionQuestionViewModel cascadingModel;
@@ -120,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 .Returns(secondParentOptionAnswer);
             
             //aa
-            cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
+            await cascadingModel.HandleAsync(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
@@ -176,7 +179,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer()
+        public async Task when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer()
         {
 
             List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
@@ -214,7 +217,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionQuestion(parentIdentity)).Returns(secondParentOptionAnswer);
 
             //act
-            cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
+            await cascadingModel.HandleAsync(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
             
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
@@ -625,6 +628,46 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
 
             combo.FilterText.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void when_inialised_with_options_as_list_display_Should_not_render_combobox()
+        {
+            SetUp();
+            
+            var cascadingQuestionId = Id.g1;
+            var parentQuestionId = Id.g2;
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                children: new IComposite[]
+                {
+                    Create.Entity.SingleQuestion(id: parentQuestionId, options: new List<Answer>
+                    {
+                        Create.Entity.Answer("one", 1)
+                    }),
+                    Create.Entity.SingleQuestion(id: cascadingQuestionId, cascadeFromQuestionId: parentQuestionId,
+                        showAsList: true)
+                });
+
+
+            var questionnaireRepository = Create.Storage.QuestionnaireStorage(questionnaire);
+            
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA,
+                questionnaireRepository: questionnaireRepository);
+            interview.AnswerSingleOptionQuestion(Id.gB, parentQuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, 1);
+
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
+            
+           
+            var viewModel = CreateCascadingSingleOptionQuestionViewModel(
+                questionnaireRepository,
+                interviewRepository);
+            
+            // Act
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(cascadingQuestionId), navigationState);
+            
+            // Assert
+
+            viewModel.Children.Should().NotContain(x => x is CategoricalComboboxAutocompleteViewModel);
         }
     }
 }

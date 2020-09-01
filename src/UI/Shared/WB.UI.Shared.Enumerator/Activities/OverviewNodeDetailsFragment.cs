@@ -1,6 +1,5 @@
 ﻿using Android.OS;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
@@ -8,7 +7,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 namespace WB.UI.Shared.Enumerator.Activities
 {
     [MvxDialogFragmentPresentation]
-    public class OverviewNodeDetailsFragment: MvxDialogFragment<OverviewNodeDetailsViewModel>
+    public class OverviewNodeDetailsFragment: MvvmCross.Platforms.Android.Views.Fragments.MvxDialogFragment<OverviewNodeDetailsViewModel>
     {
         protected int ViewResourceId => Resource.Layout.interview_overview_node_details;
 

@@ -211,13 +211,23 @@
         <ModalFrame ref="approveModal"
             :title="$t('Common.Approve')">
             <form onsubmit="return false;">
-                <div class="action-container">
-                    <p
-                        v-html="this.config.isSupervisor ? $t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Rejected by Headquarters'} ) : $t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor'} )"></p>
+                <div class="action-container"
+                    v-if="this.config.isSupervisor">
+                    <h3>
+                        {{$t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length })}}
+                    </h3>
+                    <p>
+                        <strong>{{$t('Interviews.Note')}}</strong>
+                        {{approveBySupervisorAllowedStatusesMessage}}
+                    </p>
+                </div>
+                <div class="action-container"
+                    v-else>
+                    <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor', status3: 'Rejected by Supervisor'} )"></p>
                 </div>
                 <div>
                     <label
-                        for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
+                        for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:</label>
                     <textarea
                         class="form-control"
                         rows="10"
@@ -479,6 +489,13 @@ export default {
     },
 
     computed: {
+        approveBySupervisorAllowedStatusesMessage(){
+            const completedName = this.$t('Strings.InterviewStatus_Completed')
+            const rejectedByHqName = this.$t('Strings.InterviewStatus_RejectedByHeadquarters')
+            const rejectedBySvName = this.$t('Strings.InterviewStatus_RejectedBySupervisor')
+
+            return this.$t('Interviews.ApproveConfirmMessage_Statuses', {status1: completedName, status2: rejectedByHqName, status3: rejectedBySvName})
+        },
         rowData() {
             return (this.interviewData.edges || []).map(e => e.node)
         },
@@ -1012,9 +1029,7 @@ export default {
         },
         approveInterview() {
             this.statusChangeComment = null
-            this.$refs.approveModal.modal({
-                keyboard: false,
-            })
+            this.$refs.approveModal.modal()
         },
 
         rejectInterviews() {
@@ -1365,18 +1380,20 @@ export default {
                     disabled: !canBeAssigned,
                 })
 
+                const canBeApproved = rowData.actionFlags.indexOf('CANBEAPPROVED') >= 0
                 menu.push({
                     name: self.$t('Common.Approve'),
-                    className: 'success-text',
+                    className: canBeApproved ? 'success-text' : '',
                     callback: () => self.approveInterview(),
-                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
+                    disabled: !canBeApproved,
                 })
 
+                const canBeRejected = rowData.actionFlags.indexOf('CANBEREJECTED') >= 0
                 menu.push({
                     name: self.$t('Common.Reject'),
-                    className: 'error-text',
+                    className: canBeRejected ? 'error-text' : '',
                     callback: () => self.rejectInterview(),
-                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
+                    disabled: !canBeRejected,
                 })
 
                 if (!self.config.isSupervisor) {
@@ -1390,11 +1407,12 @@ export default {
                         className: 'context-menu-separator context-menu-not-selectable',
                     })
 
+                    const canBeDeleted = rowData.actionFlags.indexOf('CANBEDELETED') >= 0
                     menu.push({
                         name: self.$t('Common.Delete'),
-                        className: 'error-text',
+                        className: canBeDeleted ? 'error-text' : '',
                         callback: () => self.deleteInterview(),
-                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
+                        disabled: !canBeDeleted,
                     })
                 }
             }

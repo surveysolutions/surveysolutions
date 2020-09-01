@@ -3,7 +3,7 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
+using AndroidX.Core.App;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
         {
             // Instantiate the builder and set notification elements:
             NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(context, CHANNEL_ID)
+                    new NotificationCompat.Builder(context)
                         .SetAutoCancel(notificationModel.AutoCancel)
 
                         .SetContentIntent(notificationModel.Intent)
@@ -61,7 +61,7 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
             if (notificationModels.Count > 1 && renderSummary)
             {
                 NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(context, CHANNEL_ID)
+                        new NotificationCompat.Builder(context)
 
                             .SetContentIntent(notificationModels.First().Intent)
                             .SetAutoCancel(true)

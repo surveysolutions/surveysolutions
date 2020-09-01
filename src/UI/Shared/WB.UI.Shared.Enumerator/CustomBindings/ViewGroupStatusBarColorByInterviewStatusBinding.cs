@@ -1,10 +1,8 @@
 ﻿using Android.App;
 using Android.Graphics;
-using Android.OS;
-using Android.Support.V4.Content;
 using Android.Views;
+using AndroidX.Core.Content;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
