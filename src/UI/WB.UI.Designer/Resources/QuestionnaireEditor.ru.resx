@@ -866,9 +866,6 @@
   <data name="Export" xml:space="preserve">
     <value>Экспорт</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Скачать</value>
-  </data>
   <data name="OptionsCloseWindow" xml:space="preserve">
     <value>Закрыть?</value>
   </data>
