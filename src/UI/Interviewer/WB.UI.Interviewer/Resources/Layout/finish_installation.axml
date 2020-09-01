@@ -1,113 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?attr/colorPrimary"
-      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    <TextView
-        style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
-  </android.support.v7.widget.Toolbar>
-  <ProgressBar style="@style/Progress_Indicator"
-            local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/zero"
-      android:layout_weight="1"
-      android:fillViewport="true">
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_horizontal"
-      android:orientation="vertical"
-      android:gravity="center">
-      <ImageView
-          style="@style/Login_Logo"
-          android:id="@+id/LoginPage_logo" />
-      <TextView
-          style="@style/Login_ErrorMessage"
-          android:id="@+id/LoginPage_error_message"
-          android:layout_below="@+id/LoginPage_logo"
-          android:layout_width="wrap_content"
-          local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
-      <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical">
-          <RelativeLayout
-              android:id="@+id/relativeLayout"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+                style="@style/ToolbarTitle"
+                local:MvxBind="Text Localization('Interviewer_ApplicationName')"/>
+    </androidx.appcompat.widget.Toolbar>
+    <ProgressBar style="@style/Progress_Indicator"
+                 local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="1"
+            android:fillViewport="true">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:gravity="center">
+            <ImageView
+                    style="@style/Login_Logo"
+                    android:id="@+id/LoginPage_logo"/>
+            <TextView
+                    style="@style/Login_ErrorMessage"
+                    android:id="@+id/LoginPage_error_message"
+                    android:layout_below="@+id/LoginPage_logo"
+                    android:layout_width="wrap_content"
+                    local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical">
 
-              <EditText
-                  style="@style/Login_Endpoint_Editor"
-                  android:id="@+id/LoginPage_endpoint"
-                  android:layout_below="@+id/LoginPage_error_message"
-                  android:singleLine="true"
-                  android:inputType="textUri|textNoSuggestions"
-                  android:imeOptions="actionNext"
-                  android:paddingRight="@dimen/Login_Endpoint_paddingRight"
-                  local:MvxBind="Text Endpoint; Watermark Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
-              
-              <ImageButton
-                  style="@style/Login_Endpoint_Scan_Button"
-                  android:id="@+id/LoginPage_scan"
-                  local:srcCompat="@drawable/scan_icon"
-                  android:layout_alignParentRight="true"                  
-                  android:background="@null"
-                  android:scaleType="fitXY"
-                  local:MvxBind="Click ScanCommand;"/>              
-          </RelativeLayout>
-        <EditText
-          style="@style/Login_Login_Editor"
-          android:layout_below="@+id/LoginPage_endpoint"
-          android:id="@+id/LoginPage_login"
-          android:singleLine="true"
-          android:inputType="textUri"
-          android:imeOptions="actionNext"
-          local:MvxBind="Text UserName; Watermark Localization('LoginNameHint'); BackgroundStyle ValidationStyleBackground(IsUserValid);" />
-        <android.support.design.widget.TextInputLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               local:passwordToggleEnabled="true"
-               local:hintEnabled="false">
-          <android.support.design.widget.TextInputEditText
-              style="@style/Login_Password_Editor"
-              android:inputType="textPassword"
-              android:id="@+id/LoginPage_password"
-              local:MvxBind="Text Password; Watermark Localization('PasswordHint');BackgroundStyle ValidationStyleBackground(IsUserValid);"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="left">
-          <Button
-            style="@style/Login_Button"
-            android:id="@+id/LoginPage_singin_button"
-            local:MvxBind="Click SignInCommand; Text Localization('LoginText')" />
-          <Button
-            style="@style/Login_Troubleshotting_Button"
-            android:id="@+id/LoginPage_troubleshooting_button"
-            local:MvxBind="Click NavigateToDiagnosticsPageCommand; Text Localization('Interviewer_Diagnostics');" />
-        </LinearLayout>
-      </LinearLayout>
+                        local:passwordToggleEnabled="true"
+                        local:hintEnabled="true"
+                        local:errorEnabled="true"
+                        local:endIconMode="custom"
+                        local:endIconDrawable="@drawable/scan_icon"
+                        local:MvxBind="Hint Localization('EndpointHint'); EndIconClick ScanCommand; Error EndpointValidationError">
+                    <com.google.android.material.textfield.TextInputEditText
+                            style="@style/Login_Editor"
+                            android:inputType="textUri|textNoSuggestions"
+                            android:id="@+id/LoginPage_endpoint"
+                            android:imeOptions="actionNext"
+                            local:MvxBind="Text Endpoint;"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        local:hintEnabled="true"
+                        local:MvxBind="Hint Localization('LoginNameHint')">
+                    <com.google.android.material.textfield.TextInputEditText
+                            style="@style/Login_Editor"
+                            android:id="@+id/LoginPage_login"
+                            android:inputType="textUri"
+                            local:MvxBind="Text UserName;"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        local:passwordToggleEnabled="true"
+                        local:hintEnabled="true"
+                        local:errorEnabled="true"
+                        local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">
+                    <com.google.android.material.textfield.TextInputEditText
+                            style="@style/Login_Editor"
+                            android:inputType="textPassword"
+                            android:id="@+id/LoginPage_password"
+                            local:MvxBind="Text Password;"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <LinearLayout android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:gravity="left">
+                    <Button
+                            style="@style/Login_Button"
+                            android:id="@+id/LoginPage_singin_button"
+                            local:MvxBind="Click SignInCommand; Text Localization('LoginText')"/>
+                    <Button
+                            style="@style/Login_Troubleshotting_Button"
+                            android:id="@+id/LoginPage_troubleshooting_button"
+                            local:MvxBind="Click NavigateToDiagnosticsPageCommand; Text Localization('Interviewer_Diagnostics');"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+            style="@style/Login_Footer"
+            android:id="@+id/login_page_footer"
+            android:layout_alignParentBottom="true">
+        <TextView
+                style="@style/Login_Footer_Message"
+                local:MvxBind="Html Localization('Login_FinishInstallation_Message')"/>
     </LinearLayout>
-  </ScrollView>
-  <LinearLayout
-      style="@style/Login_Footer"
-      android:id="@+id/login_page_footer"
-      android:layout_alignParentBottom="true">
-    <TextView
-       style="@style/Login_Footer_Message"
-       local:MvxBind="Html Localization('Login_FinishInstallation_Message')" />
-  </LinearLayout>
 </LinearLayout>
