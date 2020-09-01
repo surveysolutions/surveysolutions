@@ -141,9 +141,6 @@
   <data name="Version" xml:space="preserve">
     <value>version {0}</value>
   </data>
-  <data name="InterviewPrefilledData" xml:space="preserve">
-    <value>Interview Prefilled Data</value>
-  </data>
   <data name="Started" xml:space="preserve">
     <value>Interview started</value>
   </data>

@@ -141,9 +141,6 @@
   <data name="Version" xml:space="preserve">
     <value>версия {0}</value>
   </data>
-  <data name="InterviewPrefilledData" xml:space="preserve">
-    <value>Предзаполненные данные</value>
-  </data>
   <data name="Started" xml:space="preserve">
     <value>Начало интервью</value>
   </data>
