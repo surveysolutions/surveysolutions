@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 (
                     questionnaireId : questionnaireId.FormatGuid(),
                     questionId : questionId,
-                    options:new QuestionnaireCategoricalOption[0]
+                    options:new List<QuestionnaireCategoricalOption>()
                 );
 
             var stream = GenerateStreamFromString("1\tStreet 1\t2");
