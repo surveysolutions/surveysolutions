@@ -33,6 +33,8 @@
                     style="@style/Interview_Question_Title_Base"
                     local:MvxBind="Text Localization('Interviewer_Reassign_Comment');"/>
                 <EditText
+                    android:background="@drawable/text_editor_border"    
+                    android:padding="@dimen/Interview_Question_Answer_Input_background_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
