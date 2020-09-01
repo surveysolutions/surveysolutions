@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to at {0}.
+        ///   Looks up a localized string similar to on {0}.
         /// </summary>
         public static string GeneratedAt {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions with commented.
+        ///   Looks up a localized string similar to {0} questions with comments.
         /// </summary>
         public static string InterviewStatisticsCommented {
             get {
