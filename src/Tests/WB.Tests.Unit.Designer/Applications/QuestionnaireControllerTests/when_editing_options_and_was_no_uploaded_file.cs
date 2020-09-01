@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 using WB.UI.Designer.Controllers;
@@ -18,9 +19,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             {
                 IsCascading = true
             };
-            controller.EditOptions(null);
+            var result = (JsonResult)controller.EditOptions(null);
 
-            controller.TempData[Alerts.ERROR].Should().Be("Choose tab-separated values file to upload, please");
+            ((List<string>) result.Value)[0].Should().Be("Choose tab-separated values file to upload, please");
         }
     }
 }

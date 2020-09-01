@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using FluentAssertions;
@@ -33,15 +34,21 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel(
                 questionnaireId: questionnaireId.FormatGuid(),
                 questionId: questionId,
-                options: new QuestionnaireCategoricalOption[0]
+                options: new List<QuestionnaireCategoricalOption>()
             );
+
+            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel(questionnaireId.FormatGuid(), questionId)
+            {
+                IsCascading = false
+            };
+
             BecauseOf();
         }
 
         private void BecauseOf() => result = (JsonResult)controller.EditOptions(postedFile);
 
         [NUnit.Framework.Test] public void should_add_error_message_to_temp_data () =>
-            controller.TempData[Alerts.ERROR].Should().Be("Only tab-separated values files are accepted");
+            ((List<string>)result.Value)[0].Should().Be("Only tab-separated values files are accepted");
 
         private static QuestionnaireController controller;
         private static IFormFile postedFile;

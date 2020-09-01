@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using NHibernate.Criterion;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers;
 
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             (
                 questionnaireId : questionnaireId.FormatGuid(),
                 questionId : questionId,
-                options:new QuestionnaireCategoricalOption[0]
+                options:new List<QuestionnaireCategoricalOption>()
             )
             {
                 IsCascading = true
@@ -44,16 +45,19 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             BecauseOf();
         }
 
-        private void BecauseOf() => view = controller.EditOptions(postedFile) as ViewResult;
+        private void BecauseOf() => view = (JsonResult) controller.EditOptions(postedFile);
 
-        [NUnit.Framework.Test] public void should_return_list_with_1_option () =>
-            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.Count().Should().Be(1);
+        [NUnit.Framework.Test]
+        public void should_return_no_errors() =>
+            ((List<string>) view.Value).Count.Should().Be(0);
 
-        [NUnit.Framework.Test] public void should_return_first_option_with_value_equals_1 () =>
-            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.First().Value.Should().Be(1);
+        [NUnit.Framework.Test]
+        public void should_add_one_option() =>
+            controller.questionWithOptionsViewModel.Options.Count.Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
-            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.First().Title.Should().Be("Street 1");
+        [NUnit.Framework.Test]
+        public void should_add_one_option_with_expected_value() =>
+            controller.questionWithOptionsViewModel.Options.Single().Title.Should().Equals("First");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()
@@ -64,6 +68,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private static QuestionnaireController controller;
         private static IFormFile postedFile;
         private static Stream stream = new MemoryStream();
-        private static ViewResult view;
+        private static JsonResult view;
     }
 }
