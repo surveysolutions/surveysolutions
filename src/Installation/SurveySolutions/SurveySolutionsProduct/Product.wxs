@@ -163,11 +163,6 @@
     <Binary Id="CustomActionBinary"
             SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
 
-    <CustomAction Id="SetExportSettingsDataValue"
-                  Return="check"
-                  Property="WriteExportServiceSettings"
-                  Value="TargetFile=[EXPORTSERVICEFOLDER]appsettings.production.ini;SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
-
     <!--custom action to set settings and migrate old ones-->
     <CustomAction Id="WriteExportServiceSettings"
                   BinaryKey="CustomActionBinary"

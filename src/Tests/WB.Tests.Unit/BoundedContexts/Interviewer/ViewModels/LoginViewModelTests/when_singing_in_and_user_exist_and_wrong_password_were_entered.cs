@@ -12,10 +12,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 {
     public class when_singing_in_and_user_exist_and_wrong_password_were_entered : LoginViewModelTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public async Task context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () 
+        {
             var passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(userPassword) == userPasswordHash);
 
-            var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
+            CreateInterviewerIdentity(userName, userPasswordHash);
 
             var principal = new Mock<IInterviewerPrincipal>();
             principal.Setup(x => x.SignIn(userName, userPasswordHash, true)).Returns(true);
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             viewModel.IsOnlineLoginButtonVisible.Should().BeFalse();
 
         [NUnit.Framework.Test] public void should_set_Login_Online_Signin_Explanation_message () =>
-            viewModel.ErrorMessage.Should().Be(EnumeratorUIResources.Login_WrongPassword);
+            viewModel.PasswordError.Should().Be(EnumeratorUIResources.Login_WrongPassword);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

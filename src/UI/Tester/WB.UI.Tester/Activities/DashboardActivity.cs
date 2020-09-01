@@ -1,15 +1,13 @@
-using System;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+using AndroidX.AppCompat.Widget;
+using AndroidX.RecyclerView.Widget;
+using MvvmCross.DroidX.RecyclerView;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
-
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
