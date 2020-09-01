@@ -71,7 +71,7 @@
     <style name="OfflineSync_Done" parent="Interview_Previous_Group_Navigation_Button">
         <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
         <item name="android:layout_marginLeft">0dp</item>
-        <item name="android:background">@drawable/group_completed</item>
+        <item name="backgroundTint">@color/group_completed</item>
     </style>
     <style name="OfflineSync_ProgressStatus" parent="OfflineSync_HeaderText">
         <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>

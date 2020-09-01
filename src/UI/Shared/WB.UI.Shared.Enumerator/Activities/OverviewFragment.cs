@@ -1,12 +1,10 @@
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross;
+using AndroidX.RecyclerView.Widget;
 using MvvmCross.Commands;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Navigation;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.Services;

@@ -220,7 +220,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.CurrentStage.DisposeIfDisposable();
             this.CurrentStage = this.GetInterviewStageViewModel(eventArgs);
-            this.RaisePropertyChanged(() => this.CurrentStage);
+            this.RaisePropertyChanged(nameof(this.CurrentStage));
         }
 
         private InterviewStageViewModel GetInterviewStageViewModel(ScreenChangedEventArgs eventArgs)

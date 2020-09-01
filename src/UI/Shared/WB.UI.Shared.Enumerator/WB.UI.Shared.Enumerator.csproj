@@ -14,10 +14,9 @@
     <FileAlignment>512</FileAlignment>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -62,7 +61,12 @@
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
+    <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
+    <Compile Include="CustomBindings\MaterialButtonToQuestionStateBinding.cs" />
+    <Compile Include="CustomBindings\TextInputLayoutHintBinding.cs" />
+    <Compile Include="CustomBindings\ToParentButtonGroupStyleButtonBinding.cs" />
+    <Compile Include="CustomBindings\ViewBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ViewSetGpsLocationBinding.cs" />
     <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
@@ -103,7 +107,6 @@
     <Compile Include="Converters\GroupStateToColorConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
-    <Compile Include="Converters\MediaQuestionButtonBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionEditorStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionLayoutStyleBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionCornerOptionBackgroundConverter.cs" />
@@ -133,8 +136,6 @@
     <Compile Include="CustomBindings\TextViewAnswerStateBinding.cs" />
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
     <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
-    <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
-    <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
@@ -245,6 +246,27 @@
     <AndroidResource Include="Resources\anim\slide_from_left.xml" />
     <AndroidResource Include="Resources\anim\slide_from_right.xml" />
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
+    <AndroidResource Include="Resources\drawable\alert_dialog_btn.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\interview_approved_by_sv.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\interview_rejected_by_hq.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\sidebar_row.xml" />
+    <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml" />
+    <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
+    <AndroidResource Include="Resources\drawable\to_parent_icon.xml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\theme.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\question_title_text.xml">
@@ -252,7 +274,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\alert_dialog_btn.xml" />
     <AndroidResource Include="Resources\drawable\default_input_button.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -268,44 +289,6 @@
     <AndroidResource Include="Resources\drawable\delete_button.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_button_background.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_completed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_completed_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_completed_unpressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_disabled.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_started.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_started_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_started_unpressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_with_invalid_answers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_with_invalid_answers_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\group_with_invalid_answers_unpressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\interview_section_background.xml">
@@ -354,27 +337,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_answered.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_disabled.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_pressed_answered.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_unpressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_input_button_unpressed_answered.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\question_list_item_background.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -415,94 +377,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_button.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_button_bg.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_button_bg_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_row.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\sidebar_row_unpressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_check_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_default_holo_light.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_btn_radio_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_edit_text_holo_light.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_item_background_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_background_transition_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_list_selector_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\theme_blue_light_progress_horizontal_holo_light.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\theme_blue_light_progress_indeterminate_horizontal_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_control_selector_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_scrubber_progress_horizontal_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\group_completed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\group_started.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\group_with_invalid_answers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\question_input_button.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\question_input_button_answered.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\sidebar_button.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\sidebar_row.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\question_background_disabled_tile.png" />
@@ -530,90 +408,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\question_save_answer_progressbar_indeterminate8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_disabled_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_on_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_disabled_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_disabled_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_normal_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_default_pressed_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_disabled_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_on_pressed_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_activated_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_focused_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_longpressed_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_pressed_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_list_selector_disabled_holo_light.9.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progress_bg_holo_light.9.png" />
@@ -647,63 +441,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_progressbar_indeterminate_holo8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_disabled_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_focused_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_normal_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_control_pressed_holo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_primary_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_secondary_holo.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_scrubber_track_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_default_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_disabled_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_spinner_pressed_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_left.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_middle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_text_select_handle_right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_activated_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_default_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_focused_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_disabled_holo_light.9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_textfield_focused_holo_light.9.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview.axml">
@@ -904,14 +641,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-small\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-v21\fonts.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-v21\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -1368,33 +1097,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\to_parent_group_completed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\to_parent_group_started.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\back_to_parent.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\back_to_parent_compeleted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\back_to_parent_invalid.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\to_parent_group_invalid.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\to_parent_group_completed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\to_parent_group_invalid.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\to_parent_group_started.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\anim\zoom_in_from_center.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -1410,18 +1112,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\transparent_input_button.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\transparent_input_button_disabled.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\transparent_input_button_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\transparent_input_button_unpressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\audio_curcle_blue.xml" />
@@ -1511,18 +1201,6 @@
     <AndroidResource Include="Resources\drawable\question_option_background_protected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\theme_blue_light_btn_check_off_disabled_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\theme_blue_light_btn_radio_off_disabled_holo_light.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_holo_light.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\img_placeholder.xml" />
@@ -1905,30 +1583,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\interview_approved_by_sv.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\interview_approved_by_sv.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\interview_rejected_by_hq.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-anydpi-v21\interview_rejected_by_hq.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\pdf_fragment.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -2242,20 +1896,11 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory">
       <Version>3.1.7</Version>
     </PackageReference>
-    <PackageReference Include="MvvmCross.Droid.Support.Core.Utils">
-      <Version>6.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmCross.Droid.Support.V7.AppCompat">
-      <Version>6.4.2</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView">
-      <Version>6.4.2</Version>
-    </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Messenger">
-      <Version>6.4.2</Version>
+      <Version>7.0.0</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.Plugin.Network">
-      <Version>6.4.2</Version>
+      <Version>7.0.0</Version>
     </PackageReference>
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.3</Version>
@@ -2284,146 +1929,26 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
-    <PackageReference Include="Xam.Plugin.DeviceInfo">
-      <Version>4.1.1</Version>
-    </PackageReference>
     <PackageReference Include="Xam.Plugin.Geolocator">
-      <Version>4.5.0.6</Version>
+      <Version>4.6.2-beta</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.Media">
-      <Version>4.0.1.5</Version>
+      <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Android.ExoPlayer.UI">
-      <Version>2.9.8</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Core.Common">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Core.Runtime">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Common">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Extensions">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.LiveData">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.LiveData.Core">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.Runtime">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Lifecycle.ViewModel">
-      <Version>1.1.1.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Arch.Work.Runtime">
-      <Version>1.0.0.3</Version>
+      <Version>2.11.8</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.PhotoView">
       <Version>2.1.4</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Animated.Vector.Drawable">
-      <Version>28.0.0.3</Version>
+    <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
+      <Version>1.1.3.2</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Annotations">
-      <Version>28.0.0.3</Version>
+    <PackageReference Include="Xamarin.AndroidX.MediaRouter">
+      <Version>1.1.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.AsyncLayoutInflater">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Collections">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Compat">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout">
-      <Version>1.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.CoordinaterLayout">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Core.UI">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Core.Utils">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.CursorAdapter">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.CustomView">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Design">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.DocumentFile">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.DrawerLayout">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Exif">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Fragment">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Interpolator">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Loader">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.LocalBroadcastManager">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Media.Compat">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Print">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.SlidingPaneLayout">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.SwipeRefreshLayout">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Transition">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.v4">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.v7.CardView">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.v7.Palette">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.v7.RecyclerView">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.Vector.Drawable">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.VersionedParcelable">
-      <Version>28.0.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Android.Support.ViewPager">
-      <Version>28.0.0.3</Version>
+    <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
+      <Version>2.3.4.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
       <Version>0.10.0</Version>
@@ -2434,20 +1959,35 @@
     <PackageReference Include="Xamarin.FFImageLoading">
       <Version>2.4.11.982</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Google.Android.Material">
+      <Version>1.1.0.2-rc3</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Base">
-      <Version>71.1610.4</Version>
+      <Version>117.2.1-preview02</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
-      <Version>71.1610.4</Version>
+      <Version>117.0.0-preview04</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
-      <Version>71.1600.4</Version>
+      <Version>117.0.0-preview04</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Tasks">
-      <Version>71.1601.4</Version>
+      <Version>117.0.2-preview02</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
-      <Version>2.4.1</Version>
+      <Version>3.0.0-beta5</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Migration">
+      <Version>1.0.6.2</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmCross.DroidX.RecyclerView">
+      <Version>7.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
+      <Version>1.0.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
+      <Version>1.1.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

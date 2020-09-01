@@ -1,4 +1,6 @@
-﻿using Android.Widget;
+﻿using Android.Graphics;
+using Android.Widget;
+using AndroidX.Core.Content;
 using MvvmCross.Binding;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -19,20 +21,21 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(value);
 
-            control.SetBackgroundResource(groupBackgroundResourceId);
+            var color = ContextCompat.GetColor(control.Context, groupBackgroundResourceId);
+            control.SetBackgroundColor(new Color(color));
         }
 
-        private static int GetGroupBackgroundResourceIdByStatus(GroupStatus status)
+        private int GetGroupBackgroundResourceIdByStatus(GroupStatus status)
         {
             switch (status)
             {
                 case GroupStatus.Completed:
-                    return Resource.Drawable.group_completed;
+                    return Resource.Color.group_completed;
                 case GroupStatus.StartedInvalid:
                 case GroupStatus.CompletedInvalid:
-                    return Resource.Drawable.group_with_invalid_answers;
+                    return Resource.Color.group_with_invalid_answers;
                 default:
-                    return Resource.Drawable.group_started;
+                    return Resource.Color.group_started;
             }
         }
         
