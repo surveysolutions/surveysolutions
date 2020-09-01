@@ -1,7 +1,7 @@
 ﻿using System;
 using Android.App;
-using Android.Support.V7.App;
 using Android.Widget;
+using AndroidX.AppCompat.App;
 using MvvmCross.Platforms.Android.Binding.Target;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.UI.Shared.Enumerator.CustomControls;

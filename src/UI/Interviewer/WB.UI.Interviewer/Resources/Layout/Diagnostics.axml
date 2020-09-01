@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
-    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
                                        android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        android:background="?attr/colorPrimary"
@@ -12,7 +12,7 @@
                                        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView style="@style/ToolbarTitle"
                   local:MvxBind="Text Localization('Diagnostics_Title')" />
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbarStyle="outsideOverlay"

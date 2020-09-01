@@ -10,5 +10,5 @@
           local:MvxBind="Hidden Not(MaxAnswersCountMessage); 
                          Text MaxAnswersCountMessage; 
                          HideKeyboardOnClick .;
-                         Tag Format('tv_MaxAnswers_Message_', Identity)" 
+                         Tag Format('tv_MaxAnswers_Message_{0}', Identity)" 
 />

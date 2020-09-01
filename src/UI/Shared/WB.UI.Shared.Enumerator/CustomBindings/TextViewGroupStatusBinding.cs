@@ -1,9 +1,9 @@
 ﻿using System;
 using Android.Graphics;
-using Android.Support.V4.Content;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
+using AndroidX.Core.Content;
 using MvvmCross.Binding;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;

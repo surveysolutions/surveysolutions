@@ -278,5 +278,23 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("QuestionsFilterNotAvailable", resourceCulture);
             }
         }
+        
+        public static string ApproveConfirmMessage_plural {
+            get {
+                return ResourceManager.GetString("ApproveConfirmMessage_plural", resourceCulture);
+            }
+        }
+        
+        public static string Note {
+            get {
+                return ResourceManager.GetString("Note", resourceCulture);
+            }
+        }
+        
+        public static string ApproveConfirmMessage_Statuses {
+            get {
+                return ResourceManager.GetString("ApproveConfirmMessage_Statuses", resourceCulture);
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Android.App; 
+using Android.App;
 using Android.Text;
 using Android.Widget;
 using MvvmCross.Platforms.Android;
@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Utils;
+using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -61,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var builder = new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity);
+            var builder = new AlertDialog.Builder(this.mvxCurrentTopActivity.Activity);
 
             builder.SetTitle(message);
             builder.SetItems(options, (sender, args) =>
@@ -129,7 +130,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
+                        new AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(isHtml ? message.ToAndroidSpanned(): new SpannedString(message))
                             .SetTitle(isHtml ? title.ToAndroidSpanned() : new SpannedString(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
@@ -175,7 +176,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         {
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
+                        new AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton,
@@ -227,7 +228,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
+                        new AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned())
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
