@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Humanizer;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
@@ -75,7 +76,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     var imageName = paragraph.AddFormattedText($"{fileName}", answerStyle);
                     imageName.Color = textColor;
                     imageName.Italic = true;
-                    var imageSize = paragraph.AddFormattedText($" - ({SizeInKb(binaryData.Length)} Kb)", answerStyle);
+                    var imageSize = paragraph.AddFormattedText($" - ({SizeInKb(binaryData.Length)})", answerStyle);
                     imageSize.Color = textColor;
                     imageSize.Italic = true;
                     imageSize.Bold = false;
@@ -188,6 +189,6 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
             }
         }
 
-        private int SizeInKb(int bytes) => bytes / 1024;
+        private string SizeInKb(int bytes) => bytes.Bytes().ToString("KB");
     }
 }
