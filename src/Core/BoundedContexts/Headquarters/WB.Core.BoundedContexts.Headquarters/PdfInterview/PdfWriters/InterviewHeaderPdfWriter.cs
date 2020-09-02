@@ -12,6 +12,7 @@ using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Tables;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
@@ -81,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 leftTopText.Format.Font.Size = Unit.FromPoint(7);
                 leftTopText.AddText(string.Format(PdfInterviewRes.GeneratedBy, headquartersConfig.Value.BaseUrl));
                 leftTopText.AddLineBreak();
-                leftTopText.AddText(string.Format(PdfInterviewRes.GeneratedAt, DateTime.UtcNow.ToString(PdfDateTimeFormats.DateTimeFormat)));
+                leftTopText.AddText(string.Format(PdfInterviewRes.GeneratedAt, DateTime.UtcNow.ToString(DateTimeFormat.DateTimeWithTimezoneFormat)));
             }
 
             Table table = section.AddTable();
@@ -106,9 +107,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 startedTitle.AddFormattedText(PdfInterviewRes.Started, PdfStyles.HeaderLineTitle);
 
                 var startedValue = row[0].AddParagraph();
-                startedValue.AddFormattedText(interview.StartedDate.Value.ToString(PdfDateTimeFormats.DateFormat), PdfStyles.HeaderLineDate);
+                startedValue.AddFormattedText(interview.StartedDate.Value.ToString(DateTimeFormat.DateFormat), PdfStyles.HeaderLineDate);
                 startedValue.AddSpace(1);
-                startedValue.AddFormattedText(interview.StartedDate.Value.ToString(PdfDateTimeFormats.TimeFormat), PdfStyles.HeaderLineTime);
+                startedValue.AddFormattedText(interview.StartedDate.Value.ToString(DateTimeFormat.TimeWithTimezoneFormat), PdfStyles.HeaderLineTime);
             }
 
             if (interview.CompletedDate.HasValue)
@@ -119,9 +120,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 completedTitle.AddFormattedText(PdfInterviewRes.Completed, PdfStyles.HeaderLineTitle);
 
                 var completedValue = row[0].AddParagraph();
-                completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(PdfDateTimeFormats.DateFormat), PdfStyles.HeaderLineDate);
+                completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(DateTimeFormat.DateFormat), PdfStyles.HeaderLineDate);
                 completedValue.AddSpace(1);
-                completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(PdfDateTimeFormats.TimeFormat), PdfStyles.HeaderLineTime);
+                completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(DateTimeFormat.TimeWithTimezoneFormat), PdfStyles.HeaderLineTime);
             }
             
             row[1].AddParagraphFormattedText(PdfInterviewRes.Questionnaire, PdfStyles.HeaderLineTitle);
