@@ -148,7 +148,7 @@
     <value>Интервью завершено</value>
   </data>
   <data name="InterviewVolume" xml:space="preserve">
-    <value>Интервью статистика</value>
+    <value>Статистика интервью</value>
   </data>
   <data name="InterviewStatisticsSections" xml:space="preserve">
     <value>{0} секций</value>
@@ -163,7 +163,7 @@
     <value>{0} с замечаниями</value>
   </data>
   <data name="InterviewStatisticsUnanswered" xml:space="preserve">
-    <value>{0} не отвеченных вопросов</value>
+    <value>{0} неотвеченных вопросов</value>
   </data>
   <data name="InterviewStatisticsCommented" xml:space="preserve">
     <value>{0} вопросов с комментариями</value>
