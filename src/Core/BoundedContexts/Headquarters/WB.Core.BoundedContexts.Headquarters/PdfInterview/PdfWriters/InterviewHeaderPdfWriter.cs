@@ -1,19 +1,20 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Tables;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.UI.Headquarters.Resources;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
-namespace WB.UI.Headquarters.PdfInterview.PdfWriters
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
     public class InterviewHeaderPdfWriter
     {
@@ -91,7 +92,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
             table.AddRow().TopPadding = Unit.FromPoint(40);
             var row = table.AddRow();
 
-            row[0].AddParagraphFormattedText(Common.InterviewKey, PdfStyles.HeaderLineTitle);
+            row[0].AddParagraphFormattedText(PdfInterviewRes.InterviewKey, PdfStyles.HeaderLineTitle);
 
             var interviewKeyValue = row[0].AddParagraph();
             interviewKeyValue.Format.Font.Size = Unit.FromPoint(18); 
@@ -123,7 +124,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                 completedValue.AddFormattedText(interview.CompletedDate.Value.ToString(PdfDateTimeFormats.TimeFormat), PdfStyles.HeaderLineTime);
             }
             
-            row[1].AddParagraphFormattedText(Common.Questionnaire, PdfStyles.HeaderLineTitle);
+            row[1].AddParagraphFormattedText(PdfInterviewRes.Questionnaire, PdfStyles.HeaderLineTitle);
             var questionnaireTitle = row[1].AddParagraph();
             questionnaireTitle.Format.SpaceBefore = Unit.FromPoint(4);
             questionnaireTitle.AddFormattedText(questionnaire.Title, isBold: true, size: Unit.FromPoint(12));
@@ -160,7 +161,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
 
         private static Stream? GetEmbeddedResource(string filename)
         {
-            return typeof(PdfInterviewGenerator).Assembly
+            return Assembly.GetEntryAssembly()
                 .GetManifestResourceStream($"WB.UI.Headquarters.Content.images.{filename}");
         }
 

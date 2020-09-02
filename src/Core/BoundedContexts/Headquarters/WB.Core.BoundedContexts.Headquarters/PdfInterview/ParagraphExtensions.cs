@@ -1,9 +1,10 @@
-﻿using System.Net;
-using System.Text.Encodings.Web;
+﻿#nullable enable
+
+using System.Net;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.Tables;
 
-namespace WB.UI.Headquarters.PdfInterview
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public static class ParagraphExtensions
     {

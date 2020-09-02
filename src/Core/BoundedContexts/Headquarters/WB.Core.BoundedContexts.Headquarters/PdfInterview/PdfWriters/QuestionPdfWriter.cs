@@ -1,17 +1,19 @@
-﻿using System.Linq;
+﻿#nullable enable
+
+using System.Linq;
 using Humanizer;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Sanitizer;
-using WB.UI.Headquarters.Configs;
-using WB.UI.Headquarters.Resources;
+using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
-namespace WB.UI.Headquarters.PdfInterview.PdfWriters
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
     public class QuestionPdfWriter : IPdfWriter
     {
@@ -107,7 +109,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                         foreach (var answerOption in yesNoAnswer.CheckedOptions)
                         {
                             var option = interview.GetOptionForQuestionWithoutFilter(question.Identity, answerOption.Value, null);
-                            var optionAnswer = answerOption.Yes ? Common.Yes : (answerOption.No ? Common.No : WebInterviewUI.Interview_Overview_NotAnswered);
+                            var optionAnswer = answerOption.Yes ? PdfInterviewRes.Yes : (answerOption.No ? PdfInterviewRes.No : PdfInterviewRes.NotAnswered);
                             if (order)
                                 paragraph.AddWrapFormattedText($"#{index++} ", PdfStyles.YesNoTitle);
                             paragraph.AddWrapFormattedText($"{optionAnswer}: ", PdfStyles.YesNoTitle);
@@ -152,7 +154,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                     
                     var multiToListAnswers = multiOptionQuestion.GetAnswer()?.ToDecimals()?.ToHashSet();
                     var refListQuestion = interview.FindQuestionInQuestionBranch(multiOptionQuestion.LinkedSourceId, question.Identity);
-                    var refListQuestionAllOptions = ((InterviewTreeTextListQuestion)refListQuestion?.InterviewQuestion)?.GetAnswer()?.Rows;
+                    var refListQuestionAllOptions = (refListQuestion?.InterviewQuestion as InterviewTreeTextListQuestion)?.GetAnswer()?.Rows;
                     var refListOptions = refListQuestionAllOptions?.Where(x => multiToListAnswers?.Contains(x.Value) ?? false).ToArray();
  
                     if (refListOptions != null)
@@ -185,7 +187,7 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
             else
             {
                 var nonAnswerStyle = isPrefilled ? PdfStyles.IdentifyerQuestionNotAnswered : PdfStyles.QuestionNotAnswered;
-                paragraph.AddWrapFormattedText(WebInterviewUI.Interview_Overview_NotAnswered, nonAnswerStyle);
+                paragraph.AddWrapFormattedText(PdfInterviewRes.NotAnswered, nonAnswerStyle);
             }
         }
 

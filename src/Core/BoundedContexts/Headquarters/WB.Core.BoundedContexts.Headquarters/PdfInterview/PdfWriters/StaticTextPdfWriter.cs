@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -6,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Infrastructure.Native.Sanitizer;
 
-namespace WB.UI.Headquarters.PdfInterview.PdfWriters
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
     public class StaticTextPdfWriter : IPdfWriter
     {

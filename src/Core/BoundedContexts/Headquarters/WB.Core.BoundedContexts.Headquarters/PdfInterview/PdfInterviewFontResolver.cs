@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿#nullable enable
+
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Utils;
 
-namespace WB.UI.Headquarters.PdfInterview
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public class PdfInterviewFontResolver : FontResolver
     {
@@ -11,7 +12,7 @@ namespace WB.UI.Headquarters.PdfInterview
             NullIfFontNotFound = true;
         }
 
-        public override FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
+        public override FontResolverInfo? ResolveTypeface(string familyName, bool isBold, bool isItalic)
         {
             var fontNames = familyName.Split(',');
             foreach (var fontName in fontNames)

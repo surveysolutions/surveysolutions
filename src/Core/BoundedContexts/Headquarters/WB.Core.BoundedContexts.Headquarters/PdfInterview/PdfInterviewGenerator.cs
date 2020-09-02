@@ -4,12 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Principal;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
-using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Tables;
 using MigraDocCore.Rendering;
 using PdfSharpCore.Drawing;
@@ -17,7 +14,8 @@ using PdfSharpCore.Drawing.BarCodes;
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Utils;
-using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Configs;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -25,13 +23,9 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Sanitizer;
-using WB.UI.Headquarters.Configs;
-using WB.UI.Headquarters.PdfInterview.PdfWriters;
-using WB.UI.Headquarters.Resources;
-using Color = MigraDocCore.DocumentObjectModel.Color;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
-namespace WB.UI.Headquarters.PdfInterview
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public class PdfInterviewGenerator : IPdfInterviewGenerator
     {
@@ -69,7 +63,7 @@ namespace WB.UI.Headquarters.PdfInterview
             ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
         }
 
-        public Stream Generate(Guid interviewId)
+        public Stream? Generate(Guid interviewId)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
@@ -184,14 +178,14 @@ namespace WB.UI.Headquarters.PdfInterview
         private void WriteInterviewData(List<Identity> nodes, IQuestionnaire questionnaire, IStatefulInterview interview,
             Document document, Paragraph tableOfContents)
         {
-            Table table = null;
+            Table? table = null;
             DateTimeOffset? prevDateTime = null;
 
             foreach (Identity node in nodes)
             {
                 if (questionnaire.IsQuestion(node.Id))
                 {
-                    var row = table.AddRow();
+                    var row = table?.AddRow() ?? throw new ArgumentException("Table should be created before");
                     var question = interview.GetQuestion(node);
                     if (question.AnswerTime.HasValue)
                     {
@@ -217,7 +211,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
                 if (questionnaire.IsStaticText(node.Id))
                 {
-                    var row = table.AddRow();
+                    var row = table?.AddRow() ?? throw new ArgumentException("Table should be created before");
                         
                     var staticText = interview.GetStaticText(node);
                     new StaticTextPdfWriter(staticText, interview, questionnaire, attachmentContentService)

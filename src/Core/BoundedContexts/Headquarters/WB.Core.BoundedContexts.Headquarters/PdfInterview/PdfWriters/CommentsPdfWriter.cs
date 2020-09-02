@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿#nullable enable
+
+using System.Linq;
+using Main.Core.Entities.SubEntities;
 using MigraDocCore.DocumentObjectModel;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.UI.Headquarters.Services.Impl;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
-namespace WB.UI.Headquarters.PdfInterview.PdfWriters
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
     public class CommentsPdfWriter : IPdfWriter
     {
@@ -26,11 +28,13 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
                 {
                     paragraph.AddLineBreak();
                     paragraph.AddWrapFormattedText(comment.CommentTime.ToString(PdfDateTimeFormats.DateTimeFormat), PdfStyles.CommentDateTime);
-                    paragraph.AddWrapFormattedText($" {comment.UserRole.ToUiString()}: ", PdfStyles.CommentAuthor);
+                    paragraph.AddWrapFormattedText($" {ToUiString(comment.UserRole)}: ", PdfStyles.CommentAuthor);
                     paragraph.AddWrapFormattedText(comment.Comment, PdfStyles.CommentMessage);
                 }
             }
-
         }
+        
+        private string ToUiString(UserRoles userRole) => 
+            PdfInterviewRes.ResourceManager.GetString($"UserRoles_{userRole.ToString()}");
     }
 }
