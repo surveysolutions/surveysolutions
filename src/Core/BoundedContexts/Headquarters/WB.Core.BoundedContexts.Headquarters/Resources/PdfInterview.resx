@@ -183,4 +183,37 @@
   <data name="Cover" xml:space="preserve">
     <value>Cover</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Interview Key</value>
+  </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Headquarters</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Interviewer</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Observer</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>ApiUser</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
@@ -21,7 +22,6 @@ using WB.Tests.Web;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
-using WB.UI.Headquarters.PdfInterview;
 using UsersController = WB.UI.Headquarters.Controllers.Api.PublicApi.UsersController;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests

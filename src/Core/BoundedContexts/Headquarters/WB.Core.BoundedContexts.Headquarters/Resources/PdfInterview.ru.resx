@@ -183,5 +183,37 @@
   <data name="Cover" xml:space="preserve">
     <value>Обложка</value>
   </data>
-
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Не отвечен</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Идентификатор</value>
+  </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Хедквотер</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Супервизер</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Интервьюер</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Наблюдатель</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>Пользователь Апи</value>
+  </data>
 </root>

@@ -1,6 +1,8 @@
-﻿using MigraDocCore.DocumentObjectModel;
+﻿#nullable enable
 
-namespace WB.UI.Headquarters.PdfInterview
+using MigraDocCore.DocumentObjectModel;
+
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public class DefinePdfStyles
     {
