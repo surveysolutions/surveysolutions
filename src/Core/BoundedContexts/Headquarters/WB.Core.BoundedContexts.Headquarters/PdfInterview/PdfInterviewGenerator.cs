@@ -112,13 +112,19 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private IEnumerable<Identity> GetAllInterviewNodes(IStatefulInterview interview)
         {
+            if (!authorizedUser.IsAuthenticated || authorizedUser.IsInterviewer)
+            {
+                foreach (var entity in interview.GetUnderlyingInterviewerEntities().Where(interview.IsEnabled))
+                    yield return entity;
+                
+                yield break;
+            }
+            
             var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity);
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
-                var interviewEntities = authorizedUser.IsInterviewer
-                    ? interview.GetUnderlyingInterviewerEntities(enabledSectionId)
-                    : interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId);
+                var interviewEntities = interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId);
                 
                 foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
                     yield return interviewEntity;
