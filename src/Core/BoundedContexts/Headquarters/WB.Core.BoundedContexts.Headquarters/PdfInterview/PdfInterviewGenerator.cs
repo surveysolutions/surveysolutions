@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         {
             if (question.AnswerTime.HasValue)
             {
-                paragraph.AddFormattedText(question.AnswerTime.Value.ToString(PdfDateTimeFormats.TimeFormat),
+                paragraph.AddFormattedText(question.AnswerTime.Value.ToString(DateTimeFormat.TimeWithTimezoneFormat),
                     PdfStyles.QuestionAnswerTime);
             }
         }
@@ -379,7 +379,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         {
             if (question.AnswerTime.HasValue)
             {
-                paragraph.AddFormattedText(question.AnswerTime.Value.ToString(PdfDateTimeFormats.DateFormat),
+                paragraph.AddFormattedText(question.AnswerTime.Value.ToString(DateTimeFormat.DateFormat),
                     PdfStyles.QuestionAnswerDate);
             }
         }

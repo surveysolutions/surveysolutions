@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                 foreach (var comment in question.AnswerComments)
                 {
                     paragraph.AddLineBreak();
-                    paragraph.AddWrapFormattedText(comment.CommentTime.ToString(PdfDateTimeFormats.DateTimeFormat), PdfStyles.CommentDateTime);
+                    paragraph.AddWrapFormattedText(comment.CommentTime.ToString(DateTimeFormat.DateTimeWithTimezoneFormat), PdfStyles.CommentDateTime);
                     paragraph.AddWrapFormattedText($" {ToUiString(comment.UserRole)}: ", PdfStyles.CommentAuthor);
                     paragraph.AddWrapFormattedText(comment.Comment, PdfStyles.CommentMessage);
                 }
