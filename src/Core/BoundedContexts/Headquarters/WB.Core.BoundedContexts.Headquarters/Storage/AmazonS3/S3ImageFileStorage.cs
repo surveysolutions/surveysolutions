@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            throw new NotImplementedException();
+            return GetInterviewBinaryDataAsync(interviewId, fileName).Result;
         }
 
         public string GetPath(Guid interviewId, string filename = null) => $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
