@@ -41,14 +41,16 @@ namespace WB.UI.Headquarters.PdfInterview
         private readonly IAttachmentContentService attachmentContentService;
         private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
         private readonly IOptions<HeadquartersConfig> headquartersConfig;
+        private readonly IAuthorizedUser authorizedUser;
 
-        
+
         public PdfInterviewGenerator(IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageFileStorage imageFileStorage,
             IAttachmentContentService attachmentContentService,
             IOptions<GoogleMapsConfig> googleMapsConfig,
-            IOptions<HeadquartersConfig> headquartersConfig)
+            IOptions<HeadquartersConfig> headquartersConfig,
+            IAuthorizedUser authorizedUser)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -56,6 +58,7 @@ namespace WB.UI.Headquarters.PdfInterview
             this.attachmentContentService = attachmentContentService;
             this.googleMapsConfig = googleMapsConfig;
             this.headquartersConfig = headquartersConfig;
+            this.authorizedUser = authorizedUser;
         }
 
         static PdfInterviewGenerator()
@@ -66,7 +69,7 @@ namespace WB.UI.Headquarters.PdfInterview
             ImageSource.ImageSourceImpl = new ImageSharpImageSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
         }
 
-        public Stream Generate(Guid interviewId, IPrincipal user)
+        public Stream Generate(Guid interviewId)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
@@ -76,7 +79,7 @@ namespace WB.UI.Headquarters.PdfInterview
             if (questionnaire == null)
                 return null;
 
-            var nodes = GetAllInterviewNodes(interview, user).ToList();
+            var nodes = GetAllInterviewNodes(interview).ToList();
             var identifyedEntities = questionnaire.GetPrefilledEntities().Select(id => new Identity(id, RosterVector.Empty)).ToList();
            
             PdfDocument pdfDocument = new PdfDocument();
@@ -113,13 +116,13 @@ namespace WB.UI.Headquarters.PdfInterview
             return memoryStream;
         }
 
-        private static IEnumerable<Identity> GetAllInterviewNodes(IStatefulInterview interview, IPrincipal user)
+        private IEnumerable<Identity> GetAllInterviewNodes(IStatefulInterview interview)
         {
             var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity);
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
-                var interviewEntities = user.IsInRole(UserRoles.Interviewer.ToString())
+                var interviewEntities = authorizedUser.IsInterviewer
                     ? interview.GetUnderlyingInterviewerEntities(enabledSectionId)
                     : interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId);
                 
