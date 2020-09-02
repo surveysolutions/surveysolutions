@@ -193,12 +193,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (interview == null)
                 return NotFound(id);
 
-            if (User.IsInRole(UserRoles.Supervisor.ToString()) && interview.SupervisorId != User.UserId())
+            if (this.authorizedUser.IsSupervisor && interview.SupervisorId != this.authorizedUser.Id)
                 return Forbid();
 
-            if (User.IsInRole(UserRoles.Interviewer.ToString()))
+            if (this.authorizedUser.IsInterviewer)
             {
-                if (interview.CurrentResponsibleId != User.UserId())
+                if (interview.CurrentResponsibleId != this.authorizedUser.Id)
                     return Forbid();
                 
                 var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
