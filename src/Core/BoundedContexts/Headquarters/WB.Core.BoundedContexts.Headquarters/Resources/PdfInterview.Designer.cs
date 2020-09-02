@@ -124,6 +124,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview Key.
+        /// </summary>
+        public static string InterviewKey {
+            get {
+                return ResourceManager.GetString("InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} questions answered.
         /// </summary>
         public static string InterviewStatisticsAnswered {
@@ -196,11 +205,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string NotAnswered {
+            get {
+                return ResourceManager.GetString("NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  of .
         /// </summary>
         public static string PageOf {
             get {
                 return ResourceManager.GetString("PageOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string Questionnaire {
+            get {
+                return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         
@@ -232,6 +268,60 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Administrator.
+        /// </summary>
+        public static string UserRoles_Administrator {
+            get {
+                return ResourceManager.GetString("UserRoles_Administrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ApiUser.
+        /// </summary>
+        public static string UserRoles_ApiUser {
+            get {
+                return ResourceManager.GetString("UserRoles_ApiUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Headquarters.
+        /// </summary>
+        public static string UserRoles_Headquarter {
+            get {
+                return ResourceManager.GetString("UserRoles_Headquarter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer.
+        /// </summary>
+        public static string UserRoles_Interviewer {
+            get {
+                return ResourceManager.GetString("UserRoles_Interviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Observer.
+        /// </summary>
+        public static string UserRoles_Observer {
+            get {
+                return ResourceManager.GetString("UserRoles_Observer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor.
+        /// </summary>
+        public static string UserRoles_Supervisor {
+            get {
+                return ResourceManager.GetString("UserRoles_Supervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to version {0}.
         /// </summary>
         public static string Version {
@@ -246,6 +336,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
         

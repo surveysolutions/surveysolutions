@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿#nullable enable
+
+using System.Linq;
 using MigraDocCore.DocumentObjectModel;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Infrastructure.Native.Sanitizer;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 
-namespace WB.UI.Headquarters.PdfInterview.PdfWriters
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
     public class WarningsPdfWriter : IPdfWriter
     {

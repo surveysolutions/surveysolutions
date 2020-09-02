@@ -1,9 +1,10 @@
-﻿using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Tables;
+﻿#nullable enable
+
+using MigraDocCore.DocumentObjectModel;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Infrastructure.Native.Sanitizer;
 
-namespace WB.UI.Headquarters.PdfInterview.PdfWriters
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
     public class GroupPdfWriter : IPdfWriter
     {

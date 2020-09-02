@@ -1,6 +1,6 @@
 ﻿using MigraDocCore.DocumentObjectModel;
 
-namespace WB.UI.Headquarters.PdfInterview
+namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public class PdfColors
     {
