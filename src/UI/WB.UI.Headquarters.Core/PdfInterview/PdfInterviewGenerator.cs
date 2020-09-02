@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.PdfInterview
             }
 
             var tableOfContents = WriteTableOfContents(document.LastSection);
-            nodes.RemoveAll(node => identifyedEntities.Contains(node));
+            nodes.RemoveAll(node => identifyedEntities.Contains(node) || node.Id == questionnaire.CoverPageSectionId);
             WriteInterviewData(nodes, questionnaire, interview, document, tableOfContents);
 
             SetPagesMargins(document);
