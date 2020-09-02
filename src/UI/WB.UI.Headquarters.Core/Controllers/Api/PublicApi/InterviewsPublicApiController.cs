@@ -212,7 +212,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return Forbid();
             }
                 
-            var content = pdfInterviewGenerator.Generate(id, User);
+            var content = pdfInterviewGenerator.Generate(id);
             if (content == null)
                 return NotFound(id);
 

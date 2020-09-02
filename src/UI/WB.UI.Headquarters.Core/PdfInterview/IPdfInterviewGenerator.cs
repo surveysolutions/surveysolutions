@@ -7,6 +7,6 @@ namespace WB.UI.Headquarters.PdfInterview
 {
     public interface IPdfInterviewGenerator
     {
-        Stream Generate(Guid interviewId, IPrincipal user);
+        Stream Generate(Guid interviewId);
     }
 }
