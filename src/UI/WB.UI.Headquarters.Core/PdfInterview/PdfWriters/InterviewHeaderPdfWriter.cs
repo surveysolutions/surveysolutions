@@ -36,11 +36,13 @@ namespace WB.UI.Headquarters.PdfInterview.PdfWriters
         public void Write(Section section)
         {
             var questions = nodes.Where(node => questionnaire.IsQuestion(node.Id)).ToList();
+            var questionsAndStaticTexts = nodes.Where(node => interview.IsEnabled(node) 
+                && (questionnaire.IsQuestion(node.Id) || questionnaire.IsStaticText(node.Id))).ToList();
             int answeredQuestions = questions.Count(node => interview.WasAnswered(node)); 
             int unansweredQuestions = questions.Count(node => !interview.WasAnswered(node) && interview.IsEnabled(node)); 
             int sectionsCount = questionnaire.GetAllSections().Count(nodeId => interview.IsEnabled(new Identity(nodeId, RosterVector.Empty))); 
-            int errorsCount = nodes.Count(node => !interview.IsEntityValid(node));
-            int warningsCount = nodes.Count(node => !interview.IsEntityPlausible(node));
+            int errorsCount = questionsAndStaticTexts.Count(node => !interview.IsEntityValid(node));
+            int warningsCount = questionsAndStaticTexts.Count(node => !interview.IsEntityPlausible(node));
             int commentedCount = questions.Count(node => interview.GetQuestionComments(node).Any());
 
             var textFrame = section.AddTextFrame();
