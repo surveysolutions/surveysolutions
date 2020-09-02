@@ -1,4 +1,6 @@
-﻿using MigraDocCore.DocumentObjectModel;
+﻿using System.Net;
+using System.Text.Encodings.Web;
+using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.Tables;
 
 namespace WB.UI.Headquarters.PdfInterview
@@ -9,11 +11,13 @@ namespace WB.UI.Headquarters.PdfInterview
         {
             var paragraph = cell.AddParagraph();
             paragraph.Style = styleName;
+            text = WebUtility.HtmlDecode(text);
             return paragraph.AddFormattedText(text);
         }
         
         public static FormattedText AddFormattedText(this Paragraph paragraph, string text, bool? isBold = null, bool? isItalic = null, Unit? size = null)
         {
+            text = WebUtility.HtmlDecode(text);
             var formattedText = paragraph.AddFormattedText(text);
             if (isBold.HasValue)
                 formattedText.Font.Bold = isBold.Value;
@@ -26,6 +30,7 @@ namespace WB.UI.Headquarters.PdfInterview
         
         public static void AddWrappedText(this Paragraph paragraph, string text)
         {
+            text = WebUtility.HtmlDecode(text);
             for (int i = 0; i < text.Length; i+=15)
             {
                 var str = i + 15 > text.Length
@@ -37,6 +42,7 @@ namespace WB.UI.Headquarters.PdfInterview
 
         public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style, Color? color = null)
         {
+            text = WebUtility.HtmlDecode(text);
             for (int i = 0; i < text.Length; i+=15)
             {
                 var str = i + 15 > text.Length
