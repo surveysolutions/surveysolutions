@@ -637,8 +637,20 @@ namespace WB.UI.Headquarters.Controllers
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
                 if (interview.Status == InterviewStatus.Completed)
+                {
+                    var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
+                        .Any(key =>
+                            Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
+                            && cookieInterviewId == interview.Id
+                        );
+                    var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
+                                                              && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
+                    if (hasAccess)
+                        return this.RedirectToAction("Finish", routeValues: new { id });
+                    
                     throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
-                        Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                         Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                }
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
