@@ -26,27 +26,22 @@
                 local:srcCompat="@drawable/delete_button"/>
         </TableRow>
         <TableRow>
-            <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-                <TextView
-                    android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Interview_Question_Title_Base"
-                    local:MvxBind="Text Localization('Interviewer_Reassign_Comment');"/>
-                <EditText
-                    android:background="@drawable/text_editor_border"    
-                    android:padding="@dimen/Interview_Question_Answer_Input_background_padding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:gravity="top|left"
-                    android:scrollHorizontally="false"
-                    android:lines="6"
-                    android:maxLength="500"
-                    local:MvxBind="Text Comments;"/>
-                <TextView
-                    style="@style/Interview_Question_Title_Base"
-                    local:MvxBind="Text Localization('SelectResponsible_ReassignDescription');"/>
-            </LinearLayout>
+                    local:MvxBind="Hint Localization('Interviewer_Reassign_Comment'); 
+                                       HelperText Localization('SelectResponsible_ReassignDescription')">
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/LoginPage_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:lines="6"
+                        android:gravity="top|left"
+                        android:maxLength="500"
+                        android:scrollHorizontally="false"
+                        android:inputType="textMultiLine"
+                        local:MvxBind="Text Comments"/>
+            </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
         <TableRow>
             <MvxRecyclerView
