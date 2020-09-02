@@ -177,8 +177,8 @@
   <data name="Print" xml:space="preserve">
     <value>Печать</value>
   </data>
-  <data name="Pdf" xml:space="preserve">
-    <value>Pdf</value>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Скачать Pdf</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Создать</value>

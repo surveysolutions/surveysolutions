@@ -835,6 +835,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Pdf.
+        /// </summary>
+        public static string DownloadPdf {
+            get {
+                return ResourceManager.GetString("DownloadPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download report as.
         /// </summary>
         public static string DownloadReport {
@@ -3342,15 +3351,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pdf.
-        /// </summary>
-        public static string Pdf {
-            get {
-                return ResourceManager.GetString("Pdf", resourceCulture);
             }
         }
         
