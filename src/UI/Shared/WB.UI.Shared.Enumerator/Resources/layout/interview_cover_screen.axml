@@ -74,11 +74,12 @@
 
         <View style="@style/Interview_Entity_Divider" />
       
-        <LinearLayout style="@style/Interview_Entity" android:orientation="vertical">
+        <LinearLayout style="@style/Interview_Entity" android:orientation="vertical"
+                      android:layout_marginTop="@dimen/Interview_Group_margin_top">
             
             <Button
+                style="@style/Interview_Button"
                 android:id="@+id/btn_coverStartInterview"
-                style="@style/Interview_Complete_Screen_Button"
                 local:MvxBind="HideKeyboardOnClick .; 
                 Click StartInterviewCommand; 
                 Text FirstSectionTitle; "/>
