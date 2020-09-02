@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -186,21 +187,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/pdf")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AllowAnonymous]
         public IActionResult Pdf(Guid id)
         {
             var interview = statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
                 return NotFound(id);
 
-            if (this.authorizedUser.IsSupervisor && interview.SupervisorId != this.authorizedUser.Id)
-                return Forbid();
-
-            if (this.authorizedUser.IsInterviewer)
+            if (!this.authorizedUser.IsAuthenticated)
             {
-                if (interview.CurrentResponsibleId != this.authorizedUser.Id)
-                    return Forbid();
-                
                 var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
                     .Any(key =>
                         Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
@@ -211,7 +206,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 if (!hasAccess)
                     return Forbid();
             }
-                
+
+            if (this.authorizedUser.IsInterviewer && interview.CurrentResponsibleId != this.authorizedUser.Id)
+                return Forbid();
+
+            if (this.authorizedUser.IsSupervisor && interview.SupervisorId != this.authorizedUser.Id)
+                return Forbid();
+
             var content = pdfInterviewGenerator.Generate(id);
             if (content == null)
                 return NotFound(id);
