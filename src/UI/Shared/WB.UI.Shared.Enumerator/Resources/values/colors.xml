@@ -20,7 +20,7 @@
     <color name="sideBarPrefilledQuestionText">#FF747474</color>
 
     <color name="commentInterviewerTextColor">#FF747474</color>
-    <color name="commentDetailsInterviewerTextColor">#FF000000</color>
+    <color name="commentDetailsInterviewerTextColor">@android:color/black</color>
     <color name="commentSupervisorTextColor">#FFF6D6D0</color>
     <color name="nonAnsweredBackground">#EEEFF0</color>
     <color name="invalidAnsweredBackground">#FFF6D6D0</color>
@@ -30,7 +30,7 @@
 
     <color name="emptyOptionsText">#a5a5a5</color>
 
-    <color name="recordedAnswerText">#000000</color>
+    <color name="recordedAnswerText">@android:color/black</color>
 
     <color name="editorTextColor">#FF3F3F3F</color>
     <color name="editorAnsweredBorder">#D0D0D0</color>
