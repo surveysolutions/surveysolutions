@@ -246,6 +246,13 @@
     <AndroidResource Include="Resources\anim\slide_from_left.xml" />
     <AndroidResource Include="Resources\anim\slide_from_right.xml" />
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
+    <AndroidResource Include="Resources\color\button_error_selector.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\color\button_primary_selector.xml" />
+    <AndroidResource Include="Resources\color\button_success_selector.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\alert_dialog_btn.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
