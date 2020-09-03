@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
@@ -185,6 +186,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return interview;
         }
 
+        /// <summary>
+        /// Get interview transcript in pdf file
+        /// </summary>
+        /// <param name="id">Interview id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id:guid}/pdf")]
         [AllowAnonymous]
@@ -196,13 +202,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!this.authorizedUser.IsAuthenticated)
             {
-                var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
-                    .Any(key =>
-                        Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
-                        && cookieInterviewId == interview.Id
-                    );
-                var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
-                                                          && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
+                var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
                 if (!hasAccess)
                     return Forbid();
             }
