@@ -4,34 +4,19 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Services
 {
     public class VideoConverter : IVideoConverter
     {
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IOptions<IntegrationsConfig> integrations;
 
-        public VideoConverter(IHostingEnvironment hostingEnvironment)
+        public VideoConverter(IOptions<IntegrationsConfig> integrations)
         {
-            this.hostingEnvironment = hostingEnvironment;
-        }
-
-        private static string? ffmpegPath;
-
-        private string ConverterPath
-        {
-            get
-            {
-                if (ffmpegPath == null)
-                {
-                    var files = Directory.GetFiles(hostingEnvironment.ContentRootPath, "ffmpeg.exe", SearchOption.AllDirectories);
-                    ffmpegPath = files.FirstOrDefault();
-                    if (ffmpegPath == null)
-                        throw new ArgumentNullException("Can't found ffmpeg.exe");
-                }
-                return ffmpegPath;
-            }
+            this.integrations = integrations;
         }
 
         public byte[] CreateThumbnail(byte[] videoBytes)
@@ -43,24 +28,16 @@ namespace WB.UI.Designer.Services
             
             try
             {
-                var processInfo = new ProcessStartInfo();
-                processInfo.FileName = "\"" + ConverterPath + "\"";
-                processInfo.Arguments = $"-ss {5} -i {"\"" + tempVideoFile + "\""} -f image2 -vframes 1 -y {"\"" + thumbVideoFile + "\""}";
-                processInfo.CreateNoWindow = true;
-                processInfo.UseShellExecute = false;
-                using (var process = new Process())
-                {
-                    process.StartInfo = processInfo;
-                    process.Start();
-                    process.WaitForExit();
-
-                    return File.ReadAllBytes(thumbVideoFile);
-                }
+                var pathToFfmpeg = Path.Combine(this.integrations.Value.FFmpegExecutablePath, "ffmpeg");
+                
+                Infrastructure.Native.Utils.ConsoleCommand.Run(pathToFfmpeg
+                    , $"-ss {5} -i {"\"" + tempVideoFile + "\""} -f image2 -vframes 1 -y {"\"" + thumbVideoFile + "\""}");
+                return File.ReadAllBytes(thumbVideoFile);
             }
             finally
             {
-                File.Delete(tempVideoFile);
-                File.Delete(thumbVideoFile);
+                if(File.Exists(tempVideoFile)) File.Delete(tempVideoFile);
+                if (File.Exists(thumbVideoFile)) File.Delete(thumbVideoFile);
             }
         }
     }
