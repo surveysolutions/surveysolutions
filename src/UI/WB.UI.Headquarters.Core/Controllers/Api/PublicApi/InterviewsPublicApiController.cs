@@ -190,11 +190,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Get interview transcript in pdf file
         /// </summary>
         /// <param name="id">Interview id</param>
-        /// <returns></returns>
+        /// <response code="403">Authorised user has no access to interview</response>
+        /// <response code="404">Interview not found or pdf cannot be generated</response>
         [HttpGet]
         [Route("{id:guid}/pdf")]
         [AllowAnonymous]
-        public IActionResult Pdf(Guid id)
+        public ActionResult<FileStreamResult> Pdf(Guid id)
         {
             var interview = statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
