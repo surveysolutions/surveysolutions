@@ -48,8 +48,8 @@ namespace WB.UI.WebTester
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings",
-                new EventBusSettings());
+            registry.BindAsSingleton<EventBusSettings, EventBusSettings>();
+            registry.BindAsSingleton<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
             registry.Bind<WebTesterStatefulInterview>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
