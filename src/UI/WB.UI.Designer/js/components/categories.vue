@@ -440,9 +440,8 @@ export default {
                     stringifiedOptions += "\n";
                 }
             });
-            _.trim(stringifiedOptions)
-
-            this.stringified = stringifiedOptions;
+            
+            this.stringified = stringifiedOptions.trim();
 
         },
         showAsTable: function(){

@@ -107,13 +107,7 @@
       "node_modules/zebra_datepicker/dist/zebra_datepicker.min.js"
     ]
   },
-  "bundle": [
-    {
-      "name": "i18next-http-backend",
-      "inputFiles": [
-        "node_modules/i18next-http-backend/i18nextHttpBackend.js"
-      ]
-    },
+  "bundle": [    
     {
       "name": "i18next",
       "inputFiles": [
@@ -121,18 +115,11 @@
       ]
     },
     {
-      "name": "require",
+      "name": "require_libs",
       "inputFiles": [
         "Scripts/lib/require.js"
       ]
-    },
-    {
-      "name": "vue-js",
-      "inputFiles": [
-        "node_modules/vue/dist/vue.js",
-        "node_modules/lodash/lodash.js"
-      ]
-    },
+    },    
     {
       "name": "jquery",
       "inputFiles": [
@@ -140,7 +127,32 @@
       ]
     },
     {
-      "name": "vuetify",
+      "name": "cat__i18next",
+      "inputFiles": [
+        "node_modules/i18next/i18next.js"
+      ]
+    },
+    {
+      "name": "cat__a_i18next_http_backend",
+      "inputFiles": [
+        "node_modules/i18next-http-backend/i18nextHttpBackend.js"
+      ]
+    },
+    {
+      "name": "cat__vue",
+      "inputFiles": [
+        "node_modules/vue/dist/vue.js",
+        "node_modules/lodash/lodash.js"
+      ]
+    },    
+    {
+      "name": "cat__jquery",
+      "inputFiles": [
+        "node_modules/jquery/dist/jquery.js"
+      ]
+    },
+    {
+      "name": "cat__a_vuetify",
       "inputFiles": [
         "node_modules/vuetify/dist/vuetify.js"
       ]
