@@ -54,7 +54,7 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import parseInt from 'lodash'
 
-const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questionnaireId: Uuid, $questionnaireVersion: Long) {
+const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questionnaireId: Uuid!, $questionnaireVersion: Long!) {
   interviews(where: {
        questionnaireId: $questionnaireId,
        questionnaireVersion: $questionnaireVersion,
@@ -64,9 +64,9 @@ const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questi
   }
 }`
 
-const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($questionnaireId: Uuid, $version: Long) {
+const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($questionnaireId: Uuid!, $version: Long!) {
   assignments(where: {
-    receivedByTabletAtUtc_not: null
+    receivedByTabletAtUtc_not: null,
     questionnaireId: {
       id: $questionnaireId,
       version: $version
@@ -189,10 +189,11 @@ export default {
                         this.deletionQuestionnaireName = ''
                         this.$refs.deleteQuestionnaireModal.modal('show')
 
+                        const questionnaireGuid = selectedRow.questionnaireId
                         const interviewsQueryResult = await this.$apollo.query({
                             query: interviewsQuestionnaireDeletionQuery,
                             variables: {
-                                questionnareId: selectedRow.questionnaireId,
+                                questionnaireId: questionnaireGuid,
                                 questionnaireVersion: parseInt(selectedRow.version),
                             },
                             fetchPolicy: 'network-only',
@@ -201,7 +202,7 @@ export default {
                         const assignmentsQueryResult = await this.$apollo.query({
                             query: assignmentsQuestionnaireDeletionQuery,
                             variables: {
-                                questionnareId: selectedRow.questionnaireId,
+                                questionnaireId: questionnaireGuid,
                                 version: parseInt(selectedRow.version),
                             },
                             fetchPolicy: 'network-only',
