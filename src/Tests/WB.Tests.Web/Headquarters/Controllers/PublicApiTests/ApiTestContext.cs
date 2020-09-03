@@ -70,7 +70,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
             IStatefullInterviewSearcher statefullInterviewSearcher = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IPdfInterviewGenerator pdfInterviewGenerator = null)
         {
             var controller = new InterviewsPublicApiController(
                 allInterviewsViewFactory: allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(), 
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<InterviewsPublicApiController>>(),
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
                 diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
-                pdfInterviewGenerator: Mock.Of<IPdfInterviewGenerator>());
+                pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>());
 
             return controller;
         }
