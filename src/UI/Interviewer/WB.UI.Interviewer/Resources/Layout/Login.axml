@@ -54,6 +54,8 @@
                             android:layout_height="wrap_content">
                         <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/LoginPage_login"
+                                android:inputType="textVisiblePassword|textNoSuggestions"
+                                android:singleLine="true"
                                 style="@style/Login_Editor"
                                 local:MvxBind="Text UserName; Enabled False;"/>
                     </com.google.android.material.textfield.TextInputLayout>
