@@ -40,6 +40,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
 using Microsoft.Extensions.Caching.Memory;
+using WB.UI.Headquarters.Code.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -638,13 +639,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
-                    var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
-                        .Any(key =>
-                            Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
-                            && cookieInterviewId == interview.Id
-                        );
-                    var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
-                                                              && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
+                    var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
                     if (hasAccess)
                         return this.RedirectToAction("Finish", routeValues: new { id });
                     
@@ -880,14 +875,8 @@ namespace WB.UI.Headquarters.Controllers
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
-            var isExistsInterviewInCookie = Request.Cookies.Keys.Where(key => key.StartsWith($"InterviewId-"))
-                .Any(key =>
-                    Guid.TryParse(Request.Cookies[key], out Guid cookieInterviewId)
-                    && cookieInterviewId == interview.Id
-                );
-
-            var pdfUrl = isExistsInterviewInCookie && interview.CompletedDate.HasValue
-                && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow
+            var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
+            var pdfUrl = hasAccess
                 ? Url.Action("Pdf", "InterviewsPublicApi", new{ id = interview.Id })
                 : null;
             
