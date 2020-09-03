@@ -30,6 +30,7 @@
                                             </label>
                                             <v-text-field
                                                 v-model="editedItem.value"
+                                                :rules="['Required']"
                                                 id="value"
                                                 type="number"/>
                                         </div>
@@ -53,6 +54,7 @@
                                             <v-text-field
                                                 v-model="editedItem.title"
                                                 id="title"
+                                                :rules="['Required']"
                                                 type="text"
                                                 maxlength="250"
                                                 :counter="250"
@@ -61,8 +63,8 @@
                                         <div class="form-group">
                                             <button
                                                 type="button"
-                                                class="btn btn-lg update-button"
-                                                :disabled="categories.length >= 15000"
+                                                class="btn btn-lg update-button btn-primary"
+                                                :disabled="editedItem.title == null || editedItem.value == null"                                                
                                                 @click="save">                                                
                                                 {{ $t('Save') }}
                                             </button>
@@ -116,7 +118,7 @@
                             name="file"
                             ref="uploader"
                             v-show="false"
-                            accept=".tab, .txt, .tsv"
+                            accept=".tab, .txt, .tsv, .xls, .xlsx, .ods"
                             type="file"
                             @change="upload"
                             class="btn btn-default btn-lg btn-action-questionnaire"/>
@@ -126,7 +128,7 @@
                            {{ $t('Download') }}
                         </a>
                         &nbsp;
-                        <a class="btn btn-primary"  @click="editItem(editedItem)">{{ $t('NewItem') }}</a>
+                        <a class="btn btn-primary" :disabled="categories.length >= 15000" @click="editItem(editedItem)">{{ $t('NewItem') }}</a>
                         &nbsp;
                         <button
                             type="button"
@@ -219,12 +221,12 @@ export default {
             editedItem: {
                 value: 0,
                 title: '',
-                parentValue: 0,
+                parentValue: null,
             },
             defaultItem: {
                 value: 0,
                 title: '',
-                parentValue: 0,
+                parentValue: null,
             },
         };
     },

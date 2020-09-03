@@ -480,13 +480,31 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.questionWithOptionsViewModel == null)
                 return NotFound();
+            
+            if (this.questionWithOptionsViewModel.IsCategories)
+            {
+                var categoriesFile = this.categoriesService.GetAsExcelFile(this.questionWithOptionsViewModel.QuestionId, this.questionWithOptionsViewModel.CategoriesId);
 
-            var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
-            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
+                if (categoriesFile?.Content == null) return NotFound();
 
-            return File(this.categoricalOptionsImportService.ExportOptions(
-                this.questionWithOptionsViewModel.QuestionnaireId,
-                this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
+                var categoriesName = string.IsNullOrEmpty(categoriesFile.CategoriesName)
+                    ? "New categories"
+                    : categoriesFile.CategoriesName;
+
+                var filename = this.fileSystemAccessor.MakeValidFileName($"[{categoriesName}]{categoriesFile.QuestionnaireTitle}");
+
+                return File(categoriesFile.Content,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
+            }
+            else
+            {
+                var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
+                var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
+
+                return File(this.categoricalOptionsImportService.ExportOptions(
+                    this.questionWithOptionsViewModel.QuestionnaireId,
+                    this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
+            }
         }
 
         public class EditOptionsViewModel
