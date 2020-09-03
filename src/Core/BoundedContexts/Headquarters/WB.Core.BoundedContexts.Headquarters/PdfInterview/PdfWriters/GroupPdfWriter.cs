@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using MigraDocCore.DocumentObjectModel;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Infrastructure.Native.Sanitizer;
 
@@ -21,11 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 
             paragraph.Style = PdfStyles.GroupHeader;
             paragraph.AddWrappedText(title);
-            
-            if (@group is InterviewTreeRoster roster)
-            {
-                paragraph.AddFormattedText(" - " + roster.RosterTitle, PdfStyles.RosterTitle);
-            }
         }
     }
 }
