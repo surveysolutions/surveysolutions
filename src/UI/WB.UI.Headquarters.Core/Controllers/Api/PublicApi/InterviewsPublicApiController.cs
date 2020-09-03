@@ -195,7 +195,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:guid}/pdf")]
         [AllowAnonymous]
-        public ActionResult<FileStreamResult> Pdf(Guid id)
+        public IActionResult Pdf(Guid id)
         {
             var interview = statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
