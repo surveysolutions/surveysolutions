@@ -237,9 +237,6 @@
   <data name="Print" xml:space="preserve">
     <value>Print</value>
   </data>
-  <data name="DownloadPdf" xml:space="preserve">
-    <value>Download Pdf</value>
-  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Approve</value>
   </data>
