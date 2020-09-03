@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 if (questionnaire.IsRosterGroup(node.Id))
                 {
                     var roster = interview.GetRoster(node);
-                    new GroupPdfWriter(roster).Write(document.LastSection.AddParagraph());
+                    new RosterPdfWriter(roster, questionnaire).Write(document.LastSection.AddParagraph());
                     table = GenerateQuestionsTable(document.LastSection);
                     continue;
                 }
