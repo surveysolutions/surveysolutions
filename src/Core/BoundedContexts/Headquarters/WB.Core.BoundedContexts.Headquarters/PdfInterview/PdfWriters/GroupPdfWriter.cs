@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             
             if (@group is InterviewTreeRoster roster)
             {
-                paragraph.AddFormattedText(" - " + roster.RosterTitle.RemoveHtmlTags(), PdfStyles.RosterTitle);
+                paragraph.AddFormattedText(" - " + roster.RosterTitle, PdfStyles.RosterTitle);
             }
         }
     }
