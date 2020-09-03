@@ -97,11 +97,20 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download answers.
+        ///   Looks up a localized string similar to Download interview transcript.
         /// </summary>
         public static string DownloadAnswers {
             get {
                 return ResourceManager.GetString("DownloadAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download interview answers as pdf file.
+        /// </summary>
+        public static string DownloadAnswersHint {
+            get {
+                return ResourceManager.GetString("DownloadAnswersHint", resourceCulture);
             }
         }
         
