@@ -51,7 +51,6 @@
                         android:layout_height="match_parent"
                         android:inputType="textVisiblePassword|textNoSuggestions"
                         android:singleLine="true"
-                        android:password="true"
                         local:MvxBind="Text LoginName;"/>
             </com.google.android.material.textfield.TextInputLayout>
 
