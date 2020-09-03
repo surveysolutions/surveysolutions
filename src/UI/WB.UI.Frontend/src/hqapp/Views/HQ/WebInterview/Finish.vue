@@ -29,6 +29,7 @@
                         class="btn btn-link gray-action-unit"
                         v-bind:href="this.$config.model.pdfUrl"
                         target="_blank"
+                        :title="$t('WebInterview.DownloadAnswersHint')"
                         download>{{$t("WebInterview.DownloadAnswers")}}</a>
                 </li>
             </ul>

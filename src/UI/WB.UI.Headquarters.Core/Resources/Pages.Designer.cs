@@ -835,15 +835,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download Pdf.
-        /// </summary>
-        public static string DownloadPdf {
-            get {
-                return ResourceManager.GetString("DownloadPdf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Download report as.
         /// </summary>
         public static string DownloadReport {
