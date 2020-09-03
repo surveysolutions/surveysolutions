@@ -56,8 +56,11 @@ import parseInt from 'lodash'
 
 const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questionnaireId: Uuid, $questionnaireVersion: Long) {
   interviews(where: {
-       questionnaireId: $questionnaireId,
-       questionnaireVersion: $questionnaireVersion,
+       questionnaireId: 
+       { 
+           id: $questionnaireId,
+           version: $questionnaireVersion
+       },
        receivedByInterviewerAtUtc_not: null,
     }) {
     filteredCount

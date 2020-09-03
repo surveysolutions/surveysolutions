@@ -177,8 +177,6 @@
     <item name="android:letterSpacing">0.05</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-
-    <item name="android:background">?attr/selectableItemBackground</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
   </style>
 

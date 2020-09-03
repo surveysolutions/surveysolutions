@@ -9,18 +9,18 @@
         <!--cut from ehre-->
         <include layout="@layout/interview_complete_info" />
         <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
-            <LinearLayout style="@style/FullWidthWrappingLayout" android:orientation="horizontal">
+            <LinearLayout style="@style/FullWidthWrappingLayout" android:orientation="horizontal"
+                          android:layout_marginTop="@dimen/Interview_Group_margin_top">
                 <Button
                     android:id="@+id/btnAssign"
-                    style="@style/Interview_Complete_Screen_Button"
+                    style="@style/Button_Primary"
                     local:MvxBind="HideKeyboardOnClick .; 
                          Click Assign; 
                          Text Localization('Supervisor_Complete_Assign_btn');"/>
             
                 <Button
                     android:id="@+id/btnApprove"
-                    style="@style/Interview_Complete_Screen_Button"
-                    local:backgroundTint="@color/group_completed"
+                    style="@style/Button_Success"
                     android:layout_marginLeft="@dimen/button_shadow_margin"
                     local:MvxBind="HideKeyboardOnClick .; 
                          Click Approve; 
@@ -28,10 +28,8 @@
                          "/>
                 <Button
                     android:id="@+id/btnReject"
-                    style="@style/Interview_Complete_Screen_Button"
+                    style="@style/Button_Error"
                     android:layout_marginLeft="@dimen/button_shadow_margin"
-                    
-                    local:backgroundTint="@color/group_with_invalid_answers"
                     local:MvxBind="HideKeyboardOnClick .; 
                          Click Reject; 
                          Text Localization('Supervisor_Complete_Reject_btn');"/>
