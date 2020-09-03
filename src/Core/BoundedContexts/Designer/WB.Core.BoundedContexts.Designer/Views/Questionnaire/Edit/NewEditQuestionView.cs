@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class NewEditQuestionView
     {
-        public NewEditQuestionView(Guid id, Guid parentGroupId, 
+        public NewEditQuestionView(Guid id, 
+            Guid parentGroupId, 
             bool isPreFilled,
             QuestionnaireInfoFactory.SelectOption[] questionTypeOptions,
             QuestionScope questionScope,
@@ -99,6 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Guid[]? ParentGroupsIds { get; set; }
         public Guid[]? RosterScopeIds { get; set; }
         public Guid ParentGroupId { get; set; }
+        public Guid ChapterId { get; set; }
         public string? EnablementCondition { get; set; }
         public bool IsPreFilled { get; set; }
         public string? Instructions { get; set; }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -23,12 +24,15 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Refit;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
@@ -42,6 +46,7 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
@@ -60,6 +65,8 @@ using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
+using WB.UI.Headquarters.Services;
+using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
@@ -214,12 +221,18 @@ namespace WB.UI.Headquarters
                 j.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            });
+
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
-                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = "headquarters_session";
+                options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true;
             });
 
@@ -243,6 +256,15 @@ namespace WB.UI.Headquarters
             services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
+            services.AddHttpClientWithConfigurator<IExportServiceApi, ExportServiceApiConfigurator>();
+            services.AddTransient<DesignerRestServiceHandler>();
+            services.AddHttpClientWithConfigurator<IDesignerApi, DesignerApiConfigurator>(new RefitSettings
+                {
+                    ContentSerializer = new DesignerContentSerializer()
+                })
+                .ConfigurePrimaryHttpMessageHandler<DesignerRestServiceHandler>();
+            services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
+
             services.AddGraphQL();
             
             FileStorageModule.Setup(services, Configuration);
@@ -255,6 +277,7 @@ namespace WB.UI.Headquarters
                 mvc.Filters.AddService<InstallationFilter>(100);
                 mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                 mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
+                mvc.Filters.AddService<UpdateRequiredFilter>(400);
                 mvc.Conventions.Add(new OnlyPublicApiConvention());
                 mvc.ModelBinderProviders.Insert(0, new DataTablesRequestModelBinderProvider());
                 var noContentFormatter = mvc.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
@@ -304,7 +327,6 @@ namespace WB.UI.Headquarters
         private static void AddCompression(IServiceCollection services)
         {
             services.Configure<GzipCompressionProviderOptions>(options => { options.Level = CompressionLevel.Optimal; });
-
             services.Configure<BrotliCompressionProviderOptions>(options => { options.Level = CompressionLevel.Optimal; });
 
             services.AddResponseCompression(options =>
@@ -328,8 +350,10 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseExceptional();
+            app.UseForwardedHeaders();
 
+            app.UseExceptional();
+            
             if (!env.IsDevelopment())
             {
                 app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
@@ -356,7 +380,7 @@ namespace WB.UI.Headquarters
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
 
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             app.UseUnderConstruction();
 
             app.UseRouting();

@@ -1,14 +1,15 @@
 using System.CommandLine;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace WB.UI.Designer.SupportTool
 {
     public class SupportTool
     {
-        private readonly IWebHost host;
+        private readonly IHost host;
 
-        public SupportTool(IWebHost host)
+        public SupportTool(IHost host)
         {
             this.host = host;
         }

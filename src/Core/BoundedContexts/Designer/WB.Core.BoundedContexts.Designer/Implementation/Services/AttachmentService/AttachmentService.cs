@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
@@ -194,21 +192,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         private static AttachmentDetails GetImageAttachmentDetails(byte[] binaryContent)
         {
-            using (var stream = new MemoryStream(binaryContent))
+            try
             {
-                try
+                using var image = SixLabors.ImageSharp.Image.Load(binaryContent);
+                return new AttachmentDetails
                 {
-                    var image = Image.FromStream(stream);
-                    return new AttachmentDetails
-                    {
-                        Height = image.Size.Height,
-                        Width = image.Size.Width
-                    };
-                }
-                catch (ArgumentException e)
-                {
-                    throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
-                }
+                    Height = image.Height,
+                    Width = image.Width
+                };
+            }
+            catch (Exception e)
+            {
+                throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
             }
         }
     }

@@ -171,6 +171,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string ReadOnlyQuestion {
+            get {
+                return ResourceManager.GetString("ReadOnlyQuestion", resourceCulture);
+            }
+        }
+        
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
@@ -1275,6 +1281,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string VirtualCoverPage {
+            get {
+                return ResourceManager.GetString("VirtualCoverPage", resourceCulture);
+            }
+        }
+        
         public static string AddVariable {
             get {
                 return ResourceManager.GetString("AddVariable", resourceCulture);
@@ -1746,6 +1758,12 @@ namespace WB.UI.Designer.Resources {
         public static string HelpCoverPage {
             get {
                 return ResourceManager.GetString("HelpCoverPage", resourceCulture);
+            }
+        }
+        
+        public static string HelpVirtualCoverPage {
+            get {
+                return ResourceManager.GetString("HelpVirtualCoverPage", resourceCulture);
             }
         }
         
@@ -2247,6 +2265,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string JumpToEdit {
+            get {
+                return ResourceManager.GetString("JumpToEdit", resourceCulture);
+            }
+        }
+        
         public static string CommentEditorResolve {
             get {
                 return ResourceManager.GetString("CommentEditorResolve", resourceCulture);
@@ -2604,6 +2628,12 @@ namespace WB.UI.Designer.Resources {
         public static string HelpOptionTitle {
             get {
                 return ResourceManager.GetString("HelpOptionTitle", resourceCulture);
+            }
+        }
+        
+        public static string Forum {
+            get {
+                return ResourceManager.GetString("Forum", resourceCulture);
             }
         }
     }

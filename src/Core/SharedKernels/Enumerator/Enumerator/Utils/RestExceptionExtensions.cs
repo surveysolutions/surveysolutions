@@ -1,5 +1,10 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
+using System.Net.Mime;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
@@ -83,9 +88,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion;
                             break;
                         case HttpStatusCode.UpgradeRequired:
-                            exceptionMessage = EnumeratorUIResources.UpgradeRequired;
-                            exceptionType = SynchronizationExceptionType.UpgradeRequired;
-                            break;
+                            var exception = new SynchronizationException(
+                                SynchronizationExceptionType.UpgradeRequired,
+                                EnumeratorUIResources.UpgradeRequired);
+                            if (restException.Data.Contains("target-version"))
+                                exception.Data["target-version"] = restException.Data["target-version"];
+                            return exception;
                         case HttpStatusCode.Conflict:
                             exceptionType = SynchronizationExceptionType.UserLinkedToAnotherServer;
                             break;
@@ -105,7 +113,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             break;
                         case HttpStatusCode.Forbidden:
                             if (restException.Message.Contains("relinked"))
+                            {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
+                                exceptionMessage =
+                                    EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                            }
                             else
                             {
                                 exceptionMessage = EnumeratorUIResources.Unauthorized;

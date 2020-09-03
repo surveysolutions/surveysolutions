@@ -55,7 +55,7 @@ namespace WB.Services.Export.Jobs
             }
         }
 
-        public async Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string archiveName)
+        public async Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string questionnaireNamePrefixOverride)
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {
@@ -68,7 +68,7 @@ namespace WB.Services.Export.Jobs
 
                 if (metadata != null)
                 {
-                    var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, archiveName);
+                    var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, questionnaireNamePrefixOverride);
 
                     var uri = this.externalArtifactsStorage.GetDirectLink(externalStoragePath,
                         TimeSpan.FromHours(10), downloadFileName);
@@ -84,7 +84,7 @@ namespace WB.Services.Export.Jobs
                 var filePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(settings);
                 if (File.Exists(filePath))
                 {
-                    var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, archiveName);
+                    var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, questionnaireNamePrefixOverride);
 
                     return new DataExportArchive
                     {

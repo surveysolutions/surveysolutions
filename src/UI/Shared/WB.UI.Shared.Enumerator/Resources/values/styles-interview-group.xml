@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <style name="Interview_GroupWithDivider" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:background">@drawable/group_background</item>
   </style>
 
   <style name="Interview_Group"  parent="VerticalFullWidthWrappingLayout">
@@ -24,7 +23,7 @@
     <item name="android:textStyle">bold</item>
   </style>
 
-  <style name="Interview_Group_Button" parent="AppTheme">
+  <style name="Interview_Group_Button">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_18</item>
@@ -32,9 +31,10 @@
     <item name="android:textStyle">bold</item>
     <item name="android:gravity">left|center_vertical</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
-    <item name="android:stateListAnimator">@null</item>
     <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+    <item name="android:letterSpacing">0</item>
+    <item name="android:textAllCaps">false</item>
   </style>
 
     <style name="Interview_Group_Flat_Roster">
@@ -46,5 +46,24 @@
         <item name="android:paddingTop">@dimen/Interview_Group_button_padding</item>
         <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
         <item name="android:background">@color/group_plain_roster_background</item>
+    </style>
+
+    <style name="Interview_Previous_Group_Navigation_Button" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingRight">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+        <item name="android:paddingLeft">@dimen/Interview_Previous_Group_Navigation_Button_padding</item>
+        <item name="android:paddingTop">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+        <item name="android:paddingBottom">@dimen/Interview_Previous_Group_Navigation_Button_paddingTop</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
+        <item name="android:textSize">@dimen/textsize_12</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Interview_Group_Navigation_Button" parent="Button_Primary">
+        <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_background_padding</item>
+        <item name="android:textColor">@color/group_title_text</item>
     </style>
 </resources>

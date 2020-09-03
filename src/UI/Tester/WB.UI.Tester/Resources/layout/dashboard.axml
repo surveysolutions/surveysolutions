@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:local="http://schemas.android.com/apk/res-auto"
                  style="@style/VerticalFullWidthWrappingLayout">
-    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
                                        android:layout_width="match_parent"
                                        android:layout_height="wrap_content"
                                        android:background="?attr/colorPrimary"
@@ -35,7 +35,7 @@
                          local:MvxBind="Click ClearSearchCommand;"
                          local:srcCompat="@drawable/delete_button"/>
         </LinearLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
     <ProgressBar style="@style/Progress_Indicator"
                  local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />
     <LinearLayout style="@style/Dashboard_Questionnaires_Header">

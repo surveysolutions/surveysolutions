@@ -9,7 +9,6 @@ using Android.OS;
 using Android.Telephony;
 using Java.Lang;
 using Java.Util;
-using Plugin.DeviceInfo;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -89,7 +88,7 @@ namespace WB.UI.Shared.Enumerator.Services
             AndroidVersion = this.TryGetAndroidVersion(),
             AndroidSdkVersion = this.TryGetAndroidSdkVersion(),
             AndroidSdkVersionName = TryGetAndroidSdkVersionName(),
-            AppVersion = this.TryGetApplicationVersionName(),
+            AppVersion = this.GetApplicationVersionName(),
             AppBuildVersion = this.TryGetApplicationVersionCode(),
             LastAppUpdatedDate = this.TryGetLastAppUpdatedDate(),
             AppOrientation = this.TryGetAppOrientation(),
@@ -104,12 +103,12 @@ namespace WB.UI.Shared.Enumerator.Services
             RAMInfo = this.TryGetRamInfo(),
             StorageInfo = this.TryGetStorageInfo()
         };
-
+        
         private string TryGetDeviceType()
         {
             try
             {
-                return CrossDeviceInfo.Current.Idiom.ToString();
+                return Xamarin.Essentials.DeviceInfo.Idiom.ToString();
             }
             catch
             {
@@ -274,7 +273,7 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
-        private string TryGetApplicationVersionName()
+        public string GetApplicationVersionName()
         {
             try
             {
@@ -439,7 +438,7 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             try
             {
-                return CrossDeviceInfo.Current.Model;
+                return Xamarin.Essentials.DeviceInfo.Model;
             }
             catch
             {

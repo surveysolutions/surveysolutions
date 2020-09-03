@@ -10,7 +10,6 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
@@ -25,18 +24,18 @@
   <ItemGroup>
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="FFmpeg.Win64.Static" Version="4.1.1.1" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.2.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.4" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.2.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0001" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0" />
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.1.0" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.1.0" />
     <PackageReference Include="Shark.PdfConvert" Version="1.0.3" />
@@ -62,17 +61,49 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Resources\ErrorMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ErrorMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\FindReplaceResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FindReplaceResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\QuestionnaireController.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionnaireController.resx</DependentUpon>
+      </Compile>
       <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
       </Compile>
+      <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Update="Resources\ErrorMessages.resx">
+        <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\FindReplaceResources.resx">
+        <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\QuestionnaireController.resx">
+        <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
+        <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 

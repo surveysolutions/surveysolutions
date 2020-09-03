@@ -30,10 +30,10 @@
     "HQ+Designer": {
       "Projects": {
         "WB.UI.Headquarters": {
-          "ProfileName": "WB.UI.Headquarters.Core"
+          
         },
         "WB.UI.Designer": {
-          "ProfileName": "WB.UI.Designer"
+          
         }
       }
     },
@@ -47,10 +47,10 @@
     "WebTester": {
       "Projects": {
         "WB.UI.Designer": {
-          "ProfileName": "WB.UI.Designer"
+          
         },
         "WB.UI.WebTester": {
-          "ProfileName": "WebTester"
+         
         }
       }
     }

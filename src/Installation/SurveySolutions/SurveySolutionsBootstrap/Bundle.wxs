@@ -10,8 +10,8 @@
             UpgradeCode="D101A3BD-9921-4BBC-8F13-2B496A721317" >
 
         <!--allow only install to Server OS x64 starting Server 2012 R2 x64 but not on old laptop with consumer OS-->
-        <bal:Condition Message="This application requires Windows Server 2016 x64 or newer.">
-            (VersionNT64 &gt;= v10.0) 
+        <bal:Condition Message="This application requires Windows Server 2012 R2 x64 or newer.">
+            (VersionNT64 &gt;= v6.3) 
         </bal:Condition>
         
         <!--Search for old product written with InstallSuit? (or something like that) -->
@@ -37,10 +37,10 @@
 
         <Chain>
             <PackageGroupRef Id="ActivateIisFeatures"/>
-            <PackageGroupRef Id="WindowsDotNetHosting314"/>
+            <PackageGroupRef Id="WindowsDotNetHosting317"/>
             <RollbackBoundary/>
             <MsiPackage Id="SurveySolutionsPackage"
-                        Cache="no"
+                        Cache="yes"
                         Compressed="yes"
                         DisplayInternalUI="yes"
                         Vital="yes"

@@ -234,4 +234,10 @@
   <data name="ImportedByText" xml:space="preserve">
     <value>{{role}} пользователем {{name}}</value>
   </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>{{receivedInterviews}} интервью и {{receivedAssignments}} заданий для новых интервью были получены интервьюерами/супервизорами. После подтверждения удаления обследования сервер не будет принимать информацию по данному опроснику, и они будут удалены при последующей синхронизации без возможности восстановления. Даже в случае наличия новой информации. Это Ваша ответственность уведомить интервьюеров остановить сбор данных по этому опроснику, так как они не будут уведомлены автоматически. Желаете продолжить?</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Введите '{{questionnaireTitle}}' для подтверждения</value> 
+  </data>
 </root>

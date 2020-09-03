@@ -108,8 +108,11 @@ export default {
     },
 
     mounted() {
-        window.scroll({ top: 0, behavior: 'smooth' })
+        if(this.$route.hash){
+            this.$store.dispatch('sectionRequireScroll', { id: this.$route.hash })
+        }
     },
+
 
     computed: {
         title() {
@@ -147,7 +150,8 @@ export default {
             return this.info.validity && this.info.validity.isValid === false
         },
         coverStatusClass() {
-            if (this.$config.coverPageId) {
+            const coverPageId = this.$config.coverPageId == undefined ? this.$config.model.coverPageId : this.$config.coverPageId
+            if (coverPageId) {
                 return [
                     {
                         'complete-section'  : !this.hasBrokenPackage && this.info.status == GroupStatus.Completed && !this.hasError,

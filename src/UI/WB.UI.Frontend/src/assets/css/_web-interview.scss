@@ -58,10 +58,9 @@
 }
 .content{
 	@extend %aside;
+	//overflow: visible; 
 	border-right: 3px solid $gray-super-light;
 	width: $content-width;
-}
-.content{
 	z-index: 4;
 	left: 12px;
 	@include box-shadow(20px 10px 40px 0px rgba(0, 0, 0, 0.2));
@@ -187,11 +186,15 @@
 		}
 	}
 	&.instruction{
-		color: $blue;
+        color: $blue;
+        padding-bottom: 15px;
 		p{
             white-space: pre-wrap;
         }
-	}
+    }
+    &.text-info{
+        color: $blue;
+    }
 	&.text-danger{
 		color: $red_error;
 	}
@@ -568,18 +571,17 @@
 	max-width: 70%;
 	@extend .image-zoom-box;
 }
-.content .humburger-foldback-button{
-	display: none;
-}
 .fullscreen-hidden-content{
 	.content{
+		overflow: visible;
 		left: -$content-width;
 		box-shadow: none;
 		.humburger-foldback-button{
-			left: auto;
-			right: 20px;
-			top: 10px;
-			background-color: $gray_light;
+			right: -54px;
+			box-shadow: none;
+			background-color: #dbdfe2;
+			box-shadow: 0 0 10px 5px rgba(63, 63, 63, .1); 
+			border: 2px solid #dbdfe2;
 		}
 	}
 	.questionnaire.details-interview{
@@ -587,16 +589,13 @@
 	}
 	.humburger-foldback-button{
 		&:before, &:after{
-			left: 10px;
-			top: 9px;
-			@include rotate(0deg);
+			right: 5px;
+			top: 10px;
+			@include rotate(45deg);
 		}
 		&:after{
-			top: 21px;
-		}
-		span{
-			top: 15px;
-			visibility: visible;
+			top: 25px;
+			@include rotate(-45deg);
 		}
 	}
 }
@@ -810,6 +809,11 @@
 			width: auto;
 		}
 	}
+	.fullscreen-hidden-content{
+		.content{
+			left: -$content-width-small;
+		}
+	}
 }
 @media (max-width: $screen-md-min){
 	.wide-navbar{
@@ -851,7 +855,12 @@
 			box-shadow: none;
 			left: -$content-width-small;
 			@include hidden-foldback-button();
-			overflow: visible;
+			overflow: visible;	.humburger-foldback-button{
+				right:-54px;
+				border: 2px solid #dbdfe2;
+				background-color: #dbdfe2;
+				box-shadow: 0 0 10px 5px rgba(63, 63, 63, .1); 
+			}
 		}
 		.complete-link{
 			padding-left: 60px;
@@ -866,9 +875,21 @@
 				width: calc(100% - 12px);
 				height: auto;
 				border: none;
+				
 				@include visible-foldback-button();
 			   	.humburger-foldback-button{
-					display: block;
+					right:0;
+					top: 2px;
+					background-color: transparent;
+					border-color: transparent;
+					box-shadow: none;
+					&:before, &:after{
+						right: 12px;
+						@include rotate(-45deg);
+					}
+					&:after{
+						@include rotate(45deg);
+					}
 				}
 			}
 		}

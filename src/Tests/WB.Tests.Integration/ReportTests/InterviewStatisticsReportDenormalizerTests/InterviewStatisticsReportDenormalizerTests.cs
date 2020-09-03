@@ -4,12 +4,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -66,17 +67,16 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_multy_answer_given_should_insert_into_database()
         {
-            var summary = new InterviewSummary(plainQuestionnaire)
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                ResponsibleId = Id.gC,
-                QuestionnaireId = questionnaire.PublicKey,
-                QuestionnaireVersion = 1,
-                SupervisorId = Id.gE,
-                SupervisorName = "test"
-            };
+            var summary =  Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                responsibleName: "responsible",
+                responsibleId: Id.gC,
+                questionnaireId: questionnaire.PublicKey,
+                questionnaireVersion: 1,
+                teamLeadId: Id.gE,
+                teamLeadName: "test",
+                questionnaireVariable: plainQuestionnaire.VariableName);
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
@@ -100,17 +100,16 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_new_answer_given_should_insert_into_database()
         {
-            var summary = new InterviewSummary(plainQuestionnaire)
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                ResponsibleId = Id.gC,
-                QuestionnaireId = questionnaire.PublicKey,
-                QuestionnaireVersion = 1,
-                SupervisorId = Id.gE,
-                SupervisorName = "test"
-            };
+            var summary =  Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                responsibleName: "responsible",
+                responsibleId: Id.gC,
+                questionnaireId: questionnaire.PublicKey,
+                questionnaireVersion: 1,
+                teamLeadId: Id.gE,
+                teamLeadName: "test",
+                questionnaireVariable: plainQuestionnaire.VariableName);
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
@@ -132,18 +131,17 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_answer_disabled_should_not_generate_report_for_disabled_answers()
         {
-            var summary = new InterviewSummary(plainQuestionnaire)
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                QuestionnaireVariable = plainQuestionnaire.VariableName,
-                ResponsibleId = Id.gC,
-                QuestionnaireId = questionnaire.PublicKey,
-                QuestionnaireVersion = 1,
-                SupervisorId = Id.gE,
-                SupervisorName = "test"
-            };
+            var summary =
+                Create.Entity.InterviewSummary(
+                    interviewId: interviewId,
+                    status: InterviewStatus.Completed,
+                    responsibleName: "responsible",
+                    responsibleId: Id.gC,
+                    questionnaireId: questionnaire.PublicKey,
+                    questionnaireVersion: 1,
+                    teamLeadId: Id.gE,
+                    teamLeadName: "test",
+                    questionnaireVariable: plainQuestionnaire.VariableName);
 
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, (decimal)Dwelling.Hole));
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, relationQuestion, (decimal)Relation.Child));
@@ -178,17 +176,15 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_answer_removed_should_not_generate_report_for_removed_answers()
         {
-            var summary = new InterviewSummary(plainQuestionnaire)
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                ResponsibleId = Id.gC,
-                QuestionnaireId = questionnaire.PublicKey,
-                QuestionnaireVersion = 1,
-                SupervisorId = Id.gE,
-                SupervisorName = "test"
-            };
+            var summary = Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                responsibleName: "responsible",
+                responsibleId: Id.gC,
+                questionnaireId: questionnaire.PublicKey,
+                questionnaireVersion: 1,
+                teamLeadId: Id.gE,
+                teamLeadName: "test");
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
             
@@ -222,17 +218,16 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         [Test]
         public void when_numeric_answers_applied()
         {
-            var summary = new InterviewSummary(plainQuestionnaire)
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                ResponsibleId = Id.gC,
-                QuestionnaireId = questionnaire.PublicKey,
-                QuestionnaireVersion = 1,
-                SupervisorId = Id.gE,
-                SupervisorName = "test"
-            };
+            var summary = Create.Entity.InterviewSummary(
+                interviewId: interviewId,
+                status: InterviewStatus.Completed,
+                responsibleName: "responsible",
+                responsibleId: Id.gC,
+                questionnaireId: questionnaire.PublicKey,
+                questionnaireVersion: 1,
+                teamLeadId: Id.gE,
+                teamLeadName: "test",
+                questionnaireVariable: plainQuestionnaire.VariableName);
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
             

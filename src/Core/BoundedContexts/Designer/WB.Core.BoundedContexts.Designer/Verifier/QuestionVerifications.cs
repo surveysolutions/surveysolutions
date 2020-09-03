@@ -60,6 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<ICategoricalQuestion>("WB0129", CategoricalQuestionHasOptionsWithLongTexts, string.Format(VerificationMessages.WB0129_AnswerTitleIsTooLong, 1, MaxOptionLength)),
             Error<ICategoricalQuestion>("WB0073", OptionValuesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Error<ICategoricalQuestion>("WB0076", CategoricalOptionsCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200, MaxOptionsCountInCategoricalOptionQuestion)),
+            Error<ICategoricalQuestion>("WB0307", QuestionMustHaveLinkToExistedReusableCategories, VerificationMessages.WB0307_QuestionReferancedToIncorrectCategories),
             Error<IMultyOptionsQuestion>("WB0007", MultiOptionQuestionYesNoQuestionCantBeLinked, VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
             Error<IMultyOptionsQuestion>("WB0061", CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, string.Format(VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, MinOptionsCount)),
             Error<IMultyOptionsQuestion>("WB0021", CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
@@ -77,7 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
             ErrorForTranslation<IComposite>("WB0287", TableRosterDoesntContainsQuestionWithSubstitutions, VerificationMessages.WB0287_TableRosterDoesntContainsQuestionWithSubstitutions),
             ErrorsByQuestionsFromMatrixRostersThatHaveSubstitutionsToRosterQuestionsFromSelfOrDeeperRosterLevel,
-            Error<IQuestion>("WB0307", IdentityQuestionsMustHaveVariableLabel, VerificationMessages.WB0307_IdentityQuestionsMustHaveVariableLabel),
+            Error<IQuestion>("WB0309", IdentityQuestionsMustHaveVariableLabel, VerificationMessages.WB0309_IdentityQuestionsMustHaveVariableLabel),
             Error<IQuestion>("WB0308", IdentifyingQuestionsMustHaveOnlyAllowQuestionTypes, VerificationMessages.WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
@@ -787,6 +788,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count() > MaxOptionsCountInCategoricalOptionQuestion;
 
             return question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
+        }
+
+        private bool QuestionMustHaveLinkToExistedReusableCategories(ICategoricalQuestion question,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!question.CategoriesId.HasValue) return false;
+
+            var isExistReusableCategory = questionnaire.Categories.Any(c => c.Id == question.CategoriesId.Value);
+            return !isExistReusableCategory;
         }
 
         private static bool FilteredComboboxContainsMoreThanMaxOptions(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 

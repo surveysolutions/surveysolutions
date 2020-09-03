@@ -4,6 +4,7 @@ using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -96,6 +97,16 @@ namespace WB.UI.Interviewer.Implementations.Services
                 {
                     InterviewId = interviewId,
                     NavigationIdentity = navigationIdentity
+                });
+        }
+
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        {
+            return this.NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
+                new CreateInterviewViewModelArg()
+                {
+                    AssignmentId = assignmentId,
+                    InterviewId = Guid.NewGuid()
                 });
         }
 

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
-using System.Net.Sockets;
 using WB.Services.Scheduler.Model.Events;
 
 namespace WB.Services.Scheduler.Model
@@ -65,7 +63,7 @@ namespace WB.Services.Scheduler.Model
         [NotMapped]
         public long FailedTimes
         {
-            get => (long)(this["failedTimes"] ?? 0l);
+            get => (long)(this["failedTimes"] ?? 0L);
             set => this["failedTimes"] = value;
         }
 
@@ -84,7 +82,7 @@ namespace WB.Services.Scheduler.Model
         [NotMapped]
         public long MaxRetryAttempts
         {
-            get => (long) this["maxRetry"];
+            get => (long) (this["maxRetry"] ?? 3L);
             set => this["maxRetry"] = value;
         } 
 

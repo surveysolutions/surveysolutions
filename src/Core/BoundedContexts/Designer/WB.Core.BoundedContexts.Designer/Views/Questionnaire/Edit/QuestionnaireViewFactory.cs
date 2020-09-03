@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public QuestionnaireView? Load(QuestionnaireRevision revision)
         {
             var doc = this.questionnaireStorage.Get(revision);
-            return doc == null ? null : new QuestionnaireView(doc, Enumerable.Empty<SharedPersonView>());
+            var sharedPersons = this.GetSharedPersons(revision.QuestionnaireId);
+            return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)

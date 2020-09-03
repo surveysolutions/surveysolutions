@@ -129,7 +129,7 @@ angular.module('designerApp')
                         windowClass: "findReplaceModal dragAndDrop",
                         controller: 'findReplaceCtrl',
                         resolve: {
-                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || $scope.questionnaire.isReadOnly || false
                         }
                     });
                     searchBoxOpened = true;

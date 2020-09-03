@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +8,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -38,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
-        protected RestCredentials RestCredentials;
+        protected RestCredentials RestCredentials = null!;
         
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
@@ -223,7 +226,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.UserAuthentication
                 });
 
-                this.RestCredentials = this.RestCredentials ?? new RestCredentials
+                this.RestCredentials ??= new RestCredentials
                 {
                     Login = this.principal.CurrentUserIdentity.Name,
                     Token = this.principal.CurrentUserIdentity.Token
@@ -407,9 +410,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         break;
 
                     case SynchronizationExceptionType.UpgradeRequired:
+                        var message = EnumeratorUIResources.UpgradeRequired;
+
+                        var targetVersionObj = ex.Data["target-version"];
+                        if (targetVersionObj != null && targetVersionObj is string targetVersion)
+                        {
+                            var appVersionName = deviceInformationService.GetApplicationVersionName();
+                            message = GetRequiredUpdate(targetVersion, appVersionName);
+                        }
+
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = EnumeratorUIResources.UpgradeRequired,
+                            Title = message,
                             Status = SynchronizationStatus.Fail,
                             IsApplicationUpdateRequired = true,
                             Statistics = statistics,
@@ -476,7 +488,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 else
                 {
                     this.remoteLoginRequired = true;
-                    this.RestCredentials.Password = newPassword;
+                    if (this.RestCredentials != null)
+                    {
+                        this.RestCredentials.Password = newPassword;
+                    }
+
                     await this.SynchronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }
@@ -506,7 +522,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
 
-        protected virtual Task<string> GetNewPasswordAsync()
+        protected abstract string GetRequiredUpdate(string targetVersion, string appVersion);
+
+        protected virtual Task<string?> GetNewPasswordAsync()
         {
             var message = EnumeratorUIResources.Synchronization_UserPassword_Update_Format.FormatString(
                 this.principal.CurrentUserIdentity.Name);

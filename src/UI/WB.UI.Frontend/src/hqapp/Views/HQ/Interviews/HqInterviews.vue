@@ -211,13 +211,23 @@
         <ModalFrame ref="approveModal"
             :title="$t('Common.Approve')">
             <form onsubmit="return false;">
-                <div class="action-container">
-                    <p
-                        v-html="this.config.isSupervisor ? $t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Rejected by Headquarters'} ) : $t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor'} )"></p>
+                <div class="action-container"
+                    v-if="this.config.isSupervisor">
+                    <h3>
+                        {{$t('Interviews.ApproveConfirmMessage', {count: this.getFilteredToApprove().length })}}
+                    </h3>
+                    <p>
+                        <strong>{{$t('Interviews.Note')}}</strong>
+                        {{approveBySupervisorAllowedStatusesMessage}}
+                    </p>
+                </div>
+                <div class="action-container"
+                    v-else>
+                    <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor', status3: 'Rejected by Supervisor'} )"></p>
                 </div>
                 <div>
                     <label
-                        for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}} :</label>
+                        for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:</label>
                     <textarea
                         class="form-control"
                         rows="10"
@@ -337,7 +347,7 @@
                     <a
                         class="interview-id title-row"
                         @click="viewInterview"
-                        href="#">{{interviewKey}}</a> by
+                        href="javascript:void(0)">{{interviewKey}}</a> by
                     <span :class="responsibleClass"
                         v-html="responsibleLink"></span>
                 </p>
@@ -392,6 +402,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
     nodes {
       id
       key
+      clientKey
       status
       questionnaireId
       responsibleId
@@ -400,9 +411,10 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       errorsCount
       assignmentId
       updateDate
-      receivedByInterviewer
+      receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
+      notAnsweredCount
       identifyingQuestions {
         question {
           variable
@@ -477,6 +489,13 @@ export default {
     },
 
     computed: {
+        approveBySupervisorAllowedStatusesMessage(){
+            const completedName = this.$t('Strings.InterviewStatus_Completed')
+            const rejectedByHqName = this.$t('Strings.InterviewStatus_RejectedByHeadquarters')
+            const rejectedBySvName = this.$t('Strings.InterviewStatus_RejectedBySupervisor')
+
+            return this.$t('Interviews.ApproveConfirmMessage_Statuses', {status1: completedName, status2: rejectedByHqName, status3: rejectedBySvName})
+        },
         rowData() {
             return (this.interviewData.edges || []).map(e => e.node)
         },
@@ -520,8 +539,9 @@ export default {
                     responsivePriority: 2,
                     className: 'interview-id title-row',
                     render(data, type, row) {
-                        var result =
-                            '<a href=\'' + self.config.interviewReviewUrl + '/' + row.id + '\'>' + data + '</a>'
+                        const append = data === row.clientKey ? '' : ` <span class="text-muted">(${row.clientKey})</span>`
+                        const result =
+                            `<a href="${self.config.interviewReviewUrl}/${row.id}">${data}${append}</a>`
                         return result
                     },
                     createdCell(td, cellData, rowData, row, col) {
@@ -579,6 +599,7 @@ export default {
                 {
                     data: 'errorsCount',
                     name: 'ErrorsCount',
+                    class: 'type-numeric',
                     title: this.$t('Interviews.Errors'),
                     orderable: true,
                     render(data) {
@@ -586,6 +607,19 @@ export default {
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'errors')
+                    },
+                    width: '50px',
+                },{
+                    data: 'notAnsweredCount',
+                    name: 'NotAnsweredCount',
+                    class: 'type-numeric',
+                    title: this.$t('Interviews.NotAnsweredCount'),
+                    orderable: true,
+                    render(data) {
+                        return data === null ? `<span class="text-muted">${self.$t('Common.Unknown')}</span>` : data
+                    },
+                    createdCell(td, cellData, rowData, row, col) {
+                        $(td).attr('role', 'nonAnswered')
                     },
                     width: '50px',
                 },
@@ -603,11 +637,16 @@ export default {
                     width: '100px',
                 },
                 {
-                    data: 'receivedByInterviewer',
-                    name: 'ReceivedByInterviewer',
+                    data: 'receivedByInterviewerAtUtc',
+                    name: 'ReceivedByInterviewerAtUtc',
                     title: this.$t('Common.ReceivedByInterviewer'),
                     render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
                     },
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'received')
@@ -667,6 +706,7 @@ export default {
                     if(search && search != '') {
                         where.AND.push({ OR: [
                             { key_starts_with: search.toLowerCase() },
+                            { clientKey_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingQuestions_some: {
@@ -858,7 +898,7 @@ export default {
         },
         CountReceivedByInterviewerItems() {
             return this.getFilteredItems(function(item) {
-                return item.receivedByInterviewer === true
+                return item.receivedByInterviewerAtUtc != null
             }).length
         },
         questionnaireSelected(newValue) {
@@ -904,7 +944,7 @@ export default {
 
             if (!this.isReassignReceivedByInterviewer) {
                 filteredItems = this.arrayFilter(filteredItems, function(item) {
-                    return item.receivedByInterviewer === false
+                    return item.receivedByInterviewerAtUtc === null
                 })
             }
 
@@ -989,9 +1029,7 @@ export default {
         },
         approveInterview() {
             this.statusChangeComment = null
-            this.$refs.approveModal.modal({
-                keyboard: false,
-            })
+            this.$refs.approveModal.modal()
         },
 
         rejectInterviews() {
@@ -1308,7 +1346,7 @@ export default {
             menu.push({
                 name: self.$t('Pages.InterviewerHq_OpenInterview'),
                 callback: () => {
-                    window.location = self.config.interviewReviewUrl + '/' + rowData.id.replace(/-/g, '')
+                    window.location = `${self.config.interviewReviewUrl}/${rowData.id}`
                 },
             })
 
@@ -1342,18 +1380,20 @@ export default {
                     disabled: !canBeAssigned,
                 })
 
+                const canBeApproved = rowData.actionFlags.indexOf('CANBEAPPROVED') >= 0
                 menu.push({
                     name: self.$t('Common.Approve'),
-                    className: 'success-text',
+                    className: canBeApproved ? 'success-text' : '',
                     callback: () => self.approveInterview(),
-                    disabled: rowData.actionFlags.indexOf('CANBEAPPROVED') < 0,
+                    disabled: !canBeApproved,
                 })
 
+                const canBeRejected = rowData.actionFlags.indexOf('CANBEREJECTED') >= 0
                 menu.push({
                     name: self.$t('Common.Reject'),
-                    className: 'error-text',
+                    className: canBeRejected ? 'error-text' : '',
                     callback: () => self.rejectInterview(),
-                    disabled: rowData.actionFlags.indexOf('CANBEREJECTED') < 0,
+                    disabled: !canBeRejected,
                 })
 
                 if (!self.config.isSupervisor) {
@@ -1367,11 +1407,12 @@ export default {
                         className: 'context-menu-separator context-menu-not-selectable',
                     })
 
+                    const canBeDeleted = rowData.actionFlags.indexOf('CANBEDELETED') >= 0
                     menu.push({
                         name: self.$t('Common.Delete'),
-                        className: 'error-text',
+                        className: canBeDeleted ? 'error-text' : '',
                         callback: () => self.deleteInterview(),
-                        disabled: rowData.actionFlags.indexOf('CANBEDELETED') < 0,
+                        disabled: !canBeDeleted,
                     })
                 }
             }

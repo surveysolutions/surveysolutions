@@ -4,11 +4,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -45,19 +44,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             //workaround
             //inflated map doesn't work (should be fixed in next Esri release) 
-            var map = new MapView(this);
+            var mapView = this.ViewModel.MapView;
             var bindingSet = this.CreateBindingSet<AreaEditorActivity, AreaEditorViewModel>();
 
-            bindingSet.Bind(map)
+            bindingSet.Bind(mapView)
                 .For(v => v.Map)
                 .To(vm => vm.Map);
 
             bindingSet.Apply();
-
-            this.ViewModel.MapView = map;
-
+            
             var container = this.FindViewById<LinearLayout>(Resource.Id.area_map_view_container);
-            container.AddView(map);
+            container.AddView(mapView);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

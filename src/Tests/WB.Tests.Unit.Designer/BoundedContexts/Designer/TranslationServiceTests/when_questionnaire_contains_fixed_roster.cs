@@ -7,20 +7,23 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-
+using WB.Tests.Abc;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
     internal class when_questionnaire_contains_fixed_roster : TranslationsServiceTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        [SetUp]
+        public void context()
+        {
+            questionnaireId = Id.g1;
+            rosterId = Id.gB;
 
             var storedTranslations = new List<TranslationInstance>
             {
@@ -52,16 +55,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             BecauseOf();
         }
 
-        private void BecauseOf() 
+        private void BecauseOf()
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
             cells = workbook.Worksheets.First();
         }
 
-        [NUnit.Framework.Test] public void should_output_roster_title_translation () 
+        [TearDown]
+        public void TearDown()
         {
-            var questionTitleRow = 3;
+            workbook?.Dispose();
+        }
+
+        [NUnit.Framework.Test]
+        public void should_output_roster_title_translation()
+        {
+            var questionTitleRow = 4;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
             cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
             cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
@@ -69,9 +79,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             cells.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
         }
 
-        [NUnit.Framework.Test] public void should_output_roster_fixed_option_title_translation () 
+        [NUnit.Framework.Test]
+        public void should_output_roster_fixed_option_title_translation()
         {
-            var questionTitleRow = 4;
+            var questionTitleRow = 5;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.FixedRosterTitle);
             cells.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("42");
             cells.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(rosterId.FormatGuid());
@@ -79,13 +90,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             cells.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().Be("fixed roster item 1");
         }
 
-
-        static Guid rosterId;
-        static TranslationsService service;
-        static Guid questionnaireId;
-        static Guid translationId = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        static TranslationFile excelFile;
-        static IXLWorkbook workbook;
+        Guid rosterId;
+        TranslationsService service;
+        Guid questionnaireId;
+        Guid translationId = Id.gC;
+        TranslationFile excelFile;
+        IXLWorkbook workbook;
         private IXLWorksheet cells;
     }
 }

@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Enumerator.Native.WebInterview
 {
@@ -50,12 +51,16 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<TranslationSwitched>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewStatusChanged>,
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<AreaQuestionAnswered>,
         IEventHandler<AudioQuestionAnswered>,
         IEventHandler<AnswerCommented>,
-        IEventHandler<AnswerCommentResolved>
+        IEventHandler<AnswerCommentResolved>,
+        IEventHandler<VariablesChanged>,
+        IEventHandler<VariablesEnabled>,
+        IEventHandler<VariablesDisabled>
 
     {
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
@@ -281,6 +286,14 @@ namespace WB.Enumerator.Native.WebInterview
             this.aggregateRootCache.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
         }
+        
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        {
+            if (!evnt.IsPrototype())
+            {
+                this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+            }
+        }
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
         {
@@ -300,6 +313,21 @@ namespace WB.Enumerator.Native.WebInterview
         public void Handle(IPublishedEvent<AnswerCommentResolved> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
+
+        public void Handle(IPublishedEvent<VariablesChanged> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedVariables.Select(x => x.Identity).ToArray());
+        }
+
+        public void Handle(IPublishedEvent<VariablesEnabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Variables);
+        }
+
+        public void Handle(IPublishedEvent<VariablesDisabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Variables);
         }
     }
 }

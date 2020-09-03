@@ -121,7 +121,7 @@
     <value>Show coordinates</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>Interview has no responsible. Please, choose responsible interviewer</value>
+    <value>Please choose a person responsible for the assignment.</value>
   </data>
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
     <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>

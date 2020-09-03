@@ -530,6 +530,30 @@
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ</value>
   </data>
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Загрузить шейп-файл</value>
+  </data>
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>Задачи</value>
+  </data>
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>Интервью</value>
+  </data>
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>Показаны только элементы с координатами</value>
+  </data>
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>Все опросники</value>
+  </data>
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Тип</value>
+  </data>
   <data name="AreaMap_Close" xml:space="preserve">
     <value>Закрыть</value>
   </data>
@@ -538,6 +562,15 @@
   </data>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>Ваше местоположение вне границ карты</value>
+  </data>
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Загруженая карта расположена вне границ видимой зоны</value>
+  </data>
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>Ошибка загрузки. Шейп-файл не может быть открыт</value>
+  </data>
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Не удается получить ваше расположение. Выйдите на открытое пространство, включите GPS или увеличте значение таймаута в настройках.</value>
   </data>
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Выйти из редактора</value>
@@ -601,6 +634,9 @@
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} из {1} опций выбрано</value>
+  </data>
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>Максимальное число опций ({0}) для вопроса выбрано</value>
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Supervisor</value>
@@ -711,5 +747,8 @@
   </data>
   <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
     <value>На предыдущий ответ</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Опросники</value>
   </data>
 </root>

@@ -64,6 +64,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             Assert.That(this.summary.ErrorsCount, Is.EqualTo(4));
         }
+
+        [Test]
+        public void should_store_not_answered_count()
+        {
+            subject.Process(this.interview, null);
+
+            Assert.That(this.summary.NotAnsweredCount, Is.EqualTo(3));
+        }
         
         [Test]
         public void should_store_zero_errors_count_if_there_is_no_errors()

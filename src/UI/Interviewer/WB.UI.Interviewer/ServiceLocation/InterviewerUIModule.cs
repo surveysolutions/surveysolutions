@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -39,9 +39,9 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
+            registry.BindInPerLifetimeScope<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
-            registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
+            registry.Bind<IFastBinaryFilesHttpHandler, BinaryFilesHttpHandler>();
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
@@ -82,12 +82,13 @@ namespace WB.UI.Interviewer.ServiceLocation
 
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 #if EXCLUDEEXTENSIONS
-            registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
+            registry.Bind<IMapInteractionService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyMapInteractionService>();
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
+            registry.Bind<WB.UI.Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
-            registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
+            registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
 #endif
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
             
@@ -106,7 +107,7 @@ namespace WB.UI.Interviewer.ServiceLocation
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
 #if !EXCLUDEEXTENSIONS
-            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicense();
+            WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
 #endif
 
             return Task.CompletedTask;

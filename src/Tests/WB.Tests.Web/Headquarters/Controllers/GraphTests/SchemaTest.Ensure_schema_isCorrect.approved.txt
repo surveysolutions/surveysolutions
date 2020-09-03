@@ -78,20 +78,26 @@ type Interview {
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
   assignmentId: Int
+  "Key that was generated on interviewer tablet when interview was created for the first time"
+  clientKey: String!
   "Utc creation date"
   createdDate: DateTime!
-  "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1."
+  "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1"
   errorsCount: Int!
   id: ID!
-  "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer."
+  "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer"
   identifyingQuestions: [QuestionAnswer]
-  "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer."
+  "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer"
   key: String!
+  "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release"
+  notAnsweredCount: Int
   questionnaireId: Uuid!
   questionnaireVariable: String!
   questionnaireVersion: Long!
   "Indicator for whether the interview is on the interviewer’s tablet now"
   receivedByInterviewer: Boolean!
+  "Represents date (UTC) when the interview was received by the interviewer’s tablet"
+  receivedByInterviewerAtUtc: DateTime
   responsibleId: Uuid!
   "Login of current responsible user"
   responsibleName: String!
@@ -177,6 +183,11 @@ input AssignmentsFilter {
   AND: [AssignmentsFilter!]
   archived: Boolean
   OR: [AssignmentsFilter!]
+  questionnaireId: QuestionnaireIdentity
+  receivedByTabletAtUtc: DateTime
+  receivedByTabletAtUtc_gt: DateTime
+  receivedByTabletAtUtc_lt: DateTime
+  receivedByTabletAtUtc_not: DateTime
   responsibleId: Uuid
   responsibleId_in: [Uuid!]
   responsibleId_not: Uuid
@@ -189,6 +200,10 @@ input InterviewFilter {
   assignmentId: Int
   assignmentId_in: [Int]
   assignmentId_not: Int
+  clientKey: String
+  clientKey_contains: String
+  clientKey_in: [String]
+  clientKey_starts_with: String
   createdDate_gt: DateTime
   createdDate_gte: DateTime
   createdDate_lt: DateTime
@@ -204,11 +219,26 @@ input InterviewFilter {
   key_contains: String
   key_in: [String]
   key_starts_with: String
+  notAnsweredCount: Int
+  notAnsweredCount_gt: Int
+  notAnsweredCount_gte: Int
+  notAnsweredCount_in: [Int]
+  notAnsweredCount_lt: Int
+  notAnsweredCount_lte: Int
+  notAnsweredCount_not: Int
+  notAnsweredCount_not_gt: Int
+  notAnsweredCount_not_gte: Int
+  notAnsweredCount_not_in: [Int]
+  notAnsweredCount_not_lt: Int
+  notAnsweredCount_not_lte: Int
   OR: [InterviewFilter!]
   questionnaireId: Uuid
   questionnaireVariable: String
   questionnaireVersion: Long
-  receivedByInterviewer: Boolean
+  receivedByInterviewerAtUtc: DateTime
+  receivedByInterviewerAtUtc_gt: DateTime
+  receivedByInterviewerAtUtc_lt: DateTime
+  receivedByInterviewerAtUtc_not: DateTime
   responsibleName: String
   responsibleNameLowerCase: String
   responsibleNameLowerCase_in: [String]
@@ -241,9 +271,10 @@ input InterviewSort {
   errorsCount: SortOperationKind
   id: SortOperationKind
   key: SortOperationKind
+  notAnsweredCount: SortOperationKind
   questionnaireId: SortOperationKind
   questionnaireVersion: SortOperationKind
-  receivedByInterviewer: SortOperationKind
+  receivedByInterviewerAtUtc: SortOperationKind
   responsibleName: SortOperationKind
   responsibleRole: SortOperationKind
   status: SortOperationKind
@@ -315,6 +346,25 @@ input QuestionFilter {
   questionText: String
   scope: QuestionScope
   variable: String
+}
+
+input QuestionnaireIdentity {
+  AND: [QuestionnaireIdentity!]
+  id: Uuid
+  id_not: Uuid
+  OR: [QuestionnaireIdentity!]
+  version: Long
+  version_gt: Long
+  version_gte: Long
+  version_in: [Long!]
+  version_lt: Long
+  version_lte: Long
+  version_not: Long
+  version_not_gt: Long
+  version_not_gte: Long
+  version_not_in: [Long!]
+  version_not_lt: Long
+  version_not_lte: Long
 }
 
 input UserMapFilter {

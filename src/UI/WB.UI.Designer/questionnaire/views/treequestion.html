@@ -9,8 +9,8 @@
         </div>
         <div class="qname-block">
             <div class="conditions-block">
-                <div class="enabling-group-marker condition-item" ng-if="item.hasCondition"></div>
-                <div class="validation-group-marker condition-item" ng-if="item.hasValidation"></div>
+                <div class="enabling-group-marker"  ng-class="{'hide-if-disabled': item.hideIfDisabled}" ng-if="item.hasCondition"></div>
+                <div class="validation-group-marker" ng-if="item.hasValidation"></div>
             </div>
             <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
         </div>
@@ -21,16 +21,16 @@
                 <a ng-click="addQuestionAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" ng-i18next="TreeAddQuestionAfter"></a>
             </li>
             <li>
-                <a ng-click="addRosterAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" ng-i18next="TreeAddRosterAfter">Add roster after</a>
+                <a ng-click="addRosterAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover" ng-i18next="TreeAddRosterAfter">Add roster after</a>
             </li>
             <li>
-                <a ng-click="addGroupAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" ng-i18next="TreeAddSectionAfter">Add sub-section after</a>
+                <a ng-click="addGroupAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover" ng-i18next="TreeAddSectionAfter">Add sub-section after</a>
             </li>
             <li>
                 <a ng-click="addStaticTextAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" ng-i18next="TreeAddStaticTextAfter">Add static text after</a>
             </li>
             <li>
-                <a ng-click="addVariableAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" ng-i18next="TreeAddVariableAfter">Add variable after</a>
+                <a ng-click="addVariableAfter(item)" ng-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly && !currentChapter.isCover" ng-i18next="TreeAddVariableAfter">Add variable after</a>
             </li>
             <li>
                 <a ng-click="copyRef(item)" ng-i18next>Copy</a>

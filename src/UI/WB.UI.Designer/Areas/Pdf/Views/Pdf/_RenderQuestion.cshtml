@@ -104,7 +104,7 @@
         <div class="question-meta">
             <div class="type">
                 @questionnaire.GetFormattedQuestionType(question)
-                @if (!questionnaire.IsInterviewerQuestion(question))
+                @if (!questionnaire.IsInterviewerQuestion(question) && !questionnaire.IsParentCover(question))
                 {
                     <br />
                     <span>@string.Format(PdfStrings.Scope, questionnaire.GetQuestionScope(question))</span>

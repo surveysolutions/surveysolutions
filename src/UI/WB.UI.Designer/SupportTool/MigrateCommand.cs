@@ -4,9 +4,9 @@ using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Humanizer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly;
@@ -19,10 +19,10 @@ namespace WB.UI.Designer.SupportTool
 {
     public class MigrateCommand : Command
     {
-        private readonly IWebHost host;
+        private readonly IHost host;
         private IConfiguration Configuration => host.Services.GetRequiredService<IConfiguration>();
 
-        public MigrateCommand(IWebHost host) : base("migrate", "Migrate database to latest version")
+        public MigrateCommand(IHost host) : base("migrate", "Migrate database to latest version")
         {
             this.host = host;
 

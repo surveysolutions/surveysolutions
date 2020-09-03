@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -35,6 +35,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (CategoricalMultiLinkedToListViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (CategoricalMultiLinkedToQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (CategoricalMultiLinkedToRosterTitleViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (CategoricalMultiBottomInfoViewModel), Resource.Layout.interview_question_multi_option_bottom},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
             {typeof (TimestampQuestionViewModel), Resource.Layout.interview_question_timestamp},
             {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },

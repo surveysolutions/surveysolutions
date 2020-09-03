@@ -485,22 +485,18 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == Mock.Of<IQuestionnaire>(y =>
                     y.GetQuestionType(It.IsAny<Guid>()) == QuestionType.GpsCoordinates));
 
-            var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(UnitOfWork, questionnaireStorage);
+            var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage);
 
             foreach (var gpsAnswer in answers)
             {
-                var interviewSummary = new InterviewSummary
-                {
-                    Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
-                    SupervisorId = gpsAnswer.TeamLeadId ?? Guid.Empty,
-                    InterviewId = gpsAnswer.InterviewId,
-                    ReceivedByInterviewer = false,
-                    QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
-                    QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
-                    QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
-                    ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid(),
-                    QuestionnaireVariable = "automation"
-                };
+                var interviewSummary =
+                    Create.Entity.InterviewSummary(status: gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
+                        interviewId: gpsAnswer.InterviewId,
+                        teamLeadId: gpsAnswer.TeamLeadId,
+                        questionnaireId: gpsAnswer.QuestionnaireId.QuestionnaireId,
+                        questionnaireVersion: gpsAnswer.QuestionnaireId.Version,
+                        responsibleId: gpsAnswer.ResponsibleId);
+                    
                 interviewSummaryRepositoryLocal.Store(interviewSummary, gpsAnswer.InterviewId.FormatGuid());
 
                 geolocationDenormalizer.Update(interviewSummary, new PublishedEvent<GeoLocationQuestionAnswered>(

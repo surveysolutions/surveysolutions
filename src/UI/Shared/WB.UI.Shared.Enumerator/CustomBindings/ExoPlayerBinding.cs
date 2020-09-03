@@ -52,7 +52,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             view.Player?.Stop();
             view.Player?.Release();
             
-            var exoPlayer = ExoPlayerFactory.NewSimpleInstance(view.Context, new DefaultTrackSelector());
+            SimpleExoPlayer.Builder exoPlayer = new SimpleExoPlayer.Builder(view.Context);
             
             var dataSourceFactory = new DefaultDataSourceFactory(
                 view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
@@ -60,21 +60,21 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             var uri = Uri.FromFile(new File(value.ContentPath));
 
-            exoPlayer.Prepare(new ExtractorMediaSource.Factory(dataSourceFactory)
-                .SetExtractorsFactory(ExtractorsFactory)
+            var simpleExoPlayer = exoPlayer.Build();
+            simpleExoPlayer.Prepare(new ProgressiveMediaSource.Factory(dataSourceFactory, ExtractorsFactory)
                 .CreateMediaSource(uri));
 
             // adjust video view height so that video take all horizontal space
-            exoPlayer.RenderedFirstFrame += (sender, args) =>
+            simpleExoPlayer.RenderedFirstFrame += (sender, args) =>
             {
-                var ratio = (float)exoPlayer.VideoFormat.Height / (float)exoPlayer.VideoFormat.Width / (float)exoPlayer.VideoFormat.PixelWidthHeightRatio;
+                var ratio = (float)simpleExoPlayer.VideoFormat.Height / (float)simpleExoPlayer.VideoFormat.Width / (float)simpleExoPlayer.VideoFormat.PixelWidthHeightRatio;
                 view.SetMinimumHeight((int)(view.Width * ratio));
                 view.HideController();
             };
 
-            exoPlayer.SeekTo(1);
-            view.Player = exoPlayer;
-            media.Player = exoPlayer;
+            simpleExoPlayer.SeekTo(1);
+            view.Player = simpleExoPlayer;
+            media.Player = simpleExoPlayer;
             media.View = view;
         }
     }

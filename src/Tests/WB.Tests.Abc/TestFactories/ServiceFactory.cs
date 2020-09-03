@@ -33,6 +33,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -69,7 +70,6 @@ using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -81,6 +81,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -116,6 +117,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
@@ -179,7 +181,8 @@ namespace WB.Tests.Abc.TestFactories
             => new CumulativeChartDenormalizer(
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
+                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>(),
+                Create.Storage.NewMemoryCache());
 
         public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -295,7 +298,7 @@ namespace WB.Tests.Abc.TestFactories
             new EnumeratorDenormalizerRegistry(Create.Service.ServiceLocatorService(DashboardDenormalizer()), Mock.Of<ILogger>());
 
         public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
-            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry();
+            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry(new EventBusSettings());
 
         public AsyncEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
             new AsyncEventQueue(new AsyncEventDispatcher(liteEventRegistry,
@@ -658,28 +661,24 @@ namespace WB.Tests.Abc.TestFactories
                      x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
         }
 
-        // TODO: Core migration https://issues.mysurvey.solutions/youtrack/issue/KP-13523
-        //public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
-        //    IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
-        //    IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
-        //    IInterviewerVersionReader interviewerVersionReader = null,
-        //    IInterviewFactory interviewFactory = null,
-        //    IAuthorizedUser currentUser = null)
-        //{
-        //    // TODO: Core migration - fix
-        //    //var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
-        //    return new InterviewerProfileFactory(
-        //        null, //userManager ?? defaultUserManager,
-        //        interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-        //        deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
-        //        interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
-        //        interviewFactory ?? Mock.Of<IInterviewFactory>(),
-        //        currentUser ?? Mock.Of<IAuthorizedUser>(),
-        //        Mock.Of<IQRCodeHelper>(),
-        //        Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
-        //}
-
-
+        public InterviewerProfileFactory InterviewerProfileFactory(IUserRepository userManager = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
+            IInterviewerVersionReader interviewerVersionReader = null,
+            IInterviewFactory interviewFactory = null,
+            IAuthorizedUser currentUser = null)
+        {
+            var defaultUserManager = Mock.Of<IUserRepository>(x => x.Users == (new HqUser[0]).AsQueryable());
+            return new InterviewerProfileFactory(
+                userManager ?? defaultUserManager,
+                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
+                interviewFactory ?? Mock.Of<IInterviewFactory>(),
+                currentUser ?? Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IQRCodeHelper>(),
+                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
+        }
 
         public InterviewPackagesService InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
@@ -1063,11 +1062,15 @@ namespace WB.Tests.Abc.TestFactories
             return new EnumeratorGroupGroupStateCalculationStrategy();
         }
 
-        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        public IInvitationService InvitationService(
+            IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null,
+            IAggregateRootPrototypePromoterService promoter = null
+            )
         {
             var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
                 invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
+                promoter ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
                 Create.Service.TokenGenerator());
             return service;
         }
@@ -1081,7 +1084,9 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             var service = new InvitationService(accessor,
-                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
+                Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(),
+                Mock.Of<IAggregateRootPrototypePromoterService>(),
+                Mock.Of<ITokenGenerator>());
             return service;
         }
 
@@ -1133,9 +1138,13 @@ namespace WB.Tests.Abc.TestFactories
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
         }
 
-        public TokenGenerator TokenGenerator(int tokenLength = 8, IPlainStorageAccessor<Invitation> invitationStorage = null)
+        public TokenGenerator TokenGenerator(int tokenLength = 8, 
+            IPlainStorageAccessor<Invitation> invitationStorage = null,
+            IPlainKeyValueStorage<TenantSettings> tenantSettingsStorage = null)
         {
-            return new TokenGenerator(invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>())
+            return new TokenGenerator(
+                invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>(),
+                tenantSettingsStorage ?? new InMemoryPlainStorageAccessor<TenantSettings>())
             {
                 tokenLength = tokenLength
             };
@@ -1231,6 +1240,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new WebModeResponsibleAssignmentValidator(userViewFactory ?? Create.Storage.UserViewFactory());
         }
+
+        public QuestionnaireTranslator QuestionnaireTranslator()
+            => new QuestionnaireTranslator();
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler

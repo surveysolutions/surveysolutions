@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
-using Android.Support.V4.Content;
+using AndroidX.Core.App;
+using AndroidX.Core.Content;
 using Java.Lang;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
@@ -89,6 +89,7 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public void CloseApplication() => JavaSystem.Exit(0);
+        public abstract Task NavigateToCreateAndLoadInterview(int assignmentId);
 
         public abstract Task NavigateToLoginAsync();
         public abstract Task NavigateToFinishInstallationAsync();

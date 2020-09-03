@@ -348,6 +348,15 @@
   <data name="DataFormat_Tab" xml:space="preserve">
     <value>Tab separated data</value>
   </data>
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Questionnaire information</value>
+  </data>
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Include meta information about questionnaire</value>
+  </data>
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Exclude meta information about questionnaire</value>
+  </data>
   <data name="AddToQueue" xml:space="preserve">
     <value>Add to queue</value>
   </data>
@@ -376,7 +385,7 @@
     <value>Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider.</value>
   </data>
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions.</value>
+    <value>An unexpected error occurred during export. We are sorry for inconvenience. Please contact support team support@mysurvey.solutions with the log files *.log that are stored in the application folder. Additional information to this issue is available at the support page: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
     <value>all statuses</value>

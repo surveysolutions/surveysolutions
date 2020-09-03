@@ -1,14 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.AspNetCore;
@@ -42,42 +38,17 @@ namespace WB.UI.Designer
             return 0;
         }
 
-        private static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseSerilog((host, loggerConfig) =>
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureSurveySolutionsLogging("designer",(host, loggerConfig) =>
                 {
-                    loggerConfig
-                        .ConfigureSurveySolutionsLogging(host.HostingEnvironment.ContentRootPath, "designer");
-
                     if (!host.HostingEnvironment.IsDevelopment())
                     {
                         loggerConfig.MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning);
                     }
-                    
-                    if (host.HostingEnvironment.IsDevelopment() || InDocker)
-                    {
-                        // To debug logitems source add {SourceContext} to output template
-                        // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
-                        loggerConfig.WriteTo.Console();
-                    }
                 })
-                .ConfigureAppConfiguration((hostingContext, c) =>
-                {
-                    c.AddIniFile("appsettings.ini", false, true);
-                    c.AddIniFile("appsettings.cloud.ini", true, true);
-                    c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
-                    c.AddIniFile("appsettings.Production.ini", true);
-                    c.AddCommandLine(args);
-
-                    if (hostingContext.HostingEnvironment.IsDevelopment())
-                    {
-                        c.AddUserSecrets<Startup>();
-                    }
-                });
+                .ConfigureSurveySolutionsAppConfiguration<Startup>("DESIGNER_", args);
         }
     }
 }

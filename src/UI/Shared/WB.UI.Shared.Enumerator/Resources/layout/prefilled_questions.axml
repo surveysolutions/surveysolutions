@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/rootLayout">
 
-  <android.support.v7.widget.Toolbar
+  <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
       <TextView
           style="@style/PrefilledQuestionsToolbarTitle"
           local:MvxBind="Text QuestionnaireTitle" />
-  </android.support.v7.widget.Toolbar>
+  </androidx.appcompat.widget.Toolbar>
 
   <ProgressBar style="@style/Progress_Indicator"
              local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;" />

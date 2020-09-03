@@ -56,11 +56,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 .Select(x => x.Identity)
                 .ToImmutableHashSet();
 
-            var interviewEntities = interview.GetUnderlyingInterviewerEntities();
+            var identifyedEntities = questionnaire.GetPrefilledEntities()
+                .Select(id => new Identity(id, RosterVector.Empty));
+            var interviewEntities = identifyedEntities.Concat(interview.GetUnderlyingInterviewerEntities());
 
             this.Name = nameViewModel;
             this.Name.InitAsStatic(UIResources.Interview_Overview_Name);
-            this.Items = interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)).ToList();
+
+            var coverIdentity = new Identity(questionnaire.CoverPageSectionId, RosterVector.Empty);
+            var coverSectionItem = questionnaire.IsCoverPageSupported
+                ? new OverviewSection(interview.GetGroup(coverIdentity))
+                : OverviewSection.Empty(UIResources.Interview_Cover_Screen_Title);
+
+            this.Items = new List<OverviewNode>() { coverSectionItem }
+                .Concat(interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)))
+                .ToList();
         }
 
         public string InterviewId { get; set; }

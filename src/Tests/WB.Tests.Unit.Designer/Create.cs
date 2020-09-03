@@ -53,7 +53,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
@@ -76,6 +75,7 @@ using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.E
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.Designer
@@ -264,7 +264,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
-            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
+            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>(), Mock.Of<IDesignerTranslationService>());
         }
 
         public static DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
@@ -617,7 +617,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IClock>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>(),
+                Mock.Of<IDesignerTranslationService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 Mock.Of<ICategoriesService>(),
                 findReplaceService ?? Mock.Of<IFindReplaceService>());
@@ -1420,9 +1420,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireTranslator QuestionnaireTranslator()
-            => new QuestionnaireTranslator();
-
         public static Translation Translation(Guid? translationId = null, string name = null)
         {
             return new Translation() { Name = name, Id = translationId ?? Guid.NewGuid() };
@@ -1526,7 +1523,9 @@ namespace WB.Tests.Unit.Designer
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
-                new DesignerEngineVersionService(Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})),
+                new DesignerEngineVersionService(
+                    Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})
+                    , Mock.Of<IDesignerTranslationService>()),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,

@@ -494,6 +494,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
+        public bool IsParentCover(IQuestion question) => questionnaire.IsCoverPageSupported && questionnaire.IsCoverPage(question.GetParent()!.PublicKey);
 
         public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;

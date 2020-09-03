@@ -825,10 +825,19 @@
   <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
     <value>Категории должны содержать уникальную пару ParentId, Text</value>
   </data>
-  <data name="WB0307_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>Вопрос ссылается на не существующую категорию.</value>
+  </data>
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Вопросы в секции "Обложка" должны иметь тег переменной</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
     <value>Идентификационные вопросы могут иметь только разрешенные типы (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного).</value>
+  </data>
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>Только строковая переменная может быть использована как источник имени вложения</value>
+  </data>
+    <data name="WB0391" xml:space="preserve">
+    <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
   </data>
 </root>

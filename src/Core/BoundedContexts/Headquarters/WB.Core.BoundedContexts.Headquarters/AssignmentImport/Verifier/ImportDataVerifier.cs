@@ -355,16 +355,39 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var questionType = questionnaire.GetQuestionType(questionId.Value);
 
-            if (new [] {QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio}.Contains(questionType) 
-                || ((questionType==QuestionType.MultyOption || questionType == QuestionType.SingleOption) && (questionnaire.IsQuestionLinked(questionId.Value) || questionnaire.IsQuestionLinkedToRoster(questionId.Value))))
+            if (new[] {QuestionType.Area, QuestionType.Multimedia, QuestionType.Audio}.Contains(questionType)
+                || ((questionType == QuestionType.MultyOption
+                     || questionType == QuestionType.SingleOption)
+                    && (questionnaire.IsQuestionLinked(questionId.Value) ||
+                        questionnaire.IsQuestionLinkedToRoster(questionId.Value))))
+            {
+                var column = string.Empty;
+                var content = string.Empty;
+
+                switch (value)
+                {
+                    case AssignmentAnswers assignmentAnswers:
+                        column = assignmentAnswers.Values[0].Column;
+                        content = assignmentAnswers.Values[0].Value;
+                        break;
+                    case AssignmentValue assignmentValue:
+                        column = assignmentValue.Column;
+                        content = assignmentValue.Value;
+                        break;
+                }
+
                 yield return new PanelImportVerificationError(
                     "PL0063",
                     string.Format(messages.PL0063_NoPermittedQuestion, answer.VariableName),
-                    (value is AssignmentValue assignmentValue)
-                        ? new InterviewImportReference(assignmentValue.Column, row.Row, PreloadedDataVerificationReferenceType.Cell,
-                        assignmentValue.Value, row.FileName)
-                        :null
+
+                    new InterviewImportReference(
+                        column,
+                        row.Row,
+                        PreloadedDataVerificationReferenceType.Cell,
+                        content,
+                        row.FileName)
                 );
+            }
         }
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentWebMode webMode, PreloadingAssignmentRow assignmentRow)
@@ -741,9 +764,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var optionCode = compositeColumn[1].Replace("n", "-");
 
-            return questionnaire.GetQuestionType(questionId.Value) == QuestionType.MultyOption && 
-                   !questionnaire.IsQuestionLinked(questionId.Value) && !questionnaire.IsQuestionLinkedToRoster(questionId.Value) &&
-                   questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null).All(x => x.Value.ToString() != optionCode);
+            return questionnaire.GetQuestionType(questionId.Value) == QuestionType.MultyOption 
+                   && !questionnaire.IsQuestionLinked(questionId.Value) 
+                   && !questionnaire.IsQuestionLinkedToRoster(questionId.Value) 
+                   && questionnaire.GetOptionsForQuestion(questionId.Value, null, null, null)
+                       .All(x => x.Value.ToString() != optionCode);
         }
 
         private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)

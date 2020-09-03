@@ -56,7 +56,6 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -65,6 +64,8 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
@@ -181,6 +182,8 @@ namespace WB.Core.BoundedContexts.Headquarters
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<ITranslationImporter, TranslationImporter>();
+            registry.Bind<ICategoriesImporter, CategoriesImporter>();
             registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
@@ -445,9 +448,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<HardDeleteInterview>()
                     .SkipValidationFor<DeleteInterviewCommand>()
                     .SkipValidationFor<MoveInterviewToTeam>()
-                    .SkipValidationFor<ApproveInterviewCommand>()
                     .SkipValidationFor<RejectInterviewCommand>()
-                    .SkipValidationFor<HqApproveInterviewCommand>()
                     .SkipValidationFor<HqRejectInterviewCommand>()
                     .SkipValidationFor<UnapproveByHeadquartersCommand>()
             );

@@ -438,6 +438,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (var table in questionnaire.LookupTables)
             {
                 var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+                if (lookupTableData == null)
+                    throw new InvalidOperationException("Lookup table is empty.");
+
                 var tableName = table.Value.TableName;
                 var tableTemplateModel = new LookupTableTemplateModel
                 (

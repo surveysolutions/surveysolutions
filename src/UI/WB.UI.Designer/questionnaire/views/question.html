@@ -87,7 +87,7 @@
         </div>
 
         <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
-            <div class="enabling-group-marker"></div>
+            <div class="enabling-group-marker" ng-class="{'hide-if-disabled': activeQuestion.hideIfDisabled}"></div>
             <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
             <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked" ng-if="questionnaire.hideIfDisabled"
@@ -228,6 +228,7 @@
     <div class="form-buttons-holder">
         <div class="pull-left">
             <button type="submit" ng-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" id="edit-chapter-save-button" class="btn btn-lg " ng-class="{ 'btn-primary': questionForm.$dirty }" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid" ng-i18next>Save</button>
+            <button type="button" ng-show="currentChapter.isReadOnly && currentChapter.isCover" id="jump-to-button" class="btn btn-lg btn-link" unsaved-warning-clear ui-sref="questionnaire.chapter.question({itemId: activeQuestion.itemId, chapterId: activeQuestion.chapterId })" ng-i18next>JumpToEdit</button>
             <button type="reset"  id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">

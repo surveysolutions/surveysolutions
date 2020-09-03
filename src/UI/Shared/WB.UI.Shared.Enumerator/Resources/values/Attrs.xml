@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
+    <declare-styleable name="AppTheme">
+        <attr name="colorOnSurface" format="color|reference" />
+        <attr name="colorPrimary" format="color|reference" />
+        <attr name="colorPrimaryDark" format="color|reference" />
+        <attr name="colorAccent" format="color|reference" />
+        <attr name="colorError" format="color|reference" />
+        <attr name="colorOnPrimary" format="color|reference" />
+    </declare-styleable>
   <declare-styleable name="FlowLayout">
     <attr name="horizontalSpacing" format="dimension"/>
     <attr name="verticalSpacing" format="dimension"/>
@@ -23,4 +31,9 @@
     <attr name="numbersOnly" format="boolean" />
     <attr name="useGroupSeparator" format="boolean" />
   </declare-styleable>
+    <declare-styleable name="Widget.MaterialComponents.Button.OutlinedButton">
+        <attr name="strokeColor" format="color|reference"/>              
+        <attr name="backgroundTint" format="color|reference"/>              
+        <attr name="rippleColor" format="color|reference"/>              
+    </declare-styleable>
 </resources>

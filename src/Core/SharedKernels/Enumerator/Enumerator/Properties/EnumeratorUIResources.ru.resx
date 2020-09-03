@@ -213,6 +213,9 @@
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Опросники</value>
   </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Карта заданий</value>
+  </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Язык</value>
   </data>
@@ -316,6 +319,9 @@
   <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
     <value>Получение {0}</value>
   </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Подробнее об ошибках синхронизации можно прочесть на &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;сайте тех. поддержки&lt;/a&gt;</value>
+  </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>интервью</value>
   </data>
@@ -372,6 +378,15 @@
   </data>
   <data name="UpgradeRequired" xml:space="preserve">
     <value>Выпущена новая версия приложения. Обновите приложение, пожалуйста</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Версия поддерживаемая хедквотером: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Версия супервизора: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Версия интервьювера: {0}</value>
   </data>
   <data name="UnexpectedException" xml:space="preserve">
     <value>Неизвестная ошибка</value>
@@ -935,5 +950,8 @@
   </data>
   <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
     <value>{0} из {1} частичных данных по интервью скачано</value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+      <value>Адрес не верный</value>
   </data>
 </root>

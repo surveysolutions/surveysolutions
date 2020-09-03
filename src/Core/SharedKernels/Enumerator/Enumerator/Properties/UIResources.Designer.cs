@@ -133,11 +133,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be opened.
+        /// </summary>
+        public static string AreaMap_ErrorOnShapefileLoading {
+            get {
+                return ResourceManager.GetString("AreaMap_ErrorOnShapefileLoading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Length: {0:0.00} m.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
                 return ResourceManager.GetString("AreaMap_LengthFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load shapefile.
+        /// </summary>
+        public static string AreaMap_LoadShapefile {
+            get {
+                return ResourceManager.GetString("AreaMap_LoadShapefile", resourceCulture);
             }
         }
         
@@ -151,11 +169,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your location is out of boundaries of the map.
+        ///   Looks up a localized string similar to Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting.
+        /// </summary>
+        public static string AreaMap_LocationDataSourceFailed {
+            get {
+                return ResourceManager.GetString("AreaMap_LocationDataSourceFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your location is outside the boundaries of the map..
         /// </summary>
         public static string AreaMap_LocationOutOfBoundaries {
             get {
                 return ResourceManager.GetString("AreaMap_LocationOutOfBoundaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded map is outside of visible boundaries.
+        /// </summary>
+        public static string AreaMap_MapIsOutOfVisibleBoundaries {
+            get {
+                return ResourceManager.GetString("AreaMap_MapIsOutOfVisibleBoundaries", resourceCulture);
             }
         }
         
@@ -169,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No changes we made to be saved..
+        ///   Looks up a localized string similar to No changes to be saved..
         /// </summary>
         public static string AreaMap_NoChangesInfo {
             get {
@@ -259,7 +295,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not write audio file. Ensure that device has a free space on an internal storage.
+        ///   Looks up a localized string similar to Could not save audio file. Please check whether the device has internal storage available..
         /// </summary>
         public static string Audio_Io_Exception_Message {
             get {
@@ -504,7 +540,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use device location..
+        ///   Looks up a localized string similar to Application does not have enough permissions to execute requested action. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use device location..
         /// </summary>
         public static string GpsQuestion_MissingPermissions {
             get {
@@ -855,7 +891,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories will be available after answering referenced question.
+        ///   Looks up a localized string similar to Categories will appear only after answering the question that defines this questions categories..
         /// </summary>
         public static string Interview_LinkedQuestion_Empty {
             get {
@@ -869,6 +905,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_MaxAnswersCount {
             get {
                 return ResourceManager.GetString("Interview_MaxAnswersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The maximum number of selections ({0}) in this question has been made.
+        /// </summary>
+        public static string Interview_MaxAnswersCountSelected {
+            get {
+                return ResourceManager.GetString("Interview_MaxAnswersCountSelected", resourceCulture);
             }
         }
         
@@ -909,7 +954,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Commentaries.
+        ///   Looks up a localized string similar to Comments.
         /// </summary>
         public static string Interview_Overview_Comments {
             get {
@@ -963,7 +1008,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any category.
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; not allowed for this question.
         /// </summary>
         public static string Interview_Question_Cascading_NoMatchingValue {
             get {
@@ -972,7 +1017,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any category.
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; not allowed for this question.
         /// </summary>
         public static string Interview_Question_Filter_MatchError {
             get {
@@ -999,7 +1044,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because question is used as size of roster and specified answer is negative.
+        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because question is a roster source question and specified answer is negative.
         /// </summary>
         public static string Interview_Question_Integer_NegativeRosterSizeAnswer {
             get {
@@ -1008,7 +1053,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
+        ///   Looks up a localized string similar to Entered value cannot be parsed as integer value.
         /// </summary>
         public static string Interview_Question_Integer_ParsingError {
             get {
@@ -1044,7 +1089,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
+        ///   Looks up a localized string similar to Entered value cannot be parsed as decimal value.
         /// </summary>
         public static string Interview_Question_Real_ParsingError {
             get {
@@ -1341,6 +1386,69 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All questionnaires.
+        /// </summary>
+        public static string MapDashboard_AllQuestionnaires {
+            get {
+                return ResourceManager.GetString("MapDashboard_AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string MapDashboard_Assignments {
+            get {
+                return ResourceManager.GetString("MapDashboard_Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to only items with known coordinates are shown.
+        /// </summary>
+        public static string MapDashboard_Disclaimer {
+            get {
+                return ResourceManager.GetString("MapDashboard_Disclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string MapDashboard_FiltersTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_FiltersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string MapDashboard_Interviews {
+            get {
+                return ResourceManager.GetString("MapDashboard_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string MapDashboard_QuestionnaireTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_QuestionnaireTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string MapDashboard_TypeTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_TypeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit Map Editor.
         /// </summary>
         public static string MenuItem_Title_AreaCancel {
@@ -1355,6 +1463,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MenuItem_Title_AreaCancelEdit {
             get {
                 return ResourceManager.GetString("MenuItem_Title_AreaCancelEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
             }
         }
         
@@ -1584,7 +1701,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If interviewers don&apos;t have an access to the internet, this functionality should be enabled, because it make possibility to update their applications during offline synchronization with Supervisor application.
+        ///   Looks up a localized string similar to If interviewers don&apos;t have an access to the internet, this functionality should be enabled, because it makes it possible to update their applications during offline synchronization with the Supervisor application.
         /// </summary>
         public static string Prefs_DownloadUpdatesForInterviewerAppSummary {
             get {
@@ -1755,7 +1872,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview contains total number of roster instances and questions exceeding the system limits..
+        ///   Looks up a localized string similar to This interview contains more data than the system allows. If possible, delete unnecessary roster rows and/or unanswer questions..
         /// </summary>
         public static string Validity_InterviewSizeLimitReached {
             get {

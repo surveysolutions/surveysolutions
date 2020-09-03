@@ -124,6 +124,7 @@ namespace WB.UI.Headquarters.Controllers
                     IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild,
                     TrafficUsed = (x.TrafficUsed ?? (0L)).InKb(),
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
+                    LastLoginDate = x.LastLoginDate
                 })
             });
         }
@@ -175,6 +176,7 @@ namespace WB.UI.Headquarters.Controllers
             public bool IsUpToDate { get; set; }
             public Guid? SupervisorId { get; set; }
             public long TrafficUsed { get; set; }
+            public DateTime? LastLoginDate { get; set; }
         }
 
         [HttpPost]

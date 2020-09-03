@@ -2,6 +2,9 @@
 using System.Net.Http;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
+using Xamarin.Android.Net;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -14,8 +17,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             this.restServiceSettings = restServiceSettings;
         }
 
+        private HttpClient httpClient;
+
         public HttpClient CreateClient(IHttpStatistician statistician = null)
         {
+            if (httpClient != null) return httpClient;
+
             var http = new HttpClient(new ExtendedMessageHandler(CreateMessageHandler(), statistician))
             {
                 Timeout = this.restServiceSettings.Timeout,
@@ -23,20 +30,24 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             };
 
             http.DefaultRequestHeaders.ConnectionClose = true;
+            httpClient = http;
             return http;
         }
 
-        public HttpMessageHandler CreateMessageHandler()
+        private HttpMessageHandler CreateMessageHandler()
         {
-            var messageHandler = new ModernHttpClient.NativeMessageHandler
+            var messageHandler = new AndroidClientHandler
             {
-                Timeout = restServiceSettings.Timeout,
-                DisableCaching = true,
-                TLSConfig = { DangerousAcceptAnyServerCertificateValidator = restServiceSettings.AcceptUnsignedSslCertificate },
+                ConnectTimeout = restServiceSettings.Timeout,
                 AutomaticDecompression = DecompressionMethods.None,
-                AllowAutoRedirect = true,
-                Proxy = WebRequest.GetSystemWebProxy()
+                AllowAutoRedirect = true
             };
+            
+            if (this.restServiceSettings.AcceptUnsignedSslCertificate)
+            {
+                messageHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            }
 
             return messageHandler;
         }

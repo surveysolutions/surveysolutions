@@ -19,10 +19,8 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly string shapefilesLocation;
         private readonly ILogger logger;
 
-        string[] mapFilesToSearch = { "*.tpk", "*.mmpk", "*.tif" };
-
+        string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
         string[] shapefilesToSearch = { "*.shp"};
-
         string tempSuffix = ".part";
 
         public MapService(IPermissions permissions,
@@ -66,28 +64,41 @@ namespace WB.UI.Shared.Enumerator.Services
                 }
             }
 
-            var defaultMap = new MapDescription() { MapName = "Worldmap[default]", MapFullPath = mapPath };
+            var defaultMap = new MapDescription(MapType.LocalFile, "Worldmap[default]")
+            {
+                MapFullPath = mapPath
+            };
             return defaultMap;
         }
 
-        public List<MapDescription> GetAvailableMaps()
+        public List<MapDescription> GetAvailableMaps(bool includeOnline = false)
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                return new List<MapDescription>();
+            var mapList = new List<MapDescription>();
 
-            return
-                this.mapFilesToSearch
+            if (includeOnline)
+            {
+                mapList.Add(new MapDescription(MapType.OnlineImagery, "Online: Imagery"));
+                mapList.Add(new MapDescription(MapType.OnlineImageryWithLabels, "Online: Imagery with labels"));
+                mapList.Add(new MapDescription(MapType.OnlineOpenStreetMap, "Online: Open Street Map"));
+            }
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
+                return mapList;
+
+            
+            var localMaps = this.mapFilesToSearch
                 .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
                 .OrderBy(x => x)
-                .Select(x => new MapDescription()
+                .Select(x => new MapDescription(MapType.LocalFile, this.fileSystemAccessor.GetFileNameWithoutExtension(x))
                 {
                     MapFullPath = x,
                     Size = this.fileSystemAccessor.GetFileSize(x),
-                    MapName = this.fileSystemAccessor.GetFileNameWithoutExtension(x),
                     MapFileName = this.fileSystemAccessor.GetFileName(x),
                     CreationDate = this.fileSystemAccessor.GetCreationTime(x)
 
                 }).ToList();
+
+            return mapList.Union(localMaps).ToList();
         }
 
         public bool DoesMapExist(string mapName)

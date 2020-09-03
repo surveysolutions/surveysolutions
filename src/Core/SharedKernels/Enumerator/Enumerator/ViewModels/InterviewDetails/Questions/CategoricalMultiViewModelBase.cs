@@ -49,22 +49,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 result.Add(this.bottomBorderViewModel);
 
+                result.Add(this.bottomInfoViewModel);
+
                 return result;
             }
         }
 
         private readonly OptionBorderViewModel topBorderViewModel;
         private readonly OptionBorderViewModel bottomBorderViewModel;
+        private readonly CategoricalMultiBottomInfoViewModel bottomInfoViewModel;
         public CovariantObservableCollection<CategoricalMultiOptionViewModel<TOptionValue>> Options { get; set; }
 
         public Identity Identity { get; private set; }
-
-        private string maxAnswersCountMessage;
-        public string MaxAnswersCountMessage
-        {
-            get => maxAnswersCountMessage;
-            set => SetProperty(ref maxAnswersCountMessage, value);
-        }
 
         private bool hasOptions;
         public bool HasOptions
@@ -94,6 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.throttlingModel = throttlingModel;
 
+            this.bottomInfoViewModel = new CategoricalMultiBottomInfoViewModel();
             this.topBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
             this.bottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
         }
@@ -131,6 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateViewModelsAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
+            this.bottomInfoViewModel.Identity = entityIdentity;
         }
 
         private async Task SaveAnswer()
@@ -227,8 +225,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (this.maxAllowedAnswers.HasValue)
                 {
-                    this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                        filteredAnswers.Count, this.maxAllowedAnswers.Value);
+                    this.bottomInfoViewModel.MaxAnswersCountMessage = filteredAnswers.Count < this.maxAllowedAnswers
+                        ? string.Empty 
+                        : string.Format(UIResources.Interview_MaxAnswersCountSelected, this.maxAllowedAnswers.Value);
                 }
 
                 this.HasOptions = this.Options.Any();

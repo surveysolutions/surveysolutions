@@ -43,10 +43,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.messenger = messenger;
             this.interviewViewRepository = interviewViewRepository;
             this.keyGenerator = keyGenerator;
+            this.Title = "";
         }
 
-        private QuestionnaireIdentity questionnaireIdentity;
-        private string subTitle;
+        private QuestionnaireIdentity questionnaireIdentity = null!;
+        private string? subTitle;
 
         public void Init(QuestionnaireView questionnaire)
         {
@@ -66,15 +67,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public DashboardInterviewStatus Status => DashboardInterviewStatus.Assignment;
         public string Title { get; set; }
 
-        public string SubTitle
+        public string? SubTitle
         {
             get => subTitle;
-            set
-            {
-                if (value == subTitle) return;
-                subTitle = value;
-                RaisePropertyChanged(() => SubTitle);
-            }
+            set => SetProperty(ref subTitle, value);
         }
 
         public IMvxCommand CreateNewInterviewCommand => new MvxAsyncCommand(this.CreateNewInterviewAsync);

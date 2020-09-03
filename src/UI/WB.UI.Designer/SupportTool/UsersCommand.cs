@@ -1,9 +1,9 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -13,9 +13,9 @@ namespace WB.UI.Designer.SupportTool
 {
     public class UsersCommand : Command
     {
-        private readonly IWebHost host;
+        private readonly IHost host;
 
-        public UsersCommand(IWebHost host) : base("users", "Manage users of Headquarters")
+        public UsersCommand(IHost host) : base("users", "Manage users of Headquarters")
         {
             this.host = host;
 

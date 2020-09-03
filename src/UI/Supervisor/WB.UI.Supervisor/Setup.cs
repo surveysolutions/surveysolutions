@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Android.Support.V4.Widget;
 using Android.Widget;
+using AndroidX.DrawerLayout.Widget;
 using Autofac;
 using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
@@ -74,6 +74,7 @@ namespace WB.UI.Supervisor
                 {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
 #if !EXCLUDEEXTENSIONS
                 , {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                ,{typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel), typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardActivity)}
 #endif
             };
 

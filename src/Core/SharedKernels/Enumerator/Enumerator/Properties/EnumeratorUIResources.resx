@@ -121,7 +121,7 @@
     <value>Your user account is locked. Please contact your supervisor.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Your account doesn't have Interviewer role</value>
+    <value>Your account does not have an interviewer role</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Your account is not approved. Please contact your supervisor.</value>
@@ -212,7 +212,10 @@ for further instructions</value>
     <value>Your application is not compatible with server one. Update your Interviewer application.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Supervisor website address is invalid. Make sure that you entered correct url address</value>
+    <value>Supervisor website address is invalid. Make sure that you entered the correct URL address.</value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Address is invalid</value>
   </data>
   <data name="LocationPermissionRequired" xml:space="preserve">
     <value>Location permission is required for offline synchronization</value>
@@ -322,6 +325,9 @@ for further instructions</value>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
     <value>Assignments are locked until synchronization is complete</value>
   </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+      <value>More information on the synchronization errors may be found at the &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;support site&lt;/a&gt;</value>
+  </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>questionnaires</value>
   </data>
@@ -383,7 +389,7 @@ for further instructions</value>
     <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
-    <value>User is no longer belongs to Supervisor team. Please contact Your Headquarters for details.</value>
+    <value>User no longer belongs to this Supervisor team. Please contact your Headquarters for details.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
@@ -393,6 +399,15 @@ for further instructions</value>
   </data>
   <data name="UpgradeRequired" xml:space="preserve">
     <value>New version of application was released. Please, update the application</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Headquarters supported version: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Supervisor version: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Interviewer version: {0}</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
     <value>User authentication error</value>
@@ -416,7 +431,8 @@ for further instructions</value>
     <value>{0} interviews deleted</value>
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
-    <value>This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed</value>
+    <value>This tablet has not been setup yet. 
+You need internet connection to proceed with setting up the user and domain.</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Create backup</value>
@@ -431,31 +447,31 @@ for further instructions</value>
     <value>Version: {0}. Check for a new version</value>
   </data>
   <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Information package is successfully sent</value>
+    <value>Information package was successfully sent</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
     <value>Information package of size {0} will be sent via network. Are you sure you want to send it?</value>
   </data>
   <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>New version exists. Would you like to download and update application?</value>
+    <value>New application version exists. Would you like to download and update the application?</value>
   </data>
   <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
     <value>You have the latest version of application</value>
   </data>
   <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
-    <value>Something went wrong and tabled failed to be restored</value>
+    <value>Something went wrong and tablet failed to be restored</value>
   </data>
   <data name="Troubleshooting_Restore" xml:space="preserve">
     <value>Restore from backup</value>
   </data>
   <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is present at {0}</value>
+    <value>All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restored data is present at {0}</value>
   </data>
   <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
     <value>Tablet was successfully restored</value>
   </data>
   <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
-    <value>Sending of information package is failed</value>
+    <value>Failed to send information package.</value>
   </data>
   <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
     <value>Send tablet's information</value>
@@ -468,6 +484,9 @@ for further instructions</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Map dashboard</value>
   </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Language</value>
@@ -506,7 +525,7 @@ for further instructions</value>
     <value>Sending information package</value>
   </data>
   <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
-    <value>Sending of information package is cancelled. Reason: {0}</value>
+    <value>Sending the information package was cancelled. Reason: {0}</value>
   </data>
   <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
     <value>Cancelling</value>
@@ -524,7 +543,7 @@ for further instructions</value>
     <value>Generate support package</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>We will check for the newer version on HQ server</value>
+    <value>We will check for a newer version of the Interviewer application on the server</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
     <value>Version: {0}. Check for a new version</value>
@@ -539,7 +558,7 @@ for further instructions</value>
     <value>All application and interview data will be collected to a single archive. This can take up to 10 minutes.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Collect and send to HQ all tablet information</value>
+    <value>Send all tablet information to Headquarters for troubleshooting.</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
     <value>All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app</value>
@@ -566,7 +585,7 @@ for further instructions</value>
     <value>Share information to..</value>
   </data>
   <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>We will test connection with our server and its speed</value>
+    <value>Test the quality and speed of the connection with the server.</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
     <value>Test bandwidth to server</value>
@@ -647,7 +666,7 @@ for further instructions</value>
     <value>Synchronization endpoint '{0}' is different from provided in Settings ('{1}'). Load URL from settings?</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
-    <value>How many events could be read with one query</value>
+    <value>How many events can be read with one query</value>
   </data>
   <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
     <value>Event chunk size</value>
@@ -683,7 +702,7 @@ for further instructions</value>
     <value>Checking application updates</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website</value>
+    <value>You have an incompatible version of the Interviewer application. Please, uninstall and install it again from your Survey Solutions Headquarters website</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Loading interview data</value>
@@ -708,13 +727,13 @@ do not exit this application</value>
     <value>Failed to open interview</value>
   </data>
   <data name="FailedToLoadInterviewDescription" xml:space="preserve">
-    <value>Interview is in invalid state and cannot be open. Please contact support or try to synchronize to get correct state.</value>
+    <value>Interview case is invalid and cannot be opened. Please contact support or try to synchronize to refresh the cases.</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
-    <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has current date and time</value>
+    <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has correct current date and time</value>
   </data>
   <data name="InterviewerFromDifferentTeam" xml:space="preserve">
-    <value>Interviewer belongs to a different team. Please, sync with Headquarters website</value>
+    <value>Interviewer is part of another team. Please synchronize with Headquarters.</value>
   </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
@@ -736,8 +755,8 @@ do not exit this application</value>
 You need to complete it to be synchronized</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Interviews which have been rejected by supervisor
-You need to resolve issues noted on cover</value>
+    <value>Interviews rejected by supervisor
+Please resolve issues noted on the cover page and send them back to the supervisor.</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
     <value>Completed interviews, will be uploaded during 
@@ -800,7 +819,7 @@ Downloaded {3}%</value>
     <value>Map synchronization successfully finished</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
-    <value>Map sync error</value>
+    <value>Map synchronization error</value>
   </data>
   <data name="Dashboard_SearchResult" xml:space="preserve">
     <value>{0} elements found</value>

@@ -75,7 +75,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Route("Interview/Review/{id}/Cover")]
         public ActionResult Cover(Guid id)
         {
-            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            var interviewId = id.FormatGuid();
+            var interview = this.statefulInterviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
             if (questionnaire.GetPrefilledEntities().Any()
@@ -84,13 +85,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 if (questionnaire.IsCoverPageSupported)
                 {
-                    return RedirectToAction("Review", new{ id, url = questionnaire.CoverPageSectionId.FormatGuid()});
+                    return RedirectToAction("Review", new{ id = interviewId, url = questionnaire.CoverPageSectionId.FormatGuid()});
                 }
 
                 return Review(id, null);
             }
 
-            return RedirectToAction("Review", new{ id, url = questionnaire.GetFirstSectionId().FormatGuid()});
+            return RedirectToAction("Review", new{ id = interviewId, url = questionnaire.GetFirstSectionId().FormatGuid()});
         }        
 
         [ActivePage(MenuItem.Docs)]
@@ -149,11 +150,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
                                                                authorizedUser.IsSupervisor;
                 approveRejectAllowed.HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                                                interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                                interviewSummary.Status == InterviewStatus.ApprovedBySupervisor ||
+                                                                interviewSummary.Status == InterviewStatus.RejectedBySupervisor && interviewSummary.ReceivedByInterviewerAtUtc == null) &&
                                                                (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
                 approveRejectAllowed.SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
-                                                                authorizedUser.IsSupervisor;
+                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters ||
+                                                                 interviewSummary.Status == InterviewStatus.RejectedBySupervisor && interviewSummary.ReceivedByInterviewerAtUtc == null)
+                                                                &&  authorizedUser.IsSupervisor;
             }
 
             approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed

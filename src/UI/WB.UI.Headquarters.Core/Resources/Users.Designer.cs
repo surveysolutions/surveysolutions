@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarter&apos;s email.
+        ///   Looks up a localized string similar to Headquarters email.
         /// </summary>
         public static string HeadquartersEmail {
             get {
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Impersonate this user in read only mode.
+        ///   Looks up a localized string similar to View as this user in read only mode.
         /// </summary>
         public static string ImpersonateAsUser {
             get {
@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviewers who has not successfully synchronized their tablets to the server yet.
+        ///   Looks up a localized string similar to Number of interviewers who have not successfully synchronized their tablets to the server yet.
         /// </summary>
         public static string NotLinkedToDeviceTitle {
             get {

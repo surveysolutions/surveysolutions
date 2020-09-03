@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -77,7 +78,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     restService: Mock.Of<IRestService>(), 
                     syncClient: Mock.Of<IOfflineSyncClient>(),
                     userInteractionService: Mock.Of<IUserInteractionService>(),
-                    googleApiService: Mock.Of<IGoogleApiService>());
+                    googleApiService: Mock.Of<IGoogleApiService>(),
+                    mapInteractionService: Mock.Of<IMapInteractionService>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

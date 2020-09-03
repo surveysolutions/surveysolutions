@@ -11,30 +11,86 @@
         </ol>
 
         <DataTables ref="table"
+            multiorder
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"></DataTables>
 
         <ModalFrame ref="deleteQuestionnaireModal"
             :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnareConfirmation" )}}</p>
+            <form onsubmit="return false;">
+                <p>{{ $t("Pages.GlobalSettings_DeleteQuestionnareConfirmation" )}}</p>
+                <p class="text-danger"
+                    v-if="this.deletionWarnMsg">
+                    {{deletionWarnMsg}}
+                </p>
+                <div class="form-group">
+                    <label
+                        class="control-label"
+                        for="deleteConfirmInput">{{deletionApproveLabel}}</label>
+                    <input type="text"
+                        class="form-control"
+                        id="deleteConfirmInput"
+                        v-model="deletionQuestionnaireName" />
+                </div>
+            </form>
             <div slot="actions">
                 <button
                     type="button"
                     class="btn btn-danger"
+                    :disabled="deleteBtnDisabled"
                     @click="deleteQuestionnaire">{{ $t("Common.Delete") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
                     data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
             </div>
+
         </ModalFrame>
     </HqLayout>
 </template>
 <script>
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
+import gql from 'graphql-tag'
+import parseInt from 'lodash'
+
+const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questionnaireId: Uuid, $questionnaireVersion: Long) {
+  interviews(where: {
+       questionnaireId: 
+       { 
+           id: $questionnaireId,
+           version: $questionnaireVersion
+       },
+       receivedByInterviewerAtUtc_not: null,
+    }) {
+    filteredCount
+  }
+}`
+
+const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($questionnaireId: Uuid, $version: Long) {
+  assignments(where: {
+    receivedByTabletAtUtc_not: null
+    questionnaireId: {
+      id: $questionnaireId,
+      version: $version
+    }
+  }) {
+    filteredCount
+  }
+}`
 
 export default {
+    data() {
+        return {
+            deletionWarnMsg: '',
+            deletionQuestionnaireName: '',
+            deletedQuestionnaireId: {
+                questionnaireId: null,
+                version: null,
+                title: null,
+            },
+        }
+    },
     methods: {
         contextMenuItems({rowData}) {
             const selectedRow = rowData
@@ -127,12 +183,40 @@ export default {
                 })
                 items.push({
                     name: this.$t('Dashboard.DeleteQuestionnaire'),
-                    callback: () => {
-                        this.deletedQuestionnaireId = {
-                            questionnaireId: selectedRow.questionnaireId,
-                            version: selectedRow.version,
-                        }
+                    callback: async () => {
+                        this.deletedQuestionnaireId.questionnaireId = selectedRow.questionnaireId
+                        this.deletedQuestionnaireId.version = selectedRow.version
+                        this.deletedQuestionnaireId.title = selectedRow.title
+
+                        this.deletionWarnMsg = ''
+                        this.deletionQuestionnaireName = ''
                         this.$refs.deleteQuestionnaireModal.modal('show')
+
+                        const interviewsQueryResult = await this.$apollo.query({
+                            query: interviewsQuestionnaireDeletionQuery,
+                            variables: {
+                                questionnareId: selectedRow.questionnaireId,
+                                questionnaireVersion: parseInt(selectedRow.version),
+                            },
+                            fetchPolicy: 'network-only',
+                        })
+
+                        const assignmentsQueryResult = await this.$apollo.query({
+                            query: assignmentsQuestionnaireDeletionQuery,
+                            variables: {
+                                questionnareId: selectedRow.questionnaireId,
+                                version: parseInt(selectedRow.version),
+                            },
+                            fetchPolicy: 'network-only',
+                        })
+
+
+                        const receivedInterviews = interviewsQueryResult.data.interviews.filteredCount
+                        const receivedAssignments = assignmentsQueryResult.data.assignments.filteredCount
+
+                        if(receivedInterviews > 0 || receivedAssignments > 0) {
+                            this.deletionWarnMsg = this.$t('Dashboard.QuestionnaireDeleteWarn', {receivedInterviews, receivedAssignments})
+                        }
                     },
                 })
                 items.push({
@@ -234,6 +318,13 @@ export default {
                 footer: true,
                 responsive: false,
             }
+        },
+        deletionApproveLabel(){
+            const rt =this.$t('Dashboard.TypeQuestionnaireName', {questionnaireTitle: this.deletedQuestionnaireId.title})
+            return rt
+        },
+        deleteBtnDisabled(){
+            return this.deletedQuestionnaireId.title !== this.deletionQuestionnaireName
         },
     },
 }

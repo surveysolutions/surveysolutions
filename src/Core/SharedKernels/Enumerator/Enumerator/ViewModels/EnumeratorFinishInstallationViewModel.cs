@@ -5,6 +5,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
         private readonly IAuditLogService auditLogService;
+        private readonly IDeviceInformationService deviceInformationService;
         private const string StateKey = "identity";
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly ISerializer serializer;
@@ -38,13 +40,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IQRBarcodeScanService qrBarcodeScanService,
             ISerializer serializer,
             IUserInteractionService userInteractionService,
-            IAuditLogService auditLogService) : base(principal, viewModelNavigationService)
+            IAuditLogService auditLogService,
+            IDeviceInformationService deviceInformationService) : base(principal, viewModelNavigationService)
         {
             this.deviceSettings = deviceSettings;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
             this.auditLogService = auditLogService;
+            this.deviceInformationService = deviceInformationService;
 
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.serializer = serializer;
@@ -84,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsUserValid
         {
             get => this.isUserValid;
-            set { this.isUserValid = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.isUserValid, value);
         }
 
         private string errorMessage;
@@ -123,9 +127,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            this.Endpoint = "http://192.168.88./headquarters";
-            this.UserName = "int";
-            this.Password = "1";
+            // this.Endpoint = "http://192.168.88./headquarters";
+            // this.UserName = "int";
+            // this.Password = "1";
 #endif
         }
 
@@ -221,24 +225,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             catch (SynchronizationException ex)
             {
+                this.ErrorMessage = ex.Message;
+
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.HostUnreachable:
                     case SynchronizationExceptionType.InvalidUrl:
                     case SynchronizationExceptionType.ServiceUnavailable:
                         this.IsEndpointValid = false;
+                        this.EndpointValidationError = EnumeratorUIResources.InvalidEndpointShort;
                         break;
                     case SynchronizationExceptionType.UserIsNotInterviewer:
                     case SynchronizationExceptionType.UserLocked:
                     case SynchronizationExceptionType.UserNotApproved:
                     case SynchronizationExceptionType.Unauthorized:
                         this.IsUserValid = false;
+                        this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
                         break;
+                    
+                    case SynchronizationExceptionType.UpgradeRequired:
+                        var targetVersionObj = ex.Data["target-version"];
+                        if (targetVersionObj != null && targetVersionObj is string targetVersion)
+                        {
+                            var appVersionName = deviceInformationService.GetApplicationVersionName();
+                            ErrorMessage = GetRequiredUpdateMessage(targetVersion, appVersionName);
+                        }
+                        break;
                 }
-                this.ErrorMessage = ex.Message;
             }
             catch (Exception ex)
             {
@@ -252,12 +268,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
+        public string PasswordError
+        {
+            get => passwordError;
+            set => SetProperty(ref passwordError, value);
+        }
+
+        public string EndpointValidationError
+        {
+            get => endpointValidationError;
+            set => SetProperty(ref endpointValidationError, value);
+        }
+
+        protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
 
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
 
         private IMvxAsyncCommand scanAsyncCommand;
+        private string endpointValidationError;
+        private string passwordError;
+
         public IMvxAsyncCommand ScanCommand
         {
             get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }

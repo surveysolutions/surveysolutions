@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -109,6 +110,12 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 maxAllowedAnswers: 3,
                 variable: "var1"
             ));
+            
+            questionnaire.Categories = new List<Categories>()
+            {
+                new Categories(){ Id = categoriesId, Name = "test"}
+            };
+            
             var categoriesService = Mock.Of<ICategoriesService>(x =>
                 x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new List<CategoriesItem>()
                 {
@@ -123,6 +130,29 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             // assert
             verificationMessages.Count().Should().Be(1);
             verificationMessages.Single().Code.Should().Be("WB0021");
+            verificationMessages.Single().MessageLevel.Should().Be(VerificationMessageLevel.General);
+        }
+
+        [Test]
+        public void when_verifying_questionnaire_has_question_with_incorrect_referrence_to_reusable_category()
+        {
+            // arrange
+            Guid multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
+            Guid categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
+                multyOptionsQuestionId,
+                categoriesId: categoriesId,
+                variable: "var1"
+            ));
+            
+            var verifier = CreateQuestionnaireVerifier();
+            // act
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+            // assert
+            verificationMessages.Count().Should().Be(1);
+            verificationMessages.Single().Code.Should().Be("WB0307");
             verificationMessages.Single().MessageLevel.Should().Be(VerificationMessageLevel.General);
         }
 
@@ -559,7 +589,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 {
                     Create.Question(),
                 })
-                .ExpectError("WB0307");
+                .ExpectError("WB0309");
 
         [TestCase(QuestionType.Audio)]
         [TestCase(QuestionType.Area)]
@@ -573,5 +603,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Question(questionType: questionType),
                 })
                 .ExpectError("WB0308");
+        
+        [Test]
+        public void when_question_in_matrix_roster()
+            => QuestionnaireDocumentWithCoverPage(new[]
+                {
+                    Create.Roster(displayMode: RosterDisplayMode.Matrix, children: new[]
+                    {
+                        Create.Question()
+                    }),
+                })
+                .ExpectNoWarning("WB0203");
+
     }
 }

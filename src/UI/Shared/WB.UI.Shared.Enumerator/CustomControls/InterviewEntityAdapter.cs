@@ -1,6 +1,6 @@
-﻿using Android.Support.V7.Widget;
-using Android.Views;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+﻿using Android.Views;
+using AndroidX.RecyclerView.Widget;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
 

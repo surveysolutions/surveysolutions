@@ -7,16 +7,17 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
     internal class when_getting_translation_file_for_one_question_with_non_printable_char : TranslationsServiceTestsContext
     {
-        [NUnit.Framework.Test]
+        [Test]
         public void should_remove_non_printable_chars_in_translation_file()
         {
             char non_printable = (char)1;
@@ -45,21 +46,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);
             BecauseOf();
 
-            
-            cells.Cell(3, originalTextColumn).GetString().Should().Be("В скобках символ без графического отобажения ()");
-            cells.Cell(3, translactionColumn).GetString().Should().Be("Here is non-printable char ()");
+
+            cells.Cell(4, originalTextColumn).GetString().Should().Be("В скобках символ без графического отобажения ()");
+            cells.Cell(4, translactionColumn).GetString().Should().Be("Here is non-printable char ()");
         }
 
         private void BecauseOf()
         {
             var excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            cells = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile)).Worksheets.First();
+            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
+            cells = workbook.Worksheets.First();
         }
 
-        static TranslationsService service;
-        static IXLWorksheet cells;
-        static readonly Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-        private static readonly Guid questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        [TearDown]
+        public void TearDown()
+        {
+            workbook?.Dispose();
+        }
+
+        TranslationsService service;
+        IXLWorksheet cells;
+        private readonly Guid translationId = Id.gD;
+        readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        readonly Guid questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        private XLWorkbook workbook;
     }
 }

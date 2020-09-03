@@ -34,15 +34,15 @@
                     :haserror="modelState['ConfirmPassword'] !== undefined"
                     id="ConfirmPassword"/>
             </form-group>
-            <form-group>
+            <div class="block-filter">
                 <input
                     id="ShowPassword"
                     type="checkbox"
-                    onclick="var oldPass = document.getElementById('OldPassword');oldPass.type = (oldPass.type === 'text' ? 'password' : 'text'); var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
+                    onclick="if(window.CONFIG.model.userInfo.isOwnProfile){var oldPass = document.getElementById('OldPassword');oldPass.type = (oldPass.type === 'text' ? 'password' : 'text');} var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
                 <label for="ShowPassword"                    >
-                    <span></span>{{$t('AccountResources.ShowPassword')}}
+                    <span></span>{{$t('Pages.ShowPassword')}}
                 </label>
-            </form-group>
+            </div>
         </div>
 
         <div>

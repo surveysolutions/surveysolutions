@@ -4,7 +4,6 @@ using System.Linq;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Plugin.DeviceInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -46,6 +45,8 @@ namespace WB.UI.Shared.Enumerator.Services
         public DateTime? LastSync => this.CurrentSettings.LastSync;
 
         public bool? LastSyncSucceeded => this.CurrentSettings.LastSyncSucceeded;
+        public string LastOpenedMapName => this.CurrentSettings.LastOpenedMapName;
+
         public abstract bool VibrateOnError { get; }
         public abstract bool ShowLocationOnMap { get; }
         public abstract int GpsReceiveTimeoutSec { get; }
@@ -115,6 +116,12 @@ namespace WB.UI.Shared.Enumerator.Services
                 settings.LastSyncSucceeded = true;
             });
         }
+        public void SetLastOpenedMapName(string mapName)
+        {
+            this.SaveCurrentSettings(settings => {
+                settings.LastOpenedMapName = mapName;
+            });
+        }
 
         public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 
@@ -137,9 +144,9 @@ namespace WB.UI.Shared.Enumerator.Services
 
         protected abstract string GetExternalInformation();
 
-        public string GetDeviceModel() => CrossDeviceInfo.Current.Model;
+        public string GetDeviceModel() => Xamarin.Essentials.DeviceInfo.Model;
 
-        public string GetDeviceType() => CrossDeviceInfo.Current.Idiom.ToString();
+        public string GetDeviceType() => Xamarin.Essentials.DeviceInfo.Idiom.ToString();
 
         public string GetAndroidVersion() => Build.VERSION.Release;
 

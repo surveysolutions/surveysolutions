@@ -15,10 +15,10 @@ namespace WB.UI.Headquarters.HealthChecks
     public class ExportServiceConnectivityCheck : IHealthCheck
     {
         private readonly IInScopeExecutor scope;
-        private readonly IOptions<DataExportOptions> exportOptions;
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
 
         public ExportServiceConnectivityCheck(
-            IOptions<DataExportOptions> exportOptions, IInScopeExecutor scope)
+            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;
@@ -35,6 +35,11 @@ namespace WB.UI.Headquarters.HealthChecks
                     var api = sl.GetInstance<IExportServiceApi>();
                     var status = await api.GetConnectivityStatus();
 
+                    if (string.IsNullOrWhiteSpace(status))
+                    {
+                        status = "OK";
+                    }
+
                     return HealthCheckResult.Healthy(
                         Diagnostics.export_service_connectivity_check_Healthy
                             .FormatString(uri, status));
@@ -43,7 +48,8 @@ namespace WB.UI.Headquarters.HealthChecks
             catch (ApiException apiException)
             {
                 return HealthCheckResult.Unhealthy(
-                    Diagnostics.export_service_connectivity_check_Unhealthy.FormatString(uri, apiException.Content));
+                    Diagnostics.export_service_connectivity_check_Unhealthy.FormatString(uri,
+                        apiException.Content));
             }
             catch (Exception e)
             {

@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -194,15 +193,17 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             var interviewId = Guid.NewGuid();
             var questionnaire = Questionnaires[version];
 
-            var summary = new InterviewSummary(new PlainQuestionnaire(questionnaire, version, null, new SubstitutionService()))
-            {
-                InterviewId = interviewId,
-                Status = InterviewStatus.Completed,
-                ResponsibleName = "responsible",
-                ResponsibleId = Id.gC,
-                SupervisorId = Id.gE,
-                SupervisorName = teamLeadName
-            };
+             var summary = Create.Entity.InterviewSummary(
+                                interviewId: interviewId,
+                                status: InterviewStatus.Completed,
+                                responsibleName: "responsible",
+                                responsibleId: Id.gC,
+                                questionnaireId: questionnaire.PublicKey,
+                                questionnaireVersion: version,
+                                teamLeadId: Id.gE,
+                                teamLeadName: teamLeadName,
+                                questionnaireVariable: questionnaire.VariableName);
+             
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, version));
 
 

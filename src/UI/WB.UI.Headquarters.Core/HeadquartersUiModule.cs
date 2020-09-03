@@ -13,9 +13,11 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.AspNetCore;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
@@ -38,7 +40,6 @@ namespace WB.UI.Headquarters
             var services = registry;
 
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
-            registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IApplicationRestarter, ApplicationRestarter>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
@@ -51,6 +52,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
+            registry.Bind<UpdateRequiredFilter>();
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
@@ -63,10 +65,7 @@ namespace WB.UI.Headquarters
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
             ConfigureEventBus(registry);
-
-            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
-            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
-
+            
             var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
             var provider = config.CaptchaType;
 

@@ -7,18 +7,22 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
     internal class when_getting_translation_file_for_one_question : TranslationsServiceTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [SetUp]
+        public void context()
+        {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionId1 = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -81,98 +85,114 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             BecauseOf();
         }
 
-        private void BecauseOf() 
+        private void BecauseOf()
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile)).Worksheets.First();
+            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
+            worksheet = workbook.Worksheets.First();
         }
 
-        [NUnit.Framework.Test] public void should_output_question_title_translation ()
+        [NUnit.Framework.Test]
+        public void should_output_question_title_translation()
         {
-            var questionTitleRow = 3;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
-            workbook.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
-            workbook.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
-            workbook.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated title");
-            workbook.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().Be("title");
+            var questionTitleRow = 4;
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
+            worksheet.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
+            worksheet.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
+            worksheet.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated title");
+            worksheet.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().Be("title");
         }
 
-        [NUnit.Framework.Test] public void should_output_question_instructions_translation () 
-        {
-            var questionInstuctionsRow = 5;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionInstuctionsRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Instruction);
-            workbook.Cell(questionInstuctionsRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
-            workbook.Cell(questionInstuctionsRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
-            workbook.Cell(questionInstuctionsRow, originalTextColumn).Value?.ToString().Should().Be("non translated instruction");
-            workbook.Cell(questionInstuctionsRow, translactionColumn).Value?.ToString().Should().Be("instruction");
-        }
-
-        [NUnit.Framework.Test] public void should_output_question_validation_translation () 
-        {
-            var questionInstuctionsRow = 4;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionInstuctionsRow, translationTypeColumn).GetString())).Should().Be(TranslationType.ValidationMessage);
-            workbook.Cell(questionInstuctionsRow, translationIndexColumn).Value?.ToString().Should().Be("1");
-            workbook.Cell(questionInstuctionsRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
-            workbook.Cell(questionInstuctionsRow, originalTextColumn).Value?.ToString().Should().Be("non translated validation");
-            workbook.Cell(questionInstuctionsRow, translactionColumn).Value?.ToString().Should().Be("validation message");
-        }
-
-        [NUnit.Framework.Test] public void should_output_question_options_translation () 
+        [NUnit.Framework.Test]
+        public void should_output_question_instructions_translation()
         {
             var questionInstuctionsRow = 6;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionInstuctionsRow, translationTypeColumn).GetString())).Should().Be(TranslationType.OptionTitle);
-            workbook.Cell(questionInstuctionsRow, translationIndexColumn).Value?.ToString().Should().Be("2");
-            workbook.Cell(questionInstuctionsRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
-            workbook.Cell(questionInstuctionsRow, originalTextColumn).Value?.ToString().Should().Be("non translated option");
-            workbook.Cell(questionInstuctionsRow, translactionColumn).Value?.ToString().Should().Be("translated option");
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionInstuctionsRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Instruction);
+            worksheet.Cell(questionInstuctionsRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
+            worksheet.Cell(questionInstuctionsRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
+            worksheet.Cell(questionInstuctionsRow, originalTextColumn).Value?.ToString().Should().Be("non translated instruction");
+            worksheet.Cell(questionInstuctionsRow, translactionColumn).Value?.ToString().Should().Be("instruction");
         }
 
-        [NUnit.Framework.Test] public void should_output_empty_translation_row_for_missing_translation_title () 
+        [NUnit.Framework.Test]
+        public void should_output_question_validation_translation()
         {
-            var questionTitleRow = 7;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
-            workbook.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
-            workbook.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
-            workbook.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated title1");
-            workbook.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+            var questionInstuctionsRow = 5;
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionInstuctionsRow, translationTypeColumn).GetString())).Should().Be(TranslationType.ValidationMessage);
+            worksheet.Cell(questionInstuctionsRow, translationIndexColumn).Value?.ToString().Should().Be("1");
+            worksheet.Cell(questionInstuctionsRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
+            worksheet.Cell(questionInstuctionsRow, originalTextColumn).Value?.ToString().Should().Be("non translated validation");
+            worksheet.Cell(questionInstuctionsRow, translactionColumn).Value?.ToString().Should().Be("validation message");
         }
 
-        [NUnit.Framework.Test] public void should_output_empty_translation_row_for_missing_translation_instruction () 
+        [NUnit.Framework.Test]
+        public void should_output_question_options_translation()
         {
-            var questionTitleRow = 9;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Instruction);
-            workbook.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
-            workbook.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
-            workbook.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated instruction 1");
-            workbook.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+            var questionInstuctionsRow = 7;
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionInstuctionsRow, translationTypeColumn).GetString())).Should().Be(TranslationType.OptionTitle);
+            worksheet.Cell(questionInstuctionsRow, translationIndexColumn).Value?.ToString().Should().Be("2");
+            worksheet.Cell(questionInstuctionsRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId.FormatGuid());
+            worksheet.Cell(questionInstuctionsRow, originalTextColumn).Value?.ToString().Should().Be("non translated option");
+            worksheet.Cell(questionInstuctionsRow, translactionColumn).Value?.ToString().Should().Be("translated option");
         }
 
-        [NUnit.Framework.Test] public void should_output_empty_translation_row_for_missing_translation_validation_message () 
+        [NUnit.Framework.Test]
+        public void should_output_empty_translation_row_for_missing_translation_title()
         {
             var questionTitleRow = 8;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.ValidationMessage);
-            workbook.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("1");
-            workbook.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
-            workbook.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated validation 1");
-            workbook.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Title);
+            worksheet.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
+            worksheet.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
+            worksheet.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated title1");
+            worksheet.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
         }
 
-        [NUnit.Framework.Test] public void should_output_empty_translation_row_for_missing_translation_option () 
+        [NUnit.Framework.Test]
+        public void should_output_empty_translation_row_for_missing_translation_instruction()
         {
             var questionTitleRow = 10;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), workbook.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.OptionTitle);
-            workbook.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("1");
-            workbook.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
-            workbook.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated option 1");
-            workbook.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.Instruction);
+            worksheet.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().BeEmpty();
+            worksheet.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
+            worksheet.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated instruction 1");
+            worksheet.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
         }
 
-        static Guid questionId;
-        static TranslationsService service;
-        static Guid questionId1;
-        static Guid questionnaireId;
-        static Guid translationId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        static TranslationFile excelFile;
-        static IXLWorksheet workbook;
+        [NUnit.Framework.Test]
+        public void should_output_empty_translation_row_for_missing_translation_validation_message()
+        {
+            var questionTitleRow = 9;
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.ValidationMessage);
+            worksheet.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("1");
+            worksheet.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
+            worksheet.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated validation 1");
+            worksheet.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+        }
+
+        [NUnit.Framework.Test]
+        public void should_output_empty_translation_row_for_missing_translation_option()
+        {
+            var questionTitleRow = 11;
+            ((TranslationType)Enum.Parse(typeof(TranslationType), worksheet.Cell(questionTitleRow, translationTypeColumn).GetString())).Should().Be(TranslationType.OptionTitle);
+            worksheet.Cell(questionTitleRow, translationIndexColumn).Value?.ToString().Should().Be("1");
+            worksheet.Cell(questionTitleRow, questionnaireEntityIdColumn).Value?.ToString().Should().Be(questionId1.FormatGuid());
+            worksheet.Cell(questionTitleRow, originalTextColumn).Value?.ToString().Should().Be("non translated option 1");
+            worksheet.Cell(questionTitleRow, translactionColumn).Value?.ToString().Should().BeEmpty();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            workbook?.Dispose();
+        }
+
+        Guid questionId;
+        TranslationsService service;
+        Guid questionId1;
+        Guid questionnaireId;
+        private Guid translationId = Id.gD;
+        TranslationFile excelFile;
+        IXLWorksheet worksheet;
+        private XLWorkbook workbook;
     }
 }

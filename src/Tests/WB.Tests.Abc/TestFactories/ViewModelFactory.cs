@@ -13,11 +13,11 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -54,11 +54,10 @@ namespace WB.Tests.Abc.TestFactories
         public AttachmentViewModel AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage = null,
-            IEnumeratorSettings enumeratorSettings = null,
-            IExternalAppLauncher externalAppLauncher = null)
+            IAttachmentContentStorage attachmentContentStorage = null)
             => new AttachmentViewModel(questionnaireRepository, 
                 interviewRepository, 
+                Create.Service.LiteEventRegistry(),
                 attachmentContentStorage, () => new MediaAttachment());
 
         public DynamicTextViewModel DynamicTextViewModel(
@@ -534,7 +533,8 @@ namespace WB.Tests.Abc.TestFactories
                 qrBarcodeScanService ?? Mock.Of<IQRBarcodeScanService>(),
                 serializer?? Mock.Of <ISerializer>(),
                 userInteractionService?? Mock.Of<IUserInteractionService>(),
-                auditLogService ?? Mock.Of<IAuditLogService>());
+                auditLogService ?? Mock.Of<IAuditLogService>(),
+                Mock.Of<IDeviceInformationService>());
 
         public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
             => new ConnectedDeviceSynchronizationViewModel();

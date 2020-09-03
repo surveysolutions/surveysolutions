@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
@@ -88,7 +89,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             var hqUser = Abc.Create.Entity.HqUser();
             
             this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, string.Empty,
+                children: new IComposite[]
             {
                 Abc.Create.Entity.TextQuestion(),
                 Abc.Create.Entity.NumericRoster(children: new []
@@ -177,7 +179,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             var hqUser = Abc.Create.Entity.HqUser();
             
             this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
             {
                 Abc.Create.Entity.NumericQuestion(variableName: "dbl"),
                 Abc.Create.Entity.NumericQuestion(variableName: "int", isInteger: true),
@@ -219,6 +221,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         [TestCase(QuestionType.Audio, "test")]
         [TestCase(QuestionType.Area, "test")]
         [TestCase(QuestionType.SingleOption, "test", true)]
+        [TestCase(QuestionType.MultyOption, "['test']", true)]
         public void when_assignment_has_not_supported_question_in_identifying_data_then_should_return_verification_errors(QuestionType questionType, string preloadingValue, bool linked = false)
         {
             var variableName = "testQuestion";
@@ -228,7 +231,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
             this.SetupResponsibleUser(hqUser);
             
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, new IComposite[]
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
             {
                 GetQuestionByType(questionType, variableName, linked? Guid.NewGuid(): (Guid?) null)
             }));

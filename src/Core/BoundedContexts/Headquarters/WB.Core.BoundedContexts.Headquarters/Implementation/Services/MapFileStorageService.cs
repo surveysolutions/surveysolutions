@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             //item.Wkid = 32735; // probably written in WKT format in the deserialized.CoordinateSystem but there is no parser for it
                                  */
 
-                            if (deserialized.Wgs84Extent != null)
+                            if (deserialized?.Wgs84Extent != null)
                             {
                                 double xMin = double.MaxValue;
                                 double xMax = double.MinValue;
@@ -281,11 +281,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                                 item.XMaxVal = xMax;
                                 item.YMaxVal = yMax;
+
+                                item.Wkid = 4326; //geographic coordinates Wgs84
                             }
-
-                            item.Wkid = 4326; //geographic coordinates Wgs84
-
-
+                            else
+                                throw new Exception(".tif file is not recognized as map");
                         }
                         catch (Win32Exception e)
                         {

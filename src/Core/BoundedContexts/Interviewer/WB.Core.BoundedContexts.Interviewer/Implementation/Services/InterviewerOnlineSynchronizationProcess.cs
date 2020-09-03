@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -80,6 +84,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             this.principal.SaveInterviewer(localInterviewer);
             this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
+        }
+
+        protected override string GetRequiredUpdate(string targetVersion, string appVersion)
+        {
+            return EnumeratorUIResources.UpgradeRequired 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.HeadquartersVersion, targetVersion) 
+                   + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
+
         }
     }
 }

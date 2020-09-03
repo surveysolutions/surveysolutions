@@ -24,8 +24,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Guid userId = Guid.NewGuid();
 
-                var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId,
-                    Create.Entity.Group(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId, null,
+                     Create.Entity.Group(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
                     {
                         Create.Entity.NumericIntegerQuestion(numId, "x1")
                     }),

@@ -8,7 +8,7 @@
             <div class="ag-header-cell-label cell-bordered"
                 v-for="option in getOptions"
                 :key="question.id + '_' + option.value"
-                style="width: 180px !important;max-width:180px;" >
+                style="width:180px!important;max-width:180px;" >
                 <span>{{option.title}}</span>
             </div>
         </div>

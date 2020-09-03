@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Android.App;
-using Android.Bluetooth;
 using Android.Content;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
-using Android.Support.Design.Widget;
-using Android.Support.V4.View;
 using Android.Views;
+using AndroidX.AppCompat.Widget;
+using AndroidX.ViewPager.Widget;
+using Google.Android.Material.Snackbar;
+using Google.Android.Material.Tabs;
 using MvvmCross;
-using MvvmCross.Droid.Support.V4;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -25,7 +26,6 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Notifications;
 
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
@@ -175,7 +175,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void UpdateTypeOfInterviewsViewModelProperty(int tabPosition)
         {
-            var fragment = (MvxFragment)this.fragmentStatePagerAdapter.GetItem(tabPosition);
+            var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStatePagerAdapter.GetItem(tabPosition);
             var viewModel = (ListViewModel)fragment.ViewModel;
             this.ViewModel.TypeOfInterviews = viewModel.InterviewStatus;
         }
@@ -217,6 +217,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
             SetMenuItemIcon(menu, Resource.Id.menu_offline_synchronization, Resource.Drawable.synchronize_offline_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_map_dashboard, Resource.Drawable.map_icon);
 
             if (ViewModel.SynchronizationWithHqEnabled)
             {
@@ -227,11 +228,17 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 menu.FindItem(Resource.Id.menu_synchronization).SetVisible(false);
             }
 
+            if (!ViewModel.DoesSupportMaps)
+            {
+                menu.FindItem(Resource.Id.menu_map_dashboard).SetVisible(false);
+            }
+
             menu.LocalizeMenuItem(Resource.Id.menu_search, EnumeratorUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, EnumeratorUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, EnumeratorUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, EnumeratorUIResources.MenuItem_Title_Diagnostics);
             menu.LocalizeMenuItem(Resource.Id.menu_maps, EnumeratorUIResources.MenuItem_Title_Maps);
+            //menu.LocalizeMenuItem(Resource.Id.menu_map_dashboard, EnumeratorUIResources.MenuItem_Title_Map_Dashboard);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -245,6 +252,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
+                    break;
+                case Resource.Id.menu_map_dashboard:
+                    this.ViewModel.NavigateToMapDashboardCommand.Execute();
                     break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();

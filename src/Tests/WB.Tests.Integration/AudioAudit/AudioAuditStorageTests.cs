@@ -36,6 +36,7 @@ namespace WB.Tests.Integration.AudioAudit
                     typeof(QuestionAnswerMap),
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(TimeSpanBetweenStatusesMap),
+                    typeof(InterviewGpsMap),
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),

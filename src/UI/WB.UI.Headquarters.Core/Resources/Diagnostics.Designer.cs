@@ -97,6 +97,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Embedded Export Service Host.
+        /// </summary>
+        public static string embedded_export_service_check {
+            get {
+                return ResourceManager.GetString("embedded_export_service_check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Service is not running.
+        /// </summary>
+        public static string embedded_export_service_check_Degraded {
+            get {
+                return ResourceManager.GetString("embedded_export_service_check_Degraded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Service is running.
+        /// </summary>
+        public static string embedded_export_service_check_Healty {
+            get {
+                return ResourceManager.GetString("embedded_export_service_check_Healty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Service check.
         /// </summary>
         public static string export_service_check {
@@ -169,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters configured with Headquarters:BaseUrl: {0} is different from the current URL in browser address bar .\r\nThis may cause issues with Email links and Export Service functionality.
+        ///   Looks up a localized string similar to Headquarters configured with Headquarters:BaseUrl: {0} is different from the current URL in browser address bar. This may cause issues with Email links and Export Service functionality.
         /// </summary>
         public static string hq_baseurl_check_Degraded {
             get {

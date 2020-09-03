@@ -545,36 +545,34 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var entities = new List<IComposite>();
 
             var pasteEntity = aggregate.QuestionnaireDocument.Find<IComposite>(targetEntityId);
-            if (pasteEntity == null)
+            
+            if (aggregate.QuestionnaireDocument.IsCoverPage(targetParentId) && pasteEntity == null)
             {
-                if (aggregate.QuestionnaireDocument.IsCoverPage(targetParentId))
+                var coverGroup = aggregate.QuestionnaireDocument.Find<IGroup>(targetParentId);
+                if (coverGroup == null)
+                    throw new InvalidOperationException($"Entity was not found ({targetParentId}).");
+                
+                foreach (var composite in coverGroup.Children)
                 {
-                    var sourceGroup = aggregate.QuestionnaireDocument.Find<IGroup>(sourceEntityId);
-                    if (sourceGroup == null)
-                        throw new InvalidOperationException($"Entity was not found ({sourceEntityId}).");
-                    
-                    var coverGroup = aggregate.QuestionnaireDocument.Find<IGroup>(targetParentId)!;
-                    foreach (var composite in coverGroup.Children)
-                    {
-                        if (composite is IQuestion question)
-                            this.AddOrUpdateQuestionState(questionnaireId, question.PublicKey, question.QuestionText, targetParentId);
-                        else if (composite is IStaticText staticText)
-                            this.AddOrUpdateStaticTextState(questionnaireId, staticText.PublicKey, staticText.Text, targetParentId);
-                        else
-                            throw new ArgumentException("Unsupported type of entity on cover:" + composite.GetType());
-                    }
-
-                    entityType = QuestionnaireItemType.Section;
-                    entityTitle = coverGroup.Title;
-                    
-                    var linkToCover = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
-                    this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Clone, entityType,
-                        targetEntityId, entityTitle, aggregate.QuestionnaireDocument, linkToCover);
-                    return;
+                    if (composite is IQuestion question)
+                        this.AddOrUpdateQuestionState(questionnaireId, question.PublicKey, question.QuestionText, targetParentId);
+                    else if (composite is IStaticText staticText)
+                        this.AddOrUpdateStaticTextState(questionnaireId, staticText.PublicKey, staticText.Text, targetParentId);
+                    else
+                        throw new ArgumentException("Unsupported type of entity on cover:" + composite.GetType());
                 }
 
-                throw new InvalidOperationException($"Entity was not found ({targetEntityId}).");
+                entityType = QuestionnaireItemType.Section;
+                entityTitle = coverGroup.Title;
+                    
+                var linkToCover = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
+                this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Clone, entityType,
+                    targetEntityId, entityTitle, aggregate.QuestionnaireDocument, linkToCover);
+                return;
             }
+
+            if (pasteEntity == null)
+                throw new InvalidOperationException($"Entity was not found ({targetEntityId}).");
 
             if (pasteEntity is IGroup)
             {
