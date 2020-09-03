@@ -1,4 +1,4 @@
-@using WB.UI.Designer.Extensions
+﻿@using WB.UI.Designer.Extensions
 @using System.Globalization
 @{
     ViewBag.Title = $"{QuestionnaireEditor.OptionsWindowTitle}: {@Model.QuestionTitle ?? @Model.CategoriesName}";
@@ -24,14 +24,15 @@
     <!-- manifest:json -->
     <script>window.localization = {"QuestionnaireEditor.en.json":"../../resx/QuestionnaireEditor-9912779f18.en.json","QuestionnaireEditor.ar.json":"../../resx/QuestionnaireEditor-59939c24fd.ar.json","QuestionnaireEditor.es.json":"../../resx/QuestionnaireEditor-1887635b34.es.json","QuestionnaireEditor.fr.json":"../../resx/QuestionnaireEditor-ac8bf00e25.fr.json","QuestionnaireEditor.ru.json":"../../resx/QuestionnaireEditor-4b02937a45.ru.json","QuestionnaireEditor.sq.json":"../../resx/QuestionnaireEditor-c510dcb7a8.sq.json","QuestionnaireEditor.zh.json":"../../resx/QuestionnaireEditor-ee74b420a6.zh.json"}</script>@{ var locales_json = @"{""QuestionnaireEditor.en.json"":""../../resx/QuestionnaireEditor-9912779f18.en.json"",""QuestionnaireEditor.ar.json"":""../../resx/QuestionnaireEditor-59939c24fd.ar.json"",""QuestionnaireEditor.es.json"":""../../resx/QuestionnaireEditor-1887635b34.es.json"",""QuestionnaireEditor.fr.json"":""../../resx/QuestionnaireEditor-ac8bf00e25.fr.json"",""QuestionnaireEditor.ru.json"":""../../resx/QuestionnaireEditor-4b02937a45.ru.json"",""QuestionnaireEditor.sq.json"":""../../resx/QuestionnaireEditor-c510dcb7a8.sq.json"",""QuestionnaireEditor.zh.json"":""../../resx/QuestionnaireEditor-ee74b420a6.zh.json""}"; }
     <!-- endinject -->
-       @{
-            var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
-            var locale = locales["QuestionnaireEditor." + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName + ".json"];
-    
-        }
-        <link rel='preload' href='@locale' as="fetch" crossorigin="anonymous">
-    @Html.RenderConfig(new {
-    applyUrl = Url.Action("ApplyOptions", "Questionnaire"),
+    @{
+        var locales = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(locales_json);
+        var locale = locales["QuestionnaireEditor." + CultureInfo.CurrentUICulture.TwoLetterISOLanguageName + ".json"];
+
+    }
+    <link rel='preload' href='@locale' as="fetch" crossorigin="anonymous">
+    @Html.RenderConfig(new
+    {
+        applyUrl = Url.Action("ApplyOptions", "Questionnaire"),
     editOptionsUrl = Url.Action("EditOptions", "Questionnaire"),
     editCategoriesUrl = Url.Action("EditCategories", "Questionnaire"),
     resetOptionsUrl = Url.Action("ResetOptions", "Questionnaire"),
@@ -42,40 +43,63 @@
     isCascading = Model.IsCascading,
     isCategories = Model.IsCategories
 })
-    <script>           
-    var require = {
-                baseUrl: '/',
-                paths: {
-                    'vue': 'js/vue-js',
-                    'jquery': 'js/jquery',
-                    'i18next': 'js/i18next',
-                    'i18next-http-backend': 'js/i18next-http-backend',
-                    'vuetify': 'js/vuetify'
-                }
-            };
-            loadCss = function(config) {
-                var head = document.getElementsByTagName('head')[0];
-             
-                if (config.content) {
-                    var style  = document.createElement('style');
-                    style.type = 'text/css';
-                    
-                    if (style.styleSheet)
-                        style.styleSheet.cssText = config.content;
-                    else
-                        style.innerHTML = config.content;
-             
-                    head.appendChild(style);
-                } else if (config.url) {
-                    var link  = document.createElement('link');
-                    link.href = config.url;
-                    link.rel  = 'stylesheet';
-                    link.type = 'text/css';
-                    head.appendChild(link);
-                }
-            };
-        </script>
-    <script data-main="js/vue-app/app" src="~/js/require.js"></script>
+
+    <!-- cat__vue:js -->
+    <script> var _js_cat__vue_path ='/js/cat__vue';</script>
+    <!-- endinject -->
+    <!-- cat__jquery:js -->
+    <script> var _js_cat__jquery_path ='/js/cat__jquery';</script>
+    <!-- endinject -->
+    <!-- cat__i18next:js -->
+    <script> var _js_cat__i18next_path ='/js/cat__i18next';</script>
+    <!-- endinject -->
+    <!-- cat__a_i18next_http_backend:js -->
+    <script> var _js_cat__a_i18next_http_backend_path ='/js/cat__a_i18next_http_backend';</script>
+    <!-- endinject -->
+    <!-- cat__a_vuetify:js -->
+    <script> var _js_cat__a_vuetify_path ='/js/cat__a_vuetify';</script>
+    <!-- endinject -->
+
+    <script>
+        var require = {
+            baseUrl: '/', paths: {
+                'vue': _js_cat__vue_path,
+                'jquery': _js_cat__jquery_path,
+                'i18next': _js_cat__i18next_path,
+                'i18next-http-backend': _js_cat__a_i18next_http_backend_path,
+                'vuetify': _js_cat__a_vuetify_path
+            }
+        };
+    </script>
+
+    <script>
+        loadCss = function (config) {
+            var head = document.getElementsByTagName('head')[0];
+
+            if (config.content) {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+
+                if (style.styleSheet)
+                    style.styleSheet.cssText = config.content;
+                else
+                    style.innerHTML = config.content;
+
+                head.appendChild(style);
+            } else if (config.url) {
+                var link = document.createElement('link');
+                link.href = config.url;
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                head.appendChild(link);
+            }
+        };
+    </script>
+
+    <!-- require_libs:js -->
+    <script src="~/js/require_libs.js"></script>
+    <!-- endinject -->
+    <script>require(["js/vue-app/app"])</script>
     @Html.GenerateFavicon(Url.Content("~/favicon.ico"))
 </head>
 <body style="height: auto;">
