@@ -66,6 +66,8 @@
     <AndroidAsset Include="Assets\worldmap%28default%29.tpk" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\drawable\mtrl_btn_text_color_selector.xml" />
+    <AndroidResource Include="Resources\drawable\my_location.xml" />
     <AndroidResource Include="Resources\layout\interview_area_editor.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -173,9 +175,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\compass_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\locator_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\minus_icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -204,14 +203,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\screen_button_unpressed_bordered.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\locator_icon_disabled.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\locator_button.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\locator_icon_disabled.png" />
@@ -276,13 +267,7 @@
     <AndroidResource Include="Resources\layout\Item_SpinnerDropDown.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\show_all_items_button.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\show_all_items_icon.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\show_full_map_button.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\show_full_map_icon.xml" />
