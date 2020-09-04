@@ -32,36 +32,35 @@
         <item name="android:indeterminateDrawable">@drawable/progress_bar</item>
     </style>
 
-    <style name="Area_LocationButton">
-        <item name="android:layout_marginRight">16dp</item>
+    <style name="Widget.AppTheme.Button.IconButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@drawable/mtrl_btn_text_color_selector</item>
+        <item name="rippleColor">?colorOnPrimary</item>
+    </style>
+    
+    <style name="Area_LocationButton" parent="Widget.AppTheme.Button.IconButton">
         <item name="android:layout_gravity">right</item>
-        <item name="android:scaleType">fitCenter</item>
-        <item name="android:layout_marginTop">15dp</item>
-        <item name="android:background">@drawable/locator_button</item>
         <item name="android:enabled">false</item>
+        <item name="icon">@drawable/my_location</item>
     </style>
 
-  <style name="Area_ShowFullMap">
-      <item name="android:layout_marginRight">16dp</item>
-      <item name="android:layout_width">32dp</item>
-    <item name="android:layout_height">32dp</item>
+  <style name="Area_ShowFullMap" parent="Widget.AppTheme.Button.IconButton">
     <item name="android:layout_gravity">right</item>
-    <item name="android:scaleType">fitCenter</item>
-    <item name="android:layout_marginTop">15dp</item>
-    <item name="android:background">@drawable/show_full_map_button</item>
+    <item name="icon">@drawable/show_full_map_icon</item>
     <item name="android:enabled">false</item>
   </style>
 
-  <style name="Area_ShowAllItems">
-      <item name="android:layout_marginRight">16dp</item>
-      <item name="android:layout_width">32dp</item>
-      <item name="android:layout_height">32dp</item>
+  <style name="Area_ShowAllItems" parent="Widget.AppTheme.Button.IconButton">
       <item name="android:layout_gravity">right</item>
-      <item name="android:scaleType">fitCenter</item>
-      <item name="android:layout_marginTop">15dp</item>
-      <item name="android:background">@drawable/show_all_items_button</item>
+      <item name="icon">@drawable/show_all_items_icon</item>
       <item name="android:enabled">false</item>
   </style>
 
