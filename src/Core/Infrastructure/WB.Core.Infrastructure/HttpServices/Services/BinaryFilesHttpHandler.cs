@@ -21,7 +21,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
 
             var totalRead = 0L;
             var batchCount = 0L;
-            var buffer = new byte[16 * 1024];
+            var buffer = new byte[48 * 1024];
             var isMoreToRead = true;
 
             var totalBytesToReceive = response.Content.Headers.ContentLength;
