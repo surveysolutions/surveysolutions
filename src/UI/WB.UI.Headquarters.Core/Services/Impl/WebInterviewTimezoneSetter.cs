@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
             if (httpContext?.Request?.Cookies != null)
             {
-                if (httpContext.Request.Cookies.TryGetValue("timezone", out var tz))
+                if (httpContext.Request.Cookies.TryGetValue("_tz", out var tz))
                 {
                     if (int.TryParse(tz, out var val))
                     {
