@@ -24,7 +24,7 @@
     <link rel='apple-touch-icon' sizes='72x72' href='~/img/identity/favicon-hq-72x72.png'>
     <link rel='apple-touch-icon' href='~/img/identity/favicon-hq.png'>
     <script>
-        document.cookie = "timezone=" + new Date().getTimezoneOffset();
+        document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
 
         global: CONFIG = {
             basePath: '@Url.Content("~/")',
