@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests
             var question3 = questionnaire.QuestionnaireDocument.Find<IQuestion>(Id.g3);
             Assert.That(question3, Is.Not.Null);
             Assert.That(question3.GetParent().PublicKey, Is.EqualTo(questionnaire.QuestionnaireDocument.CoverPageSectionId));
-            Assert.That(question3.Featured, Is.False);
+            Assert.That(question3.Featured, Is.True);
             Assert.That(cover.Children.Second(), Is.EqualTo(question3));
         }
 
