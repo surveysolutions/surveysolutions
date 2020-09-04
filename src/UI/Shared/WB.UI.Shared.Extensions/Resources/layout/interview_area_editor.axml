@@ -191,10 +191,8 @@
             android:duplicateParentState="true"
             android:gravity="center_vertical|right">
             <Button
-                style="@style/Area_Screen_Button"
+                style="@style/Interview_Button_Link"
                 android:id="@+id/areaEditor_Cancel"
-                android:background="@color/text_color_light"
-                android:textColor="@color/dark_text_color"
                 android:layout_marginRight="@dimen/area_editor_cancel_margin_right"
                 local:MvxBind="Click CancelCommand;Text Localization('AreaMap_Cancel');" />
             <Button
