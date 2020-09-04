@@ -3,25 +3,13 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light">
     </style>
     
-    <style name="Area_Screen_Button">
-        <item name="android:background">@drawable/screen_button</item>
+    <style name="Area_Screen_Button" parent="Button_Primary">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_marginTop">14dp</item>
-        <item name="android:layout_marginBottom">14dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingTop">@dimen/area_editor_padding_regular</item>
-        <item name="android:paddingBottom">@dimen/area_editor_padding_regular</item>
-        <item name="android:stateListAnimator">@null</item>
-        <item name="android:textSize">12dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">0.1</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Area_Screen_Button_Bordered" parent="Area_Screen_Button">
-        <item name="android:background">@drawable/screen_button_bordered</item>
+        
     </style>
         
     <style name="Progress_Indicator" parent="android:Widget.ProgressBar.Horizontal">
