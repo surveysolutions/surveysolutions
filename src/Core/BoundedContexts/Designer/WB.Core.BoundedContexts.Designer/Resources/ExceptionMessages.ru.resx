@@ -192,6 +192,9 @@
   <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
     <value>Имя опросника не может быть пустым.</value>
   </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>Опросник уже поддерживает обложку.</value>
+  </data>
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
     <value>Секция не может содержать более {0} дочерних элементов.</value>
   </data>

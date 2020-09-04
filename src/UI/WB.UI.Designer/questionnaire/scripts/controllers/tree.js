@@ -125,6 +125,13 @@
                 }
             });
 
+            $scope.migrateToNewVersion = function () {
+                commandService.migrateToNewVersion($state.params.questionnaireId)
+                    .then(function () {
+                        document.location.reload();
+                    });
+            };
+
             $scope.showSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.search;
                 utilityService.focus('focusSearch');
