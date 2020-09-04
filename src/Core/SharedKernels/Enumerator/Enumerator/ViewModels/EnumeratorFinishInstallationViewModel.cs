@@ -74,14 +74,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public string Password
         {
             get => this.password;
-            set { this.password = value; RaisePropertyChanged(); }
-        }
-
-        private bool isEndpointValid;
-        public bool IsEndpointValid
-        {
-            get => this.isEndpointValid;
-            set { this.isEndpointValid = value; RaisePropertyChanged(); }
+            set
+            {
+                SetProperty(ref this.password, value);
+                this.PasswordError = null;
+            }
         }
 
         private bool isUserValid;
@@ -95,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public string ErrorMessage
         {
             get => this.errorMessage;
-            set { this.errorMessage = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.errorMessage, value);
         }
 
         private bool isInProgress;
@@ -106,10 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private IMvxAsyncCommand signInCommand;
-        public IMvxAsyncCommand SignInCommand
-        {
-            get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
-        }
+        public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress);
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
@@ -123,13 +117,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             await base.Initialize().ConfigureAwait(false);
 
             this.IsUserValid = true;
-            this.IsEndpointValid = true;
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            // this.Endpoint = "http://192.168.88./headquarters";
-            // this.UserName = "int";
-            // this.Password = "1";
+            this.Endpoint = "http://10.0.2.2:5001";
+            this.UserName = "int";
+            this.Password = "1";
 #endif
         }
 
@@ -176,7 +169,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task SignInAsync()
         {
             this.IsUserValid = true;
-            this.IsEndpointValid = true;
+            this.ErrorMessage = null;
+            this.EndpointValidationError = null;
 
             if (this.Endpoint?.StartsWith("@") == true)
             {
@@ -232,7 +226,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     case SynchronizationExceptionType.HostUnreachable:
                     case SynchronizationExceptionType.InvalidUrl:
                     case SynchronizationExceptionType.ServiceUnavailable:
-                        this.IsEndpointValid = false;
                         this.EndpointValidationError = EnumeratorUIResources.InvalidEndpointShort;
                         break;
                     case SynchronizationExceptionType.UserIsNotInterviewer:
