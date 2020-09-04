@@ -8,6 +8,7 @@
 @inject IProductVersion productVersion
 
 <script type="text/javascript">
+    document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
     window.CONFIG = @( new {
         verboseMode = false,
         googleApiKey = googleMapsConfig.Value.ApiKey,
