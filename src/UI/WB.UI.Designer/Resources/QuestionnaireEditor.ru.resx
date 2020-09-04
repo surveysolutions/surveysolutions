@@ -565,6 +565,9 @@
   <data name="VirtualCoverPage" xml:space="preserve">
     <value>Виртуальная страница обложки</value>
   </data>
+  <data name="MigrateToNewCover" xml:space="preserve">
+    <value>Обновить с поддержкой новой обложки</value>
+  </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Добавить переменную</value>
   </data>
