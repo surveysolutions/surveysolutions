@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, @event.Payload.UserId,
-                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AssignTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AssignTime?.UtcDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 new Dictionary<string, string> { { "responsible", @event.Payload.InterviewerId.FormatGuid() } });
 
@@ -175,7 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
 
             this.AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty,
-                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CompleteTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CompleteTime?.UtcDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejected> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, @event.Payload.UserId,
-                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RejectTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RejectTime?.UtcDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
               this.CreateCommentParameters(@event.Payload.Comment));
 

@@ -541,7 +541,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.ResponsibleId = @event.Payload.InterviewerId.Value;
             }
 
-            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime?.UtcDateTime;
             interviewView.ReceivedByInterviewerAtUtc = null;
 
             this.interviewViewRepository.Store(interviewView);
