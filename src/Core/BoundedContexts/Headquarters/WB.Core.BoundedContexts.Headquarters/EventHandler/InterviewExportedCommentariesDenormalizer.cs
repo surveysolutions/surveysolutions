@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
              InterviewExportedAction.Completed, evnt.Payload.Comment,
-             evnt.Payload.CompleteTime ?? evnt.EventTimeStamp);
+             evnt.Payload.CompleteTime?.UtcDateTime ?? evnt.EventTimeStamp);
             return summary;
         }
 
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.StoreCommentForStatusChange(summary, evnt.Payload.UserId,
                 InterviewExportedAction.RejectedBySupervisor, evnt.Payload.Comment,
-                evnt.Payload.RejectTime ?? evnt.EventTimeStamp);
+                evnt.Payload.RejectTime?.UtcDateTime ?? evnt.EventTimeStamp);
             return summary;
         }
 
