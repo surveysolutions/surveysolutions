@@ -24,6 +24,7 @@
         function onLogoError(source) {
             source.parentElement.className += " no-logo";
         }
+        document.cookie = "timezone=" + new Date().getTimezoneOffset() + "; path=/";
     </script>
 </head>
 <body>
