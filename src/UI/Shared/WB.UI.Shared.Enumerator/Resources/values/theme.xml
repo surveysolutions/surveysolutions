@@ -17,11 +17,16 @@
         <!-- elements -->
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
         <item name="editTextStyle">@style/EditTextTheme</item>
-        <item name="buttonBarButtonStyle">@style/AlertButtonStyle</item>
         <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
         <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.App.NegativeButton</item>
+    </style>
+    
     <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.TextInputLayout</item>
     </style>
@@ -50,19 +55,20 @@
         <item name="color">@color/group_title_text</item>
     </style>
 
-    <style name="AlertButtonStyle" parent="android:Widget.Material.Button">
-        <item name="android:background">@drawable/alert_dialog_btn</item>
-        <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
-        <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/group_started</item>
         <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
         <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textColor">@color/group_title_text</item>
+    </style>
+
+
+    <style name="Widget.App.NegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button.TextButton</item>
+    </style>
+    <style name="ThemeOverlay.App.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/commentDetailsInterviewerTextColor</item>
     </style>
     
     <style name="ProgressBarTheme_Blue_Light" parent="android:Widget.ProgressBar.Horizontal">

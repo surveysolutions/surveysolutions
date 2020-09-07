@@ -180,6 +180,12 @@
   <data name="InterviewCompletionDateFormatText" xml:space="preserve">
     <value>Дата завершения интервью:</value>
   </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Скачать стенограмму интервью</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Скачать интервью ответы в виде pdf файла</value>
+  </data>
   <data name="InterviewIdFormatText" xml:space="preserve">
     <value>Интервью ID: {0}</value>
   </data>
