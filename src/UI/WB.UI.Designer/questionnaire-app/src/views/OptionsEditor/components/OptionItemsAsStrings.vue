@@ -1,0 +1,145 @@
+<template>
+    <v-container fluid>
+        <v-textarea
+            ref="strings"
+            v-model="categoriesAsText"
+            rows="15"
+            filled
+            spellcheck="false"
+            wrap="off"
+            autocorrect="off"
+            :rules="textRules"
+            :disabled="loading || convert"
+            :loading="loading || convert"
+            class="monospaced-with-wrap"
+            @change="change"
+            @focus="onFocus"
+            @blur="onBlur"
+        ></v-textarea>
+    </v-container>
+</template>
+
+<script>
+import {
+    convertToText,
+    validateText,
+    convertToTable
+} from '../utils/tableToString';
+
+export default {
+    name: 'CategoriesStrings',
+
+    props: {
+        categories: { type: Array, required: true },
+        cascading: { type: Boolean, required: true },
+        loading: { type: Boolean, required: true }
+    },
+
+    data() {
+        return {
+            categoriesAsText: null,
+            convert: false
+        };
+    },
+
+    computed: {
+        textRules() {
+            return [
+                value => {
+                    if (this.lineCount == 0) {
+                        return true;
+                    }
+
+                    if (this.lineCount > 15000) {
+                        return 'Max 15,000 lines';
+                    }
+
+                    const top5Errors = validateText(
+                        value,
+                        this.cascading
+                    ).slice(0, 5);
+
+                    if (top5Errors.length > 0) {
+                        const error = [
+                            this.$t(
+                                'QuestionnaireEditor.OptionLineFormatError'
+                            ),
+                            '',
+                            ...top5Errors
+                        ].join('\r\n');
+                        return error;
+                    }
+
+                    return true;
+                }
+            ];
+        },
+
+        categoriesAsTextSplit() {
+            return (this.categoriesAsText || '').split(/\r\n|\r|\n/);
+        },
+
+        isTextValid() {
+            return validateText(this.categoriesAsText, this.cascading);
+        },
+
+        lineCount() {
+            return this.categoriesAsTextSplit.length;
+        },
+
+        valid() {
+            return this.$refs.strings.valid;
+        }
+    },
+
+    watch: {
+        categories() {
+            this.reload();
+        }
+    },
+
+    mounted() {
+        this.reload();
+    },
+
+    methods: {
+        change(value) {
+            if (this.valid) {
+                const categories = convertToTable(value, this.cascading);
+                this.$emit('change', categories);
+            }
+        },
+
+        onFocus() {
+            this.$emit('editing', true);
+        },
+
+        onBlur() {
+            this.$emit('editing', false);
+        },
+
+        reload() {
+            if (this.convert) return;
+
+            this.convert = true;
+            this.$emit('inprogress', true);
+
+            convertToText(this.categories, this.cascading).then(data => {
+                this.$nextTick(() => {
+                    this.categoriesAsText = data;
+                });
+
+                this.convert = false;
+                this.$emit('inprogress', false);
+            });
+        }
+    }
+};
+</script>
+
+<style>
+.monospaced-with-wrap {
+    font-family: monospace, monospace;
+    white-space: pre-wrap;
+}
+</style>

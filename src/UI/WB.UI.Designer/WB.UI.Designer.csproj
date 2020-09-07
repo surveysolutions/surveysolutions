@@ -9,6 +9,7 @@
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
+    <SpaRoot>questionnaire-app\</SpaRoot>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -40,6 +41,10 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.1.0" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.1.0" />
     <PackageReference Include="Shark.PdfConvert" Version="1.0.3" />
+
+
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.7" />
+    <PackageReference Include="VueCliMiddleware" Version="3.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
@@ -54,58 +59,74 @@
     </EmbeddedResource>
   </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-        <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
-            <DependentUpon>appsettings.ini</DependentUpon>
-        </Content>
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">
+      <DependentUpon>appsettings.ini</DependentUpon>
+    </Content>
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="Resources\ErrorMessages.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>ErrorMessages.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\FindReplaceResources.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FindReplaceResources.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\QuestionnaireController.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>QuestionnaireController.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\ErrorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\FindReplaceResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireController.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ErrorMessages.resx">
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FindReplaceResources.resx">
+      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireController.resx">
+      <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
+      <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode. https://docs.npmjs.com/cli/ci.html -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+    <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <EmbeddedResource Update="Resources\ErrorMessages.resx">
-        <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\FindReplaceResources.resx">
-        <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\QuestionnaireController.resx">
-        <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
-        <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+      <DistFiles Include="$(SpaRoot)dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
     </ItemGroup>
+  </Target>
 
 </Project>

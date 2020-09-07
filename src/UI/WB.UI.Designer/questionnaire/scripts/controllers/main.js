@@ -481,6 +481,10 @@ angular.module('designerApp')
                 getQuestionnaire();
             });
 
+            $rootScope.$on('categoriesUpdated', function() {
+                getQuestionnaire();
+            })
+
             $rootScope.$on('chapterDeleted', function () {
                 getQuestionnaire();
             });
