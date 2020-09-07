@@ -1379,7 +1379,7 @@
     <value>Вы можете скачать и обновить списки категорий.</value>
   </data>
   <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
-    <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>ent>
+    <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>ent&gt;
   </data>
   <data name="SideBarCategoriesTitle" xml:space="preserve">
     <value>Категории</value>
@@ -1452,5 +1452,17 @@
   </data>
   <data name="Forum" xml:space="preserve">
     <value>Форум</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Таблица</value>
+  </data>
+  <data name="Strings" xml:space="preserve">
+    <value>Строки</value>
+  </data>
+  <data name="OptionLineFormatError" xml:space="preserve">
+    <value>Каждая строка должна быть в формате 'title...value' или 'title...parentValue/value'</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+    <value>Слишком большое значение</value>
   </data>
 </root>
