@@ -1587,6 +1587,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Every line should be in format {title...value} or {title...parent_value/value}. Example: bob...4/32.
+        /// </summary>
+        public static string OptionLineFormatError {
+            get {
+                return ResourceManager.GetString("OptionLineFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close Window?.
         /// </summary>
         public static string OptionsCloseWindow {
@@ -3621,6 +3630,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Strings.
+        /// </summary>
+        public static string Strings {
+            get {
+                return ResourceManager.GetString("Strings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table.
+        /// </summary>
+        public static string Table {
+            get {
+                return ResourceManager.GetString("Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
         public static string Test {
@@ -3887,6 +3914,15 @@ namespace WB.UI.Designer.Resources {
         public static string ValidationCondition {
             get {
                 return ResourceManager.GetString("ValidationCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value is too big.
+        /// </summary>
+        public static string ValidationIntValue {
+            get {
+                return ResourceManager.GetString("ValidationIntValue", resourceCulture);
             }
         }
         

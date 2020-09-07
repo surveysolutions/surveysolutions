@@ -20,86 +20,75 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Designer.BootstrapSupport;
 
 namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
-        #region [Edit options]
         private const string OptionsSessionParameterName = "options";
+
+        private EditOptionsViewModel? _questionWithOptionsViewModel = null;
 
         public EditOptionsViewModel? questionWithOptionsViewModel
         {
             get
             {
+                if (_questionWithOptionsViewModel != null) return _questionWithOptionsViewModel;
                 var model = this.HttpContext.Session.Get(OptionsSessionParameterName);
                 if (model != null)
                 {
-                    return JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
+                    _questionWithOptionsViewModel = JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
+                    return _questionWithOptionsViewModel;
                 }
 
                 return null;
             }
             set
             {
+                _questionWithOptionsViewModel = value;
                 string data = JsonConvert.SerializeObject(value);
 
                 this.HttpContext.Session.Set(OptionsSessionParameterName, Encoding.UTF8.GetBytes(data));
             }
         }
 
-        public IActionResult EditOptions(QuestionnaireRevision id, Guid questionId, bool? isCascading = false)
-        {
-            this.SetupViewModel(id, questionId, isCascading ?? false);
-            if (this.questionWithOptionsViewModel == null)
-                return NotFound();
-            
-            return this.View("EditOptions", this.questionWithOptionsViewModel);
-        }
-
-        public IActionResult EditCascadingOptions(QuestionnaireRevision id, Guid questionId)
-            => this.EditOptions(id, questionId, true);
-
-        public IActionResult EditCategories(QuestionnaireRevision id, Guid categoriesId)
+        public IActionResult GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
 
             if (categoriesView == null)
                 return NotFound();
 
-            var categories = 
-               this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
-                Select(
-                    option => new QuestionnaireCategoricalOption
-                    {
-                        Value = option.Id ,
-                        ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
-                        Title = option.Text
-                    });
+            var categories =
+                this.categoriesService.GetCategoriesById(id.QuestionnaireId, categoriesId).
+                    Select(
+                        option => new QuestionnaireCategoricalOption
+                        {
+                            Value = option.Id,
+                            ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
+                            Title = option.Text
+                        });
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel
             (
-               questionnaireId: id.QuestionnaireId.FormatGuid(),
-               categoriesId: categoriesId,
-               categoriesName: categoriesView.Name,
-               options: categories.ToList(),
-               isCascading: true,
-               isCategories : true
+                questionnaireId: id.QuestionnaireId.FormatGuid(),
+                categoriesId: categoriesId,
+                categoriesName: categoriesView.Name,
+                options: categories.ToList(),
+                isCascading: true,
+                isCategories: true
             );
 
             if (this.questionWithOptionsViewModel == null)
                 return NotFound();
 
-            return this.View("EditOptions", this.questionWithOptionsViewModel);
+            return this.Json(this.questionWithOptionsViewModel);
         }
 
-        public IActionResult GetOptions() => this.Json(this.questionWithOptionsViewModel?.Options);
-
-        private void SetupViewModel(QuestionnaireRevision id, Guid questionId, bool isCascading)
+        public IActionResult GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
-
+            
             var options = editQuestionView != null 
                 ? editQuestionView.Options.Select(
                               option => new QuestionnaireCategoricalOption
@@ -118,102 +107,14 @@ namespace WB.UI.Designer.Controllers
                 options : options.ToList(),
                 isCascading : isCascading
             );
+
+            return Json(this.questionWithOptionsViewModel);
         }
 
         public IActionResult ResetOptions()
         {
-            if (this.questionWithOptionsViewModel == null)
-                return NotFound();
-
-            if (this.questionWithOptionsViewModel.IsCategories)
-            {
-               return RedirectToAction("EditCategories",
-                    new
-                    {
-                        id = this.questionWithOptionsViewModel.QuestionnaireId,
-                        categoriesId = this.questionWithOptionsViewModel.CategoriesId
-                    });
-            }
-
-            return this.questionWithOptionsViewModel.IsCascading 
-                ? RedirectToAction("EditCascadingOptions",
-                    new {
-                        id = this.questionWithOptionsViewModel.QuestionnaireId,
-                        questionId = this.questionWithOptionsViewModel.QuestionId
-                    })
-                    
-                : RedirectToAction("EditOptions",
-                new {
-                        id = this.questionWithOptionsViewModel.QuestionnaireId,
-                        questionId = this.questionWithOptionsViewModel.QuestionId
-                    });
-        }
-
-        public IActionResult ResetCascadingOptions()
-        {
-            if (this.questionWithOptionsViewModel == null)
-                return NotFound();
-
-            return RedirectToAction("EditCascadingOptions",
-                new
-                {
-                    id = this.questionWithOptionsViewModel.QuestionnaireId,
-                    questionId = this.questionWithOptionsViewModel.QuestionId
-                });
-        }
-
-        [HttpPost]
-        public IActionResult AddOrUpdateOption(int optionValue, string optionTitle ,int optionIndex, int? parentValue)
-        {
-            List<string> errors = new List<string>();
-
-            var withOptionsViewModel = this.questionWithOptionsViewModel;
-            if (withOptionsViewModel == null)
-            {
-                errors.Add(Resources.QuestionnaireController.Error);
-                return this.Json(errors);
-            }
-
-            if (optionIndex > -1)
-            {
-                var option = withOptionsViewModel.Options[optionIndex];
-                option.Value = optionValue;
-                option.Title = optionTitle;
-                option.ParentValue = parentValue;
-            }
-            else
-            {
-                withOptionsViewModel.Options.Add(new QuestionnaireCategoricalOption()
-                {
-                    Value = optionValue, 
-                    Title = optionTitle,
-                    ParentValue = parentValue
-                });
-            }
-            
-            this.questionWithOptionsViewModel = withOptionsViewModel;
-            return this.Json(errors);
-        }
-
-        [HttpPost]
-        public IActionResult DeleteOption(int optionIndex)
-        {
-            List<string> errors = new List<string>();
-
-            var withOptionsViewModel = this.questionWithOptionsViewModel;
-            if (withOptionsViewModel == null)
-            {
-                errors.Add(Resources.QuestionnaireController.Error);
-                return this.Json(errors);
-            }
-
-            if (optionIndex > -1)
-            {
-                withOptionsViewModel.Options.RemoveAt(optionIndex);
-            }
-
-            this.questionWithOptionsViewModel = withOptionsViewModel;
-            return this.Json(errors);
+            this.questionWithOptionsViewModel = null;
+            return Ok();
         }
 
         [HttpPost]
@@ -418,9 +319,9 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApplyCascadingOptions()
+        public async Task<IActionResult> ApplyCascadingOptions([FromBody] UpdateCategoriesModel? categoriesModel)
         {
-            if (this.questionWithOptionsViewModel == null)
+            if (this.questionWithOptionsViewModel == null || categoriesModel == null)
                 return Json(GetNotFoundResponseObject());
 
             var commandResult = await this.ExecuteCommand(
@@ -428,7 +329,12 @@ namespace WB.UI.Designer.Controllers
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.User.GetId(),
-                        this.questionWithOptionsViewModel.Options.ToArray()));
+                        categoriesModel.Categories!.Select(c => new QuestionnaireCategoricalOption
+                        {
+                            Title = c.Title,
+                            Value = c.Value,
+                            ParentValue = c.ParentValue
+                        }).ToArray()));
 
             return Json(commandResult);
         }
@@ -496,15 +402,13 @@ namespace WB.UI.Designer.Controllers
                 return File(categoriesFile.Content,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
             }
-            else
-            {
-                var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
-                var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
 
-                return File(this.categoricalOptionsImportService.ExportOptions(
-                    this.questionWithOptionsViewModel.QuestionnaireId,
-                    this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
-            }
+            var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
+            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
+
+            return File(this.categoricalOptionsImportService.ExportOptions(
+                this.questionWithOptionsViewModel.QuestionnaireId,
+                this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
         }
 
         public class EditOptionsViewModel
@@ -548,7 +452,5 @@ namespace WB.UI.Designer.Controllers
 
             public bool IsCategories { get; set; }
         }
-
-        #endregion
     }
 }

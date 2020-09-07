@@ -58,6 +58,20 @@
                 }
             };
 
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
+            // Automatically reload window on popup close. If supported by browser
+            $scope.openEditor = null
+            if('BroadcastChannel' in window){
+                $scope.bcChannel = new BroadcastChannel("editcategory")
+                $scope.bcChannel.onmessage = function(ev) {
+                    console.log(ev.data)
+                    if(ev.data === 'close#' + $scope.openEditor) {
+                        $scope.loadQuestion()
+                    }
+                }
+            }
+
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
@@ -502,7 +516,7 @@
                 }
                 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
-
+                $scope.openEditor =  $scope.activeQuestion.itemId
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                     "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
             };
@@ -519,8 +533,10 @@
                 }
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
-
-                window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
+                $scope.openEditor =  $scope.activeQuestion.itemId
+                window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId 
+                    + "?questionid=" + $scope.activeQuestion.itemId
+                    + "&cascading=true",
                     "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
             };
 
