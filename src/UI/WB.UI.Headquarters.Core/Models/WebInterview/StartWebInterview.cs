@@ -45,6 +45,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string WebSurveyHeader { get; set; }
         public string FinishInterview { get; set; }
         public string SurveyName { get; set; }
+        public string PdfUrl { get; set; }
     }
 
     public class WebInterviewError
