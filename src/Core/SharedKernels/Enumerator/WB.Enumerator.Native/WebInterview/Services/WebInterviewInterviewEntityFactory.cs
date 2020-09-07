@@ -528,7 +528,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     Text = ac.Comment,
                     IsOwnComment = true,
                     UserRole = ac.UserRole,
-                    CommentTimeUtc = ac.CommentTime,
+                    CommentTimeUtc = ac.CommentTime.UtcDateTime,
                     Id = ac.Id,
                     Resolved = ac.Resolved
                 })

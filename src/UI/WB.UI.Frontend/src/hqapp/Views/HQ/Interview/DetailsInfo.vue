@@ -45,6 +45,16 @@
                                 class="btn btn-link gray-action-unit"
                                 @click="showOverview">{{$t("Details.Overview")}}</button>
                         </li>
+                        <li>
+                            <span class="data-label"></span>
+                            <span class="data"></span>
+                            <a id="btn_Print"
+                                class="btn btn-link gray-action-unit"
+                                v-bind:href="this.$config.model.pdfUrl"
+                                target="_blank"
+                                :title="$t('WebInterview.DownloadAnswersHint')"
+                                download>{{$t("WebInterview.DownloadAnswers")}}</a>
+                        </li>
                     </ul>
                 </div>
             </div>

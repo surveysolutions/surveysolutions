@@ -97,7 +97,9 @@
     <Content Update="wwwroot\**\*.*">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
-    <EmbeddedResource Include="wwwroot\**\*" />
+
+    <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Content\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>
