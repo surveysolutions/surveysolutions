@@ -289,12 +289,15 @@ namespace WB.UI.Headquarters.Controllers
                             if (invitation.Interview.Status >= InterviewStatus.Completed)
                                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
                                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                            
+                            HttpContext.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                             return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
                         }
                     }
 
                     var interviewId = this.CreateInterview(assignment);
                     invitationService.InterviewWasCreated(invitation.Id, interviewId);
+                    HttpContext.SaveWebInterviewAccessForCurrentUser(interviewId);
 
                     return this.Redirect(GenerateUrl("Cover", interviewId));
                 }
@@ -311,7 +314,10 @@ namespace WB.UI.Headquarters.Controllers
                     webInterviewConfig.SingleResponse)
                 {
                     if (IsInterviewExists(invitation.InterviewId))
+                    {
+                        HttpContext.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                         return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
+                    }
                 }
 
                 if (assignment.IsCompleted)
@@ -338,6 +344,7 @@ namespace WB.UI.Headquarters.Controllers
                             Expires = DateTime.Now.AddYears(1)
                         });
 
+                        HttpContext.SaveWebInterviewAccessForCurrentUser(interviewId);
                         return this.Redirect(GenerateUrl("Cover", interviewId));
                     }
                 }
@@ -439,6 +446,7 @@ namespace WB.UI.Headquarters.Controllers
             if (invitation.InterviewId != null)
             {
                 RememberCapchaFilled(invitation.InterviewId);
+                HttpContext.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                 return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
 
@@ -452,6 +460,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (this.statefulInterviewRepository.Get(pendingInterviewId.FormatGuid()) != null)
                 {
                     RememberCapchaFilled(invitation.InterviewId);
+                    HttpContext.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                     return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
                 }
             }
@@ -481,6 +490,7 @@ namespace WB.UI.Headquarters.Controllers
 
             TempData[LastCreatedInterviewIdKey] = interviewId;
 
+            HttpContext.SaveWebInterviewAccessForCurrentUser(interviewId);
             var generateUrl = GenerateUrl("Cover", interviewId);
             return this.Redirect(generateUrl);
         }
@@ -597,16 +607,16 @@ namespace WB.UI.Headquarters.Controllers
             if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) ||
                 !string.IsNullOrEmpty(assignment?.Password))
             {
+                HttpContext.SaveWebInterviewAccessForCurrentUser(id);
                 var model = this.GetResumeModel(id);
                 return this.View("Resume", model);
             }
 
             RememberCapchaFilled(id);
+            HttpContext.SaveWebInterviewAccessForCurrentUser(id);
 
             if (returnUrl == null)
-            {
                 return Redirect(GenerateUrl(@"Cover", id));
-            }
 
             return Redirect(returnUrl);
         }
@@ -638,14 +648,8 @@ namespace WB.UI.Headquarters.Controllers
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
                 if (interview.Status == InterviewStatus.Completed)
-                {
-                    var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
-                    if (hasAccess)
-                        return this.RedirectToAction("Finish", routeValues: new { id });
-                    
                     throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
                          Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
-                }
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -705,11 +709,10 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             RememberCapchaFilled(id);
+            HttpContext.SaveWebInterviewAccessForCurrentUser(id);
 
             if (returnUrl == null)
-            {
                 return Redirect(GenerateUrl(@"Cover", id));
-            }
 
             return this.Redirect(returnUrl);
         }
@@ -875,7 +878,7 @@ namespace WB.UI.Headquarters.Controllers
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
-            var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
+            var hasAccess = HttpContext.HasAccessToWebInterviewAfterComplete(interview);
             var pdfUrl = hasAccess
                 ? Url.Action("Pdf", "InterviewsPublicApi", new{ id = interview.Id })
                 : null;
