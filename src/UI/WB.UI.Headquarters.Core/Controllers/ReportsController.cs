@@ -127,6 +127,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var devicesInterviewersModel = new DevicesInterviewersModel
             {
+                BaseReportUrl = Url.Action("InterviewersAndDevices", "Reports", new { id = (Guid?)null }),
                 DataUrl = Url.Action("DeviceInterviewers", "ReportDataApi"),
                 InterviewersBaseUrl = Url.Action("Interviewers", "Users"),
                 InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
