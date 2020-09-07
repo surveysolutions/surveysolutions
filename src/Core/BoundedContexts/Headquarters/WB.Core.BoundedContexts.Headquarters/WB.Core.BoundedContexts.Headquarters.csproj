@@ -69,6 +69,9 @@
     <PackageReference Include="refit" Version="5.1.67" />
     <PackageReference Include="Sendgrid" Version="9.21.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
+    <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="0.1.1" />
+    <PackageReference Include="MigraDocCore.Rendering" Version="0.1.0" />
+    <PackageReference Include="PdfSharpCore" Version="1.2.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -123,6 +126,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>WebInterviewResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\PdfInterview.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PdfInterview.resx</DependentUpon>
+    </Compile>
+   
   </ItemGroup>
 
   <ItemGroup>
@@ -135,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfInterview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\PreloadingVerificationMessages.resx">
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>

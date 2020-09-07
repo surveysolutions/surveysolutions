@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
                 Text = x.Comment,
                 IsOwnComment = x.UserId == currentUserId,
                 UserRole = x.UserRole,
-                CommentTimeUtc = x.CommentTime,
+                CommentTimeUtc = x.CommentTime.UtcDateTime,
                 Resolved = x.Resolved,
                 EntityId = x.QuestionIdentity.ToString()
             });

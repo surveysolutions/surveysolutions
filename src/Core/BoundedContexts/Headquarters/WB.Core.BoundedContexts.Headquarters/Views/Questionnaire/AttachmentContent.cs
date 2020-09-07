@@ -13,5 +13,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         {
             return this.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase);
         }
+        public virtual bool IsVideo()
+        {
+            return this.ContentType.StartsWith("video", StringComparison.OrdinalIgnoreCase);
+        }
+        public virtual bool IsAudio()
+        {
+            return this.ContentType.StartsWith("audio", StringComparison.OrdinalIgnoreCase);
+        }
+        public virtual bool IsPdf()
+        {
+            return this.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
