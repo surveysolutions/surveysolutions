@@ -655,7 +655,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.InterviewerId = @event.InterviewerId;
             this.properties.IsReceivedByInterviewer = false;
-            this.properties.InterviewerAssignedDateTime = @event.AssignTime;
+            this.properties.InterviewerAssignedDateTime = @event.OriginDate ?? @event.AssignTime;
         }
 
         protected virtual void Apply(InterviewDeleted @event) { }
@@ -672,7 +672,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(InterviewCompleted @event)
         {
             this.properties.WasCompleted = true;
-            this.properties.CompletedDate = @event.CompleteTime;
+            this.properties.CompletedDate = @event.OriginDate ?? @event.CompleteTime;
         }
 
         protected virtual void Apply(InterviewRestarted @event) { }
@@ -687,7 +687,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.WasCompleted = false;
             this.properties.WasRejected = true;
-            this.properties.RejectDateTime = @event.RejectTime;
+            this.properties.RejectDateTime = @event.OriginDate ?? @event.RejectTime;
         }
 
         protected virtual void Apply(InterviewRejectedByHQ @event) { }
