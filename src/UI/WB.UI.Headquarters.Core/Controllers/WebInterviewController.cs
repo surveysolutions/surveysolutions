@@ -40,6 +40,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
 using Microsoft.Extensions.Caching.Memory;
+using WB.UI.Headquarters.Code.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -637,8 +638,14 @@ namespace WB.UI.Headquarters.Controllers
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
                 if (interview.Status == InterviewStatus.Completed)
+                {
+                    var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
+                    if (hasAccess)
+                        return this.RedirectToAction("Finish", routeValues: new { id });
+                    
                     throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
-                        Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                         Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                }
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -868,6 +875,11 @@ namespace WB.UI.Headquarters.Controllers
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
+            var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
+            var pdfUrl = hasAccess
+                ? Url.Action("Pdf", "InterviewsPublicApi", new{ id = interview.Id })
+                : null;
+            
             return new FinishWebInterview
             {
                 QuestionnaireTitle = questionnaire.Title,
@@ -882,6 +894,7 @@ namespace WB.UI.Headquarters.Controllers
                 SurveyName = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(),
                     questionnaire.Title),
+                PdfUrl = pdfUrl,
             };
         }
 

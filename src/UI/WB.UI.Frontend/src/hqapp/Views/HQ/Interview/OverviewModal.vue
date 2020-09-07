@@ -26,12 +26,12 @@
                 @click="hide">
                 {{ $t("Pages.CloseLabel") }}
             </button>
-            <!-- <button type="button"
+            <button type="button"
                 class="btn btn-link"
                 style="float:right"
                 @click="print">
                 {{ $t("Pages.Print") }}
-            </button> -->
+            </button>
         </div>
     </ModalFrame>
 </template>

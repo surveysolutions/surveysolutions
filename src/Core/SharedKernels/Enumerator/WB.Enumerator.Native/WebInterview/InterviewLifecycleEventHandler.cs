@@ -289,7 +289,7 @@ namespace WB.Enumerator.Native.WebInterview
         
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            if (!evnt.IsPrototype())
+            if (!evnt.IsPrototype() && evnt.Payload.Status != InterviewStatus.Completed)
             {
                 this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
             }

@@ -2,11 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -23,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
@@ -41,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ILogger<InterviewsPublicApiController> logger;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
+        private readonly IPdfInterviewGenerator pdfInterviewGenerator;
 
         public InterviewsPublicApiController(
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -53,7 +57,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IAuthorizedUser authorizedUser,
             ILogger<InterviewsPublicApiController> logger,
             IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewDiagnosticsFactory diagnosticsFactory)
+            IInterviewDiagnosticsFactory diagnosticsFactory,
+            IPdfInterviewGenerator pdfInterviewGenerator)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -66,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.logger = logger;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
+            this.pdfInterviewGenerator = pdfInterviewGenerator;
         }
 
 
@@ -178,6 +184,43 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             return interview;
+        }
+
+        /// <summary>
+        /// Get interview transcript in pdf file
+        /// </summary>
+        /// <param name="id">Interview id</param>
+        /// <response code="403">Authorised user has no access to interview</response>
+        /// <response code="404">Interview not found or pdf cannot be generated</response>
+        [HttpGet]
+        [Route("{id:guid}/pdf")]
+        [AllowAnonymous]
+        public IActionResult Pdf(Guid id)
+        {
+            var interview = statefulInterviewRepository.Get(id.ToString());
+            if (interview == null)
+                return NotFound(id);
+
+            if (!this.authorizedUser.IsAuthenticated)
+            {
+                var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
+                if (!hasAccess)
+                    return Forbid();
+            }
+
+            if (this.authorizedUser.IsInterviewer && interview.CurrentResponsibleId != this.authorizedUser.Id)
+                return Forbid();
+
+            if (this.authorizedUser.IsSupervisor && interview.SupervisorId != this.authorizedUser.Id)
+                return Forbid();
+
+            var content = pdfInterviewGenerator.Generate(id);
+            if (content == null)
+                return NotFound(id);
+
+            return this.File(content, 
+                "application/pdf", 
+                fileDownloadName: interview.GetInterviewKey() + ".pdf");
         }
 
         /// <summary>

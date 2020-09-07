@@ -127,7 +127,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new { id = interviewSummary.ResponsibleId }) :
                                             "javascript:void(0);",
-                InterviewsUrl = Url.Action("Index", "Interviews")
+                InterviewsUrl = Url.Action("Index", "Interviews"),
+                PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ id = id }),
             });
         }
 
@@ -230,5 +231,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string QuestionnaireTitle { get; set; }
         public long QuestionnaireVersion { get; set; }
         public string InterviewDuration { get; set; }
+        public string PdfUrl { get; set; }
     }
 }
