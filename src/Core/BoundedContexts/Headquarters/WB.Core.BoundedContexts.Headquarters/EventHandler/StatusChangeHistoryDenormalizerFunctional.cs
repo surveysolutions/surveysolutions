@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.SupervisorId,
                 state.ResponsibleId,
                 InterviewExportedAction.Completed,
-                @event.Payload.CompleteTime?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.CompleteTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.SupervisorId,
                 state.ResponsibleId,
                 InterviewExportedAction.RejectedBySupervisor,
-                @event.Payload.RejectTime?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.RejectTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.SupervisorId,
                 @event.Payload.InterviewerId,
                 expectedStatus,
-                @event.Payload.AssignTime?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
 
