@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -56,6 +59,7 @@ namespace WB.UI.Headquarters
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             registry.Bind<UpdateRequiredFilter>();
+            registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
             registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
 
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>

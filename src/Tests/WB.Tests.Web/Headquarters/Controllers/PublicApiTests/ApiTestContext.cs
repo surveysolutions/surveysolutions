@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
@@ -69,7 +70,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
             IStatefullInterviewSearcher statefullInterviewSearcher = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IPdfInterviewGenerator pdfInterviewGenerator = null)
         {
             var controller = new InterviewsPublicApiController(
                 allInterviewsViewFactory: allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(), 
@@ -82,7 +84,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<InterviewsPublicApiController>>(),
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
-                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>());
+                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
+                pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>());
 
             return controller;
         }
