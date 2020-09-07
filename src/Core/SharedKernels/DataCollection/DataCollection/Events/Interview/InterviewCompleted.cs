@@ -11,11 +11,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.Comment = comment;
 
             if (originDate != default(DateTimeOffset))
-                this.CompleteTime = originDate;
+                this.CompleteTime = originDate.UtcDateTime;
             
         }
 
-        public DateTimeOffset? CompleteTime { get; set; }
+        public DateTime? CompleteTime { get; set; }
         public string Comment { get; private set; }
     }
 }
