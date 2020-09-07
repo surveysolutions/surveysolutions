@@ -1,19 +1,25 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.Infrastructure.AspNetCore;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
@@ -53,7 +59,9 @@ namespace WB.UI.Headquarters
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             registry.Bind<UpdateRequiredFilter>();
-            
+            registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
+            registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
+
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());

@@ -25,7 +25,7 @@
     <color name="nonAnsweredBackground">#EEEFF0</color>
     <color name="invalidAnsweredBackground">#FFF6D6D0</color>
 
-    <color name="colorToolbarText">#FFFFFFFF</color>
+    <color name="colorToolbarText">@android:color/white</color>
     <color name="colorToolbarTransp">#BFFFFFFF</color>
 
     <color name="emptyOptionsText">#a5a5a5</color>

@@ -244,8 +244,7 @@ namespace WB.UI.Headquarters
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRazorPages();
-            services.AddHttpContextAccessor();
-
+            
             services.AddHqAuthorization();
             services.AddDatabaseStoredExceptional(environment, Configuration);
 

@@ -55,7 +55,7 @@
                   local:MvxBind="Text SelectedMap;" />
             </LinearLayout>
               <Button
-                  style="@style/Area_LocationButton"
+                  style="@style/Area_LocationButton"                  
                   local:MvxBind="Click SwitchLocatorCommand; Visibility Visibility(Map != null)" />
               <Button
                     style="@style/Area_ShowFullMap"
