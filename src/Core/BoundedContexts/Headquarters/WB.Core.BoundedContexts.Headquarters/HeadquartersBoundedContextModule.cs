@@ -425,14 +425,14 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
             
-            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
-                configuration
+            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration
                 .PreProcessBy<InterviewCacheWarmupPreProcessor>()
                     .SkipPreProcessFor<HardDeleteInterview>()
                     .SkipPreProcessFor<DeleteInterviewCommand>()
                     .SkipPreProcessFor<MarkInterviewAsReceivedByInterviewer>()
                     .SkipPreProcessFor<AssignInterviewerCommand>()
                     .SkipPreProcessFor<AssignSupervisorCommand>()
+                .PreProcessBy<IWebInterviewTimezoneSetter>()
                 .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
                     .SkipPostProcessFor<HardDeleteInterview>()
                     .SkipPostProcessFor<DeleteInterviewCommand>()
