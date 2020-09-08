@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -114,10 +115,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             IRandomValuesSource randomSource = null,
             IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings = null)
         {
-            return new InterviewUniqueKeyGenerator(summaries ?? new TestInMemoryWriter<InterviewSummary>(),
+            var interviewUniqueKeyGenerator = new InterviewUniqueKeyGenerator(summaries ?? new TestInMemoryWriter<InterviewSummary>(),
                 naturalKeySettings ?? new TestInMemoryKeyValueStorage<NaturalKeySettings>(),
                 randomSource ?? Create.Service.RandomValuesSource(),
                 Mock.Of<ILogger<InterviewUniqueKeyGenerator>>());
+
+            InterviewUniqueKeyGenerator.maxInterviewKeyValue = 0;
+            
+            return interviewUniqueKeyGenerator;
         }
     }
 }
