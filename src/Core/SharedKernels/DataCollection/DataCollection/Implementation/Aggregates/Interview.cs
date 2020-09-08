@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -25,7 +23,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -737,7 +734,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
 
-        private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
+        private readonly Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
         private IQuestionOptionsRepository questionOptionsRepository;
         
         protected virtual IQuestionnaire GetQuestionnaireOrThrow(string language)
