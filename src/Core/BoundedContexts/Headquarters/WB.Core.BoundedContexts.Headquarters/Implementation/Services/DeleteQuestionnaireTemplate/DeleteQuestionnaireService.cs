@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
         }
 
-        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
 
@@ -208,25 +208,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
-        private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid userId)
         {
             var exceptionsDuringDelete = new List<Exception>();
-            List<InterviewSummary> listOfInterviews;
+            List<Guid> interviewIds;
 
             do
             {
-                listOfInterviews = this.interviewsToDeleteFactory.LoadBatch(questionnaireId, questionnaireVersion);
+                interviewIds = this.interviewsToDeleteFactory.LoadBatch(questionnaireId, questionnaireVersion);
 
                 try
                 {
-                    foreach (var interviewSummary in listOfInterviews)
-                    {
-                        this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
-                            userId ?? interviewSummary.ResponsibleId));
+                    Parallel.ForEach(interviewIds,
+                        new ParallelOptions()
+                        {
+                            MaxDegreeOfParallelism = 
+                        },
+                        interviewId =>
+                        {
+                            this.commandService.Execute(new HardDeleteInterview(interviewId, userId));
 
-                        // to reduce memory pressure during deleting of thousands interviews
-                        this.aggregateRootCache.Evict(interviewSummary.InterviewId);
-                    }
+                            // to reduce memory pressure during deleting of thousands interviews
+                            this.aggregateRootCache.Evict(interviewId);
+                        });
                 }
                 catch (Exception e)
                 {
@@ -234,7 +238,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                     exceptionsDuringDelete.Add(e);
                 }
 
-            } while (exceptionsDuringDelete.Count == 0 && listOfInterviews.Count > 0);
+            } while (exceptionsDuringDelete.Count == 0 && interviewIds.Count > 0);
 
             if (exceptionsDuringDelete.Count > 0)
                 throw new AggregateException(
