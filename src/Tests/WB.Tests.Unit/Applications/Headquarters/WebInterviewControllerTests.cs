@@ -53,15 +53,14 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         [TestCase(1, "11111111111111111111111111111111")]
-        [TestCase(1, null)]
         [TestCase(100, "11111111111111111111111111111111")]
         public void when_resume_interview_should_save_info_in_session(int quantity, string interviewId)
         {
             var controller = CreateController(quantity, interviewId);
 
-            controller.Resume("interviewId", "returnUrl");
+            controller.Resume(interviewId, "returnUrl");
 
-            Assert.That(controller.HttpContext.Session.Get<bool>("WebInterview-interviewId"), Is.EqualTo(true));
+            Assert.That(controller.HttpContext.Session.Get<bool>($"WebInterview-{interviewId}"), Is.EqualTo(true));
         }
 
         private WebInterviewController CreateController(int quantity, string interviewId)
