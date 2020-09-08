@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Code.WebInterview
         {
             var isExistsInterviewInCookie = context.Session.Get<bool>("WebInterview-" + interview.Id.FormatGuid());
             var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
-                                                      && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
+                                                      && interview.CompletedDate.Value.UtcDateTime.AddHours(1) > DateTime.UtcNow;
             return hasAccess;
         }
     }

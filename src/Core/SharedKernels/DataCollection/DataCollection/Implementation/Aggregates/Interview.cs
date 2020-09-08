@@ -204,7 +204,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(TextQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity)?.SetAnswer(TextAnswer.FromString(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
             if (this.UsesExpressionStorage) return;
@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(QRBarcodeQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(QRBarcodeAnswer.FromString(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
 
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(PictureQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value), @event.OriginDate ?? @event.AnswerTimeUtc);
 
@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(NumericRealQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
 
@@ -247,7 +247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(NumericIntegerQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
@@ -259,7 +259,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(DateTimeQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
 
@@ -270,7 +270,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(SingleOptionQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             var question = this.Tree.GetQuestion(questionIdentity);
 
@@ -283,7 +283,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(MultipleOptionsQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             var question = this.Tree.GetQuestion(questionIdentity);
 
@@ -297,7 +297,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(YesNoQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions), @event.OriginDate ?? @event.AnswerTimeUtc);
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
@@ -309,7 +309,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(GeoLocationQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(GpsAnswer.FromGeoPosition(new GeoPosition(
                     @event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude, @event.Timestamp)), @event.OriginDate ?? @event.AnswerTimeUtc);
@@ -322,7 +322,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(AreaQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize,
                 @event.Length, @event.Coordinates, @event.DistanceToEditor)), @event.OriginDate ?? @event.AnswerTimeUtc);
@@ -331,7 +331,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(AudioQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(AudioAnswer.FromString(@event.FileName, @event.Length), @event.OriginDate ?? @event.AnswerTimeUtc);
         }
@@ -339,7 +339,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(TextListQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(TextListAnswer.FromTupleArray(@event.Answers), @event.OriginDate ?? @event.AnswerTimeUtc);
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
@@ -351,7 +351,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
             this.Tree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector), @event.OriginDate ?? @event.AnswerTimeUtc);
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVector);
@@ -360,7 +360,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
             this.Tree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(@event.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray()), @event.OriginDate ?? @event.AnswerTimeUtc);
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVectors);
@@ -655,7 +655,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.InterviewerId = @event.InterviewerId;
             this.properties.IsReceivedByInterviewer = false;
-            this.properties.InterviewerAssignedDateTime = @event.AssignTime;
+            this.properties.InterviewerAssignedDateTime = @event.OriginDate ?? @event.AssignTime;
         }
 
         protected virtual void Apply(InterviewDeleted @event) { }
@@ -672,7 +672,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(InterviewCompleted @event)
         {
             this.properties.WasCompleted = true;
-            this.properties.CompletedDate = @event.CompleteTime;
+            this.properties.CompletedDate = @event.OriginDate ?? @event.CompleteTime;
         }
 
         protected virtual void Apply(InterviewRestarted @event) { }
@@ -687,7 +687,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.WasCompleted = false;
             this.properties.WasRejected = true;
-            this.properties.RejectDateTime = @event.RejectTime;
+            this.properties.RejectDateTime = @event.OriginDate ?? @event.RejectTime;
         }
 
         protected virtual void Apply(InterviewRejectedByHQ @event) { }
@@ -2995,7 +2995,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void SetStartDateOnFirstAnswerSet(Identity questionIdentity, DateTime answerDate)
+        private void SetStartDateOnFirstAnswerSet(Identity questionIdentity, DateTimeOffset answerDate)
         {
             if (this.properties.StartedDate.HasValue) return;
 
