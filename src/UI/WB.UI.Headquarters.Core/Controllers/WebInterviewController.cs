@@ -777,7 +777,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return new ResumeWebInterview
             {
-                StartedDate = interview.StartedDate?.ToString("o"),
+                StartedDate = interview.StartedDate?.UtcDateTime.ToString("o"),
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
                 HostedCaptchaHtml = model.HostedCaptchaHtml,
@@ -883,8 +883,8 @@ namespace WB.UI.Headquarters.Controllers
             return new FinishWebInterview
             {
                 QuestionnaireTitle = questionnaire.Title,
-                StartedDate = interview.StartedDate?.ToString("o"),
-                CompletedDate = interview.CompletedDate?.ToString("o"),
+                StartedDate = interview.StartedDate?.UtcDateTime.ToString("o"),
+                CompletedDate = interview.CompletedDate?.UtcDateTime.ToString("o"),
                 WebSurveyHeader = SubstituteQuestionnaireName(
                     webInterviewConfig.CustomMessages.GetText(WebInterviewUserMessages.WebSurveyHeader).ToString(),
                     questionnaire.Title),

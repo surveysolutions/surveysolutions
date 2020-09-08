@@ -26,10 +26,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool WasCompleted { get; set; }
         public bool WasRejected { get; set; }
         public bool IsHardDeleted { get; set; }
-        public DateTime? StartedDate { get; set; }
-        public DateTime? CompletedDate { get; set; }
-        public DateTime? RejectDateTime { get; set; }
-        public DateTime? InterviewerAssignedDateTime { get; set; }
+        public DateTimeOffset? StartedDate { get; set; }
+        public DateTimeOffset? CompletedDate { get; set; }
+        public DateTimeOffset? RejectDateTime { get; set; }
+        public DateTimeOffset? InterviewerAssignedDateTime { get; set; }
         public int? AssignmentId { get; set; }
 
         private Guid? supervisorId;
