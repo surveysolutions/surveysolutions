@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<MultipleOptionsQuestionAnswered>().RosterVector.Should().BeEquivalentTo(propagationVector);
 
         [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event_with_AnswerTime_equal_to_answerTime () =>
-            eventContext.GetSingleEvent<MultipleOptionsQuestionAnswered>().OriginDate.Value.UtcDateTime.Should().BeCloseTo(DateTime.UtcNow, 2000);
+            eventContext.GetSingleEvent<MultipleOptionsQuestionAnswered>().OriginDate.Value.UtcDateTime.Should().BeCloseTo(answerTime.UtcDateTime, 2000);
 
         private static EventContext eventContext;
         private static Interview interview;
