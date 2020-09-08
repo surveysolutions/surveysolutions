@@ -18,12 +18,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.interviewsReader = interviewsReader;
         }
 
-        public List<InterviewSummary> LoadBatch(Guid questionnaireId, long questionnaireVersion)
+        public List<Guid> LoadBatch(Guid questionnaireId, long questionnaireVersion)
         {
             var result = this.interviewsReader.Query(_ => _.Where(interview => 
                 interview.QuestionnaireId == questionnaireId &&
                 interview.QuestionnaireVersion == questionnaireVersion)
                 .Take(BatchSize)
+                .Select(summary => summary.InterviewId)
                 .ToList());
 
             return result;
