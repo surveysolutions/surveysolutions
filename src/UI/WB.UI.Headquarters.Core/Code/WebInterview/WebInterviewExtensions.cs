@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Code.WebInterview
         {
             var isExistsInterviewInCookie = request.Cookies.HasInterviewInfoInCookie(interview.Id);
             var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
-                                                      && interview.CompletedDate.Value.AddHours(1) > DateTime.UtcNow;
+                                                      && interview.CompletedDate.Value.UtcDateTime.AddHours(1) > DateTime.UtcNow;
             return hasAccess;
         }
     }
