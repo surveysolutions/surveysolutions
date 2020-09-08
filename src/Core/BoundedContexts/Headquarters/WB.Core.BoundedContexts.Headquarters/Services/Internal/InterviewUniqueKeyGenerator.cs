@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         private readonly IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings;
         private readonly IRandomValuesSource randomValuesSource;
         private readonly ILogger<InterviewUniqueKeyGenerator> logger;
-        private int maxInterviewKeyValue = 0;
+        private int? maxInterviewKeyValue = 0;
 
         public InterviewUniqueKeyGenerator(IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
             IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings,
@@ -31,13 +31,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.naturalKeySettings = naturalKeySettings;
             this.randomValuesSource = randomValuesSource;
             this.logger = logger;
-
-            NaturalKeySettings storedMaxValue = naturalKeySettings.GetById(AppSetting.NatualKeySettings);
-            maxInterviewKeyValue = storedMaxValue?.MaxValue ?? 99_99_99_99;
         }
 
         public InterviewKey Get()
         {
+            if (maxInterviewKeyValue == 0)
+            {
+                NaturalKeySettings storedMaxValue = naturalKeySettings.GetById(AppSetting.NatualKeySettings);
+                maxInterviewKeyValue = storedMaxValue?.MaxValue ?? 99_99_99_99;
+            }
+
             var result = Policy.Handle<InterviewUniqueKeyGeneratorException>()
                 .Retry(5, (ctx, retryCount) =>
                 {
