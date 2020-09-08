@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         private readonly IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings;
         private readonly IRandomValuesSource randomValuesSource;
         private readonly ILogger<InterviewUniqueKeyGenerator> logger;
-        private static int maxInterviewKeyValue = 0;
+        public static int maxInterviewKeyValue = 0;
 
         public InterviewUniqueKeyGenerator(IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
             IPlainKeyValueStorage<NaturalKeySettings> naturalKeySettings,
