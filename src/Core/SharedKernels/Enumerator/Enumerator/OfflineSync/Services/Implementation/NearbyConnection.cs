@@ -269,10 +269,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             events.OnNext(new NearbyEvent.InitiatedConnection(info.Endpoint, info));
         }
 
-        private void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
+        private async void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
         {
             this.logger.Verbose($"({update.Endpoint}, payloadId: {update.Id}, status: {update.Status.ToString()}, {update.BytesTransferred} of {update.TotalBytes}");
-            communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
+            await communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
         }
 
         private async void OnPayloadReceived(object sender, IPayload payload)

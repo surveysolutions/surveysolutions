@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        public async void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
+        public async Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
             NearbyPayloadTransferUpdate update)
         {
             var isIncoming = false;

@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 throw new NotImplementedException();
             }
 
-            public void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint, NearbyPayloadTransferUpdate update)
+            public Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint, NearbyPayloadTransferUpdate update)
             {
                 throw new NotImplementedException();
             }
