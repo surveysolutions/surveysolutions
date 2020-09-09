@@ -14,10 +14,7 @@ namespace WB.UI.Headquarters.Code.WebInterview
         
         public static bool HasAccessToWebInterviewAfterComplete(this ISession session, IStatefulInterview interview)
         {
-            var isExistsInterviewInCookie = session.Get<bool>("WebInterview-" + interview.Id.FormatGuid());
-            var hasAccess = isExistsInterviewInCookie && interview.CompletedDate.HasValue
-                                                      && interview.CompletedDate.Value.UtcDateTime.AddHours(1) > DateTime.UtcNow;
-            return hasAccess;
+            return session.Get<bool>("WebInterview-" + interview.Id.FormatGuid());
         }
     }
 }
