@@ -2445,13 +2445,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void MigrateToNewVersion()
         {
             if (QuestionnaireDocument.IsCoverPageSupported)
-                throw new QuestionnaireException(DomainExceptionType.Undefined, ExceptionMessages.QuestionnaireTitleIsEmpty);
+                throw new QuestionnaireException(DomainExceptionType.MigrateToNewVersion, ExceptionMessages.QuestionnaireTitleIsEmpty);
 
             var cover = CreateGroup(QuestionnaireDocument.CoverPageSectionId, QuestionnaireEditor.CoverPageSection, String.Empty, String.Empty, String.Empty, false);
             this.innerDocument.Insert(0, cover, null);
 
-            var featuredQuestions = QuestionnaireDocument
-                .Find<IQuestion>(question => question.Featured)
+            var featuredQuestions = QuestionnaireDocument.Children
+                .TreeToEnumerableDepthFirst(c => c.Children)
+                .Where(entity => entity is IQuestion question && question.Featured)
                 .Reverse()
                 .ToList();
 
