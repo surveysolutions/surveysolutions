@@ -269,19 +269,7 @@ namespace WB.UI.Designer
                 }
             });
             app.UseSpaStaticFiles();
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseStaticFiles(new StaticFileOptions
-            //    {
-            //        RequestPath = "/js/app",
-            //        FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"/questionnaire/scripts"),
-            //        OnPrepareResponse = ctx =>
-            //        {
-            //            // remove cache
-            //        }
-            //    });
-            //}
-
+            
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
@@ -325,15 +313,18 @@ namespace WB.UI.Designer
                     pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
                 routes.MapRazorPages();
 
-                routes.MapToVueCliProxy("{*path}", new SpaOptions
-                    {
-                        SourcePath = SpaRoot
-                },
-                    port: 0,
-                    npmScript: "serve", //(System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
-                    regex: "Compiled successfully",
-                    forceKill: true
-                );
+                if (env.IsDevelopment())
+                {
+                    routes.MapToVueCliProxy("{*path}", new SpaOptions
+                        {
+                            SourcePath = SpaRoot
+                        },
+                        port: 0,
+                        npmScript: "serve", //(System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
+                        regex: "Compiled successfully",
+                        forceKill: true
+                    );
+                }
             });
 
             app.UseSpa(spa =>
