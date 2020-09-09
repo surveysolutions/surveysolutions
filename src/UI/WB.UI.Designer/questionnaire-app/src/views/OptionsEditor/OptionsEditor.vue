@@ -10,7 +10,7 @@
 
                         <v-spacer></v-spacer>
 
-                        <v-btn icon class="hidden-xs-only" @close="close()">
+                        <v-btn icon class="hidden-xs-only" @click="close()">
                             <v-icon>mdi-close</v-icon>
                         </v-btn>
                     </v-toolbar>
