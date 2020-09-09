@@ -441,6 +441,7 @@
     "Table": "Table",
     "Strings": "Strings",
     "OptionLineFormatError": "Every line should be in format {title...value} or {title...parent_value/value}. Example: bob...4/32",
-    "ValidationIntValue": "Value is too big"
+    "ValidationIntValue": "Value is too big",
+    "RequiredField": "Required field"
   }
 }

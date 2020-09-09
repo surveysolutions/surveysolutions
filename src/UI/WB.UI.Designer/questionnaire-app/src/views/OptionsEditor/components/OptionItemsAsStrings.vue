@@ -31,7 +31,7 @@ export default {
 
     props: {
         categories: { type: Array, required: true },
-        cascading: { type: Boolean, required: true },
+        showParentValue: { type: Boolean, required: true },
         loading: { type: Boolean, required: true }
     },
 
@@ -56,7 +56,7 @@ export default {
 
                     const top5Errors = validateText(
                         value,
-                        this.cascading
+                        this.showParentValue
                     ).slice(0, 5);
 
                     if (top5Errors.length > 0) {
@@ -80,7 +80,7 @@ export default {
         },
 
         isTextValid() {
-            return validateText(this.categoriesAsText, this.cascading);
+            return validateText(this.categoriesAsText, this.showParentValue);
         },
 
         lineCount() {
@@ -105,7 +105,7 @@ export default {
     methods: {
         change(value) {
             if (this.valid) {
-                const categories = convertToTable(value, this.cascading);
+                const categories = convertToTable(value, this.showParentValue);
                 this.$emit('change', categories);
             }
         },
@@ -124,7 +124,7 @@ export default {
             this.convert = true;
             this.$emit('inprogress', true);
 
-            convertToText(this.categories, this.cascading).then(data => {
+            convertToText(this.categories, this.showParentValue).then(data => {
                 this.$nextTick(() => {
                     this.categoriesAsText = data;
                 });

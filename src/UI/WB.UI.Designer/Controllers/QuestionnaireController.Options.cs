@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -25,34 +23,7 @@ namespace WB.UI.Designer.Controllers
 {
     public partial class QuestionnaireController
     {
-        private const string OptionsSessionParameterName = "options";
-
-        private EditOptionsViewModel? _questionWithOptionsViewModel = null;
-
-        public EditOptionsViewModel? questionWithOptionsViewModel
-        {
-            get
-            {
-                if (_questionWithOptionsViewModel != null) return _questionWithOptionsViewModel;
-                var model = this.HttpContext.Session.Get(OptionsSessionParameterName);
-                if (model != null)
-                {
-                    _questionWithOptionsViewModel = JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
-                    return _questionWithOptionsViewModel;
-                }
-
-                return null;
-            }
-            set
-            {
-                _questionWithOptionsViewModel = value;
-                string data = JsonConvert.SerializeObject(value);
-
-                this.HttpContext.Session.Set(OptionsSessionParameterName, Encoding.UTF8.GetBytes(data));
-            }
-        }
-
-        public IActionResult GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
+        public ActionResult<EditOptionsViewModel> GetCategoryOptions(QuestionnaireRevision id, Guid categoriesId)
         {
             var categoriesView = this.questionnaireInfoFactory.GetCategoriesView(id, categoriesId);
 
@@ -69,83 +40,63 @@ namespace WB.UI.Designer.Controllers
                             Title = option.Text
                         });
 
-            this.questionWithOptionsViewModel = new EditOptionsViewModel
+            return new EditOptionsViewModel
             (
                 questionnaireId: id.QuestionnaireId.FormatGuid(),
                 categoriesId: categoriesId,
                 categoriesName: categoriesView.Name,
                 options: categories.ToList(),
-                isCascading: true,
+                isCascading: false,
                 isCategories: true
             );
-
-            if (this.questionWithOptionsViewModel == null)
-                return NotFound();
-
-            return this.Json(this.questionWithOptionsViewModel);
         }
 
-        public IActionResult GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
+        public EditOptionsViewModel GetOptions(QuestionnaireRevision id, Guid questionId, bool isCascading)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
-            
-            var options = editQuestionView != null 
+
+            var options = editQuestionView != null
                 ? editQuestionView.Options.Select(
                               option => new QuestionnaireCategoricalOption
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
-                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?) null,
+                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?)null,
                                   Title = option.Title
-                              }) 
+                              })
                 : new QuestionnaireCategoricalOption[0];
 
-            this.questionWithOptionsViewModel = new EditOptionsViewModel
+            return new EditOptionsViewModel
             (
-                questionnaireId : id.QuestionnaireId.FormatGuid(),
-                questionId : questionId,
-                questionTitle : editQuestionView?.Title,
-                options : options.ToList(),
-                isCascading : isCascading
+                questionnaireId: id.QuestionnaireId.FormatGuid(),
+                questionId: questionId,
+                questionTitle: editQuestionView?.Title,
+                options: options.ToList(),
+                isCascading: isCascading
             );
-
-            return Json(this.questionWithOptionsViewModel);
-        }
-
-        public IActionResult ResetOptions()
-        {
-            this.questionWithOptionsViewModel = null;
-            return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditOptions(IFormFile? csvFile)
+        public IActionResult EditOptions([FromQuery] QuestionnaireRevision id, [FromQuery] Guid questionId, [FromBody] IFormFile? csvFile)
         {
             List<string> errors = new List<string>();
-            
-            var withOptionsViewModel = this.questionWithOptionsViewModel;
-            if (withOptionsViewModel == null)
-            {
-                errors.Add(Resources.QuestionnaireController.Error);
-                return this.Json(errors);
-            }
 
             if (csvFile == null)
             {
                 errors.Add(Resources.QuestionnaireController.SelectTabFile);
-                return this.Json(errors);
+                return this.Json(new { errors });
             }
 
             try
             {
                 var importResult = this.categoricalOptionsImportService.ImportOptions(
-                    csvFile.OpenReadStream(),
-                    withOptionsViewModel.QuestionnaireId,
-                    withOptionsViewModel.QuestionId);
+                    csvFile.OpenReadStream(), id.ToString(), questionId);
 
                 if (importResult.Succeeded)
                 {
-                    withOptionsViewModel.Options = importResult.ImportedOptions.ToList();
-                    this.questionWithOptionsViewModel = withOptionsViewModel;
+                    return Json(new
+                    {
+                        options = importResult.ImportedOptions.ToList()
+                    });
                 }
                 else
                     errors.AddRange(importResult.Errors);
@@ -155,21 +106,14 @@ namespace WB.UI.Designer.Controllers
                 errors.Add(Resources.QuestionnaireController.TabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
-            
-            return this.Json(errors);
+
+            return this.Json(new { errors });
         }
 
         [HttpPost]
         public IActionResult EditCategories(IFormFile? csvFile)
         {
             List<string> errors = new List<string>();
-
-            var withOptionsViewModel = this.questionWithOptionsViewModel;
-            if (withOptionsViewModel == null)
-            {
-                errors.Add(Resources.QuestionnaireController.Error);
-                return this.Json(errors);
-            }
 
             if (csvFile == null)
             {
@@ -181,8 +125,8 @@ namespace WB.UI.Designer.Controllers
             {
                 var extension = this.fileSystemAccessor.GetFileExtension(csvFile.FileName);
 
-                var excelExtensions = new[] {".xlsx", ".ods", ".xls"};
-                var tsvExtensions = new[] {".txt", ".tab", ".tsv"};
+                var excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
+                var tsvExtensions = new[] { ".txt", ".tab", ".tsv" };
 
                 if (!excelExtensions.Union(tsvExtensions).Contains(extension))
                     throw new ArgumentException(ExceptionMessages.ImportOptions_Tab_Or_Excel_Only);
@@ -193,19 +137,19 @@ namespace WB.UI.Designer.Controllers
 
                 var rows = this.categoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
 
-                withOptionsViewModel.Options =
-                    rows
+                return Json(new
+                {
+                    options = rows
                         .Select(x => new QuestionnaireCategoricalOption()
                         {
                             Title = x.Text,
                             Value = int.Parse(x.Id!),
                             ParentValue = string.IsNullOrEmpty(x.ParentId)
-                                ? (int?) null
+                                ? (int?)null
                                 : int.Parse(x.ParentId)
                         })
-                        .ToList();
-
-                this.questionWithOptionsViewModel = withOptionsViewModel;
+                        .ToList()
+                });
             }
             catch (InvalidFileException e)
             {
@@ -224,13 +168,10 @@ namespace WB.UI.Designer.Controllers
                 errors.Add(Resources.QuestionnaireController.TabFilesOnly);
                 this.logger.LogError(e, e.Message);
             }
-            
-            return this.Json(errors);
+
+            return this.Json(new { errors });
         }
 
-        [HttpPost]
-        public IActionResult EditCascadingOptions(IFormFile csvFile)
-            => this.EditOptions(csvFile);
 
         public class Category
         {
@@ -241,28 +182,27 @@ namespace WB.UI.Designer.Controllers
 
         public class UpdateCategoriesModel
         {
-            public Category[]? Categories { set; get; } 
+            public Category[]? Categories { set; get; }
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApplyOptions([FromBody]UpdateCategoriesModel? categoriesModel)
+        public async Task<IActionResult> ApplyOptions(QuestionnaireRevision id, Guid entityId,
+            bool isCascading, bool isCategory,
+            [FromBody] UpdateCategoriesModel? categoriesModel)
         {
-            if(categoriesModel?.Categories == null)
+            if (categoriesModel?.Categories == null)
                 return Json(GetNotFoundResponseObject());
 
-            if (this.questionWithOptionsViewModel == null)
-                return Json(GetNotFoundResponseObject());
-            
-            if (this.questionWithOptionsViewModel.IsCategories)
+            if (isCategory)
             {
-                var questionnaireId = Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId);
+                var questionnaireId = id.QuestionnaireId;
                 var categoriesId = Guid.NewGuid();
-                
+
                 //remove double parse
                 try
                 {
                     this.categoriesService.Store(questionnaireId,
-                        categoriesId, categoriesModel.Categories.Select((x,i) => new CategoriesRow()
+                        categoriesId, categoriesModel.Categories.Select((x, i) => new CategoriesRow()
                         {
                             Id = x.Value.ToString(),
                             Text = x.Title,
@@ -278,37 +218,44 @@ namespace WB.UI.Designer.Controllers
                     commandResult.IsSuccess = false;
                     commandResult.Error = "Error occurred: " + e.Message;
 
-                    return Json(commandResult); 
+                    return Json(commandResult);
+                }
+
+                var model = this.GetCategoryOptions(id, entityId);
+
+                if (model.Value == null)
+                {
+                    return model.Result;
                 }
 
                 var command = new AddOrUpdateCategories(
                     questionnaireId,
                     this.User.GetId(),
                     categoriesId,
-                    this.questionWithOptionsViewModel.CategoriesName ?? "",
-                    this.questionWithOptionsViewModel.CategoriesId);
+                    model.Value.CategoriesName ?? "",
+                    model.Value.CategoriesId);
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
                 return Json(categoriesCommandResult);
             }
             else
             {
-                var questionnaireCategoricalOptions = categoriesModel.Categories.Select(x=> new QuestionnaireCategoricalOption()
+                var questionnaireCategoricalOptions = categoriesModel.Categories.Select(x => new QuestionnaireCategoricalOption()
                 {
                     Value = x.Value,
                     ParentValue = x.ParentValue,
                     Title = x.Title
                 }).ToArray();
 
-                var command = this.questionWithOptionsViewModel.IsCascading
-                    ? (QuestionCommand) new UpdateCascadingComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
+                var command = isCascading
+                    ? (QuestionCommand)new UpdateCascadingComboboxOptions(
+                        id.QuestionnaireId,
+                        entityId,
                         this.User.GetId(),
                         questionnaireCategoricalOptions)
                     : new UpdateFilteredComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
+                        id.QuestionnaireId,
+                        entityId,
                         this.User.GetId(),
                         questionnaireCategoricalOptions);
 
@@ -316,27 +263,6 @@ namespace WB.UI.Designer.Controllers
 
                 return Json(commandResult);
             }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ApplyCascadingOptions([FromBody] UpdateCategoriesModel? categoriesModel)
-        {
-            if (this.questionWithOptionsViewModel == null || categoriesModel == null)
-                return Json(GetNotFoundResponseObject());
-
-            var commandResult = await this.ExecuteCommand(
-                new UpdateCascadingComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
-                        this.User.GetId(),
-                        categoriesModel.Categories!.Select(c => new QuestionnaireCategoricalOption
-                        {
-                            Title = c.Title,
-                            Value = c.Value,
-                            ParentValue = c.ParentValue
-                        }).ToArray()));
-
-            return Json(commandResult);
         }
 
         private object GetNotFoundResponseObject()
@@ -382,14 +308,11 @@ namespace WB.UI.Designer.Controllers
             return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
-        public IActionResult ExportOptions()
+        public IActionResult ExportOptions(QuestionnaireRevision id, Guid entityId, bool isCategory, bool isCascading)
         {
-            if (this.questionWithOptionsViewModel == null)
-                return NotFound();
-            
-            if (this.questionWithOptionsViewModel.IsCategories)
+            if (isCategory)
             {
-                var categoriesFile = this.categoriesService.GetAsExcelFile(this.questionWithOptionsViewModel.QuestionId, this.questionWithOptionsViewModel.CategoriesId);
+                var categoriesFile = this.categoriesService.GetAsExcelFile(id.QuestionnaireId, entityId);
 
                 if (categoriesFile?.Content == null) return NotFound();
 
@@ -400,33 +323,35 @@ namespace WB.UI.Designer.Controllers
                 var filename = this.fileSystemAccessor.MakeValidFileName($"[{categoriesName}]{categoriesFile.QuestionnaireTitle}");
 
                 return File(categoriesFile.Content,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
+                    @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{filename}.xlsx");
             }
 
-            var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
+            var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, entityId);
+
+            var title = editQuestionView?.Title ?? "";
             var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
 
-            return File(this.categoricalOptionsImportService.ExportOptions(
-                this.questionWithOptionsViewModel.QuestionnaireId,
-                this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
+            var export = this.categoricalOptionsImportService.ExportOptions(id.QuestionnaireId.FormatGuid(), entityId);
+
+            return File(export, "text/csv", fileDownloadName);
         }
 
         public class EditOptionsViewModel
         {
-            public EditOptionsViewModel(string questionnaireId, 
+            public EditOptionsViewModel(string questionnaireId,
                 Guid? questionId = null,
                 Guid? categoriesId = null,
-                List<QuestionnaireCategoricalOption>? options = null, 
+                List<QuestionnaireCategoricalOption>? options = null,
                 string? questionTitle = null,
                 bool? isCascading = null,
                 bool? isCategories = null,
                 string? categoriesName = null)
             {
-                if(questionId == null && categoriesId == null)
+                if (questionId == null && categoriesId == null)
                     throw new InvalidOperationException($"{nameof(categoriesId)} or {nameof(questionId)} should not be empty");
 
                 QuestionnaireId = questionnaireId;
-                if(questionId !=null)
+                if (questionId != null)
                     QuestionId = questionId.Value;
 
                 if (categoriesId != null)

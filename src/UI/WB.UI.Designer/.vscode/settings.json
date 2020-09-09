@@ -1,0 +1,7 @@
+{
+    "i18n-ally.localesPaths": [
+        "questionnaire-app/src/locale",
+        "bin/Debug/netcoreapp3.1/questionnaire-app/src/locale",
+        "bin/Debug/netcoreapp3.1/questionnaire-app/src/locales"
+    ]
+}

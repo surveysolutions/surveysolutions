@@ -23,20 +23,23 @@
                         }}</v-tab>
                     </v-tabs>
                     <div v-if="errors.length > 0" class="alert alert-danger">
-                        <v-alert
-                            v-for="error in errors"
-                            :key="error"
-                            type="error"
-                        >
-                            {{ error }}
-                        </v-alert>
+                        <v-card-text>
+                            <v-alert
+                                v-for="error in errors"
+                                :key="error"
+                                outlined
+                                type="error"
+                            >
+                                {{ error }}
+                            </v-alert>
+                        </v-card-text>
                     </div>
                     <v-tabs-items v-model="currentTab">
                         <v-tab-item key="table">
                             <category-table
                                 :categories="categories"
                                 :loading="loading"
-                                :cascading="cascading"
+                                :show-parent-value="cascading || isCategory"
                             />
                         </v-tab-item>
                         <v-tab-item key="strings">
@@ -44,10 +47,10 @@
                                 v-if="tab == 1"
                                 ref="strings"
                                 :loading="loading"
-                                :cascading="cascading"
+                                :show-parent-value="cascading || isCategory"
                                 :categories="categories"
-                                @change="stringsChanged"
-                                @editing="onStringsEditing"
+                                @change="v => (categories = v)"
+                                @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
                             />
                         </v-tab-item>
@@ -66,9 +69,21 @@
             <v-btn @click="resetChanges">{{
                 $t('QuestionnaireEditor.OptionsUploadRevert')
             }}</v-btn>
-            <v-spacing></v-spacing>
-            <v-btn>Upload</v-btn>
-            <v-btn>Export</v-btn>
+            <v-spacer />
+
+            <v-file-input
+                ref="file"
+                v-model="file"
+                class="pt-2"
+                accept=".tab, .txt, .tsv, .xls, .xlsx, .ods"
+                :label="$t('QuestionnaireEditor.Upload')"
+                dense
+                @change="uploadFile"
+            ></v-file-input>
+            <a :href="exportOptionsUri" class="ma-2 v-btn v-size--default">
+                <v-icon>mdi-download</v-icon>
+                {{ $t('QuestionnaireEditor.Download') }}</a
+            >
         </v-footer>
     </v-container>
 </template>
@@ -109,7 +124,10 @@ export default {
             convert: false,
             inEditMode: false,
 
-            required: value => !!value || 'Required.'
+            file: null,
+
+            required: value =>
+                !!value || this.$t('QuestionnaireEditor.RequiredField')
         };
     },
 
@@ -131,6 +149,15 @@ export default {
                 this.$t('QuestionnaireEditor.OptionsWindowTitle') +
                 ': ' +
                 this.options.questionTitle
+            );
+        },
+
+        exportOptionsUri() {
+            return optionsApi.getExportOptionsUri(
+                this.questionnaireRev,
+                this.id,
+                this.isCategory,
+                this.cascading
             );
         }
     },
@@ -179,8 +206,7 @@ export default {
                 .finally(() => (this.ajax = false));
         },
 
-        async resetChanges() {
-            await optionsApi.resetOptions();
+        resetChanges() {
             this.reloadCategories();
         },
 
@@ -196,12 +222,22 @@ export default {
             this.currentTab = this.tab;
         },
 
-        onStringsEditing(progress) {
-            this.inEditMode = progress;
-        },
+        uploadFile(files) {
+            if (!files) return;
 
-        stringsChanged(categories) {
-            this.categories = categories;
+            const file = files.length ? files[0] : files;
+
+            this.errors = [];
+
+            const apiRequest = this.isCategory
+                ? optionsApi.uploadCategory
+                : optionsApi.uploadOptions;
+
+            apiRequest(file).then(r => {
+                this.errors = r.data;
+                this.reloadCategories();
+                this.file = null;
+            });
         },
 
         close() {
@@ -221,7 +257,13 @@ export default {
             this.errors = [];
 
             optionsApi
-                .applyOptions(this.categories)
+                .applyOptions(
+                    this.categories,
+                    this.questionnaireRev,
+                    this.id,
+                    this.cascading,
+                    this.isCategory
+                )
                 .then(response => {
                     if (response.isSuccess || response.IsSuccess) {
                         this.close();

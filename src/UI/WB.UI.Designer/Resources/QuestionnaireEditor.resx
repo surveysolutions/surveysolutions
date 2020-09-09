@@ -1450,4 +1450,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Value is too big</value>
   </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Required field</value>
+  </data>
 </root>

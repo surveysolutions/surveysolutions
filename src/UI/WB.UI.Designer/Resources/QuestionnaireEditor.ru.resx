@@ -1465,4 +1465,7 @@
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Слишком большое значение</value>
   </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Обязательное поле</value>
+  </data>
 </root>

@@ -17,11 +17,11 @@
         </v-card-title>
 
         <category-dialog
-            v-if="editedItem != null"
+            v-if="dialog"
             :title="formTitle"
             :item="editedItem"
             :shown="dialog"
-            :cascading="cascading"
+            :show-parent-value="showParentValue"
             @cancel="dialog = false"
             @change="save"
         />
@@ -91,13 +91,9 @@
                         {{ props.item.parentValue }}
                     </div>
                     <template v-slot:input>
-                        <div class="mt-4 title">
-                            Update title
-                        </div>
-                    </template>
-                    <template v-slot:input>
                         <v-text-field
                             v-model="props.item.parentValue"
+                            @
                             :rules="[required, maxValue]"
                             single-line
                             counter
@@ -138,7 +134,7 @@ export default {
 
     props: {
         categories: { type: Array, required: true },
-        cascading: { type: Boolean, required: true },
+        showParentValue: { type: Boolean, required: true },
         loading: { type: Boolean, required: true }
     },
 
@@ -168,11 +164,11 @@ export default {
                     text: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
                     sortable: true,
                     value: 'title',
-                    width: this.cascading ? '60%' : '70%'
+                    width: this.showParentValue ? '60%' : '70%'
                 }
             ];
 
-            if (this.cascading) {
+            if (this.showParentValue) {
                 headers.push({
                     text: this.$t('QuestionnaireEditor.OptionsUploadParent'),
                     sortable: true,
@@ -206,6 +202,7 @@ export default {
         },
 
         editItem(item) {
+            console.log('editItem', Object.assign({}, item));
             this.editedIndex = this.categories.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;

@@ -17,7 +17,7 @@
                                     :rules="[required]"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" :sm="cascading ? 6 : 12">
+                            <v-col cols="12" :sm="showParentValue ? 6 : 12">
                                 <v-text-field
                                     v-model="itemValue"
                                     :label="
@@ -30,7 +30,7 @@
                                     required
                                 ></v-text-field>
                             </v-col>
-                            <v-col v-if="cascading" cols="12" sm="6">
+                            <v-col v-if="showParentValue" cols="12" sm="6">
                                 <v-text-field
                                     v-model="itemParentValue"
                                     :label="
@@ -69,7 +69,7 @@ export default {
             type: Object,
             required: true
         },
-        cascading: { type: Boolean, required: true },
+        showParentValue: { type: Boolean, required: true },
         shown: { type: Boolean, required: true }
     },
 
@@ -79,7 +79,8 @@ export default {
             itemValue: this.item.value,
             itemParentValue: this.item.parentValue,
 
-            required: value => !!value || 'Required.',
+            required: value =>
+                !!value || this.$t('QuestionnaireEditor.RequiredField'),
             maxValue: v =>
                 Math.abs(parseInt(v)) < 2147483647 ||
                 this.$t('QuestionnaireEditor.ValidationIntValue'),
