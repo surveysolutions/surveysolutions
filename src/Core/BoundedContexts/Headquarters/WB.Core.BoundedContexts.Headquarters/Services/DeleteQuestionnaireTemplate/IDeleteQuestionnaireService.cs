@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTempl
         Task DisableQuestionnaire(Guid questionnaireId,
             long questionnaireVersion, Guid? userId);
 
-        void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid userId);
+        void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion/*, Guid userId*/);
     }
 }
