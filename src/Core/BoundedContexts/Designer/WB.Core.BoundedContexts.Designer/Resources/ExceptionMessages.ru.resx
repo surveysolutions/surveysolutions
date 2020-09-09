@@ -399,4 +399,7 @@
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
     <value>Вы используете старый опросник. Поэтому редактирование порядка вопросов в секции "Обложка" не доступно.</value>
   </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>Опросник уже поддерживает обложку</value>
+  </data>
 </root>

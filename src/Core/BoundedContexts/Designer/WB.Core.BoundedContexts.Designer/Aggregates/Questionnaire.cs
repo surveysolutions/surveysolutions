@@ -2445,7 +2445,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void MigrateToNewVersion()
         {
             if (QuestionnaireDocument.IsCoverPageSupported)
-                throw new QuestionnaireException(DomainExceptionType.MigrateToNewVersion, ExceptionMessages.QuestionnaireTitleIsEmpty);
+                throw new QuestionnaireException(DomainExceptionType.MigrateToNewVersion, ExceptionMessages.QuestionnaireAlreadySupportedCover);
 
             var cover = CreateGroup(QuestionnaireDocument.CoverPageSectionId, QuestionnaireEditor.CoverPageSection, String.Empty, String.Empty, String.Empty, false);
             this.innerDocument.Insert(0, cover, null);
