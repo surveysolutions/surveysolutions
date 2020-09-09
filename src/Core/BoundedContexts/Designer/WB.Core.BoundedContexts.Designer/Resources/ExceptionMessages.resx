@@ -388,4 +388,7 @@
   <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
     <value>Only tab-separated values (*.tab, *.txt, *.tsv) or excel (*.xslx, *.xls, *.ods) files are accepted</value>
   </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>Questionnaire already supports cover</value>
+  </data>
 </root>
