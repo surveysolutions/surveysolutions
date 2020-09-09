@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
             if (!disabledNotDeletedQuestionnaire.DisabledBy.HasValue)
                 throw new ArgumentException();
                 
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy);
+            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version/*, disabledNotDeletedQuestionnaire.DisabledBy*/);
 
             return Task.CompletedTask;
         }
