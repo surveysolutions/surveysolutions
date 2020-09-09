@@ -190,7 +190,8 @@
     <value>Questionnaire's title cannot be empty or contain whitespace only.</value>
   </data>
   <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
-    <value>Questionnaire already support new cover.</value>
+    <value>Questionnaire already supports cover page.</value>
+
   </data>
   <data name="SubSectionCantBeFound" xml:space="preserve">
     <value>Sub-section with public key {0} can't be found.</value>
