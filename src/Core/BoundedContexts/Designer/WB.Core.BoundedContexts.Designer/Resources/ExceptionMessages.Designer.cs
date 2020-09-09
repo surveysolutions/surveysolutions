@@ -646,6 +646,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire already supports cover.
+        /// </summary>
+        public static string QuestionnaireAlreadySupportedCover {
+            get {
+                return ResourceManager.GetString("QuestionnaireAlreadySupportedCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire item with id {0} can&apos;t be found..
         /// </summary>
         public static string QuestionnaireCantBeFound {
@@ -664,7 +673,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire already support new cover..
+        ///   Looks up a localized string similar to Questionnaire already supports cover page..
         /// </summary>
         public static string QuestionnaireSuportedNewCover {
             get {
