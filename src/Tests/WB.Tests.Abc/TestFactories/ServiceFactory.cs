@@ -92,10 +92,8 @@ using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -731,7 +729,7 @@ namespace WB.Tests.Abc.TestFactories
             ICommandService commandService = null)
         {
             var commands = commandService ?? Mock.Of<ICommandService>();
-            var assignmentsService = assignments;
+            IAssignmentsService assignmentsService = assignments;
             if (assignmentsService == null)
             {
                 var assignment = Create.Entity.Assignment();
@@ -739,13 +737,25 @@ namespace WB.Tests.Abc.TestFactories
                     s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
             }
 
-            return new AssignmentsUpgrader(assignmentsService,
-                importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.AssignmentFactory(commands, assignmentsService),
-                Mock.Of<IInvitationService>(),
-                commands);
+            var questionnaires = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
+            var upgService = upgradeService ?? Mock.Of<IAssignmentsUpgradeService>();
+            var localVerifier = importService ?? Mock.Of<IPreloadedDataVerifier>();
+
+            var sl = Mock.Of<IServiceLocator>(locator =>
+                locator.GetInstance<ICommandService>() == commands &&
+                locator.GetInstance<IInvitationService>() == Mock.Of<IInvitationService>() &&
+                locator.GetInstance<IPreloadedDataVerifier>() == localVerifier &&
+                locator.GetInstance<IAssignmentFactory>() == Create.Service.AssignmentFactory(commands, assignmentsService, Mock.Of<IAssignmentIdGenerator>()) &&
+                locator.GetInstance<IAssignmentsService>() == assignmentsService
+            );
+            
+            var upgrader = new SingleAssignmentUpgrader(InScopeExecutor(sl));
+            
+            return new AssignmentsUpgrader(
+                assignmentsService,
+                questionnaires,
+                upgService,
+                upgrader);
         }
 
         public IAssignmentFactory AssignmentFactory(
@@ -819,7 +829,6 @@ namespace WB.Tests.Abc.TestFactories
         public OfflineSynchronizationService OfflineSynchronizationService(
             IOfflineSyncClient offlineSyncClient = null,
             IInterviewerPrincipal interviewerPrincipal = null,
-            IInterviewerQuestionnaireAccessor questionnaireAccessor = null,
             IDeviceSettings deviceSettings = null)
         {
             return new OfflineSynchronizationService(

@@ -289,6 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToConstant<IAuditLogTypeResolver>(() => new AuditLogTypeResolver(typeof(IAuditLogEntity).Assembly));
 
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
+            registry.Bind<ISingleAssignmentUpgrader, SingleAssignmentUpgrader>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
