@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -11,9 +12,11 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -127,6 +130,25 @@ namespace WB.UI.Interviewer.ViewModel
                     try
                     {
                         await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                    }
+                    catch (MissingPermissionsException missingPermissionsException)
+                    {
+                        this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                            .ConfigureAwait(false);
+
+                        switch (missingPermissionsException.Permission)
+                        {
+                            case Permission.Microphone:
+                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                                break;
+                            case Permission.Storage:
+                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                                break;
+                            default:
+                                this.userInteractionService.ShowToast(missingPermissionsException.Message);
+                                break;
+                        }
                     }
                     catch (Exception exc)
                     {
