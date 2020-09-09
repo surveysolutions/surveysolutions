@@ -331,7 +331,8 @@
       <value>Пользователь {1} импортировал опросник {2} на Хедквотер ({0}) </value>
   </data>
   <data name="MigratedNewCoverSupport" xml:space="preserve">
-    <value>Обновлен до поддержки новой обложки</value>
+    <value>Сгенерирована обложка</value>
+
   </data>
   <data name="LeaveComment" xml:space="preserve">
       <value>Оставить комментарий</value>
