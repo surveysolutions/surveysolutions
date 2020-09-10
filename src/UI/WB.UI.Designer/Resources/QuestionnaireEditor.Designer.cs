@@ -2361,6 +2361,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Row added.
+        /// </summary>
+        public static string RowAdded {
+            get {
+                return ResourceManager.GetString("RowAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run.
         /// </summary>
         public static string Run {
@@ -3675,20 +3684,20 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Strings.
+        ///   Looks up a localized string similar to Text view.
         /// </summary>
-        public static string Strings {
+        public static string StringsView {
             get {
-                return ResourceManager.GetString("Strings", resourceCulture);
+                return ResourceManager.GetString("StringsView", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table.
+        ///   Looks up a localized string similar to Table view.
         /// </summary>
-        public static string Table {
+        public static string TableView {
             get {
-                return ResourceManager.GetString("Table", resourceCulture);
+                return ResourceManager.GetString("TableView", resourceCulture);
             }
         }
         

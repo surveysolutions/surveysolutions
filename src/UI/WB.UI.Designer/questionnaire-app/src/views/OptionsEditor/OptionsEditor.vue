@@ -25,10 +25,10 @@
                     </v-toolbar>
                     <v-tabs v-model="tab" grow @change="tabChange">
                         <v-tab key="table">{{
-                            $t('QuestionnaireEditor.Table')
+                            $t('QuestionnaireEditor.TableView')
                         }}</v-tab>
                         <v-tab key="strings">{{
-                            $t('QuestionnaireEditor.Strings')
+                            $t('QuestionnaireEditor.StringsView')
                         }}</v-tab>
                     </v-tabs>
                     <div v-if="errors.length > 0" class="alert alert-danger">
