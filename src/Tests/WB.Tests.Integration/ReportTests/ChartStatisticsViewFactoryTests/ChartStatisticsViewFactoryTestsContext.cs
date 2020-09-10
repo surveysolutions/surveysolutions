@@ -36,12 +36,26 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
 
             sessionFactory = IntegrationCreate.SessionFactory(
-                this.connectionString, new List<Type> { typeof(CumulativeReportStatusChangeMap) }, 
+                this.connectionString, 
+                new List<Type>
+                {
+                    typeof(CumulativeReportStatusChangeMap),
+                    typeof(InterviewSummaryMap),
+                    typeof(QuestionAnswerMap),
+                    typeof(InterviewCommentedStatusMap),
+                    typeof(InterviewCommentMap),
+                    typeof(TimeSpanBetweenStatusesMap),
+                    typeof(InterviewGpsMap),
+                    typeof(InterviewStatisticsReportRowMap),
+                    typeof(QuestionnaireCompositeItemMap),
+                }, 
                 true, schemaName: new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
             UnitOfWork = NewUnitOfWork();
             cumulativeReportStatusChangeStorage =
                 IntegrationCreate.PostgresReadSideRepository<CumulativeReportStatusChange>(UnitOfWork);
+            interviewSummary =
+                IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
             
             var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
             
@@ -123,6 +137,16 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
             InterviewStatus? last = null;
             Guid? lastEntryId = null;
+            
+            interviewSummary.Store(new InterviewSummary()
+            {
+                InterviewId = interviewId,
+                QuestionnaireId = questionnaireId.QuestionnaireId,
+                QuestionnaireVersion = questionnaireId.Version,
+                QuestionnaireVariable = interviewId.ToString(),
+                CreatedDate = DateTime.UtcNow,
+                UpdateDate = DateTime.UtcNow
+            }, interviewId);
 
             foreach (var status in statuses)
             {
@@ -150,6 +174,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         }
 
         private PostgreReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private PostgreReadSideStorage<InterviewSummary> interviewSummary;
         protected Mock<IAllUsersAndQuestionnairesFactory> questionnaires;
 
         protected void AddStatusChangeLine(Guid entryId, QuestionnaireIdentity questionnaireId, Guid interviewId, DateTime date, InterviewStatus status, int changeValue)

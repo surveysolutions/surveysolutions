@@ -29,9 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
             if(disabledNotDeletedQuestionnaire == null) return Task.CompletedTask;
 
             if (!disabledNotDeletedQuestionnaire.DisabledBy.HasValue)
-                throw new ArgumentException();
+                throw new ArgumentException("Should specify userId for delete questionnaire");
                 
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version/*, disabledNotDeletedQuestionnaire.DisabledBy*/);
+            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy.Value);
 
             return Task.CompletedTask;
         }
