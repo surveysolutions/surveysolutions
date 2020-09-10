@@ -1438,11 +1438,11 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="Forum" xml:space="preserve">
     <value>Forum</value>
   </data>
-  <data name="Table" xml:space="preserve">
-    <value>Table</value>
+  <data name="TableView" xml:space="preserve">
+    <value>Table view</value>
   </data>
-  <data name="Strings" xml:space="preserve">
-    <value>Strings</value>
+  <data name="StringsView" xml:space="preserve">
+    <value>Text view</value>
   </data>
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Value is too big</value>
@@ -1464,5 +1464,8 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Add new category</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+    <value>Row added</value>
   </data>
 </root>

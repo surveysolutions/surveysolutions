@@ -438,14 +438,15 @@
     "EditItem": "Edit item",
     "DeleteItemCofirm": "Are you sure you want to delete this item?",
     "Forum": "Forum",
-    "Table": "Table",
-    "Strings": "Strings",
+    "TableView": "Table view",
+    "StringsView": "Text view",
     "ValidationIntValue": "Value is too big",
     "RequiredField": "Required field",
     "FileUploaded": "File uploaded",
     "DataChangesReverted": "Data changes reverted",
     "OptionsSizeLimit": "Maximum {{ max }} rows allowed",
     "CommunicationError": "Network error",
-    "SideBarCategoriesAddNew": "Add new category"
+    "SideBarCategoriesAddNew": "Add new category",
+    "RowAdded": "Row added"
   }
 }

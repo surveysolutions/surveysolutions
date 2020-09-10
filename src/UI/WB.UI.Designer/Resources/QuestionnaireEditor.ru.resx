@@ -1453,11 +1453,11 @@
   <data name="Forum" xml:space="preserve">
     <value>Форум</value>
   </data>
-  <data name="Table" xml:space="preserve">
-    <value>Таблица</value>
+  <data name="TableView" xml:space="preserve">
+    <value>Табличный вид</value>
   </data>
-  <data name="Strings" xml:space="preserve">
-    <value>Строки</value>
+  <data name="StringsView" xml:space="preserve">
+    <value>Текстовый вид</value>
   </data>
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Слишком большое значение</value>
@@ -1479,5 +1479,8 @@
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Добавить новую категорию</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+    <value>Строка добавлена</value>
   </data>
 </root>
