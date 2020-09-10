@@ -1969,17 +1969,11 @@
     <PackageReference Include="Xamarin.Google.Android.Material">
       <Version>1.1.0.3-rc3</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.GooglePlayServices.Base">
-      <Version>117.2.1-preview02</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
       <Version>117.0.0-preview04</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
       <Version>117.0.0-preview04</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.GooglePlayServices.Tasks">
-      <Version>117.0.2-preview02</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
