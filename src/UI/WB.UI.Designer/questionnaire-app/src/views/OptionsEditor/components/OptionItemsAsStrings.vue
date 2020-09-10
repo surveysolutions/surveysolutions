@@ -79,10 +79,6 @@ export default {
             return (this.categoriesAsText || '').split(/\r\n|\r|\n/);
         },
 
-        isTextValid() {
-            return validateText(this.categoriesAsText, this.showParentValue);
-        },
-
         lineCount() {
             return this.categoriesAsTextSplit.length;
         },

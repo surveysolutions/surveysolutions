@@ -106,7 +106,11 @@ export function validateText(value, isCascading) {
 
     const diff = [];
     for (var i = 0; i < options.length; i++) {
-        if (regex.test(options[i].trim()) === false) {
+        const option = options[i].trim();
+
+        if (option == '') continue;
+
+        if (regex.test(option) === false) {
             diff.push(`  ${i}: ${options[i]}`);
         }
     }
