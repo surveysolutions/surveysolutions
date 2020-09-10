@@ -1465,4 +1465,13 @@
   <data name="RequiredField" xml:space="preserve">
     <value>Обязательное поле</value>
   </data>
+  <data name="FileUploaded" xml:space="preserve">
+    <value>Файл загружен</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Data changes reverted</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Максимально допустимо только {{ max }} строк</value>
+  </data>
 </root>

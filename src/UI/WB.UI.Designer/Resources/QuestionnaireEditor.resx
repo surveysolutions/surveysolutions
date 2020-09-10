@@ -1450,4 +1450,13 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="RequiredField" xml:space="preserve">
     <value>Required field</value>
   </data>
+  <data name="FileUploaded" xml:space="preserve">
+    <value>File uploaded</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Data changes reverted</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Maximum {{ max }} rows allowed</value>
+  </data>
 </root>

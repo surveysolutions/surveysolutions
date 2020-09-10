@@ -441,6 +441,9 @@
     "Table": "Table",
     "Strings": "Strings",
     "ValidationIntValue": "Value is too big",
-    "RequiredField": "Required field"
+    "RequiredField": "Required field",
+    "FileUploaded": "File uploaded",
+    "DataChangesReverted": "Data changes reverted",
+    "OptionsSizeLimit": "Maximum {{ max }} rows allowed"
   }
 }
