@@ -430,7 +430,6 @@
     "Forum": "Форум",
     "Table": "Таблица",
     "Strings": "Строки",
-    "OptionLineFormatError": "Каждая строка должна быть в формате 'title...value' или 'title...parentValue/value'",
     "ValidationIntValue": "Слишком большое значение",
     "RequiredField": "Обязательное поле",
     "ErrorsCounter_plural": "{{count}} errors",

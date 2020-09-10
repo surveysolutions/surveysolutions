@@ -76,7 +76,7 @@ const scripts = () =>
     );
 
 const inject = () =>
-  injectSections(src(["questionnaire/index.cshtml", "views/questionnaire/EditOptions.cshtml"]), dist, {
+  injectSections(src(["questionnaire/index.cshtml"]), dist, {
     quiet: true,
     
     //addPrefix: PRODUCTION ? "~" : "~/src",
