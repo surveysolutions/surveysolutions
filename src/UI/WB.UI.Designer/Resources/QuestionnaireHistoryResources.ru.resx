@@ -330,6 +330,10 @@
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
       <value>Пользователь {1} импортировал опросник {2} на Хедквотер ({0}) </value>
   </data>
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>Сгенерирована обложка</value>
+
+  </data>
   <data name="LeaveComment" xml:space="preserve">
       <value>Оставить комментарий</value>
       <comment>Оставить комментарий</comment>
