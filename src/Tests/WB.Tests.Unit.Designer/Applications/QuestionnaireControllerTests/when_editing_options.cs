@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NHibernate.Criterion;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Tests.Abc;
 using WB.UI.Designer.Controllers;
 
 
@@ -33,31 +35,22 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
-            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel
-            (
-                questionnaireId : questionnaireId.FormatGuid(),
-                questionId : questionId,
-                options:new List<QuestionnaireCategoricalOption>()
-            )
-            {
-                IsCascading = true
-            };
             BecauseOf();
         }
 
-        private void BecauseOf() => view = (JsonResult) controller.EditOptions(postedFile);
+        private void BecauseOf() => view =  controller.EditOptions(new QuestionnaireRevision(Id.g1), Id.g2, postedFile).Value;
 
         [NUnit.Framework.Test]
         public void should_return_no_errors() =>
-            ((List<string>) view.Value).Count.Should().Be(0);
+           view.Errors.Count.Should().Be(0);
 
         [NUnit.Framework.Test]
         public void should_add_one_option() =>
-            controller.questionWithOptionsViewModel.Options.Count.Should().Be(1);
+            view.Options.Length.Should().Be(1);
 
         [NUnit.Framework.Test]
         public void should_add_one_option_with_expected_value() =>
-            controller.questionWithOptionsViewModel.Options.Single().Title.Should().Equals("First");
+            view.Options.Single().Title.Should().Equals("First");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()
@@ -68,6 +61,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private static QuestionnaireController controller;
         private static IFormFile postedFile;
         private static Stream stream = new MemoryStream();
-        private static JsonResult view;
+        private static QuestionnaireController.EditOptionsResponse view;
     }
 }

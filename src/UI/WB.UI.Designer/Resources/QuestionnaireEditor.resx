@@ -1444,9 +1444,6 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="Strings" xml:space="preserve">
     <value>Strings</value>
   </data>
-  <data name="OptionLineFormatError" xml:space="preserve">
-    <value>Every line should be in format {title...value} or {title...parent_value/value}. Example: bob...4/32</value>
-  </data>
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Value is too big</value>
   </data>

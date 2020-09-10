@@ -1,15 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.UI.Designer.Controllers;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
@@ -17,8 +12,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         [NUnit.Framework.Test] public void should_return_stored_options()
         {
-            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            var questionId = Guid.Parse("22222222222222222222222222222222");
+            var questionnaireId = Abc.Id.g1;
+            var questionId = Abc.Id.g2;
             var comboboxQuestionId = Guid.Parse("12345678901234567890123456789012");
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: questionnaireId,
                 children: new IComposite[]
@@ -35,24 +30,15 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var controller = CreateQuestionnaireController(
                 categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
-            
-            controller.questionWithOptionsViewModel =
-                new QuestionnaireController.EditOptionsViewModel
-                (
-                    questionnaireId : questionnaireId.FormatGuid(),
-                    questionId : questionId,
-                    options:new List<QuestionnaireCategoricalOption>()
-                );
 
             var stream = GenerateStreamFromString("1\tStreet 1\t2");
 
             stream.Position = 0;
             var postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
 
-            var view = controller.EditOptions(postedFile) as JsonResult;
+            var view = controller.EditOptions(new QuestionnaireRevision(questionnaireId), questionId, postedFile);
 
-            var model = (List<string>)view.Value;
-            model.Should().BeEmpty();
+            Assert.That(view.Value.Errors, Is.Empty);
         }
     }
 }
