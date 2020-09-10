@@ -11,11 +11,15 @@
             :rules="textRules"
             :disabled="loading || convert"
             :loading="loading || convert"
-            class="monospaced-with-wrap"
+            style="font-family: monospace, monospace"
             @change="change"
             @focus="onFocus"
             @blur="onBlur"
-        ></v-textarea>
+        >
+            <template v-slot:message="{ message }">
+                <div style="white-space: pre-wrap;">{{ message }}</div>
+            </template>
+        </v-textarea>
     </v-container>
 </template>
 
@@ -132,10 +136,3 @@ export default {
     }
 };
 </script>
-
-<style>
-.monospaced-with-wrap {
-    font-family: monospace, monospace;
-    white-space: pre-wrap;
-}
-</style>
