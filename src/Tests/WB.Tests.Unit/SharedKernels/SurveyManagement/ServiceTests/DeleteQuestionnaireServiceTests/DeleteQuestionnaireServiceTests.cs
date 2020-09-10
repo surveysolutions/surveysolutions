@@ -57,9 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 
-            interviewsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
-                .Returns(new List<InterviewSummary>());
-
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
                 questionnaireStorage: questionnaireStorage,
@@ -91,6 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             long questionnaireVersion = 5;
             Guid userId = Guid.Parse("22222222222222222222222222222222");
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             Guid interviewId = Guid.Parse("33333333333333333333333333333333");
 
             var commandServiceMock = Substitute.For<ICommandService>();
@@ -103,12 +101,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             SetUp.InstanceToMockedServiceLocator(plainQuestionnaireRepository);
 
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
-
-            var interviewQueue = new Queue<List<InterviewSummary>>();
-            interviewQueue.Enqueue(new List<InterviewSummary>() { new InterviewSummary() { InterviewId = interviewId } });
-            interviewQueue.Enqueue(new List<InterviewSummary>());
-            interviewsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireId, questionnaireVersion))
-                .Returns(interviewQueue.Dequeue);
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
@@ -127,6 +119,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
 
+            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAllEventsForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAudioForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAudioAuditForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAllInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+            
             commandServiceMock.Received(1).Execute(
                 Arg.Is<DisableQuestionnaire>(
                     _ =>
@@ -138,10 +135,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     _ =>
                         _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion &&
                         _.ResponsibleId == userId), Arg.Any<string>());
-
-            commandServiceMock.Received(1)
-                .Execute(Arg.Is<HardDeleteInterview>(_ => _.InterviewId == interviewId && _.UserId == userId),
-                    It.IsAny<string>());
         }
 
         [Test]
@@ -149,6 +142,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         {
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             long questionnaireVersion = 5;
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             Guid userId = Guid.Parse("22222222222222222222222222222222");
             Guid assignmentId = Guid.Parse("33333333333333333333333333333333");
 
@@ -162,12 +156,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             SetUp.InstanceToMockedServiceLocator(plainQuestionnaireRepository);
 
             var assignmentsToDeleteFactoryMock = new Mock<IAssignmentsToDeleteFactory>();
-
-            var assignmentQueue = new Queue<List<Assignment>>();
-            assignmentQueue.Enqueue(new List<Assignment>() { new Assignment() { PublicKey = assignmentId } });
-            assignmentQueue.Enqueue(new List<Assignment>());
-            assignmentsToDeleteFactoryMock.Setup(x => x.LoadBatch(questionnaireId, questionnaireVersion))
-                .Returns(assignmentQueue.Dequeue);
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
                 assignmentsToDeleteFactory: assignmentsToDeleteFactoryMock.Object,
@@ -186,6 +174,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
 
+            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllAssignments(
+                    It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllEventsForAssignments(
+                    It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+
             commandServiceMock.Received(1).Execute(
                 Arg.Is<DisableQuestionnaire>(
                     _ =>
@@ -197,10 +190,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     _ =>
                         _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion &&
                         _.ResponsibleId == userId), Arg.Any<string>());
-
-            commandServiceMock.Received(1)
-                .Execute(Arg.Is<DeleteAssignment>(_ => _.PublicKey == assignmentId && _.UserId == userId),
-                    It.IsAny<string>());
         }
     }
 }
