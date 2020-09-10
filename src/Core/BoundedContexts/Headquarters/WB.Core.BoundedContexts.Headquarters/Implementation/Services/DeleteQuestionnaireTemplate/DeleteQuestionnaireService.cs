@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
         }
 
-        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion)
+        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
 
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.DeleteInvitations(questionnaireIdentity);
                     this.DeleteAssignments(questionnaireIdentity);
-                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, Guid.Empty));
+                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
                 }
             }
             catch (Exception e)
