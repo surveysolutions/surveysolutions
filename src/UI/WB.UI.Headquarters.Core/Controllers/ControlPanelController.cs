@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             try
             {
-                this.commandService.Execute(new ReevaluateInterview(id, this.authorizedUser.Id));
+                this.commandService.Execute(new ReevaluateInterview(id, this.authorizedUser.Id, DateTimeOffset.UtcNow));
                 return this.Ok();
             }
             catch (Exception exception)
