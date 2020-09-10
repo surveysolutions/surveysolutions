@@ -1587,15 +1587,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Every line should be in format {title...value} or {title...parent_value/value}. Example: bob...4/32.
-        /// </summary>
-        public static string OptionLineFormatError {
-            get {
-                return ResourceManager.GetString("OptionLineFormatError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Close Window?.
         /// </summary>
         public static string OptionsCloseWindow {

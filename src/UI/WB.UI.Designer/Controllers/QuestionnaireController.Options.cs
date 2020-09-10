@@ -76,14 +76,17 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditOptions([FromQuery] QuestionnaireRevision id, [FromQuery] Guid questionId, [FromBody] IFormFile? csvFile)
+        public ActionResult<EditOptionsResponse> EditOptions([FromQuery] QuestionnaireRevision id, [FromQuery] Guid questionId, [FromBody] IFormFile? csvFile)
         {
             List<string> errors = new List<string>();
 
             if (csvFile == null)
             {
                 errors.Add(Resources.QuestionnaireController.SelectTabFile);
-                return this.Json(new { errors });
+                return new EditOptionsResponse
+                {
+                    Errors = errors
+                };
             }
 
             try
@@ -93,10 +96,15 @@ namespace WB.UI.Designer.Controllers
 
                 if (importResult.Succeeded)
                 {
-                    return Json(new
+                    return new EditOptionsResponse
                     {
-                        options = importResult.ImportedOptions.ToList()
-                    });
+                        Options = importResult.ImportedOptions.Select(c => new Category
+                        {
+                            ParentValue = c.ParentValue,
+                            Title = c.Title,
+                            Value = c.Value
+                        }).ToArray()
+                    };
                 }
                 else
                     errors.AddRange(importResult.Errors);
@@ -107,18 +115,24 @@ namespace WB.UI.Designer.Controllers
                 this.logger.LogError(e, e.Message);
             }
 
-            return this.Json(new { errors });
+            return new EditOptionsResponse
+            {
+                Errors = errors
+            };
         }
 
         [HttpPost]
-        public IActionResult EditCategories(IFormFile? csvFile)
+        public ActionResult<EditOptionsResponse> EditCategories(IFormFile? csvFile)
         {
             List<string> errors = new List<string>();
 
             if (csvFile == null)
             {
                 errors.Add(Resources.QuestionnaireController.SelectTabFile);
-                return this.Json(errors);
+                return new EditOptionsResponse
+                {
+                    Errors = errors
+                };
             }
 
             try
@@ -129,7 +143,15 @@ namespace WB.UI.Designer.Controllers
                 var tsvExtensions = new[] { ".txt", ".tab", ".tsv" };
 
                 if (!excelExtensions.Union(tsvExtensions).Contains(extension))
-                    throw new ArgumentException(ExceptionMessages.ImportOptions_Tab_Or_Excel_Only);
+                {
+                    return new EditOptionsResponse
+                    {
+                        Errors = new List<string>()
+                        {
+                            ExceptionMessages.ImportOptions_Tab_Or_Excel_Only
+                        }
+                    };
+                }
 
                 var fileType = excelExtensions.Contains(extension)
                     ? CategoriesFileType.Excel
@@ -137,10 +159,10 @@ namespace WB.UI.Designer.Controllers
 
                 var rows = this.categoriesService.GetRowsFromFile(csvFile.OpenReadStream(), fileType);
 
-                return Json(new
+                return new EditOptionsResponse
                 {
-                    options = rows
-                        .Select(x => new QuestionnaireCategoricalOption()
+                    Options = rows
+                        .Select(x => new Category()
                         {
                             Title = x.Text,
                             Value = int.Parse(x.Id!),
@@ -148,8 +170,8 @@ namespace WB.UI.Designer.Controllers
                                 ? (int?)null
                                 : int.Parse(x.ParentId)
                         })
-                        .ToList()
-                });
+                        .ToArray()
+                };
             }
             catch (InvalidFileException e)
             {
@@ -183,6 +205,12 @@ namespace WB.UI.Designer.Controllers
         public class UpdateCategoriesModel
         {
             public Category[]? Categories { set; get; }
+        }
+
+        public class EditOptionsResponse
+        {
+            public Category[]? Options { get; set; }
+            public List<string> Errors { get; set; } = new List<string>();
         }
 
         [HttpPost]

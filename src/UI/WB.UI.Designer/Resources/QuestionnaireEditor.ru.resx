@@ -1459,9 +1459,6 @@
   <data name="Strings" xml:space="preserve">
     <value>Строки</value>
   </data>
-  <data name="OptionLineFormatError" xml:space="preserve">
-    <value>Каждая строка должна быть в формате 'title...value' или 'title...parentValue/value'</value>
-  </data>
   <data name="ValidationIntValue" xml:space="preserve">
     <value>Слишком большое значение</value>
   </data>
