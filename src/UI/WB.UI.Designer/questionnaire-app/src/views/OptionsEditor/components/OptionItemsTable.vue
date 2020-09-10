@@ -20,6 +20,7 @@
             v-if="dialog"
             :title="formTitle"
             :item="editedItem"
+            :parent-categories="parentCategories"
             :shown="dialog"
             :show-parent-value="showParentValue"
             @cancel="dialog = false"
@@ -40,17 +41,6 @@
             style="overflow-wrap:anywhere;"
             dense
         >
-            <!-- <template #item.parentValue="{ item }">
-                {{ item.parentValue }}
-                <span
-                    class="caption text--disabled .d-none .d-md-flex .d-lg-none"
-                    >{{
-                        captionForParentValue(
-                            item.parentValue
-                        )
-                    }}</span
-                >
-            </template> -->
             <template v-slot:item.title="props">
                 <v-edit-dialog :return-value.sync="props.item.title" large>
                     <div>{{ props.item.title }}</div>
@@ -89,9 +79,27 @@
                 >
                     <div>
                         {{ props.item.parentValue }}
+                        <span
+                            v-if="parentCategories.length > 0"
+                            class="caption text--disabled .d-none .d-md-flex .d-lg-none"
+                            >{{
+                                captionForParentValue(props.item.parentValue)
+                                    .title
+                            }}</span
+                        >
                     </div>
                     <template v-slot:input>
+                        <v-autocomplete
+                            v-if="parentCategories.length > 0"
+                            v-model="props.item.parentValue"
+                            autofocus
+                            eager
+                            :items="parentCategories"
+                            :item-text="v => v.value + ' - ' + v.title"
+                            item-value="value"
+                        />
                         <v-text-field
+                            v-else
                             v-model="props.item.parentValue"
                             @
                             :rules="[required, maxValue]"
@@ -134,6 +142,7 @@ export default {
 
     props: {
         categories: { type: Array, required: true },
+        parentCategories: { type: Array, required: false, default: () => [] },
         showParentValue: { type: Boolean, required: true },
         loading: { type: Boolean, required: true }
     },
@@ -232,6 +241,10 @@ export default {
             }
 
             this.close();
+        },
+
+        captionForParentValue(value) {
+            return this.parentCategories.find(p => p.value == value);
         }
     }
 };
