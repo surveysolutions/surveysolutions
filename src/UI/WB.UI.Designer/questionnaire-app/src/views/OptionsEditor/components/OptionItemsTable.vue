@@ -199,3 +199,9 @@ export default {
     }
 };
 </script>
+
+<style css scoped>
+::v-deep tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+</style>
