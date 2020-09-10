@@ -445,6 +445,7 @@
     "FileUploaded": "File uploaded",
     "DataChangesReverted": "Data changes reverted",
     "OptionsSizeLimit": "Maximum {{ max }} rows allowed",
-    "CommunicationError": "Network error"
+    "CommunicationError": "Network error",
+    "SideBarCategoriesAddNew": "Add new category"
   }
 }

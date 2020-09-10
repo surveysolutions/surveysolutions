@@ -539,6 +539,12 @@
                             </a>
                         </p>
                         <p>
+                            <input type="button" ng-i18next="[value]SideBarCategoriesAddNew" value="ADD new category"
+                                   class="btn lighter-hover" 
+                                   ng-click="addNewCategory();$event.stopPropagation()"
+                                   ng-disabled="isReadOnlyForUser" />
+                        </p>
+                        <p>
                             <input type="button" ng-i18next="[value]SideBarCategoriesUploadNew" value="Upload new categories"
                                    class="btn lighter-hover" ngf-select
                                    ngf-change="createAndUploadFile($file);$event.stopPropagation()"

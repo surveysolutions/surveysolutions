@@ -80,7 +80,9 @@
                     <div>
                         {{ props.item.parentValue }}
                         <span
-                            v-if="parentCategories.length > 0"
+                            v-if="
+                                parentCategories && parentCategories.length > 0
+                            "
                             class="caption text--disabled .d-none .d-md-flex .d-lg-none"
                             >{{
                                 captionForParentValue(props.item.parentValue)
@@ -90,7 +92,9 @@
                     </div>
                     <template v-slot:input>
                         <v-autocomplete
-                            v-if="parentCategories.length > 0"
+                            v-if="
+                                parentCategories && parentCategories.length > 0
+                            "
                             v-model="props.item.parentValue"
                             autofocus
                             eager

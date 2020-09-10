@@ -163,6 +163,14 @@ export default {
                 );
             }
 
+            if (this.cascading) {
+                return (
+                    this.$t('QuestionnaireEditor.CascadingOptionsWindowTitle') +
+                    ': ' +
+                    this.options.questionTitle
+                );
+            }
+
             return (
                 this.$t('QuestionnaireEditor.OptionsWindowTitle') +
                 ': ' +
