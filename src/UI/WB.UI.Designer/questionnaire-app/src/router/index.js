@@ -14,7 +14,8 @@ const routes = [
         props: route => ({
             questionnaireRev: route.params.questionnaireId,
             id: route.query.categoriesid,
-            isCategory: true
+            isCategory: true,
+            cascading: route.query.cascading
         })
     },
     {
@@ -26,7 +27,8 @@ const routes = [
         props: route => ({
             questionnaireRev: route.params.questionnaireId,
             id: route.query.questionid,
-            isCategory: false
+            isCategory: false,
+            cascading: route.query.cascading
         })
     },
     {

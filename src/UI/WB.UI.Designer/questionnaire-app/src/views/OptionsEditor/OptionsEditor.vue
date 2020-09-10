@@ -114,8 +114,8 @@ export default {
     props: {
         questionnaireRev: { type: String, required: true },
         id: { type: String, required: true },
-        isCategory: { type: Boolean, required: true },
-        cascading: { type: Boolean, required: false, default: true }
+        isCategory: { type: Boolean, required: false },
+        cascading: { type: Boolean, required: false, default: false }
     },
 
     data() {

@@ -45,79 +45,17 @@
             style="overflow-wrap:anywhere;"
             dense
         >
-            <template v-slot:item.title="props">
-                <v-edit-dialog :return-value.sync="props.item.title" large>
-                    <div>{{ props.item.title }}</div>
-                    <template v-slot:input>
-                        <v-text-field
-                            v-model="props.item.title"
-                            :rules="[required]"
-                            single-line
-                            counter
-                            autofocus
-                        ></v-text-field>
-                    </template>
-                </v-edit-dialog>
-            </template>
-
-            <template v-slot:item.value="props">
-                <v-edit-dialog :return-value.sync="props.item.value" large>
-                    <div>{{ props.item.value }}</div>
-                    <template v-slot:input>
-                        <v-text-field
-                            v-model="props.item.value"
-                            :rules="[required, maxValue]"
-                            single-line
-                            counter
-                            autofocus
-                            type="number"
-                        ></v-text-field>
-                    </template>
-                </v-edit-dialog>
-            </template>
-
             <template v-slot:item.parentValue="props">
-                <v-edit-dialog
-                    :return-value.sync="props.item.parentValue"
-                    large
-                >
-                    <div>
-                        {{ props.item.parentValue }}
-                        <span
-                            v-if="
-                                parentCategories && parentCategories.length > 0
-                            "
-                            class="caption text--disabled .d-none .d-md-flex .d-lg-none"
-                            >{{
-                                captionForParentValue(props.item.parentValue)
-                                    .title
-                            }}</span
-                        >
-                    </div>
-                    <template v-slot:input>
-                        <v-autocomplete
-                            v-if="
-                                parentCategories && parentCategories.length > 0
-                            "
-                            v-model="props.item.parentValue"
-                            autofocus
-                            eager
-                            :items="parentCategories"
-                            :item-text="v => v.value + ' - ' + v.title"
-                            item-value="value"
-                        />
-                        <v-text-field
-                            v-else
-                            v-model="props.item.parentValue"
-                            @
-                            :rules="[required, maxValue]"
-                            single-line
-                            counter
-                            type="number"
-                            autofocus
-                        ></v-text-field>
-                    </template>
-                </v-edit-dialog>
+                <div>
+                    {{ props.item.parentValue }}
+                    <span
+                        v-if="parentCategories && parentCategories.length > 0"
+                        class="caption text--disabled .d-none .d-md-flex .d-lg-none"
+                        >{{
+                            captionForParentValue(props.item.parentValue).title
+                        }}</span
+                    >
+                </div>
             </template>
             <template #item.actions="{ item }">
                 <div>
