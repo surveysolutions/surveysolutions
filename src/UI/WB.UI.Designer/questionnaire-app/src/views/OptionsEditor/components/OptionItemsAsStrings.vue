@@ -51,10 +51,9 @@ export default {
                     }
 
                     if (this.lineCount > 15000) {
-                        return this.$t(
-                            'QuestionnaireEditor.EnteredMoreThanAllowed',
-                            { max: 15000 }
-                        );
+                        return this.$t('QuestionnaireEditor.OptionsSizeLimit', {
+                            max: 15000
+                        });
                     }
 
                     const top5Errors = validateText(

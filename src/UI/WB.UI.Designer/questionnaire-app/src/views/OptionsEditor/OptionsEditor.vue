@@ -1,5 +1,11 @@
 <template>
     <v-container fluid>
+        <v-snackbar v-model="snacks.fileUploaded" top color="success">{{
+            $t('QuestionnaireEditor.FileUploaded')
+        }}</v-snackbar>
+        <v-snackbar v-model="snacks.formReverted" top color="success">{{
+            $t('QuestionnaireEditor.DataChangesReverted')
+        }}</v-snackbar>
         <v-row align="start" justify="center">
             <v-col lg="10">
                 <v-card class="mx-4 elevation-12">
@@ -126,6 +132,11 @@ export default {
 
             file: null,
 
+            snacks: {
+                fileUploaded: false,
+                formReverted: false
+            },
+
             required: value =>
                 !!value || this.$t('QuestionnaireEditor.RequiredField')
         };
@@ -178,7 +189,7 @@ export default {
     },
 
     methods: {
-        reloadCategories() {
+        reloadCategories(onDone) {
             if (this.ajax) return;
             if (this.inEditMode || this.convert) {
                 setTimeout(() => this.reloadCategories(), 100);
@@ -202,12 +213,14 @@ export default {
                     this.categories = data.options;
                     delete data.options;
                     this.options = data;
+
+                    if (onDone) onDone.apply(this);
                 })
                 .finally(() => (this.ajax = false));
         },
 
         resetChanges() {
-            this.reloadCategories();
+            this.reloadCategories(() => (this.snacks.formReverted = true));
         },
 
         tabChange(tab) {
@@ -234,9 +247,10 @@ export default {
                 : optionsApi.uploadOptions;
 
             apiRequest(file).then(r => {
-                this.errors = r.data;
-                this.reloadCategories();
+                this.errors = r.data.errors;
+                this.categories = r.data.options;
                 this.file = null;
+                this.snacks.fileUploaded = true;
             });
         },
 
