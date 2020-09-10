@@ -72,7 +72,10 @@ namespace WB.UI.Designer.Controllers
                 questionTitle: editQuestionView?.Title,
                 options: options.ToList(),
                 isCascading: isCascading
-            );
+            )
+            {
+                CascadeFromQuestionId = editQuestionView?.CascadeFromQuestionId
+            };
         }
 
         [HttpPost]
@@ -404,6 +407,7 @@ namespace WB.UI.Designer.Controllers
             public bool IsCascading { get; set; }
 
             public bool IsCategories { get; set; }
+            public string? CascadeFromQuestionId { get; set; }
         }
     }
 }

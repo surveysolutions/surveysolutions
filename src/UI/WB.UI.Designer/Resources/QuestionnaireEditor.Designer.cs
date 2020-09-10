@@ -358,6 +358,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Network error.
+        /// </summary>
+        public static string CommunicationError {
+            get {
+                return ResourceManager.GetString("CommunicationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} error found.
         /// </summary>
         public static string CompilationErrorsCounter {
