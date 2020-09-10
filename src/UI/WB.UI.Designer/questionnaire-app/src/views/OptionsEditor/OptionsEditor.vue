@@ -12,16 +12,16 @@
         <v-row align="start" justify="center">
             <v-col lg="10">
                 <v-card class="mx-4 elevation-12">
-                    <v-toolbar dark color="primary" dense>
+                    <v-toolbar dense dark color="primary">
                         <v-toolbar-title v-if="options">{{
                             formTitle
                         }}</v-toolbar-title>
 
                         <v-spacer></v-spacer>
-
+                        <!-- 
                         <v-btn icon class="hidden-xs-only" @click="close()">
                             <v-icon>mdi-close</v-icon>
-                        </v-btn>
+                        </v-btn> -->
                     </v-toolbar>
                     <v-tabs v-model="tab" grow @change="tabChange">
                         <v-tab key="table">{{
