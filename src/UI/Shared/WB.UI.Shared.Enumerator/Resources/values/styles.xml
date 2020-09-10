@@ -224,14 +224,17 @@
         <item name="android:letterSpacing">0.1</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:backgroundTint">@color/button_primary_selector</item>
+        <item name="backgroundTint">@color/button_primary_selector</item><!--needed for android 5-->
     </style>
 
     <style name="Button_Success" parent="Button_Primary">
         <item name="android:backgroundTint">@color/button_success_selector</item>
+        <item name="backgroundTint">@color/button_success_selector</item><!--needed for android 5-->
     </style>
 
     <style name="Button_Error" parent="Button_Primary">
         <item name="android:backgroundTint">@color/button_error_selector</item>
+        <item name="backgroundTint">@color/button_error_selector</item> <!--needed for android 5-->
     </style>
 
 </resources>
