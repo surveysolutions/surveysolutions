@@ -439,6 +439,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data changes reverted.
+        /// </summary>
+        public static string DataChangesReverted {
+            get {
+                return ResourceManager.GetString("DataChangesReverted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New roster.
         /// </summary>
         public static string DefaultNewRoster {
@@ -678,6 +687,15 @@ namespace WB.UI.Designer.Resources {
         public static string Export {
             get {
                 return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File uploaded.
+        /// </summary>
+        public static string FileUploaded {
+            get {
+                return ResourceManager.GetString("FileUploaded", resourceCulture);
             }
         }
         
@@ -1601,6 +1619,15 @@ namespace WB.UI.Designer.Resources {
         public static string OptionsListError {
             get {
                 return ResourceManager.GetString("OptionsListError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum {{ max }} rows allowed.
+        /// </summary>
+        public static string OptionsSizeLimit {
+            get {
+                return ResourceManager.GetString("OptionsSizeLimit", resourceCulture);
             }
         }
         

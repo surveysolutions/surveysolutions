@@ -432,6 +432,8 @@
     "Strings": "Строки",
     "ValidationIntValue": "Слишком большое значение",
     "RequiredField": "Обязательное поле",
+    "FileUploaded": "Файл загружен",
+    "DataChangesReverted": "Data changes reverted",
     "ErrorsCounter_plural": "{{count}} errors",
     "SideBarAttachmentsCounter_plural": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_plural": "{{count}} Lookup Tables:",
@@ -441,6 +443,7 @@
     "WarningsCounter_plural": "{{count}} warnings",
     "CompilationErrorsCounter_plural": "{{count}} errors found",
     "CompilationWarningsCounter_plural": "{{count}} warnings found",
-    "FindReplaceInAllFound_plural": "in {{count}} found entities?"
+    "FindReplaceInAllFound_plural": "in {{count}} found entities?",
+    "OptionsSizeLimit": "Maximum {{ max }} rows allowed"
   }
 }
