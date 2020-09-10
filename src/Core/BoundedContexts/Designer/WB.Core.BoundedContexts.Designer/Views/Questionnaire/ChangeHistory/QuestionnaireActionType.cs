@@ -15,5 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Revert = 10,
         Mark = 11,
         ImportToHq = 12,
+        MigrateToNewVersion = 13,
     }
 }
