@@ -45,5 +45,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
             query.ExecuteUpdate();
         }
+
+        public void RemoveAudioAuditForInterviews(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var queryText = $"DELETE FROM plainstore.audioauditfiles as a " +
+                            $"USING readside.interviewsummaries as i " +
+                            $"WHERE a.interviewid = i.interviewid " +
+                            $"  AND i.questionnaireid = :questionnaireId " +
+                            $"  AND i.questionnaireversion = :questionnaireVersion ";
+
+            var query = sessionFactory.Session.CreateSQLQuery(queryText);
+            query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
+            query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
+            query.ExecuteUpdate();
+        }
+
+        public void RemoveAudioForInterviews(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var queryText = $"DELETE FROM plainstore.audiofiles as a " +
+                            $"USING readside.interviewsummaries as i " +
+                            $"WHERE a.interviewid = i.interviewid " +
+                            $"  AND i.questionnaireid = :questionnaireId " +
+                            $"  AND i.questionnaireversion = :questionnaireVersion ";
+
+            var query = sessionFactory.Session.CreateSQLQuery(queryText);
+            query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
+            query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
+            query.ExecuteUpdate();
+        }
     }
 }
