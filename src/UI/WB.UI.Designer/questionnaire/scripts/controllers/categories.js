@@ -83,6 +83,31 @@
                 $scope.isFolded = true;
             };
 
+            $scope.addNewCategory = function() {
+                if ($scope.isReadOnlyForUser) {
+                    notificationService.notice($i18next.t('NoPermissions'));
+                    return;
+                }
+
+                var categories = { categoriesId: utilityService.guid() };
+                
+                commandService.updateCategories($state.params.questionnaireId, categories)
+                    .then(function (response) {
+                        if (response.status !== 200) return;
+
+                        categories.checkpoint = categories.checkpoint || {};
+
+                        dataBind(categories.checkpoint, categories);
+                        $scope.categoriesList.push(categories);
+                        updateQuestionnaireCategories();
+
+                        setTimeout(function() {
+                                utilityService.focus("focusCategories" + categories.categoriesId);
+                            },
+                            500);
+                    });
+            }
+
             $scope.createAndUploadFile = function (file) {
                 if (_.isNull(file) || _.isUndefined(file)) {
                     return;

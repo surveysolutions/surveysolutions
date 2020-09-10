@@ -32,7 +32,10 @@
                             </v-col>
                             <v-col v-if="showParentValue" cols="12" sm="6">
                                 <v-autocomplete
-                                    v-if="parentCategories.length > 0"
+                                    v-if="
+                                        parentCategories &&
+                                            parentCategories.length > 0
+                                    "
                                     v-model="itemParentValue"
                                     autofocus
                                     eager

@@ -2883,6 +2883,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new category.
+        /// </summary>
+        public static string SideBarCategoriesAddNew {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesAddNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Categories.
         /// </summary>
         public static string SideBarCategoriesCounter {

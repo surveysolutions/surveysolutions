@@ -1477,4 +1477,7 @@
   <data name="CommunicationError" xml:space="preserve">
     <value>Ошибка сети</value>
   </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+    <value>Добавить новую категорию</value>
+  </data>
 </root>

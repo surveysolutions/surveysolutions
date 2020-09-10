@@ -436,6 +436,7 @@
     "DataChangesReverted": "Data changes reverted",
     "OptionsSizeLimit": "Максимально допустимо только {{ max }} строк",
     "CommunicationError": "Ошибка сети",
+    "SideBarCategoriesAddNew": "Добавить новую категорию",
     "ErrorsCounter_plural": "{{count}} errors",
     "SideBarAttachmentsCounter_plural": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_plural": "{{count}} Lookup Tables:",

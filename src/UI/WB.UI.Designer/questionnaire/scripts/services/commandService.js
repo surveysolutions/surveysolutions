@@ -178,7 +178,7 @@
                 }).then(function (response) {
                     blockUI.stop();
 
-                    if (!_.isNull(categories.file))
+                    if (categories.file)
                         notificationService.notice(response.data);
 
                     categories.file = null;
