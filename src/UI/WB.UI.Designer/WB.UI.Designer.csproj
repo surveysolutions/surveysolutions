@@ -115,8 +115,8 @@
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode. https://docs.npmjs.com/cli/ci.html -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" Condition="'$(SkipSpaBuild)' != 'true'"/>
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" Condition="'$(SkipSpaBuild)' != 'true'"/>
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
