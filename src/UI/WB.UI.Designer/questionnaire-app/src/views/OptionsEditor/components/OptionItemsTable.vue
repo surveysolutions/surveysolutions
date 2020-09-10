@@ -27,6 +27,10 @@
             @change="save"
         />
 
+        <v-snackbar v-model="snacks.rowAdded" top color="success">{{
+            $t('QuestionnaireEditor.RowAdded')
+        }}</v-snackbar>
+
         <v-data-table
             ref="table"
             :headers="headers"
@@ -157,7 +161,11 @@ export default {
             editedItem: null,
             editedIndex: null,
             dialog: false,
-            required: value => !!value || 'Required.',
+
+            snacks: { rowAdded: false },
+
+            required: value =>
+                !!value || this.$t('QuestionnaireEditor.RequiredField'),
             maxValue: v =>
                 Math.abs(parseInt(v)) < 2147483647 ||
                 this.$t('QuestionnaireEditor.ValidationIntValue')
@@ -241,7 +249,7 @@ export default {
                 Object.assign(this.categories[this.editedIndex], item);
             } else {
                 this.categories.push(item);
-                this.search = item.title;
+                this.snacks.rowAdded = true;
             }
 
             this.close();
