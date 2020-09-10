@@ -9,5 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTempl
     {
         void RemoveAllInterviews(QuestionnaireIdentity questionnaireIdentity);
         void RemoveAllEventsForInterviews(QuestionnaireIdentity questionnaireIdentity);
+        void RemoveAudioAuditForInterviews(QuestionnaireIdentity questionnaireIdentity);
+        void RemoveAudioForInterviews(QuestionnaireIdentity questionnaireIdentity);
     }
 }

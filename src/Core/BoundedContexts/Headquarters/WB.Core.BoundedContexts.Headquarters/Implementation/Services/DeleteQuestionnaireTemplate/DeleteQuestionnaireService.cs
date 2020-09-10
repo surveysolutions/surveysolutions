@@ -184,6 +184,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private void DeleteInterviews(QuestionnaireIdentity questionnaireIdentity)
         {
+            interviewsToDeleteFactory.RemoveAudioForInterviews(questionnaireIdentity);
+            interviewsToDeleteFactory.RemoveAudioAuditForInterviews(questionnaireIdentity);
             interviewsToDeleteFactory.RemoveAllEventsForInterviews(questionnaireIdentity);
             interviewsToDeleteFactory.RemoveAllInterviews(questionnaireIdentity);
             aggregateRootCache.Clear();
