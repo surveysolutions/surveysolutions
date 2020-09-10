@@ -1474,4 +1474,7 @@
   <data name="OptionsSizeLimit" xml:space="preserve">
     <value>Максимально допустимо только {{ max }} строк</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Ошибка сети</value>
+  </data>
 </root>

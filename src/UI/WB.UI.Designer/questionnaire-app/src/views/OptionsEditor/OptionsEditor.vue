@@ -6,6 +6,9 @@
         <v-snackbar v-model="snacks.formReverted" top color="success">{{
             $t('QuestionnaireEditor.DataChangesReverted')
         }}</v-snackbar>
+        <v-snackbar v-model="snacks.ajaxError" top color="error">{{
+            $t('QuestionnaireEditor.CommunicationError')
+        }}</v-snackbar>
         <v-row align="start" justify="center">
             <v-col lg="10">
                 <v-card class="mx-4 elevation-12">
@@ -44,6 +47,7 @@
                         <v-tab-item key="table">
                             <category-table
                                 :categories="categories"
+                                :parent-categories="parentCategories"
                                 :loading="loading"
                                 :show-parent-value="cascading || isCategory"
                             />
@@ -67,7 +71,7 @@
         <v-footer fixed>
             <v-btn
                 class="ma-2"
-                color="primary"
+                color="success"
                 :loading="submitting"
                 @click="apply"
                 >{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn
@@ -119,11 +123,13 @@ export default {
             tab: 'table',
             currentTab: 0,
             categories: [],
+            parentCategories: null,
             categoriesAsText: '',
 
             search: null,
             submitting: false,
             errors: [],
+
             options: null,
 
             ajax: false,
@@ -134,7 +140,8 @@ export default {
 
             snacks: {
                 fileUploaded: false,
-                formReverted: false
+                formReverted: false,
+                ajaxError: false
             },
 
             required: value =>
@@ -189,7 +196,7 @@ export default {
     },
 
     methods: {
-        reloadCategories(onDone) {
+        async reloadCategories(onDone) {
             if (this.ajax) return;
             if (this.inEditMode || this.convert) {
                 setTimeout(() => this.reloadCategories(), 100);
@@ -197,26 +204,41 @@ export default {
             }
             this.ajax = true;
 
-            const query = this.isCategory
-                ? optionsApi.getCategoryOptions(
-                      this.questionnaireRev,
-                      this.id,
-                      this.cascading
-                  )
-                : optionsApi.getOptions(
-                      this.questionnaireRev,
-                      this.id,
-                      this.cascading
-                  );
-            query
-                .then(data => {
-                    this.categories = data.options;
-                    delete data.options;
-                    this.options = data;
+            try {
+                const query = this.isCategory
+                    ? optionsApi.getCategoryOptions(
+                          this.questionnaireRev,
+                          this.id,
+                          this.cascading
+                      )
+                    : optionsApi.getOptions(
+                          this.questionnaireRev,
+                          this.id,
+                          this.cascading
+                      );
 
-                    if (onDone) onDone.apply(this);
-                })
-                .finally(() => (this.ajax = false));
+                const data = await query;
+                this.categories = data.options;
+                delete data.options;
+                this.options = data;
+
+                if (this.options.cascadeFromQuestionId) {
+                    const parent = await optionsApi.getOptions(
+                        this.questionnaireRev,
+                        this.options.cascadeFromQuestionId,
+                        false
+                    );
+
+                    this.parentCategories = parent.options;
+                }
+
+                if (onDone) onDone.apply(this);
+            } catch (e) {
+                console.error(e);
+                this.snacks.ajaxError = true;
+            } finally {
+                this.ajax = false;
+            }
         },
 
         resetChanges() {
