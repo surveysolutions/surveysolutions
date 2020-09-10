@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public interface IAssignmentsToDeleteFactory
     {
-        List<Assignment> LoadBatch(Guid questionnaireId, long questionnaireVersion);
+        void RemoveAllAssignments(QuestionnaireIdentity questionnaireIdentity);
+        void RemoveAllEventsForAssignments(QuestionnaireIdentity questionnaireIdentity);
     }
 }

@@ -2,29 +2,46 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     class AssignmentsToDeleteFactory : IAssignmentsToDeleteFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<Assignment> assignmentsReader;
+        private readonly IUnitOfWork sessionFactory;
 
         public const int BatchSize = 100;
 
-        public AssignmentsToDeleteFactory(IQueryableReadSideRepositoryReader<Assignment> assignmentsReader)
+        public AssignmentsToDeleteFactory(IUnitOfWork sessionFactory)
         {
-            this.assignmentsReader = assignmentsReader;
+            this.sessionFactory = sessionFactory;
         }
 
-        public List<Assignment> LoadBatch(Guid questionnaireId, long questionnaireVersion)
+        public void RemoveAllAssignments(QuestionnaireIdentity questionnaireIdentity)
         {
-            var result = this.assignmentsReader.Query(_ => _.Where(assignment =>
-                    assignment.QuestionnaireId.QuestionnaireId == questionnaireId &&
-                    assignment.QuestionnaireId.Version == questionnaireVersion)
-                .Take(BatchSize)
-                .ToList());
+            var queryText = $"DELETE FROM readside.assignments as a " +
+                            $"WHERE a.questionnaireid = :questionnaireId " +
+                            $"  AND a.questionnaireversion = :questionnaireVersion ";
 
-            return result;
+            var query = sessionFactory.Session.CreateSQLQuery(queryText);
+            query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
+            query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
+            query.ExecuteUpdate();
+        }
+
+        public void RemoveAllEventsForAssignments(QuestionnaireIdentity questionnaireIdentity)
+        {
+            var queryText = $"DELETE FROM events.events as e " +
+                            $"USING readside.assignments as a " +
+                            $"WHERE e.eventsourceid = a.publickey " +
+                            $"  AND a.questionnaireid = :questionnaireId " +
+                            $"  AND a.questionnaireversion = :questionnaireVersion ";
+
+            var query = sessionFactory.Session.CreateSQLQuery(queryText);
+            query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
+            query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
+            query.ExecuteUpdate();
         }
     }
 }
