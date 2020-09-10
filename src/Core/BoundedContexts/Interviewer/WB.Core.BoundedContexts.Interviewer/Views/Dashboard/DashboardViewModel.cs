@@ -79,6 +79,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
+                if(!this.interviewerSettings.AllowSyncWithHq)
+                    this.nearbyConnection?.StopAll();
             });
 
             this.CreateNew = createNewViewModel;

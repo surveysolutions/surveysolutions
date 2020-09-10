@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 this.connectionClient.StopAll();
                 this.RemoteEndpoints.Clear();
-                this.knownEnpoints.Clear();
+                this.knownEndpoints.Clear();
                 this.pendingRequestConnections.Clear();
                 this.locker = new NamedAsyncLocker();
                 this.logger.Info("[STOP ALL]");
@@ -204,7 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"[LOST ENDPOINT] ({endpoint}) ENTER");
 
-            if (knownEnpoints.TryRemove(endpoint, out var name))
+            if (knownEndpoints.TryRemove(endpoint, out var name))
             {
                 this.logger.Verbose($"({endpoint}) Remove known: '{name ?? "<unknown>"}'. Notify.");
                 events.OnNext(new NearbyEvent.EndpointLost(endpoint));
@@ -215,7 +215,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"[FOUND ENDPOINT] ({info.Endpoint}, {info.EndpointName}) ENTER");
 
-            if (knownEnpoints.TryAdd(info.Endpoint, info.EndpointName))
+            if (knownEndpoints.TryAdd(info.Endpoint, info.EndpointName))
             {
                 this.logger.Verbose($"({info.Endpoint}) Add known: '{info.EndpointName ?? "<unknown>"}'. Notify.");
                 events.OnNext(new NearbyEvent.EndpointFound(info.Endpoint, info));
@@ -226,12 +226,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"[DISCONNECTED] ({endpoint}) ENTER");
 
-            var exising = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
-            events.OnNext(new NearbyEvent.Disconnected(endpoint, exising?.Name));
+            var existing = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
+            events.OnNext(new NearbyEvent.Disconnected(endpoint, existing?.Name));
 
-            if (exising != null)
+            if (existing != null)
             {
-                this.RemoteEndpoints.Remove(exising);
+                this.RemoteEndpoints.Remove(existing);
             }
         }
 
@@ -243,14 +243,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             if (resolution.IsSuccess)
             {
-                var exising = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
+                var existing = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
 
-                if (exising != null)
+                if (existing != null)
                 {
-                    this.RemoteEndpoints.Remove(exising);
+                    this.RemoteEndpoints.Remove(existing);
                 }
 
-                knownEnpoints.TryGetValue(endpoint, out var name);
+                knownEndpoints.TryGetValue(endpoint, out var name);
 
                 this.logger.Verbose($"[OnConnectionClientResult] Connected to endpoint: {endpoint}. Name: {name}");
                 this.RemoteEndpoints.Add(new RemoteEndpoint { Enpoint = endpoint, Name = name });
@@ -259,13 +259,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         }
 
         private readonly ConcurrentDictionary<string, string>
-            knownEnpoints = new ConcurrentDictionary<string, string>();
+            knownEndpoints = new ConcurrentDictionary<string, string>();
 
         private void OnInitiatedConnectionClient(object sender, NearbyConnectionInfo info)
         {
             this.logger.Verbose($"[OnInitiatedConnectionClient] ({info.Endpoint}, name: {info.EndpointName}," +
                                 $" incoming: {info.IsIncomingConnection}, auth: {info.AuthenticationToken})");
-            knownEnpoints.TryAdd(info.Endpoint, info.EndpointName);
+            knownEndpoints.TryAdd(info.Endpoint, info.EndpointName);
             events.OnNext(new NearbyEvent.InitiatedConnection(info.Endpoint, info));
         }
 
