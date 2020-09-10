@@ -269,16 +269,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             events.OnNext(new NearbyEvent.InitiatedConnection(info.Endpoint, info));
         }
 
-        private async void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
+        private void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
         {
             this.logger.Verbose($"({update.Endpoint}, payloadId: {update.Id}, status: {update.Status.ToString()}, {update.BytesTransferred} of {update.TotalBytes}");
-            await communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
+            Task.Run(()=>communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update).Wait()).ConfigureAwait(false);
         }
 
-        private async void OnPayloadReceived(object sender, IPayload payload)
+        private void OnPayloadReceived(object sender, IPayload payload)
         {
             this.logger.Verbose($"({payload.Endpoint}, {payload.ToString()})");
-            await communicator.ReceivePayloadAsync(this, payload.Endpoint, payload);
+            Task.Run(() => communicator.ReceivePayloadAsync(this, payload.Endpoint, payload).Wait()).ConfigureAwait(false);
         }
 
         public void Dispose()

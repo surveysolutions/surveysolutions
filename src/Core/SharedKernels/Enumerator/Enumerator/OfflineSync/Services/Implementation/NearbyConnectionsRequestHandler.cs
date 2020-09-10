@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         
         public Task<ICommunicationMessage> Handle(ICommunicationMessage message)
         {
-            // ReSharper disable once InconsistentlySynchronizedField - handlers initialization is only occure once during app start
+            // ReSharper disable once InconsistentlySynchronizedField - handlers initialization is only occur once during app start
             if (handlers.TryGetValue(message.GetType(), out var handler))
             {
                 return handler(message);
