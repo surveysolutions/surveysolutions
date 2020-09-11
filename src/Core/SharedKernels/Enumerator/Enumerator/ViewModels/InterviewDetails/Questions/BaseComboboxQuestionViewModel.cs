@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
 
-            this.Answer = this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
+            this.Answer = GetCurrentAnswer();
             var initialFilter = this.Answer.HasValue ? this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value)?.Title ?? null : null;
 
             this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
@@ -97,6 +97,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             comboboxCollection.Add(comboboxViewModel);
 
             this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        protected virtual int? GetCurrentAnswer()
+        {
+            return this.interview.GetSingleOptionQuestion(this.Identity).GetAnswer()?.SelectedValue;
         }
 
         public virtual async Task SaveAnswerAsync(int optionValue)
