@@ -62,12 +62,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             ISynchronizationCompleteSource synchronizationCompleteSource,
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
-            IRestService restService,
             IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
             IMapInteractionService mapInteractionService) : base(principal, viewModelNavigationService, permissionsService,
-            nearbyConnection, interviewerSettings, restService)
+            nearbyConnection)
         {
             this.messenger = messenger;
             this.principal = principal;
@@ -76,6 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.auditLogService = auditLogService;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
+
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
         }
+
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -369,7 +370,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override async Task OnStartDiscovery()
         {
-            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
+            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
+                this.GetServiceName(), cancellationTokenSource.Token);
             
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
@@ -397,7 +399,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void OnDeviceConnected(string name)
         {
             this.StopDiscovery();
-
             using (new CommunicationSession())
             {
                 this.RunSynchronization();
@@ -441,6 +442,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void Synchronization_OnCancel(object sender, EventArgs e)
         {
+            if(this.cancellationTokenSource != null)
+            {
+                // this.cancellationTokenSource.Cancel();
+            }
         }
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
