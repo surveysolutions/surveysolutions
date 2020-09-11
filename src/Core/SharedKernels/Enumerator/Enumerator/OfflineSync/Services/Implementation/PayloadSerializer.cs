@@ -14,24 +14,39 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             this.serializer = serializer;
         }
 
-        public async Task<T> FromPayloadAsync<T>(byte[] payload)
+        public Task<T> FromPayloadAsync<T>(byte[] payload)
         {
-            var ms = new MemoryStream(payload);
-            await using var zip = new GZipStream(ms, CompressionMode.Decompress);
-            using var sr = new StreamReader(zip);
-            var json = await sr.ReadToEndAsync();
-            return this.serializer.Deserialize<T>(json);
+            using (var ms = new MemoryStream(payload))
+            {
+                using (var zip = new GZipStream(ms, CompressionMode.Decompress))
+                {
+                    using (var sr = new StreamReader(zip))
+                    {
+                        // TODO: Fix to async as soon https://github.com/xamarin/xamarin-android/issues/3397 fixed
+                        var json = sr.ReadToEnd();
+                        return Task.FromResult(this.serializer.Deserialize<T>(json));
+                    }
+                }
+            }
         }
         
-        public async Task<byte[]> ToPayloadAsync<T>(T message)
+        public Task<byte[]> ToPayloadAsync<T>(T message)
         {
-            var ms = new MemoryStream();
-            await using var zip = new GZipStream(ms, CompressionLevel.Optimal);
-            await using var sw = new StreamWriter(zip);
-            var json = this.serializer.Serialize(message);
-            await sw.WriteAsync(json);
+            using (var ms = new MemoryStream())
+            {
+                using (var zip = new GZipStream(ms, CompressionLevel.Optimal))
+                {
+                    using (var sw = new StreamWriter(zip))
+                    {
+                        var json = this.serializer.Serialize(message);
+                        
+                        // TODO: Fix to async as soon https://github.com/xamarin/xamarin-android/issues/3397 fixed
+                        sw.Write(json);
+                    }
+                }
 
-            return ms.ToArray();
+                return Task.FromResult(ms.ToArray());
+            }
         }
     }
 }
