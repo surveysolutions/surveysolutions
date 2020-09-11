@@ -49,17 +49,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 if (headquartersStatuses == null)
                 {
-                    headquartersStatuses = new List<ComboboxViewItem>
+                    lock (invisibleForUserStatuses)
                     {
-                        AsComboboxItem("AllExceptApprovedByHQ", Strings.AllInterviewersExceptApprovedByHeadquarters,
-                            headquarterStatusesList
-                                .Where(status => status != InterviewStatus.ApprovedByHeadquarters)
-                                .ToArray()
-                        )
-                    };
+                        if (headquarterStatusesList == null)
+                        {
+                            headquartersStatuses = new List<ComboboxViewItem>
+                            {
+                                AsComboboxItem("AllExceptApprovedByHQ",
+                                    Strings.AllInterviewersExceptApprovedByHeadquarters,
+                                    headquarterStatusesList
+                                        .Where(status => status != InterviewStatus.ApprovedByHeadquarters)
+                                        .ToArray()
+                                )
+                            };
 
-                    headquartersStatuses.AddRange(headquarterStatusesList.Select(status =>
-                        AsComboboxItem(status, status)));
+                            headquartersStatuses.AddRange(headquarterStatusesList.Select(status =>
+                                AsComboboxItem(status, status)));
+                        }
+                    }
                 }
 
                 return headquartersStatuses;
