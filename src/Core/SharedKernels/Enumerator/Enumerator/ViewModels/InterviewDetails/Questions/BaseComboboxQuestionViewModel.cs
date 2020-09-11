@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -52,6 +51,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
 
+            this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
+            this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
+            
             this.comboboxViewModel = 
                 new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, 
                     true, mainThreadDispatcher);
@@ -74,14 +76,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.Identity = entityIdentity;
-            this.interview = this.interviewRepository.Get(interviewId);
+            this.interview = this.interviewRepository.GetOrThrow(interviewId);
             this.interviewId = this.interview.Id;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
-
-            this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
-            this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
 
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
 
