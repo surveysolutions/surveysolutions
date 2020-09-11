@@ -101,31 +101,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
 
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
-            //var test = new ConnectedDeviceViewModel();
-            //test.InterviewerName = "Interviewer1";
-            //test.Synchronization.ProgressOnProgressChanged(this, new SyncProgressInfo
-            //{
-            //    Description = "description",
-            //    Statistics = new SynchronizationStatistics
-            //    {
-            //        RemovedAssignmentsCount = 1,
-            //        NewAssignmentsCount = 1,
-            //        DeletedInterviewsCount = 5,
-            //        FailedToCreateInterviewsCount = 4,
-            //        TotalCompletedInterviewsCount = 12,
-            //        FailedToUploadInterviwesCount = 21,
-            //        NewInterviewsCount = 21,
-            //        RejectedInterviewsCount = 21,
-            //        SuccessfullyUploadedInterviewsCount = 12,
-            //        SuccessfullyDownloadedQuestionnairesCount = 1225,
-            //        TotalDeletedInterviewsCount = 19,
-            //        TotalNewInterviewsCount = 676,
-            //        TotalRejectedInterviewsCount = 12
-            //    },
-            //    Status = SynchronizationStatus.Upload,
-            //    Title = "title"
-            //});
-            //this.ConnectedDevices.Add(test);
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)

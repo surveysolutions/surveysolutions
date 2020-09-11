@@ -107,8 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             Package payload = null;
 
             try
-            {
-                
+            {                
                 payload = await PreparePayload(endpoint, Guid.NewGuid(), message, true);
                 payload.Comment = $"Package {typeof(TRequest).Name} -> {typeof(TResponse).Name}";
                 var tsc = new TaskCompletionSourceWithProgress(payload, progress, logger, cancellationToken);
@@ -221,7 +220,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                     if (isIncoming)
                     {
-                        var bytes = await payload.BytesFromStream;
+                        var bytes = payload.BytesFromStream;
                         var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
                         await HandlePayloadContent(connection, endpoint, payloadContent);
                         //logger.Verbose(
