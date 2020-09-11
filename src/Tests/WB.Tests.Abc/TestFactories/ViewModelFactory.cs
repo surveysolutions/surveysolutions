@@ -135,6 +135,7 @@ namespace WB.Tests.Abc.TestFactories
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
                 Stub.MvxMainThreadAsyncDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionQuestionAnswered>>.WithNotEmptyValues,
+                Abc.SetUp.FilteredOptionsViewModel(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.ThrottlingViewModel());
