@@ -22,8 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         protected readonly IPermissionsService permissions;
         protected readonly INearbyConnection nearbyConnection;
         protected CancellationTokenSource cancellationTokenSource = null;
-        private readonly IEnumeratorSettings settings;
-        private readonly IRestService restService;
+
         private readonly IDisposable nearbyConnectionSubscribtion;
 
         public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(StartDiscoveryAsync);
@@ -31,15 +30,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         protected BaseOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
-            INearbyConnection nearbyConnection,
-            IEnumeratorSettings settings,
-            IRestService restService)
+            INearbyConnection nearbyConnection)
             : base(principal, viewModelNavigationService)
         {
             this.permissions = permissions;
             this.nearbyConnection = nearbyConnection;
-            this.settings = settings;
-            this.restService = restService;
             nearbyConnectionSubscribtion = this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
         }
 
@@ -68,7 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 var isAllowedGetLocation = await TryRequestLocationPermission();
                 if (!isAllowedGetLocation)
                     return;
-                
+
+
                 await this.OnStartDiscovery();
             }
             finally
@@ -77,11 +73,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             }
         }
 
-
         private async Task<bool> TryRequestLocationPermission()
         {
             try
-            { 
+            {
                 await this.permissions.AssureHasPermission(Permission.Location);
             }
             catch (MissingPermissionsException)
@@ -123,10 +118,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.OnDeviceConnectionAccepting(name);
             var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint);
 
-            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
+            if (connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
                 connectionStatus.Status == ConnectionStatusCode.StatusOutOfOrderApiCall)
                 return;
-            
+
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
             else
@@ -143,16 +138,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             try
             {
                 connectionStatus = await this.nearbyConnection
-                    .RequestConnectionAsync(interviewerName, endpoint, cancellationTokenSource.Token)
-                    .ConfigureAwait(false);
+                     .RequestConnectionAsync(interviewerName, endpoint, cancellationTokenSource.Token);
             }
             catch (NullReferenceException)
             {
-               //research the cause of NRE
-               //occurred with second call
+                //research the cause of NRE
+                //occurred with second call
             }
 
-            if(connectionStatus == null ||
+            if (connectionStatus == null ||
                connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
                connectionStatus.Status == ConnectionStatusCode.StatusOutOfOrderApiCall)
                 return;
