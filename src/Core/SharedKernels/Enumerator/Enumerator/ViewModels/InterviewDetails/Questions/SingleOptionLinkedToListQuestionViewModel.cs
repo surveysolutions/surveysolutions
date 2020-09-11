@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public bool HasOptions => this.Options.Any();
+        public bool HasOptions => this.Options.Any() || RenderAsCombobox;
 
         public override void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
@@ -113,12 +113,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override int? GetCurrentAnswer()
         {
             return this.interview.GetSingleOptionLinkedToListQuestion(this.Identity).GetAnswer()?.SelectedValue;
-        }
-
-        public override Task SaveAnswerAsync(int optionValue)
-        {
-            this.selectedOptionToSave = optionValue;
-            return this.SaveAnswer();
         }
 
         public bool RenderAsCombobox { get; private set; }
@@ -303,7 +297,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RefreshOptionsFromModelAsync()
         {
-            this.comboboxViewModel.ResetFilterAndOptions();
             this.comboboxCollection.Remove(this.comboboxViewModel);
 
             if (RenderAsCombobox)
