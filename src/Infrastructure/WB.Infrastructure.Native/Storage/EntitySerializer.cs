@@ -22,6 +22,7 @@ namespace WB.Infrastructure.Native.Storage
         {
             TypeNameHandling = TypeNameHandling.Auto,
             DefaultValueHandling = DefaultValueHandling.Ignore,
+            DateParseHandling = DateParseHandling.DateTimeOffset,
             MissingMemberHandling = MissingMemberHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
