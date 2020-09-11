@@ -81,13 +81,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public string GetPath(Guid interviewId, string filename = null) => this.GetPathToFile(interviewId, filename);
 
-        public void RemoveAllBinaryDataForInterview(Guid interviewId)
+        public Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
         {
-            var directoryPath = this.GetPathToInterviewDirectory(interviewId);
-            if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                return;
+            foreach (var interviewId in interviewIds.AsParallel())
+            {
+                var directoryPath = this.GetPathToInterviewDirectory(interviewId);
+                if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
+                    continue;
 
-            fileSystemAccessor.DeleteDirectory(directoryPath);
+                fileSystemAccessor.DeleteDirectory(directoryPath);
+            }
+            
+            return Task.CompletedTask;
         }
 
         private string GetPathToFile(Guid interviewId, string fileName)
