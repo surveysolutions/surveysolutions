@@ -119,10 +119,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             await deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId);
 
-            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAllEventsForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
-            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAudioForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
-            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAudioAuditForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
-            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAllInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
+            interviewsToDeleteFactoryMock.Verify(c => c.RemoveAllInterviewsDataAsync(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
             
             commandServiceMock.Received(1).Execute(
                 Arg.Is<DisableQuestionnaire>(
@@ -174,9 +171,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             await deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId);
 
-            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllAssignments(
-                    It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
-            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllEventsForAssignments(
+            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllAssignmentsData(
                     It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
 
             commandServiceMock.Received(1).Execute(
