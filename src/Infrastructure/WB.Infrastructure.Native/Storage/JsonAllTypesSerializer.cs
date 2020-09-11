@@ -18,6 +18,8 @@ namespace WB.Infrastructure.Native.Storage
             this.jsonSerializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
+                DateParseHandling = DateParseHandling.DateTimeOffset,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
