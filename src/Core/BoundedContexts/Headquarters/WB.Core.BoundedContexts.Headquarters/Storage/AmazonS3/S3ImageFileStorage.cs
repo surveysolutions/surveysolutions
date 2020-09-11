@@ -27,7 +27,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return GetInterviewBinaryDataAsync(interviewId, fileName).Result;
         }
 
-        public string GetPath(Guid interviewId, string filename = null) => $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
+        public string GetPath(Guid interviewId, string filename = null) => $"{GetInterviewDirectoryPath(interviewId)}/{filename ?? String.Empty}";
+        private string GetInterviewDirectoryPath(Guid interviewId) => $"images/{interviewId.FormatGuid()}";
+        public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
+        {
+            var paths = interviewIds.Select(id => GetInterviewDirectoryPath(id));
+            await externalFileStorage.RemoveAsync(paths).ConfigureAwait(false);
+        }
 
         public async Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
