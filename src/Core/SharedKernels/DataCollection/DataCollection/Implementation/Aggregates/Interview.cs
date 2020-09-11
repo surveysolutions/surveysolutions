@@ -808,32 +808,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return false;
             }
         }
-
-        public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value, parentQuestionValue);
-        }
-
-        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            CategoricalOption filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
-
-            if (filteredOption == null)
-                return null;
-
-            if (questionnaire.IsSupportFilteringForOptions(question.Id))
-            {
-                if (this.UsesExpressionStorage)
-                {
-                    return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
-                }
-                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
-            }
-            return filteredOption;
-        }
-
+        
         #endregion
 
         #region Assembly
