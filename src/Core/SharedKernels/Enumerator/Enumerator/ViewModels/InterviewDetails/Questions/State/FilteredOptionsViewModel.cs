@@ -65,8 +65,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (maxCountToLoad.HasValue)
                 this.Count = maxCountToLoad.Value;
 
-            interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
+            interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.questionIdentity = entityIdentity;
 
