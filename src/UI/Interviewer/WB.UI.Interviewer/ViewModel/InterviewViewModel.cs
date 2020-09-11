@@ -78,15 +78,8 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override async Task NavigateBack()
         {
-            if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-                this.Dispose();
-            }
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
         }
 
         protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
