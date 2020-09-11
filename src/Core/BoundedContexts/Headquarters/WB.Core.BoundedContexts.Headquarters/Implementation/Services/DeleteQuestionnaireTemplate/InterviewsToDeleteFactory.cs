@@ -112,5 +112,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 pageIndex++;
             } while (interviewIds.Count > 0 && interviewIds.Count == BatchSize);
         }
+
+        public async Task RemoveAllInterviewsDataAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            await RemoveInterviewsImagesAsync(questionnaireIdentity);
+            RemoveAudioForInterviews(questionnaireIdentity);
+            RemoveAudioAuditForInterviews(questionnaireIdentity);
+            RemoveAllEventsForInterviews(questionnaireIdentity);
+            RemoveAllInterviews(questionnaireIdentity);
+        }
     }
 }

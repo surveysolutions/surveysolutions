@@ -158,8 +158,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private void DeleteAssignments(QuestionnaireIdentity questionnaireIdentity)
         {
-            assignmentsToDeleteFactory.RemoveAllEventsForAssignments(questionnaireIdentity);
-            assignmentsToDeleteFactory.RemoveAllAssignments(questionnaireIdentity);
+            assignmentsToDeleteFactory.RemoveAllAssignmentsData(questionnaireIdentity);
             aggregateRootCache.Clear();
         }
 
@@ -184,11 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private async Task DeleteInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            await interviewsToDeleteFactory.RemoveInterviewsImagesAsync(questionnaireIdentity);
-            interviewsToDeleteFactory.RemoveAudioForInterviews(questionnaireIdentity);
-            interviewsToDeleteFactory.RemoveAudioAuditForInterviews(questionnaireIdentity);
-            interviewsToDeleteFactory.RemoveAllEventsForInterviews(questionnaireIdentity);
-            interviewsToDeleteFactory.RemoveAllInterviews(questionnaireIdentity);
+            await interviewsToDeleteFactory.RemoveAllInterviewsDataAsync(questionnaireIdentity);
             aggregateRootCache.Clear();
         }
     }

@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (Exception e)
             {
-                LogError($"Unable to remove object in S3. Path: {paths}", e);
+                LogError($"Unable to remove object in S3. Paths: {paths}", e);
                 throw;
             }
         }

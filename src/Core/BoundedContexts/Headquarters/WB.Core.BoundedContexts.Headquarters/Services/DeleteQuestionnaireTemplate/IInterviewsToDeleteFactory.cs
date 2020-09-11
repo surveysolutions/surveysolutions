@@ -8,10 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTempl
 {
     internal interface IInterviewsToDeleteFactory
     {
-        void RemoveAllInterviews(QuestionnaireIdentity questionnaireIdentity);
-        void RemoveAllEventsForInterviews(QuestionnaireIdentity questionnaireIdentity);
-        void RemoveAudioAuditForInterviews(QuestionnaireIdentity questionnaireIdentity);
-        void RemoveAudioForInterviews(QuestionnaireIdentity questionnaireIdentity);
-        Task RemoveInterviewsImagesAsync(QuestionnaireIdentity questionnaireIdentity);
+        Task RemoveAllInterviewsDataAsync(QuestionnaireIdentity questionnaireIdentity);
     }
 }

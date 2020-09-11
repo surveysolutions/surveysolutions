@@ -43,5 +43,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
             query.ExecuteUpdate();
         }
+
+        public void RemoveAllAssignmentsData(QuestionnaireIdentity questionnaireIdentity)
+        {
+            RemoveAllEventsForAssignments(questionnaireIdentity);
+            RemoveAllAssignments(questionnaireIdentity);
+        }
     }
 }
