@@ -61,5 +61,10 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

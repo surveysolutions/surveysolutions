@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
     internal class DeleteQuestionnaireServiceTests : DeleteQuestionnaireServiceTestContext
     {
         [Test]
-        public void when_delete_questionnaire_and_lookup_tables()
+        public async Task when_delete_questionnaire_and_lookup_tables()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 5);
 
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                                 Version = questionnaireIdentity.Version
                             }));
 
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, userId);
+            await deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, userId);
             
             Mock.Get(questionnaireStorage).Verify(s => s.GetQuestionnaireDocument(questionnaireIdentity), Times.Once);
             
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                             }));
 
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
+            await deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId);
 
             interviewsToDeleteFactoryMock.Verify(c => c.RemoveAllEventsForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
             interviewsToDeleteFactoryMock.Verify(c => c.RemoveAudioForInterviews(It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                             }));
 
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
+            await deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId);
 
             assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllAssignments(
                     It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);

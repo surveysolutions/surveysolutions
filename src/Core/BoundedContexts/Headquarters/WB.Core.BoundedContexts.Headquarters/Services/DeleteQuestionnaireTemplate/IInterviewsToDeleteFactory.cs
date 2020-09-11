@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -11,5 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTempl
         void RemoveAllEventsForInterviews(QuestionnaireIdentity questionnaireIdentity);
         void RemoveAudioAuditForInterviews(QuestionnaireIdentity questionnaireIdentity);
         void RemoveAudioForInterviews(QuestionnaireIdentity questionnaireIdentity);
+        Task RemoveInterviewsImagesAsync(QuestionnaireIdentity questionnaireIdentity);
     }
 }

@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
         }
 
-        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid userId)
+        public async Task DeleteInterviewsAndQuestionnaireAfterAsync(Guid questionnaireId, long questionnaireVersion, Guid userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
 
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
                 var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
 
-                this.DeleteInterviews(questionnaireIdentity);
+                await this.DeleteInterviewsAsync(questionnaireIdentity);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity, questionnaireDocument);
                 this.DeleteReusableCategories(questionnaireIdentity, questionnaireDocument);
@@ -182,8 +182,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
-        private void DeleteInterviews(QuestionnaireIdentity questionnaireIdentity)
+        private async Task DeleteInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
+            await interviewsToDeleteFactory.RemoveInterviewsImagesAsync(questionnaireIdentity);
             interviewsToDeleteFactory.RemoveAudioForInterviews(questionnaireIdentity);
             interviewsToDeleteFactory.RemoveAudioAuditForInterviews(questionnaireIdentity);
             interviewsToDeleteFactory.RemoveAllEventsForInterviews(questionnaireIdentity);

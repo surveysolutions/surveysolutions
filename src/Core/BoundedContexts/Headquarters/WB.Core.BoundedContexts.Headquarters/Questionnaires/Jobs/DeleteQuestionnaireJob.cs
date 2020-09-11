@@ -31,9 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
             if (!disabledNotDeletedQuestionnaire.DisabledBy.HasValue)
                 throw new ArgumentException("Should specify userId for delete questionnaire");
                 
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy.Value);
-
-            return Task.CompletedTask;
+            return deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy.Value);
         }
     }
 }
