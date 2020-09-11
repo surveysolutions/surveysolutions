@@ -773,25 +773,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => questionnaire.HasGroup(groupId)
                 ? questionnaire.GetGroupTitle(groupId) ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
-
-
-        /// Filter for regular categorical questions, such as YesNo, Single and Multi.
-        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
-            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
-
-            if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
-                return options.Take(itemsCount).ToList();
-
-            if (this.UsesExpressionStorage)
-                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
-
-            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
-        }
-
+        
         protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
             IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
         {

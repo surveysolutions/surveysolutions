@@ -752,6 +752,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize, excludedOptionIds);
 
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            IEnumerable<CategoricalOption> options;
+
+            if (questionnaire.IsLinkedToListQuestion(questionIdentity.Id))
+            {
+                options = OptionsForLinkedToTextListQuestion(questionIdentity);
+            }
+            else
+            {
+                options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
+            }
+            if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
+                return options.Take(itemsCount).ToList();
+
+            if (this.UsesExpressionStorage)
+                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
+
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
+        }
+        
+        private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
+        {
+            var questionnaire = GetQuestionnaireOrThrow(Language);
+            var linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId.Id);
+            var listQuestion = FindQuestionInQuestionBranch(linkedToQuestionId, questionId);
+            if (listQuestion == null || listQuestion.IsDisabled()) yield break;
+
+            var listOptions = listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows;
+            var filteredOptions = GetSingleOptionLinkedToListQuestion(questionId)?.Options;
+            
+            if (listOptions == null || filteredOptions == null) yield break;
+
+            foreach (var textListAnswerRow in listOptions)
+            {
+                if (filteredOptions.Contains(textListAnswerRow.Value))
+                    yield return new CategoricalOption
+                    {
+                        Title = textListAnswerRow.Text,
+                        Value = textListAnswerRow.Value
+                    };
+            }
+        }
+
         public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
         {
             var question = this.GetCascadingQuestion(questionIdentity);
