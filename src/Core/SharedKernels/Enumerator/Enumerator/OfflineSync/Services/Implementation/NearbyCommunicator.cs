@@ -113,14 +113,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 var tsc = new TaskCompletionSourceWithProgress(payload, progress, logger, cancellationToken);
                 pending.TryAdd(payload.CorrelationId, tsc);
 
-                //logger.Verbose(
-                //    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {typeof(TResponse).Name}");
-
                 await SendOverWireAsync(connection, endpoint, payload);
                 var response = await tsc.Task.ConfigureAwait(false);
-
-                //logger.Verbose(
-                //    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {response.GetType().Name}");
 
                 switch (response)
                 {
@@ -260,7 +254,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         });
 
                         if (pending.TryRemove(header.CorrelationId, out var failure))
+                        {
                             failure.SetCanceled();
+                        }
                     }
 
                     break;
@@ -347,12 +343,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-
         private async Task<Package> PreparePayload(string endpoint, Guid correlationId, ICommunicationMessage payload,
             bool isRequest, string errorMessage = null)
         {
-            var sw = Stopwatch.StartNew();
-
             var package = new Package();
             package.CorrelationId = correlationId;
             package.PayloadContent = new PayloadContent(correlationId, payload, isRequest);
@@ -380,8 +373,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
 
             package.Header = payloadProvider.AsBytes(package.HeaderBytes, endpoint);
-            sw.Stop();
-            logger.Verbose("Took " + sw.ElapsedMilliseconds + "ms");
             return package;
         }
 
@@ -474,20 +465,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             public void Debounce()
             {
                 sw.Restart();
-                //timer?.Dispose();
-                //timer = new Timer(SetCanceled, null, (int) MessageAwaitingTimeout.TotalMilliseconds,
-                //    Timeout.Infinite);
-              //  logger.Verbose($"Payload: {Payload.Comment}");
             }
-
-            //private void SetCanceled(object state)
-            //{
-            //    logger.Verbose($"Payload: {Payload.Comment}");
-            //    if (isCompleted || sw.Elapsed < MessageAwaitingTimeout) return;
-            //    logger.Verbose($"Execute. Payload: {Payload.Comment}");
-            //    TaskCompletionSource.TrySetCanceled();
-            //    timer?.Dispose();
-            //}
 
             public void UpdateProgress(long sendBytes, long totalBytes)
             {
