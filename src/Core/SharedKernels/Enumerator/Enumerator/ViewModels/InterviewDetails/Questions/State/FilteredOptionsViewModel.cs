@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,17 +17,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILogger logger;
 
-        private IStatefulInterview interview;
-        private List<CategoricalOption> Options { get; set; }
+        private IStatefulInterview interview = null!;
+        private List<CategoricalOption>? options;
         private string Filter { get; set; } = String.Empty;
         public int Count { get; protected set; } = 200;
 
-        public virtual event Func<object, EventArgs, Task> OptionsChanged;
+        public virtual event Func<object, EventArgs, Task>? OptionsChanged;
 
         public int? ParentValue { set; get; }
 
-        private Identity questionIdentity;
-        private int[] excludedOptionIds;
+        private Identity questionIdentity = null!;
+        private int[]? excludedOptionIds;
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
         {
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return x.Title == y.Title && x.Value == y.Value;
             }
 
-            public int GetHashCode(CategoricalOption obj)
+            public int GetHashCode(CategoricalOption? obj)
             {
                 return obj?.Value.GetHashCode() ?? 0;
             }
@@ -48,11 +49,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnswerNotifier answerNotifier,
             ILogger logger)
         {
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
-            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
             this.logger = logger;
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewRepository = interviewRepository;
+            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
 
             this.answerNotifier = answerNotifier;
         }
@@ -72,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
             {
-                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, ParentValue, Filter, this.Count, null);
+                this.options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, ParentValue, Filter, this.Count, null);
             }
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
@@ -98,12 +97,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual List<CategoricalOption> GetOptions(string filter = "", int[] excludedOptionIds = null, int? count = null)
+        public virtual List<CategoricalOption> GetOptions(string filter = "", int[]? excludedOptionIdsArg = null, int? count = null)
         {
             this.Filter = filter;
-            this.excludedOptionIds = excludedOptionIds;
-            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIds).ToList();
-            return Options;
+            this.excludedOptionIds = excludedOptionIdsArg;
+            var optionsFromInterview = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, count ?? this.Count, excludedOptionIdsArg)
+                ?.ToList();
+            this.options = optionsFromInterview ?? new List<CategoricalOption>();
+            return options;
         }
 
         public virtual CategoricalOption GetOptionByTextValue(string textValue)
@@ -129,10 +130,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var listOfNewOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count, this.excludedOptionIds).ToList(); 
 
-            var existingOptions = this.Options;
+            var existingOptions = this.options;
             if (existingOptions == null || !listOfNewOptions.SequenceEqual(existingOptions, new CategoricalOptionEqualityComparer()))
             {
-                this.Options = listOfNewOptions;
+                this.options = listOfNewOptions;
                 this.OptionsChanged?.Invoke(this, EventArgs.Empty);
             }
         }
