@@ -29,8 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireStorage;
         private QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
         private IStatefulInterview interview;
-        private string? partialText;
-        private SingleOptionLinkedQuestionOptionViewModel? selectedOption;
+        private string? filterText;
         private IEnumerable<Guid> parentRosterIds;
 
         public AutoCompleteSingleOptionLinkedQuestionViewModel(
@@ -58,14 +57,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            
+
             this.interview = this.interviewRepository.GetOrThrow(interviewId);
             var questionnaire =
                 this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
-            
+
             var linkedToRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(entityIdentity.Id);
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(linkedToRosterId).ToHashSet();
             BindSuggestionList();
+
+            var selectedOption = this.AutoCompleteSuggestions.FirstOrDefault(x => x.Selected);
+            if (selectedOption != null)
+            {
+                this.FilterText = selectedOption.Title;
+            }
             
             this.liteEventRegistry.Subscribe(this, interviewId);
         }
@@ -74,33 +79,38 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var singleOptionLinkedQuestionOptionViewModels = CreateOptions().ToList();
             this.AutoCompleteSuggestions = singleOptionLinkedQuestionOptionViewModels;
-            this.SelectedOption = singleOptionLinkedQuestionOptionViewModels.SingleOrDefault(x => x.Selected);
-            this.PartialText = SelectedOption?.Title;
         }
 
         public List<SingleOptionLinkedQuestionOptionViewModel> AutoCompleteSuggestions { get; set; }
-        
+
         public AnsweringViewModel Answering { get; set; }
 
         public IQuestionStateViewModel QuestionState => this.questionState;
-        
+
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
         public Identity Identity { get; private set; }
 
-        public string? PartialText
+        public string? FilterText
         {
-            get => partialText;
-            set => SetProperty(ref partialText, value);
+            get => filterText;
+            set => SetProperty(ref filterText, value);
         }
 
-        public SingleOptionLinkedQuestionOptionViewModel? SelectedOption
+        public IMvxAsyncCommand ShowErrorIfNoAnswerCommand => new MvxAsyncCommand(SendAnswer);
+        public IMvxCommand<string> FilterCommand => new MvxCommand<string>(Filter);
+
+        private void Filter(string filter)
         {
-            get => selectedOption;
-            set => SetProperty(ref selectedOption, value);
+            this.FilterText = filter;
         }
 
-        public IMvxAsyncCommand SelectedObjectChanged => new MvxAsyncCommand(SendAnswer);
+        public IMvxCommand<SingleOptionLinkedQuestionOptionViewModel> SaveAnswerBySelectedOptionCommand => new MvxCommand<SingleOptionLinkedQuestionOptionViewModel>(RememberSelectedOption);
+
+        private void RememberSelectedOption(SingleOptionLinkedQuestionOptionViewModel option)
+        {
+            this.FilterText = option.Title;
+        }
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(RemoveAnswer);
 
@@ -124,26 +134,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void Clear()
         {
-            this.PartialText = null;
-            this.SelectedOption = null;
+            this.FilterText = null;
         }
 
         private async Task SendAnswer()
         {
-            if (this.SelectedOption == null)
+            var selectedOption = this.AutoCompleteSuggestions.FirstOrDefault(x => x.Title.Equals(this.FilterText));
+
+            if (selectedOption == null)
                 return;
-            
+
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interview.Id,
                 this.principal.CurrentUserIdentity.UserId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
-                SelectedOption.RosterVector);
+                selectedOption.RosterVector);
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
-                
+
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
@@ -155,12 +166,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
-            
+
             foreach (var linkedOption in linkedQuestion.Options)
-                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue, interview);
+                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue,
+                    interview);
         }
-        
-        private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption, IStatefulInterview interview)
+
+        private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption,
+            RosterVector answeredOption, IStatefulInterview interview)
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
@@ -170,8 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 QuestionState = this.questionState,
                 Parent = this
             };
-
-
+            
             return optionViewModel;
         }
 
@@ -182,7 +194,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             liteEventRegistry.Unsubscribe(this);
         }
 
-       
 
         public void Handle(AnswersRemoved @event)
         {
@@ -209,7 +220,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
+            var optionListShouldBeUpdated =
+                @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
                 BindSuggestionList();
