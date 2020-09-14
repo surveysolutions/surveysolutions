@@ -83,15 +83,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
         {
-            foreach (var interviewId in interviewIds.AsParallel())
-            {
-                var directoryPath = this.GetPathToInterviewDirectory(interviewId);
-                if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                    continue;
-
-                fileSystemAccessor.DeleteDirectory(directoryPath);
-            }
-            
+            Parallel.ForEach(interviewIds,
+                interviewId =>
+                {
+                    var directoryPath = this.GetPathToInterviewDirectory(interviewId);
+                    if (fileSystemAccessor.IsDirectoryExists(directoryPath))
+                        fileSystemAccessor.DeleteDirectory(directoryPath);
+                });
+           
             return Task.CompletedTask;
         }
 

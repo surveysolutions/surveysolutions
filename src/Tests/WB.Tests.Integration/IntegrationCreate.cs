@@ -395,12 +395,41 @@ namespace WB.Tests.Integration
             return cfg.BuildSessionFactory();
         }
 
+        public static ISessionFactory SessionFactory(string connectionString, 
+            string readSideSchemaName,
+            IEnumerable<Type> readStorageEntityMapTypes,
+            string plainStoreSchemaName,
+            IEnumerable<Type> plainStorageEntityMapTypes,
+            bool executeSchemaUpdate)
+        {
+            var cfg = new Configuration();
+            
+            cfg.DataBaseIntegration(db =>
+            {
+                db.ConnectionString = connectionString;
+                db.Dialect<PostgreSQL91Dialect>();
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+            });
+
+            cfg.AddDeserializedMapping(GetMappingsFor(readStorageEntityMapTypes, readSideSchemaName), "read");
+            cfg.AddDeserializedMapping(GetMappingsFor(plainStorageEntityMapTypes, plainStoreSchemaName), "plain");
+            cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
+
+            if (executeSchemaUpdate)
+            {
+                var update = new SchemaUpdate(cfg);
+                update.Execute(false, true);
+            }
+            
+            return cfg.BuildSessionFactory();
+        }
+
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
             return new UnitOfWork(factory, Mock.Of<ILogger>());
         }
 
-        private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes)
+        private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
         {
             var mapper = new ModelMapper();
             mapper.AddMappings(painStorageEntityMapTypes);
@@ -416,7 +445,17 @@ namespace WB.Tests.Integration
             {
                 var tableName = type.Name.Pluralize();
                 customizer.Table(tableName);
+                
+                if (schemaName != null)
+                    customizer.Schema(schemaName);
             };
+
+            if (schemaName != null)
+            {
+                mapper.BeforeMapSet += (inspector, member, customizer) => customizer.Schema(schemaName);
+                mapper.BeforeMapBag += (inspector, member, customizer) => customizer.Schema(schemaName);
+                mapper.BeforeMapList += (inspector, member, customizer) => customizer.Schema(schemaName);
+            }
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
