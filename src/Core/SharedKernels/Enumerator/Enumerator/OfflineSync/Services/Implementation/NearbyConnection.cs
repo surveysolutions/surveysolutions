@@ -300,7 +300,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private void OnPayloadReceived(object sender, IPayload payload)
         {
-            this.logger.Verbose($" ==> ({payload.Endpoint}, {payload})");
+            this.logger.Verbose($"GOT ==> ({payload.Endpoint}, {payload})");
 
             communicationQueue.Add(payload);
         }
