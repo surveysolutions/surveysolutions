@@ -444,6 +444,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if(this.cancellationTokenSource != null)
             {
+                this.nearbyConnection.StopAll();
                 // this.cancellationTokenSource.Cancel();
             }
         }
