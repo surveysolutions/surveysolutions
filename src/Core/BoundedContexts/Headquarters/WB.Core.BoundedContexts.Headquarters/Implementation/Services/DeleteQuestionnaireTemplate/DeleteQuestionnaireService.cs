@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -116,6 +118,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
                 var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+                if (questionnaireDocument == null)
+                    throw new ArgumentException($"questionnaire not found {questionnaireIdentity}");
 
                 await this.DeleteInterviewsAsync(questionnaireIdentity);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
@@ -131,7 +135,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 if (!isAssignmentImportIsGoing)
                 {
                     this.DeleteInvitations(questionnaireIdentity);
-                    this.DeleteAssignments(questionnaireIdentity);
+                    await this.DeleteAssignmentsAsync(questionnaireIdentity);
                     this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
                 }
             }
@@ -156,9 +160,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             invitationsDeletionService.Delete(questionnaireIdentity);
         }
 
-        private void DeleteAssignments(QuestionnaireIdentity questionnaireIdentity)
+        private async Task DeleteAssignmentsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            assignmentsToDeleteFactory.RemoveAllAssignmentsData(questionnaireIdentity);
+            await assignmentsToDeleteFactory.RemoveAllAssignmentsDataAsync(questionnaireIdentity);
             aggregateRootCache.Clear();
         }
 

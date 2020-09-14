@@ -171,7 +171,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             await deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
             await deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId);
 
-            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllAssignmentsData(
+            assignmentsToDeleteFactoryMock.Verify(a => a.RemoveAllAssignmentsDataAsync(
                     It.Is<QuestionnaireIdentity>(q => q == questionnaireIdentity)), Times.Once);
 
             commandServiceMock.Received(1).Execute(
