@@ -28,8 +28,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             adapter.ItemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
             adapter.PartialTextChanged += this.AdapterOnPartialTextChanged;
-            adapter.FilterPredicate = (o, s) => true;
-
             base.Adapter = adapter;
             
             this.ItemClick += this.OnItemClick;
@@ -37,6 +35,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             this.EditorAction += this.OnEditorAction;
             this.Click += OnEditTextClick;
+        }
+
+        public void DisableDefaultSearch()
+        {
+            adapter.FilterPredicate = (o, s) => true;
         }
 
         protected InstantAutoCompleteTextView(IntPtr javaReference, JniHandleOwnership transfer)

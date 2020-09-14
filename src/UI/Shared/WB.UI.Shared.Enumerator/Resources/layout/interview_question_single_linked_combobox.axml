@@ -4,7 +4,7 @@
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
-      <MvxAppCompatAutoCompleteTextView
+      <InstantAutoCompleteTextView
               style="@style/Interview_Question_Answer_FilteredComboBox"
               android:inputType="textVisiblePassword"
               android:imeOptions="actionDone"
@@ -12,12 +12,13 @@
               android:completionThreshold="0"
               local:MvxItemTemplate="@layout/interview_question_single_linked_combobox_item"
               local:MvxBind="ItemsSource AutoCompleteSuggestions;
-                     PartialText PartialText;  
-                     SelectedObject SelectedOption;
-                     SelectedObjectChanged SelectedObjectChanged;
+                     PartialText FilterText;  
+                     OnPartialTextChanged FilterCommand;
+                     OnItemSelected SaveAnswerBySelectedOptionCommand;
+                     OnFocusOut ShowErrorIfNoAnswerCommand;
                      Watermark Localization('FilteredComboboxQuestion_Hint');
                      Tag Format('Answer_{0}', Identity)" />
-      <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(PartialText)"
+      <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText)"
                     style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
           <ImageButton style="@style/Interview_Question_RemoveAnswer"
                        android:layout_gravity="right" android:duplicateParentState="true"
