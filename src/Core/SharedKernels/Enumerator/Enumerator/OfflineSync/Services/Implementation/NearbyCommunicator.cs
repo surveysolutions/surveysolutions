@@ -132,7 +132,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         return result;
                     default:
                         throw new Exception(
-                            $"Unexpected return type. Expected: {typeof(TResponse).FullName}. Gor: {response.GetType().FullName}");
+                            $"Unexpected return type. Expected: {typeof(TResponse).FullName}. " +
+                            $"Got: {response.GetType().FullName}");
                 }
             }
             catch (Exception inner)
