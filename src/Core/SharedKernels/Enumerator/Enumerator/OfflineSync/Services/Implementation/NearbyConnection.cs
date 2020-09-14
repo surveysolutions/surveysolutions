@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Humanizer;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -36,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             events = new Subject<INearbyEvent>();
             Events = events;
             Task.Factory.StartNew(CommunicationQueue, TaskCreationOptions.LongRunning);
+            Task.Factory.StartNew(PayloadSenderQueue, TaskCreationOptions.LongRunning);
         }
 
         public async Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
@@ -146,11 +148,36 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             return status;
         }
 
+        private BlockingCollection<(TaskCompletionSource<NearbyStatus> tcs, string to, IPayload payload)> sendingQueue
+            = new BlockingCollection<(TaskCompletionSource<NearbyStatus>, string, IPayload)>();
+
+        private async Task PayloadSenderQueue()
+        {
+            foreach (var item in sendingQueue.GetConsumingEnumerable())
+            {
+                try
+                {
+                    var to = item.to;
+                    var payload = item.payload;
+                    var status = await this.connectionClient.SendPayloadAsync(to, payload);
+                    this.logger.Verbose($"[SENDED PAYLOAD] to: {to}.Payload: {payload.Id} # {payload.Type}. Result: {ToString(status)}");
+                    item.tcs.SetResult(status);
+                }
+                catch (Exception e)
+                {
+                    item.tcs.SetException(e);
+                }
+            }
+        }
+
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
-            var status = await this.connectionClient.SendPayloadAsync(to, payload);
-            this.logger.Verbose($"[SEND PAYLOAD] to: {to}.Payload: {payload.Id} # {payload.Type}. Result: {ToString(status)}");
-            return status;
+            var tcs = new TaskCompletionSource<NearbyStatus>();
+            var item = (tcs, to, payload);
+            this.sendingQueue.Add(item);
+            this.logger.Verbose($"Added to queue: {to}.Payload: {payload.Id} # {payload.Type}");
+
+            return await tcs.Task;
         }
 
         public IObservable<INearbyEvent> Events { get; }
