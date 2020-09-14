@@ -1,14 +1,11 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -19,7 +16,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -36,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
-        protected IStatefulInterview interview;
+        private IStatefulInterview interview = null!;
         private readonly ThrottlingViewModel throttlingModel;
 
         public SingleOptionLinkedQuestionViewModel(
@@ -54,14 +50,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
-            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.mainThreadDispatcher = mainThreadDispatcher;
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.throttlingModel = throttlingModel;
-            this.questionnaireRepository = questionnaireStorage ?? throw new ArgumentNullException("questionnaireStorage");
+            this.questionnaireRepository = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.throttlingModel.Init(SaveAnswer);
+            this.options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>();
+            this.parentRosterIds = Enumerable.Empty<Guid>();
         }
 
         private Guid interviewId;
@@ -74,25 +72,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
 
-        private OptionBorderViewModel optionsTopBorderViewModel;
+        private OptionBorderViewModel? optionsTopBorderViewModel;
 
-        private OptionBorderViewModel optionsBottomBorderViewModel;
+        private OptionBorderViewModel? optionsBottomBorderViewModel;
 
         public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
             get => this.options;
-            private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions);}
+            private set
+            {
+                this.options = value; 
+                this.RaisePropertyChanged(nameof(this.HasOptions));
+            }
         }
 
         public bool HasOptions => this.Options.Any();
 
         public IQuestionStateViewModel QuestionState => this.questionState;
 
-        public QuestionInstructionViewModel InstructionViewModel { get; set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; }
 
-        public AnsweringViewModel Answering { get; private set; }
+        public AnsweringViewModel Answering { get; }
 
-        public Identity Identity { get; private set; }
+        public Identity Identity { get; private set; } = null!;
 
         public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
@@ -102,8 +104,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, questionIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, questionIdentity, navigationState);
 
-            this.interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, interview.Language);
+            this.interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(this.interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = questionIdentity;
             this.interviewId = interview.Id;
@@ -112,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToQuestionId).ToHashSet();
 
             var question = interview.GetLinkedSingleOptionQuestion(this.Identity);
-            this.previousOptionToReset = question.IsAnswered() ? (decimal[])question.GetAnswer()?.SelectedValue : (decimal[])null;
+            this.previousOptionToReset = question.IsAnswered() ? (decimal[])question.GetAnswer()?.SelectedValue : null;
 
             this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
             this.Options.CollectionChanged += (sender, args) =>
@@ -197,9 +199,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private decimal[] previousOptionToReset = null;
+        private decimal[]? previousOptionToReset = null;
 
-        private decimal[] selectedOptionToSave = null;
+        private decimal[]? selectedOptionToSave = null;
 
         internal async Task OptionSelectedAsync(object sender)
         {
@@ -211,7 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        private SingleOptionLinkedQuestionOptionViewModel GetOptionByValue(decimal[] value)
+        private SingleOptionLinkedQuestionOptionViewModel? GetOptionByValue(decimal[]? value)
         {
             return value != null 
                 ? this.Options.FirstOrDefault(x => Enumerable.SequenceEqual(x.RosterVector, value))
@@ -261,7 +263,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task HandleAsync(LinkedOptionsChanged @event)
         {
-            ChangedLinkedOptions changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
+            ChangedLinkedOptions? changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
 
             if (changedLinkedQuestion != null)
             {
