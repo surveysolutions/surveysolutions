@@ -58,7 +58,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300,
             VariableModel = 400,
             ReadOnlyQuestion = 500,
-            FlatRoster = 600
+            FlatRoster = 600,
+            AutocompleteLinkedToRosterSingleOptionQuestionModel
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -88,6 +89,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {
                             InterviewEntityType.LinkedToRosterSingleOptionQuestionModel,
                             Load<SingleOptionRosterLinkedQuestionViewModel>
+                        },
+                        {
+                            InterviewEntityType.AutocompleteLinkedToRosterSingleOptionQuestionModel,
+                            Load<AutoCompleteSingleOptionLinkedQuestionViewModel>
                         },
                         {
                             InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel,
@@ -229,7 +234,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                         if (questionnaire.IsQuestionLinkedToRoster(entityId))
                         {
-                            return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
+                            if(!questionnaire.IsQuestionFilteredCombobox(entityId))
+                                return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
+                            else
+                            {
+                                return InterviewEntityType.AutocompleteLinkedToRosterSingleOptionQuestionModel;
+                            }
                         }
 
                         if (questionnaire.IsQuestionCascading(entityId))

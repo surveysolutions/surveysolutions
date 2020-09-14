@@ -809,18 +809,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId)
              => this.cacheOfUnderlyingStaticTexts.GetOrAdd(groupId, this.GetAllUnderlyingStaticTextsImpl);
 
-        public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
-        {
-            if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
-                this.cacheOfUnderlyingInterviewerQuestions[groupId] = this
-                    .GetGroupOrThrow(groupId)
-                    .Find<IQuestion>(IsInterviewierQuestion)
-                    .Select(question => question.PublicKey)
-                    .ToReadOnlyCollection();
-
-            return this.cacheOfUnderlyingInterviewerQuestions[groupId];
-        }
-
         public ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId)
         {
             if (!this.cacheOfChildQuestions.ContainsKey(groupId))
