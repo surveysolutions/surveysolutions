@@ -168,8 +168,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId);
 
-        ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
-
         IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId);
