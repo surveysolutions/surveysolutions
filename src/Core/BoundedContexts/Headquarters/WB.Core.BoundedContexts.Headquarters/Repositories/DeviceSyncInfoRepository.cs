@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId));
         }
 
-        public DateTime? GetLastSyncronizationDate(Guid interviewerId)
+        public DateTime? GetLastSynchronizationDate(Guid interviewerId)
         {
             return this.dbContext.Query(_ => _.OrderByDescending(di => di.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId)?.SyncDate);
@@ -58,6 +58,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .ToList());
 
             return trafficUsage.ToDictionary(x => x.InterviewerId, x => x.Traffic);
+        }
+
+        public Dictionary<Guid, SyncStats> GetSynchronizationsStats(Guid[] interviewerIds)
+        {
+            var syncStat = this.dbContext.Query(devices =>
+                (from device in devices
+                    where interviewerIds.Contains(device.InterviewerId)
+                    group device by device.InterviewerId
+                    into grouping
+                    select new
+                    {
+                        InterviewerId = grouping.Key,
+                        FailedSyncCount = grouping.Count(x => x.Statistics == null),
+                        SuccessfulSyncCount = grouping.Count(x => x.Statistics != null),
+                        LastSync = grouping.Max(x=> x.SyncDate)
+                    }).ToList());
+
+            return syncStat.ToDictionary(x => x.InterviewerId, 
+                x => new SyncStats(x.SuccessfulSyncCount, x.FailedSyncCount, x.LastSync));
         }
 
         public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
@@ -162,9 +181,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         {
             var list = this.dbContext.Query(devices => devices.OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId && d.Statistics != null)
-                .Take(5).ToList());
+                .Take(5)
+                .ToList());
 
             return list.Count > 0 ? list.Average(info => info.Statistics.TotalConnectionSpeed) : (double?)null;
+        }
+
+        public Dictionary<Guid, double> GetAverageSynchronizationSpeedInBytesPerSeconds(Guid[] interviewerIds)
+        {
+            var syncWithEmptyStat = this.dbContext.Query(devices =>
+                (from device in devices
+                    where interviewerIds.Contains(device.InterviewerId)
+                          && device.Statistics != null
+                    group device by device.InterviewerId
+                    into grouping
+                    
+                    select new
+                    {
+                        InterviewerId = grouping.Key,
+                        AverageSpeed = grouping.Average(x => x.Statistics.TotalConnectionSpeed)
+                    }).ToList());
+
+            return syncWithEmptyStat.ToDictionary(x => x.InterviewerId, x => x.AverageSpeed);
+        }
+
+        public IEnumerable<DeviceSyncInfo> GetLastFailedByInterviewerIds(Guid[] interviewerIds)
+        {
+            var syncWithEmptyStat = this.dbContext.Query(devices =>
+                (from device in devices
+                    where interviewerIds.Contains(device.InterviewerId)
+                          && device.Statistics == null
+                    group device by device.InterviewerId
+                    into grouping
+                    select new
+                    {
+                        grouping.Key,
+                        DeviceInfoId = grouping.Max(x => x.Id)
+                    }).ToList());
+
+            List<int> requiredDeviceInfos = syncWithEmptyStat.Select(x => x.DeviceInfoId).ToList();
+
+            return this.dbContext.Query(_ => _.Where(x => requiredDeviceInfos.Contains(x.Id)).ToList());
         }
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
