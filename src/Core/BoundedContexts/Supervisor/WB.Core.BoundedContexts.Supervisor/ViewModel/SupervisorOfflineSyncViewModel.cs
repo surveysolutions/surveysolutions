@@ -8,8 +8,6 @@ using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
@@ -30,15 +28,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public SupervisorOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
-            IEnumeratorSettings settings,
             INearbyCommunicator communicator,
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory,
             IDeviceSynchronizationProgress deviceSynchronizationProgress,
             IUserInteractionService userInteractionService,
-            IRestService restService,
             IGoogleApiService googleApiService)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
@@ -101,6 +97,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
 
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
+            StartDiscoveryAsyncCommand.Execute();
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)
