@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     lock (invisibleForUserStatuses)
                     {
-                        if (headquarterStatusesList == null)
+                        if (headquartersStatuses == null)
                         {
                             headquartersStatuses = new List<ComboboxViewItem>
                             {
