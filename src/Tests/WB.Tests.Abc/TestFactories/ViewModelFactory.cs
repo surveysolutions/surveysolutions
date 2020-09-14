@@ -130,8 +130,8 @@ namespace WB.Tests.Abc.TestFactories
             AnsweringViewModel answering = null)
             => new SingleOptionLinkedToListQuestionViewModel(
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+                Create.Storage.QuestionnaireStorage(questionnaire ?? Mock.Of<IQuestionnaire>()),
+                Create.Storage.InterviewRepository(interview ?? Mock.Of<IStatefulInterview>()),
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
                 Stub.MvxMainThreadAsyncDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionQuestionAnswered>>.WithNotEmptyValues,

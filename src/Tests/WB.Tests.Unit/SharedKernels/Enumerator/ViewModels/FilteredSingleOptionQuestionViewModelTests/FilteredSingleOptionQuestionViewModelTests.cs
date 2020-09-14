@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
     public class FilteredSingleOptionQuestionViewModelTests : FilteredSingleOptionQuestionViewModelTestsContext
     {
         [Test]
-        public void when_entering_filter_text()
+        public async Task when_entering_filter_text()
         {
             FilteredSingleOptionQuestionViewModel viewModel;
             Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                        new CategoricalOption() {Title = "bba", Value = 4}
                    });
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>()
             {
@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var autocomplete = viewModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             //act
-            autocomplete.FilterCommand.Execute(answerValue);
+            await autocomplete.FilterCommand.ExecuteAsync(answerValue);
 
             //assert
             autocomplete.AutoCompleteSuggestions.Count.Should().Be(3);
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
                    _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200, It.IsAny<int[]>()) == new List<CategoricalOption>() { option });
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -150,7 +150,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer
                    && _.GetOptionForQuestionWithFilter(questionIdentity, "html", null) == Create.Entity.CategoricalQuestionOption(4, "html", null));
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -195,7 +195,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                    && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer
                    && _.GetOptionForQuestionWithoutFilter(questionIdentity, 3, null) == new CategoricalOption() { Title = "3", Value = 3 });
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
+            var interviewRepository =Create.Storage.InterviewRepository(interview);
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -238,7 +238,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             vm.Init(interview.Id.ToString("N"), questionId, Create.Other.NavigationState());
 
             var combobox = vm.Children.OfType<CategoricalComboboxAutocompleteViewModel>().First();
-            combobox.FilterCommand.Execute(string.Empty);
+            await combobox.FilterCommand.ExecuteAsync(string.Empty);
             // act
             await combobox.ShowErrorIfNoAnswerCommand.ExecuteAsync();
             // assert
