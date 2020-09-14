@@ -1,10 +1,8 @@
-﻿using SQLite;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
