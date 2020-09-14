@@ -45,13 +45,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                     new OnDiscoveryCallback(OnFoundEndpoint, OnLostEndpoint, cancellationToken),
                     new DiscoveryOptions.Builder().SetStrategy(Strategy.P2pStar).Build());
             }
-            catch(ApiException e)
+            catch(ApiException api)
             {
-                return new NearbyStatus
-                {
-                    IsSuccess = e.StatusCode == 8002 /* STATUS_ALREADY_DISCOVERING */,
-                    StatusMessage = e.Message
-                };
+                return Error(api);
             }
 
             return NearbyStatus.Ok;
@@ -95,10 +91,29 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             logger.Verbose($"({endpoint}) ENTER");
 
-            await Api.AcceptConnectionAsync(endpoint,
-                    new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)));
+            try
+            {
+                await Api.AcceptConnectionAsync(endpoint,
+                        new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)));
 
-            return NearbyStatus.Ok;
+                return NearbyStatus.Ok;
+            }
+            catch(ApiException api)
+            {
+                logger.Error($"({endpoint})", api);
+                return Error(api);
+            }
+        }
+
+        private NearbyStatus Error(ApiException api)
+        {
+            return new NearbyStatus
+            {
+                IsSuccess = false,
+                Status = (ConnectionStatusCode) api.StatusCode,
+                StatusMessage = api.Message,
+                StatusCode = api.StatusCode
+            };
         }
 
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
@@ -109,9 +124,16 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                 throw new ArgumentException($"Cannot handle payload of type: {payload.GetType().FullName}",
                     nameof(payload));
 
-            await Api.SendPayloadAsync(to, send.NearbyPayload);
+            try
+            {
+                await Api.SendPayloadAsync(to, send.NearbyPayload);
 
-            return NearbyStatus.Ok;
+                return NearbyStatus.Ok;
+            }
+            catch (ApiException api)
+            {
+                return Error(api);
+            }
         }
 
         public void StopAllEndpoint()

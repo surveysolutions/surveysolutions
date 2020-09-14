@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             //        this.GoogleApi.Disconnect();
             //    }
             //}
-
+            communicator?.StopAll();
             base.OnStop();
         }
 
@@ -77,9 +77,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         {
             this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
             var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
-            apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);
-
-            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
+            
+            apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);        
         }
 
         protected override void Dispose(bool disposing)

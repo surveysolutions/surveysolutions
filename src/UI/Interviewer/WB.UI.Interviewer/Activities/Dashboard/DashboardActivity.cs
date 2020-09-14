@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Android.App;
 using Android.Content;
-using Android.Gms.Auth.Api.SignIn;
-using Android.Gms.Common;
-using Android.Gms.Common.Api.Internal;
-using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
 using Android.Views;
@@ -17,7 +13,6 @@ using Google.Android.Material.Tabs;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -283,7 +278,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         #region Offline synhronization
 
         const int RequestCodeRecoverPlayServices = 1001;
-        private INearbyConnection communicator;
             
         protected override void Dispose(bool disposing)
         {
@@ -329,7 +323,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void RestoreGoogleApiConnectionIfNeeded()
         {
-            this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
             var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
             apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);
             System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
