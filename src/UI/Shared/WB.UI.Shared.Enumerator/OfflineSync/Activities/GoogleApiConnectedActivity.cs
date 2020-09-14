@@ -31,14 +31,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         protected override void OnStop()
         {
-            //this.communicator?.StopAll();
-            //if (this.GoogleApi != null)
-            //{
-            //    if (this.GoogleApi.IsConnected)
-            //    {
-            //        this.GoogleApi.Disconnect();
-            //    }
-            //}
             communicator?.StopAll();
             base.OnStop();
         }
