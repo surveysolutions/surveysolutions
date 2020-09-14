@@ -10,10 +10,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
 
@@ -22,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 {
     internal class when_changed_answer_for_filtered_question_with_filter_on_options : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        [OneTimeSetUp] 
-        public void context () {
+        [Test] 
+        public void should_update_suggestions_list () {
             var interviewId = "interviewId";
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             
@@ -36,17 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value &&(filter == null || x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)).ToList());
 
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
             var questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
 
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>(), Mock.Of<ILogger>());
 
-            filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
+            var filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
             filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(3)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = null });
             filteredOptionsViewModel.Setup(x => x.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>())).Returns((string filter, int[] excludedOptions, int? count) => 
                 interview.Object.GetTopFilteredOptionsForQuestion(questionIdentity, null, filter, 15, null));
 
-            viewModel = CreateFilteredSingleOptionQuestionViewModel(
+            var viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
                 answering: answerViewModel,
                 interviewRepository: interviewRepository,
@@ -55,20 +53,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
             Thread.Sleep(1000);
-            filteredOptionsViewModel.ResetCalls();
-            BecauseOf();
-        }
-
-        public void BecauseOf() {
+            filteredOptionsViewModel.Invocations.Clear();
+            
+            // Act
             filteredOptionsViewModel.Raise(_ => _.OptionsChanged -= null, EventArgs.Empty);
             Thread.Sleep(1000);
-        }
-
-        [Test] 
-        public void should_update_suggestions_list () =>
+            
+            // assert
             filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>()), Times.Once);
-
-        private static FilteredSingleOptionQuestionViewModel viewModel;
-        private static Mock<FilteredOptionsViewModel> filteredOptionsViewModel;
+        }
     }
 }
