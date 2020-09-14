@@ -1,7 +1,5 @@
 ﻿#nullable enable
 
-using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -26,24 +24,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         private async Task RemoveAllAssignmentsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            logger.LogInformation("Start removing assignments");
-
             await this.sessionFactory.Session.Query<Assignment>()
                 .Where(a => a.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                             && a.QuestionnaireId.Version == questionnaireIdentity.Version)
                 .DeleteAsync();
-
-            logger.LogInformation($"Finished removing assignments. Elapsed time: {stopwatch.Elapsed}");
         }
 
         private async Task RemoveAllEventsForAssignmentsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            logger.LogInformation("Start removing assignment's events");
-
             await this.sessionFactory.Session.Query<RawEvent>()
                 .Where(e => 
                     this.sessionFactory.Session.Query<Assignment>()
@@ -63,10 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
-            query.ExecuteUpdate();
+            await query.ExecuteUpdateAsync();
         */
-                        
-            logger.LogInformation($"Finished removing assignment's events. Elapsed time: {stopwatch.Elapsed}");
         }
 
         public async Task RemoveAllAssignmentsDataAsync(QuestionnaireIdentity questionnaireIdentity)

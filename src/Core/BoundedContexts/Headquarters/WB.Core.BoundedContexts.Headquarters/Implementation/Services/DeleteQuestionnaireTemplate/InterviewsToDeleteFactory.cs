@@ -43,24 +43,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private async Task RemoveAllInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            logger.LogInformation("Start removing interview summaries");
-
             await this.sessionFactory.Session.Query<InterviewSummary>()
                 .Where(s => s.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                             && s.QuestionnaireVersion == questionnaireIdentity.Version)
                 .DeleteAsync();
-            
-            logger.LogInformation($"Finished removing interview summaries. Elapsed time: {stopwatch.Elapsed}");
         }
 
         private async Task RemoveAllEventsForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            logger.LogInformation("Start removing interview's events");
-
             await this.sessionFactory.Session.Query<RawEvent>()
                 .Where(e => 
                     this.sessionFactory.Session.Query<InterviewSummary>()
@@ -70,8 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                             && s.QuestionnaireVersion == questionnaireIdentity.Version))
                 .DeleteAsync();
 
-            /*
-            var queryText = $"DELETE FROM events.events as e " +
+            
+            /*var queryText = $"DELETE FROM events.events as e " +
                             $"USING readside.interviewsummaries as i " +
                             $"WHERE e.eventsourceid = i.interviewid " +
                             $"  AND i.questionnaireid = :questionnaireId " +
@@ -80,18 +70,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
-            query.ExecuteUpdate();
-            */
-
-            logger.LogInformation($"Finished removing interview's events. Elapsed time: {stopwatch.Elapsed}");
+            await query.ExecuteUpdateAsync();*/
         }
 
         private async Task RemoveAudioAuditForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            logger.LogInformation("Start removing interview's audio audit");
-
             await this.sessionFactory.Session.Query<AudioAuditFile>()
                 .Where(a => 
                     this.sessionFactory.Session.Query<InterviewSummary>()
@@ -101,7 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                         && s.QuestionnaireVersion == questionnaireIdentity.Version))
                 .DeleteAsync();
 
-            /*var queryText = $"DELETE FROM plainstore.audioauditfiles as a " +
+            /*
+            var queryText = $"DELETE FROM plainstore.audioauditfiles as a " +
                             $"USING readside.interviewsummaries as i " +
                             $"WHERE a.interviewid = i.interviewid " +
                             $"  AND i.questionnaireid = :questionnaireId " +
@@ -110,17 +94,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
-            query.ExecuteUpdate();*/
-
-            logger.LogInformation($"Finished removing interview's audio audit. Elapsed time: {stopwatch.Elapsed}");
+            await query.ExecuteUpdateAsync();
+        */
         }
 
         private async Task RemoveAudioForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            logger.LogInformation("Start removing interview's audio");
-
             await this.sessionFactory.Session.Query<AudioFile>()
                 .Where(af => 
                     this.sessionFactory.Session.Query<InterviewSummary>()
@@ -130,6 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                             && s.QuestionnaireVersion == questionnaireIdentity.Version))
                 .DeleteAsync();
 
+            
             /*
             var queryText = $"DELETE FROM plainstore.audiofiles as a " +
                             $"USING readside.interviewsummaries as i " +
@@ -140,10 +120,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
-            query.ExecuteUpdate();
-            */
-
-            logger.LogInformation($"Finished removing interview's audio. Elapsed time: {stopwatch.Elapsed}");
+            await query.ExecuteUpdateAsync();
+        */
         }
 
         private async Task RemoveInterviewsImagesAsync(QuestionnaireIdentity questionnaireIdentity)
@@ -175,8 +153,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 pageIndex++;
             } while (interviewIds.Count > 0 && interviewIds.Count == BatchSize);
-            
-            logger.LogInformation($"Finished removing interview's images. Elapsed time: {stopwatch.Elapsed}");
         }
 
         public async Task RemoveAllInterviewsDataAsync(QuestionnaireIdentity questionnaireIdentity)
