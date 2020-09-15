@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
