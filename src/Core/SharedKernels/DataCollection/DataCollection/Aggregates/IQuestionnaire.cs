@@ -321,5 +321,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid CoverPageSectionId { get; }
         string GetAttachmentNameForEntity(Guid entityId);
         IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
+        Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
     }
 }

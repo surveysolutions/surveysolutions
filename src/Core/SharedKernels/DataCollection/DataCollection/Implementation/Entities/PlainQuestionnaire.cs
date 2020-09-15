@@ -1261,6 +1261,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfUnderlyingRosters[groupId];
         }
 
+        public Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            var linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+            if (linkedQuestion.LinkedToQuestionId != null)
+            {
+                return this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
+            }
+            if (linkedQuestion.LinkedToRosterId != null)
+            {
+                return GetRosterReferencedByLinkedQuestion(linkedQuestionId);
+            }
+            
+            throw new QuestionnaireException($"Cannot return id of referenced question because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
+        }
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
