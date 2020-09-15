@@ -112,31 +112,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.FilterText = option.Title;
         }
 
-        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(RemoveAnswer);
-
-        private async Task RemoveAnswer()
-        {
-            try
-            {
-                await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interview.Id,
-                        this.principal.CurrentUserIdentity.UserId,
-                        this.Identity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-
-                Clear();
-            }
-            catch (InterviewException exception)
-            {
-                this.QuestionState.Validity.ProcessException(exception);
-            }
-        }
-
-        private void Clear()
-        {
-            this.FilterText = null;
-        }
-
         private async Task SendAnswer()
         {
             var selectedOption = this.AutoCompleteSuggestions.FirstOrDefault(x => x.Title.Equals(this.FilterText));
@@ -161,6 +136,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(RemoveAnswer);
+
+        private async Task RemoveAnswer()
+        {
+            try
+            {
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interview.Id,
+                        this.principal.CurrentUserIdentity.UserId,
+                        this.Identity));
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                Clear();
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
+            }
+        }
+
+        private void Clear()
+        {
+            this.FilterText = null;
         }
 
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()
