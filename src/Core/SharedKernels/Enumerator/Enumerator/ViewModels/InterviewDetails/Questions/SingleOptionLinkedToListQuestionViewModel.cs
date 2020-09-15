@@ -283,8 +283,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         HasOptions = HasOptions
                     };
                 result.Add(this.optionsTopBorderViewModel);
-                result.AddCollection(comboboxCollection);
-
+                if (this.RenderAsCombobox)
+                {
+                    result.AddCollection(comboboxCollection);
+                }
+                else
+                {
+                    result.AddCollection(this.Options);
+                }
+                    
                 this.optionsBottomBorderViewModel =
                     new OptionBorderViewModel(this.questionState, false)
                     {
