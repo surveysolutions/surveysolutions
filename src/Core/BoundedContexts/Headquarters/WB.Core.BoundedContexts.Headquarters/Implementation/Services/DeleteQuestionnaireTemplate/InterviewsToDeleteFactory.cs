@@ -51,17 +51,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private async Task RemoveAllEventsForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            await this.sessionFactory.Session.Query<RawEvent>()
+            /*await this.sessionFactory.Session.Query<RawEvent>()
                 .Where(e => 
                     this.sessionFactory.Session.Query<InterviewSummary>()
                         .Any(s =>
                             s.InterviewId == e.EventSourceId
                             && s.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                             && s.QuestionnaireVersion == questionnaireIdentity.Version))
-                .DeleteAsync();
+                .DeleteAsync();*/
 
             
-            /*var queryText = $"DELETE FROM events.events as e " +
+            var queryText = $"DELETE FROM events.events as e " +
                             $"USING readside.interviewsummaries as i " +
                             $"WHERE e.eventsourceid = i.interviewid " +
                             $"  AND i.questionnaireid = :questionnaireId " +
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var query = sessionFactory.Session.CreateSQLQuery(queryText);
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
-            await query.ExecuteUpdateAsync();*/
+            await query.ExecuteUpdateAsync();
         }
 
         private async Task RemoveAudioAuditForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
