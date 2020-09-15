@@ -1,9 +1,29 @@
-﻿@model WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory.InterviewHistoryView
+﻿@using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
+@model WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory.InterviewHistoryView
            
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Title = @Pages.InterviewHistory_Header;
+}
+
+@{
+    string AsTimeZone(TimeSpan? offset)
+    {
+        if (offset == null)
+        {
+            return "";
+        }
+
+        var sign = offset.Value >= TimeSpan.Zero ? "+" : "-";
+        var name = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(tz => tz.BaseUtcOffset == offset.Value);
+        if (name != null)
+        {
+            return name.DisplayName.Substring(1, name.DisplayName.IndexOf(')') - 1);
+        }
+
+        return sign + offset.Value.ToString(@"hh\:mm");
+    }
 }
 
 <main class="main">
@@ -21,7 +41,8 @@
                         <th>Parameters</th>
                         <th>Originator</th>
                         <th>Role</th>
-                        <th>Timestamp</th>
+                        <th>Timestamp (UTC)</th>
+                        <th>TimeZone</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,7 +66,10 @@
                                 @item.OriginatorRole
                             </td>
                             <td>
-                                @(item.Timestamp.HasValue ? item.Timestamp.Value.ToString("s") : "<NULL>")
+                                @(item.Timestamp.HasValue ? item.Timestamp.Value.ToString(DateTimeFormat.DateWithTimeFormat) : "<NULL>")
+                            </td>
+                            <td>
+                                @(AsTimeZone(item.Offset))
                             </td>
                         </tr>
                     }
