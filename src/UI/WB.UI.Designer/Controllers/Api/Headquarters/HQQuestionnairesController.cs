@@ -18,8 +18,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Attributes;
-using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
@@ -70,7 +68,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("")]
         [ResponseCache(NoStore = true)]
         //in next version of API rename filter to smth like SearchFor
-        //to comply with Amason firewall
+        //to comply with Amazon firewall
         public IActionResult Get(string filter = "", string sortOrder = "", [FromQuery]int pageIndex = 1, [FromQuery]int pageSize = 128)
         {
             var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel

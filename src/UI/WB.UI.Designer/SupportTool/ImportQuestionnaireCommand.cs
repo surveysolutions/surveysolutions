@@ -63,9 +63,10 @@ namespace WB.UI.Designer.SupportTool
 
             var fs = File.OpenRead(path);
             var state = new RestoreState();
+            Guid newQuestionnaireId = Guid.NewGuid();
             try
             {
-                restore.RestoreQuestionnaire(fs, user.Id, state);
+                restore.RestoreQuestionnaire(fs, user.Id, state, newQuestionnaireId);
 
                 if (state.Error != null)
                 {
