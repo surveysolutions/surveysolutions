@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -34,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview = null!;
         private string? filterText;
         private IEnumerable<Guid> parentRosterIds;
+        private List<SingleOptionLinkedQuestionOptionViewModel> autoCompleteSuggestions;
 
         public AutoCompleteSingleOptionLinkedQuestionViewModel(
             IViewModelEventRegistry liteEventRegistry,
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.questionState = questionStateViewModel;
             this.parentRosterIds = Enumerable.Empty<Guid>();
-            this.AutoCompleteSuggestions = new List<SingleOptionLinkedQuestionOptionViewModel>();
+            this.autoCompleteSuggestions = new List<SingleOptionLinkedQuestionOptionViewModel>();
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -66,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire =
                 this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
-            var linkedToRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(entityIdentity.Id);
+            var linkedToRosterId = questionnaire.GetEntityReferencedByLinkedQuestion(entityIdentity.Id);
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(linkedToRosterId).ToHashSet();
             BindSuggestionList();
 
@@ -85,7 +87,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.AutoCompleteSuggestions = singleOptionLinkedQuestionOptionViewModels;
         }
 
-        public List<SingleOptionLinkedQuestionOptionViewModel> AutoCompleteSuggestions { get; set; }
+        public List<SingleOptionLinkedQuestionOptionViewModel> AutoCompleteSuggestions
+        {
+            get => autoCompleteSuggestions;
+            set => SetProperty(ref autoCompleteSuggestions, value);
+        }
 
         public AnsweringViewModel Answering { get; set; }
 
@@ -176,7 +182,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
-            var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
+            var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity) ??
+                                 throw new ArgumentNullException($"interview.GetLinkedSingleOptionQuestion returned null")
+                                 {
+                                     Data = {
+                                     {
+                                         InterviewQuestionInvariants.ExceptionKeys.QuestionId, this.Identity
+                                     }}
+                                 };
 
             foreach (var linkedOption in linkedQuestion.Options)
                 yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue,

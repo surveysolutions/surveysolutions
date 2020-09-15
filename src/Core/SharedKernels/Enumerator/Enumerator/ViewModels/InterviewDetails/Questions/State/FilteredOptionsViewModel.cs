@@ -42,7 +42,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        protected FilteredOptionsViewModel() { }
+        protected FilteredOptionsViewModel()
+        {
+            this.logger = null!;
+            this.interview = null!;
+            this.interviewRepository = null!;
+            this.questionnaireRepository = null!;
+            this.answerNotifier = null!;
+        }
 
         public FilteredOptionsViewModel (IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
