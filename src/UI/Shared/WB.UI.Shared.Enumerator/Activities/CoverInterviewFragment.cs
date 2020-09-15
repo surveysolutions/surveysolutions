@@ -37,7 +37,9 @@ namespace WB.UI.Shared.Enumerator.Activities
                 nestedScrollView.Post(new InnerRunnable(() =>
                 {
                     var entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
-                    var topOffset = entityControl.Top + ((View)entityControl.Parent).Top;
+                    var topOffset = entityControl != null
+                        ? entityControl.Top + ((View)entityControl.Parent).Top
+                        : 0;
                     nestedScrollView.ScrollTo(0, topOffset);
                     this.ViewModel.ScrollToIdentity = null;
                 }));
