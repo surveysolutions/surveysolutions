@@ -38,6 +38,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             controller.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext()
+                {
+                    Session = Mock.Of<ISession>()
+                }
             };
 
             var actionResult = controller.Pdf(interviewId);

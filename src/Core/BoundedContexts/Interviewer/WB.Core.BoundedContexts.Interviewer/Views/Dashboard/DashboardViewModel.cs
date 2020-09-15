@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -176,7 +177,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
 
         public IMvxCommand NavigateToMapDashboardCommand =>
-            new MvxAsyncCommand(async () => await mapInteractionService.OpenMapDashboardAsync());
+            new MvxAsyncCommand(async () => await NavigateToMapDashboard());
+
+        private async Task NavigateToMapDashboard()
+        {
+            try
+            {
+               await mapInteractionService.OpenMapDashboardAsync();
+            }
+            catch (MissingPermissionsException e)
+            {
+                UserInteractionService.ShowToast(e.Message);
+            }
+        }
 
         private Task NavigateToMaps()
         {

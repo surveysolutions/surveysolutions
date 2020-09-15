@@ -1488,6 +1488,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate cover.
+        /// </summary>
+        public static string MigrateToNewCover {
+            get {
+                return ResourceManager.GetString("MigrateToNewCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         public static string ModalConfirm {

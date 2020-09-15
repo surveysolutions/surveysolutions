@@ -610,6 +610,13 @@
                 return urlCall('DELETE', "questionnaire/" + questionnaireId + "/scenarios/" + id, { });
             };
 
+            commandService.migrateToNewVersion = function (questionnaireId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                };
+                return commandCall("MigrateToNewVersion", command);
+            };
+
             return commandService;
         }
     );

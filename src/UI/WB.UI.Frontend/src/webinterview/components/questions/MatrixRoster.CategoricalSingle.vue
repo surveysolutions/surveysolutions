@@ -37,6 +37,7 @@
             v-for="option in editorParams.question.options"
             :key="$me.id + '_' + option.value">
             <div  class="field"
+                :class="{ 'answered': $me.isAnswered }"
                 style="width:180px;">
                 <input
                     class="wb-radio"
@@ -50,6 +51,8 @@
                 <label :for="$me.id + '_' + option.value">
                     <span class="tick"></span>
                 </label>
+
+                <wb-remove-answer v-if="option.value === $me.answer"/>
             </div>
         </div>
     </div>

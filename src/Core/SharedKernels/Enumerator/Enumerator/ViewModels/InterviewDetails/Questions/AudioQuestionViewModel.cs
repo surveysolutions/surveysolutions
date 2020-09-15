@@ -7,6 +7,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -205,19 +206,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.permissions.AssureHasPermission(Permission.Microphone);
-                await this.permissions.AssureHasPermission(Permission.Storage);
+                await this.permissions.AssureHasPermissionOrThrow<MicrophonePermission>().ConfigureAwait(false);
+                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>();
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
                 this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
-            catch (MissingPermissionsException e) when (e.Permission == Permission.Microphone)
+            catch (MissingPermissionsException e) when (e.PermissionType == typeof(MicrophonePermission))
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Microphone);
             }
-            catch (MissingPermissionsException e) when (e.Permission == Permission.Storage)
+            catch (MissingPermissionsException e) when (e.PermissionType == typeof(StoragePermission))
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .MissingPermissions_Storage);

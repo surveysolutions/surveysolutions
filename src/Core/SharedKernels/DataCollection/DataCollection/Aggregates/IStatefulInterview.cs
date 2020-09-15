@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public interface IStatefulInterview
     {
-        DateTime? StartedDate { get; }
-        DateTime? CompletedDate { get; }
+        DateTimeOffset? StartedDate { get; }
+        DateTimeOffset? CompletedDate { get; }
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
@@ -190,8 +190,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool AcceptsInterviewerAnswers();
 
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
-
-        InterviewSynchronizationDto GetSynchronizationDto();
 
         bool IsReadOnlyQuestion(Identity identity);
 
