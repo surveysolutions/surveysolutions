@@ -32,16 +32,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         private async Task RemoveAllEventsForAssignmentsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            await this.sessionFactory.Session.Query<RawEvent>()
+            /*await this.sessionFactory.Session.Query<RawEvent>()
                 .Where(e => 
                     this.sessionFactory.Session.Query<Assignment>()
                         .Any(a =>
                             a.PublicKey == e.EventSourceId
                             && a.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                             && a.QuestionnaireId.Version == questionnaireIdentity.Version))
-                .DeleteAsync();
+                .DeleteAsync();*/
 
-            /*
+            
             var queryText = $"DELETE FROM events.events as e " +
                             $"USING readside.assignments as a " +
                             $"WHERE e.eventsourceid = a.publickey " +
@@ -52,7 +52,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
             query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
             await query.ExecuteUpdateAsync();
-        */
         }
 
         public async Task RemoveAllAssignmentsDataAsync(QuestionnaireIdentity questionnaireIdentity)
