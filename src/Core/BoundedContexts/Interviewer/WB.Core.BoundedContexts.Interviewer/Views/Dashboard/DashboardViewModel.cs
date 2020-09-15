@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IOfflineSyncClient syncClient;
-        
+
         private readonly IMvxMessenger messenger;
 
         private MvxSubscriptionToken? startingLongOperationMessageSubscriptionToken;
@@ -184,7 +184,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.CancelSynchronizationCommand.Execute();
             return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
-        
+
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -350,12 +350,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
 
         public Action? OnOfflineSynchronizationStarted;
-        private IMapInteractionService mapInteractionService;
+        private readonly IMapInteractionService mapInteractionService;
 
         private void StartOfflineSynchronization()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            
+
             this.cancellationTokenSource = new CancellationTokenSource();
 
             this.Synchronization.Status = SynchronizationStatus.Started;
@@ -372,7 +372,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
                 this.GetServiceName(), cancellationTokenSource.Token);
-            
+
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }
@@ -420,10 +420,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceFound;
         }
 
-        protected override void OnDeviceConnectionAccepting(string name) => 
+        protected override void OnDeviceConnectionAccepting(string name) =>
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepting;
 
-        protected override void OnDeviceConnectionAccepted(string name) => 
+        protected override void OnDeviceConnectionAccepted(string name) =>
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepted;
 
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
@@ -442,11 +442,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void Synchronization_OnCancel(object sender, EventArgs e)
         {
-            if(this.cancellationTokenSource != null)
-            {
-                this.nearbyConnection.StopAll();
-                // this.cancellationTokenSource.Cancel();
-            }
+            this.nearbyConnection.StopAll();
         }
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
