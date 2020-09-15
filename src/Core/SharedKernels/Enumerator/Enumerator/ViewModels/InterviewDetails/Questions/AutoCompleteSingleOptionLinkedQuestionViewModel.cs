@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -18,17 +20,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class AutoCompleteSingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
+        ICompositeQuestion,
         IViewModelEventHandler<AnswersRemoved>,
         IViewModelEventHandler<LinkedOptionsChanged>,
         IViewModelEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
-        private IViewModelEventRegistry liteEventRegistry;
-        private IPrincipal principal;
-        private IStatefulInterviewRepository interviewRepository;
+        private readonly IViewModelEventRegistry liteEventRegistry;
+        private readonly IPrincipal principal;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
-        private IStatefulInterview interview;
+        private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
+        private IStatefulInterview interview = null!;
         private string? filterText;
         private IEnumerable<Guid> parentRosterIds;
 
@@ -49,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.questionState = questionStateViewModel;
             this.parentRosterIds = Enumerable.Empty<Guid>();
+            this.AutoCompleteSuggestions = new List<SingleOptionLinkedQuestionOptionViewModel>();
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -89,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
-        public Identity Identity { get; private set; }
+        public Identity Identity { get; private set; } = null!;
 
         public string? FilterText
         {
@@ -114,10 +118,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswer()
         {
+            if (string.IsNullOrEmpty(this.FilterText))
+                return;
+            
             var selectedOption = this.AutoCompleteSuggestions.FirstOrDefault(x => x.Title.Equals(this.FilterText));
 
             if (selectedOption == null)
+            {
+                var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage).ConfigureAwait(false);
                 return;
+            }
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interview.Id,
@@ -173,12 +184,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption,
-            RosterVector answeredOption, IStatefulInterview interview)
+            RosterVector? answeredOption, 
+            IStatefulInterview statefulInterview)
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
                 RosterVector = linkedOption,
-                Title = interview.GetLinkedOptionTitle(this.Identity, linkedOption),
+                Title = statefulInterview.GetLinkedOptionTitle(this.Identity, linkedOption),
                 Selected = linkedOption.Equals(answeredOption),
                 QuestionState = this.questionState,
                 Parent = this
