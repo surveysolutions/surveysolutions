@@ -25,6 +25,10 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                     WHERE NOT EXISTS ( SELECT * FROM readside.interviewsummaries as i
                         WHERE c.summary_id = i.id 
                     );
+                DELETE FROM readside.interviewcommentedstatuses as c
+                    WHERE NOT EXISTS ( SELECT * FROM readside.interviewsummaries as i
+                        WHERE c.interview_id = i.id 
+                    );
             ");
         }
 
