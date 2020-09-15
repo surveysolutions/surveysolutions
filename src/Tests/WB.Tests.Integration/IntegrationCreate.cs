@@ -162,9 +162,8 @@ namespace WB.Tests.Integration
             var interview = new Interview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                optionsRepository,
-                new SystemClock()
-                );
+                optionsRepository);
+
             interview.ServiceLocatorInstance = serviceLocator.Object;
 
             interview.CreateInterview(Create.Command.CreateInterview(
@@ -201,8 +200,7 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new SystemClock()
+                Create.Storage.QuestionnaireQuestionOptionsRepository()
                 );
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
@@ -254,9 +252,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                optionsRepository,
-                new SystemClock()
-                 );
+                optionsRepository);
+
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
 
             interview.CreateInterview(Create.Command.CreateInterview(
