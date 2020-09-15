@@ -396,6 +396,8 @@ namespace WB.Tests.Integration
         }
 
         public static ISessionFactory SessionFactory(string connectionString, 
+            string usersSchemaName,
+            IEnumerable<Type> usersEntityMapTypes,
             string readSideSchemaName,
             IEnumerable<Type> readStorageEntityMapTypes,
             string plainStoreSchemaName,
@@ -411,6 +413,7 @@ namespace WB.Tests.Integration
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
+            cfg.AddDeserializedMapping(GetMappingsFor(usersEntityMapTypes, usersSchemaName), "user");
             cfg.AddDeserializedMapping(GetMappingsFor(readStorageEntityMapTypes, readSideSchemaName), "read");
             cfg.AddDeserializedMapping(GetMappingsFor(plainStorageEntityMapTypes, plainStoreSchemaName), "plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
