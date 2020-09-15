@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using Plugin.Permissions;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -11,9 +11,11 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -23,13 +25,15 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
-        private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly IAuditLogService auditLogService;
         private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IJsonAllTypesSerializer serializer;
+        private bool isAuditStarting;
+        private readonly ILogger logger;
 
+        
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -46,18 +50,17 @@ namespace WB.UI.Interviewer.ViewModel
             ICommandService commandService,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
-            ILastCreatedInterviewStorage lastCreatedInterviewStorage,
             IAuditLogService auditLogService,
             IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
-            ILogger logger, 
+            ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
             IJsonAllTypesSerializer serializer)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
-                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState,
+                principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
-            this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.auditLogService = auditLogService;
             this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
@@ -66,21 +69,17 @@ namespace WB.UI.Interviewer.ViewModel
             this.serializer = serializer;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
+            await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId,
+                this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
+        public IMvxCommand NavigateToMapsCommand =>
+            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
         public override async Task NavigateBack()
         {
-            if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-                this.Dispose();
-            }
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
         }
 
         protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
@@ -96,14 +95,15 @@ namespace WB.UI.Interviewer.ViewModel
             switch (this.navigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
-                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
+                    var completeInterviewViewModel =
+                        this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
                     completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return completeInterviewViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
             }
         }
-        
+
         public override void ViewAppeared()
         {
             if (!this.Principal.IsAuthenticated)
@@ -117,7 +117,7 @@ namespace WB.UI.Interviewer.ViewModel
                 var interviewId = Guid.Parse(InterviewId);
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview == null) return;
-                
+
                 commandService.Execute(new ResumeInterviewCommand(interviewId,
                     Principal.CurrentUserIdentity.UserId));
 
@@ -128,11 +128,30 @@ namespace WB.UI.Interviewer.ViewModel
                     {
                         await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
                     }
+                    catch (MissingPermissionsException missingPermissionsException)
+                    {
+                        this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                            .ConfigureAwait(false);
+
+                        if (missingPermissionsException.PermissionType == typeof(MicrophonePermission))
+                        {
+                            this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                        }
+                        else if (missingPermissionsException.PermissionType == typeof(StoragePermission))
+                        {
+                            this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                        }
+                        else
+                        {
+                            this.userInteractionService.ShowToast(missingPermissionsException.Message);  
+                        }
+                    }
                     catch (Exception exc)
                     {
                         logger.Warn("Audio audit failed to start.", exception: exc);
                         await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                                .ConfigureAwait(false);
+                            .ConfigureAwait(false);
                         this.userInteractionService.ShowToast(exc.Message);
                     }
                     finally
@@ -141,15 +160,12 @@ namespace WB.UI.Interviewer.ViewModel
                     }
                 }
 
-                auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
+                auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
+                    assignmentId));
                 base.ViewAppeared();
             });
         }
-
-        private bool isAuditStarting = false;
         
-        private readonly ILogger logger;
-
         public override void ViewDisappearing()
         {
             if (InterviewId != null && Principal.IsAuthenticated)
@@ -176,10 +192,11 @@ namespace WB.UI.Interviewer.ViewModel
                 {
                     interviewView.LastVisitedSectionId = this.serializer.Serialize(this.navigationState.CurrentGroup);
                 }
+
                 interviewView.LastVisitedScreenType = this.navigationState.CurrentScreenType;
                 this.interviewViewRepository.Store(interviewView);
             }
-            
+
             base.ViewDisappearing();
         }
     }

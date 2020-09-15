@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Services.Impl
         {
             Type enumType = val.GetType();
             string stringValue = Enum.GetName(enumType, val);
-            return EnumNames.ResourceManager.GetString($"{enumType.Name}_{stringValue}");
+            return EnumNames.ResourceManager.GetString($"{enumType.Name}_{stringValue}", EnumNames.Culture);
         }
     }
 }

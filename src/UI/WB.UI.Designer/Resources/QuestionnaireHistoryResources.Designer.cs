@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class QuestionnaireHistoryResources {
@@ -228,6 +228,15 @@ namespace WB.UI.Designer.Resources {
         public static string Metadata_Update {
             get {
                 return ResourceManager.GetString("Metadata_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migrated to new cover page support.
+        /// </summary>
+        public static string MigratedNewCoverSupport {
+            get {
+                return ResourceManager.GetString("MigratedNewCoverSupport", resourceCulture);
             }
         }
         

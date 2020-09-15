@@ -203,7 +203,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!this.authorizedUser.IsAuthenticated)
             {
-                var hasAccess = Request.HasAccessToWebInterviewAfterComplete(interview);
+                var hasAccess = HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
                 if (!hasAccess)
                     return Forbid();
             }

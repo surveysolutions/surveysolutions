@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Plugin.Media.Abstractions;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
@@ -19,8 +20,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> TakePicture()
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
-            await this.permissions.AssureHasPermission(Permission.Camera);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions
             {
@@ -34,8 +35,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<Stream> ChoosePictureGallery()
         {
-            await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
-            await this.permissions.AssureHasPermission(Permission.Camera).ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
             await this.media.Initialize().ConfigureAwait(false);
 
             MediaFile result = await this.media.PickPhotoAsync().ConfigureAwait(false);
