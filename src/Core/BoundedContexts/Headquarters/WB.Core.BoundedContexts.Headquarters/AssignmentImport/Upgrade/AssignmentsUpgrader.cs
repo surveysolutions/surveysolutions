@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -14,18 +15,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IAssignmentsService assignments;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsUpgradeService upgradeService;
-        private readonly ISingleAssignmentUpgrader assignmentUpgrader;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public AssignmentsUpgrader(IAssignmentsService assignments,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsUpgradeService upgradeService,
-            ISingleAssignmentUpgrader assignmentUpgrader)
+            IInScopeExecutor inScopeExecutor)
         {
             this.assignments = assignments ?? throw new ArgumentNullException(nameof(assignments));
             this.questionnaireStorage =
                 questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.upgradeService = upgradeService;
-            this.assignmentUpgrader = assignmentUpgrader;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom,
@@ -45,7 +46,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
                     try
                     {
-                        this.assignmentUpgrader.Upgrade(assignmentId, targetQuestionnaire, userId, migrateTo);
+                        this.inScopeExecutor.Execute(sl =>
+                        {
+                            var singleUpgrader = sl.GetInstance<ISingleAssignmentUpgrader>();
+                            singleUpgrader.Upgrade(assignmentId, targetQuestionnaire, userId, migrateTo);
+                        });
                         migratedSuccessfully++;
                     }
                     catch (AssignmentUpgradeException e)
