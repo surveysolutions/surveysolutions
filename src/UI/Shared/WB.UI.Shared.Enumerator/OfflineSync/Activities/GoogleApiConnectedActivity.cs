@@ -1,7 +1,4 @@
-﻿using Android.Gms.Common;
-using Android.Gms.Common.Apis;
-using Android.Gms.Nearby;
-using Android.OS;
+﻿using Android.Gms.Nearby;
 using Android.Widget;
 using MvvmCross;
 using MvvmCross.ViewModels;
@@ -71,15 +68,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
             
             apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);        
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-
-            base.Dispose(disposing);
         }
     }
 }
