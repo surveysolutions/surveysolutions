@@ -14,55 +14,59 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
     public class SingleAssignmentUpgrader : ISingleAssignmentUpgrader
     {
-        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
+        private readonly ICommandService commandService;
+        private readonly IPreloadedDataVerifier importService;
+        private readonly IAssignmentsService assignments;
 
-        public SingleAssignmentUpgrader(IInScopeExecutor inScopeExecutor)
+        public SingleAssignmentUpgrader(
+            IAssignmentFactory assignmentFactory,
+            IInvitationService invitationService,
+            ICommandService commandService,
+            IPreloadedDataVerifier importService,
+            IAssignmentsService assignments
+        )
         {
-            this.inScopeExecutor = inScopeExecutor;
+            this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
+            this.commandService = commandService;
+            this.importService = importService;
+            this.assignments = assignments;
         }
 
         public void Upgrade(int assignmentId, IQuestionnaire targetQuestionnaire, Guid userId,
             QuestionnaireIdentity migrateTo)
         {
-            this.inScopeExecutor.Execute(sl =>
+            var oldAssignment = assignments.GetAssignment(assignmentId);
+            if (!oldAssignment.IsCompleted)
             {
-                IAssignmentFactory assignmentFactory = sl.GetInstance<IAssignmentFactory>();
-                IInvitationService invitationService = sl.GetInstance<IInvitationService>();
-                ICommandService commandService = sl.GetInstance<ICommandService>();
-                IPreloadedDataVerifier importService = sl.GetInstance<IPreloadedDataVerifier>();
-                IAssignmentsService assignments = sl.GetInstance<IAssignmentsService>();
-                
-                var oldAssignment = assignments.GetAssignment(assignmentId);
-                if (!oldAssignment.IsCompleted)
+                var assignmentVerification =
+                    importService.VerifyWithInterviewTree(oldAssignment.Answers, null,
+                        targetQuestionnaire);
+                if (assignmentVerification == null)
                 {
-                    var assignmentVerification =
-                        importService.VerifyWithInterviewTree(oldAssignment.Answers, null,
-                            targetQuestionnaire);
-                    if (assignmentVerification == null)
-                    {
-                        var newAssignment = assignmentFactory.CreateAssignment(
-                            userId,
-                            migrateTo,
-                            oldAssignment.ResponsibleId,
-                            oldAssignment.InterviewsNeeded,
-                            oldAssignment.Email,
-                            oldAssignment.Password,
-                            oldAssignment.WebMode,
-                            oldAssignment.AudioRecording,
-                            oldAssignment.Answers.ToList(),
-                            oldAssignment.ProtectedVariables,
-                            oldAssignment.Comments);
+                    var newAssignment = assignmentFactory.CreateAssignment(
+                        userId,
+                        migrateTo,
+                        oldAssignment.ResponsibleId,
+                        oldAssignment.InterviewsNeeded,
+                        oldAssignment.Email,
+                        oldAssignment.Password,
+                        oldAssignment.WebMode,
+                        oldAssignment.AudioRecording,
+                        oldAssignment.Answers.ToList(),
+                        oldAssignment.ProtectedVariables,
+                        oldAssignment.Comments);
 
-                        invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                        commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId));
-
-                    }
-                    else
-                    {
-                        throw new AssignmentUpgradeException(assignmentVerification.ErrorMessage);
-                    }
+                    invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
+                    commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId));
                 }
-            });
+                else
+                {
+                    throw new AssignmentUpgradeException(assignmentVerification.ErrorMessage);
+                }
+            }
         }
     }
 }
