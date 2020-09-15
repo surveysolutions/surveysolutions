@@ -6,7 +6,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -71,10 +70,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
 
                 var translationDtos = await this.synchronizationService.GetQuestionnaireTranslationAsync(questionnaireIdentity, cancellationToken);
-                this.logger.Trace($"Get translations for questionnaire {questionnaireIdentity}. {translationDtos.Count} records.");
+                this.logger.Debug($"Get translations for questionnaire {questionnaireIdentity}. {translationDtos.Count} records.");
 
                 var reusableCategories = await this.synchronizationService.GetQuestionnaireReusableCategoriesAsync(questionnaireIdentity, cancellationToken);
-                this.logger.Trace($"Get categories for questionnaire {questionnaireIdentity}. {reusableCategories.Count} categories with {reusableCategories.Sum(c => c.Options.Count)} sum of items.");
+                this.logger.Debug($"Get categories for questionnaire {questionnaireIdentity}. {reusableCategories.Count} categories with {reusableCategories.Sum(c => c.Options.Count)} sum of items.");
 
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(questionnaireIdentity, transferProgress, cancellationToken);
 
