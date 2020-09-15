@@ -2,9 +2,8 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Ncqrs.Eventing.Storage;
 using NHibernate.Linq;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre;
 

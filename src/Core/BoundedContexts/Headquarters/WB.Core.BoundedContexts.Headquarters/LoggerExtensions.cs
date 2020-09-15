@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            logger.LogInformation($"Start {operation}");
+            logger.Info($"Start {operation}");
 
             try
             {
@@ -19,12 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             }
             catch (Exception e)
             {
-                logger.LogError($"Error {operation}. Elapsed time: {stopwatch.Elapsed}", e);
+                logger.Error($"Error {operation}. Elapsed time: {stopwatch.Elapsed}", e);
                 throw;
             }
             finally
             {
-                logger.LogInformation($"Finished {operation}. Elapsed time: {stopwatch.Elapsed}");
+                logger.Info($"Finished {operation}. Elapsed time: {stopwatch.Elapsed}");
             }
         }
 

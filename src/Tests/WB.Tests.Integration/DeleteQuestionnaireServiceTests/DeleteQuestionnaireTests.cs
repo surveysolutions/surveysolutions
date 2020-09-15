@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -280,7 +279,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 Mock.Of<IImageFileStorage>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<Microsoft.Extensions.Logging.ILogger>());
+                Mock.Of<ILogger>());
 
             IPlainStorageAccessor<TranslationInstance> translations =
                 new PostgresPlainStorageRepository<TranslationInstance>(unitOfWork);
@@ -324,7 +323,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 null,
                 new InvitationsDeletionService(unitOfWork),
                 Mock.Of<IAggregateRootCache>(),
-                new AssignmentsToDeleteFactory(unitOfWork, Mock.Of<Microsoft.Extensions.Logging.ILogger>()),
+                new AssignmentsToDeleteFactory(unitOfWork, Mock.Of<ILogger>()),
                 new ReusableCategoriesStorage(new PostgresPlainStorageRepository<ReusableCategoricalOptions>(unitOfWork)),
                 questionnaireBackupStorage
             );
