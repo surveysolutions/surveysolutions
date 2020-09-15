@@ -280,7 +280,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 Mock.Of<IImageFileStorage>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger<InterviewsToDeleteFactory>>());
 
             IPlainStorageAccessor<TranslationInstance> translations =
                 new PostgresPlainStorageRepository<TranslationInstance>(unitOfWork);
@@ -324,7 +324,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 null,
                 new InvitationsDeletionService(unitOfWork),
                 Mock.Of<IAggregateRootCache>(),
-                new AssignmentsToDeleteFactory(unitOfWork, Mock.Of<ILogger>()),
+                new AssignmentsToDeleteFactory(unitOfWork, Mock.Of<ILogger<AssignmentsToDeleteFactory>>()),
                 new ReusableCategoriesStorage(new PostgresPlainStorageRepository<ReusableCategoricalOptions>(unitOfWork)),
                 questionnaireBackupStorage
             );

@@ -6,10 +6,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -24,14 +24,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IImageFileStorage imageFileStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly ILogger logger;
+        private readonly ILogger<InterviewsToDeleteFactory> logger;
 
         private const int BatchSize = 100;
 
         public InterviewsToDeleteFactory(IUnitOfWork sessionFactory, IImageFileStorage imageFileStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader,
             IQuestionnaireStorage questionnaireStorage,
-            ILogger logger)
+            ILogger<InterviewsToDeleteFactory> logger)
         {
             this.sessionFactory = sessionFactory;
             this.imageFileStorage = imageFileStorage;

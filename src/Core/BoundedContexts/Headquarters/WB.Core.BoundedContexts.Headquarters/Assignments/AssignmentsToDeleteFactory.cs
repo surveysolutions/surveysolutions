@@ -2,8 +2,8 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -12,10 +12,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     class AssignmentsToDeleteFactory : IAssignmentsToDeleteFactory
     {
         private readonly IUnitOfWork sessionFactory;
-        private readonly ILogger logger;
+        private readonly ILogger<AssignmentsToDeleteFactory> logger;
 
         public AssignmentsToDeleteFactory(IUnitOfWork sessionFactory,
-            ILogger logger)
+            ILogger<AssignmentsToDeleteFactory> logger)
         {
             this.sessionFactory = sessionFactory;
             this.logger = logger;
