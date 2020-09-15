@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             try
             {                
-                payload = await PreparePayload(endpoint, Guid.NewGuid(), message, true);
+                payload = PreparePayload(endpoint, Guid.NewGuid(), message, true);
                 payload.Comment = $"Package {typeof(TRequest).Name} -> {typeof(TResponse).Name}";
                 var tsc = new TaskCompletionSourceWithProgress(payload, progress, logger, cancellationToken);
                 pending.TryAdd(payload.CorrelationId, tsc);
@@ -157,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             switch (payload.Type)
             {
                 case PayloadType.Bytes:
-                    var header = await payloadSerializer.FromPayloadAsync<PayloadHeader>(payload.Bytes);
+                    var header = payloadSerializer.FromPayload<PayloadHeader>(payload.Bytes);
                     headers.TryAdd(header.PayloadId, header);
                     incomingDataInfo.OnNext(new IncomingDataInfo
                     {
@@ -216,7 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     if (isIncoming)
                     {
                         var bytes = payload.BytesFromStream;
-                        var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
+                        var payloadContent = payloadSerializer.FromPayload<PayloadContent>(bytes);
                         await HandlePayloadContent(connection, endpoint, payloadContent);
                         //logger.Verbose(
                         //    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payloadContent.CorrelationId} Incoming message - {payloadContent.Payload.GetType()}");
@@ -303,7 +303,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 }
                 catch (Exception e)
                 {
-                    var errorResponse = await PreparePayload(endpoint, payloadContent.CorrelationId,
+                    var errorResponse = PreparePayload(endpoint, payloadContent.CorrelationId,
                         new FailedResponse
                         {
                             ErrorMessage = e.Message,
@@ -315,7 +315,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     return;
                 }
 
-                var responsePayload = await PreparePayload(endpoint, payloadContent.CorrelationId, response, false);
+                var responsePayload = PreparePayload(endpoint, payloadContent.CorrelationId, response, false);
                 await SendOverWireAsync(nearbyConnection, endpoint, responsePayload);
             }
             else
@@ -344,13 +344,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private async Task<Package> PreparePayload(string endpoint, Guid correlationId, ICommunicationMessage payload,
+        private Package PreparePayload(string endpoint, Guid correlationId, ICommunicationMessage payload,
             bool isRequest, string errorMessage = null)
         {
             var package = new Package();
             package.CorrelationId = correlationId;
             package.PayloadContent = new PayloadContent(correlationId, payload, isRequest);
-            package.PayloadContentBytes = await payloadSerializer.ToPayloadAsync(package.PayloadContent);
+            package.PayloadContentBytes = payloadSerializer.ToPayload(package.PayloadContent);
             package.Content = payloadProvider.AsStream(package.PayloadContentBytes, endpoint);
 
             package.HeaderPayload =
@@ -362,7 +362,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 package.HeaderPayload.Message = errorMessage;
             }
 
-            package.HeaderBytes = await payloadSerializer.ToPayloadAsync(package.HeaderPayload);
+            package.HeaderBytes = payloadSerializer.ToPayload(package.HeaderPayload);
             package.HeaderPayload.PayloadType = payload.GetType().FullName;
             headers.TryAdd(package.Content.Id, package.HeaderPayload);
 
@@ -370,7 +370,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 package.HeaderPayload.PayloadContent = package.PayloadContent;
 
-                package.HeaderBytes = await payloadSerializer.ToPayloadAsync(package.HeaderPayload);
+                package.HeaderBytes = payloadSerializer.ToPayload(package.HeaderPayload);
             }
 
             package.Header = payloadProvider.AsBytes(package.HeaderBytes, endpoint);

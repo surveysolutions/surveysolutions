@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IGoogleApiService GoogleApiService { get; }
         private readonly IInterviewViewModelFactory viewModelFactory;
 
-        private ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
 
         public SupervisorOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
 
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
-            StartDiscoveryAsyncCommand.Execute();
+            await StartDiscoveryAsyncCommand.ExecuteAsync();
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)
