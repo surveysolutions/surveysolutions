@@ -23,6 +23,7 @@
           <ImageButton style="@style/Interview_Question_RemoveAnswer"
                        android:layout_gravity="right" android:duplicateParentState="true"
                        local:MvxBind="HideKeyboardOnClick .;
+                                     Tag Format('ib_RemoveAnswer_{0}', Identity);
                                      Click RemoveAnswerCommand; "
                        local:srcCompat="@drawable/delete_button"/>
       </LinearLayout>
