@@ -30,6 +30,7 @@
                                 :id="`${$me.id}_${option.value}`"
                                 :name="$me.id"
                                 :value="option.value"
+                                v-model="answer"
                                 :disabled="!$me.acceptAnswer"
                                 @input="answerSingleOption(option.value)">
                             <label :for="$me.id + '_' + option.value">
@@ -79,7 +80,11 @@ export default {
             return [this.$me.options.find((o) => { return o.value == self.answer })]
         },
         answer() {
-            return this.$me.options.find((o) => o.value === this.$me.answer)
+            const option = this.$me.options.find((o) => o.value === this.$me.answer)
+            if(this.$me.renderAsCombobox)
+                return option
+            else
+                return option?.value
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
