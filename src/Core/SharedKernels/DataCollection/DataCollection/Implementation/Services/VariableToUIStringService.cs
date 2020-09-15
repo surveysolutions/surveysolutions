@@ -27,6 +27,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 case DateTime dt:
                     variableAsString = dt.ToString(DateTimeFormat.DateFormat);
                     break;
+                case DateTimeOffset dto:
+                    variableAsString = dto.ToString(DateTimeFormat.DateFormat);
+                    break;
             }
 
             return variableAsString;
