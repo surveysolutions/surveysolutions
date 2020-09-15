@@ -68,8 +68,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 writer.WriteField("event");
                 writer.WriteField("responsible");
                 writer.WriteField("role");
-                writer.WriteField("timestamp");
-                writer.WriteField("offset");
+                writer.WriteField("timestamp_utc");
+                writer.WriteField("tz_offset");
                 writer.WriteField("parameters");
                 writer.NextRecord();
 
