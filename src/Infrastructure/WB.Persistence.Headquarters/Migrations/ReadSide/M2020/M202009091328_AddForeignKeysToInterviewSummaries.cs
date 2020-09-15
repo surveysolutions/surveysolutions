@@ -35,8 +35,11 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .ToTable("interviewsummaries").InSchema("readside").PrimaryColumn("id")
                 .OnDelete(Rule.Cascade);
 
-            Create.ForeignKey("fk_interviewcommentedstatuses_to_interviewsummaries")
-                .FromTable("interviewcommentedstatuses").InSchema("readside").ForeignColumn("interview_id")
+            Delete.ForeignKey("FK_answerstofeaturedquestions_interview_id_interviewsummaries_i")
+                .OnTable("answerstofeaturedquestions").InSchema("readside");
+            
+            Create.ForeignKey("FK_answerstofeaturedquestions_interview_id_interviewsummaries_i")
+                .FromTable("answerstofeaturedquestions").InSchema("readside").ForeignColumn("interview_id")
                 .ToTable("interviewsummaries").InSchema("readside").PrimaryColumn("id")
                 .OnDelete(Rule.Cascade);
         }
