@@ -6,9 +6,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -28,12 +32,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
@@ -53,6 +58,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 {
@@ -86,8 +92,14 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
             var userId = await CreateUser();
             SaveQuestionnaire(questionnaireIdentity, questionnaire);
-            CreateAssignment(questionnaireIdentity, userId);
-            CreateInterviewSummary(questionnaireIdentity, userId);
+            
+            var assignmentId = CreateAssignment(questionnaireIdentity, userId);
+            CreateEvents(assignmentId);
+
+            var interviewId = CreateInterviewSummary(questionnaireIdentity, userId);
+            CreateAudioFiles(interviewId);
+            CreateAudioAuditFiles(interviewId);
+            CreateEvents(interviewId);
 
             
             await DeleteQuestionnaire(questionnaire, questionnaireIdentity, userId);
@@ -104,10 +116,79 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 && s.QuestionnaireVersion == questionnaireIdentity.Version);
             Assert.That(countInterviews, Is.EqualTo(0));
 
+            var countAudio = unitOfWork.Session.Query<AudioFile>().Count(s =>
+                s.InterviewId == interviewId);
+            Assert.That(countAudio, Is.EqualTo(0));
+
+            var countAudioAudit = unitOfWork.Session.Query<AudioAuditFile>().Count(s =>
+                s.InterviewId == interviewId);
+            Assert.That(countAudioAudit, Is.EqualTo(0));
+
             var countAssignments = unitOfWork.Session.Query<Assignment>().Count(a =>
                 a.QuestionnaireId == questionnaireIdentity);
             Assert.That(countAssignments, Is.EqualTo(0));
 
+            var eventStore = new PostgresEventStore(new EventTypeResolver(
+                    typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
+                    typeof(HeadquartersBoundedContextModule).Assembly), 
+                unitOfWork, Mock.Of<ILogger<PostgresEventStore>>());
+            var interviewEvents = eventStore.Read(interviewId, 0);
+            Assert.That(interviewEvents.Count(), Is.EqualTo(0));
+
+            var assignmentEvents = eventStore.Read(assignmentId, 0);
+            Assert.That(assignmentEvents.Count(), Is.EqualTo(0));
+        }
+
+        private void CreateEvents(Guid eventSourceId)
+        {
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+
+            var eventStore = new PostgresEventStore(new EventTypeResolver(
+                    typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
+                    typeof(HeadquartersBoundedContextModule).Assembly),
+                unitOfWork,
+                Mock.Of<ILogger<PostgresEventStore>>());
+
+            eventStore.Store(new UncommittedEventStream(null, new UncommittedEvent[]
+            {
+                new UncommittedEvent(Guid.NewGuid(),
+                    eventSourceId, 1, 0, DateTime.Now, 
+                    new InterviewApproved(Guid.NewGuid(), "c", DateTimeOffset.UtcNow))
+            }));
+            unitOfWork.AcceptChanges();
+        }
+
+        private void CreateAudioFiles(Guid interviewId)
+        {
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+
+            var storage = new PostgresPlainStorageRepository<AudioFile>(unitOfWork);
+
+            var fileId = AudioFile.GetFileId(interviewId, "test");
+            storage.Store(new AudioFile()
+            {
+                Id = fileId,
+                InterviewId = interviewId,
+                Data = new byte[] { 1 },
+                FileName = "test"
+            }, fileId);
+            unitOfWork.AcceptChanges();
+        }
+        private void CreateAudioAuditFiles(Guid interviewId)
+        {
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+
+            var storage = new PostgresPlainStorageRepository<AudioAuditFile>(unitOfWork);
+
+            var fileId = AudioAuditFile.GetFileId(interviewId, "test");
+            storage.Store(new AudioAuditFile()
+            {
+                Id = fileId,
+                InterviewId = interviewId,
+                Data = new byte[] { 1 },
+                FileName = "test"
+            }, fileId);
+            unitOfWork.AcceptChanges();
         }
 
         private async Task DeleteQuestionnaire(QuestionnaireDocument questionnaire, 
@@ -142,7 +223,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             );
         }
 
-        private void CreateInterviewSummary(QuestionnaireIdentity questionnaireIdentity, Guid userId)
+        private Guid CreateInterviewSummary(QuestionnaireIdentity questionnaireIdentity, Guid userId)
         {
             using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
 
@@ -167,9 +248,10 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             };
             interviews.Store(interviewSummary);
             unitOfWork.AcceptChanges();
+            return interviewId;
         }
 
-        private void CreateAssignment(QuestionnaireIdentity questionnaireIdentity, Guid userId)
+        private Guid CreateAssignment(QuestionnaireIdentity questionnaireIdentity, Guid userId)
         {
             using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
 
@@ -188,6 +270,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             };
             assignmentStorage.Store(assignment, assignmentId);
             unitOfWork.AcceptChanges();
+            return assignmentId;
         }
 
         private IDeleteQuestionnaireService CreateDeleteQuestionnaireService(IUnitOfWork unitOfWork, 
