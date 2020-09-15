@@ -4,10 +4,17 @@ using FluentMigrator;
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(202009091328)]
-    public class M202009091328_AddForeignKeysToInterviewSummaries : AutoReversingMigration
+    public class M202009091328_AddForeignKeysToInterviewSummaries : Migration
     {
         public override void Up()
         {
+            Delete.Index("interviewsummaries_interviewid_idx")
+                .OnTable("interviewsummaries").InSchema("readside");
+                
+            Create.Index("interviewsummaries_interviewid_unique_idx")
+                .OnTable("interviewsummaries").InSchema("readside")
+                .OnColumn("interviewid").Unique();
+            
             Create.ForeignKey("fk_interview_geo_answers_to_interviewsummaries")
                 .FromTable("interview_geo_answers").InSchema("readside").ForeignColumn("interview_id")
                 .ToTable("interviewsummaries").InSchema("readside").PrimaryColumn("id")
@@ -32,6 +39,11 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .FromTable("interviewcommentedstatuses").InSchema("readside").ForeignColumn("interview_id")
                 .ToTable("interviewsummaries").InSchema("readside").PrimaryColumn("id")
                 .OnDelete(Rule.Cascade);
+        }
+
+        public override void Down()
+        {
+            
         }
     }
 }
