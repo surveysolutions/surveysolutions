@@ -27,6 +27,7 @@
                                 :id="$me.id + '_' + option.value"
                                 :name="$me.id"
                                 :value="option.value"
+                                v-model="answer"
                                 :disabled="!$me.acceptAnswer"
                                 @input="sendLinkedAnswer(option.value)">
                             <label :for="$me.id + '_' + option.value">
@@ -75,10 +76,10 @@ export default {
             return [find(this.$me.options, function(o) { return o.value == self.answer })]
         },
         answer() {
-
             if (this.$me.options == null || this.$me.answer == null)
                 return
-            return this.$me.options.find((a) => isEqual(a.rosterVector, this.$me.answer))
+            const result = this.$me.options.find((a) => isEqual(a.rosterVector, this.$me.answer))
+            return result
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0
