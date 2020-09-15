@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
     public class PayloadSerializationTests
     {
         [Test]
-        public async Task can_serialize_and_deserialize_all_communication_messages()
+        public void can_serialize_and_deserialize_all_communication_messages()
         {
             var communicationMessageType = typeof(ICommunicationMessage);
             var messageTypes = Assembly.GetAssembly(communicationMessageType)
@@ -31,20 +31,17 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             fixture.Register<WB.Core.Infrastructure.EventBus.IEvent>(() => Create.Event.TextQuestionAnswered());
             var serializer = new PayloadSerializer(new JsonAllTypesSerializer());
 
-            var deserializeMethod = serializer.GetType().GetMethod(nameof(PayloadSerializer.FromPayloadAsync));
+            var deserializeMethod = serializer.GetType().GetMethod(nameof(PayloadSerializer.FromPayload));
             if (deserializeMethod == null) throw new Exception();
 
             foreach (var messageType in messageTypes)
             {
                 var message = new SpecimenContext(fixture).Resolve(messageType);
-                var payload = await serializer.ToPayloadAsync(message);
+                var payload = serializer.ToPayload(message);
 
                 var action = deserializeMethod.MakeGenericMethod(messageType);
 
-                Assert.DoesNotThrowAsync(async () =>
-                    {
-                        await (Task) action.Invoke(serializer, new object[] {payload});
-                    },
+                Assert.DoesNotThrow(() => action.Invoke(serializer, new object[] {payload}),
                     $"Try to deserialize {messageType.Name} failed");
             }
         }
