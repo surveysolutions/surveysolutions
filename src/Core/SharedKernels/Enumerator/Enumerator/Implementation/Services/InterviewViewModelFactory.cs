@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             VariableModel = 400,
             ReadOnlyQuestion = 500,
             FlatRoster = 600,
-            AutocompleteLinkedToRosterSingleOptionQuestionModel
+            AutocompleteLinkedSingleOptionQuestionModel = 700
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             Load<SingleOptionRosterLinkedQuestionViewModel>
                         },
                         {
-                            InterviewEntityType.AutocompleteLinkedToRosterSingleOptionQuestionModel,
+                            InterviewEntityType.AutocompleteLinkedSingleOptionQuestionModel,
                             Load<AutoCompleteSingleOptionLinkedQuestionViewModel>
                         },
                         {
@@ -227,19 +227,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     case QuestionType.SingleOption:
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
-                            return questionnaire.IsLinkedToListQuestion(entityId)
-                                ? InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel
-                                : InterviewEntityType.LinkedSingleOptionQuestionModel;
+                            
+
+                            if (questionnaire.IsLinkedToListQuestion(entityId))
+                                return InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel;
+                            
+                            if(questionnaire.IsQuestionFilteredCombobox(entityId))
+                                return InterviewEntityType.AutocompleteLinkedSingleOptionQuestionModel;
+                            return InterviewEntityType.LinkedSingleOptionQuestionModel;
                         }
 
                         if (questionnaire.IsQuestionLinkedToRoster(entityId))
                         {
-                            if(!questionnaire.IsQuestionFilteredCombobox(entityId))
-                                return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
-                            else
-                            {
-                                return InterviewEntityType.AutocompleteLinkedToRosterSingleOptionQuestionModel;
-                            }
+                            if (questionnaire.IsQuestionFilteredCombobox(entityId))
+                                return InterviewEntityType.AutocompleteLinkedSingleOptionQuestionModel;
+                            
+                            return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
                         }
 
                         if (questionnaire.IsQuestionCascading(entityId))
