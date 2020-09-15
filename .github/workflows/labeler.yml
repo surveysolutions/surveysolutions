@@ -23,3 +23,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: |
             rc
+        
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'rc' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            automerge
+            
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'release' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            automerge
