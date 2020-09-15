@@ -59,7 +59,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 }
                 
                 var openReadStream = Upload.OpenReadStream();
-                restoreService.RestoreQuestionnaire(openReadStream, User.GetId(), state);
+                Guid questionnaireId = Guid.NewGuid();
+                restoreService.RestoreQuestionnaire(openReadStream, User.GetId(), state, questionnaireId);
                 
                 this.Success = $"Restore finished. Restored {state.RestoredEntitiesCount} entities.";
                 this.Error = state.Error;
