@@ -741,21 +741,21 @@ namespace WB.Tests.Abc.TestFactories
             var upgService = upgradeService ?? Mock.Of<IAssignmentsUpgradeService>();
             var localVerifier = importService ?? Mock.Of<IPreloadedDataVerifier>();
 
+            var upgrader = new SingleAssignmentUpgrader(Create.Service.AssignmentFactory(commands, assignmentsService, Mock.Of<IAssignmentIdGenerator>()),
+                Mock.Of<IInvitationService>(),
+                commands,
+                localVerifier,
+                assignmentsService);
+            
             var sl = Mock.Of<IServiceLocator>(locator =>
-                locator.GetInstance<ICommandService>() == commands &&
-                locator.GetInstance<IInvitationService>() == Mock.Of<IInvitationService>() &&
-                locator.GetInstance<IPreloadedDataVerifier>() == localVerifier &&
-                locator.GetInstance<IAssignmentFactory>() == Create.Service.AssignmentFactory(commands, assignmentsService, Mock.Of<IAssignmentIdGenerator>()) &&
-                locator.GetInstance<IAssignmentsService>() == assignmentsService
+                locator.GetInstance<ISingleAssignmentUpgrader>() == upgrader
             );
-            
-            var upgrader = new SingleAssignmentUpgrader(InScopeExecutor(sl));
-            
+
             return new AssignmentsUpgrader(
                 assignmentsService,
                 questionnaires,
                 upgService,
-                upgrader);
+                Create.Service.InScopeExecutor(sl));
         }
 
         public IAssignmentFactory AssignmentFactory(
