@@ -3,7 +3,6 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,10 +35,16 @@ namespace WB.UI.Designer.SupportTool
                 Argument = new Argument<string>()
             });
 
-            this.Handler = CommandHandler.Create<string, string>(ImportQuestionnaire);
+            this.AddOption(new Option(new[] { "--createnew" }, "Create a new questionnaire.")
+            {
+                Required = false,
+                Argument = new Argument<bool>(() => false)
+            });
+
+            this.Handler = CommandHandler.Create<string, string, bool>(ImportQuestionnaire);
         }
 
-        private async Task ImportQuestionnaire(string path, string username)
+        private async Task ImportQuestionnaire(string path, string username, bool createnew)
         {
             using var scope = this.host.Services.CreateScope();
             var locator = scope.ServiceProvider;
@@ -63,10 +68,9 @@ namespace WB.UI.Designer.SupportTool
 
             var fs = File.OpenRead(path);
             var state = new RestoreState();
-            Guid newQuestionnaireId = Guid.NewGuid();
             try
             {
-                restore.RestoreQuestionnaire(fs, user.Id, state, newQuestionnaireId);
+                var id = restore.RestoreQuestionnaire(fs, user.Id, state, createnew);
 
                 if (state.Error != null)
                 {
@@ -74,7 +78,7 @@ namespace WB.UI.Designer.SupportTool
                 }
                 else
                 {
-                    Console.WriteLine($@"Restore finished. Restored {state.RestoredEntitiesCount} entities.");
+                    Console.WriteLine($@"Restore finished. Restored {state.RestoredEntitiesCount} entities. Questionnaire Id:{id}");
                 }
 
             }
