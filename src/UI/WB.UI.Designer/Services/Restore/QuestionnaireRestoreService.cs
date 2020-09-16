@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Main.Core.Documents;
@@ -39,17 +38,17 @@ namespace WB.UI.Designer.Services.Restore
             this.categoriesService = categoriesService;
         }
 
-        public void RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, Guid newQuestionnaireId)
+        public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
             using var zipStream = new ZipInputStream(archive);
-            
-            ZipEntry zipEntry = zipStream.GetNextEntry();
 
-            while (zipEntry != null)
+            var questionnaireId = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
+
+            zipStream.Seek(0, SeekOrigin.Begin);
+            ZipEntry zipEntry;
+            while ((zipEntry = zipStream.GetNextEntry()) != null)
             {
-                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, newQuestionnaireId);
-
-                zipEntry = zipStream.GetNextEntry();
+                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaireId);
             }
 
             state.Error = "";
@@ -57,6 +56,55 @@ namespace WB.UI.Designer.Services.Restore
             {
                 state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
             }
+
+            return questionnaireId;
+        }
+
+        public Guid RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, Guid responsibleId,
+            RestoreState state, bool createNew)
+        {
+            ZipEntry zipEntry;
+            while ((zipEntry = zipStream.GetNextEntry()) != null)
+            {
+                if (zipEntry.IsDirectory) continue;
+                try
+                {
+                    string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                        new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+                        StringSplitOptions.RemoveEmptyEntries);
+
+                    if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
+                    {
+                        string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                        var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
+                        
+                        if(createNew)
+                            questionnaireDocument.PublicKey = Guid.NewGuid();
+
+                        var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
+                        this.commandService.Execute(command);
+
+                        this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+                        this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+
+                        state.Success.AppendLine($"[{zipEntry.FileName}]");
+                        state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
+                        state.RestoredEntitiesCount++;
+
+                        dbContext.SaveChanges();
+
+                        return questionnaireDocument.PublicKey;
+                    }
+                }
+                catch (Exception exception)
+                {
+                        this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
+                        state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
+                        logger.LogError(state.Error);
+                }
+            }
+
+            throw new Exception("Questionnaire document was not found.");
         }
 
         public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state, Guid questionnaireId)
@@ -66,10 +114,6 @@ namespace WB.UI.Designer.Services.Restore
                 string[] zipEntryPathChunks = zipEntry.FileName.Split(
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                     StringSplitOptions.RemoveEmptyEntries);
-
-                bool isQuestionnaireDocumentEntry =
-                    zipEntryPathChunks.Length == 1 &&
-                    zipEntryPathChunks[0].ToLower().EndsWith(".json");
 
                 bool isAttachmentEntry =
                     zipEntryPathChunks.Length == 3 &&
@@ -92,24 +136,7 @@ namespace WB.UI.Designer.Services.Restore
                     (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase) ||
                      ".ods".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase));
 
-                if (isQuestionnaireDocumentEntry)
-                {
-                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-
-                    var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
-                    questionnaireDocument.PublicKey = questionnaireId;
-
-                    var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
-                    this.commandService.Execute(command);
-
-                    this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-                    this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-
-                    state.Success.AppendLine($"[{zipEntry.FileName}]");
-                    state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
-                    state.RestoredEntitiesCount++;
-                }
-                else if (isAttachmentEntry)
+                if (isAttachmentEntry)
                 {
                     var attachmentId = Guid.Parse(zipEntryPathChunks[1]);
                     var fileName = zipEntryPathChunks[2];
