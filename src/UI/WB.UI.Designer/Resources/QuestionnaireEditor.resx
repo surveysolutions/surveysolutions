@@ -739,6 +739,10 @@
   <data name="VirtualCoverPage" xml:space="preserve">
     <value>Virtual cover page</value>
   </data>
+  <data name="MigrateToNewCover" xml:space="preserve">
+    <value>Generate cover</value>
+
+  </data>
   <data name="AddVariable" xml:space="preserve">
     <value>Add variable</value>
   </data>

@@ -2,10 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
       xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
- 
- <!--<item
-      android:id="@+id/map_editor_clear"
-      local:showAsAction="never" />-->
+    
   <item
       android:id="@+id/map_editor_exit"
       local:showAsAction="never" />

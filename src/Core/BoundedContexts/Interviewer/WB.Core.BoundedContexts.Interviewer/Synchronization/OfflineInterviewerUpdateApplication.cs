@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Humanizer;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -62,7 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
             if (versionFromServer.HasValue && versionFromServer > interviewerSettings.GetApplicationVersionCode())
             {
-                await this.permissions.AssureHasPermission(Permission.Storage);
+                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
                 try
                 {

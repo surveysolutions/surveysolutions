@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -204,22 +205,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         }
                     }
                 }
+                catch (MissingPermissionsException e) when (e.PermissionType == typeof(CameraPermission))
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                        .MissingPermissions_Camera);
+                }
+                catch (MissingPermissionsException e) when (e.PermissionType == typeof(StoragePermission))
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                        .MissingPermissions_Storage);
+                }
                 catch (MissingPermissionsException mpe)
                 {
-                    switch (mpe.Permission)
-                    {
-                        case Permission.Camera:
-                            await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                                .MissingPermissions_Camera);
-                            break;
-                        case Permission.Storage:
-                            await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                                .MissingPermissions_Storage);
-                            break;
-                        default:
-                            await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
-                            break;
-                    }
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
                 }
             }
         }
