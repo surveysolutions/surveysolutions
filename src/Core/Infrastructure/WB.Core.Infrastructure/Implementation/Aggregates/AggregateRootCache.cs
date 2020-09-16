@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Metrics;
 
@@ -8,6 +10,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
     public class AggregateRootCache : IAggregateRootCache
     {
         private readonly IMemoryCache memoryCache;
+        private CancellationTokenSource resetCacheToken = new CancellationTokenSource();
 
         public AggregateRootCache(IMemoryCache memoryCache)
         {
@@ -35,7 +38,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
             this.memoryCache.Set(Key(aggregateId), value, new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(expiration)
-                .RegisterPostEvictionCallback(CacheItemRemoved));
+                .RegisterPostEvictionCallback(CacheItemRemoved)
+                .AddExpirationToken(new CancellationChangeToken(resetCacheToken.Token)));
             
             CoreMetrics.StatefullInterviewsCached?.Labels("added").Inc();
 
@@ -59,6 +63,17 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         public void Evict(Guid aggregateId)
         {
             this.memoryCache.Remove(Key(aggregateId));
+        }
+
+        public void Clear()
+        {
+            if (resetCacheToken != null && !resetCacheToken.IsCancellationRequested && resetCacheToken.Token.CanBeCanceled)
+            {
+                resetCacheToken.Cancel();
+                resetCacheToken.Dispose();
+            }
+
+            resetCacheToken = new CancellationTokenSource();
         }
     }
 }

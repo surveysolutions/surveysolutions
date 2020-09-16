@@ -208,5 +208,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 throw;
             }
         }
+
+        public async Task RemoveAsync(IEnumerable<string> paths)
+        {
+            try
+            {
+                var deleteRequest = new DeleteObjectsRequest();
+                deleteRequest.BucketName = BucketInfo.BucketName;
+                deleteRequest.Quiet = true; 
+
+                foreach (var path in paths)
+                    deleteRequest.AddKey(BucketInfo.PathTo(path));
+
+                await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+            }
+            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
+            {
+                // ignore
+                log.Info($"Unable to find object in S3. BucketName: {BucketInfo.BucketName}. BasePath: {BucketInfo.PathPrefix} ", e);
+            }
+            catch (Exception e)
+            {
+                LogError($"Unable to remove object in S3. Paths: {paths}", e);
+                throw;
+            }
+        }
     }
 }
