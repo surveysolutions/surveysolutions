@@ -104,6 +104,7 @@ namespace WB.UI.Designer.Services.Restore
                 }
             }
 
+            state.Error = "Questionnaire document was not found.";
             throw new Exception("Questionnaire document was not found.");
         }
 
