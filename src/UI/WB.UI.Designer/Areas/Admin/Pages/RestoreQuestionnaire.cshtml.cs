@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Services.Restore;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
@@ -33,6 +34,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         [BindProperty]
         public IFormFile? Upload { get; set; }
 
+        [BindProperty]
+        public bool CreateNew { get; set; }
+
         public IActionResult OnPost()
         {
             var state = new RestoreState();
@@ -59,10 +63,10 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 }
                 
                 var openReadStream = Upload.OpenReadStream();
-                Guid questionnaireId = Guid.NewGuid();
-                restoreService.RestoreQuestionnaire(openReadStream, User.GetId(), state, questionnaireId);
                 
-                this.Success = $"Restore finished. Restored {state.RestoredEntitiesCount} entities.";
+                var questionnaireId = restoreService.RestoreQuestionnaire(openReadStream, User.GetId(), state, CreateNew);
+                
+                this.Success = $"Restore finished. Restored {state.RestoredEntitiesCount} entities. Questionnaire Id: {questionnaireId.FormatGuid()}";
                 this.Error = state.Error;
                 return Page();
             }
