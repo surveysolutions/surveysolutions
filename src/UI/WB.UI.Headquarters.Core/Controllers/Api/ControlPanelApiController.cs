@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             foreach (var kv in configuration.AsEnumerable(true))
             {
-                if (kv.Key == "ConnectionStrings:DefaultConnection")
+                if (kv.Key == "ConnectionStrings:DefaultConnection" || kv.Key == "ConnectionString")
                 {
                     AddConfig(kv.Key, RemovePasswordFromConnectionString(kv.Value));
                     continue;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Humanizer;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -20,8 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly INearbyConnectionClient connectionClient;
         private readonly Subject<INearbyEvent> events;
 
-        private NamedAsyncLocker locker = new NamedAsyncLocker();
-
         public NearbyConnection(INearbyCommunicator communicator, ILogger logger, INearbyConnectionClient connectionClient)
         {
             this.communicator = communicator;
@@ -37,10 +36,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             events = new Subject<INearbyEvent>();
             Events = events;
+            Task.Factory.StartNew(CommunicationQueue, TaskCreationOptions.LongRunning);
+            Task.Factory.StartNew(PayloadSenderQueue, TaskCreationOptions.LongRunning);
         }
 
         public async Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
         {
+            knownEndpoints.Clear();
+            connectionClient.StopDiscovery();
+
             var result = await connectionClient.StartDiscoveryAsync(serviceName, cancellationToken);
 
             this.logger.Info($"[START DISCOVERY] of {serviceName}");
@@ -62,6 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         public async Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
         {
+            this.connectionClient.StopAdvertising();
             //this.logger.Verbose($"{serviceName}, {name}) ENTER");
             var result = await this.connectionClient.StartAdvertisingAsync(serviceName, name, cancellationToken);
             this.logger.Info($"[START ADVERTISING] of {serviceName} by {name}");
@@ -79,75 +84,100 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await locker.RunWithLockAsync(endpoint, async () =>
+            this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) ENTER. Done waiting lock");
+
+            // if there is already successful pending request. Than do nothing
+            if (pendingRequestConnections.TryGetValue(endpoint, out _))
             {
-                this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) ENTER. Done waiting lock");
+                this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) EXIT. There is already pending requests");
 
-                // if there is already succesfull pending request. Than do nothing
-                if (pendingRequestConnections.TryGetValue(endpoint, out _))
+                return new NearbyStatus
                 {
-                    this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) EXIT. There is already pending requests");
+                    IsSuccess = true,
+                    Status = ConnectionStatusCode.StatusAlreadyConnectedToEndpoint
+                };
+            }
 
-                    return new NearbyStatus
-                    {
-                        IsSuccess = true,
-                        Status = ConnectionStatusCode.StatusAlreadyConnectedToEndpoint
-                    };
-                }
+            if (RemoteEndpoints.Any(re => re.Endpoint == endpoint))
+            {
+                this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) Already connected. EXIT");
+                events.OnNext(new NearbyEvent.Connected(endpoint, name));
 
-                if (RemoteEndpoints.Any(re => re.Enpoint == endpoint))
+                return new NearbyStatus
                 {
-                    this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) Already connected. EXIT");
-                    return new NearbyStatus
-                    {
-                        IsSuccess = true,
-                        Status = ConnectionStatusCode.StatusOk
-                    };
-                }
+                    IsSuccess = true,
+                    Status = ConnectionStatusCode.StatusOk
+                };
+            }
 
-                NearbyStatus result;
-                try
+            NearbyStatus result;
+            try
+            {
+                result = await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                result = new NearbyStatus
                 {
-                   result = await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken).ConfigureAwait(false);
-                }
-                catch (Exception)
-                {
-                    result = new NearbyStatus
-                    {
-                        IsCanceled = true,
-                        IsSuccess = false,
-                        Status = ConnectionStatusCode.StatusError
-                    };
-                }
+                    IsCanceled = true,
+                    IsSuccess = false,
+                    Status = ConnectionStatusCode.StatusError,
+                    StatusMessage = e.Message
+                };
+            }
 
-                if (result.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
-                {
-                    this.OnConnectionClientResult(endpoint, new NearbyConnectionResolution { IsSuccess = true });
-                }
+            if (result.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
+            {
+                this.OnConnectionClientResult(endpoint, new NearbyConnectionResolution { IsSuccess = true });
+            }
 
-                if (result.IsSuccess)
-                {
-                    this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) Added pending request connection.");
-                    pendingRequestConnections.TryAdd(endpoint, true);
-                }
+            if (result.IsSuccess)
+            {
+                this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) Added pending request connection.");
+                pendingRequestConnections.TryAdd(endpoint, true);
+            }
 
-                this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) => RequestConnectionAsync ended {result.Status.ToString()}");
-                return result;
-            }).ConfigureAwait(false);
+            this.logger.Verbose($"[REQUEST CONNECTION]: ({name}, {endpoint}) => RequestConnectionAsync ended {result.Status.ToString()}");
+            return result;
         }
 
         public async Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
         {
             var status = await this.connectionClient.AcceptConnectionAsync(endpoint);
-            this.logger.Info($"[ACCEPT CONNECTION] to endpoing: {endpoint}. Status: {ToString(status)}");
+            this.logger.Info($"[ACCEPT CONNECTION] to endpoint: {endpoint}. Status: {ToString(status)}");
             return status;
+        }
+
+        private BlockingCollection<(TaskCompletionSource<NearbyStatus> tcs, string to, IPayload payload)> sendingQueue
+            = new BlockingCollection<(TaskCompletionSource<NearbyStatus>, string, IPayload)>();
+
+        private async Task PayloadSenderQueue()
+        {
+            foreach (var item in sendingQueue.GetConsumingEnumerable())
+            {
+                try
+                {
+                    var to = item.to;
+                    var payload = item.payload;
+                    var status = await this.connectionClient.SendPayloadAsync(to, payload);
+                    this.logger.Verbose($"[SENDED PAYLOAD] to: {to}.Payload: {payload.Id} # {payload.Type}. Result: {ToString(status)}");
+                    item.tcs.SetResult(status);
+                }
+                catch (Exception e)
+                {
+                    item.tcs.SetException(e);
+                }
+            }
         }
 
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
-            var status = await this.connectionClient.SendPayloadAsync(to, payload);
-            this.logger.Verbose($"[SEND PAYLOAD] to: {to}.Payload: {payload.Id} # {payload.Type}. Result: {ToString(status)}");
-            return status;
+            var tcs = new TaskCompletionSource<NearbyStatus>();
+            var item = (tcs, to, payload);
+            this.sendingQueue.Add(item);
+            this.logger.Verbose($"Added to queue: {to}.Payload: {payload.Id} # {payload.Type}");
+
+            return await tcs.Task;
         }
 
         public IObservable<INearbyEvent> Events { get; }
@@ -162,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 this.logger.Info($"[STOP DISCOVERY]");
                 this.connectionClient.StopDiscovery();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this.logger.Error("[STOP DISCOVERY] Failed", e);
             }
@@ -188,12 +218,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 this.connectionClient.StopAll();
                 this.RemoteEndpoints.Clear();
-                this.knownEnpoints.Clear();
+                this.knownEndpoints.Clear();
                 this.pendingRequestConnections.Clear();
-                this.locker = new NamedAsyncLocker();
+
                 this.logger.Info("[STOP ALL]");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this.logger.Error("[STOP ALL] Failed", e);
                 /* om om om */
@@ -204,7 +234,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"[LOST ENDPOINT] ({endpoint}) ENTER");
 
-            if (knownEnpoints.TryRemove(endpoint, out var name))
+            if (knownEndpoints.TryRemove(endpoint, out var name))
             {
                 this.logger.Verbose($"({endpoint}) Remove known: '{name ?? "<unknown>"}'. Notify.");
                 events.OnNext(new NearbyEvent.EndpointLost(endpoint));
@@ -215,7 +245,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"[FOUND ENDPOINT] ({info.Endpoint}, {info.EndpointName}) ENTER");
 
-            if (knownEnpoints.TryAdd(info.Endpoint, info.EndpointName))
+            if (knownEndpoints.TryAdd(info.Endpoint, info.EndpointName))
             {
                 this.logger.Verbose($"({info.Endpoint}) Add known: '{info.EndpointName ?? "<unknown>"}'. Notify.");
                 events.OnNext(new NearbyEvent.EndpointFound(info.Endpoint, info));
@@ -226,12 +256,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"[DISCONNECTED] ({endpoint}) ENTER");
 
-            var exising = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
-            events.OnNext(new NearbyEvent.Disconnected(endpoint, exising?.Name));
+            var existing = this.RemoteEndpoints.FirstOrDefault(re => re.Endpoint == endpoint);
+            events.OnNext(new NearbyEvent.Disconnected(endpoint, existing?.Name));
 
-            if (exising != null)
+            if (existing != null)
             {
-                this.RemoteEndpoints.Remove(exising);
+                this.RemoteEndpoints.Remove(existing);
             }
         }
 
@@ -243,47 +273,69 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             if (resolution.IsSuccess)
             {
-                var exising = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
+                var existing = this.RemoteEndpoints.FirstOrDefault(re => re.Endpoint == endpoint);
 
-                if (exising != null)
+                if (existing != null)
                 {
-                    this.RemoteEndpoints.Remove(exising);
+                    this.RemoteEndpoints.Remove(existing);
                 }
 
-                knownEnpoints.TryGetValue(endpoint, out var name);
+                knownEndpoints.TryGetValue(endpoint, out var name);
 
                 this.logger.Verbose($"[OnConnectionClientResult] Connected to endpoint: {endpoint}. Name: {name}");
-                this.RemoteEndpoints.Add(new RemoteEndpoint { Enpoint = endpoint, Name = name });
-                events.OnNext(new NearbyEvent.Connected(endpoint, resolution, name));
+                this.RemoteEndpoints.Add(new RemoteEndpoint { Endpoint = endpoint, Name = name });
+                events.OnNext(new NearbyEvent.Connected(endpoint, name));
             }
         }
 
-        private readonly ConcurrentDictionary<string, string>
-            knownEnpoints = new ConcurrentDictionary<string, string>();
+        private readonly ConcurrentDictionary<string, string> knownEndpoints = new ConcurrentDictionary<string, string>();
 
         private void OnInitiatedConnectionClient(object sender, NearbyConnectionInfo info)
         {
             this.logger.Verbose($"[OnInitiatedConnectionClient] ({info.Endpoint}, name: {info.EndpointName}," +
                                 $" incoming: {info.IsIncomingConnection}, auth: {info.AuthenticationToken})");
-            knownEnpoints.TryAdd(info.Endpoint, info.EndpointName);
+            knownEndpoints.TryAdd(info.Endpoint, info.EndpointName);
             events.OnNext(new NearbyEvent.InitiatedConnection(info.Endpoint, info));
         }
 
         private void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
         {
             this.logger.Verbose($"({update.Endpoint}, payloadId: {update.Id}, status: {update.Status.ToString()}, {update.BytesTransferred} of {update.TotalBytes}");
-            communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
+
+            this.communicationQueue.Add(update);
         }
 
-        private async void OnPayloadReceived(object sender, IPayload payload)
+        private BlockingCollection<object> communicationQueue = new BlockingCollection<object>();
+
+        private async Task CommunicationQueue()
         {
-            this.logger.Verbose($"({payload.Endpoint}, {payload.ToString()})");
-            await communicator.ReceivePayloadAsync(this, payload.Endpoint, payload);
+            foreach (var queue in communicationQueue.GetConsumingEnumerable())
+            {
+                if (communicationQueue.IsAddingCompleted) return;
+
+                if (queue is IPayload payload)
+                {
+                    await communicator.ReceivePayloadAsync(this, payload.Endpoint, payload);
+                }
+
+                if (queue is NearbyPayloadTransferUpdate update)
+                {
+                    communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
+                }
+            }
+        }
+
+        private void OnPayloadReceived(object sender, IPayload payload)
+        {
+            this.logger.Verbose($"GOT ==> ({payload.Endpoint}, {payload})");
+
+            communicationQueue.Add(payload);
         }
 
         public void Dispose()
         {
             events?.Dispose();
+            this.communicationQueue.CompleteAdding();
 
             this.connectionClient.LostEndpoint -= LostEndpoint;
             this.connectionClient.FoundEndpoint -= FoundEndpoint;

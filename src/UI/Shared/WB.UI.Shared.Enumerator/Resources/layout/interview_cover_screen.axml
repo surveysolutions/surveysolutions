@@ -78,7 +78,7 @@
                       android:layout_marginTop="@dimen/Interview_Group_margin_top">
             
             <Button
-                style="@style/Interview_Button"
+                style="@style/Interview_Group_Navigation_Button"
                 android:id="@+id/btn_coverStartInterview"
                 local:MvxBind="HideKeyboardOnClick .; 
                 Click StartInterviewCommand; 

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -32,8 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task StartAudioRecordingAsync(Guid interviewId)
         {
-            await this.permissions.AssureHasPermission(Permission.Microphone);
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<MicrophonePermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             audioAuditService.StartAuditRecording($"{interviewId.FormatGuid()}-{fileNamePrefix}");
         }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Android.App;
 using Android.Content;
-using Android.Gms.Common;
-using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
 using Android.Views;
@@ -15,7 +13,6 @@ using Google.Android.Material.Tabs;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -37,9 +34,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         Exported = false)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>,
         ISyncBgService<SyncProgressDto>,
-        ISyncServiceHost<SyncBgService>,
-        GoogleApiClient.IConnectionCallbacks,
-        GoogleApiClient.IOnConnectionFailedListener
+        ISyncServiceHost<SyncBgService>
     {
         private static Random rnd = new Random();
 
@@ -282,37 +277,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         #region Offline synhronization
 
-        protected GoogleApiClient GoogleApi;
         const int RequestCodeRecoverPlayServices = 1001;
-        private INearbyConnection communicator;
-
-        protected override void OnStop()
-        {
-            this.communicator?.StopAll();
-            this.GoogleApi?.Disconnect();
-
-            base.OnStop();
-        }
-
-        public void OnConnected(Bundle connectionHint)
-        {
-            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
-        }
-
-        public void OnConnectionSuspended(int cause)
-        {
-        }
-
-        public void OnConnectionFailed(ConnectionResult result)
-        {
-        }
-
+            
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.GoogleApi?.Dispose();
-                this.GoogleApi = null;
+                //if(this.communicator.)
+                //this.GoogleApiClnt?.Dispose();
+                //this.GoogleApiClnt = null;
                 this.ViewModel.OnOfflineSynchronizationStarted = null;
             }
 
@@ -350,26 +323,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void RestoreGoogleApiConnectionIfNeeded()
         {
-            if (this.GoogleApi == null)
-            {
-                this.GoogleApi = new GoogleApiClient.Builder(this)
-                    .EnableAutoManage(this, this)
-                    .AddApi(NearbyClass.CONNECTIONS_API)
-                    .Build();
-
-                this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
-                var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
-                apiClientFactory.GoogleApiClient = this.GoogleApi;
-            }
-
-            if (this.GoogleApi.IsConnected)
-            {
-                System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
-                this.ViewModel.StartDiscoveryAsyncCommand.Execute();
-                return;
-            }
-
-            this.GoogleApi.Connect();
+            var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
+            apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);
+            System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
+            
+            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
         #endregion
     }

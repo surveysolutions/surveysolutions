@@ -396,10 +396,10 @@ namespace WB.Tests.Abc.TestFactories
             public void ReadStream()
             {
                 using var ms = Stream as MemoryStream;
-                BytesFromStream =Task.FromResult(ms.ToArray());
+                BytesFromStream =ms.ToArray();
             }
 
-            public Task<byte[]> BytesFromStream { get; set; }
+            public byte[] BytesFromStream { get; set; }
         }
     }
 }

@@ -333,16 +333,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             IEvent Deserialize(string value, Type type)
             {
-                using (var sr = new StringReader(value))
-                {
-                    using (JsonTextReader jsonTextReader = new JsonTextReader(sr))
-                    {
-                        return (IEvent)serializer.Deserialize(jsonTextReader, type);
-                    }
-                }
+                using JsonTextReader reader = new JsonTextReader(new StringReader(value));
+                return (IEvent)serializer.Deserialize(reader, type);
             }
 
-            foreach (var raw in rawEventsData)
+            foreach (var raw in rawEventsData.AsParallel())
             {
                 if (obsoleteEvents.Contains(raw.EventType.ToLower()))
                 {

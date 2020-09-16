@@ -75,7 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     synchronizationCompleteSource: synchronizationCompleteSource ?? SyncCompleteSource, 
                     permissionsService: Mock.Of<IPermissionsService>(), 
                     nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
-                    restService: Mock.Of<IRestService>(), 
                     syncClient: Mock.Of<IOfflineSyncClient>(),
                     userInteractionService: Mock.Of<IUserInteractionService>(),
                     googleApiService: Mock.Of<IGoogleApiService>(),
