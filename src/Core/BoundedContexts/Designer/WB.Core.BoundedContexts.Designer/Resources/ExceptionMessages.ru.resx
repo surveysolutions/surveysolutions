@@ -192,6 +192,9 @@
   <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
     <value>Имя опросника не может быть пустым.</value>
   </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>Опросник уже поддерживает обложку.</value>
+  </data>
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
     <value>Секция не может содержать более {0} дочерних элементов.</value>
   </data>
@@ -395,5 +398,8 @@
   </data>
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
     <value>Вы используете старый опросник. Поэтому редактирование порядка вопросов в секции "Обложка" не доступно.</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>Опросник уже поддерживает обложку</value>
   </data>
 </root>

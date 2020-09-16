@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -82,9 +83,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
             try
             {
-                await this.permissions.AssureHasPermission(Permission.Storage);
+                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
             }
-            catch (MissingPermissionsException e) when (e.Permission == Permission.Storage)
+            catch (MissingPermissionsException)
             {
                 this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
                 return;

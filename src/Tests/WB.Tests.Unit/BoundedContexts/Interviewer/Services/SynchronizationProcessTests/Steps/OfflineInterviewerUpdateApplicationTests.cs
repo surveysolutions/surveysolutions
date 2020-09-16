@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             await step.ExecuteAsync();
             // assert
 
-            permissions.Verify(x => x.AssureHasPermission(Permission.Storage), Times.Once);
+            permissions.Verify(x => x.AssureHasPermissionOrThrow<StoragePermission>(), Times.Once);
             mockOfSynchronizationService.Verify(x => x.GetApplicationAsync(It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSystemService.Verify(x => x.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
             navigationService.Verify(x => x.InstallNewApp(It.IsAny<string>()), Times.Once);

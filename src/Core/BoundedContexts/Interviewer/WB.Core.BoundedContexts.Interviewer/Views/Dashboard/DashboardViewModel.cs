@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IOfflineSyncClient syncClient;
-        
+
         private readonly IMvxMessenger messenger;
 
         private MvxSubscriptionToken? startingLongOperationMessageSubscriptionToken;
@@ -62,12 +63,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             ISynchronizationCompleteSource synchronizationCompleteSource,
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
-            IRestService restService,
             IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
             IMapInteractionService mapInteractionService) : base(principal, viewModelNavigationService, permissionsService,
-            nearbyConnection, interviewerSettings, restService)
+            nearbyConnection)
         {
             this.messenger = messenger;
             this.principal = principal;
@@ -76,6 +76,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.auditLogService = auditLogService;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
+
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
@@ -102,6 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
         }
+
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -176,14 +178,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
 
         public IMvxCommand NavigateToMapDashboardCommand =>
-            new MvxAsyncCommand(async () => await mapInteractionService.OpenMapDashboardAsync());
+            new MvxAsyncCommand(async () => await NavigateToMapDashboard());
+
+        private async Task NavigateToMapDashboard()
+        {
+            try
+            {
+               await mapInteractionService.OpenMapDashboardAsync();
+            }
+            catch (MissingPermissionsException e)
+            {
+                UserInteractionService.ShowToast(e.Message);
+            }
+        }
 
         private Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
-        
+
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -349,12 +363,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
 
         public Action? OnOfflineSynchronizationStarted;
-        private IMapInteractionService mapInteractionService;
+        private readonly IMapInteractionService mapInteractionService;
 
         private void StartOfflineSynchronization()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            
+
             this.cancellationTokenSource = new CancellationTokenSource();
 
             this.Synchronization.Status = SynchronizationStatus.Started;
@@ -369,8 +383,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override async Task OnStartDiscovery()
         {
-            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
-            
+            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
+                this.GetServiceName(), cancellationTokenSource.Token);
+
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }
@@ -397,7 +412,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void OnDeviceConnected(string name)
         {
             this.StopDiscovery();
-
             using (new CommunicationSession())
             {
                 this.RunSynchronization();
@@ -419,10 +433,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceFound;
         }
 
-        protected override void OnDeviceConnectionAccepting(string name) => 
+        protected override void OnDeviceConnectionAccepting(string name) =>
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepting;
 
-        protected override void OnDeviceConnectionAccepted(string name) => 
+        protected override void OnDeviceConnectionAccepted(string name) =>
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepted;
 
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
@@ -441,6 +455,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void Synchronization_OnCancel(object sender, EventArgs e)
         {
+            this.nearbyConnection.StopAll();
         }
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)

@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.eventStore = eventStore;
         }
-
+        
         public List<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
         {
             var processingPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
@@ -179,18 +179,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor,
                 ResponsibleId = interview.ResponsibleId,
             });
-        }
-
-        public InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId)
-        {
-            var statefulInterview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-
-            var isInterviewerAcceptedStatus = statefulInterview.Status == InterviewStatus.InterviewerAssigned
-                                              || statefulInterview.Status == InterviewStatus.RejectedBySupervisor;
-            if (!isInterviewerAcceptedStatus)
-                return null;
-
-            return statefulInterview.GetSynchronizationDto();
         }
     }
 }

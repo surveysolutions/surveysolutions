@@ -5,31 +5,23 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Infrastructure
 {
     public class WebTesterStatefulInterview : StatefulInterview
     {
-        private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         public WebTesterStatefulInterview(
             ISubstitutionTextFactory substitutionTextFactory,
-            IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             IInterviewTreeBuilder treeBuilder,
             IQuestionOptionsRepository optionsRepository,
-            IQuestionnaireStorage questionnaireStorage,
-            IClock clock
-            ) 
+            IQuestionnaireStorage questionnaireStorage) 
             : base(
                 substitutionTextFactory, 
                 treeBuilder,
-                optionsRepository,
-                clock
-                )
+                optionsRepository)
         {
-            this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
             this.questionnaireStorage = questionnaireStorage;
         }
 
