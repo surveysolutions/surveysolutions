@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            logger.LogInformation($"Start {operation}");
+            logger.LogInformation("Start {operation}", operation);
 
             try
             {
@@ -19,12 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             }
             catch (Exception e)
             {
-                logger.LogError($"Error {operation}. Elapsed time: {stopwatch.Elapsed}", e);
+                logger.LogError(e, "Error {operation}. Elapsed time: {elapsed}", operation, stopwatch.Elapsed);
                 throw;
             }
             finally
             {
-                logger.LogInformation($"Finished {operation}. Elapsed time: {stopwatch.Elapsed}");
+                logger.LogInformation("Finished {operation}. Elapsed time: {elapsed}", operation, stopwatch.Elapsed);
             }
         }
 
