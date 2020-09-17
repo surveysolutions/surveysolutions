@@ -77,12 +77,18 @@ namespace WB.Services.Export.Services.Processing
                         exportSettings.Translation);
                 if (questionnaire == null)
                     throw new InvalidOperationException("questionnaire must be not null.");
-                var translation = questionnaire.Translations.First(x => x.Id == exportSettings.Translation);
-                translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
+                var translation = questionnaire.Translations.FirstOrDefault(x => x.Id == exportSettings.Translation);
+
+                if (translation != null)
+                {
+                    translationName += $"_{this.fileSystemAccessor.MakeValidFileName(translation.Name.Unidecode())}";
+                }
             }
 
+            string metaSuffix = exportSettings.IncludeMeta != false ? "" : "_no-meta";
+
             var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
-                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}.zip";
+                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
 
             return archiveName;
         }

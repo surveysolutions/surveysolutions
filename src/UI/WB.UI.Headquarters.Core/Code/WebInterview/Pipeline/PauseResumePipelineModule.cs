@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
@@ -26,12 +27,12 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
 
             if (authorizedUser.IsInterviewer)
             {
-                await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id))
+                await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id, AgentDeviceType.Web))
                     .ConfigureAwait(false);
             }
             else if (authorizedUser.IsSupervisor)
             {
-                await commandService.ExecuteAsync(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id))
+                await commandService.ExecuteAsync(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id, AgentDeviceType.Web))
                     .ConfigureAwait(false);
             }
         }

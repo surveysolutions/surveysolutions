@@ -474,10 +474,13 @@
   <data name="ResponsibleRequired" xml:space="preserve">
     <value>Необходимо выбрать ответственного</value>
   </data>
-    <data name="WebModeNonInterviewer" xml:space="preserve">
+  <data name="WebModeNonInterviewer" xml:space="preserve">
     <value>Все задания для web интервью должны быть назначены на интервьюера</value>
   </data>
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
     <value>Вы переносите задания на пользователя который не является интервьюером. Если вы уже отправили ссылки для этих заданий, респонденты не смогут отвечать до тех пор пока задание не будет назначено на интервьюераz.</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+      <value>Задание не может быть завершено. Оно создано в веб режиме, но веб режим отключен на опроснике</value>
   </data>
 </root>

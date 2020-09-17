@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Services.Impl
                             Text = ac.Comment,
                             IsOwnComment = ac.UserId == this.authorizedUser.Id,
                             UserRole = ac.UserRole,
-                            CommentTimeUtc = ac.CommentTime,
+                            CommentTimeUtc = ac.CommentTime.UtcDateTime,
                             Id = ac.Id,
                             Resolved = ac.Resolved,
                             CommentOnPreviousAnswer = ac.CommentOnPreviousAnswer

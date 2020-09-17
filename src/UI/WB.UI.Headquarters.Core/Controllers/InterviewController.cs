@@ -127,7 +127,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new { id = interviewSummary.ResponsibleId }) :
                                             "javascript:void(0);",
-                InterviewsUrl = Url.Action("Index", "Interviews")
+                InterviewsUrl = Url.Action("Index", "Interviews"),
+                PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ id = id }),
             });
         }
 
@@ -150,11 +151,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
                                                                authorizedUser.IsSupervisor;
                 approveRejectAllowed.HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                                                interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                                interviewSummary.Status == InterviewStatus.ApprovedBySupervisor ||
+                                                                interviewSummary.Status == InterviewStatus.RejectedBySupervisor /*&& interviewSummary.ReceivedByInterviewerAtUtc == null*/) &&
                                                                (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
                 approveRejectAllowed.SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
-                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
-                                                                authorizedUser.IsSupervisor;
+                                                                 interviewSummary.Status == InterviewStatus.RejectedByHeadquarters ||
+                                                                 interviewSummary.Status == InterviewStatus.RejectedBySupervisor /*&& interviewSummary.ReceivedByInterviewerAtUtc == null*/)
+                                                                &&  authorizedUser.IsSupervisor;
+
+                approveRejectAllowed.ReceivedByInterviewer = interviewSummary.ReceivedByInterviewerAtUtc != null;
             }
 
             approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed
@@ -228,5 +233,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string QuestionnaireTitle { get; set; }
         public long QuestionnaireVersion { get; set; }
         public string InterviewDuration { get; set; }
+        public string PdfUrl { get; set; }
     }
 }

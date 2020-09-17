@@ -178,7 +178,7 @@
                 }).then(function (response) {
                     blockUI.stop();
 
-                    if (!_.isNull(categories.file))
+                    if (categories.file)
                         notificationService.notice(response.data);
 
                     categories.file = null;
@@ -608,6 +608,13 @@
 
             commandService.deleteScenario = function (questionnaireId, id) {
                 return urlCall('DELETE', "questionnaire/" + questionnaireId + "/scenarios/" + id, { });
+            };
+
+            commandService.migrateToNewVersion = function (questionnaireId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                };
+                return commandCall("MigrateToNewVersion", command);
             };
 
             return commandService;

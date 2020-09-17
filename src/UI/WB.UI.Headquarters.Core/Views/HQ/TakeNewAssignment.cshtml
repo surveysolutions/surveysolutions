@@ -1,12 +1,13 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
+@using WB.Core.BoundedContexts.Headquarters.Configs
 @model object
 @{
     ViewBag.ActivePage = MenuItem.Assignments;
     ViewBag.Title = Common.CreateNewAssignment;
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@inject IOptions<WB.UI.Headquarters.Configs.GoogleMapsConfig> googleMapsConfig;
+@inject IOptions<GoogleMapsConfig> googleMapsConfig;
 
 @section Scripts{
     @Html.RenderHqConfig(Model)

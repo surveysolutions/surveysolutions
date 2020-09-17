@@ -241,7 +241,7 @@
     <value>Correo electrónico del Observador</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Quitar</value>
+    <value>Remover</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Supervisor</value>
@@ -268,9 +268,24 @@
     <value>Total de entrevistadores</value>
   </data>
   <data name="TryLater" xml:space="preserve">
-    <value>Favor intente de nuevo</value>
+    <value>Intente nuevamente más tarde</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>Login</value>
+    <value>Usuario</value>
+  </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Create administrator</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Contraseña para el usuario {0} cambiada</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Clave</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Reset clave de usuario</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Usuario no encontrado</value>
   </data>
 </root>

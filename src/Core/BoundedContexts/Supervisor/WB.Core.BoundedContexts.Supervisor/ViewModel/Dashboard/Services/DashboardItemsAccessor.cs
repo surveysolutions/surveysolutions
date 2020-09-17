@@ -85,14 +85,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private SupervisorDashboardInterviewViewModel ConvertInterviewToViewModel(InterviewView interviewView)
         {
-            var preffilledQuestions = this.identifyingQuestionsRepo
+            var prefilledQuestions = this.identifyingQuestionsRepo
                 .Where(x => x.InterviewId == interviewView.InterviewId)
                 .OrderBy(x => x.SortIndex)
                 .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
                 .ToList();
 
             var dashboardItem = this.viewModelFactory.GetNew<SupervisorDashboardInterviewViewModel>();
-            dashboardItem.Init(interviewView, preffilledQuestions);
+            dashboardItem.Init(interviewView, prefilledQuestions);
             return dashboardItem;
         }
 
@@ -105,10 +105,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private Expression<Func<InterviewView, bool>> GetOutboxInterviewsFilter()
         {
+            var userId = this.principal.CurrentUserIdentity.UserId;
+
             return x =>
                 x.ReceivedByInterviewerAtUtc == null && 
                 (x.Status == InterviewStatus.ApprovedBySupervisor || 
-                 x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && 
+                 x.ResponsibleId != userId && 
                  (x.Status == InterviewStatus.RejectedBySupervisor || 
                   x.Status == InterviewStatus.InterviewerAssigned || 
                   x.Status == InterviewStatus.Restarted));
@@ -126,8 +128,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private Expression<Func<AssignmentDocument, bool>> GetOutboxAssignmentsFilter()
         {
+            var userId = this.principal.CurrentUserIdentity.UserId;
             return x => 
-                x.ResponsibleId != this.principal.CurrentUserIdentity.UserId 
+                x.ResponsibleId != userId 
                 && x.ReceivedByInterviewerAt == null;
         }
 
@@ -194,20 +197,25 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             return this.interviews.Where(GetSentToInterviewerInterviewsFilter());
         }
 
+        //usage of property causes an error
+        // https://github.com/praeclarum/sqlite-net/issues/535
         private Expression<Func<InterviewView, bool>> GetItemsWaitingForSupervisorActionFilter()
         {
+            var userId = this.principal.CurrentUserIdentity.UserId;
+
             return x => 
                 x.ReceivedByInterviewerAtUtc == null && (
                     x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters ||
                     (x.Status == InterviewStatus.RejectedBySupervisor || 
                      x.Status == InterviewStatus.InterviewerAssigned || 
                      x.Status == InterviewStatus.SupervisorAssigned 
-                    ) && x.ResponsibleId == this.principal.CurrentUserIdentity.UserId);
+                    ) && x.ResponsibleId == userId);
         }
 
         private IReadOnlyCollection<InterviewView> GetItemsWaitingForSupervisorAction()
         {
-            var itemsWaitingForSupervisorAction = this.interviews.Where(GetItemsWaitingForSupervisorActionFilter());
+            var itemsWaitingForSupervisorAction = 
+                this.interviews.Where(GetItemsWaitingForSupervisorActionFilter());
             return itemsWaitingForSupervisorAction;
         }
 
@@ -219,8 +227,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private Expression<Func<AssignmentDocument, bool>> GetAssignmentsToAssignFilter()
         {
+            var userId = this.principal.CurrentUserIdentity.UserId;
+
             return x =>
-                x.ResponsibleId == this.principal.CurrentUserIdentity.UserId
+                x.ResponsibleId == userId
                 && x.ReceivedByInterviewerAt == null;
         }
 

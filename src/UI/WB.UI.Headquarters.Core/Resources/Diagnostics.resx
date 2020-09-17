@@ -101,10 +101,13 @@
     <value>Waiting for health check results</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Health status: {{ status }}</value>
+    <value>Health status: {{status}}</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
     <value>Server metrics</value>
+  </data>
+  <data name="WaitingForMetrics" xml:space="preserve">
+    <value>Calculating metrics</value>
   </data>
   <data name="hq_baseurl_check" xml:space="preserve">
     <value>BaseUrl configuration check</value>
@@ -156,5 +159,8 @@
   </data>
   <data name="embedded_export_service_check_Degraded">
     <value>Export Service is not running</value>
+  </data>
+  <data name="Connectivity" xml:space="preserve">
+      <value>Web socket connectivity</value>
   </data>
 </root>

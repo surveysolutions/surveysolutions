@@ -18,15 +18,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Attributes;
-using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     [Route("api/hq/v3/questionnaires")]
     [Authorize]
-    public class HQQuestionnairesController : ControllerBase
+    public class HQQuestionnairesController : HQControllerBase
     {
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -70,7 +68,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         [Route("")]
         [ResponseCache(NoStore = true)]
         //in next version of API rename filter to smth like SearchFor
-        //to comply with Amason firewall
+        //to comply with Amazon firewall
         public IActionResult Get(string filter = "", string sortOrder = "", [FromQuery]int pageIndex = 1, [FromQuery]int pageSize = 128)
         {
             var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
@@ -276,14 +274,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             return resultAssembly;
-        }
-
-        private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
-        {
-            if (questionnaireView.CreatedBy == User.GetId())
-                return true;
-
-            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }

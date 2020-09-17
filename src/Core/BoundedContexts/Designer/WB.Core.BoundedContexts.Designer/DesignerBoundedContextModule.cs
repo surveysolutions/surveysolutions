@@ -27,7 +27,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.CommandBus;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -41,6 +40,8 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -125,6 +126,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<DeleteQuestionnaire>((command, aggregate) => aggregate.DeleteQuestionnaire(), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<ResourcesPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<RevertVersionQuestionnaire>((command, aggregate) => aggregate.RevertVersion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PostProcessBy<SearchPostProcessors>())
                 .Handles<ImportQuestionnaireToHq>((command, aggregate) => {}, config => config.PostProcessBy<HistoryPostProcessor>())
+                .Handles<MigrateToNewVersion>((command, aggregate) => aggregate.MigrateToNewVersion(command), config => config.PostProcessBy<HistoryPostProcessor>())
                 // Macro
                 .Handles<AddMacro>(aggregate => aggregate.AddMacro, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<DeleteMacro>(aggregate => aggregate.DeleteMacro, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())

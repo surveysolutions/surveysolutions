@@ -14,7 +14,7 @@
                   BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, And(QuestionState.IsAnswered, HasOptions), false));">
 
         <TextView style="@style/Interview_Question_EmptyOptions"
-                  local:MvxBind="Hidden HasOptions; Text Localization('Interview_LinkedQuestion_Empty');"/>
+                  local:MvxBind="Hidden HasOptions; Text Localization('Interview_LinkedQuestion_Empty'); Tag Format('tv_noOptions_{0}', Identity) "/>
 
     </LinearLayout>
 </LinearLayout>

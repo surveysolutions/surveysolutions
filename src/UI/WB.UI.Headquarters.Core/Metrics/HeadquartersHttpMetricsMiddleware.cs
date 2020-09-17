@@ -25,19 +25,37 @@ namespace WB.UI.Headquarters.Metrics
 
         public async Task Invoke(HttpContext context)
         {
-            string[] subsystem = new string[1];
             var path = context.Request.Path;
 
-            // will not track request to diagnostics endpoints
-            if (path.StartsWithSegments("/metrics") || path.StartsWithSegments("/.hc") ||
-                path.StartsWithSegments("/.version"))
+            async Task Next()
             {
-                await next(context);
+                try
+                {
+                    await next(context);
+                }
+                catch (Exception)
+                {
+                    CommonMetrics.ExceptionsOccur.Inc();
+                    throw;
+                }
+            }
+
+            // will not track request to diagnostics endpoints
+            if (path.StartsWithSegments("/metrics") 
+                || path.StartsWithSegments("/.hc") 
+                || path.StartsWithSegments("/.version") 
+                )
+            {
+                await Next();
                 return;
             }
 
+            string[] subsystem = new string[1];
+
             // web interview commands requests
             if (path.StartsWithSegments("/api/webinterview/commands")) subsystem[0] = "webcommand";
+
+            else if (path.StartsWithSegments("/WebInterview")) subsystem[0] = "webinterview";
 
             // interviewer app synchronization requests
             else if (path.StartsWithSegments("/api/interviewer")) subsystem[0] = "interviewer";
@@ -51,22 +69,25 @@ namespace WB.UI.Headquarters.Metrics
             // export service requests
             else if (path.StartsWithSegments("/api/export")) subsystem[0] = "export";
 
+            // interview
+            else if (path == "/interview") subsystem[0] = "interview_hub";
+
             // all other requests
             else subsystem[0] = "other";
 
             using var inprogress = HttpInProgress.Labels(subsystem).TrackInProgress();
+
+            if (subsystem[0] == "interview_hub")
+            {
+                await Next();
+                HttpRequestsTotal.Inc();
+                return;
+            }
+
             using var timer = HttpRequestsDuration.Labels(subsystem).NewTimer();
 
-            try
-            {
-                await next(context);
-            }
-            catch (Exception)
-            {
-                CommonMetrics.ExceptionsOccur.Inc();
-                throw;
-            }
-
+            await Next();
+            
             HttpRequestsTotal.Inc();
         }
     }

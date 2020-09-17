@@ -70,7 +70,6 @@ using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -82,6 +81,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -92,10 +92,8 @@ using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -181,7 +179,8 @@ namespace WB.Tests.Abc.TestFactories
             => new CumulativeChartDenormalizer(
                 cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
+                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>(),
+                Create.Storage.NewMemoryCache());
 
         public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -297,7 +296,7 @@ namespace WB.Tests.Abc.TestFactories
             new EnumeratorDenormalizerRegistry(Create.Service.ServiceLocatorService(DashboardDenormalizer()), Mock.Of<ILogger>());
 
         public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
-            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry();
+            => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry(new EventBusSettings());
 
         public AsyncEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
             new AsyncEventQueue(new AsyncEventDispatcher(liteEventRegistry,
@@ -425,14 +424,16 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewerPrincipal(
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<ILogger>());
         }
 
         public SupervisorPrincipal SupervisorPrincipal(IPlainStorage<SupervisorIdentity> storage,
             IPasswordHasher passwordHasher)
             => new SupervisorPrincipal(
                 storage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<ILogger>());
 
         public IInterviewerPrincipal InterviewerPrincipal(Guid userId)
             => Mock.Of<IInterviewerPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(u => u.UserId == userId));
@@ -730,7 +731,7 @@ namespace WB.Tests.Abc.TestFactories
             ICommandService commandService = null)
         {
             var commands = commandService ?? Mock.Of<ICommandService>();
-            var assignmentsService = assignments;
+            IAssignmentsService assignmentsService = assignments;
             if (assignmentsService == null)
             {
                 var assignment = Create.Entity.Assignment();
@@ -738,13 +739,25 @@ namespace WB.Tests.Abc.TestFactories
                     s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
             }
 
-            return new AssignmentsUpgrader(assignmentsService,
-                importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.AssignmentFactory(commands, assignmentsService),
+            var questionnaires = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
+            var upgService = upgradeService ?? Mock.Of<IAssignmentsUpgradeService>();
+            var localVerifier = importService ?? Mock.Of<IPreloadedDataVerifier>();
+
+            var upgrader = new SingleAssignmentUpgrader(Create.Service.AssignmentFactory(commands, assignmentsService, Mock.Of<IAssignmentIdGenerator>()),
                 Mock.Of<IInvitationService>(),
-                commands);
+                commands,
+                localVerifier,
+                assignmentsService);
+            
+            var sl = Mock.Of<IServiceLocator>(locator =>
+                locator.GetInstance<ISingleAssignmentUpgrader>() == upgrader
+            );
+
+            return new AssignmentsUpgrader(
+                assignmentsService,
+                questionnaires,
+                upgService,
+                Create.Service.InScopeExecutor(sl));
         }
 
         public IAssignmentFactory AssignmentFactory(
@@ -818,7 +831,6 @@ namespace WB.Tests.Abc.TestFactories
         public OfflineSynchronizationService OfflineSynchronizationService(
             IOfflineSyncClient offlineSyncClient = null,
             IInterviewerPrincipal interviewerPrincipal = null,
-            IInterviewerQuestionnaireAccessor questionnaireAccessor = null,
             IDeviceSettings deviceSettings = null)
         {
             return new OfflineSynchronizationService(

@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (interview == null)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
+                await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
                 this.Dispose();
                 return;
             }
@@ -125,12 +125,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.currentLanguage = interview.Language;
             this.defaultLanguageName = questionnaire.DefaultLanguageName;
 
-            this.BreadCrumbs.Init(InterviewId, this.navigationState);
-            this.Sections.Init(InterviewId, this.navigationState);
-
             this.navigationState.Init(interviewId: InterviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
 
+            this.BreadCrumbs.Init(InterviewId, this.navigationState);
+            this.Sections.Init(InterviewId, this.navigationState);
+            
             await this.navigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
@@ -220,7 +220,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.CurrentStage.DisposeIfDisposable();
             this.CurrentStage = this.GetInterviewStageViewModel(eventArgs);
-            this.RaisePropertyChanged(() => this.CurrentStage);
+            this.RaisePropertyChanged(nameof(this.CurrentStage));
         }
 
         private InterviewStageViewModel GetInterviewStageViewModel(ScreenChangedEventArgs eventArgs)
@@ -279,7 +279,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     return completeInterviewViewModel;
                 case ScreenType.Cover:
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.AnchoredElementIdentity);
                     return coverInterviewViewModel;
                 case ScreenType.Group:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
@@ -352,17 +352,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
 
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
-        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);

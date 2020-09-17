@@ -41,21 +41,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 
         public override async Task NavigateBack()
         {
-            if (this.HasPrefilledQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
-                this.Dispose();
-            }
+            await this.ViewModelNavigationService.NavigateToDashboardAsync();
+            this.Dispose();
         }
 
         private async Task ReloadQuestionnaire()

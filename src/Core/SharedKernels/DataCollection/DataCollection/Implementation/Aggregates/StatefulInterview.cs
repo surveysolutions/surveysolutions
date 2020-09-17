@@ -29,9 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public StatefulInterview(
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository optionsRepository,
-            IClock clock)
-            : base(substitutionTextFactory, treeBuilder, optionsRepository, clock)
+            IQuestionOptionsRepository optionsRepository)
+            : base(substitutionTextFactory, treeBuilder, optionsRepository)
         {
         }
 
@@ -99,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage)
             {
-                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null, removeLinkedAnswers: false);
+                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null, DateTimeOffset.UtcNow, removeLinkedAnswers: false);
             }
             else
             {
@@ -194,8 +193,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTree sourceInterview;
 
-        public DateTime? StartedDate => this.properties.StartedDate;
-        public DateTime? CompletedDate => this.properties.CompletedDate;
+        public DateTimeOffset? StartedDate => this.properties.StartedDate;
+        public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
         public InterviewStatus Status => this.properties.Status;
         public bool IsDeleted => this.properties.IsHardDeleted || this.Status == InterviewStatus.Deleted;
 
@@ -273,7 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (isNeedFirePassiveEvents)
             {
                 var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
-                this.ApplyPassiveEvents(treeDifference);
+                this.ApplyPassiveEvents(treeDifference, originDate);
             }
 
             this.ApplyEvent(new InterviewCompleted(userId, originDate, comment));
@@ -351,7 +350,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview, command.OriginDate));
 
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, entityIdentity: null);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, entityIdentity: null, command.OriginDate);
         }
 
         #endregion
@@ -753,6 +752,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize, excludedOptionIds);
 
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            if (questionnaire.IsLinkedToListQuestion(questionIdentity.Id))
+            {
+                return OptionsForLinkedToTextListQuestion(questionIdentity)
+                    .Where(x => filter.IsNullOrEmpty() || x.Title.Contains(filter, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(x => excludedOptionIds == null || !excludedOptionIds.Contains(x.Value))
+                    .Take(itemsCount)
+                    .ToList();
+            }
+
+            var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
+            
+            if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
+                return options.Take(itemsCount).ToList();
+
+            if (this.UsesExpressionStorage)
+                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
+
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
+        }
+        
+        private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
+        {
+            var questionnaire = GetQuestionnaireOrThrow(Language);
+            var linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId.Id);
+            var listQuestion = FindQuestionInQuestionBranch(linkedToQuestionId, questionId);
+            if (listQuestion == null || listQuestion.IsDisabled()) yield break;
+
+            var asInterviewTreeTextListQuestion = listQuestion.GetAsInterviewTreeTextListQuestion();
+            var listOptions = asInterviewTreeTextListQuestion.GetAnswer()?.Rows;
+            var filteredOptions = GetSingleOptionLinkedToListQuestion(questionId)?.Options;
+            
+            if (listOptions == null || filteredOptions == null) yield break;
+
+            foreach (var textListAnswerRow in listOptions)
+            {
+                if (filteredOptions.Contains(textListAnswerRow.Value))
+                    yield return new CategoricalOption
+                    {
+                        Title = textListAnswerRow.Text,
+                        Value = textListAnswerRow.Value
+                    };
+            }
+        }
+
         public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
         {
             var question = this.GetCascadingQuestion(questionIdentity);
@@ -773,9 +821,59 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithoutFilter(question, value, parentQuestionValue);
 
+        public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            if (questionnaire.IsLinkedToListQuestion(question.Id))
+            {
+                var linkedQuestion = GetSingleOptionLinkedToListQuestion(question);
+                var answer = linkedQuestion.GetAnswer();
+                if (answer == null) return null;
+                
+                
+                var listQuestion = FindQuestionInQuestionBranch(linkedQuestion.LinkedSourceId, question)
+                    .GetAsInterviewTreeTextListQuestion();
+
+                var linkedToText = listQuestion.GetTitleByItemCode(answer.SelectedValue);
+                    
+                return new CategoricalOption
+                {
+                    Title = linkedToText,
+                    Value = answer.SelectedValue
+                };
+            }
+            
+            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value, parentQuestionValue);
+        }
+        
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            if (questionnaire.IsLinkedToListQuestion(question.Id))
+            {
+                return GetFirstTopFilteredOptionsForQuestion(question, null, optionText, 1, Array.Empty<int>())
+                    .FirstOrDefault();
+            }
+            
+            CategoricalOption filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
+
+            if (filteredOption == null)
+                return null;
+
+            if (questionnaire.IsSupportFilteringForOptions(question.Id))
+            {
+                if (this.UsesExpressionStorage)
+                {
+                    return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
+                }
+                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
+            }
+            return filteredOption;
+        }
+        
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
                 userId: commentDto.UserId,
@@ -794,134 +892,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
         {
             return this.Tree.Sections;
-        }
-
-        public InterviewSynchronizationDto GetSynchronizationDto()
-        {
-            var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
-            var disabledGroups = new HashSet<InterviewItemId>();
-            var disabledQuestions = new HashSet<InterviewItemId>();
-            var disabledStaticTexts = new List<Identity>();
-            var validAnsweredQuestions = new HashSet<InterviewItemId>();
-            var invalidAnsweredQuestions = new HashSet<InterviewItemId>();
-            var readonlyQuestions = new HashSet<InterviewItemId>();
-            var validStaticTexts = new List<Identity>();
-            var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
-            var failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
-
-            foreach (var question in Tree.FindQuestions())
-            {
-                CommentSynchronizationDto[] comments = question.AnswerComments.Select(ac => new CommentSynchronizationDto()
-                {
-                    Date = ac.CommentTime,
-                    Text = ac.Comment,
-                    UserId = ac.UserId,
-                    UserRole = ac.UserRole
-                }).ToArray();
-
-                var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
-                    question.Identity.RosterVector,
-                    InterviewTreeQuestion.GetAnswerAsObject(question),
-                    comments,
-                    InterviewTreeQuestion.GetProtectedAnswerAsObject(question));
-
-                if (question.IsAnswered() || answeredQuestion.HasComments())
-                {
-                    answeredQuestions.Add(answeredQuestion);
-                }
-
-                if (question.IsDisabled())
-                {
-                    disabledQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                }
-                else
-                {
-                    if (question.IsAnswered() && !question.IsValid)
-                    {
-                        invalidAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                        failedValidationConditions.Add(question.Identity, question.FailedErrors.ToList());
-                    }
-                    if (question.IsValid)
-                    {
-                        validAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                    }
-                }
-
-                if (question.IsReadonly)
-                {
-                    readonlyQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                }
-            }
-
-            foreach (var group in Tree.AllNodes.OfType<InterviewTreeGroup>())
-            {
-                if (group.IsDisabled())
-                    disabledGroups.Add(new InterviewItemId(group.Identity.Id, group.Identity.RosterVector));
-            }
-
-            foreach (var staticText in Tree.FindStaticTexts())
-            {
-                var staticTextIdentity = staticText.Identity;
-                if (!staticText.IsDisabled())
-                {
-                    if (!staticText.IsValid)
-                    {
-                        invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
-                            staticTextIdentity, staticText.FailedErrors.ToList()));
-                    }
-                }
-                else
-                {
-                    disabledStaticTexts.Add(staticTextIdentity);
-                }
-            }
-
-            Dictionary<InterviewItemId, object> variableValues = new Dictionary<InterviewItemId, object>();
-            HashSet<InterviewItemId> disabledVariables = new HashSet<InterviewItemId>();
-
-            foreach (var variable in Tree.AllNodes.OfType<InterviewTreeVariable>())
-            {
-                if (variable.IsDisabled())
-                {
-                    disabledVariables.Add(new InterviewItemId(variable.Identity.Id, variable.Identity.RosterVector));
-                }
-                else if (variable.HasValue)
-                {
-                    variableValues.Add(new InterviewItemId(variable.Identity.Id, variable.Identity.RosterVector), variable.Value);
-                }
-            }
-
-            var interviewSynchronizationDto = new InterviewSynchronizationDto(
-                id: Id,
-                status: Status,
-                comments: Status == InterviewStatus.RejectedBySupervisor ? SupervisorRejectComment : null,
-                rejectDateTime:  this.properties.RejectDateTime,
-                interviewerAssignedDateTime : this.properties.InterviewerAssignedDateTime,
-                userId: CurrentResponsibleId,
-                supervisorId: this.properties.SupervisorId,
-                questionnaireId: QuestionnaireIdentity.QuestionnaireId,
-                questionnaireVersion: QuestionnaireIdentity.Version,
-                answers: answeredQuestions.ToArray(),
-                disabledGroups: disabledGroups,
-                disabledQuestions: disabledQuestions,
-                disabledStaticTexts: disabledStaticTexts,
-                validAnsweredQuestions: validAnsweredQuestions,
-                invalidAnsweredQuestions: invalidAnsweredQuestions,
-                readonlyQuestions: readonlyQuestions,
-                validStaticTexts: validStaticTexts,
-                invalidStaticTexts: invalidStaticTexts,
-                rosterGroupInstances: null /* Obsolete */,
-                failedValidationConditions: failedValidationConditions.ToList(),
-                linkedQuestionOptions: null /* Obsolete */,
-                variables: variableValues,
-                disabledVariables: disabledVariables,
-                wasCompleted: this.properties.WasCompleted,
-                createdOnClient: true);
-            interviewSynchronizationDto.Language = this.Language;
-            interviewSynchronizationDto.InterviewKey = GetInterviewKey();
-            interviewSynchronizationDto.AssignmentId = GetAssignmentId();
-
-            return interviewSynchronizationDto;
         }
 
         public bool IsReadOnlyQuestion(Identity identity)
@@ -1004,7 +974,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
             }
             
-            ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
+            ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate, command.DeviceType));
         }
 
         public void Pause(PauseInterviewCommand command)

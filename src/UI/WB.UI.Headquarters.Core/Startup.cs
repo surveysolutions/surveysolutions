@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -24,12 +25,15 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Refit;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
@@ -43,6 +47,7 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
@@ -54,6 +59,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
+using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
 using WB.UI.Headquarters.Filters;
@@ -61,6 +67,8 @@ using WB.UI.Headquarters.HealthChecks;
 using WB.UI.Headquarters.Metrics;
 using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
+using WB.UI.Headquarters.Services;
+using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
@@ -205,7 +213,6 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
             services.AddUnderConstruction();
 
             services.AddOptions();
@@ -226,7 +233,7 @@ namespace WB.UI.Headquarters
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
-                options.Cookie.Name = "hq";
+                options.Cookie.Name = "headquarters_session";
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true;
             });
@@ -239,8 +246,7 @@ namespace WB.UI.Headquarters
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRazorPages();
-            services.AddHttpContextAccessor();
-
+            
             services.AddHqAuthorization();
             services.AddDatabaseStoredExceptional(environment, Configuration);
 
@@ -250,6 +256,15 @@ namespace WB.UI.Headquarters
             services.AddScoped<GlobalNotificationResultFilter>();
             services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
+
+            services.AddHttpClientWithConfigurator<IExportServiceApi, ExportServiceApiConfigurator>();
+            services.AddTransient<DesignerRestServiceHandler>();
+            services.AddHttpClientWithConfigurator<IDesignerApi, DesignerApiConfigurator>(new RefitSettings
+                {
+                    ContentSerializer = new DesignerContentSerializer()
+                })
+                .ConfigurePrimaryHttpMessageHandler<DesignerRestServiceHandler>();
+            services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
             
@@ -366,7 +381,7 @@ namespace WB.UI.Headquarters
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
 
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             app.UseUnderConstruction();
 
             app.UseRouting();
@@ -425,6 +440,8 @@ namespace WB.UI.Headquarters
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview");
+                endpoints.MapHub<SignalrDiagnosticHub>("signalrdiag",
+                    options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
 
                 endpoints.MapGet("/Index", ctx =>
                 {

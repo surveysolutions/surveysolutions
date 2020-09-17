@@ -3,6 +3,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -12,9 +13,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerPrincipal : EnumeratorPrincipal, IInterviewerPrincipal
     {
         private readonly IPlainStorage<InterviewerIdentity> usersStorage;
-
+        
         public InterviewerPrincipal(IPlainStorage<InterviewerIdentity> usersStorage,
-            IPasswordHasher passwordHasher) : base(passwordHasher)
+            IPasswordHasher passwordHasher,
+            ILogger logger) : base(passwordHasher, logger)
         {
             this.usersStorage = usersStorage;
         }
@@ -37,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return GetInterviewerIdentity() != null;
         }
 
-        public string GetExistingIdentityNameOrNull()
+        public string? GetExistingIdentityNameOrNull()
         {
             return GetInterviewerIdentity()?.Name;
         }

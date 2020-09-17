@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
+using Esri.ArcGISRuntime.Symbology;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 
@@ -52,8 +56,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
                         await newRasterLayer.LoadAsync().ConfigureAwait(false);
 
                         //add error display
-                        //
-                        if (newRasterLayer.SpatialReference.IsProjected)
+                        if (newRasterLayer.LoadError == null)
                         {
                             return new Basemap(newRasterLayer);
                         }
@@ -85,6 +88,56 @@ namespace WB.UI.Shared.Extensions.CustomServices
                 default:
                     return null;
             }
+        }
+
+        public static async Task<FeatureLayer> GetShapefileAsFeatureLayer(string fullPattToFSapefile)
+        {
+            // Open the shapefile
+            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(fullPattToFSapefile);
+            // Create a feature layer to display the shapefile
+            FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
+
+            await newFeatureLayer.LoadAsync();
+
+            // Create a StringBuilder to create the label definition JSON string
+            StringBuilder addressLabelsBuilder = new StringBuilder();
+            addressLabelsBuilder.AppendLine("{");
+            //     Define a labeling expression that will show the address attribute value
+            addressLabelsBuilder.AppendLine("\"labelExpressionInfo\": {");
+            addressLabelsBuilder.AppendLine("\"expression\": \"return $feature.label;\"},");
+            //     Align labels horizontally
+            addressLabelsBuilder.AppendLine("\"labelPlacement\": \"esriServerPolygonPlacementAlwaysHorizontal\",");
+            //     Use a green bold text symbol
+            addressLabelsBuilder.AppendLine("\"symbol\": {");
+            addressLabelsBuilder.AppendLine("\"color\": [0,255,50,255],");
+            addressLabelsBuilder.AppendLine("\"font\": {\"size\": 18, \"weight\": \"bold\"},");
+            addressLabelsBuilder.AppendLine("\"type\": \"esriTS\"}");
+            addressLabelsBuilder.AppendLine("}");
+
+            // Get the label definition string
+            var addressLabelsJson = addressLabelsBuilder.ToString();
+
+            // Create a new LabelDefintion object using the static FromJson method
+            LabelDefinition labelDef = LabelDefinition.FromJson(addressLabelsJson);
+
+            // Clear the current collection of label definitions (if any)
+            newFeatureLayer.LabelDefinitions.Clear();
+
+            // Add this label definition to the collection
+            newFeatureLayer.LabelDefinitions.Add(labelDef);
+
+            // Make sure labeling is enabled for the layer
+            newFeatureLayer.LabelsEnabled = true;
+
+
+            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Aqua, 1.0);
+            SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(20, Color.Aquamarine), lineSymbol);
+
+            var alternateRenderer = new SimpleRenderer(fillSymbol);
+
+            newFeatureLayer.Renderer = alternateRenderer;
+
+            return newFeatureLayer;
         }
     }
 }

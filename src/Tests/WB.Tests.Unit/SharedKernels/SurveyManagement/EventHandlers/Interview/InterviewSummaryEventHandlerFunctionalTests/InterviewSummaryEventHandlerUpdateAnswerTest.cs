@@ -12,7 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -78,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 new ReusableCategoriesFillerIntoQuestionnaire(new ReusableCategoriesStorage(reusableCategoriesStorage)));
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
 
-            var interviewSummaryEventHandler = new InterviewSummaryDenormalizer(Mock.Of<IUserViewFactory>(), questionnaireStorage);
+            var interviewSummaryEventHandler = new InterviewSummaryDenormalizer(Mock.Of<IUserViewFactory>(), questionnaireStorage, Create.Storage.NewMemoryCache());
 
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
@@ -293,7 +292,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             return new InterviewSummaryDenormalizer(
                 new Mock<IUserViewFactory>().Object,
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == plainQuestionnaire));
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == plainQuestionnaire),
+                Create.Storage.NewMemoryCache());
         }
 
         protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)

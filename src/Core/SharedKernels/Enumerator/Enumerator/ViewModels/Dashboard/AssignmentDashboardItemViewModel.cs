@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -13,9 +14,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
     {
         protected readonly IServiceLocator serviceLocator;
-        protected AssignmentDocument Assignment;
+        protected AssignmentDocument Assignment = null!;
         private int interviewsByAssignmentCount;
-        private QuestionnaireIdentity questionnaireIdentity;
+        private QuestionnaireIdentity questionnaireIdentity = null!;
 
         public int AssignmentId => this.Assignment.Id;
 
@@ -35,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public override string Comments => this.Assignment.Comments;
 
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
+        
         public string AssignmentIdLabel { get; } = String.Empty;
 
         public void Init(AssignmentDocument assignmentDocument)
@@ -100,8 +102,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             BindTitles();
         }
 
-        private string responsible;
-        public string Responsible
+        private string? responsible;
+        public string? Responsible
         {
             get => responsible;
             set => SetProperty(ref this.responsible, value);

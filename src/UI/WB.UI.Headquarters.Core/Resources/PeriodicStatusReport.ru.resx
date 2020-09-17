@@ -156,6 +156,9 @@
   <data name="BackToSupervisors" xml:space="preserve">
     <value>К супервизорам</value>
   </data>
+  <data name="BackToTeams" xml:space="preserve">
+    <value>К командам</value>
+  </data>
   <data name="By" xml:space="preserve">
     <value>Кем</value>
   </data>

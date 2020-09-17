@@ -49,6 +49,8 @@ namespace WB.Services.Scheduler
             services.Configure<JobSettings>(jobSettingsSection);
 
             services.RegisterJobHandler<StaleJobCleanupService>(StaleJobCleanupService.Name);
+
+            services.AddTransient<IJobsArchiver, JobsArchiver>();
         }
 
         public static void AddProgressReporter(this IServiceCollection services)

@@ -163,7 +163,7 @@
     <value>Escribe tu comentario</value>
   </data>
   <data name="CommentHeadquarters" xml:space="preserve">
-    <value>Comentarios de la Oficina Central </value>
+    <value>Comentarios de la Oficina Central</value>
   </data>
   <data name="CommentHide" xml:space="preserve">
     <value>Ocultar comentario</value>
@@ -437,9 +437,7 @@
     <value>Área de edición</value>
   </data>
   <data name="CoverBrokenPackegeText" xml:space="preserve">
-    <value>¡Atención! Esta entrevista tiene datos corruptos, &lt;br /&gt;
-solo está disponible la versión previa de la entrevista. &lt;br /&gt;
-Póngase en contacto con el soporte para obtener asistencia.</value>
+    <value>¡Atención! Esta entrevista tiene datos corruptos, &lt;br /&gt; solo está disponible la versión previa de la entrevista. &lt;br /&gt; Póngase en contacto con el soporte para obtener asistencia.</value>
   </data>
   <data name="CoverBrokenPackegeTitle" xml:space="preserve">
     <value>Error: esta entrevista está dañada</value>
@@ -470,5 +468,20 @@ Póngase en contacto con el soporte para obtener asistencia.</value>
   </data>
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>Por favor cierra esta página. Puede abrir uno nuevo volviendo al sitio del Diseñador</value>
+  </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>En respuesta anterior</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Introducir la contraseña</value>
+  </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>Se ha realizado el número máximo de selecciones ({{value}}) en esta pregunta</value>
+  </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>Elegir del mapa</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Recargar cuestionario</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -17,6 +18,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.HealthChecks;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
@@ -24,6 +27,8 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
     public class ExportServiceEmbeddableHost : BackgroundService
     {
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
+        private readonly IOptions<FileStorageConfig> fileStorageConfig;
+        private readonly IAmazonS3Configuration amazonS3Config;
         private readonly ILogger<ExportServiceEmbeddableHost> logger;
         private readonly EmbeddedExportServiceHealthCheck healthCheck;
         private readonly IConfiguration configuration;
@@ -31,12 +36,16 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
         public ExportServiceEmbeddableHost(
             IOptions<HeadquartersConfig> headquarterOptions,
+            IOptions<FileStorageConfig> fileStorageConfig,
+            IAmazonS3Configuration amazonS3Config,
             IConfiguration configuration,
             ILogger<ExportServiceEmbeddableHost> logger,
             EmbeddedExportServiceHealthCheck healthCheck,
             IServer server)
         {
             this.headquarterOptions = headquarterOptions;
+            this.fileStorageConfig = fileStorageConfig;
+            this.amazonS3Config = amazonS3Config;
             this.logger = logger;
             this.healthCheck = healthCheck;
             this.server = server;
@@ -91,12 +100,38 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                 serverUrl = server.Features.Get<IServerAddressesFeature>().Addresses.FirstOrDefault(ip => ip.Contains("localhost"));
             }
 
+            var configuredFolder = fileStorageConfig.Value.AppData;
+
+            configuredFolder = Path.Combine(configuredFolder, "export");
+
+            MoveExportFilesIfRequired(configuredFolder);
+
             logger.LogInformation("Configuring export service to use {serverUrl} as tenant url for {tenant}",
                 serverUrl, this.headquarterOptions.Value.TenantName);
 
             exportHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
             {
-                ctx.Configuration["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl;
+                var settings = new Dictionary<string, string>
+                {
+                    ["ConnectionStrings:DefaultConnection"] = configuration.GetConnectionString("DefaultConnection"),
+                    ["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl,
+                    ["ExportSettings:DirectoryPath"] = configuredFolder
+                };
+
+                if (fileStorageConfig.Value.GetStorageProviderType() == StorageProviderType.AmazonS3)
+                {
+                    var bucketInfo = this.amazonS3Config.GetAmazonS3BucketInfo();
+
+                    var folder = bucketInfo.PathPrefix.Replace($"/{headquarterOptions.Value.TenantName}", "").TrimEnd('\\', '/');
+
+                    settings["Storage:S3:Enabled"] = true.ToString();
+                    settings["Storage:S3:Prefix"] = "export";
+                    settings["Storage:S3:Folder"] = folder;
+                    settings["Storage:S3:BucketName"] = bucketInfo.BucketName;
+                    settings["ExportSettings:DirectoryPath"] = this.fileStorageConfig.Value.TempData;
+                }
+
+                builder.AddInMemoryCollection(settings);
             });
 
             exportHostBuilder.ConfigureWebHost(w =>
@@ -106,7 +141,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                 w.UseStartup(exportHost.GetType("WB.Services.Export.Host.Startup"));
             });
 
-            var host = exportHostBuilder?.Build();
+            var host = exportHostBuilder.Build();
 
             var lifetime = host.Services.GetService<IHostApplicationLifetime>();
 
@@ -131,6 +166,26 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             {
                 healthCheck.StartupTaskCompleted = false;
             }
+        }
+
+        private void MoveExportFilesIfRequired(string configuredFolder)
+        {
+            if (!Directory.Exists(".export"))
+            {
+                return;
+            }
+
+            if (configuredFolder == null) return;
+
+            if (Directory.Exists(configuredFolder)) return;
+
+            if (Path.GetFullPath(".export") == Path.GetFullPath(configuredFolder))
+            {
+                return;
+            }
+
+            Directory.Move(".export", configuredFolder);
+            logger.LogInformation($"Export service Data Directory moved from .export folder to {configuredFolder}");
         }
     }
 }

@@ -3,6 +3,7 @@
 @using WB.UI.Headquarters.Code
 @using WB.UI.Headquarters.Configs
 @using WB.UI.Headquarters.Models.WebInterview
+@using WB.Core.BoundedContexts.Headquarters.Configs
 @{ Layout = null; }
 @model WB.UI.Headquarters.Models.WebInterview.WebInterviewIndexPageModel
 @inject IProductVersion productVersion
@@ -24,6 +25,8 @@
     <link rel='apple-touch-icon' sizes='72x72' href='~/img/identity/favicon-hq-72x72.png'>
     <link rel='apple-touch-icon' href='~/img/identity/favicon-hq.png'>
     <script>
+        document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
+
         global: CONFIG = {
             basePath: '@Url.Content("~/")',
             id: '@Model.Id',

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Metrics;
@@ -88,16 +89,16 @@ namespace WB.UI.Headquarters.Metrics
             result.Add(new MetricState("Working Memory usage", Process.GetCurrentProcess().WorkingSet64.Bytes().Humanize("0.000"),
                 Process.GetCurrentProcess().WorkingSet64));
 
-            var eventsCount = BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("events").Value;
-            var eventsSize = BrokenPackagesStatsCollector.DatabaseTableSize.Labels("events").Value.Bytes().Humanize("0.00");
-            var interviews = BrokenPackagesStatsCollector.DatabaseTableRowsCount.Labels("interviewsummaries").Value;
+            var eventsCount = DatabaseStatsCollector.DatabaseTableRowsCount.Labels("events").Value;
+            var eventsSize = DatabaseStatsCollector.DatabaseTableSize.Labels("events").Value.Bytes().Humanize("0.00");
+            var interviews = DatabaseStatsCollector.DatabaseTableRowsCount.Labels("interviewsummaries").Value;
             result.Add(new MetricState(
                 "Events", $"{eventsSize} of {"event".ToQuantity(eventsCount, "N0")} for {"interview".ToQuantity(interviews, "N0")}", 
                 eventsCount));
 
             result.Add(new MetricState(
-                "Database", BrokenPackagesStatsCollector.DatabaseSize.Value.Bytes().Humanize("0.000"),
-                BrokenPackagesStatsCollector.DatabaseSize.Value
+                "Database", DatabaseStatsCollector.DatabaseSize.Value.Bytes().Humanize("0.000"),
+                DatabaseStatsCollector.DatabaseSize.Value
             ));
 
             // web interview
@@ -118,7 +119,6 @@ namespace WB.UI.Headquarters.Metrics
             var busy = CommonMetrics.NpgsqlConnections.GetSummForLabels(BusyDbConnectionsLabel);
 
             result.Add(new MetricState("Database connections", $"Busy: {busy}, Idle: {idle}", busy));
-
             
             // ReSharper disable once UseStringInterpolation
             var readRate = await dataTransferRead;
@@ -133,10 +133,17 @@ namespace WB.UI.Headquarters.Metrics
 
             result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s", await requests));
 
+            result.Add(new MetricState("Thread Pool", "Queue: " + ThreadPool.PendingWorkItemCount, ThreadPool.PendingWorkItemCount));
+
             await cacheItemsDiff;
 
             result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)", memoryCache.Count));
 
+            var completedEmailCount = DatabaseStatsCollector.DatabaseTableRowsCount.Labels("completedemailrecords").Value;
+            result.Add(new MetricState(
+                "Completed emails query size", $"Query size: {completedEmailCount}", 
+                completedEmailCount));
+            
             return new ServerStatusResponse
             {
                 LastUpdateTime = DateTime.UtcNow,

@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -498,6 +498,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string ApproveRejectPartialView_ApproveLabel {
             get {
                 return ResourceManager.GetString("ApproveRejectPartialView_ApproveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply on interview which Interviewer already received.
+        /// </summary>
+        public static string ApproveRejectPartialView_ApproveReceivedConfirm {
+            get {
+                return ResourceManager.GetString("ApproveRejectPartialView_ApproveReceivedConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current responsible interviewer will not be notified about the interview approving until the next synchronization. If interviewer has started working on the interview already, all the data that interviewer has entered before the next synchronization will be DISCARDED!.
+        /// </summary>
+        public static string ApproveRejectPartialView_ApproveReceivedWarning {
+            get {
+                return ResourceManager.GetString("ApproveRejectPartialView_ApproveReceivedWarning", resourceCulture);
             }
         }
         
@@ -2500,7 +2518,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date when the interviewer loged in last time.
+        ///   Looks up a localized string similar to Date when the interviewer logged in to website last time.
         /// </summary>
         public static string Interviewers_LastLoginDateTooltip {
             get {

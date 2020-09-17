@@ -1,0 +1,9 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/colorPrimary">
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/button_corners_radius" />
+            <solid android:color="@color/colorToolbarTransp" />
+        </shape>
+    </item>
+</ripple>
