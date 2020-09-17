@@ -125,6 +125,13 @@
                 }
             });
 
+            $scope.migrateToNewVersion = function () {
+                commandService.migrateToNewVersion($state.params.questionnaireId)
+                    .then(function () {
+                        document.location.reload();
+                    });
+            };
+
             $scope.showSearch = function () {
                 $scope.filtersBoxMode = filtersBlockModes.search;
                 utilityService.focus('focusSearch');
@@ -762,6 +769,7 @@
                 question.linkedToType = data.linkedToType;
                 question.isInteger = data.isInteger;
                 question.yesNoView = data.yesNoView;
+                question.hideIfDisabled = data.hideIfDisabled;
 
                 $rootScope.updateVariableTypes(question);
             });
@@ -774,6 +782,7 @@
 
                 staticText.hasValidation = data.hasValidation;
                 staticText.hasCondition = data.hasCondition;
+                staticText.hideIfDisabled = data.hideIfDisabled;
             });
 
             $rootScope.$on('variableUpdated', function (event, data) {
@@ -795,6 +804,7 @@
                 group.title = data.title;
                 group.variable = data.variable;
                 group.hasCondition = data.hasCondition;
+                group.hideIfDisabled = data.hideIfDisabled;
 
                 $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable, data.type);
             });
@@ -805,6 +815,7 @@
                 roster.title = data.title;
                 roster.variable = data.variable;
                 roster.hasCondition = data.hasCondition;
+                roster.hideIfDisabled = data.hideIfDisabled;
                 $rootScope.updateSelfVariable(data.type);
                 $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable, data.type);
             });

@@ -1,4 +1,3 @@
-#nullable enable
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;

@@ -207,9 +207,6 @@
   <data name="EmptySectionLine2" xml:space="preserve">
     <value>يمكنك البدء باستخدام أزرار {{-addQuestionBtn}} و {{-addSubsectionBtn}}</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>لغة المسح وأنواع الأجهزة والتعاون والخيارات الأخرى</value>
-  </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>يمكن العثور عليها في  {{-settingsBtn}} لوحة (الزاوية اليسرى العليا)</value>
   </data>
@@ -427,7 +424,7 @@
     <value>تطبيق </value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {0} فئات كحد أقصى.</value>
+    <value>لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {limit} فئات كحد أقصى.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>قيمة الأصل</value>

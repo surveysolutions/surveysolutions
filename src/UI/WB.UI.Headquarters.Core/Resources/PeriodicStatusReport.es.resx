@@ -166,7 +166,7 @@
     <value>en el</value>
   </data>
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
-    <value>en el equipo {0} </value>
+    <value>en el equipo {0}</value>
   </data>
   <data name="LastDateToShowLabel" xml:space="preserve">
     <value>Comenzando desde</value>
@@ -199,7 +199,7 @@
     <value>Número de aprobaciones y rechazos por supervisor de las entrevistas colectadas por {0}</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
-    <value>Sobre la ultima</value>
+    <value>Sobre la Última</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Período</value>
@@ -229,9 +229,21 @@
     <value>Tipo</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>ver.</value>
+    <value>Versión</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Semanas</value>
+  </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>Tiempo promedio que la entrevista fue presentada en la pantalla del entrevistador antes de completarla por entrevistador.</value>
+  </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Tiempo promedio que la entrevista se presentó en la pantalla del entrevistador antes de completarla por supervisor.</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+    <value>Número de entrevistas completadas por entrevistador. Las entrevistas rechazadas y luego completadas se cuentan como eventos de finalización separados.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>Número de aprobaciones y rechazos de un supervisor en entrevistas recopiladas por el entrevistador</value>
   </data>
 </root>

@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     internal static class BaseViewModelSetupMethods
     {
-        public static void Prepare(bool isAuthenticationRequired, IPrincipal principal, IViewModelNavigationService navigationService)
+        public static void CheckAuthentication(bool isAuthenticationRequired, IPrincipal principal, IViewModelNavigationService navigationService)
         {
             if (isAuthenticationRequired && !principal.IsAuthenticated)
             {
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public static void ReloadStateFromBundle(IPrincipal principal, IMvxBundle bundle)
         {
-            if (bundle.Data.ContainsKey("userName") && ! principal.IsAuthenticated)
+            if (bundle.Data.ContainsKey("userName") && !principal.IsAuthenticated)
             {
                 principal.SignInWithHash(bundle.Data["userName"], bundle.Data["passwordHash"], true);
             }

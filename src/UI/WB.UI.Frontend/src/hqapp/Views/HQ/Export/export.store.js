@@ -10,7 +10,8 @@ function formatDate(data) {
 export default {
     state: {
         jobs: [],
-        exportServiceIsUnavailable: true,
+        exportServiceInitializing: true,
+        exportServiceIsUnavailable: false,
         _exportStatusUpdateInProgres: false,
     },
 
@@ -52,8 +53,7 @@ export default {
 
                 commit('SET_SERVICE_STATE', true)
 
-                if (jobsToUpdate.length > 0)
-                    dispatch('getJobsUpdate', jobsToUpdate)
+                dispatch('getJobsUpdate', jobsToUpdate)
 
             } catch (error) {
                 Vue.config.errorHandler(error)
@@ -81,12 +81,17 @@ export default {
                 })
             }
 
+            commit('SET_SERVICE_INITALIZED')
         },
     },
 
     mutations: {
-        SET_SERVICE_STATE(state, value, sdfad) {
+        SET_SERVICE_STATE(state, value) {
             state.exportServiceIsUnavailable = !value
+        },
+
+        SET_SERVICE_INITALIZED(state) {
+            state.exportServiceInitializing = false
         },
 
         ADD_JOB(state, { id }) {

@@ -220,7 +220,7 @@
     <value>Puede navegar a la entrevista en la siguiente encuesta: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
-    <value>Hola y bienvenido a la Encuesta Web  de Survey Solutions </value>
+    <value>Hola y bienvenido a la Encuesta Web  de Survey Solutions</value>
   </data>
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>Lo sentimos, demasiadas personas están accediendo a este sitio web al mismo tiempo. Estamos trabajando en este problema. Por favor, inténtelo de nuevo más tarde.</value>
@@ -238,10 +238,10 @@
     <value>Entrevistar</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-    <value>Encuesta Web de Survey Solutions </value>
+    <value>Encuesta Web de Survey Solutions</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>Hola y bienvenido a la Encuesta Web de Survey Solutions </value>
+    <value>Hola y bienvenido a la Encuesta Web de Survey Solutions</value>
   </data>
   <data name="CompleteInterview" xml:space="preserve">
     <value>Entrevista completada</value>
@@ -292,47 +292,25 @@
     <value>Completar</value>
   </data>
   <data name="Email_InvitationTemplate_Message" xml:space="preserve">
-    <value>¡Bienvenido a % SURVEYNAME%!
-
-Para realizar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%
- 
-¡Gracias por su cooperación!</value>
+    <value>¡Bienvenido a % SURVEYNAME%!  Para realizar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%   ¡Gracias por su cooperación!</value>
   </data>
   <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
     <value>Invitación para participar en%SURVEYNAME%</value>
   </data>
   <data name="Email_NoResponse_Message" xml:space="preserve">
-    <value>¡Recibió este recordatorio porque no ha comenzado a responder a %SURVEYNAME%!
- 
-Para realizar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%
- 
-¡Gracias por su cooperación!</value>
+    <value>¡Recibió este recordatorio porque no ha comenzado a responder a %SURVEYNAME%!   Para realizar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%   ¡Gracias por su cooperación!</value>
   </data>
   <data name="Email_NoResponse_Subject" xml:space="preserve">
     <value>Recordatorio, no olvides participar en %SURVEYNAME%</value>
   </data>
   <data name="Email_PartialResponse_Message" xml:space="preserve">
-    <value>Recibe este recordatorio porque ha comenzado a responder a %SURVEYNAME%, pero no ha completado el proceso.
- 
-Para continuar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%.
- 
-Responda todas las preguntas aplicables y haga clic en el botón "COMPLETO" para enviar sus respuestas.
- 
-¡Gracias por su cooperación!</value>
+    <value>Recibe este recordatorio porque ha comenzado a responder a %SURVEYNAME%, pero no ha completado el proceso.   Para continuar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%.   Responda todas las preguntas aplicables y haga clic en el botón "COMPLETO" para enviar sus respuestas.   ¡Gracias por su cooperación!</value>
   </data>
   <data name="Email_PartialResponse_Subject" xml:space="preserve">
     <value>Recordatorio, complete su respuesta a %SURVEYNAME%</value>
   </data>
   <data name="Email_RejectEmail_Message" xml:space="preserve">
-    <value>¡Gracias por participar en %SURVEYNAME%!
- 
-Mientras procesaba su respuesta, nuestro personal encontró algunos problemas, que por este medio le solicitamos que revise.
- 
-Para continuar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%.
- 
-Agradeceríamos que intente abordar todos los problemas marcados en su respuesta y haga clic en el botón "COMPLETAR" para enviar sus respuestas.
- 
-¡Gracias por su cooperación!</value>
+    <value>¡Gracias por participar en %SURVEYNAME%!   Mientras procesaba su respuesta, nuestro personal encontró algunos problemas, que por este medio le solicitamos que revise.   Para continuar la encuesta, haga clic en el siguiente enlace: %SURVEYLINK% e ingrese su contraseña: %PASSWORD%.   Agradeceríamos que intente abordar todos los problemas marcados en su respuesta y haga clic en el botón "COMPLETAR" para enviar sus respuestas.   ¡Gracias por su cooperación!</value>
   </data>
   <data name="Email_RejectEmail_Subject" xml:space="preserve">
     <value>Su acción es necesaria en %SURVEYNAME%</value>
@@ -350,9 +328,21 @@ Agradeceríamos que intente abordar todos los problemas marcados en su respuesta
     <value>Reanudar entrevista</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Iniciar nueva entrevista</value>
+    <value>Inicio</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Advertencia</value>
+  </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Descargar la transcripción de la entrevista</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Descargar las respuestas de la entrevista como archivo pdf</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>La contraseña no es válida</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
   </data>
 </root>

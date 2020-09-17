@@ -13,11 +13,11 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -130,11 +130,12 @@ namespace WB.Tests.Abc.TestFactories
             AnsweringViewModel answering = null)
             => new SingleOptionLinkedToListQuestionViewModel(
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+                Create.Storage.QuestionnaireStorage(questionnaire ?? Mock.Of<IQuestionnaire>()),
+                Create.Storage.InterviewRepository(interview ?? Mock.Of<IStatefulInterview>()),
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
                 Stub.MvxMainThreadAsyncDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionQuestionAnswered>>.WithNotEmptyValues,
+                Abc.SetUp.FilteredOptionsViewModel(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.ThrottlingViewModel());
@@ -172,11 +173,8 @@ namespace WB.Tests.Abc.TestFactories
             AnsweringViewModel answering = null) => new SingleOptionLinkedQuestionViewModel(
             Mock.Of<IPrincipal>(_ =>
                 _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-            Mock.Of<IQuestionnaireStorage>(_ =>
-                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
-                (questionnaire ?? Mock.Of<IQuestionnaire>())),
-            Mock.Of<IStatefulInterviewRepository>(_ =>
-                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+            Create.Storage.QuestionnaireStorage(questionnaire ?? Mock.Of<IQuestionnaire>()),
+            Create.Storage.InterviewRepository(interview ?? Mock.Of<IStatefulInterview>()),
             eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
             Stub.MvxMainThreadAsyncDispatcher(),
             questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,

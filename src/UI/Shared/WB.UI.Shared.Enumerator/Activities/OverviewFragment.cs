@@ -1,12 +1,11 @@
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
 using MvvmCross;
 using MvvmCross.Commands;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Navigation;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,13 +15,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 {
     public class OverviewFragment : BaseFragment<OverviewViewModel>
     {
-        private readonly IViewModelNavigationService navigationService;
         private MvxRecyclerView recyclerView;
-
-        public OverviewFragment(IViewModelNavigationService navigationService)
-        {
-            this.navigationService = navigationService;
-        }
 
         protected override int ViewResourceId => Resource.Layout.interview_overview;
 
@@ -35,7 +28,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.recyclerView.SetLayoutManager(new LinearLayoutManager(this.Context));
             this.recyclerView.Adapter.ItemClick = new MvxAsyncCommand<OverviewNode>(async node =>
             {
-                await navigationService.NavigateToAsync<OverviewNodeDetailsViewModel, OverviewNodeDetailsViewModelArgs>(
+                var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
+                await viewModelNavigationService.NavigateToAsync<OverviewNodeDetailsViewModel, OverviewNodeDetailsViewModelArgs>(
                     new OverviewNodeDetailsViewModelArgs
                     {
                         InterviewId = ViewModel.InterviewId,

@@ -52,9 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.isIndeterminate, value);
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
         public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
 

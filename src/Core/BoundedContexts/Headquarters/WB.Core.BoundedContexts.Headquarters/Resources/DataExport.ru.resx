@@ -335,6 +335,15 @@
   <data name="DataFormat" xml:space="preserve">
     <value>Формат данных</value>
   </data>
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Информация по опроснику</value>
+  </data>
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Включить мета информацию по опроснику</value>
+  </data>
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Исключить мета информацию по опроснику</value>
+  </data>
   <data name="DataDestination_Dropbox" xml:space="preserve">
     <value>Загрузить на Dropbox</value>
   </data>

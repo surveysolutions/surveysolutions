@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.logger = logger;
         }
 
-        private readonly ILogger logger;
+        protected readonly ILogger logger;
 
         protected Guid interviewId;
 

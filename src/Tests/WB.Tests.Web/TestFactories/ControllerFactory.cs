@@ -158,7 +158,8 @@ namespace WB.Tests.Web.TestFactories
             IPlainKeyValueStorage<QuestionnairePdf> pdfStorage = null,
             IReusableCategoriesStorage reusableCategoriesStorage = null,
             ITranslationStorage translationStorage = null,
-            IQuestionnaireTranslator translator = null)
+            IQuestionnaireTranslator translator = null,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage = null)
         {
             return new QuestionnaireApiController(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
@@ -166,7 +167,8 @@ namespace WB.Tests.Web.TestFactories
                 pdfStorage ?? new TestPlainStorage<QuestionnairePdf>(),
                 reusableCategoriesStorage ?? Mock.Of<IReusableCategoriesStorage>(),
                 translationStorage ?? Mock.Of<ITranslationStorage>(),
-                translator ?? Mock.Of<IQuestionnaireTranslator>()
+                translator ?? Mock.Of<IQuestionnaireTranslator>(),
+                questionnaireBackupStorage ?? new TestPlainStorage<QuestionnaireBackup>()
             );
         }
     }

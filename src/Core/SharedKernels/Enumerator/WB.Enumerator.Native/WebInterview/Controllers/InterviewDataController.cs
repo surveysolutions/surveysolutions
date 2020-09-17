@@ -439,6 +439,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var questionnaire = this.GetCallerQuestionnaire(callerInterview.QuestionnaireIdentity, callerInterview.Language);
             var interviewEntities = new List<InterviewEntity>();
 
+            var isReviewMode = IsReviewMode();
+
             foreach (var id in ids)
             {
                 if (id == @"NavigationButton")
@@ -447,7 +449,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     continue;
                 }
 
-                var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode());
+                var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, isReviewMode);
                 interviewEntities.Add(interviewEntity);
 
                 if (interviewEntity is RosterEntity tableRoster)
@@ -457,7 +459,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                         var childQuestions = callerInterview.GetChildQuestions(Identity.Parse(tableRosterInstance.Id));
                         foreach (var childQuestion in childQuestions)
                         {
-                            var question = this.interviewEntityFactory.GetEntityDetails(childQuestion.ToString(), callerInterview, questionnaire, IsReviewMode());
+                            var question = this.interviewEntityFactory.GetEntityDetails(childQuestion.ToString(), callerInterview, questionnaire, isReviewMode);
                             interviewEntities.Add(question);
                         }
                     }

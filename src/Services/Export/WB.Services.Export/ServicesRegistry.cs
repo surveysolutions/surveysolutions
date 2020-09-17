@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using ddidotnet;
 using Microsoft.Extensions.Configuration;
@@ -90,7 +91,7 @@ namespace WB.Services.Export
             services.AddTransient<IDatabaseSchemaCommandBuilder, DatabaseSchemaCommandBuilder>();
             services.AddTransient<IUserStorage, UserStorage>();
             services.AddTransient<IPdfExporter, PdfExporter>();
-            services.AddTransient<IJsonExporter, JsonExporter>();
+            services.AddTransient<IQuestionnaireBackupExporter, QuestionnaireBackupExporter>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
@@ -102,7 +103,12 @@ namespace WB.Services.Export
             FileStorageModule.Register(services, configuration);
 
             // options
-            services.Configure<ExportServiceSettings>(configuration.GetSection("ExportSettings"));
+            services
+                .Configure<ExportServiceSettings>(configuration.GetSection("ExportSettings"))
+                .PostConfigure<ExportServiceSettings>(c =>
+                {
+                    c.DirectoryPath = c.DirectoryPath.Replace("~", Directory.GetCurrentDirectory());
+                });
         }
 
         public static void RegisterFunctionalHandlers(this IServiceCollection services, params Type[] implementingTypes)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -26,17 +27,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader;
+        private readonly IMemoryCache memoryCache;
         private readonly IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage;
 
         public CumulativeChartDenormalizer(
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage,
-            INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader)
+            INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader,
+            IMemoryCache memoryCache)
         {
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
             this.interviewReferencesStorage = interviewReferencesStorage;
             this.cumulativeReportReader = cumulativeReportReader;
+            this.memoryCache = memoryCache;
         }
 
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents)
@@ -56,7 +60,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                 var state = states.GetOrAdd(statusChangeEvent.EventSourceId, () => new CumulativeState
                 {
-                    QuestionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(statusChangeEvent.EventSourceId)
+                    QuestionnaireIdentity = this.memoryCache.GetQuestionnaireIdentity(
+                        this.interviewReferencesStorage, 
+                        statusChangeEvent.EventSourceId)
                 });
 
                 state.LastInterviewStatus = interviewStatusChanged.PreviousStatus

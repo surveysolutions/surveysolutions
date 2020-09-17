@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
     internal class CategoricalComboboxAutocompleteViewModelTest : CategoricalComboboxAutocompleteViewModelTestContext
     {
         [Test]
-        public void when_setting_FilterText_in_not_empty_value()
+        public async Task when_setting_FilterText_in_not_empty_value()
         {
             CategoricalComboboxAutocompleteViewModel comboModel;
 
@@ -43,8 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                         x.ParentValue == 1 && x.Title.IndexOf(filter ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0)
                     .ToList());
 
-            var interviewRepository =
-                Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             comboModel.Init(interviewId, questionIdentity, navigationState);
 
             //act
-            comboModel.FilterCommand.Execute("3");
+            await comboModel.FilterCommand.ExecuteAsync("3");
 
             comboModel.FilterText.Should().NotBeNull();
             comboModel.AutoCompleteSuggestions.Should().NotBeEmpty();

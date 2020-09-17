@@ -3,11 +3,11 @@ using System.Collections;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidX.AppCompat.Widget;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Platforms.Android.Binding.Views;
 
@@ -28,8 +28,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             adapter.ItemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
             adapter.PartialTextChanged += this.AdapterOnPartialTextChanged;
-            adapter.FilterPredicate = (o, s) => true;
-
             base.Adapter = adapter;
             
             this.ItemClick += this.OnItemClick;
@@ -37,6 +35,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             this.EditorAction += this.OnEditorAction;
             this.Click += OnEditTextClick;
+        }
+
+        public void DisableDefaultSearch()
+        {
+            adapter.FilterPredicate = (o, s) => true;
         }
 
         protected InstantAutoCompleteTextView(IntPtr javaReference, JniHandleOwnership transfer)

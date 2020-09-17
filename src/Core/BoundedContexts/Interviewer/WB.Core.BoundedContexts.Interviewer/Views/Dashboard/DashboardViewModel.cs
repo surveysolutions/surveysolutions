@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -20,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -34,11 +36,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IOfflineSyncClient syncClient;
-        
+
         private readonly IMvxMessenger messenger;
 
-        private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-        private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken? startingLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken? stopLongOperationMessageSubscriptionToken;
 
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
@@ -61,12 +63,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             ISynchronizationCompleteSource synchronizationCompleteSource,
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
-            IRestService restService,
             IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
             IMapInteractionService mapInteractionService) : base(principal, viewModelNavigationService, permissionsService,
-            nearbyConnection, interviewerSettings, restService)
+            nearbyConnection)
         {
             this.messenger = messenger;
             this.principal = principal;
@@ -75,6 +76,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.auditLogService = auditLogService;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
+
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
@@ -102,6 +104,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
         }
 
+
         public override void Prepare(DashboardViewModelArgs parameter)
         {
             this.LastVisitedInterviewId = parameter.InterviewId;
@@ -119,7 +122,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                this.ViewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
                 return;
             }
 
@@ -146,8 +149,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void UnsubscribeFromMessages()
         {
-            startingLongOperationMessageSubscriptionToken.Dispose();
-            stopLongOperationMessageSubscriptionToken.Dispose();
+            startingLongOperationMessageSubscriptionToken?.Dispose();
+            stopLongOperationMessageSubscriptionToken?.Dispose();
         }
 
         public bool SynchronizationWithHqEnabled
@@ -158,14 +161,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private Guid? LastVisitedInterviewId { set; get; }
 
-        private IMvxCommand synchronizationCommand;
+        private IMvxCommand? synchronizationCommand;
         public IMvxCommand SynchronizationCommand
         {
             get
             {
-                return synchronizationCommand ??
-                       (synchronizationCommand = new MvxCommand(this.RunSynchronization,
-                           () => !this.Synchronization.IsSynchronizationInProgress));
+                return synchronizationCommand ??= new MvxCommand(this.RunSynchronization,
+                    () => !this.Synchronization.IsSynchronizationInProgress);
             }
         }
 
@@ -176,14 +178,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
 
         public IMvxCommand NavigateToMapDashboardCommand =>
-            new MvxAsyncCommand(async () => await mapInteractionService.OpenMapDashboardAsync());
+            new MvxAsyncCommand(async () => await NavigateToMapDashboard());
+
+        private async Task NavigateToMapDashboard()
+        {
+            try
+            {
+               await mapInteractionService.OpenMapDashboardAsync();
+            }
+            catch (MissingPermissionsException e)
+            {
+                UserInteractionService.ShowToast(e.Message);
+            }
+        }
 
         private Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
-        
+
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -258,9 +272,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RunSynchronization()
         {
-            if (this.viewModelNavigationService.HasPendingOperations)
+            if (this.ViewModelNavigationService.HasPendingOperations)
             {
-                this.viewModelNavigationService.ShowWaitMessage();
+                this.ViewModelNavigationService.ShowWaitMessage();
                 return;
             }
 
@@ -271,7 +285,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private Task NavigateToDiagnostics()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
         }
 
         private Task SignOut()
@@ -279,7 +293,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.CancelSynchronizationCommand.Execute();
             var userName = this.Principal.CurrentUserIdentity.Name;
             this.auditLogService.Write(new LogoutAuditLogEntity(userName));
-            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
@@ -341,20 +355,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<SearchViewModel>);
+            new MvxAsyncCommand(ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         #region Offline synchronization
 
         public IMvxCommand StartOfflineSyncCommand => new MvxCommand(this.StartOfflineSynchronization);
         public bool DoesSupportMaps => mapInteractionService.DoesSupportMaps;
 
-        public Action OnOfflineSynchronizationStarted;
-        private IMapInteractionService mapInteractionService;
+        public Action? OnOfflineSynchronizationStarted;
+        private readonly IMapInteractionService mapInteractionService;
 
         private void StartOfflineSynchronization()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            
+
             this.cancellationTokenSource = new CancellationTokenSource();
 
             this.Synchronization.Status = SynchronizationStatus.Started;
@@ -369,8 +383,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override async Task OnStartDiscovery()
         {
-            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
-            
+            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
+                this.GetServiceName(), cancellationTokenSource.Token);
+
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }
@@ -397,7 +412,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void OnDeviceConnected(string name)
         {
             this.StopDiscovery();
-
             using (new CommunicationSession())
             {
                 this.RunSynchronization();
@@ -419,10 +433,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceFound;
         }
 
-        protected override void OnDeviceConnectionAccepting(string name) => 
+        protected override void OnDeviceConnectionAccepting(string name) =>
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepting;
 
-        protected override void OnDeviceConnectionAccepted(string name) => 
+        protected override void OnDeviceConnectionAccepted(string name) =>
             this.Synchronization.ProcessOperationDescription = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepted;
 
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
@@ -441,6 +455,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void Synchronization_OnCancel(object sender, EventArgs e)
         {
+            this.nearbyConnection.StopAll();
         }
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)

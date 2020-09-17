@@ -1,4 +1,5 @@
 ﻿using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -6,5 +7,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         RestCredentials Get();
         void Set(RestCredentials restCredentials);
+        void SetTaskCredentials(RestCredentials restCredentials);
     }
 }

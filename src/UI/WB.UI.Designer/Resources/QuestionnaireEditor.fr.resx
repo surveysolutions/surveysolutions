@@ -210,9 +210,6 @@
   <data name="EmptySectionLine3" xml:space="preserve">
     <value>en haut de ce bloc ou gérer les sections avec {{-panel}} panneau de gauche</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Langue de l'enquête, types d'appareils, collaboration et autres options</value>
-  </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>peut être trouvé sur le panneau {{-settingsBtn}} (en haut à droite)</value>
   </data>
@@ -445,7 +442,7 @@
     <value>Appliquer</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {0} catégories.</value>
+    <value>Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {limit} catégories.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Valeur parente</value>

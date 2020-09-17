@@ -61,5 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public Guid? TranslationId { get; set; }
         public bool Deleted { get; set; } = false;
         public string TranslationName { get; set; }
+
+        public bool? IncludeMeta { set; get; }
     }
 }

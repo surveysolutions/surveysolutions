@@ -9,6 +9,7 @@ using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,11 +18,15 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
 {
@@ -114,6 +119,30 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
 
         [Test]
+        public void should_not_allow_approving_rejected_interview_when_received_by_interviewer_tablet()
+        {
+            var status = InterviewStatus.RejectedBySupervisor;
+            var interviewView = new InterviewView();
+            interviewView.Id = InterviewId.FormatGuid();
+            interviewView.ReceivedByInterviewerAtUtc = DateTime.UtcNow;
+
+            var interviewsList = new SqliteInmemoryStorage<InterviewView>();
+            interviewsList.Store(interviewView);
+            
+            var interview = Mock.Of<IStatefulInterview>(x => x.Status == status);
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
+
+            var viewModel = CreateViewModel(interviewRepository: interviewRepository,
+                interviewsList: interviewsList);
+
+            // Act
+            viewModel.Configure(interviewView.Id, Create.Other.NavigationState(interviewRepository));
+
+            // Assert
+            Assert.That(viewModel.Reject.CanExecute(), Is.False);
+        }
+        
+        [Test]
         public void should_allow_supervisor_assigned_only_in_appropriate_status([Values]InterviewStatus status)
         {
             var allowedStatuses = new[]
@@ -184,7 +213,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(statefulInterviewRepository));
 
             // Assert
-            viewModel.Approve.CanExecute().Should().BeFalse();
+            viewModel.Approve.CanExecute().Should().BeTrue();
             viewModel.Reject.CanExecute().Should().BeFalse();
         }
 
@@ -199,8 +228,19 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             DynamicTextViewModel dynamicTextViewModel = null,
             IViewModelNavigationService navigationService = null,
             ILogger logger = null,
-            IAuditLogService auditLogService = null)
+            IAuditLogService auditLogService = null,
+            IPlainStorage<InterviewView> interviewsList = null,
+            IUserInteractionService userInteractionService = null)
         {
+            
+            var stubInterviewsList = new SqliteInmemoryStorage<InterviewView>();
+            stubInterviewsList.Store(new InterviewView
+            {
+                InterviewId = InterviewId,
+                Id = InterviewId.FormatGuid()
+            });
+            
+            
             return new SupervisorResolveInterviewViewModel(
                 commandService ?? Create.Service.CommandService(),
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Id.gA)),
@@ -212,7 +252,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 dynamicTextViewModel ?? Create.ViewModel.DynamicTextViewModel(),
                 navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
-                auditLogService ?? Mock.Of<IAuditLogService>()
+                auditLogService ?? Mock.Of<IAuditLogService>(),
+                interviewsList ?? stubInterviewsList,
+                userInteractionService ?? Mock.Of<IUserInteractionService>()
             );
         }
     }

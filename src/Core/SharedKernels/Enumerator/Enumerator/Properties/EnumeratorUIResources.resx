@@ -214,6 +214,9 @@ for further instructions</value>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Supervisor website address is invalid. Make sure that you entered the correct URL address.</value>
   </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Address is invalid</value>
+  </data>
   <data name="LocationPermissionRequired" xml:space="preserve">
     <value>Location permission is required for offline synchronization</value>
   </data>

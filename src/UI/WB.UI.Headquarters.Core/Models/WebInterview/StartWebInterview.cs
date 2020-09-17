@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using Microsoft.AspNetCore.Html;
-using WB.Core.BoundedContexts.Headquarters.WebInterview;
+﻿using System.Collections.Generic;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -45,25 +41,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string WebSurveyHeader { get; set; }
         public string FinishInterview { get; set; }
         public string SurveyName { get; set; }
+        public string PdfUrl { get; set; }
     }
 
     public class WebInterviewError
     {
         public string ErrorMessage { get; set; }
         public bool AllowInterviewRestart { get; set; }
-    }
-
-    public static class WebInterviewMsgExtensions
-    {
-        public static IHtmlContent GetText(this Dictionary<WebInterviewUserMessages, string> messages,
-            WebInterviewUserMessages message)
-        {
-            if (messages == null || !messages.ContainsKey(message) || string.IsNullOrEmpty(messages[message]))
-            {
-                return new HtmlString(WebInterviewConfig.DefaultMessages[message]);
-            }
-
-            return new HtmlString(messages[message]);
-        }
     }
 }

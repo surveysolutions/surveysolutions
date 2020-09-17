@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             CheckNewVersionViewModel checkNewVersion,
             BackupRestoreViewModel backupRestore,
             BandwidthTestViewModel bandwidthTest,
-            SendLogsViewModel logsViewModel) : base(principal, viewModelNavigationService)
+            SendLogsViewModel logsViewModel) : base(principal, viewModelNavigationService, false)
         {
             this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
@@ -30,8 +30,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.BackupRestore = backupRestore;
             this.BandwidthTest = bandwidthTest;
         }
-
-        public override bool IsAuthenticationRequired => false;
 
         public SendTabletInformationViewModel TabletInformation { get; set; }
 
@@ -44,16 +42,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public SendLogsViewModel Logs => logsViewModel;
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToMapsAsync);
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToMapsAsync);
 
         public IMvxCommand SignOutCommand
-            => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+            => new MvxAsyncCommand(this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
         public IMvxCommand NavigateToLoginCommand
-            => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToLoginAsync);
+            => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToLoginAsync);
 
-        public bool IsAuthenticated => this.principal.IsAuthenticated;
+        public bool IsAuthenticated => this.Principal.IsAuthenticated;
 
         private void ShareDeviceTechnicalInformation()
         {

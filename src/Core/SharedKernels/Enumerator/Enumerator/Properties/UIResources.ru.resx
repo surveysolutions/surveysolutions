@@ -530,6 +530,9 @@
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ</value>
   </data>
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Загрузить шейп-файл</value>
+  </data>
   <data name="MapDashboard_Assignments" xml:space="preserve">
     <value>Задачи</value>
   </data>
@@ -562,6 +565,9 @@
   </data>
   <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
     <value>Загруженая карта расположена вне границ видимой зоны</value>
+  </data>
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>Ошибка загрузки. Шейп-файл не может быть открыт</value>
   </data>
   <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
     <value>Не удается получить ваше расположение. Выйдите на открытое пространство, включите GPS или увеличте значение таймаута в настройках.</value>
@@ -744,5 +750,11 @@
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Опросники</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+      <value>Приложению необходим доступ к микрофону.</value>
+  </data>
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+      <value>Приложению необходимо разрешение на использование хранилища</value>
   </data>
 </root>

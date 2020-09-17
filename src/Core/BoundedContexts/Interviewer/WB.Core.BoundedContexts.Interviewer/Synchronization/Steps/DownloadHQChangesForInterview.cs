@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             List<InterviewApiView> remoteInterviews = await this.synchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews
                 .Where(i => i.LastEventId.HasValue)
-                .ToDictionary(k => k.Id, v => v.LastEventId.Value);
+                .ToDictionary(k => k.Id, v => v.LastEventId.GetValueOrDefault());
 
             var localInterviews = this.interviewViewRepository.LoadAll();
             var localPartialySyncedInterviews = localInterviews
@@ -84,9 +84,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     IsCompleted = i.Status == InterviewStatus.Completed
                 })
                 .Where(i => i.LastHqEventId.HasValue)
-                .ToDictionary(k => k.InterviewId, v => new InterviewLite(){
+                .ToDictionary(k => k.InterviewId, v => new InterviewLite {
                     InterviewId = v.InterviewId,
-                    LastHqEventId = v.LastHqEventId.Value,
+                    LastHqEventId = v.LastHqEventId.GetValueOrDefault(),
                     IsCompleted = v.IsCompleted
                 });
 

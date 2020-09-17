@@ -12,18 +12,13 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    public interface IPdfExporter
-    {
-        Task ExportAsync(TenantInfo tenant,
-            QuestionnaireDocument questionnaire,
-            string basePath, CancellationToken cancellationToken);
-    }
-
     public class PdfExporter : IPdfExporter
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger<PdfExporter> logger;
+
+        private string translationDefaultName = "Original";
 
         public PdfExporter(ITenantApi<IHeadquartersApi> tenantApi,
             IFileSystemAccessor fileSystemAccessor,
@@ -38,7 +33,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireDocument questionnaire,
             string basePath, CancellationToken cancellationToken)
         {
-            var targetFolder = Path.Combine(basePath, "Pdf");
+            var targetFolder = Path.Combine(basePath, "Questionnaire");
+            Directory.CreateDirectory(targetFolder);
+
+            targetFolder = Path.Combine(targetFolder, "Pdf");
             IHeadquartersApi hqApi = tenantApi.For(tenant);
 
             this.logger.LogDebug("Loading main pdf for {questionnaire}", questionnaire.QuestionnaireId);
@@ -49,7 +47,11 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId);
                 if (cancellationToken.IsCancellationRequested) return;
-                var mainFilePath = Path.Combine(targetFolder, targetFileName);
+                
+                var defaultTranslationName = string.IsNullOrEmpty(questionnaire.DefaultLanguageName)
+                    ? translationDefaultName
+                    : questionnaire.DefaultLanguageName.Unidecode();
+                var mainFilePath = Path.Combine(targetFolder, $"{defaultTranslationName} {targetFileName}");
                 Directory.CreateDirectory(targetFolder);
                 using (var mainStream = this.fileSystemAccessor.OpenOrCreateFile(mainFilePath, false))
                 {

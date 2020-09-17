@@ -25,7 +25,7 @@
           local:MvxBind="HideKeyboardOnClick .; 
                           Click SaveAnswerCommand; 
                           Text Localization('Interview_Questions_Timestamp_SaveAnswer'); 
-                          BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));
+                          ButtonToQuestionState LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false);
                           Tag Format('btnAnswer_{0}', Identity)" />
       </LinearLayout>
 

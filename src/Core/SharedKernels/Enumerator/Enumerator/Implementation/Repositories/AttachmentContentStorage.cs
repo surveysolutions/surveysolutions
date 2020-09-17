@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
             if (storeInFileSystem)
             {
-                await this.permissionsService.AssureHasPermission(Permission.Storage);
+                await this.permissionsService.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
             }
 
             this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
@@ -144,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public async Task<IEnumerable<string>> EnumerateCacheAsync()
         {
-            await this.permissionsService.AssureHasPermission(Permission.Storage);
+            await this.permissionsService.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
             List<string> result = new List<string>();
 
             if (this.files.IsDirectoryExists(FileCacheDirectory))

@@ -1,14 +1,21 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
@@ -39,7 +46,6 @@ namespace WB.UI.Headquarters
             var services = registry;
 
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
-            registry.Bind<IExportServiceApiFactory, ExportServiceApiFactory>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             registry.Bind<IApplicationRestarter, ApplicationRestarter>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
@@ -53,7 +59,9 @@ namespace WB.UI.Headquarters
             registry.Bind<WebInterviewNotificationService>();
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             registry.Bind<UpdateRequiredFilter>();
-            
+            registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
+            registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
+
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
@@ -65,10 +73,7 @@ namespace WB.UI.Headquarters
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
             ConfigureEventBus(registry);
-
-            registry.Bind<IDesignerApiFactory, DesignerApiFactory>();
-            registry.BindToMethod(ctx => ctx.Resolve<IDesignerApiFactory>().Get());
-
+            
             var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
             var provider = config.CaptchaType;
 

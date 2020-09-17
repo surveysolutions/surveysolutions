@@ -99,5 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             userInterfaceStateService.ThrottledActionFinished();
             this.hasPendingAction = false;
         }
+
+        public bool HasPendingAction => hasPendingAction;
     }
 }

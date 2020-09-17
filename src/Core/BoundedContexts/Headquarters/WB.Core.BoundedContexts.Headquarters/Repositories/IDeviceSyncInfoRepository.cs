@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         void AddOrUpdate(DeviceSyncInfo deviceSyncInfo);
         DeviceSyncInfo GetLastByInterviewerId(Guid interviewerId);
-        DateTime? GetLastSyncronizationDate(Guid interviewerId);
+        DateTime? GetLastSynchronizationDate(Guid interviewerId);
         DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId);
         DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId);
         int GetSuccessSynchronizationsCount(Guid interviewerId);
@@ -24,5 +24,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId);
         Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId);
         Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds);
+        IEnumerable<DeviceSyncInfo> GetLastFailedByInterviewerIds(Guid[] interviewerIds);
+
+        Dictionary<Guid, SyncStats> GetSynchronizationsStats(Guid[] interviewerIds);
+        Dictionary<Guid, double> GetAverageSynchronizationSpeedInBytesPerSeconds(Guid[] interviewerIds);
     }
 }

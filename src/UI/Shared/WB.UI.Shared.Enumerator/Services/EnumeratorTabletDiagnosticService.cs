@@ -7,10 +7,12 @@ using Android.Content;
 using Android.OS;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
@@ -61,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.Services
             bool continueIfNoPatch = true,
             IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
             await this.permissions.EnsureHasPermissionToInstallFromUnknownSourcesAsync().ConfigureAwait(false);
             
             var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N

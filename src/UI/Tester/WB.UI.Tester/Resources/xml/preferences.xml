@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto">
   <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer" android:defaultValue="@integer/HttpResponseTimeout"/>
 
   <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" android:defaultValue="@integer/GpsReceiveTimeoutSec"/>
@@ -18,4 +18,4 @@
     <CheckBoxPreference android:key="AcceptUnsignedSslCertificate" android:defaultValue="@bool/AcceptUnsignedSslCertificate" />
   </PreferenceCategory>
   
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

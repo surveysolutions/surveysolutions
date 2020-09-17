@@ -1,13 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Gms.Common.Apis;
-using Android.Gms.Nearby;
 using Android.Gms.Nearby.Connection;
-using Java.Util.Concurrent;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -28,7 +24,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             this.apiClientFactory = apiClientFactory;
         }
 
-        private GoogleApiClient Api => apiClientFactory?.GoogleApiClient 
+        private ConnectionsClient Api => apiClientFactory?.ConnectionsClient
                                        ?? throw new NearbyConnectionException("Not connected to Google API", ConnectionStatusCode.StatusError);
 
         public event EventHandler<string> LostEndpoint;
@@ -43,128 +39,127 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             this.logger.Verbose($"{serviceName} ENTER");
 
-            var result = await ExecuteNearbyActionWithTimeoutAsync(
-                NearbyClass.Connections.StartDiscovery(Api, serviceName,
+            try
+            {
+                await Api.StartDiscoveryAsync(serviceName,
                     new OnDiscoveryCallback(OnFoundEndpoint, OnLostEndpoint, cancellationToken),
-                    new DiscoveryOptions.Builder().SetStrategy(Strategy.P2pStar).Build()))
-                .ConfigureAwait(false);
+                    new DiscoveryOptions.Builder().SetStrategy(Strategy.P2pStar).Build());
+            }
+            catch(ApiException api)
+            {
+                return Error(api);
+            }
 
-            LogNonSuccessfulResult(result, new ActionArgs((nameof(serviceName), serviceName)));
-
-            this.logger.Verbose($"{serviceName} EXIT. Result: {result.Status}");
-
-            return ToConnectionStatus(result);
+            return NearbyStatus.Ok;
         }
 
         public async Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
         {
             this.logger.Verbose($"{serviceName}, {name} ENTER");
 
-            var result = await NearbyClass.Connections.StartAdvertisingAsync(Api, name, serviceName,
+            try
+            {
+                await Api.StartAdvertisingAsync(name, serviceName,
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected),
                     cancellationToken),
                  new AdvertisingOptions.Builder().SetStrategy(Strategy.P2pStar).Build())
                 .ConfigureAwait(false);
-
-            if (!result.Status.IsSuccess)
-            {
-                var status = ToConnectionStatus(result.Status);
-                throw new NearbyConnectionException("Failed to start advertising. " + status.StatusMessage, status.Status);
             }
-
-            return result.LocalEndpointName;
+            catch (ApiException e)
+            {
+                return e.Message;
+            }
+            return name;
         }
 
         public async Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken)
         {
             logger.Verbose($"({name}, {endpoint}) EXECUTE");
-            var nearbyStatus = await ExecuteNearbyActionWithTimeoutAsync(
-                NearbyClass.Connections.RequestConnection(Api, name, endpoint,
-                    new OnConnectionLifecycleCallback(
-                        new NearbyConnectionLifeCycleCallback(
-                            OnInitiatedConnection,
-                            OnConnectionResult,
-                            OnDisconnected), cancellationToken)))
-                .ConfigureAwait(false);
 
-            LogNonSuccessfulResult(nearbyStatus, new ActionArgs(("name", name), ("endpoint", endpoint)));
+            try
+            {
+                await Api.RequestConnectionAsync(name, endpoint,
+                        new OnConnectionLifecycleCallback(
+                            new NearbyConnectionLifeCycleCallback(
+                                OnInitiatedConnection,
+                                OnConnectionResult,
+                                OnDisconnected), cancellationToken));
 
-            logger.Verbose($"({name}, {endpoint}) EXECUTE DONE => {nearbyStatus.Status}");
-
-            return ToConnectionStatus(nearbyStatus);
+                return NearbyStatus.Ok;
+            }
+            catch (ApiException api)
+            {
+                logger.Error($"({endpoint})", api);
+                return Error(api);
+            }
         }
 
         public async Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
         {
             logger.Verbose($"({endpoint}) ENTER");
-            
-            var result = await ExecuteNearbyActionWithTimeoutAsync(
-                NearbyClass.Connections.AcceptConnection(Api, endpoint,
-                    new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate))))
-                .ConfigureAwait(false);
 
-            LogNonSuccessfulResult(result, new ActionArgs(("endpoint", endpoint)));
+            try
+            {
+                await Api.AcceptConnectionAsync(endpoint,
+                        new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)));
 
-            logger.Verbose($"({endpoint}) EXIT => {result.Status}");
+                return NearbyStatus.Ok;
+            }
+            catch(ApiException api)
+            {
+                logger.Error($"({endpoint})", api);
+                return Error(api);
+            }
+        }
 
-            return ToConnectionStatus(result);
+        private NearbyStatus Error(ApiException api)
+        {
+            return new NearbyStatus
+            {
+                IsSuccess = false,
+                Status = (ConnectionStatusCode) api.StatusCode,
+                StatusMessage = api.Message,
+                StatusCode = api.StatusCode
+            };
         }
 
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
-            if (this.Api.IsConnected)
+            // this.logger.Verbose($"({to}, '{payload}') ENTER");
+
+            if (!(payload is Entities.Payload send))
+                throw new ArgumentException($"Cannot handle payload of type: {payload.GetType().FullName}",
+                    nameof(payload));
+
+            try
             {
-                this.logger.Verbose($"({to}, '{payload}') ENTER");
+                await Api.SendPayloadAsync(to, send.NearbyPayload);
 
-                if (!(payload is Entities.Payload send))
-                    throw new ArgumentException($"Cannot handle payload of type: {payload.GetType().FullName}",
-                        nameof(payload));
-
-                var result = await ExecuteNearbyActionWithTimeoutAsync(
-                        NearbyClass.Connections.SendPayload(Api, to, send.NearbyPayload))
-                    .ConfigureAwait(false);
-
-                LogNonSuccessfulResult(result, new ActionArgs(("to", to)));
-
-                this.logger.Verbose($"({to}, '{payload}') EXIT => {result.Status}");
-
-                return ToConnectionStatus(result);
+                return NearbyStatus.Ok;
             }
-
-            return NearbyStatus.NotConnected;
-        }
-
-        private static async Task<Statuses> ExecuteNearbyActionWithTimeoutAsync(PendingResult nearbyAction)
-        {
-            using (nearbyAction)
-            using (var awaitableResultCallback = new AwaitableResultCallback<Statuses>())
+            catch (ApiException api)
             {
-                nearbyAction.SetResultCallback(awaitableResultCallback, 30, TimeUnit.Seconds);
-
-                var statuses = await awaitableResultCallback.AwaitAsync()
-                    .ConfigureAwait(false);
-
-                return statuses;
+                return Error(api);
             }
         }
 
         public void StopAllEndpoint()
         {
             this.logger.Verbose();
-            NearbyClass.Connections.StopAllEndpoints(Api);
+            Api.StopAllEndpoints();
         }
 
         public void StopDiscovery()
         {
             this.logger.Verbose();
-            NearbyClass.Connections.StopDiscovery(Api);
+            Api.StopDiscovery();
         }
 
         public void StopAdvertising()
         {
             this.logger.Verbose();
-            NearbyClass.Connections.StopAdvertising(Api);
+            Api.StopAdvertising();
         }
 
         public void StopAll()
@@ -200,38 +195,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             InitiatedConnection?.Invoke(this, info);
         }
 
-        private void LogNonSuccessfulResult(Statuses result, ActionArgs args, [CallerMemberName] string method = null)
-        {
-            if (result.IsSuccess) return;
-
-            NearbyStatus nearbyStatus = ToConnectionStatus(result);
-            if (nearbyStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
-                return;
-
-            (string key, string data)[] FromStatuses(Statuses status)
-            {
-                return new[]
-                {
-                    ("method", method),
-                    ("StatusCode", status.StatusCode.ToString()),
-                    ("StatusMessage", status.StatusMessage),
-                    ("StatusCodeName", nearbyStatus.Status.ToString()),
-                    ("HasResolution", status.HasResolution.ToString()),
-                    ("ResolutionPackage", status.HasResolution ? result.Resolution.CreatorPackage : "no"),
-                    ("IsCanceled", status.IsCanceled.ToString()),
-                    ("IsInterrupted", status.IsInterrupted.ToString()),
-                    ("ConnectionStatusCode", status.Status.ToString())
-                };
-            }
-
-            var exception = new Exception();
-
-            foreach (var exceptionData in args.Data.Concat(FromStatuses(result)))
-                exception.Data[exceptionData.key] = exceptionData.data;
-
-            logger.Error("Connection error", exception);
-        }
-
         protected virtual void OnLostEndpoint(string endpoint)
         {
             LostEndpoint?.Invoke(this, endpoint);
@@ -250,23 +213,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             }
 
             public (string key, string data)[] Data { get; }
-        }
-
-        private static NearbyStatus ToConnectionStatus(Statuses statuses)
-        {
-            ConnectionStatusCode status = Enum.IsDefined(typeof(ConnectionStatusCode), statuses.StatusCode)
-                ? (ConnectionStatusCode)statuses.StatusCode
-                : ConnectionStatusCode.Unknown;
-
-            return new NearbyStatus
-            {
-                IsSuccess = statuses.IsSuccess,
-                IsCanceled = statuses.IsCanceled,
-                StatusMessage = statuses.StatusMessage,
-                IsInterrupted = statuses.IsInterrupted,
-                StatusCode = statuses.StatusCode,
-                Status = status
-            };
         }
     }
 }

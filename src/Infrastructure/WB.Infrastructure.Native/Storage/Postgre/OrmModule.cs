@@ -23,7 +23,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Resources;
 using WB.Core.Infrastructure.Services;
-using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -39,8 +38,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.connectionSettings = connectionSettings;
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-        { 
+        public async Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        {
             try
             {
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
@@ -50,28 +49,48 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     this.connectionSettings.PlainStorageSchemaName);
 
                 status.Message = Modules.MigrateDb;
-                
-                DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                    this.connectionSettings.PlainStorageSchemaName,
-                    this.connectionSettings.PlainStoreUpgradeSettings,
-                    loggerProvider);
 
-                status.ClearMessage();
+                await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
 
-                if (this.connectionSettings.ReadSideUpgradeSettings != null)
+                void MigrateReadside()
                 {
-                    status.Message = Modules.InitializingDb;
-                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.ReadSideSchemaName);
+                    if (this.connectionSettings.ReadSideUpgradeSettings != null)
+                    {
+                        status.Message = Modules.InitializingDb;
+                        DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                            this.connectionSettings.ReadSideSchemaName);
 
-                    status.Message = Modules.MigrateDb;
+                        status.Message = Modules.MigrateDb;
+                        DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                            this.connectionSettings.ReadSideSchemaName,
+                            this.connectionSettings.ReadSideUpgradeSettings,
+                            loggerProvider);
+
+                        status.ClearMessage();
+                    }
+                }
+
+                void MigratePlainstore()
+                {
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.ReadSideSchemaName, 
-                        this.connectionSettings.ReadSideUpgradeSettings,
+                        this.connectionSettings.PlainStorageSchemaName,
+                        this.connectionSettings.PlainStoreUpgradeSettings,
                         loggerProvider);
 
                     status.ClearMessage();
                 }
+
+                try
+                {
+                    MigratePlainstore();
+                }
+                catch
+                {
+                    MigrateReadside();
+                    MigratePlainstore();
+                }
+
+                MigrateReadside();
 
                 if (this.connectionSettings.LogsUpgradeSettings != null)
                 {
@@ -110,8 +129,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                 throw exc.AsInitializationException(connectionSettings.ConnectionString);
             }
-
-            return Task.CompletedTask;
         }
 
         public void Load(IIocRegistry registry)

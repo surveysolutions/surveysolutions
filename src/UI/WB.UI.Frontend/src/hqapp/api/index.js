@@ -242,13 +242,17 @@ class WebInterviewSettingsApi {
         isEnabledSpamProtection,
         reminderAfterDaysIfNoResponse,
         reminderAfterDaysIfPartialResponse,
-        singleResponse) {
+        singleResponse,
+        emailOnComplete,
+        attachAnswersInEmail) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http.post(url, {
             spamProtection: isEnabledSpamProtection,
             reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
             reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse,
             singleResponse: singleResponse,
+            emailOnComplete: emailOnComplete,
+            attachAnswersInEmail: attachAnswersInEmail,
         })
     }
 

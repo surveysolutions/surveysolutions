@@ -4,11 +4,11 @@ using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -44,9 +44,9 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
+            registry.BindInPerLifetimeScope<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
-            registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
+            registry.Bind<IFastBinaryFilesHttpHandler, BinaryFilesHttpHandler>();
             registry.Bind<IGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, SupervisorInterviewStateCalculationStrategy>();
 

@@ -44,23 +44,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             base.Configure(interviewId, navigationState);
 
-            var interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
-
-
-            var statefulInterview = this.interviewRepository.Get(interviewId);
+            
             if (string.IsNullOrEmpty(this.Comment))
             {
-                this.Comment = statefulInterview.InterviewerCompleteComment;
+                this.Comment = interview.InterviewerCompleteComment;
             }
         }
 
         protected override Task CloseInterviewAfterComplete()
         {
-            var statefulInterview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId.FormatGuid());
             auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
             return base.CloseInterviewAfterComplete();
         }

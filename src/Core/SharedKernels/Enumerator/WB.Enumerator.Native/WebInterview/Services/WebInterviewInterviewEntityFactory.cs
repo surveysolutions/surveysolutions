@@ -166,6 +166,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                         {
                             res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
+                            res.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
                         });
                         break;
                     case InterviewQuestionType.Text:
@@ -296,6 +297,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         result = this.Map<InterviewLinkedSingleQuestion>(question, res =>
                         {
                             res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                            res.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
                         });
                         break;
 
@@ -528,7 +530,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     Text = ac.Comment,
                     IsOwnComment = true,
                     UserRole = ac.UserRole,
-                    CommentTimeUtc = ac.CommentTime,
+                    CommentTimeUtc = ac.CommentTime.UtcDateTime,
                     Id = ac.Id,
                     Resolved = ac.Resolved
                 })

@@ -21,6 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Sortable(x => x.QuestionnaireId);
             descriptor.Sortable(x => x.QuestionnaireVersion);
             descriptor.Sortable(x => x.SummaryId).Name("id");
+            descriptor.Sortable(x => x.NotAnsweredCount);
         }
     }
 }

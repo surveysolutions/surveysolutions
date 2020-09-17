@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -26,6 +26,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (MultimediaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (AutoCompleteSingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_linked_combobox},
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (CategoricalComboboxAutocompleteViewModel), Resource.Layout.interview_question_categorical_combobox},

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MvvmCross.Platforms.Android;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using ZXing.Mobile;
@@ -19,7 +20,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<QRBarcodeScanResult> ScanAsync()
         {
-            await this.permissions.AssureHasPermission(Permission.Camera);
+            await this.permissions.AssureHasPermissionOrThrow<CameraPermission>().ConfigureAwait(false);
             
             MobileBarcodeScanner.Initialize(this.androidCurrentTopActivity.Activity.Application);
             var scanner = new MobileBarcodeScanner();

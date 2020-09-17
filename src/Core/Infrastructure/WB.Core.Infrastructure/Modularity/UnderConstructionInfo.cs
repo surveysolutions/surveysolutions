@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.Modularity
 {
@@ -15,9 +14,10 @@ namespace WB.Core.Infrastructure.Modularity
             isOneInstanceCreated = true;
         }
 
-        public void Run()
+        public void Run(string message = null)
         {
            Status = UnderConstructionStatus.Running;
+           Message = message ?? String.Empty;
         }
 
         public void Finish()
