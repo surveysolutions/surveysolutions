@@ -250,4 +250,10 @@
   <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
     <value>Resume</value>
   </data>
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>Send email after complete web interview</value>
+  </data>
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>Attach Pdf with answers to email</value>
+  </data>
 </root>

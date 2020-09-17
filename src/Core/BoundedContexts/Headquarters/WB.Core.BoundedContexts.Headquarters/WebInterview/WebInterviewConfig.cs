@@ -22,6 +22,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public bool Started { get; set; }
         public bool UseCaptcha { get; set; }
+        public bool EmailOnComplete { get; set; }
+        public bool AttachAnswersInEmail { get; set; }
+
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
 
         public static Dictionary<WebInterviewUserMessages, string> DefaultMessages =>
@@ -37,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.CompleteNoteToSupervisor,     WebInterviewResources.NoteForSupervisor},
                 { WebInterviewUserMessages.CompleteButton,  WebInterviewResources.Complete},
                 { WebInterviewUserMessages.StartNewButton,  WebInterviewResources.StartNewInterview},
-                { WebInterviewUserMessages.ResumeButton,  WebInterviewResources.ResumeInterview},
+                { WebInterviewUserMessages.ResumeButton,    WebInterviewResources.ResumeInterview},
             };
 
         public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }
@@ -50,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_NoResponse.Subject, EmailTemplateTexts.Reminder_NoResponse.Message, EmailTemplateTexts.Reminder_NoResponse.PasswordDescription, EmailTemplateTexts.Reminder_NoResponse.LinkText) },
             { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_PartialResponse.Subject, EmailTemplateTexts.Reminder_PartialResponse.Message, EmailTemplateTexts.Reminder_PartialResponse.PasswordDescription, EmailTemplateTexts.Reminder_PartialResponse.LinkText) },
             { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) },
+            { EmailTextTemplateType.CompleteInterviewEmail, new EmailTextTemplate(EmailTemplateTexts.CompleteEmail.Subject, EmailTemplateTexts.CompleteEmail.Message, EmailTemplateTexts.CompleteEmail.PasswordDescription, EmailTemplateTexts.CompleteEmail.LinkText) },
         };
 
         public int? ReminderAfterDaysIfNoResponse { get; set; }
@@ -90,6 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         Reminder_PartialResponse,
         RejectEmail,
         ResumeTemplate,
+        CompleteInterviewEmail,
     }
 
     public class EmailTemplateTexts
@@ -137,6 +142,20 @@ Thank you for cooperation!";
         }
 
         public class RejectEmail
+        {
+            public static string Subject => "Your action is required in %SURVEYNAME%";
+            public static string Message => @"Thank you for taking part in %SURVEYNAME%!
+ 
+While processing your response our staff has found some issues, which you are hereby asked to review.
+ 
+We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your response.
+ 
+Thank you for cooperation!";
+            public static string PasswordDescription => "This interview is protected. Please use following password:";
+            public static string LinkText => "CONTINUE INTERVIEW";
+        }
+
+        public class CompleteEmail
         {
             public static string Subject => "Your action is required in %SURVEYNAME%";
             public static string Message => @"Thank you for taking part in %SURVEYNAME%!
