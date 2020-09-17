@@ -39,9 +39,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             new DoExportFileHeader("rejections__hq", "How many times this interview was rejected by HQ", ExportValueType.NumericInt),
             //new DoExportFileHeader("n_questions_valid", "Number of valid questions"),
             new DoExportFileHeader("entities__errors", "Number of questions and static texts with errors", ExportValueType.NumericInt),
-            //new DoExportFileHeader("n_questions_unanswered", "Number of unanswered questions"),
             new DoExportFileHeader("questions__comments", "Number of questions with comments", ExportValueType.NumericInt),
             new DoExportFileHeader("interview__duration", "Active time it took to complete the interview, DD.HH:MM:SS", ExportValueType.String),
+            new DoExportFileHeader("n_questions_unanswered", "Number of unanswered questions", ExportValueType.NumericInt),
         };
 
         public DiagnosticsExporter(
@@ -94,6 +94,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                         diagInfo.InterviewDuration != null
                             ? new TimeSpan(diagInfo.InterviewDuration.Value).ToString(@"dd\.hh\:mm\:ss", CultureInfo.InvariantCulture)
                             : string.Empty,
+                        diagInfo.NotAnsweredCount != null 
+                            ? diagInfo.NotAnsweredCount.Value.ToString(CultureInfo.InvariantCulture) 
+                            : string.Empty
                     });
                 }
 

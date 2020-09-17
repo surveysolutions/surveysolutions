@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
             this.Data["responseType"] = responseType.Name;
             this.Data["endpoint"] = endpoint;
 
-            var remote = connection.RemoteEndpoints?.SingleOrDefault(r => r.Enpoint == endpoint);
+            var remote = connection.RemoteEndpoints?.SingleOrDefault(r => r.Endpoint == endpoint);
             if (remote != null)
             {
                 this.Data["remote"] = remote.Name;

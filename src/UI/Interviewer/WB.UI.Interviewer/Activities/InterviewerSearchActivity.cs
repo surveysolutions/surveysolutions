@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.OS;
 using Android.Views;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.DroidX.RecyclerView;
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Shared.Enumerator.Activities;
 

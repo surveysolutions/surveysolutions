@@ -264,9 +264,6 @@
   <data name="EmptySectionLine3" xml:space="preserve">
     <value>në krue të këtij blloku ose menaxhoni rubrikat me {{-panel}} panelin e majtë</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Gjuha e anketës, llojet e pajisjeve, bashkëpunimi dhe opsione të tjera</value>
-  </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>mund të gjendet në panelin {{-settingsBtn}} (sipër në të djathë)</value>
   </data>

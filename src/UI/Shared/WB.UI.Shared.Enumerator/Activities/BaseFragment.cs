@@ -1,12 +1,11 @@
 ﻿using Android.OS;
 using Android.Views;
-using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class BaseFragment<TViewModel> : MvxFragment<TViewModel> where TViewModel : MvxViewModel
+    public abstract class BaseFragment<TViewModel> : MvvmCross.Platforms.Android.Views.Fragments.MvxFragment<TViewModel> where TViewModel : MvxViewModel
     {
         protected abstract int ViewResourceId { get; }
 

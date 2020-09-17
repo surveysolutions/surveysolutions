@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{{status1}}&lt;/i&gt; и &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+      <value>{{count}} интервью будут утверждены.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;
-&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{{status1}}&lt;/i&gt; и &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;
+&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; и &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (только на другого интервьюера)&lt;/i&gt; и &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
@@ -236,5 +236,17 @@
   </data>
   <data name="RejectToNewResponsible" xml:space="preserve">
     <value>Вернуть и выбрать нового ответственного</value>
+  </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Количество вопросов без ответа. Включает вопросы супервизора, идентифицирующие и интервьюера. Моржет содержать пустые значения для интервью завершенных до версии 20.09.</value>
+  </data>
+    <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Не отвечено</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+      <value>Внимание!</value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+      <value>Вы можете утвердить интервью имеющие следующие статусы: {{status1}}, {{status2}} и {{status3}}</value>
   </data>
 </root>

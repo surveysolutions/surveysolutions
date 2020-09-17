@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Scheduler.Model;
+using WB.Services.Scheduler.Model.Mapping;
 
 namespace WB.Services.Scheduler
 {
@@ -30,6 +31,7 @@ namespace WB.Services.Scheduler
         }
 
         public DbSet<JobItem> Jobs { get; set; }
+        public DbSet<JobArchive> Archive { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

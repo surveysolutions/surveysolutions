@@ -6,7 +6,7 @@
                 local:MvxBind="Click NavigateToSectionCommand; PaddingLeft NodeDepth; Activated IsCurrent">
     <TableRow android:gravity="center_vertical">
       <Button style="@style/Interview_Sidebar_Sections_ToggleButton"
-              local:MvxBind="Click ToggleCommand; Text If(Expanded, '–','+'); Transparent Not(HasChildren); Enabled HasChildren; TextColor GroupStateToColor(SideBarGroupState.SimpleStatus)"/>
+              local:MvxBind="Click ToggleCommand; Text If(Expanded, '–','+'); Transparent Not(HasChildren); Enabled HasChildren; ToParentButtonGroupStyle SideBarGroupState"/>
       <TextView
             style="@style/Interview_Sidebar_Sections_Section_Title"
             android:singleLine="false"

@@ -118,7 +118,6 @@ namespace WB.UI.Headquarters.Metrics
             var busy = CommonMetrics.NpgsqlConnections.GetSummForLabels(BusyDbConnectionsLabel);
 
             result.Add(new MetricState("Database connections", $"Busy: {busy}, Idle: {idle}", busy));
-
             
             // ReSharper disable once UseStringInterpolation
             var readRate = await dataTransferRead;
@@ -132,6 +131,8 @@ namespace WB.UI.Headquarters.Metrics
             ), readRate + writeRate));
 
             result.Add(new MetricState("Requests", "requests".ToQuantity(await requests, "N2") + "/s", await requests));
+
+            result.Add(new MetricState("Thread Pool", "Queue: " + ThreadPool.PendingWorkItemCount, ThreadPool.PendingWorkItemCount));
 
             await cacheItemsDiff;
 

@@ -73,7 +73,7 @@
                                                         ref="welcomeTextTitle"
                                                         :min-height="77"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea h2"
+                                                        class="form-control js-elasticArea font-bold"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -265,7 +265,7 @@
                                                         ref="resumeWelcome"
                                                         :min-height="77"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea h2"
+                                                        class="form-control js-elasticArea font-bold"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -455,7 +455,7 @@
                                                         ref="completeNoteToSupervisor"
                                                         :min-height="77"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea h2">
+                                                        class="form-control js-elasticArea font-bold">
                                                     </textarea-autosize>
                                                     <button type="button"
                                                         @click="webInterviewPageMessages['completeNoteToSupervisor'].text=''"
@@ -562,7 +562,7 @@
                                                         ref="webSurveyHeader"
                                                         :min-height="77"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea h2"
+                                                        class="form-control js-elasticArea font-bold"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -984,7 +984,7 @@
                                                                 <tr>
                                                                     <td align="center"
                                                                         style="padding: 15px 0; white-space: pre-line;">
-                                                                        Personal Information Management Office. 115 West Century Road, Suite 250, Paramus, NJ 07652
+                                                                        Here the address of your organization will appear as specified in your account at the mass mailing server.
                                                                     </td>
                                                                 </tr>
                                                                 <!-- <tr>

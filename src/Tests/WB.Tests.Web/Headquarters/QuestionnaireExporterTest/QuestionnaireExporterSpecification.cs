@@ -243,6 +243,10 @@ namespace WB.Tests.Web.Headquarters.QuestionnaireExporterTest
                 .Setup(s => s.Serialize(It.IsAny<QuestionnaireDocument>()))
                 .Returns(SerializedQuestionnaireDocument);
 
+            MockOf<IPlainKeyValueStorage<QuestionnaireBackup>>()
+                .Setup(s => s.GetById(It.IsAny<string>()))
+                .Returns((QuestionnaireBackup)null);
+
             var subj = fixture.Create<QuestionnaireExporter>();
 
             this.fileResponse = subj.CreateZipExportFile(questionnaireIdentity);

@@ -220,7 +220,7 @@
     <value>Selected translation file is empty</value>
   </data>
   <data name="NoAccessToQuestionnaire" xml:space="preserve">
-    <value>User doesn't have permission to access requested questionnaire</value>
+    <value>User doesn't have permission to access the requested questionnaire.</value>
   </data>
   <data name="UserNeedToContactSupportFormat" xml:space="preserve">
     <value>You are not authorized to perform this action. Please contact support. IP:{0}</value>

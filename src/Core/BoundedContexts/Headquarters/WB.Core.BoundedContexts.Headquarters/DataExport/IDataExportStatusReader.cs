@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         Task<DataExportArchive> GetDataArchive(
             QuestionnaireIdentity questionnaireIdentity, DataExportFormat format,
-            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null);
+            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null, bool? includeMeta = null);
 
         Task<ExportDataAvailabilityView> GetDataAvailabilityAsync(QuestionnaireIdentity questionnaireIdentity);
 

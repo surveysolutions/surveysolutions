@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
+using IHttpClientFactory = WB.Core.Infrastructure.HttpServices.Services.IHttpClientFactory;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
@@ -70,7 +72,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             var testMessageHandler = new TestMessageHandler();
             var httpClient = new HttpClient(testMessageHandler);
             var httpClientFactory = 
-                Mock.Of<Core.GenericSubdomains.Portable.Services.IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
             RestService service = Create.Service.RestService(httpClientFactory: httpClientFactory, restServiceSettings: settings);
 
             var hash = Convert.ToBase64String(MD5.Create().ComputeHash(

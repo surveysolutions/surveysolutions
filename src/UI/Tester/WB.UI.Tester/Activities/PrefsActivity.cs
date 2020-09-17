@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Android.App;
 using Android.Content.PM;
@@ -22,6 +23,7 @@ namespace WB.UI.Tester.Activities
             FragmentManager.BeginTransaction().Replace(Android.Resource.Id.Content, new PrefsFragment()).Commit();
         }
 
+        [Obsolete]
         protected override bool IsValidFragment(string fragmentName)
         {
             return typeof(PrefsFragment).Name.Equals(fragmentName);
@@ -32,6 +34,7 @@ namespace WB.UI.Tester.Activities
             private static int tapTimes;
             private Preference devSettingsCategory;
 
+            [Obsolete]
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);

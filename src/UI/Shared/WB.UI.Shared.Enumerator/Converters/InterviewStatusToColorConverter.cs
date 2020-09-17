@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
-    public class InterviewStatusToColorConverter : MvxValueConverter<DashboardInterviewStatus, int>
+   public class InterviewStatusToColorConverter : MvxValueConverter<DashboardInterviewStatus, int>
     {
         protected override int Convert(DashboardInterviewStatus status, Type targetType, object parameter, CultureInfo culture)
         {

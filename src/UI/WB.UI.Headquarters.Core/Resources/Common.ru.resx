@@ -341,4 +341,7 @@
   <data name="NotEquals" xml:space="preserve">
     <value>Не равно</value>
   </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Не известно</value>
+  </data>
 </root>

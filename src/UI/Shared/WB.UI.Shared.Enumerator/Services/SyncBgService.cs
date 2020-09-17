@@ -22,33 +22,44 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (!this.isSyncRunning)
             {
-                var synchronizationProcess = Mvx.IoCProvider.Resolve<ISynchronizationProcess>();
                 this.CurrentProgress = new SyncProgressDto(new Progress<SyncProgressInfo>(), new CancellationTokenSource());
 
                 this.thread = new Thread(() =>
                 {
+                    var provider = Mvx.IoCProvider.CreateChildContainer();
+
                     try
                     {
-                        synchronizationProcess.SynchronizeAsync(this.CurrentProgress.Progress, this.CurrentProgress.CancellationTokenSource.Token)
-                                              .WaitAndUnwrapException(); // do not pass cancellationToken, since it will always throw operation cancelled here
-                    }
+                        var synchronizationProcess = provider.Resolve<ISynchronizationProcess>();
+                        synchronizationProcess.SynchronizeAsync(this.CurrentProgress.Progress,
+                                this.CurrentProgress.CancellationTokenSource.Token)
+                            .WaitAndUnwrapException(); // do not pass cancellationToken, since it will always throw operation cancelled here
+                        }
                     catch (System.OperationCanceledException ec)
                     {
-                        Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize (canceled)", ec);
+                        Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SyncBgService>()
+                            .Error(">!>Failed to synchronize (canceled)", ec);
                     }
                     catch (Exception e)
                     {
-                        Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize", e);
+                        Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SyncBgService>()
+                            .Error(">!>Failed to synchronize", e);
                     }
                     finally
                     {
                         this.isSyncRunning = false;
                         this.CurrentProgress = null;
+
+                        if (provider is IDisposable disposable)
+                        {
+                            disposable.Dispose();
+                        }
                     }
                 });
 
                 this.isSyncRunning = true;
                 this.thread.Start();
+
             }
         }
 

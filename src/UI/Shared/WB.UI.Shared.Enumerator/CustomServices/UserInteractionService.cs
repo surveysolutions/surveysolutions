@@ -2,20 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
-using Android.Gms.Common;
-using Android.OS;
-using Android.Runtime;
 using Android.Text;
 using Android.Widget;
-using Java.Lang;
-using Java.Lang.Reflect;
+using Google.Android.Material.Dialog;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Utils;
-using GoogleApiAvailability = Android.Gms.Common.GoogleApiAvailability;
+using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -39,8 +34,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             bool isHtml = true)
         {
             var tcs = new TaskCompletionSource<bool>();
-            okButton = okButton ?? UIResources.Ok;
-            cancelButton = cancelButton ?? UIResources.Cancel;
+            okButton ??= UIResources.Ok;
+            cancelButton ??= UIResources.Cancel;
 
             this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton, isHtml);
             return tcs.Task;
@@ -54,8 +49,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
            bool isTextInputPassword=false)
         {
             var tcs = new TaskCompletionSource<string>();
-            okButton = okButton ?? UIResources.Ok;
-            cancelButton = cancelButton ?? UIResources.Cancel;
+            okButton ??= UIResources.Ok;
+            cancelButton ??= UIResources.Cancel;
 
             this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? string.Empty),
                 () => tcs.TrySetResult(null), title,
@@ -68,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var builder = new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity);
+            var builder = new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity);
 
             builder.SetTitle(message);
             builder.SetItems(options, (sender, args) =>
@@ -88,25 +83,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public Task AlertAsync(string message, string title = "", string okButton = null)
         {
             var tcs = new TaskCompletionSource<object>();
-            okButton = okButton ?? UIResources.Ok;
+            okButton ??= UIResources.Ok;
             this.Alert(message, () => tcs.TrySetResult(null), title, okButton);
             return tcs.Task;
-        }
-
-        public Task WaitPendingUserInteractionsAsync()
-        {
-            lock (UserInteractionsLock)
-            {
-                if (UserInteractions.Count == 0)
-                    return Task.FromResult(null as object);
-
-                if (userInteractionsAwaiter == null)
-                {
-                    userInteractionsAwaiter = new TaskCompletionSource<object>();
-                }
-
-                return userInteractionsAwaiter.Task;
-            }
         }
 
         public void ShowToast(string message)
@@ -136,8 +115,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton, bool isHtml)
         {
             var userInteractionId = Guid.NewGuid();
-            okButton = okButton ?? UIResources.Ok;
-            cancelButton = cancelButton ?? UIResources.Cancel;
+            okButton ??= UIResources.Ok;
+            cancelButton ??= UIResources.Cancel;
 
             try
             {
@@ -152,7 +131,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
+                        new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(isHtml ? message.ToAndroidSpanned(): new SpannedString(message))
                             .SetTitle(isHtml ? title.ToAndroidSpanned() : new SpannedString(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
@@ -198,7 +177,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         {
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
+                        new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton,
@@ -250,7 +229,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
+                        new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned())
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>

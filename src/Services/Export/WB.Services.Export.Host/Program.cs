@@ -26,11 +26,6 @@ namespace WB.Services.Export.Host
                     Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
 
-                if (args.All(a => a != "--ignore-pid"))
-                {
-                    new StartupBlocker().OpenPIDFile();
-                }
-
                 var host = CreateWebHostBuilder(args).UseWindowsService();
 
                 if (WindowsServiceHelpers.IsWindowsService())
