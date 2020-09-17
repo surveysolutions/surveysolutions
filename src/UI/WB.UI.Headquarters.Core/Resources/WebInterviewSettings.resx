@@ -192,6 +192,9 @@
   <data name="RejectEmailMessage" xml:space="preserve">
     <value>Reject</value>
   </data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Complete</value>
+  </data>
   <data name="InvitationEmailMessage" xml:space="preserve">
     <value>Invitation</value>
   </data>
