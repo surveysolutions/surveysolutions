@@ -33,13 +33,15 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly ICategoriesExportService reusableCategoriesExporter;
         private readonly IEntitySerializer<QuestionnaireDocument> serializer;
+        private readonly IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage;
         private readonly ILogger logger;
 
         public QuestionnaireExporter(IQuestionnaireStorage questionnaireStorage, IAttachmentContentService contentService,
             IEntitySerializer<QuestionnaireDocument> serializer, IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage, 
             ITranslationsExportService translationsExportService, ITranslationManagementService translationManagementService, 
             ILoggerProvider loggerProvider, IReusableCategoriesStorage reusableCategoriesStorage,
-            ICategoriesExportService reusableCategoriesExporter)
+            ICategoriesExportService reusableCategoriesExporter,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.contentService = contentService;
@@ -50,6 +52,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.reusableCategoriesStorage = reusableCategoriesStorage;
             this.reusableCategoriesExporter = reusableCategoriesExporter;
             this.logger = loggerProvider.GetForType(this.GetType());
+            this.questionnaireBackupStorage = questionnaireBackupStorage;
         }
 
         [Localizable(false)]
@@ -63,6 +66,16 @@ namespace WB.UI.Headquarters.Services.Impl
             var variable = questionnaire.VariableName ?? title;
 
             logger.Debug($"Begin export of questionnaire: {title} # {questionnaireIdentity}");
+
+            var backup = this.questionnaireBackupStorage.GetById(questionnaireIdentity.ToString());
+            if (backup != null)
+            {
+                return new File
+                {
+                    FileStream = new MemoryStream(backup.Content),
+                    Filename = variable + ".zip"
+                };
+            }
 
             var output = new MemoryStream();
 

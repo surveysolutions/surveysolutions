@@ -8,7 +8,12 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.Portable" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-    internal partial class <#=Model.ClassName#> : LevelFunctions, <#=typeof(IInterviewLevel).Name#>, <#=typeof(IIndexedInterviewLevel).Name#>
+    internal partial class <#=Model.ClassName #> : LevelFunctions, <#=nameof(IInterviewLevel) #>
+     <# if (Model.RosterScope.Length > 0) 
+    { 
+        #> 
+        , <#=nameof(IIndexedInterviewLevel) #>
+    <# } #>
     {
         
         public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
@@ -126,6 +131,10 @@
 
         public Identity Identity  { get; private set; }
 
+<#
+    if (Model.RosterScope.Length > 0)
+    {
+#>
         public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
 
         public int @rowindex => _state.GetRosterIndex(Identity);
@@ -135,6 +144,8 @@
         public int RowCode => @rowcode;
 
         public int RowIndex => @rowindex;
+
+<# } #>
 
         // backward compatibility
         private QuestionnaireRandom Quest;		

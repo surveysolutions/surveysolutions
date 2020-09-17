@@ -9,6 +9,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;

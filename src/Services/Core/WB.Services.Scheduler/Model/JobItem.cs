@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
-using System.Net.Sockets;
 using WB.Services.Scheduler.Model.Events;
 
 namespace WB.Services.Scheduler.Model

@@ -7,7 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class VariableView : INameable, IQuestionnaireItem
     {
-        public VariableView(Guid id, string itemId, VariableData variableData, Breadcrumb[]? breadcrumbs = null, QuestionnaireInfoFactory.SelectOption[]? typeOptions = null)
+        public VariableView(Guid id, string itemId, VariableData variableData, Breadcrumb[]? breadcrumbs = null,
+            QuestionnaireInfoFactory.SelectOption[]? typeOptions = null)
         {
             this.Id = id;
             ItemId = itemId;
@@ -28,6 +29,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public List<IQuestionnaireItem> Items
         {
             get { return new List<IQuestionnaireItem>(); }
+            set { }
+        }
+
+        public bool HasCondition
+        {
+            get => false;
+            set { }
+        }
+
+        public bool HideIfDisabled
+        {
+            get => false;
             set { }
         }
 

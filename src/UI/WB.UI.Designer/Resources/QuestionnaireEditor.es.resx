@@ -210,9 +210,7 @@
   <data name="EmptySectionLine3" xml:space="preserve">
     <value>en la parte superior de este bloque o administrar secciones con {{-panel}} panel izquierdo</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Idioma de la encuesta, tipos de dispositivos, colaboración y otras opciones</value>
-  </data>
+  
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>se puede encontrar en el panel {{-settingsBtn}} (esquina superior derecha)</value>
   </data>

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -25,7 +23,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -143,14 +140,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository optionsRepository,
-            IClock clock
+            IQuestionOptionsRepository optionsRepository
             )
         {
             this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
             this.questionOptionsRepository = optionsRepository ?? throw new ArgumentNullException(nameof(optionsRepository));
-            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         #region Apply (state restore) methods
@@ -204,9 +199,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(TextQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity)?.SetAnswer(TextAnswer.FromString(@event.Answer), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity)?.SetAnswer(TextAnswer.FromString(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
@@ -214,9 +209,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(QRBarcodeQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(QRBarcodeAnswer.FromString(@event.Answer), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(QRBarcodeAnswer.FromString(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
@@ -225,9 +220,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(PictureQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.RosterVector, @event.PictureFileName);
@@ -236,9 +231,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(NumericRealQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.RosterVector, (double)@event.Answer);
@@ -247,9 +242,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(NumericIntegerQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
 
             if (this.UsesExpressionStorage) return;
@@ -259,9 +254,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(DateTimeQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateDateAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
@@ -270,11 +265,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(SingleOptionQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             var question = this.Tree.GetQuestion(questionIdentity);
 
-            question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue), @event.AnswerTimeUtc);
+            question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValue);
@@ -283,11 +278,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(MultipleOptionsQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             var question = this.Tree.GetQuestion(questionIdentity);
 
-            question.SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(@event.SelectedValues), @event.AnswerTimeUtc);
+            question.SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(@event.SelectedValues), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             if (this.UsesExpressionStorage) return;
@@ -297,9 +292,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(YesNoQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions), @event.OriginDate ?? @event.AnswerTimeUtc);
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
 
             if (this.UsesExpressionStorage) return;
@@ -309,10 +304,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(GeoLocationQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(GpsAnswer.FromGeoPosition(new GeoPosition(
-                    @event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude, @event.Timestamp)), @event.AnswerTimeUtc);
+                    @event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude, @event.Timestamp)), @event.OriginDate ?? @event.AnswerTimeUtc);
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.RosterVector, @event.Latitude,
@@ -322,26 +317,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(AreaQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize,
-                @event.Length, @event.Coordinates, @event.DistanceToEditor)), @event.AnswerTimeUtc);
+                @event.Length, @event.Coordinates, @event.DistanceToEditor)), @event.OriginDate ?? @event.AnswerTimeUtc);
         }
 
         protected virtual void Apply(AudioQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(AudioAnswer.FromString(@event.FileName, @event.Length), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(AudioAnswer.FromString(@event.FileName, @event.Length), @event.OriginDate ?? @event.AnswerTimeUtc);
         }
 
         protected virtual void Apply(TextListQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(TextListAnswer.FromTupleArray(@event.Answers), @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(TextListAnswer.FromTupleArray(@event.Answers), @event.OriginDate ?? @event.AnswerTimeUtc);
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
 
             if (this.UsesExpressionStorage) return;
@@ -351,8 +346,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector), @event.AnswerTimeUtc);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector), @event.OriginDate ?? @event.AnswerTimeUtc);
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVector);
         }
@@ -360,8 +355,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate?.UtcDateTime ?? @event.AnswerTimeUtc.Value);
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(@event.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray()), @event.AnswerTimeUtc);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.OriginDate ?? @event.AnswerTimeUtc.Value);
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(@event.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray()), @event.OriginDate ?? @event.AnswerTimeUtc);
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVectors);
         }
@@ -576,7 +571,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(
                 new AnswerComment(@event.UserId, userRole, 
-                    @event.OriginDate?.UtcDateTime ?? @event.CommentTime.Value, 
+                    @event.OriginDate ?? @event.CommentTime.Value, 
                     @event.Comment, commentByQuestion, @event.CommentId,
                     false));
         }
@@ -655,7 +650,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.InterviewerId = @event.InterviewerId;
             this.properties.IsReceivedByInterviewer = false;
-            this.properties.InterviewerAssignedDateTime = @event.AssignTime;
+            this.properties.InterviewerAssignedDateTime = @event.OriginDate ?? @event.AssignTime;
         }
 
         protected virtual void Apply(InterviewDeleted @event) { }
@@ -672,7 +667,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(InterviewCompleted @event)
         {
             this.properties.WasCompleted = true;
-            this.properties.CompletedDate = @event.CompleteTime;
+            this.properties.CompletedDate = @event.OriginDate ?? @event.CompleteTime;
         }
 
         protected virtual void Apply(InterviewRestarted @event) { }
@@ -687,7 +682,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.WasCompleted = false;
             this.properties.WasRejected = true;
-            this.properties.RejectDateTime = @event.RejectTime;
+            this.properties.RejectDateTime = @event.OriginDate ?? @event.RejectTime;
         }
 
         protected virtual void Apply(InterviewRejectedByHQ @event) { }
@@ -739,10 +734,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
 
-        private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
+        private readonly Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
         private IQuestionOptionsRepository questionOptionsRepository;
-        protected readonly IClock clock;
-
+        
         protected virtual IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
             var cacheKey = language ?? "Default-Language-9518C2F02FF54DC9A6BCB31507B03F06";
@@ -1106,12 +1100,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(TextAnswer.FromString(answer), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(TextAnswer.FromString(answer), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
         
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, DateTime answer)
@@ -1127,12 +1121,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireDateTimeAnswerAllowed();
 
             var changedInterviewTree = GetChangedTree();
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(DateTimeAnswer.FromDateTime(answer), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(DateTimeAnswer.FromDateTime(answer), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerNumericIntegerQuestion(AnswerNumericIntegerQuestionCommand command)
@@ -1151,12 +1145,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireNumericIntegerAnswerAllowed(answer, this.Tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeIntegerQuestion()?.ProtectedAnswer?.Value);
 
             var changedInterviewTree = GetChangedTree();
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(NumericIntegerAnswer.FromInt(answer), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(NumericIntegerAnswer.FromInt(answer), originDate);
             changedInterviewTree.ActualizeTree();
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double answer)
@@ -1171,12 +1165,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireNumericRealAnswerAllowed(answer);
 
             var changedInterviewTree = GetChangedTree();
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(NumericRealAnswer.FromDouble(answer), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(NumericRealAnswer.FromDouble(answer), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, int selectedValue)
@@ -1211,13 +1205,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (treeQuestion.IsLinkedToListQuestion)
             {
-                singleQuestion.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)), originDate.UtcDateTime);
+                singleQuestion.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)), originDate);
             }
             else
             {
                 var question = singleQuestion;
                 var questionWasAnsweredAndAnswerChanged = question.IsAnswered() && question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue != selectedValue;
-                question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)), originDate.UtcDateTime);
+                question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)), originDate);
 
                 if (questionWasAnsweredAndAnswerChanged)
                 {
@@ -1225,10 +1219,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, decimal[] selectedRosterVector)
@@ -1245,12 +1239,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedRosterVector), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedRosterVector), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, int[] selectedValues)
@@ -1281,17 +1275,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isLinkedToList)
             {
-                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(selectedValues), originDate.UtcDateTime);
+                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(selectedValues), originDate);
             }
             else
-                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(selectedValues), originDate.UtcDateTime);
+                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(selectedValues), originDate);
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector,
@@ -1310,12 +1304,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = GetChangedTree();
 
             changedInterviewTree.GetQuestion(questionIdentity)
-                .SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(selectedRosterVectors), originDate.UtcDateTime);
+                .SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(selectedRosterVectors), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerYesNoQuestion(AnswerYesNoQuestion command)
@@ -1332,14 +1326,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions), command.OriginDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions), command.OriginDate);
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, command.OriginDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, command.UserId);
+            this.ApplyEvents(treeDifference, command.UserId, command.OriginDate);
         }
 
         public void AnswerTextListQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate,
@@ -1359,14 +1353,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = GetChangedTree();
             var interviewTreeQuestion = changedInterviewTree.GetQuestion(questionIdentity);
 
-            interviewTreeQuestion.SetAnswer(TextListAnswer.FromTupleArray(answers), originDate.UtcDateTime);
+            interviewTreeQuestion.SetAnswer(TextListAnswer.FromTupleArray(answers), originDate);
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double latitude, double longitude,
@@ -1384,12 +1378,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = GetChangedTree();
 
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(GpsAnswer.FromGeoPosition(answer), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(GpsAnswer.FromGeoPosition(answer), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, string answer)
@@ -1405,12 +1399,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQRBarcodeAnswerAllowed();
 
             var changedInterviewTree = GetChangedTree();
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(QRBarcodeAnswer.FromString(answer), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(QRBarcodeAnswer.FromString(answer), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerAreaQuestion(AnswerGeographyQuestionCommand command)
@@ -1427,14 +1421,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = GetChangedTree();
 
             var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, command.Area, command.Length, command.Coordinates, command.DistanceToEditor);
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer), command.OriginDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer), command.OriginDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, command.OriginDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, command.UserId);
+            this.ApplyEvents(treeDifference, command.UserId, command.OriginDate);
         }
-
 
         public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, string pictureFileName)
         {
@@ -1450,12 +1443,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(pictureFileName, originDate.UtcDateTime), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(pictureFileName, originDate.UtcDateTime), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public void AnswerAudioQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, string pictureFileName, TimeSpan length)
@@ -1472,12 +1465,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AudioAnswer.FromString(pictureFileName, length), originDate.UtcDateTime);
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AudioAnswer.FromString(pictureFileName, length), originDate);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         public bool IsAnswerProtected(Identity questionIdentity, decimal value)
@@ -1522,10 +1515,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, userId, originDate);
         }
 
         private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> givenAndRemovedAnswers)
@@ -1557,7 +1550,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.ActualizeTree();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null, command.OriginDate);
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
@@ -1576,7 +1569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null,
                 previousStatus: InterviewStatus.SupervisorAssigned, originDate: command.OriginDate));
 
-            this.ApplyEvents(treeDifference, command.UserId);
+            this.ApplyEvents(treeDifference, command.UserId, command.OriginDate);
         }
 
         public void CreateInterview(CreateInterview command)
@@ -1587,11 +1580,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = command.QuestionnaireId;
             InterviewTree changedInterviewTree = GetChangedTree();
 
-            this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
+            this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId, command.OriginDate);
             this.ProtectAnswers(changedInterviewTree, command.ProtectedVariables);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null, command.OriginDate);
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
@@ -1625,7 +1618,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
             }
 
-            this.ApplyEvents(treeDifference, command.UserId);
+            this.ApplyEvents(treeDifference, command.UserId, command.OriginDate);
         }
 
         private bool cacheInitialized = false;
@@ -1664,7 +1657,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected void PutAnswers(InterviewTree changedInterviewTree,
             IEnumerable<InterviewAnswer> answers,
-            int? commandAssignmentId)
+            int? commandAssignmentId,
+            DateTimeOffset originDate)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1688,9 +1682,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (interviewTreeQuestion == null)
                         continue;
 
-                    interviewTreeQuestion.SetAnswer(answer.Answer, DateTime.UtcNow);
+                    interviewTreeQuestion.SetAnswer(answer.Answer, originDate);
 
-                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, changedInterviewTree, questionOptionsRepository));
+                    interviewTreeQuestion.RunImportInvariantsOrThrow(
+                        new InterviewQuestionInvariants(answer.Identity, questionnaire, 
+                            changedInterviewTree, questionOptionsRepository));
 
                     if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
                     {
@@ -1703,7 +1699,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         
-        public void ReevaluateInterview(Guid responsibleId)
+        public void ReevaluateInterview(Guid responsibleId, DateTimeOffset originDate)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -1713,9 +1709,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaire = this.GetQuestionnaireOrThrow();
             var sourceInterview = GetChangedTree();
 
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null, originDate);
             var treeDifference = FindDifferenceBetweenTrees(sourceInterview, this.Tree);
-            this.ApplyEvents(treeDifference, responsibleId);
+            this.ApplyEvents(treeDifference, responsibleId, originDate);
         }
 
         public void RepeatLastInterviewStatus(RepeatLastInterviewStatus command)
@@ -1750,8 +1746,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, command.UserId);
-            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId, DateTimeOffset.Now));
+            this.ApplyEvents(treeDifference, command.UserId, command.OriginDate);
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId, command.OriginDate));
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, string comment)
@@ -1999,7 +1995,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters,
+                InterviewStatus.RejectedBySupervisor);
 
             this.ApplyEvent(new InterviewApprovedByHQ(userId, comment, originDate));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment, previousStatus: this.properties.Status, originDate:originDate));
@@ -2155,14 +2152,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
             {
                 var @event = synchronizedEvent.Payload;
-                this.ApplyEvent(synchronizedEvent.EventIdentifier, DateTime.UtcNow /*synchronizedEvent.EventTimeStamp*/, @event);
+                this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
             }
 
             var sourceInterview = GetChangedTree();
 
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null, command.OriginDate);
             var treeDifference = FindDifferenceBetweenTrees(sourceInterview, this.Tree);
-            this.ApplyPassiveEvents(treeDifference);
+            this.ApplyPassiveEvents(treeDifference, command.OriginDate);
             
             //mismatch between trees 
             //resetting cached tree
@@ -2231,23 +2228,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Events raising
 
-        protected void ApplyPassiveEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        protected void ApplyPassiveEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, DateTimeOffset originDate)
         {
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
             var questionsWithChangedLinkedToListOptionsSet = diffByQuestions.Where(x => x.AreLinkedToListOptionsChanged).ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
-            this.ApplyEnablementEvents(diff);
-            this.ApplyValidityEvents(diff);
-            this.ApplyVariableEvents(changedVariables);
-            this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
-            this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
-            this.ApplySubstitutionEvents(diff);
-            this.ApplyReadonlyStateEvents(diff);
+            this.ApplyEnablementEvents(diff, originDate);
+            this.ApplyValidityEvents(diff, originDate);
+            this.ApplyVariableEvents(changedVariables, originDate);
+            this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet, originDate);
+            this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet, originDate);
+            this.ApplySubstitutionEvents(diff, originDate);
+            this.ApplyReadonlyStateEvents(diff, originDate);
         }
 
-        protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid responsibleId)
+        protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid responsibleId, DateTimeOffset originDate)
         {
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
@@ -2262,8 +2259,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var aggregatedEventsShouldBeFired = intersection.Count == 0;
             if (aggregatedEventsShouldBeFired)
             {
-                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
-                this.ApplyRosterEvents(changedRosters);
+                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId, originDate);
+                this.ApplyRosterEvents(changedRosters, originDate);
             }
             else
             {
@@ -2271,16 +2268,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // events fired by levels (from the questionnaire level down to nested rosters)
                 for (int i = 0; i <= maxDepth; i++)
                 {
-                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId);
-                    this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), 
+                        responsibleId, originDate);
+                    this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray(), originDate);
                 }
             }
-            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer, responsibleId);
-            this.ApplyProtectedAnswers(diff);
-            this.ApplyPassiveEvents(diff); 
+            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer, responsibleId, originDate);
+            this.ApplyProtectedAnswers(diff, originDate);
+            this.ApplyPassiveEvents(diff, originDate); 
         }
 
-        private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, DateTimeOffset originDate)
         {
             var groupsWithChangedTitles = diff.OfType<InterviewTreeGroupDiff>()
                 .Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
@@ -2295,11 +2293,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (groupsWithChangedTitles.Any() || questionsWithChangedTitles.Any() || staticTextsWithChangedTitles.Any())
             {
-                this.ApplyEvent(new SubstitutionTitlesChanged(questionsWithChangedTitles, staticTextsWithChangedTitles, groupsWithChangedTitles, DateTimeOffset.Now));
+                this.ApplyEvent(new SubstitutionTitlesChanged(questionsWithChangedTitles, staticTextsWithChangedTitles, groupsWithChangedTitles,
+                    originDate));
             }
         }
 
-        private void ApplyLinkedOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
+        private void ApplyLinkedOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet, 
+            DateTimeOffset originDate)
         {
             var changedLinkedOptions = questionsWithChangedOptionsSet
                 .Select(x => new ChangedLinkedOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinked.Options.ToArray()))
@@ -2307,11 +2307,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changedLinkedOptions.Any())
             {
-                this.ApplyEvent(new LinkedOptionsChanged(changedLinkedOptions, DateTimeOffset.Now));
+                this.ApplyEvent(new LinkedOptionsChanged(changedLinkedOptions, originDate));
             }
         }
 
-        private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
+        private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet, DateTimeOffset originDate)
         {
             var changedLinkedOptions = questionsWithChangedOptionsSet
                 .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options.Select(Convert.ToDecimal).ToArray()))
@@ -2319,19 +2319,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changedLinkedOptions.Any())
             {
-                this.ApplyEvent(new LinkedToListOptionsChanged(changedLinkedOptions, DateTimeOffset.Now));
+                this.ApplyEvent(new LinkedToListOptionsChanged(changedLinkedOptions, originDate));
             }
         }
 
-        private void ApplyVariableEvents(InterviewTreeVariableDiff[] diffsByChangedVariables)
+        private void ApplyVariableEvents(InterviewTreeVariableDiff[] diffsByChangedVariables, DateTimeOffset originDate)
         {
             var changedVariables = diffsByChangedVariables.Where(x => x.ChangedNode != null && x.IsValueChanged).Select(ToChangedVariable).ToArray();
 
             if (changedVariables.Any())
-                this.ApplyEvent(new VariablesChanged(changedVariables, DateTimeOffset.Now));
+                this.ApplyEvent(new VariablesChanged(changedVariables, originDate));
         }
 
-        private void ApplyValidityEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        private void ApplyValidityEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, DateTimeOffset originDate)
         {
             var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
 
@@ -2358,9 +2358,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 //.ToDictionary(x => x.Identity, x => x.FailedWarnings);
                 .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarnings))
                 .ToList();
-
-            var originDate = DateTimeOffset.Now;
-
+            
             if (validQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredValid(validQuestionIdentities, originDate));
             if (invalidQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestionIdentities, originDate));
 
@@ -2386,7 +2384,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ApplyEnablementEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        private void ApplyEnablementEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, DateTimeOffset originDate)
         {
             var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
 
@@ -2406,9 +2404,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var disabledVariables = diffByVariables.Where(x => x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
             var enabledVariables = diffByVariables.Where(x => x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
-
-            var originDate = DateTimeOffset.Now;
-
+            
             if (disabledGroups.Any()) this.ApplyEvent(new GroupsDisabled(disabledGroups, originDate));
             if (enabledGroups.Any()) this.ApplyEvent(new GroupsEnabled(enabledGroups, originDate));
             if (disabledQuestions.Any()) this.ApplyEvent(new QuestionsDisabled(disabledQuestions, originDate));
@@ -2419,15 +2415,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (enabledVariables.Any()) this.ApplyEvent(new VariablesEnabled(enabledVariables, originDate));
         }
 
-        private void ApplyReadonlyStateEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        private void ApplyReadonlyStateEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, DateTimeOffset originDate)
         {
             var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
             var diffByQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
             var readonlyQuestions = diffByQuestions.Where(x => x.NodeIsMarkedAsReadonly).Select(x => x.ChangedNode.Identity).ToArray();
-            if (readonlyQuestions.Any()) this.ApplyEvent(new QuestionsMarkedAsReadonly(readonlyQuestions, DateTimeOffset.Now));
+            if (readonlyQuestions.Any()) this.ApplyEvent(new QuestionsMarkedAsReadonly(readonlyQuestions, originDate));
         }
 
-        private void ApplyProtectedAnswers(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        private void ApplyProtectedAnswers(IReadOnlyCollection<InterviewTreeNodeDiff> diff, DateTimeOffset originDate)
         {
             var allNotNullableNodes = diff.Where(x => x.ChangedNode != null)
                                           .OfType<InterviewTreeQuestionDiff>()
@@ -2436,14 +2432,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                           .ToList();
             if (allNotNullableNodes.Count > 0)
             {
-                var @event = new AnswersMarkedAsProtected(allNotNullableNodes.Select(x => x.Identity).ToArray(), DateTimeOffset.Now);
+                var @event = new AnswersMarkedAsProtected(allNotNullableNodes.Select(x => x.Identity).ToArray(), originDate);
                 this.ApplyEvent(@event);
             }
         }
 
-        private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)
+        private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId, DateTimeOffset originDate)
         {
-            var now = this.clock.DateTimeOffsetNow();
+            var now = originDate;
             foreach (var diffByQuestion in diffByQuestions)
             {
                 var changedQuestion = diffByQuestion.ChangedNode;
@@ -2563,22 +2559,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid userId)
+        private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid userId, DateTimeOffset originDate)
         {
             var questionIdentittiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
 
             if (questionIdentittiesWithRemovedAnswer.Any())
-                this.ApplyEvent(new AnswersRemoved(userId, questionIdentittiesWithRemovedAnswer, DateTimeOffset.Now));
+                this.ApplyEvent(new AnswersRemoved(userId, questionIdentittiesWithRemovedAnswer, originDate));
         }
 
-        private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff)
+        private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff, DateTimeOffset originDate)
         {
             var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode).ToArray();
             var addedRosters = diff.Where(x => x.IsNodeAdded).Select(x => x.ChangedNode).ToArray();
             var changedRosterTitles = diff.Where(x => x.IsRosterTitleChanged).Select(x => x.ChangedNode).ToArray();
-
-            var originDate = DateTimeOffset.Now;
-
+            
             if (removedRosters.Any())
                 this.ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray(), originDate));
 
@@ -2681,60 +2675,62 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return sourceInterview.Compare(changedInterview);
         }
 
-        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, Identity entityIdentity, bool removeLinkedAnswers = true)
+        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree,
+            IQuestionnaire questionnaire, 
+            Identity entityIdentity, DateTimeOffset originDate, bool removeLinkedAnswers = true)
         {
             if (questionnaire.IsUsingExpressionStorage())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
-                using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
+                using var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers);
+                if (questionnaire.SupportsExpressionsGraph() && entityIdentity != null)
                 {
-                    if (questionnaire.SupportsExpressionsGraph() && entityIdentity != null)
-                    {
-                        var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity.Id);
-                        PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
-                        var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
-                        PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
-                    }
-                    else
-                    {
-                        var playOrder = questionnaire.GetExpressionsPlayOrder();
-                        PlayActionForEachNodeInOrder(playOrder, node => node.Accept(updater));
-                        PlayActionForEachNodeInOrder(playOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
-                    }
+                    var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity.Id);
+                    PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
+                    var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
+                    PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+                }
+                else
+                {
+                    var playOrder = questionnaire.GetExpressionsPlayOrder();
+                    PlayActionForEachNodeInOrder(playOrder, node => node.Accept(updater));
+                    PlayActionForEachNodeInOrder(playOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+                }
 
-                    void PlayActionForEachNodeInOrder(List<Guid> playOrder, Action<IInterviewTreeNode> action)
+                void PlayActionForEachNodeInOrder(List<Guid> playOrder, Action<IInterviewTreeNode> action)
+                {
+                    foreach (var entityId in playOrder)
                     {
-                        foreach (var entityId in playOrder)
+                        var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
+
+                        foreach (var entity in entityIdentities)
                         {
-                            var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
-
-                            foreach (var entity in entityIdentities)
+                            var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
+                            if (changedNode != null)
                             {
-                                var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
-                                if (changedNode != null)
-                                {
-                                    action(changedNode);
-                                }
+                                action(changedNode);
                             }
                         }
                     }
-
-                    this.UpdateRosterTitles(changedInterviewTree, questionnaire);
-                    this.UpdateLinkedQuestions(changedInterviewTree, updater);
                 }
+
+                this.UpdateRosterTitles(changedInterviewTree, questionnaire);
+                this.UpdateLinkedQuestions(changedInterviewTree, updater);
             }
             else
             {
-                this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
+                this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire, originDate);
             }
             
             changedInterviewTree.ReplaceSubstitutions();
         }
 
-        private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
-            IQuestionnaire questionnaire)
+        private void UpdateTreeWithDependentChangesWithExpressionState(
+            InterviewTree changedInterviewTree,
+            IQuestionnaire questionnaire,
+            DateTimeOffset originDate)
         {
             ILatestInterviewExpressionState expressionProcessorState = this.GetClonedExpressionState();
 
@@ -2745,7 +2741,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdateTreeWithEnablementChanges(changedInterviewTree, enablementChanges);
 
             StructuralChanges structuralChanges = expressionProcessorState.GetStructuralChanges();
-            this.UpdateTreeWithStructuralChanges(changedInterviewTree, structuralChanges);
+            this.UpdateTreeWithStructuralChanges(changedInterviewTree, structuralChanges, originDate);
 
             this.UpdateRosterTitles(changedInterviewTree, questionnaire);
 
@@ -2886,11 +2882,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void UpdateTreeWithStructuralChanges(InterviewTree tree, StructuralChanges structuralChanges)
+        private void UpdateTreeWithStructuralChanges(InterviewTree tree, StructuralChanges structuralChanges, DateTimeOffset originDate)
         {
             foreach (KeyValuePair<Identity, int[]> changedMultiQuestion in structuralChanges.ChangedMultiQuestions)
             {
-                tree.GetQuestion(changedMultiQuestion.Key).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(changedMultiQuestion.Value), DateTime.UtcNow);
+                tree.GetQuestion(changedMultiQuestion.Key)
+                    .SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(changedMultiQuestion.Value),
+                    originDate);
             }
 
             foreach (KeyValuePair<Identity, int?> changedSingleQuestion in structuralChanges.ChangedSingleQuestions)
@@ -2919,7 +2917,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (KeyValuePair<Identity, YesNoAnswersOnly> changedYesNoQuestion in structuralChanges.ChangedYesNoQuestions)
             {
-                tree.GetQuestion(changedYesNoQuestion.Key).SetAnswer(YesNoAnswer.FromYesNoAnswersOnly(changedYesNoQuestion.Value), DateTime.UtcNow);
+                tree.GetQuestion(changedYesNoQuestion.Key).SetAnswer(YesNoAnswer.FromYesNoAnswersOnly(changedYesNoQuestion.Value), 
+                    originDate);
             }
 
             foreach (Identity removedRosterIdentity in structuralChanges.RemovedRosters)
@@ -2994,7 +2993,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void SetStartDateOnFirstAnswerSet(Identity questionIdentity, DateTime answerDate)
+        private void SetStartDateOnFirstAnswerSet(Identity questionIdentity, DateTimeOffset answerDate)
         {
             if (this.properties.StartedDate.HasValue) return;
 

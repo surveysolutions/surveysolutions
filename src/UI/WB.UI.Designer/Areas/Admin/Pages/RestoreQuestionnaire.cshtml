@@ -34,6 +34,10 @@
     <div class="form-group">
         <input class="form-control" type="file" asp-for="Upload" placeholder=".zip file" accept=".zip" />
     </div>
+    <div class="form-group">
+        <input id="create-new" type="checkbox" asp-for="CreateNew"/>
+        <label for="create-new">Create new questionnaire. If selected new questionnaire will be created otherwise existing one will be overriden.</label>
+    </div>
     <div class="form-actions">
         <input type="submit" class="btn btn-success btn-lg" value="Upload" />
         <a class="btn" asp-controller="ControlPanel" asp-action="Index">

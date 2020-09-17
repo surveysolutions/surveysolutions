@@ -3,11 +3,11 @@ using System.Collections;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidX.AppCompat.Widget;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Platforms.Android.Binding.Views;
 

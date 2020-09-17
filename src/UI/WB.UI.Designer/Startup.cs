@@ -187,6 +187,7 @@ namespace WB.UI.Designer
             services.AddTransient<IRecipientNotifier, MailNotifier>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
+            services.Configure<IntegrationsConfig>(Configuration.GetSection("Integrations"));
 
             var membershipSection = this.Configuration.GetSection("Membership");
             services.Configure<IdentityOptions>(opt =>

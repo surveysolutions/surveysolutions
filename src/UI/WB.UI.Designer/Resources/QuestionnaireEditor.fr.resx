@@ -210,9 +210,6 @@
   <data name="EmptySectionLine3" xml:space="preserve">
     <value>en haut de ce bloc ou gérer les sections avec {{-panel}} panneau de gauche</value>
   </data>
-  <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Langue de l'enquête, types d'appareils, collaboration et autres options</value>
-  </data>
   <data name="EmptySectionLine5" xml:space="preserve">
     <value>peut être trouvé sur le panneau {{-settingsBtn}} (en haut à droite)</value>
   </data>

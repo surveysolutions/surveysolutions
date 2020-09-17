@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
@@ -13,9 +14,11 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -24,6 +27,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IAuditLogService auditLogService;
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IPlainStorage<InterviewView> interviews;
+
         
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
@@ -36,7 +41,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             DynamicTextViewModel dynamicTextViewModel, 
             IViewModelNavigationService navigationService,
             ILogger logger,
-            IAuditLogService auditLogService) : 
+            IAuditLogService auditLogService,
+            IPlainStorage<InterviewView> interviews) : 
                 base(navigationService,
                 commandService,
                 principal,
@@ -50,10 +56,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
+            this.interviews = interviews;
         }
 
         private InterviewStatus status;
         private IStatefulInterview interview;
+        private DateTime? receivedByInterviewerTabletAt;
 
         public override void Configure(string interviewId, NavigationState navigationState)
         {
@@ -74,6 +82,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             base.AnsweredCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
             base.ErrorsCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
             base.UnansweredCount = interview.CountActiveQuestionsInInterviewForSupervisor() - base.AnsweredCount;
+
+            var interviewView = this.interviews.GetById(interviewId);
+            this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
@@ -84,7 +95,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
-                 this.status == InterviewStatus.RejectedByHeadquarters);
+                 this.status == InterviewStatus.RejectedByHeadquarters ||
+                 this.status == InterviewStatus.RejectedBySupervisor && this.receivedByInterviewerTabletAt == null);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {

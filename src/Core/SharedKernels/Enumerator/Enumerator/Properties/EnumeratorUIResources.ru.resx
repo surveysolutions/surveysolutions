@@ -951,4 +951,7 @@
   <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
     <value>{0} из {1} частичных данных по интервью скачано</value>
   </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+      <value>Адрес не верный</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿using Android.Support.V4.Widget;
+﻿using AndroidX.DrawerLayout.Widget;
 using WB.UI.Shared.Enumerator.CustomBindings;
 
 namespace WB.UI.Supervisor.MvvmBindings

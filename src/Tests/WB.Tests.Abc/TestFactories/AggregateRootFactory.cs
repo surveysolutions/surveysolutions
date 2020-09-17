@@ -58,9 +58,7 @@ namespace WB.Tests.Abc.TestFactories
             var interview = new Interview(
                 textFactory ?? textFactoryMock.Object,
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new SystemClock()
-                );
+                Create.Storage.QuestionnaireQuestionOptionsRepository());
 
             interview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -80,7 +78,8 @@ namespace WB.Tests.Abc.TestFactories
             IFileSystemAccessor fileSystemAccessor = null,
             IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null,
             IReusableCategoriesStorage categoriesStorage = null,
-            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage = null)
+            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage = null,
+            IPlainKeyValueStorage<QuestionnaireBackup> questionnaireBackupStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyAccessor>(),
@@ -88,7 +87,8 @@ namespace WB.Tests.Abc.TestFactories
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>(),
                 categoriesStorage ?? Mock.Of<IReusableCategoriesStorage>(),
-                pdfStorage ?? new InMemoryPlainStorageAccessor<QuestionnairePdf>());
+                pdfStorage ?? new InMemoryPlainStorageAccessor<QuestionnairePdf>(),
+                questionnaireBackupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireBackup>>());
 
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
@@ -149,8 +149,7 @@ namespace WB.Tests.Abc.TestFactories
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                clock ?? new SystemClock());
+                Create.Storage.QuestionnaireQuestionOptionsRepository());
 
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
@@ -188,9 +187,8 @@ namespace WB.Tests.Abc.TestFactories
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new SystemClock()
-                );
+                Create.Storage.QuestionnaireQuestionOptionsRepository());
+
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
             if (shouldBeInitialized)

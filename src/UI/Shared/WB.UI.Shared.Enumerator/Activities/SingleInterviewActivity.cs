@@ -11,7 +11,7 @@ using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnCreate(bundle);
 
-            this.Toolbar = this.FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
+            this.Toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.Toolbar);
 
             SetupAnswerTimeMeasurement();

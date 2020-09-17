@@ -1,8 +1,7 @@
-﻿using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.AppCompat.Widget;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
