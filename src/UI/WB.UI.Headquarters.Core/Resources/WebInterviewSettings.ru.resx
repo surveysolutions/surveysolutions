@@ -182,6 +182,9 @@
   <data name="RejectEmailMessage" xml:space="preserve">
     <value>Отклоненные</value>
   </data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Завершенные</value>
+  </data>
   <data name="InvitationEmailMessage" xml:space="preserve">
     <value>Приглашение</value>
   </data>

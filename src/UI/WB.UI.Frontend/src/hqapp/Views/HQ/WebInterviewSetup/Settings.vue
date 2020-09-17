@@ -1033,6 +1033,29 @@
                             <span class="tick"></span>{{$t('WebInterviewSetup.SingleResponse')}}
                         </label>
                     </div>
+                    <div class="form-group mb-20">
+                        <input class="checkbox-filter"
+                            v-validate="''"
+                            data-vv-name="emailOnComplete"
+                            id="emailOnComplete"
+                            type="checkbox"
+                            v-model="emailOnCompleteIsEnabled">
+                        <label for="emailOnComplete">
+                            <span class="tick"></span>{{$t('WebInterviewSetup.EmailOnComplete')}}
+                        </label>
+                    </div>
+                    <div class="form-group mb-20">
+                        <input class="checkbox-filter"
+                            v-validate="''"
+                            data-vv-name="attachAnswersInEmail"
+                            id="attachAnswersInEmail"
+                            type="checkbox"
+                            :disabled="emailOnComplete"
+                            v-model="attachAnswersInEmailIsEnabled">
+                        <label for="attachAnswersInEmail">
+                            <span class="tick"></span>{{$t('WebInterviewSetup.AttachAnswersToCompleteEmail')}}
+                        </label>
+                    </div>
                     <div class="notification-block mb-20">
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithNoResponse')}}
@@ -1154,6 +1177,8 @@ export default {
             webInterviewPageMessages: [],
             spamProtectionIsEnabled: false,
             singleResponseIsEnabled: true,
+            emailOnCompleteIsEnabled: false,
+            attachAnswersInEmailIsEnabled: false,
             started: false,
             reminderAfterDaysIfNoResponse: 3,
             reminderAfterDaysIfPartialResponse: 3,
@@ -1170,12 +1195,16 @@ export default {
         self.started = this.$config.model.started
         self.spamProtectionIsEnabled = this.$config.model.useCaptcha
         self.singleResponseIsEnabled = this.$config.model.singleResponse
+        self.emailOnCompleteIsEnabled = this.$config.model.emailOnComplete
+        self.attachAnswersInEmailIsEnabled = this.$config.model.attachAnswersInEmail
         self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse
         self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse
         self.cancelSpamProtectionIsEnabled = this.$config.model.useCaptcha
         self.cancelReminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse
         self.cancelReminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse
         self.cancelSingleResponseIsEnabled = this.$config.model.singleResponse
+        self.cancelEmailOnCompleteIsEnabled = this.$config.model.emailOnComplete
+        self.cancelAttachAnswersInEmailIsEnabled = this.$config.model.attachAnswersInEmail
         self.logoUrl = this.$config.model.logoUrl
         self.hasLogo = this.$config.model.hasLogo
 
@@ -1364,12 +1393,16 @@ export default {
                 this.spamProtectionIsEnabled,
                 this.reminderAfterDaysIfNoResponse == 'null' ? null : this.reminderAfterDaysIfNoResponse,
                 this.reminderAfterDaysIfPartialResponse == 'null' ? null : this.reminderAfterDaysIfPartialResponse,
-                this.singleResponseIsEnabled)
+                this.singleResponseIsEnabled,
+                this.emailOnCompleteIsEnabled,
+                this.attachAnswersInEmailIsEnabled)
                 .then(function (response) {
                     self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
                     self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse
                     self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse
                     self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled
+                    self.cancelEmailOnCompleteIsEnabled = self.emailOnCompleteIsEnabled
+                    self.cancelAttachAnswersInEmailIsEnabled = self.attachAnswersInEmailIsEnabled
                     self.$validator.reset('additionalSettings')
                 })
                 .catch(function (error) {
@@ -1384,6 +1417,8 @@ export default {
             this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse
             this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse
             this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled
+            this.emailOnCompleteIsEnabled = this.cancelEmailOnCompleteIsEnabled
+            this.attachAnswersInEmailIsEnabled = this.cancelAttachAnswersInEmailIsEnabled
             this.$validator.reset('additionalSettings')
         },
         previewText(text) {
