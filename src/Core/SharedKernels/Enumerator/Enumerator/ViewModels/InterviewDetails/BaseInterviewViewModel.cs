@@ -220,7 +220,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.CurrentStage.DisposeIfDisposable();
             this.CurrentStage = this.GetInterviewStageViewModel(eventArgs);
-            this.RaisePropertyChanged(() => this.CurrentStage);
+            this.RaisePropertyChanged(nameof(this.CurrentStage));
         }
 
         private InterviewStageViewModel GetInterviewStageViewModel(ScreenChangedEventArgs eventArgs)
@@ -279,7 +279,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     return completeInterviewViewModel;
                 case ScreenType.Cover:
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.AnchoredElementIdentity);
                     return coverInterviewViewModel;
                 case ScreenType.Group:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();

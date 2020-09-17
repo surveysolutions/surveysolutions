@@ -162,6 +162,9 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
+  </data>
   <data name="InvalidResetPasswordLink" xml:space="preserve">
     <value>Your password reset link invalid or expired. Please try again</value>
   </data>

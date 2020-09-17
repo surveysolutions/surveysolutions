@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview.Pipeline;
+using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -38,6 +39,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             foreach (var action in deferQueue.GetConsumingEnumerable())
             {
+                CommonMetrics.WebInterviewNotifications.Dec();
                 try
                 {
                     InScopeExecutor.Current.Execute(action);
@@ -55,6 +57,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             if (aggregateRootCache.GetConnectedCount(interviewId) > 0)
             {
+                CommonMetrics.WebInterviewNotifications.Inc();
                 deferQueue.Add(action);
             }
         }

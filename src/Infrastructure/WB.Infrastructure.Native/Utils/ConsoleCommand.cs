@@ -24,6 +24,7 @@ namespace WB.Infrastructure.Native.Utils
             process.OutputDataReceived += (sender, e) => outputDataReceived?.Invoke(e.Data);
 
             process.Start();
+            process.WaitForExit(40_000);
 
             if (process.ExitCode != 0)
             {

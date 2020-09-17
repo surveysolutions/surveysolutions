@@ -89,11 +89,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             if (questionId.HasValue)
                 return questionnaire.IsPrefilled(questionId.Value) && !questionnaire.IsCoverPageSupported
-                    ? GenerateInterviewUrl("cover", interview.Id, virtualDirectoryName)
-                    : GenerateInterviewUrl("section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
+                    ? GenerateInterviewUrl("Cover", interview.Id, virtualDirectoryName)
+                    : GenerateInterviewUrl("Section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
 
             if (rosterOrGroupId.HasValue)
-                return GenerateInterviewUrl("section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity) ?? nearestInterviewEntity, nearestInterviewEntity);
+                return GenerateInterviewUrl("Section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity) ?? nearestInterviewEntity, nearestInterviewEntity);
 
             return null;
         }
@@ -132,7 +132,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private string GenerateInterviewUrl(string action, Guid interviewId, string virtualDirectoryName, Identity sectionId = null, Identity scrollTo = null)
         {
             var relativeUrl = $@"~/{virtualDirectoryName}/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}";
-            return this.virtualPathService.GetAbsolutePath(relativeUrl);
+            return this.virtualPathService.GetRelatedToRootPath(relativeUrl);
         }
 
         private string GenerateAttachmentUrl(Guid interviewId, string attachmentContentId)

@@ -46,11 +46,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public async Task<DataExportArchive?> GetDataArchive(QuestionnaireIdentity questionnaireIdentity,
             DataExportFormat format,
-            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null)
+            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null,
+            bool? includeMeta = null)
         {
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
             var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName,
-                format, status, from, to, translationId);
+                format, status, from, to, translationId, includeMeta);
 
             if (result.StatusCode == HttpStatusCode.NotFound) return null;
 

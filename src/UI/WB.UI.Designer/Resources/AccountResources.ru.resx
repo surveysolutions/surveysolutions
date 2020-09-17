@@ -304,4 +304,7 @@
   <data name="PasswordEmailSent" xml:space="preserve">
     <value>Пожалуйста, проверьте электронную почту для восстановления пароля.</value>
   </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Форум</value>
+  </data>
 </root>

@@ -1,16 +1,58 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+ARG NODEJS_VERSION
+ARG DOTNET_VERSION
 
-RUN apt-get update \
-    && apt-get install -y libfontconfig1 libgdiplus ffmpeg gdal-bin
+FROM node:${NODEJS_VERSION} AS js_builder
+
+COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
+COPY src/UI/WB.UI.Headquarters.Core/Resources src/UI/WB.UI.Headquarters.Core/Resources
+COPY src/UI/WB.UI.Headquarters.Core/Views src/UI/WB.UI.Headquarters.Core/Views
+COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources
+COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
+
+WORKDIR /src/UI/WB.UI.Frontend
+RUN yarn && yarn build --package
+
+FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
+
+ARG GIT_BRANCH
+ARG HQ_BUILD
+ARG EXPORT_BUILD
+
+COPY libs /libs
+COPY src /src
+
+COPY --from=js_builder /src/UI/WB.UI.Frontend/dist/package/hq /src/UI/WB.UI.Headquarters.Core/
+
+RUN dotnet publish /src/UI/WB.UI.Headquarters.Core \
+    -c Release -o /hq \
+    --version-suffix $GIT_BRANCH \
+    /p:BuildNumber=$HQ_BUILD
+RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
+    -c Release \
+    -o /export \
+    --version-suffix $GIT_BRANCH \
+    /p:BuildNumber=$EXPORT_BUILD
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
 
 ARG BUILD_DATE
 ARG VCS_REF
 ARG BUILD_VERSION
+ARG GIT_BRANCH
 
 ARG HQ_BUILD
 ARG IN_BUILD
 ARG SV_BUILD
 ARG EXPORT_BUILD
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    gdal-bin \
+    ffmpeg \
+    libfontconfig1 \
+    libgdiplus \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Labels.
 LABEL org.label-schema.schema-version="1.0"
@@ -28,15 +70,16 @@ LABEL solutions.mysurvey.interviewer.build-no=$IN_BUILD
 LABEL solutions.mysurvey.supervisor.build-no=$SV_BUILD
 LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
 
-COPY appsettings.ini /app/appsettings.cloud.ini
+# Larger files at first
+COPY build/headquarters/*.apk /app/Client/
 
-ADD headquarters.linux-x64.tar.gz /app/
-ADD export.linux-x64.tar.gz /app/Export.Service
+COPY --from=builder hq /app
+COPY --from=builder export /app/Export.Service
 
-COPY *.apk /app/Client/
+COPY build/headquarters/appsettings.ini /app/appsettings.cloud.ini
 
 WORKDIR /app
 EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 CMD curl -l http://hq/.hc/ready
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
 
-ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll", "--urls=http://0.0.0.0:80"]
+ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll"]

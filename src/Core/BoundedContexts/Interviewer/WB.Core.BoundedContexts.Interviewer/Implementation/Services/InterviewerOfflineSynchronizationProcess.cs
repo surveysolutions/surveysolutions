@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -50,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                       + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
-        protected override Task<string> GetNewPasswordAsync() => Task.FromResult((string)null);
+        protected override Task<string?> GetNewPasswordAsync() => Task.FromResult(default(string));
 
         protected override void WriteToAuditLogStartSyncMessage()
             => this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Offline));

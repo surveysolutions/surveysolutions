@@ -5,6 +5,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -73,28 +74,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public string Password
         {
             get => this.password;
-            set { this.password = value; RaisePropertyChanged(); }
-        }
-
-        private bool isEndpointValid;
-        public bool IsEndpointValid
-        {
-            get => this.isEndpointValid;
-            set { this.isEndpointValid = value; RaisePropertyChanged(); }
+            set
+            {
+                SetProperty(ref this.password, value);
+                this.PasswordError = null;
+            }
         }
 
         private bool isUserValid;
         public bool IsUserValid
         {
             get => this.isUserValid;
-            set { this.isUserValid = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.isUserValid, value);
         }
 
         private string errorMessage;
         public string ErrorMessage
         {
             get => this.errorMessage;
-            set { this.errorMessage = value; RaisePropertyChanged(); }
+            set => SetProperty(ref this.errorMessage, value);
         }
 
         private bool isInProgress;
@@ -105,10 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private IMvxAsyncCommand signInCommand;
-        public IMvxAsyncCommand SignInCommand
-        {
-            get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
-        }
+        public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress);
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
@@ -122,11 +117,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             await base.Initialize().ConfigureAwait(false);
 
             this.IsUserValid = true;
-            this.IsEndpointValid = true;
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            this.Endpoint = "http://192.168.88./headquarters";
+            this.Endpoint = "http://10.0.2.2:5001";
             this.UserName = "int";
             this.Password = "1";
 #endif
@@ -175,7 +169,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task SignInAsync()
         {
             this.IsUserValid = true;
-            this.IsEndpointValid = true;
+            this.ErrorMessage = null;
+            this.EndpointValidationError = null;
 
             if (this.Endpoint?.StartsWith("@") == true)
             {
@@ -231,13 +226,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     case SynchronizationExceptionType.HostUnreachable:
                     case SynchronizationExceptionType.InvalidUrl:
                     case SynchronizationExceptionType.ServiceUnavailable:
-                        this.IsEndpointValid = false;
+                        this.EndpointValidationError = EnumeratorUIResources.InvalidEndpointShort;
                         break;
                     case SynchronizationExceptionType.UserIsNotInterviewer:
                     case SynchronizationExceptionType.UserLocked:
                     case SynchronizationExceptionType.UserNotApproved:
                     case SynchronizationExceptionType.Unauthorized:
                         this.IsUserValid = false;
+                        this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
@@ -265,6 +261,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
+        public string PasswordError
+        {
+            get => passwordError;
+            set => SetProperty(ref passwordError, value);
+        }
+
+        public string EndpointValidationError
+        {
+            get => endpointValidationError;
+            set => SetProperty(ref endpointValidationError, value);
+        }
+
         protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
@@ -272,6 +280,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
 
         private IMvxAsyncCommand scanAsyncCommand;
+        private string endpointValidationError;
+        private string passwordError;
+
         public IMvxAsyncCommand ScanCommand
         {
             get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }

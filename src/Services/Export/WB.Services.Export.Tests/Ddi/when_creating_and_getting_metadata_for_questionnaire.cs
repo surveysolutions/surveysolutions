@@ -80,7 +80,7 @@ namespace WB.Services.Export.Tests.Ddi
             metadataWriter.Verify(x => x.CreateDdiDataFile("main level"), Times.Once());
 
         [NUnit.Framework.Test] public void should_return_correct_path () =>
-            filePath.Should().Be(questionnaireId + "_ddi.xml");
+            filePath.Should().EndWith("ddi.xml");
 
         [NUnit.Framework.Test] public void should_add_variable_for_txt_question () =>
             metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "txt", DdiDataType.DynString, "lbl_txt", "ttt","text question", null));

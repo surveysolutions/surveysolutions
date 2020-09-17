@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -64,14 +65,22 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public string Password
         {
             get => password;
-            set { password = value; RaisePropertyChanged(); }
+            set => SetProperty(ref password, value);
         }
 
         private bool staySignedIn = true;
+        private string loginError;
+
         public bool StaySignedIn
         {
             get => staySignedIn;
-            set { staySignedIn = value; RaisePropertyChanged(); }
+            set => SetProperty(ref staySignedIn , value);
+        }
+
+        public string LoginError
+        {
+            get => loginError;
+            set => SetProperty(ref loginError, value);
         }
 
         public IMvxAsyncCommand LoginCommand => new MvxAsyncCommand(this.LoginAsync, () => !IsInProgress);
@@ -80,49 +89,53 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             IsInProgress = true;
 
-            string errorMessage = null;
-
-            if (!string.IsNullOrEmpty(LoginName))
+            try
             {
-                try
+                string errorMessage = null;
+                this.LoginError = null;
+
+                if (!string.IsNullOrEmpty(LoginName))
                 {
-                    if (await this.designerApiService.Authorize(login: LoginName, password: Password))
+                    try
                     {
-                        this.userStorage.RemoveAll();
-                        this.dashboardLastUpdateStorage.RemoveAll();
-                        this.questionnairesStorage.RemoveAll();
-                        this.principal.SignIn(userName: this.LoginName, password: this.Password,
-                            staySignedIn: this.StaySignedIn);
-                        await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
+                        if (await this.designerApiService.Authorize(login: LoginName, password: Password))
+                        {
+                            this.userStorage.RemoveAll();
+                            this.dashboardLastUpdateStorage.RemoveAll();
+                            this.questionnairesStorage.RemoveAll();
+                            this.principal.SignIn(userName: this.LoginName, password: this.Password,
+                                staySignedIn: this.StaySignedIn);
+                            await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
+                        }
+                    }
+                    catch (RestException ex)
+                    {
+                        switch (ex.StatusCode)
+                        {
+                            case HttpStatusCode.NotFound:
+                                LoginError = TesterUIResources.Login_Error_NotFound;
+                                break;
+                            default:
+                                errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
+                                break;
+                        }
+
+                        if (string.IsNullOrEmpty(errorMessage))
+                            throw;
                     }
                 }
-                catch (RestException ex)
+                else
                 {
-                    switch (ex.StatusCode)
-                    {
-                        case HttpStatusCode.NotFound:
-                            errorMessage = TesterUIResources.Login_Error_NotFound;
-                            break;
-                        default:
-                            errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
-                            break;
-                    }
+                    LoginError = TesterUIResources.Login_Error_EmptyName;
+                }
 
-                    if (string.IsNullOrEmpty(errorMessage))
-                        throw;
-                }
-                finally
-                {
-                    IsInProgress = false;
-                }
+                if (!string.IsNullOrEmpty(errorMessage))
+                    await this.userInteractionService.AlertAsync(errorMessage);
             }
-            else
+            finally
             {
-                errorMessage = TesterUIResources.Login_Error_EmptyName;
+                IsInProgress = false;
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
     }
 }

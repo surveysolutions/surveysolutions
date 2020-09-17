@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         
         bool DoesIdentityExist();
 
-        string GetExistingIdentityNameOrNull();
+        string? GetExistingIdentityNameOrNull();
 
         bool SaveInterviewer(InterviewerIdentity interviewer);
 

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
         private static readonly string actualTextWithMarkdownLink = $"[hello]({targetTextQuestionVariable})";
         private string expectedTextWithMarkdownLink =>
-            $"<a href=\"~/Interview/Review/{CurrentInterview.Id.FormatGuid()}/section/{Id.gA.FormatGuid()}#{targetQuestionIdentity.Id.FormatGuid()}\">hello</a>";
+            $"<a href=\"~/Interview/Review/{CurrentInterview.Id.FormatGuid()}/Section/{Id.gA.FormatGuid()}#{targetQuestionIdentity.Id.FormatGuid()}\">hello</a>";
 
         private static readonly Identity textQuestionIdentity = Id.Identity1;
         private static readonly Identity staticTextIdentity = Id.Identity2;

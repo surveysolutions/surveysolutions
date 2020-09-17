@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public QuestionType Type { get; set; }
 
         public bool HasCondition { get; set; }
+        public bool HideIfDisabled { get; set; }
 
         public bool HasValidation { get; set; }
 

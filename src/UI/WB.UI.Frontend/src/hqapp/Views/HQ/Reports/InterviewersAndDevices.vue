@@ -2,6 +2,15 @@
     <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')"
         :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')"
         :hasSearch="true">
+        <div slot="subtitle">
+            <a
+                v-if="supervisorId"
+                :href="interviewersAndDevicesUrl"
+                class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                {{ $t('PeriodicStatusReport.BackToSupervisors') }}
+            </a>
+        </div>
         <DataTables ref="table"
             :tableOptions="tableOptions"
             exportable
@@ -54,6 +63,9 @@ export default {
         supervisorId() {
             return this.$route.params.supervisorId
         },
+        interviewersAndDevicesUrl(){
+            return this.$config.model.baseReportUrl
+        },
         tableOptions() {
             var self = this
             return {
@@ -65,6 +77,11 @@ export default {
                         title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t('DevicesInterviewers.Teams'),
                         orderable: true,
                         render: function(data, type, row) {
+
+                            if(row.DT_RowClass == 'total-row') {
+                                return `<span>${data}</span>`
+                            }
+
                             if(self.supervisorId) {
                                 return self.getLinkToInterviewerProfile(data, row)
                             }

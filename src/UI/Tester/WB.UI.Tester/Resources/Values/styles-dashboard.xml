@@ -52,7 +52,7 @@
     <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
   </style>
 
-  <style name="Dashboard_MyQuestionnairesLink" parent="AppTheme">
+  <style name="Dashboard_MyQuestionnairesLink">
     <item name="android:textColor">@color/dashboard_my_questionnaire_link</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
@@ -105,7 +105,7 @@
     <item name="android:background">@drawable/dashboard_item_bg</item>
   </style>
 
-  <style name="Dashboard_EmptyQuestionnaireListText" parent="AppTheme">
+  <style name="Dashboard_EmptyQuestionnaireListText">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_left</item>
@@ -116,7 +116,7 @@
     <item name="android:fontFamily">sans-serif-thin</item>
   </style>
 
-  <style name="Dashboard_QuestionnaireListItem_Marker" parent="AppTheme">
+  <style name="Dashboard_QuestionnaireListItem_Marker">
     <item name="android:layout_width">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_left</item>
     <item name="android:layout_height">match_parent</item>
   </style>
@@ -135,7 +135,7 @@
     <item name="android:paddingBottom">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
   </style>
 
-  <style name="Dashboard_QuestionnaireListItem_ModifiedDate" parent="AppTheme">
+  <style name="Dashboard_QuestionnaireListItem_ModifiedDate">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:textColor">@color/dashboard_questionnaire_list_item_modified_date</item>

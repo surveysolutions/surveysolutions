@@ -1,10 +1,9 @@
-﻿using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.ViewModels;
+﻿using MvvmCross.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class EnumeratorSplashScreenAppCompatActivity<TSetup, TApplication> : MvxSplashScreenAppCompatActivity<TSetup, TApplication>
-        where TSetup : MvxAppCompatSetup<TApplication>, new()
+    public abstract class EnumeratorSplashScreenAppCompatActivity<TSetup, TApplication> : MvvmCross.Platforms.Android.Views.MvxSplashScreenActivity<TSetup, TApplication>
+        where TSetup : MvvmCross.Platforms.Android.Core.MvxAndroidSetup<TApplication>, new()
         where TApplication : class, IMvxApplication, new()
     {
         protected EnumeratorSplashScreenAppCompatActivity(int resourceId) : base(resourceId)

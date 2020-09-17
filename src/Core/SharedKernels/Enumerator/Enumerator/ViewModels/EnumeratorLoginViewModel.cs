@@ -5,6 +5,7 @@ using MvvmCross.Navigation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -50,7 +51,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public string Password
         {
             get => this.password;
-            set => SetProperty(ref this.password, value);
+            set
+            {
+                SetProperty(ref this.password, value);
+                this.PasswordError = null;
+            }
         }
 
         private bool isUserValid;
@@ -76,7 +81,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.errorMessage, value);
         }
 
+        public string PasswordError
+        {
+            get => passwordError;
+            set => SetProperty(ref passwordError, value);
+        }
+
         private bool isInProgress;
+        private string passwordError;
+
         public bool IsInProgress
         {
             get => this.isInProgress;
@@ -101,7 +114,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = this.GetUserName();
-            this.ErrorMessage = EnumeratorUIResources.Login_WrongPassword;
         }
 
         public override async void ViewCreated()
@@ -122,6 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (!this.IsUserValid)
             {
+                this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                 this.IncreaseCountOfFailedLoginAttempts();
                 return;
             }
@@ -140,7 +153,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             
             var restCredentials = new RestCredentials {Login = this.UserName};
             this.IsInProgress = true;
-            this.ErrorMessage = String.Empty;
+            this.ErrorMessage = null;
+            this.PasswordError = null;
             
             try
             {
