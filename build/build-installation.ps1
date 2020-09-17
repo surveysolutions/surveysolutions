@@ -31,7 +31,6 @@ $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContai
 
 $HQsitePath = Join-path $workdir "HQwork"
 
-
 #remove old files
 if (!($noDestCleanup)) {
 	if (Test-Path $HQsitePath){
@@ -53,7 +52,6 @@ Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
 
 #Remove-Item "$HQsitePath\HostMap.config"
 
-Copy-Item $HQSourcePath\ExportService $HQsitePath\ExportService -Force -Recurse
 Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
 
 $files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe"})
@@ -69,24 +67,6 @@ foreach($file in $files) {
 }
 # $version = $newVersion = "{0}{1}.{2}.{3}.{4}" -f $versionOfProduct.ProductMajorPart, $versionOfProduct.ProductMinorPart.ToString("00"), $versionOfProduct.ProductBuildPart, $versionOfProduct.ProductPrivatePart, $BuildNumber
 $productFileVersion = $versionOfProduct.FileVersion
-# https://github.com/dotnet/core/issues/4011#issuecomment-567610911
-$envBundle = [xml] @"
-<environmentVariables>
-<environmentVariable name="DOTNET_BUNDLE_EXTRACT_BASE_DIR" value=".\.net-app" />
-</environmentVariables>
-"@
-
- $hqConfig = "$HQsitePath\Site\Web.config"
- [xml]$xml = Get-Content $hqConfig
- $aspNetCores = $xml.SelectNodes("//aspNetCore")
-
- foreach($aspNetCore in $aspNetCores) 
- {
-     $envNode = $xml.ImportNode($envBundle.DocumentElement, $true)
-     $aspNetCore.AppendChild($envNode)
- }
-
- $xml.save($hqConfig)
 
 $installationArgs = @(
     $InstallationProject;
@@ -100,12 +80,6 @@ $installationArgs = @(
 )
 
 $pathToMsBuild = GetPathToMSBuild
-
-
-#Log-Block "Restore nuget" {
-#        nuget restore $MainInstallationSolution
-#    }
-
 
 Log-Message "Calling build from $pathToMsBuild with params: $installationArgs" 
 
