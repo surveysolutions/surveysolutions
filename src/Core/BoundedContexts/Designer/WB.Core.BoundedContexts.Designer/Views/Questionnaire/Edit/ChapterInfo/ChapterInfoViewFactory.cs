@@ -153,7 +153,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 attachmentName : staticText.AttachmentName,
                 hasCondition : !string.IsNullOrWhiteSpace(staticText.ConditionExpression),
                 hasValidation : staticText.ValidationConditions.Count > 0
-            );
+            )
+            {
+                HideIfDisabled = staticText.HideIfDisabled
+            };
         }
 
         private GroupInfoView ConvertToGroupInfoView(IGroup group)
@@ -164,6 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = group.Title,
                 IsRoster = group.IsRoster,
                 HasCondition = !string.IsNullOrWhiteSpace(group.ConditionExpression),
+                HideIfDisabled = group.HideIfDisabled,
                 Variable = group.VariableName,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
@@ -180,6 +184,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = question.QuestionText,
                 Variable = question.StataExportCaption,
                 HasCondition = !string.IsNullOrWhiteSpace(question.ConditionExpression),
+                HideIfDisabled = question.HideIfDisabled,
                 HasValidation = question.ValidationConditions.Count > 0,
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),

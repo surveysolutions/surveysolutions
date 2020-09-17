@@ -17,19 +17,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
 
         public override async Task NavigateBack()
         {
-            if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            }
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)

@@ -51,6 +51,11 @@ namespace WB.Services.Export.Infrastructure.Implementation
             return Directory.GetFiles(directoryPath);
         }
 
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
+        {
+            return Directory.GetFiles(pathToDirectory, pattern);
+        }
+
         public bool IsFileExists(string filePath) => File.Exists(filePath);
         public byte[] ReadAllBytes(string filePath) => File.ReadAllBytes(filePath);
         public void WriteAllBytes(string filePath, byte[] data)

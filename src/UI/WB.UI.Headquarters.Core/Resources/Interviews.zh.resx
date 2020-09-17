@@ -118,8 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈： &lt;i&gt;{{status1}}&lt;/i&gt;和&lt;i&gt;{{status2}}&lt;/i&gt;。</value>
+      <value>{{count}}个访谈将通过审核。</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个选中的访谈将被分配。&lt;/h3&gt;
@@ -151,8 +150,8 @@
 &lt;b&gt;注意！&lt;/b&gt;您只能取消审核处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;。</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt;。</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
+&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt;, {{status3}}。</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;
@@ -214,5 +213,8 @@
   </data>
   <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
     <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+      <value>注意！</value>
   </data>
 </root>

@@ -61,8 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
+        ///   Looks up a localized string similar to {{count}} interview will be approved..
         /// </summary>
         public static string ApproveConfirmMessage {
             get {
@@ -71,12 +70,39 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {{count}} interviews will be approved..
+        /// </summary>
+        public static string ApproveConfirmMessage_plural {
+            get {
+                return ResourceManager.GetString("ApproveConfirmMessage_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can approve interviews with the following statuses only: {{status1}},  {{status2}} and {{status3}}..
+        /// </summary>
+        public static string ApproveConfirmMessage_Statuses {
+            get {
+                return ResourceManager.GetString("ApproveConfirmMessage_Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt; and &lt;i&gt;{{status2}}&lt;/i&gt;..
+        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; and &lt;i&gt;{{status3}}&lt;/i&gt;..
         /// </summary>
         public static string ApproveConfirmMessageHQ {
             get {
                 return ResourceManager.GetString("ApproveConfirmMessageHQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current responsible interviewers will not be notified about the interview(s) approving until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!.
+        /// </summary>
+        public static string ApproveReceivedWarning {
+            get {
+                return ResourceManager.GetString("ApproveReceivedWarning", resourceCulture);
             }
         }
         
@@ -215,6 +241,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string FiltersByQuestions {
             get {
                 return ResourceManager.GetString("FiltersByQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string NotAnsweredCount {
+            get {
+                return ResourceManager.GetString("NotAnsweredCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note!.
+        /// </summary>
+        public static string Note {
+            get {
+                return ResourceManager.GetString("Note", resourceCulture);
             }
         }
         
@@ -361,6 +405,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_LastUpdate {
             get {
                 return ResourceManager.GetString("Tooltip_Table_LastUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release..
+        /// </summary>
+        public static string Tooltip_Table_NotAnsweredCount {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_NotAnsweredCount", resourceCulture);
             }
         }
         

@@ -9,16 +9,13 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using MvvmCross.Tests;
-using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -28,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -180,9 +176,7 @@ namespace WB.Tests.Integration.InterviewTests
             var interview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Create.Storage.QuestionnaireQuestionOptionsRepository(),
-                new SystemClock()
-                );
+                Create.Storage.QuestionnaireQuestionOptionsRepository());
 
             interview.ServiceLocatorInstance = serviceLocatorMock.Object;
 
@@ -192,7 +186,8 @@ namespace WB.Tests.Integration.InterviewTests
         protected static Interview SetupInterviewWithExpressionStorage(
             AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument,
-            IEnumerable<object> events = null)
+            IEnumerable<object> events = null,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
             questionnaireDocument.IsUsingExpressionStorage = true;
@@ -202,7 +197,7 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
-            var optionRepo = Create.Storage.QuestionnaireQuestionOptionsRepository();
+            var optionRepo = optionsRepository ?? Create.Storage.QuestionnaireQuestionOptionsRepository();
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null, null, optionRepo);
             
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
@@ -221,9 +216,9 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
+        protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, IQuestionOptionsRepository optionsRepository = null)
         {
-            return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, null);
+            return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, null, optionsRepository);
         }
 
         protected static Interview SetupInterview(

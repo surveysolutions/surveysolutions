@@ -3,7 +3,6 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Moq;
@@ -123,7 +122,7 @@ namespace WB.Tests.Abc.TestFactories
             return storage;
         }
 
-        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository()
         {
             var optionsRepository = new QuestionnaireQuestionOptionsRepository(
                 );
@@ -147,9 +146,13 @@ namespace WB.Tests.Abc.TestFactories
             var result = new Mock<IQuestionnaireStorage>();
             result.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
+            result.Setup(x => x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaire);
 
+            
+            
             return result.Object;
         }
 
@@ -166,6 +169,17 @@ namespace WB.Tests.Abc.TestFactories
         public IOptionsRepository OptionsRepository(IPlainStorage<OptionView, int?> plainStore)
         {
             return new OptionsRepository(plainStore);
+        }
+
+        public IQuestionnaireStorage QuestionnaireStorage(IQuestionnaire questionnaire)
+        {
+            var result = new Mock<IQuestionnaireStorage>();
+            result.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(questionnaire);
+            result.Setup(x => x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(questionnaire);
+
+            return result.Object;
         }
     }
 }

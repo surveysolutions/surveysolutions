@@ -130,7 +130,7 @@
     <value>Su aplicación no es compatible con el servidor. Actualice la aplicación del entrevistador.</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Terminado ({0})</value>
+    <value>Completado ({0})</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Nuevo ({0})</value>
@@ -199,10 +199,10 @@
     <value>Contraseña incorrecta</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>El sitio web de Survey Solutions Supervisor está ahora en el modo de mantenimiento. Disculpen las molestias</value>
+    <value>El servidor se encuentra en mantenimiento en este momento. Sentimos la inconveniencia. Por favor intente nuevamente más tarde.</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Tablero de instrumentos</value>
+    <value>Tablero</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Iniciar de sesión</value>
@@ -427,13 +427,13 @@
     <value>Existe nueva versión de la aplicación. Por favor, actualice la aplicación</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>ADVERTENCIA</value>
+    <value>Advertencia</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Asignado el {0}</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
-    <value>Por colectar: sin limite</value>
+    <value>Por colectar: sin límite</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
     <value>Por colectar {0} entrevistas</value>
@@ -517,10 +517,10 @@
     <value>&lt;font color="red"&gt;No hay conexión a internet&lt;/Font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
-    <value>La conexión &lt;font color="red"&gt;no esta en buen estado&lt;/font&gt;</value>
+    <value>La conexión &lt;font color="red"&gt;no está en buen estado&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
-    <value>La conexión esta OK</value>
+    <value>La conexión está OK</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
     <value>&lt;font color="red"&gt;No hay conexión con el servidor&lt;/font&gt;</value>
@@ -571,7 +571,7 @@
     <value>Toda la información y los datos de las entrevistas serán colectados en un solo archivo. Esto puede tomar hasta 10 minutos.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Colectar la información de la tableta y enviarla a la sede</value>
+    <value>Recolectar la información de la tableta y enviarla a la sede</value>
   </data>
   <data name="Diagnostics_ServerUrl" xml:space="preserve">
     <value>URL del servidor:</value>
@@ -604,13 +604,13 @@
     <value>Actualizar</value>
   </data>
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
-    <value>Usted cuenta con la ultima versión de la aplicación</value>
+    <value>Usted cuenta con la Última versión de la aplicación</value>
   </data>
   <data name="FailedToCreateInterview" xml:space="preserve">
     <value>Fallo al crear la entrevista. Razón: {0}</value>
   </data>
   <data name="FailedToLoadInterview" xml:space="preserve">
-    <value>Ha fallado la apertura de la encuesta</value>
+    <value>Error al abrir la entrevista</value>
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Punto de sincronización '{0}' difiere del indicado en la configuración ('{1}'). Utilizar la URL indicada en configuración ?</value>
@@ -677,5 +677,242 @@
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>No ha sido posible verificar el certificado de la URAL. Por favor verifique que el website de la sede es válido y verifique que su dispositivo tiene la fecha y hora correcta.</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Sincronización de asignaciones</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Asignar</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Realice una búsqueda para mostrar resultados</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Salir de la búsqueda</value>
+  </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Buscando...</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} elementos encontrados</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Ingrese el texto para la búsqueda</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobado por el supervisor a las {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Rechazado por la Sede el {0}</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Responsable: {0}</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Guarde toda la información relevante en el archivo de este dispositivo.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Generar paquete de soporte</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Enviar registros de seguimiento</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Envíe registros detallados al sitio de la sede para la investigación de problemas</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>La bitácora es enviada a la sede</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>El caso de la entrevista no es válido y no se puede abrir. Póngase en contacto con el soporte técnico o intente sincronizar para actualizar los casos.</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Se produjo un error al escanear</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Versión compatible con la sede: {0}</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>Creación de entrevista</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Esto puede tardar un par de minutos, no salga de esta aplicación.</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>La entrevista comenzará en breve</value>
+  </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>El entrevistador es parte de otro equipo. Sincronice con la sede.</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Versión de Interviewer: {0}</value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>La dirección no es válida</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Se requiere permiso de ubicación para la sincronización sin conexión</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Sincronice para obtener mapas o comuníquese con su supervisor para obtener más instrucciones</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Todos los mapas se sincronizaron</value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Maps</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Comprobando mapas en el servidor</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Error de sincronización del mapa</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>La sincronización del mapa finalizó correctamente</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Manejo del mapa {0}, {1} de {2}. Descargado {3}%</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Dashboard de mapas</value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Sincronización de mapas</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>Tiene {0} entrevistas completas que deben sincronizarse</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Entrevistas</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Hay muchas entrevistas completadas. Sincronizar.</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Ha comenzado demasiadas entrevistas. Por favor complételas.</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>Tiene {0} entrevista (s) rechazada que no se manejaron</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Algunas asignaciones no se actualizaron en los últimos 3 días.</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>No hubo reintento después de una sincronización fallida. Inténtalo de nuevo</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Sincronización</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>La sincronización no se realizó últimamente. Sincronizar</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Permitir la sincronización con la sede</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Desactive esta configuración si desea sincronizar solo con la aplicación de supervisor móvil. Después de la primera sincronización exitosa con la aplicación Supervisor, no será posible volver a habilitar esta configuración</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>No es posible sincronizar con la oficina central una vez que hubo al menos una sincronización exitosa con la aplicación Supervisor</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Reasignar</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Reasignar</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Seleccione un nuevo responsable para la entrevista. Aparecerá en el dispositivo del entrevistador después de la próxima sincronización.</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Supervisor version: {0}</value>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Compruebe si hay entrevistas obsoletas</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Comprobando las actualizaciones de la aplicación</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Descarga de actualizaciones de la aplicación</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Received {0} of {1} at {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} de {1} entrevistas descargadas</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Puede encontrar más información sobre los errores de sincronización en el &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt; sitio de asistencia &lt;/a&gt;</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Sincronización de los entrevistadores</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Sincronizando {0} de {1} entrevistador (es)</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Sincronización de los detalles del supervisor</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>cambios de entrevista</value>
+  </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Recibiendo {0}</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Recibir información de auditoría</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Enviado {0} de {1} al {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>Se actualizaron {0} entrevistas</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} entrevistas subidas parciales</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>El supervisor siempre debe tener los últimos cambios de la sede, por lo que debe sincronizarse en último lugar en el equipo antes de que la sincronización fuera de línea esté disponible</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>La aplicación de supervisor debe sincronizarse.</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Actualización de entrevistas locales con cambios del servidor</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Cargar información de auditoría</value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Envío de actualizaciones de aplicaciones</value>
+  </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Subiendo logo</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>El usuario ya no pertenece a este equipo de supervisores. Comuníquese con su sede para obtener más detalles.</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>El usuario actual se creó en otra instancia de la aplicación de la sede. Cambiar la URL del punto final de sincronización al servidor original</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Usuario vinculado a otro servidor</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Transferir asignaciones</value>
+  </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Actualización de cuestionarios</value>
   </data>
 </root>

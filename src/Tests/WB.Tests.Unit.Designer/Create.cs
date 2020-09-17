@@ -53,7 +53,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
@@ -76,6 +75,7 @@ using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.E
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 
 namespace WB.Tests.Unit.Designer
@@ -1317,6 +1317,11 @@ namespace WB.Tests.Unit.Designer
                 linkedFilterExpression,
                 isFilteredCombobox,
                 categoriesId);
+
+            public static MigrateToNewVersion MigrateToNewVersion(Guid questionnaireId, Guid userId)
+            {
+                return new MigrateToNewVersion(questionnaireId, userId); 
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

@@ -40,11 +40,17 @@ namespace WB.Infrastructure.AspNetCore
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
                 .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
+#if !DEBUG
+                .MinimumLevel.Override("Serilog.AspNetCore.RequestLoggingMiddleware", LogEventLevel.Warning)
+#endif
+                .MinimumLevel.Override("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService", LogEventLevel.Error)
+                .MinimumLevel.Override("WB.UI.Headquarters.Code.Authentication.TenantTokenAuthenticationHandler", LogEventLevel.Information)
                 .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
                     restrictedToMinimumLevel: LogEventLevel.Information)
                 .WriteTo
                     .File(new RenderedCompactJsonFormatter(), Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                         retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
+                .ReadFrom.Configuration(host.Configuration, "Logging")
                 ;    
         }
 

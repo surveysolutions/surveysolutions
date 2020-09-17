@@ -1,8 +1,10 @@
+using System;
 using System.Threading;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Preferences;
+using AndroidX.AppCompat.App;
+using AndroidX.Preference;
 using MvvmCross;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -14,30 +16,27 @@ namespace WB.UI.Tester.Activities
         NoHistory = false, 
         Name = "org.worldbank.solutions.Vtester.PrefsActivity",
         Exported = false)]
-    public class PrefsActivity : PreferenceActivity
+    public class PrefsActivity : AppCompatActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
-            FragmentManager.BeginTransaction().Replace(Android.Resource.Id.Content, new PrefsFragment()).Commit();
+            base.OnCreate(bundle);
+            this.SupportFragmentManager
+                .BeginTransaction()
+                .Replace(Android.Resource.Id.Content, new PrefsFragment())
+                .Commit();
         }
 
-        protected override bool IsValidFragment(string fragmentName)
-        {
-            return typeof(PrefsFragment).Name.Equals(fragmentName);
-        }
-
-        public class PrefsFragment : PreferenceFragment
+        public class PrefsFragment : PreferenceFragmentCompat
         {
             private static int tapTimes;
             private Preference devSettingsCategory;
 
-            public override void OnCreate(Bundle savedInstanceState)
+            public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
-                base.OnCreate(savedInstanceState);
-                AddPreferencesFromResource(Resource.Xml.preferences);
+                this.AddPreferencesFromResource(Resource.Xml.preferences);
 
-                var settings = Mvx.Resolve<TesterSettings>();
+                var settings = Mvx.IoCProvider.Resolve<TesterSettings>();
 
                 this.devSettingsCategory = this.FindPreference("dev_settings_category");
 

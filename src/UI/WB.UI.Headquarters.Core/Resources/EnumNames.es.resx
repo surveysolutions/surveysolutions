@@ -162,4 +162,37 @@
   <data name="UserRoles_Supervisor" xml:space="preserve">
     <value>Supervisor</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Completar</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Nota para el supervisor</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>Finalizar texto</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>Invitación de bienvenida</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>Resume Invitation</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>Reanudar encabezado</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Iniciar nueva entrevista</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>Nombre de la encuesta</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>Terminar encabezado</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>Encabezado de bienvenida</value>
+  </data>
 </root>

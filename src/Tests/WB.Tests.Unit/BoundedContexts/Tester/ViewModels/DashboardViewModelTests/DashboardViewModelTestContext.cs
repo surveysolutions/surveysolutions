@@ -41,6 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
+            mockOfPrincipal.Setup(x => x.IsAuthenticated).Returns(true);
 
             var localDashboardLastUpdateStorageMock = new Mock<IPlainStorage<DashboardLastUpdate>>();
             localDashboardLastUpdateStorageMock

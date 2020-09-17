@@ -8,42 +8,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        protected readonly IPrincipal principal;
-        protected readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IPrincipal Principal;
+        protected readonly IViewModelNavigationService ViewModelNavigationService;
+        private readonly bool isAuthenticationRequired;
 
-        protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
+        protected BaseViewModel(IPrincipal principal, 
+            IViewModelNavigationService viewModelNavigationService, 
+            bool isAuthenticationRequired = true)
         {
-            this.principal = principal;
-            this.viewModelNavigationService = viewModelNavigationService;
+            this.Principal = principal;
+            this.ViewModelNavigationService = viewModelNavigationService;
+            this.isAuthenticationRequired = isAuthenticationRequired;
         }
-
-        public virtual bool IsAuthenticationRequired => true;
-
-        public override void Prepare()
+        
+        public override void ViewAppearing()
         {
-            base.Prepare();
-            BaseViewModelSetupMethods.Prepare(this.IsAuthenticationRequired, this.principal, this.viewModelNavigationService);
+            base.ViewAppearing();
+            BaseViewModelSetupMethods.CheckAuthentication(isAuthenticationRequired, this.Principal, this.ViewModelNavigationService);
         }
-
+        
         protected override void ReloadFromBundle(IMvxBundle parameters)
         {
             base.ReloadFromBundle(parameters);
-            BaseViewModelSetupMethods.ReloadStateFromBundle(this.principal, parameters);
+            BaseViewModelSetupMethods.ReloadStateFromBundle(this.Principal, parameters);
         }
 
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            BaseViewModelSetupMethods.SaveStateToBundle(this.principal, bundle);
+            BaseViewModelSetupMethods.SaveStateToBundle(this.Principal, bundle);
         }
 
         // it's much more performant, as original extension call new Action<...> on every call
         protected void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, 
-            [CallerMemberName] string propertyName = "")
+            [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<TReturn>.Default.Equals(backingField, newValue)) return;
-            backingField = newValue;
-            this.RaisePropertyChanged(propertyName);
+            SetProperty(ref backingField, newValue, propertyName);
         }
     }
 }

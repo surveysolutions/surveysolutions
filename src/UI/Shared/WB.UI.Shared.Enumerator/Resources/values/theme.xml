@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <!-- application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowBackground">@color/applicationBackground</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnSurface">@color/commentInterviewerTextColor</item>
+        <item name="colorPrimaryDark">@color/darkActionBar</item>
+        <item name="colorOnPrimary">@color/group_title_text</item>
+        <item name="colorAccent">@color/group_started</item>
+        <item name="colorError">@color/errorTextColor</item>
+        <!-- elements -->
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+        <item name="editTextStyle">@style/EditTextTheme</item>
+        <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
+        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="alertDialogTheme">@style/AppMaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/AppMaterialAlertDialog</item>
+    </style>
+
+    <style name="AppMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.App.NegativeButton</item>
+    </style>
+    
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TextInputLayout</item>
+    </style>
+
+    <style name="ThemeOverlay.App.TextInputLayout" parent="">
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
+        <item name="android:textColorHint">@color/disabledTextColor</item>
+    </style>
+    
+    <style name="BlueAppTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/colorBlueThemePrimary</item>
+        <item name="colorPrimaryDark">@color/interviewActionBar</item>
+        <item name="android:textColorHighlight">#9936aee5</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+        <item name="android:dropDownListViewStyle">@style/Divider_ListStyle</item>
+    </style>
+
+    <style name="GrayAppTheme" parent="AppTheme">
+        <item name="colorPrimary">#FF666666</item>
+        <item name="android:textColorHighlight">#9936aee5</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+    </style>
+    
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@color/group_title_text</item>
+    </style>
+
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/group_started</item>
+        <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+        <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">@color/group_title_text</item>
+    </style>
+
+
+    <style name="Widget.App.NegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button.TextButton</item>
+    </style>
+    <style name="ThemeOverlay.App.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/commentDetailsInterviewerTextColor</item>
+    </style>
+    
+    <style name="ProgressBarTheme_Blue_Light" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/theme_blue_light_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/theme_blue_light_progress_indeterminate_horizontal_holo_light</item>
+        <item name="android:minHeight">@dimen/Theme_ProgressBar_height</item>
+        <item name="android:maxHeight">@dimen/Theme_ProgressBar_height</item>
+    </style>
+    
+    
+    <style name="EditTextTheme" parent="android:Widget.EditText">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+
+    <style name="DropDownListViewStyleTheme" parent="android:Widget.Material.ListView.DropDown">
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">@dimen/zero</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabMode">scrollable</item>
+        <item name="tabTextColor">@color/disabledTextColor</item>
+        <item name="tabIndicatorColor">@color/color_white_30_percent_transparent</item>
+        <item name="tabIndicatorHeight">6dp</item>
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingEnd">12dp</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/group_title_text</item>
+    </style>
+
+    <style name="TabTextAppearance" parent="">
+        <item name="android:textSize">@dimen/textsize_16</item>
+        <item name="android:textColor">@color/color_white_10_percent_transparent</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="ToolbarIcon">
+        <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
+        <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_marginLeft">@dimen/button_shadow_margin</item>
+        <item name="android:layout_marginRight">@dimen/button_shadow_margin</item>
+    </style>
+
+</resources>

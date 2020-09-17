@@ -40,8 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        public ISyncBgService<SyncProgressDto> SyncBgService { get; set; }
-        
+        public ISyncBgService<SyncProgressDto> SyncBgService { get; set; }        
 
         private CancellationTokenSource synchronizationCancellationTokenSource;
 
@@ -95,6 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public void CancelSynchronizaion()
         {
             OnCancel?.Invoke(this, EventArgs.Empty);
+            
 
             this.IsSynchronizationInfoShowed = false;
             this.IsSynchronizationInProgress = false;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,9 +12,9 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
 
 
@@ -44,8 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                     x.GetTopFilteredOptionsForQuestion(questionIdentity, 1, "3", Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns(Options.Where(x => x.Value == 3).ToList());
 
-            var interviewRepository =
-                Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == StatefulInterviewMock.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -70,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_handling_SingleOptionQuestionAnswered_for_parent_question()
+        public async Task when_handling_SingleOptionQuestionAnswered_for_parent_question()
         {
             List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
             CascadingSingleOptionQuestionViewModel cascadingModel;
@@ -102,9 +103,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                     x.GetTopFilteredOptionsForQuestion(questionIdentity, 1, "3", Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns(Options.Where(x => x.ParentValue == 1).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x =>
-                x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
-
+            var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
+            
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(Options.Where(x => x.ParentValue == 2).ToList());
@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 .Returns(secondParentOptionAnswer);
             
             //aa
-            cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
+            await cascadingModel.HandleAsync(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
@@ -151,7 +151,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetTopFilteredOptionsForQuestion(questionIdentity, 1, string.Empty, Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns(Options.Where(x => x.ParentValue == 1).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == StatefulInterviewMock.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -176,7 +176,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer()
+        public async Task when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer()
         {
 
             List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
@@ -199,7 +199,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetTopFilteredOptionsForQuestion(questionIdentity, 2, string.Empty, Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns(Options.Where(x => x.ParentValue == 2).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -214,7 +214,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionQuestion(parentIdentity)).Returns(secondParentOptionAnswer);
 
             //act
-            cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
+            await cascadingModel.HandleAsync(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
             
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
@@ -239,7 +239,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 => _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer
                    && _.GetSingleOptionQuestion(parentIdentity) == parentOptionAnswer);
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -262,6 +262,51 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
+        public void when_initializing_answered_question_should_set_filter_text_to_answer()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                children: new IComposite[]
+                {
+                    Create.Entity.SingleQuestion(id: parentIdentity.Id, options: new List<Answer>
+                    {
+                        Create.Entity.Answer("one", 1),
+                        Create.Entity.Answer("one", 2)
+                    }),
+                    Create.Entity.SingleQuestion(id: questionIdentity.Id, cascadeFromQuestionId: parentIdentity.Id,
+                        options: Options.Select(x => Create.Entity.Answer(x.Title, x.Value, x.ParentValue)).ToList())
+                }
+            );
+
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 1,
+                questionOptionsRepository: new QuestionnaireQuestionOptionsRepository());
+
+            var questionnaireRepository = Create.Storage.QuestionnaireStorage(plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(interviewGuid,
+                questionnaireRepository: questionnaireRepository
+                );
+
+            interview.AnswerSingleOptionQuestion(userId, parentIdentity.Id, RosterVector.Empty, 
+                DateTimeOffset.Now, 1);
+            interview.AnswerSingleOptionQuestion(userId, questionIdentity.Id, RosterVector.Empty,
+                DateTimeOffset.Now, 1);
+
+
+            SetUp();
+            var cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
+                interviewRepository: Create.Storage.InterviewRepository(interview),
+                questionnaireRepository: questionnaireRepository);
+
+            //act
+            cascadingModel.Init(interviewGuid.FormatGuid(), Create.Identity(questionIdentity.Id), navigationState);
+
+            var autocompleteViewModel = cascadingModel.Children.OfType<CategoricalComboboxAutocompleteViewModel>()
+                .FirstOrDefault();
+
+            Assert.That(autocompleteViewModel,
+                Has.Property(nameof(CategoricalComboboxAutocompleteViewModel.FilterText)).Not.Null.Or.Empty);
+        }
+
+        [Test]
         public async Task when_setting_FilterText_and_there_are_match_options()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
@@ -279,7 +324,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -325,7 +370,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -366,7 +411,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -418,7 +463,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -464,7 +509,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -505,7 +550,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -556,7 +601,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                             }
                 }));
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -600,11 +645,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), It.IsAny<int[]>()))
                 .Returns((Identity identity, int? value, string filter, int count, int[] excludedOptions) => Options.Where(x => x.ParentValue == value && (filter == null || x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)).ToList());
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
+            var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
 
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire();
 
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion(optionsRepository);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>()
             {
@@ -625,6 +670,46 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
 
             combo.FilterText.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void when_inialised_with_options_as_list_display_Should_not_render_combobox()
+        {
+            SetUp();
+            
+            var cascadingQuestionId = Id.g1;
+            var parentQuestionId = Id.g2;
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                children: new IComposite[]
+                {
+                    Create.Entity.SingleQuestion(id: parentQuestionId, options: new List<Answer>
+                    {
+                        Create.Entity.Answer("one", 1)
+                    }),
+                    Create.Entity.SingleQuestion(id: cascadingQuestionId, cascadeFromQuestionId: parentQuestionId,
+                        showAsList: true)
+                });
+
+
+            var questionnaireRepository = Create.Storage.QuestionnaireStorage(questionnaire);
+            
+            var interview = Create.AggregateRoot.StatefulInterview(Id.gA,
+                questionnaireRepository: questionnaireRepository);
+            interview.AnswerSingleOptionQuestion(Id.gB, parentQuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, 1);
+
+            var interviewRepository = Create.Storage.InterviewRepository(interview);
+            
+           
+            var viewModel = CreateCascadingSingleOptionQuestionViewModel(
+                questionnaireRepository,
+                interviewRepository);
+            
+            // Act
+            viewModel.Init(interview.Id.FormatGuid(), Create.Identity(cascadingQuestionId), navigationState);
+            
+            // Assert
+
+            viewModel.Children.Should().NotContain(x => x is CategoricalComboboxAutocompleteViewModel);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public WebInterviewUserMessages TitleType { get; set; }
             [Required] public string TitleText { get; set; }
             [Required] public WebInterviewUserMessages MessageType { get; set; }
-            [Required] public string MessageText { get; set; }
+            public string MessageText { get; set; }
 
             public WebInterviewUserMessages? ButtonType { get; set; }
             public string ButtonText { get; set; }
@@ -65,8 +65,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public EmailTextTemplateType Type { get; set; }
             [Required] public string Subject { get; set; }
             [Required] public string Message { get; set; }
-            [Required] public string PasswordDescription { get; set; }
-            [Required] public string LinkText { get; set; }
+            public string PasswordDescription { get; set; }
+            public string LinkText { get; set; }
         }
 
         [Route(@"{id}/emailTemplate")]
@@ -124,6 +124,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             public int? ReminderAfterDaysIfNoResponse { get; set; } 
             public int? ReminderAfterDaysIfPartialResponse { get; set; } 
             public bool SingleResponse { get; set; }
+            public bool EmailOnComplete { get; set; }
+            public bool AttachAnswersInEmail { get; set; }
         }
 
         [Route(@"{id}/additionalSettings")]
@@ -142,6 +144,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             config.ReminderAfterDaysIfNoResponse = updateModel.ReminderAfterDaysIfNoResponse;
             config.ReminderAfterDaysIfPartialResponse = updateModel.ReminderAfterDaysIfPartialResponse;
             config.SingleResponse = updateModel.SingleResponse;
+            config.EmailOnComplete = updateModel.EmailOnComplete;
+            config.AttachAnswersInEmail = updateModel.AttachAnswersInEmail;
 
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 

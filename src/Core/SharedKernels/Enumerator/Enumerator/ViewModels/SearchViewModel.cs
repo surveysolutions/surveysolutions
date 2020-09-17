@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsInProgressItemsLoading => this.IsInProgressItemsLoadingCount > 0;
 
         public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation);
-        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => ViewModelNavigationService.NavigateToDashboardAsync());
         public IMvxCommand<string> SearchCommand => new MvxCommand<string>(async text => await SearchAsync(text));
 
         public async Task SearchAsync(string searchText)

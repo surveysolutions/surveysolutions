@@ -1,4 +1,3 @@
-using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.ViewModels;
 
 namespace WB.UI.Interviewer

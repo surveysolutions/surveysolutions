@@ -2,9 +2,10 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
+using AndroidX.Core.App;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Plugin.Messenger;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -27,7 +28,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.messenger = messenger;
         }
 
-        public async Task AssureHasPermission(Permission permission) => await this.permissions.AssureHasPermission(permission);
+        public async Task AssureHasPermissionOrThrow<T>() where T : BasePermission, new() 
+            => await this.permissions.AssureHasPermissionOrThrow<T>();
 
         public Task EnsureHasPermissionToInstallFromUnknownSourcesAsync()
         {

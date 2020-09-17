@@ -2,83 +2,56 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.QuestionnaireImport;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class QuestionnaireImportService : IQuestionnaireImportService
     {
-        private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IStringCompressor zipUtils;
-        private readonly IAttachmentContentService attachmentContentService;
-        private readonly IDesignerUserCredentials designerUserCredentials;
-        private readonly IDesignerApiFactory designerApiFactory;
         private readonly IQuestionnaireImportStatuses questionnaireImportStatuses;
         private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
-        private readonly IPlainKeyValueStorage<QuestionnairePdf> pdfStorage;
-        private readonly IReusableCategoriesStorage reusableCategoriesStorage;
-        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
-        private readonly ITranslationManagementService translationManagementService;
-        private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
-        private readonly ICommandService commandService;
         private readonly ILogger logger;
-        private readonly ISystemLog auditLog;
-        private readonly IUnitOfWork unitOfWork;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IArchiveUtils archiveUtils;
+        private readonly IDesignerUserCredentials designerUserCredentials;
 
         public QuestionnaireImportService(
-            ISupportedVersionProvider supportedVersionProvider,
             IStringCompressor zipUtils,
-            IAttachmentContentService attachmentContentService,
-            IQuestionnaireVersionProvider questionnaireVersionProvider,
-            ITranslationManagementService translationManagementService,
-            IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
-            ICommandService commandService,
             ILogger logger,
-            ISystemLog auditLog,
-            IUnitOfWork unitOfWork,
             IAuthorizedUser authorizedUser,
-            IPlainKeyValueStorage<QuestionnairePdf> pdfStorage,
-            IReusableCategoriesStorage reusableCategoriesStorage,
-            IDesignerUserCredentials designerUserCredentials,
-            IDesignerApiFactory designerApiFactory,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
-            IAssignmentsUpgradeService assignmentsUpgradeService)
+            IAssignmentsUpgradeService assignmentsUpgradeService, 
+            IArchiveUtils archiveUtils,
+            IDesignerUserCredentials designerUserCredentials)
         {
-            this.supportedVersionProvider = supportedVersionProvider;
             this.zipUtils = zipUtils;
-            this.attachmentContentService = attachmentContentService;
-            this.questionnaireVersionProvider = questionnaireVersionProvider;
-            this.translationManagementService = translationManagementService;
-            this.lookupTablesStorage = lookupTablesStorage;
-            this.commandService = commandService;
             this.logger = logger;
-            this.auditLog = auditLog;
-            this.unitOfWork = unitOfWork;
             this.authorizedUser = authorizedUser;
-            this.pdfStorage = pdfStorage;
-            this.reusableCategoriesStorage = reusableCategoriesStorage;
-            this.designerUserCredentials = designerUserCredentials;
-            this.designerApiFactory = designerApiFactory;
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
+            this.archiveUtils = archiveUtils;
+            this.designerUserCredentials = designerUserCredentials;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -103,8 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             bool shouldMigrateAssignments, 
             QuestionnaireIdentity migrateFrom)
         {
-            var designerCredentials = designerUserCredentials.Get();
-            var designerApi = designerApiFactory.Get(new ScopeDesignerUserCredentials(designerCredentials));
             var userId = authorizedUser.Id;
             var userName = authorizedUser.UserName;
 
@@ -126,13 +97,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (questionnaireImportResult.Status != QuestionnaireImportStatus.NotStarted)
                 return questionnaireImportResult;
 
+            var designerCredentials = designerUserCredentials.Get();
+
             var bgTask = Task.Run(async () =>
             {
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
-                    var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
-                    var result = await questionnaireImportService.ImportImpl(designerApi, userId, userName, questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, shouldMigrateAssignments, migrateFrom, includePdf);
-                    return result;
+                    var designerServiceCredentials = serviceLocatorLocal.GetInstance<IDesignerUserCredentials>();
+
+                    try
+                    {
+                        designerServiceCredentials.SetTaskCredentials(designerCredentials);
+
+                        var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
+                        var result = await questionnaireImportService.ImportImpl(designerCredentials, serviceLocatorLocal, userId, userName, 
+                            questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
+                            shouldMigrateAssignments, migrateFrom, includePdf);
+                        return result;
+                    }
+                    finally
+                    {
+                        designerServiceCredentials.SetTaskCredentials(null);
+                    }
                 });
             });
             
@@ -142,18 +128,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return questionnaireImportResult;
         }
 
-        private List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, IDesignerApi designerApi, bool includePdf)
+        private List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, 
+            QuestionnaireDocument questionnaireDocument, QuestionnaireImportResult importResult, 
+            IDesignerApi designerApi, IServiceLocator serviceLocator, bool includePdf)
         {
             var questionnaireImportSteps = new List<IQuestionnaireImportStep>()
             {
-                new AttachmentsQuestionnaireImportStep(questionnaireDocument, designerApi, attachmentContentService),
-                new TranslationsQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, translationManagementService, logger),
-                new LookupTablesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, lookupTablesStorage, logger),
-                new CategoriesQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, reusableCategoriesStorage, logger),
+                new QuestionnaireBackupImportStep(questionnaireIdentity, questionnaireDocument, designerApi, 
+                     serviceLocator, archiveUtils)
             };
 
             if (includePdf)
+            {
+                var pdfStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnairePdf>>();
                 questionnaireImportSteps.Add(new PdfQuestionnaireImportStep(questionnaireIdentity, questionnaireDocument, designerApi, pdfStorage, logger));
+            }
 
             return questionnaireImportSteps;
         }
@@ -166,9 +155,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        private async Task<QuestionnaireImportResult> ImportImpl(IDesignerApi designerApi, Guid userId, string userName, Guid questionnaireId, QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
-            string comment, string requestUrl, bool shouldMigrateAssignments, QuestionnaireIdentity migrateFrom, bool includePdf = true)
+        //import should have it's own scope
+        //all scope dependent references should come into the method or resolved inside
+        private async Task<QuestionnaireImportResult> ImportImpl(RestCredentials credentials,
+            IServiceLocator serviceLocator, Guid userId, string userName, Guid questionnaireId, 
+            QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
+            string comment, string requestUrl, bool shouldMigrateAssignments, 
+            QuestionnaireIdentity migrateFrom, bool includePdf = true)
         {
+            var designerApi = serviceLocator.GetInstance<IDesignerApi>();
+
             try
             {
                 await designerApi.IsLoggedIn();
@@ -180,14 +176,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return questionnaireImportResult;
             }
 
+            var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
+            var commandService = serviceLocator.GetInstance<ICommandService>();
+            var questionnaireVersionProvider = serviceLocator.GetInstance<IQuestionnaireVersionProvider>();
+            var supportedVersionProvider = serviceLocator.GetInstance<ISupportedVersionProvider>();
+            var auditLog = serviceLocator.GetInstance<ISystemLog>();
+
             bool shouldRollback = true;
             try
             {
                 // prevent 2 concurrent requests from importing
-                var query = this.unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156);");
+                var query = unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(51658156);");
                 await query.ExecuteUpdateAsync();
 
-                var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaireId);
+                var questionnaireVersion = questionnaireVersionProvider.GetNextVersion(questionnaireId);
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
                 questionnaireImportResult.Identity = questionnaireIdentity;
 
@@ -200,9 +202,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Progress;
 
-                var importSteps = this.GetImportSteps(questionnaireIdentity, questionnaire, questionnaireImportResult, designerApi, includePdf)
-                    .Where(step => step.IsNeedProcessing())
-                    .ToList();
+                var importSteps = 
+                    this.GetImportSteps(questionnaireIdentity, questionnaire, questionnaireImportResult, designerApi, serviceLocator, includePdf)
+                        .Where(step => step.IsNeedProcessing())
+                        .ToList();
 
                 #region Progress
 
@@ -248,7 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
-                commandService.Execute(new ImportFromDesigner(
+                await commandService.ExecuteAsync(new ImportFromDesigner(
                     userId,
                     questionnaire,
                     isCensusMode,
@@ -270,7 +273,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     });
                 questionnaireProgress.Report(95);
 
-                this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName);
+                auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity, userId, userName);
                 questionnaireProgress.Report(100);
 
                 questionnaireImportResult.ProgressPercent = 100;
@@ -343,7 +346,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (shouldRollback)
                 {
                     questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
-                    this.unitOfWork.DiscardChanges();
+                    unitOfWork.DiscardChanges();
                 }
             }
         }

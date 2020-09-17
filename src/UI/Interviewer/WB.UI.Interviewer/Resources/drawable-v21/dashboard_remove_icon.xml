@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/dashboard_button_color_pressed">
-  <shape id="@android:id/mask">
-    <solid android:color="@android:color/transparent" />
-    <corners android:radius="@dimen/Dashboard_Layout_border_radius" />
-  </shape>
-</ripple>

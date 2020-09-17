@@ -10,9 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         List<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId);
         List<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId);
         IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds);
-        [Obsolete("Since 18.08 KP-11379")]
-        InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId);
-
         bool HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(Guid authorizedUserId);
         bool HasAnyInterviewsInProgressWithResolvedCommentsForSupervisor(Guid authorizedUserId);
         bool HasAnySmallSubstitutionEvent(Guid interviewId);

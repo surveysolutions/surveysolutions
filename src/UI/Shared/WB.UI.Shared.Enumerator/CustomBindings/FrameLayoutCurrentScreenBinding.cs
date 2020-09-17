@@ -1,9 +1,7 @@
 ﻿using System;
-using Android.Support.V4.App;
 using Android.Widget;
+using AndroidX.Fragment.App;
 using MvvmCross;
-using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platforms.Android;
 using MvvmCross.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -41,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             var mvxViewFinder = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
             var fragmentType = mvxViewFinder.GetViewType(viewModelType);
 
-            if (!(Mvx.IoCProvider.Resolve(fragmentType) is MvxFragment mvxFragment))
+            if (!(Mvx.IoCProvider.Resolve(fragmentType) is MvvmCross.Platforms.Android.Views.Fragments.MvxFragment mvxFragment))
                 throw new ArgumentException("Can't resolve frame for ViewModel: " + viewModelType);
 
             mvxFragment.ViewModel = frameViewModel;

@@ -196,10 +196,10 @@
     <value>Actualizado</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Nota Legal</value>
+    <value>Legal</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Cargando. Favor esperar</value>
+    <value>Cargando...</value>
   </data>
   <data name="Logoff" xml:space="preserve">
     <value>Salir</value>
@@ -214,7 +214,7 @@
     <value>No</value>
   </data>
   <data name="NoResultsFound" xml:space="preserve">
-    <value>No se encontraron resultados</value>
+    <value>No se han encontrado resultados</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
@@ -232,7 +232,7 @@
     <value>Cuestionario</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Cuestionarios</value>
+    <value>Questionnaires</value>
   </data>
   <data name="ReceivedByInterviewer" xml:space="preserve">
     <value>Recibido por entrevistador</value>
@@ -277,7 +277,7 @@
     <value>The World Bank Group</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Titulo</value>
+    <value>Título</value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
@@ -294,5 +294,47 @@
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Seleccione cuestionario</value>
       <comment>Buscar</comment>
+  </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>Todas las preguntas GPS</value>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Todas las versiones</value>
+  </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Download Supervisor app</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Email providers settings</value>
+  </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Igual</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>No es igual</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Nada ha sido seleccionado</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Tarea abierta</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Procesando…</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Versión del cuestionario</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Selccionar opción</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Comienza con</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Desconocido</value>
   </data>
 </root>

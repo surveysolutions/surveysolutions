@@ -32,7 +32,7 @@
                            Click SaveAnswerCommand; 
                            Tag Format('btnAnswer_{0}', Identity);
                            Text Localization('Interview_Questions_Area_SaveAnswer'); 
-                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));" />
+                           ButtonToQuestionState LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false);" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

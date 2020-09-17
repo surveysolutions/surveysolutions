@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
@@ -119,9 +120,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IStatefulInterviewRepository StatefulInterviewRepositoryWith(IStatefulInterview interview)
         {
-            var result = Substitute.For<IStatefulInterviewRepository>();
-            result.Get(null).ReturnsForAnyArgs(interview);
-            return result;
+            return Create.Storage.InterviewRepository(interview);
         }
 
         
@@ -396,10 +395,10 @@ namespace WB.Tests.Abc.TestFactories
             public void ReadStream()
             {
                 using var ms = Stream as MemoryStream;
-                BytesFromStream =Task.FromResult(ms.ToArray());
+                BytesFromStream =ms.ToArray();
             }
 
-            public Task<byte[]> BytesFromStream { get; set; }
+            public byte[] BytesFromStream { get; set; }
         }
     }
 }

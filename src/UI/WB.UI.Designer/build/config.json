@@ -16,7 +16,7 @@
   },
   "assets": {
     "images": ["Content/images/*"],
-    "fonts": ["Content/fonts/*"],
+    "fonts": ["Content/fonts/*", "node_modules/@mdi/font/fonts/*"],
     "qbank": ["Content/qbank/**/*" ]
   },
   "injectTargets": [
@@ -25,8 +25,6 @@
     "Areas/Identity/Pages/Layout.Account.cshtml",
     "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml",
     "Views/Classifications/Index.cshtml",
-    "Views/Questionnaire/EditCascadingOptions.cshtml",
-    "Views/Questionnaire/EditOptions.cshtml",
     "Views/Questionnaire/Public.cshtml",
     "Views/Shared/_ValidationScriptsPartial.cshtml",
     "Views/Shared/Layout.cshtml",
@@ -101,20 +99,68 @@
       "node_modules/angular-moment/angular-moment.js",
       "node_modules/xss/dist/xss.js",
       "node_modules/i18next/i18next.min.js",
-      "node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js",
+      "node_modules/i18next-http-backend/i18nextHttpBackend.min.js",
       "node_modules/ng-i18next/dist/ng-i18next.js",
       "node_modules/zebra_datepicker/dist/css/bootstrap/icons.png",
       "node_modules/zebra_datepicker/dist/css/bootstrap/zebra_datepicker.min.css",
       "node_modules/zebra_datepicker/dist/zebra_datepicker.min.js"
     ]
   },
-  "bundle": [
+  "bundle": [    
+    {
+      "name": "i18next",
+      "inputFiles": [
+        "node_modules/i18next/i18next.js"
+      ]
+    },
+    {
+      "name": "require_libs",
+      "inputFiles": [
+        "Scripts/lib/require.js"
+      ]
+    },    
+    {
+      "name": "jquery",
+      "inputFiles": [
+        "node_modules/jquery/dist/jquery.js"
+      ]
+    },
+    {
+      "name": "cat__i18next",
+      "inputFiles": [
+        "node_modules/i18next/i18next.js"
+      ]
+    },
+    {
+      "name": "cat__a_i18next_http_backend",
+      "inputFiles": [
+        "node_modules/i18next-http-backend/i18nextHttpBackend.js"
+      ]
+    },
+    {
+      "name": "cat__vue",
+      "inputFiles": [
+        "node_modules/vue/dist/vue.js",
+        "node_modules/lodash/lodash.js"
+      ]
+    },    
+    {
+      "name": "cat__jquery",
+      "inputFiles": [
+        "node_modules/jquery/dist/jquery.js"
+      ]
+    },
+    {
+      "name": "cat__a_vuetify",
+      "inputFiles": [
+        "node_modules/vuetify/dist/vuetify.js"
+      ]
+    },
     {
       "name": "popup",
       "inputFiles": [
-        "questionnaire/content/designer-start/bootstrap-custom.less",
-        "questionnaire/content/designer-start/bootstrap-override.less",
-        "questionnaire/content/wb-options-window.css"
+        "node_modules/vuetify/dist/vuetify.css",
+        "node_modules/@mdi/font/css/materialdesignicons.css"
       ]
     },
     {

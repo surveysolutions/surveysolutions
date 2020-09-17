@@ -521,7 +521,14 @@ export default {
                     title: this.$t('Assignments.WebMode'),
                     tooltip: this.$t('Assignments.Tooltip_Table_WebMode'),
                     searchable: false,
-                    render(data) {
+                    render(data, type, row) {
+                        const isUnfinished = row.quantity === -1 || row.quantity > row.interviewsCount
+                        if(isUnfinished && data === true && row.webModeEnabledOnQuestionnaire === false) {
+                            const localisedYes = self.$t('Common.Yes')
+                            const title = self.$t('Assignments.WebModeEnabledWarning')
+                            return `<span class='text-danger' title='${title}'>${localisedYes}</span>`
+                        }
+
                         return data === false ? self.$t('Common.No') : self.$t('Common.Yes')
                     },
                 },

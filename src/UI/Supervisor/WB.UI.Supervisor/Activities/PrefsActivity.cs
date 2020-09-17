@@ -1,10 +1,13 @@
+using System;
 using System.Globalization;
 using Android.App;
 using Android.OS;
-using Android.Preferences;
+using AndroidX.AppCompat.App;
+using AndroidX.Preference;
 using MvvmCross;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.UI.Shared.Enumerator.Settings;
 using WB.UI.Supervisor.SharedPreferences;
 
 namespace WB.UI.Supervisor.Activities
@@ -13,31 +16,28 @@ namespace WB.UI.Supervisor.Activities
         NoHistory = false, 
         Theme = "@style/GrayAppTheme",
         Exported = false)]
-    public class PrefsActivity : PreferenceActivity
+    public class PrefsActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            FragmentManager.BeginTransaction().Replace(Android.Resource.Id.Content, new PrefsFragment()).Commit();
+            this.SupportFragmentManager
+                .BeginTransaction()
+                .Replace(Android.Resource.Id.Content, new PrefsFragment())
+                .Commit();
         }
 
-        protected override bool IsValidFragment(string fragmentName)
+        public class PrefsFragment : PreferenceFragmentCompat
         {
-            return typeof(PrefsFragment).Name.Equals(fragmentName);
-        }
-
-        public class PrefsFragment : PreferenceFragment
-        {
-            public override void OnCreate(Bundle savedInstanceState)
+            public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
-                base.OnCreate(savedInstanceState);
                 this.AddPreferencesFromResource(Resource.Xml.preferences);
                 this.SetupPreferences();
             }
 
             private void SetupPreferences()
             {
-                var settings = Mvx.Resolve<ISupervisorSettings>();
+                var settings = Mvx.IoCProvider.Resolve<ISupervisorSettings>();
 
                 this.SetPreferenceTitleAndSummary("interview_settings_category",
                     EnumeratorUIResources.Prefs_InterviewSettings, string.Empty);
@@ -56,18 +56,24 @@ namespace WB.UI.Supervisor.Activities
                     settings.SetEndpoint(e.NewValue.ToString());
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.EventChunkSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     settings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, settings.EventChunkSize));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.HttpResponseTimeout)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     settings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue,
                         (int) settings.Timeout.TotalSeconds));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.BufferSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.BufferSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     settings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, settings.BufferSize));
                     this.UpdateSettings();
@@ -89,7 +95,7 @@ namespace WB.UI.Supervisor.Activities
 
             private void UpdateSettings()
             {
-                var settings = Mvx.Resolve<ISupervisorSettings>();
+                var settings = Mvx.IoCProvider.Resolve<ISupervisorSettings>();
 
                 this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, EnumeratorUIResources.Prefs_EndpointTitle,
                     settings.Endpoint, settings.Endpoint);

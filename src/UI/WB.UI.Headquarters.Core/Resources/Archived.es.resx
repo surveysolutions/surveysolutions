@@ -127,10 +127,10 @@
     <value>entrevistadores archivados</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>supervisores archivados</value>
+    <value>Supervisores archivados</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Fecha de creación</value>
+    <value>Cuenta creada</value>
   </data>
   <data name="DoYouWantToContinue" xml:space="preserve">
     <value>Desea continuar?</value>
@@ -145,7 +145,7 @@
     <value>Nombre</value>
   </data>
   <data name="Unarchive" xml:space="preserve">
-    <value>Sin archivar</value>
+    <value>Desarchivar</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
     <value>Entrevistador(es) serán desarchivados</value>

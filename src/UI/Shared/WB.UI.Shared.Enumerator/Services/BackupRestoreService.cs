@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -67,13 +70,13 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<string> BackupAsync()
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
             return await this.BackupAsync(this.privateStorage).ConfigureAwait(false);
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
@@ -119,7 +122,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<RestorePackageInfo> GetRestorePackageInfo(string restoreFolder)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(restoreFolder))
                 this.fileSystemAccessor.CreateDirectory(restoreFolder);
@@ -266,7 +269,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task RestoreAsync(string backupFilePath)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {

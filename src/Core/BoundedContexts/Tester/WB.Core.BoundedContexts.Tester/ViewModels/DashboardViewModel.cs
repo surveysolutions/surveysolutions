@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -70,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
 
-            var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
+            var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.Principal.CurrentUserIdentity.Name);
 
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
         }
@@ -247,7 +248,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.CancelLoadServerQuestionnaires();
             
-            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
 
@@ -291,7 +292,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 this.dashboardLastUpdateStorage.Store(new DashboardLastUpdate
                 {
-                    Id = this.principal.CurrentUserIdentity.Name,
+                    Id = this.Principal.CurrentUserIdentity.Name,
                     LastUpdateDate = lastUpdateDate
                 });
 

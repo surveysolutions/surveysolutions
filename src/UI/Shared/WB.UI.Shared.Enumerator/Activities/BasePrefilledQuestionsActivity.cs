@@ -1,8 +1,7 @@
 using Android.OS;
-using Android.Support.V7.Widget;
-using MvvmCross.Droid.Support.V7.RecyclerView;
+using AndroidX.RecyclerView.Widget;
+using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.CustomControls;
 

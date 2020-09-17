@@ -18,8 +18,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     if ((interviewSummary.Status == InterviewStatus.Created
                          || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                          || interviewSummary.Status == InterviewStatus.InterviewerAssigned
-                         || interviewSummary.Status == InterviewStatus.SentToCapi) &&
-                        !interviewSummary.ReceivedByInterviewerAtUtc.HasValue && !interviewSummary.WasCompleted)
+                         || interviewSummary.Status == InterviewStatus.SentToCapi) 
+                        && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue 
+                        && !interviewSummary.WasCompleted)
                     {
                         yield return InterviewActionFlags.CanBeDeleted;
                     }
@@ -48,7 +49,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     }
 
                     if (interviewSummary.Status == InterviewStatus.Completed 
-                        || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters)
+                        || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters
+                        || interviewSummary.Status == InterviewStatus.RejectedBySupervisor)
                     {
                         yield return InterviewActionFlags.CanBeApproved;
                     }
@@ -65,14 +67,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 if ((interviewSummary.Status == InterviewStatus.Created
                      || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                      || interviewSummary.Status == InterviewStatus.InterviewerAssigned
-                     || interviewSummary.Status == InterviewStatus.SentToCapi) &&
-                    !interviewSummary.ReceivedByInterviewerAtUtc.HasValue && !interviewSummary.WasCompleted)
+                     || interviewSummary.Status == InterviewStatus.SentToCapi) 
+                    && !interviewSummary.ReceivedByInterviewerAtUtc.HasValue 
+                    && !interviewSummary.WasCompleted)
                     yield return InterviewActionFlags.CanBeDeleted;
 
-                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)
+                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor 
+                    || interviewSummary.Status == InterviewStatus.Completed
+                    || interviewSummary.Status == InterviewStatus.RejectedBySupervisor)
                     yield return InterviewActionFlags.CanBeApproved;
 
-                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor || interviewSummary.Status == InterviewStatus.Completed)
+                if (interviewSummary.Status == InterviewStatus.ApprovedBySupervisor 
+                    || interviewSummary.Status == InterviewStatus.Completed)
                     yield return InterviewActionFlags.CanBeRejected;
 
                 if (interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters)

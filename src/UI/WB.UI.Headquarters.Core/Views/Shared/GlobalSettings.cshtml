@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using WB.Core.BoundedContexts.Headquarters.Configs
 @using WB.Core.Infrastructure.Versions
 @using WB.UI.Headquarters.Configs
 @using WB.UI.Headquarters.Services
@@ -7,6 +8,7 @@
 @inject IProductVersion productVersion
 
 <script type="text/javascript">
+    document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
     window.CONFIG = @( new {
         verboseMode = false,
         googleApiKey = googleMapsConfig.Value.ApiKey,

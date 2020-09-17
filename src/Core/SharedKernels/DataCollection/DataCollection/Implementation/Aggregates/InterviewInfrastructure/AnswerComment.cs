@@ -8,13 +8,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Guid? Id { get; }
         public Guid UserId { get; private set; }
         public UserRoles UserRole { get; private set; }
-        public DateTime CommentTime { get; private set; }
+        public DateTimeOffset CommentTime { get; private set; }
         public string Comment { get; private set; }
         public Identity QuestionIdentity { get; private set; }
         public bool Resolved { get; set; }
         public bool CommentOnPreviousAnswer { get; set; } = false;
 
-        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity, Guid? id, bool resolved)
+        public AnswerComment(Guid userId, UserRoles userRole, DateTimeOffset commentTime, string comment, Identity questionIdentity, Guid? id, bool resolved)
         {
             UserId = userId;
             UserRole = userRole;

@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -11,7 +12,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedToListQuestionViewModelTests
 {
     [TestOf(typeof(SingleOptionLinkedToListQuestionViewModel))]
-    public class when_answer_removed
+    public class when_answer_removed : SingleOptionLinkedToListQuestionViewModelTests
     {
         [Test]
         public void should_view_model_has_text_list_options()
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
                 Create.Entity.PlainQuestionnaire(questionnaire),
                 interview,
                 answering: answeringMock.Object);
-            viewModel.Init("inerviewid", Identity.Create(Id.g2, RosterVector.Empty), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), Identity.Create(Id.g2, RosterVector.Empty), Create.Other.NavigationState());
 
             //act
             viewModel.Options.Last().RemoveAnswerCommand.Execute();

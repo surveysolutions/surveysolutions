@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RosterTitle" xml:space="preserve">
-    <value>Lista: {0}</value>
+    <value>Roster: {0}</value>
   </data>
   <data name="RosterType_Fixed" xml:space="preserve">
     <value>Conjunto fijo de ítems</value>
   </data>
   <data name="RosterType_List" xml:space="preserve">
-    <value>Lista de preguntas</value>
+    <value>Pregunta tipo lista</value>
   </data>
   <data name="RosterType_Multi" xml:space="preserve">
-    <value>Seleccion-multiple de preguntas</value>
+    <value>Pregunta de selección-múltiple</value>
   </data>
   <data name="RosterType_Numeric" xml:space="preserve">
     <value>Pregunta numérica</value>
