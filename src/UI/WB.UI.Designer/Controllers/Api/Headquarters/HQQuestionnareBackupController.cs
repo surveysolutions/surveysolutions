@@ -38,7 +38,6 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status403Forbidden, ErrorMessages.NoAccessToQuestionnaire);
             }
 
-
             var stream = this.questionnaireHelper.GetBackupQuestionnaire(questionnaireId, out string questionnaireFileName);
             if (stream == null) return NotFound();
 
