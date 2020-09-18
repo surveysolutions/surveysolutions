@@ -397,7 +397,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                string.IsNullOrEmpty(assignmentRow.Email?.Value);
         
         private bool WebModeOnlyForInterviewer(AssignmentResponsible webMode, PreloadingAssignmentRow assignmentRow)
-            => assignmentRow.WebMode?.WebMode == true && webMode.Responsible.InterviewerId == null;
+            => assignmentRow.WebMode?.WebMode == true && webMode.Responsible?.InterviewerId == null;
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
             => quantity.Quantity == 1 &&
