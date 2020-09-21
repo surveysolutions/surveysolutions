@@ -786,7 +786,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row-element">
+                                            <div class="row-element"
+                                                v-if="isPasswordSupported(emailTemplate)">
                                                 <div class="h5 mb-0">
                                                     {{$t('WebInterviewSettings.DescriptionForPassword')}}
                                                 </div>
@@ -815,7 +816,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row-element">
+                                            <div class="row-element"
+                                                v-if="isButtonSupported(emailTemplate)">
                                                 <div class="h5">
                                                     {{$t('WebInterviewSettings.StartInterviewButton')}}
                                                 </div>
@@ -941,17 +943,17 @@
                                                                         {{ previewText(emailTemplate.message) }}
                                                                     </td>
                                                                 </tr>
-                                                                <tr>
+                                                                <tr v-if="isPasswordSupported(emailTemplate)">
                                                                     <td style="padding: 0px 0 5px; font-size: 16px; line-height: 20px; white-space: pre-line;">
                                                                         {{ previewText(emailTemplate.passwordDescription) }}
                                                                     </td>
                                                                 </tr>
-                                                                <tr>
+                                                                <tr v-if="isPasswordSupported(emailTemplate)">
                                                                     <td style="padding: 0px 0 50px; font-size: 24px; line-height: 30px; color: #727272; font-weight: bold;">
                                                                         43845634
                                                                     </td>
                                                                 </tr>
-                                                                <tr>
+                                                                <tr v-if="isButtonSupported(emailTemplate)">
                                                                     <td>
                                                                         <a href="javascript:void(0);"
                                                                             class="btn-success"
@@ -1050,7 +1052,7 @@
                             data-vv-name="attachAnswersInEmail"
                             id="attachAnswersInEmail"
                             type="checkbox"
-                            :disabled="emailOnComplete"
+                            :disabled="!emailOnComplete"
                             v-model="attachAnswersInEmailIsEnabled">
                         <label for="attachAnswersInEmail">
                             <span class="tick"></span>{{$t('WebInterviewSetup.AttachAnswersToCompleteEmail')}}
@@ -1440,6 +1442,12 @@ export default {
             emailTemplate[fieldName] = null
             await this.$nextTick()
             await this.$validator.validate('emailTemplateData'+ emailTemplate.value + '.' + fieldName)
+        },
+        isPasswordSupported(emailTemplate){
+            return emailTemplate.value != 'completeInterviewEmail'
+        },
+        isButtonSupported(emailTemplate) {
+            return emailTemplate.value != 'completeInterviewEmail'
         },
     },
     watch: {

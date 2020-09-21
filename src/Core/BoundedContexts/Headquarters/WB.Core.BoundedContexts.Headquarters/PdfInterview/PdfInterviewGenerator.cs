@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
@@ -65,6 +66,14 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         public Stream? Generate(Guid interviewId)
         {
+            var pdfView = !authorizedUser.IsAuthenticated || authorizedUser.IsInterviewer
+                ? PdfView.Interviewer
+                : PdfView.Review;
+            return Generate(interviewId, pdfView);
+        }
+        
+        public Stream? Generate(Guid interviewId, PdfView pdfView)
+        {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
                 return null;
@@ -73,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             if (questionnaire == null)
                 return null;
 
-            var nodes = GetAllInterviewNodes(interview).ToList();
+            var nodes = GetAllInterviewNodes(interview, pdfView).ToList();
             var identifyedEntities = questionnaire.GetPrefilledEntities().Select(id => new Identity(id, RosterVector.Empty)).ToList();
            
             PdfDocument pdfDocument = new PdfDocument();
@@ -110,9 +119,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             return memoryStream;
         }
 
-        private IEnumerable<Identity> GetAllInterviewNodes(IStatefulInterview interview)
+        private IEnumerable<Identity> GetAllInterviewNodes(IStatefulInterview interview, PdfView pdfView)
         {
-            if (!authorizedUser.IsAuthenticated || authorizedUser.IsInterviewer)
+            if (pdfView == PdfView.Interviewer)
             {
                 foreach (var entity in interview.GetUnderlyingInterviewerEntities().Where(interview.IsEnabled))
                     yield return entity;

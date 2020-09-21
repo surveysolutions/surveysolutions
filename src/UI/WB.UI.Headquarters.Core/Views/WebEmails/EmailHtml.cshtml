@@ -83,12 +83,15 @@
                             </td>
                         </tr>
                     }
-                    <tr>
-                        <td>
-                            <a href="@Model.Link" class="btn-success" 
-                               style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">@Model.LinkText</a>
-                        </td>
-                    </tr>
+                    @if (!string.IsNullOrWhiteSpace(Model.Link))
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Model.Link" class="btn-success"
+                                   style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">@Model.LinkText</a>
+                            </td>
+                        </tr>
+                    }
                 </table>
             </td>
         </tr>
