@@ -347,7 +347,7 @@
     <value>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</value>
   </data>
   <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
-    <value>will be showed in list of reusable categories for any types of categorical questions.</value>
+    <value>will be added to list of reusable categories for any types of categorical questions</value>
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Toggle Dropdown</value>

@@ -76,7 +76,7 @@
     "SideBarTranslationsEmptyLine2": "You may download and update translations to different languages.",
     "SideBarCategoriesEmptyLine2": "You may download and update categories.",
     "SideBarTranslationsEmptyLine3": "Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.",
-    "SideBarCategoriesEmptyLine3": "will be showed in list of reusable categories for any types of categorical questions.",
+    "SideBarCategoriesEmptyLine3": "will be added to list of reusable categories for any types of categorical questions",
     "ToggleDropdown": "Toggle Dropdown",
     "Update": "Update",
     "VariableName": "name",
