@@ -1472,4 +1472,14 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="RowAdded" xml:space="preserve">
     <value>Row added</value>
   </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>
+You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
+  </data>
+  <data name="AddCascading" xml:space="preserve">
+    <value>Add cascading values</value>
+  </data>
+  <data name="RemoveCascading" xml:space="preserve">
+    <value>Remove cascading values</value>
+  </data>
 </root>

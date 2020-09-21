@@ -1487,4 +1487,14 @@
   <data name="RowAdded" xml:space="preserve">
     <value>Строка добавлена</value>
   </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>Ввод не верен. Каждая строка должна следовать следующему формату: "Текст...Родительское/
+Значение". 'Текст' должен содержать символы или цифры. 'Значение' должно быть целочисленным. Пустые строки не разрешены.</value>
+  </data>
+  <data name="AddCascading" xml:space="preserve">
+    <value>Добавить каскадные значения</value>
+  </data>
+  <data name="RemoveCascading" xml:space="preserve">
+    <value>Удалить каскадные значения</value>
+  </data>
 </root>
