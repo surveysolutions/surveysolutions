@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
@@ -27,9 +28,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
 
             if(disabledNotDeletedQuestionnaire == null) return Task.CompletedTask;
 
-            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy);
-
-            return Task.CompletedTask;
+            if (!disabledNotDeletedQuestionnaire.DisabledBy.HasValue)
+                throw new ArgumentException("Should specify userId for delete questionnaire");
+                
+            return deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy.Value);
         }
     }
 }

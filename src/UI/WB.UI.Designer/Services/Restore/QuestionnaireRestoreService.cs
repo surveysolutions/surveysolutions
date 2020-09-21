@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Main.Core.Documents;
@@ -39,17 +38,17 @@ namespace WB.UI.Designer.Services.Restore
             this.categoriesService = categoriesService;
         }
 
-        public void RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state)
+        public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
             using var zipStream = new ZipInputStream(archive);
-            
-            ZipEntry zipEntry = zipStream.GetNextEntry();
 
-            while (zipEntry != null)
+            var questionnaireId = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
+
+            zipStream.Seek(0, SeekOrigin.Begin);
+            ZipEntry zipEntry;
+            while ((zipEntry = zipStream.GetNextEntry()) != null)
             {
-                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state);
-
-                zipEntry = zipStream.GetNextEntry();
+                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaireId);
             }
 
             state.Error = "";
@@ -57,9 +56,59 @@ namespace WB.UI.Designer.Services.Restore
             {
                 state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
             }
+
+            return questionnaireId;
         }
 
-        public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state)
+        public Guid RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, Guid responsibleId,
+            RestoreState state, bool createNew)
+        {
+            ZipEntry zipEntry;
+            while ((zipEntry = zipStream.GetNextEntry()) != null)
+            {
+                if (zipEntry.IsDirectory) continue;
+                try
+                {
+                    string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                        new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+                        StringSplitOptions.RemoveEmptyEntries);
+
+                    if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
+                    {
+                        string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                        var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
+                        
+                        if(createNew)
+                            questionnaireDocument.PublicKey = Guid.NewGuid();
+
+                        var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
+                        this.commandService.Execute(command);
+
+                        this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+                        this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+
+                        state.Success.AppendLine($"[{zipEntry.FileName}]");
+                        state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
+                        state.RestoredEntitiesCount++;
+
+                        dbContext.SaveChanges();
+
+                        return questionnaireDocument.PublicKey;
+                    }
+                }
+                catch (Exception exception)
+                {
+                        this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
+                        state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
+                        logger.LogError(state.Error);
+                }
+            }
+
+            state.Error = "Questionnaire document was not found.";
+            throw new Exception("Questionnaire document was not found.");
+        }
+
+        public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state, Guid questionnaireId)
         {
             try
             {
@@ -67,61 +116,31 @@ namespace WB.UI.Designer.Services.Restore
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                     StringSplitOptions.RemoveEmptyEntries);
 
-                bool isInsideQuestionnaireFolder = Guid.TryParse(
-                    zipEntryPathChunks[0].Split(new[] { '(', ')' }, StringSplitOptions.RemoveEmptyEntries).Last(),
-                    out var questionnaireId);
-
-                if (!isInsideQuestionnaireFolder)
-                {
-                    return;
-                }
-
-                bool isQuestionnaireDocumentEntry =
-                    zipEntryPathChunks.Length == 2 &&
-                    zipEntryPathChunks[1].ToLower().EndsWith(".json");
-
                 bool isAttachmentEntry =
-                    zipEntryPathChunks.Length == 4 &&
-                    string.Equals(zipEntryPathChunks[1], "attachments", StringComparison.CurrentCultureIgnoreCase);
+                    zipEntryPathChunks.Length == 3 &&
+                    string.Equals(zipEntryPathChunks[0], "attachments", StringComparison.CurrentCultureIgnoreCase);
 
                 bool isLookupTableEntry =
-                    zipEntryPathChunks.Length == 3 &&
-                    string.Equals(zipEntryPathChunks[1], "lookup tables", StringComparison.CurrentCultureIgnoreCase) &&
-                    zipEntryPathChunks[2].ToLower().EndsWith(".txt");
+                    zipEntryPathChunks.Length == 2 &&
+                    string.Equals(zipEntryPathChunks[0], "lookup tables", StringComparison.CurrentCultureIgnoreCase) &&
+                    zipEntryPathChunks[1].ToLower().EndsWith(".txt");
 
                 bool isTranslationEntry =
-                    zipEntryPathChunks.Length == 3 &&
-                    string.Equals(zipEntryPathChunks[1], "translations", StringComparison.CurrentCultureIgnoreCase) &&
-                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
-                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
+                    zipEntryPathChunks.Length == 2 &&
+                    string.Equals(zipEntryPathChunks[0], "translations", StringComparison.CurrentCultureIgnoreCase) &&
+                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase) ||
+                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase));
 
                 bool isCollectionsEntry =
-                    zipEntryPathChunks.Length == 3 &&
-                    string.Equals(zipEntryPathChunks[1], "categories", StringComparison.CurrentCultureIgnoreCase) &&
-                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
-                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
+                    zipEntryPathChunks.Length == 2 &&
+                    string.Equals(zipEntryPathChunks[0], "categories", StringComparison.CurrentCultureIgnoreCase) &&
+                    (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase) ||
+                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[1]), StringComparison.InvariantCultureIgnoreCase));
 
-                if (isQuestionnaireDocumentEntry)
+                if (isAttachmentEntry)
                 {
-                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
-
-                    var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
-                    questionnaireDocument.PublicKey = questionnaireId;
-
-                    var command = new ImportQuestionnaire(responsibleId, questionnaireDocument);
-                    this.commandService.Execute(command);
-
-                    this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-                    this.categoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
-
-                    state.Success.AppendLine($"[{zipEntry.FileName}]");
-                    state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
-                    state.RestoredEntitiesCount++;
-                }
-                else if (isAttachmentEntry)
-                {
-                    var attachmentId = Guid.Parse(zipEntryPathChunks[2]);
-                    var fileName = zipEntryPathChunks[3];
+                    var attachmentId = Guid.Parse(zipEntryPathChunks[1]);
+                    var fileName = zipEntryPathChunks[2];
 
                     if (string.Equals(fileName, "content-type.txt", StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -157,7 +176,7 @@ namespace WB.UI.Designer.Services.Restore
                 }
                 else if (isLookupTableEntry)
                 {
-                    var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]));
+                    var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]));
 
                     string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
@@ -169,7 +188,7 @@ namespace WB.UI.Designer.Services.Restore
                 }
                 else if (isTranslationEntry)
                 {
-                    var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
+                    var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
                     byte[]? excelContent;
 
                     using (var memoryStream = new MemoryStream())
@@ -187,7 +206,7 @@ namespace WB.UI.Designer.Services.Restore
                 }
                 else if (isCollectionsEntry)
                 {
-                    var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]);
+                    var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
                     var collectionsId = Guid.Parse(collectionsIdString);
 
                     this.categoriesService.Store(questionnaireId, collectionsId, zipStream, CategoriesFileType.Excel);
