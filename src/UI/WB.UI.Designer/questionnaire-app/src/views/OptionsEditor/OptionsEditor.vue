@@ -49,7 +49,9 @@
                                 :categories="categories"
                                 :parent-categories="parentCategories"
                                 :loading="loading"
-                                :show-parent-value="cascading || isCategory"
+                                :is-category="isCategory"
+                                :is-cascading="isCascading"
+                                @setCascading="setCascadingCategory"
                             />
                         </v-tab-item>
                         <v-tab-item key="strings">
@@ -57,7 +59,7 @@
                                 v-if="tab == 1"
                                 ref="strings"
                                 :loading="loading"
-                                :show-parent-value="cascading || isCategory"
+                                :show-parent-value="isCascading"
                                 :categories="categories"
                                 @change="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
@@ -138,6 +140,8 @@ export default {
 
             file: null,
 
+            isCascadingCategory: false,
+
             snacks: {
                 fileUploaded: false,
                 formReverted: false,
@@ -154,6 +158,10 @@ export default {
             return this.ajax || this.convert;
         },
 
+        isCascading() {
+            return this.cascading || this.isCascadingCategory;
+        },
+
         formTitle() {
             if (this.isCategory) {
                 return (
@@ -163,7 +171,7 @@ export default {
                 );
             }
 
-            if (this.cascading) {
+            if (this.isCascading) {
                 return (
                     this.$t('QuestionnaireEditor.CascadingOptionsWindowTitle') +
                     ': ' +
@@ -183,7 +191,7 @@ export default {
                 this.questionnaireRev,
                 this.id,
                 this.isCategory,
-                this.cascading
+                this.isCascading
             );
         }
     },
@@ -204,6 +212,10 @@ export default {
     },
 
     methods: {
+        setCascadingCategory(cascadingCategory) {
+            this.isCascadingCategory = cascadingCategory;
+        },
+
         async reloadCategories(onDone) {
             if (this.ajax) return;
             if (this.inEditMode || this.convert) {
@@ -217,16 +229,23 @@ export default {
                     ? optionsApi.getCategoryOptions(
                           this.questionnaireRev,
                           this.id,
-                          this.cascading
+                          this.isCascading
                       )
                     : optionsApi.getOptions(
                           this.questionnaireRev,
                           this.id,
-                          this.cascading
+                          this.isCascading
                       );
 
                 const data = await query;
                 this.categories = data.options;
+
+                if (
+                    this.isCategory &&
+                    data.options.find(o => o.parentValue != null)
+                ) {
+                    this.isCascadingCategory = true;
+                }
                 delete data.options;
                 this.options = data;
 
@@ -305,7 +324,7 @@ export default {
                     this.categories,
                     this.questionnaireRev,
                     this.id,
-                    this.cascading,
+                    this.isCascading,
                     this.isCategory
                 )
                 .then(response => {

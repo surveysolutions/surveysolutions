@@ -67,7 +67,13 @@ export default {
 
                     if (top5Errors.length > 0) {
                         const error = [
-                            this.$t('QuestionnaireEditor.OptionsListError'),
+                            this.showParentValue
+                                ? this.$t(
+                                      'QuestionnaireEditor.OptionsCascadingListError'
+                                  )
+                                : this.$t(
+                                      'QuestionnaireEditor.OptionsListError'
+                                  ),
                             '',
                             ...top5Errors
                         ].join('\r\n');

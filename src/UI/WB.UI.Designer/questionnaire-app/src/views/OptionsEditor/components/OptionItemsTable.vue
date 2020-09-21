@@ -14,6 +14,18 @@
                 <v-icon left>mdi-plus</v-icon
                 >{{ $t('QuestionnaireEditor.NewItem') }}
             </v-btn>
+            <v-btn
+                v-if="isCategory && !isCascading"
+                class="ma-2"
+                @click="setCascading(true)"
+                >{{ $t('QuestionnaireEditor.AddCascading') }}</v-btn
+            >
+            <v-btn
+                v-if="isCategory && isCascading"
+                class="ma-2"
+                @click="setCascading(null)"
+                >{{ $t('QuestionnaireEditor.RemoveCascading') }}</v-btn
+            >
         </v-card-title>
 
         <category-dialog
@@ -22,7 +34,7 @@
             :item="editedItem"
             :parent-categories="parentCategories"
             :shown="dialog"
-            :show-parent-value="showParentValue"
+            :show-parent-value="isCascading"
             @cancel="dialog = false"
             @change="save"
         />
@@ -89,7 +101,8 @@ export default {
     props: {
         categories: { type: Array, required: true },
         parentCategories: { type: Array, required: false, default: () => [] },
-        showParentValue: { type: Boolean, required: true },
+        isCategory: { type: Boolean, required: true },
+        isCascading: { type: Boolean, required: true },
         loading: { type: Boolean, required: true }
     },
 
@@ -123,11 +136,11 @@ export default {
                     text: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
                     sortable: true,
                     value: 'title',
-                    width: this.showParentValue ? '60%' : '70%'
+                    width: this.isCascading ? '60%' : '70%'
                 }
             ];
 
-            if (this.showParentValue) {
+            if (this.isCascading) {
                 headers.push({
                     text: this.$t('QuestionnaireEditor.OptionsUploadParent'),
                     sortable: true,
@@ -158,6 +171,10 @@ export default {
             this.editedIndex = -1;
             this.editedItem = {};
             this.dialog = true;
+        },
+
+        setCascading(value) {
+            this.$emit('setCascading', value);
         },
 
         editItem(item) {

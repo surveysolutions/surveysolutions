@@ -328,6 +328,7 @@
     "SelectCategories": "Select categories",
     "SectionVariableName": "Variable name",
     "VirtualCoverPage": "Virtual cover page",
+    "MigrateToNewCover": "Generate cover",
     "EmptySectionLine3": "on top of this block or manage sections with {{-panel}} left panel",
     "EmptySectionLine4": "Questionnaire name, variable, collaboration and other options",
     "QuestionCheckboxes": "Checkboxes",
@@ -447,6 +448,9 @@
     "OptionsSizeLimit": "Maximum {{ max }} rows allowed",
     "CommunicationError": "Network error",
     "SideBarCategoriesAddNew": "Add new category",
-    "RowAdded": "Row added"
+    "RowAdded": "Row added",
+    "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
+    "AddCascading": "Add cascading values",
+    "RemoveCascading": "Remove cascading values"
   }
 }

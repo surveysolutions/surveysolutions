@@ -70,6 +70,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add cascading values.
+        /// </summary>
+        public static string AddCascading {
+            get {
+                return ResourceManager.GetString("AddCascading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {
@@ -1623,6 +1632,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///You entered an invalid input. Each line should follow the format: &quot;Title...ParentValue/Value&quot;. &apos;Value&apos; and &apos;ParentValue&apos; must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed..
+        /// </summary>
+        public static string OptionsCascadingListError {
+            get {
+                return ResourceManager.GetString("OptionsCascadingListError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close Window?.
         /// </summary>
         public static string OptionsCloseWindow {
@@ -2186,6 +2205,15 @@ namespace WB.UI.Designer.Resources {
         public static string Recompile {
             get {
                 return ResourceManager.GetString("Recompile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove cascading values.
+        /// </summary>
+        public static string RemoveCascading {
+            get {
+                return ResourceManager.GetString("RemoveCascading", resourceCulture);
             }
         }
         
