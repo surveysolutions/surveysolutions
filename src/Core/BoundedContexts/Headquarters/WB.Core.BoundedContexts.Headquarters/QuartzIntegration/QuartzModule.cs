@@ -79,6 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
             await serviceLocator.GetInstance<SendInvitationsTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
+            await serviceLocator.GetInstance<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 10);
         }
     }
 }

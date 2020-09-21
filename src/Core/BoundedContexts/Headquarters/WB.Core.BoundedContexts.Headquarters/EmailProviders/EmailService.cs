@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
@@ -9,12 +12,14 @@ using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using AmazonContent = Amazon.SimpleEmail.Model.Content;
+using Attachment = SendGrid.Helpers.Mail.Attachment;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 {
@@ -30,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             this.serializer = serializer;
         }
 
-        public async Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody)
+        public async Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments = null)
         {
             EmailProviderSettings settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             if (!IsConfigured())
@@ -39,9 +44,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             switch (settings.Provider)
             {
                 case EmailProvider.Amazon:
-                    return await SendEmailWithAmazon(to, subject, htmlBody, textBody, settings).ConfigureAwait(false);
+                    return await SendEmailWithAmazon(to, subject, htmlBody, textBody, attachments, settings).ConfigureAwait(false);
                 case EmailProvider.SendGrid:
-                    return await SendEmailWithSendGrid(to, subject, htmlBody, textBody, settings).ConfigureAwait(false);
+                    return await SendEmailWithSendGrid(to, subject, htmlBody, textBody, attachments, settings).ConfigureAwait(false);
                 default:
                     throw new Exception("Email provider wasn't set up");
             }
@@ -72,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             return settings;
         }
 
-        public async Task<string> SendEmailWithSendGrid(string to, string subject, string htmlBody, string textBody, ISendGridEmailSettings settings)
+        public async Task<string> SendEmailWithSendGrid(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, ISendGridEmailSettings settings)
         {
             var client = new SendGridClient(settings.SendGridApiKey);
             var msg = new SendGridMessage
@@ -80,8 +85,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 From = new EmailAddress(settings.SenderAddress),
                 Subject = subject,
                 PlainTextContent = textBody,
-                HtmlContent = htmlBody
+                HtmlContent = htmlBody,
             };
+
+            if (attachments != null)
+            {
+                msg.Attachments = attachments.Select(a =>
+                    new Attachment()
+                    {
+                        ContentId = Guid.NewGuid().ToString(),
+                        Disposition = "attachment",
+                        Filename = a.Filename,
+                        Content = a.Base64String,
+                        Type = a.ContentType,
+                    }).ToList();
+            }
 
             if(!string.IsNullOrWhiteSpace(settings.ReplyAddress))
                 msg.ReplyTo = new EmailAddress(settings.ReplyAddress);
@@ -121,43 +139,32 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             public string Field { get; set; }
         }
 
-        public async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, IAmazonEmailSettings settings)
+        public async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, IAmazonEmailSettings settings)
         {
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
             using var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1);
             
-            var sendRequest = new SendEmailRequest
+            var messageBuilder = new RawMessageBuilder();
+            messageBuilder.From = settings.SenderAddress;
+            messageBuilder.To = to;
+            messageBuilder.ReplyAddress = settings.ReplyAddress;
+            messageBuilder.Subject = subject;
+            messageBuilder.HtmlBody = htmlBody;
+            messageBuilder.TextBody = textBody;
+            messageBuilder.Attachments = attachments;
+            var rawMessage = messageBuilder.Build();
+
+            await using var messageStream = new MemoryStream(Encoding.UTF8.GetBytes(rawMessage));
+            var sendRequest = new SendRawEmailRequest
             {
                 Source = settings.SenderAddress,
-                Destination = new Destination
-                {
-                    ToAddresses = new List<string> { to }
-                },
-                Message = new Message
-                {
-                    Subject = new AmazonContent(subject),
-                    Body = new Body
-                    {
-                        Html = new AmazonContent
-                        {
-                            Charset = "UTF-8",
-                            Data = htmlBody
-                        },
-                        Text = new AmazonContent
-                        {
-                            Charset = "UTF-8",
-                            Data = textBody
-                        }
-                    }
-                }
+                Destinations = new List<string>() { to },
+                RawMessage = new RawMessage(messageStream),
             };
-
-            if (!string.IsNullOrWhiteSpace(settings.ReplyAddress))
-                sendRequest.ReplyToAddresses = new List<string>() {settings.ReplyAddress};
-
+            
             try
             {
-                var response = await client.SendEmailAsync(sendRequest).ConfigureAwait(false);
+                var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
                 return response.MessageId;
             }
             catch (AggregateException ae)
@@ -174,7 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 
     public interface IEmailService
     {
-        Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody);
+        Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments = null);
         bool IsConfigured();
         ISenderInformation GetSenderInfo();
     }

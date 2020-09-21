@@ -1,4 +1,9 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Invitations
+﻿using System;
+using System.Text.RegularExpressions;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+
+namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class WebInterviewEmailTemplate
     {
@@ -33,18 +38,37 @@
                 .Replace(QuestionnaireTitle, questionnaireTitle)
                 .Replace(SurveyLink, link)
                 .Replace(Password, password);
-            LinkText = template.LinkText
+            LinkText = template.LinkText?
                 .Replace(SurveyName, questionnaireTitle)
                 .Replace(QuestionnaireTitle, questionnaireTitle);
-            PasswordDescription = template.PasswordDescription
+            PasswordDescription = template.PasswordDescription?
                 .Replace(SurveyName, questionnaireTitle)
                 .Replace(QuestionnaireTitle, questionnaireTitle);
         }
 
-        public string Subject { get; }
-        public string MainText { get; }
+        public string Subject { get; private set; }
+        public string MainText { get; private set; }
         public string PasswordDescription { get; }
         public string LinkText { get; }
+
+        public void RenderInterviewData(IStatefulInterview interview, IQuestionnaire questionnaire)
+        {
+            Subject = ReplaceVariablesWithData(Subject, interview, questionnaire);
+            MainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
+        }
+
+        private static Regex FindVariables = new Regex("%[(A-Za-z0-9_)+]%", RegexOptions.Compiled);
+        private string ReplaceVariablesWithData(string text, IStatefulInterview interview, IQuestionnaire questionnaire)
+        {
+            return FindVariables.Replace(text, match =>
+            {
+                var questionId = questionnaire.GetQuestionIdByVariable(match.Value.Trim('%'));
+                if (!questionId.HasValue)
+                    return String.Empty;
+                var answer = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
+                return answer;
+            });
+        }
     }
 }
 
