@@ -111,7 +111,7 @@ export function validateText(value, isCascading) {
         if (option == '') continue;
 
         if (regex.test(option) === false) {
-            diff.push(`  ${i}: ${options[i]}`);
+            diff.push(`  ${i + 1}: ${options[i]}`);
         }
     }
 
