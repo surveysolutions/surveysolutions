@@ -27,5 +27,10 @@ namespace WB.Core.Infrastructure.Aggregates
         /// </summary>
         /// <param name="aggregateId">An aggregate root UUID identifying the entry.</param>
         void Evict(Guid aggregateId);
+
+        /// <summary>
+        /// Clear all data in cache
+        /// </summary>
+        void Clear();
     }
 }
