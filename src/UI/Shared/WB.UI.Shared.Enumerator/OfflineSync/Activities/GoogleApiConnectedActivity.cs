@@ -1,7 +1,4 @@
-﻿using Android.Gms.Common;
-using Android.Gms.Common.Apis;
-using Android.Gms.Nearby;
-using Android.OS;
+﻿using Android.Gms.Nearby;
 using Android.Widget;
 using MvvmCross;
 using MvvmCross.ViewModels;
@@ -14,11 +11,9 @@ using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
     public abstract class GoogleApiConnectedActivity<TViewModel>
-        : BaseActivity<TViewModel>,
-            GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener
+        : BaseActivity<TViewModel>
             where TViewModel : class, IMvxViewModel, IOfflineSyncViewModel
     {
-        protected GoogleApiClient GoogleApi;
         const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
 
@@ -33,15 +28,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         protected override void OnStop()
         {
-            this.communicator?.StopAll();
-            if (this.GoogleApi != null)
-            {
-                if (this.GoogleApi.IsConnected)
-                {
-                    this.GoogleApi.Disconnect();
-                }
-            }
-
+            communicator?.StopAll();
             base.OnStop();
         }
 
@@ -77,51 +64,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         private void RestoreGoogleApiConnectionIfNeeded()
         {
-            if (this.GoogleApi == null)
-            {
-                this.GoogleApi = new GoogleApiClient.Builder(this)
-                    .AddConnectionCallbacks(this)
-                    .AddOnConnectionFailedListener(this)
-                    .AddApi(NearbyClass.CONNECTIONS_API)
-                    .Build();
-
-                this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
-                var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
-                apiClientFactory.GoogleApiClient = this.GoogleApi;
-            }
-
-            if (this.GoogleApi.IsConnected)
-            {
-                this.ViewModel.StartDiscoveryAsyncCommand.Execute();
-                return;
-            }
-
-            if (!this.GoogleApi.IsConnected && !this.GoogleApi.IsConnecting)
-                this.GoogleApi.Connect();
-        }
-
-        public void OnConnected(Bundle connectionHint)
-        {
-            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
-        }
-
-        public void OnConnectionSuspended(int cause)
-        {
-        }
-
-        public void OnConnectionFailed(ConnectionResult result)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                this.GoogleApi?.Dispose();
-                this.GoogleApi = null;
-            }
-
-            base.Dispose(disposing);
+            this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
+            var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
+            
+            apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);        
         }
     }
 }
