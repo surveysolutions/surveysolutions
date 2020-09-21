@@ -17,7 +17,7 @@
                 $scope.bcChannel.onmessage = function(ev) {
                     console.log(ev.data)
                     if(ev.data === 'close#' + $scope.openEditor) {
-                        $rootScope.$emit("categoriesUpdated")
+                        window.location.reload();
                     }
                 }
             }
