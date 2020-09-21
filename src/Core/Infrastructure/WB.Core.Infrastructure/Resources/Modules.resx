@@ -133,6 +133,6 @@
     <value>Database migration in progress</value>
   </data>
   <data name="ErrorDatabaseUnauthorized" xml:space="preserve">
-    <value>Application is not authorised to connect to database. Check application log file for details</value>
+    <value>Application is not authorized to connect to database. Check application log file for details</value>
   </data>
 </root>
