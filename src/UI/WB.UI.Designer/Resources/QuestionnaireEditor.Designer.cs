@@ -2965,7 +2965,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to will be showed in list of reusable categories for any types of categorical questions..
+        ///   Looks up a localized string similar to will be added to list of reusable categories for any types of categorical questions.
         /// </summary>
         public static string SideBarCategoriesEmptyLine3 {
             get {
