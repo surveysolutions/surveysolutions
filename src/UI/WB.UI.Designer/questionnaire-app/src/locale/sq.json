@@ -382,7 +382,7 @@
     "SideBarCategoriesCounter": "{{count}} Categories",
     "SideBarCategoriesEmptyLine1": "Use this tab to manage reusable categories.",
     "SideBarCategoriesEmptyLine2": "You may download and update categories.",
-    "SideBarCategoriesEmptyLine3": "will be showed in list of reusable categories for any types of categorical questions.",
+    "SideBarCategoriesEmptyLine3": "will be added to list of reusable categories for any types of categorical questions",
     "SideBarScenarioTitle": "Scenarios",
     "SideBarCategoriesTitle": "Categories",
     "SideBarCategoriesUploadNew": "Upload new categories",
