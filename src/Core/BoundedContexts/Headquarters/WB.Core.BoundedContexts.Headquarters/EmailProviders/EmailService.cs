@@ -11,6 +11,7 @@ using Amazon;
 using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using MimeKit;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -21,6 +22,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using AmazonContent = Amazon.SimpleEmail.Model.Content;
 using Attachment = SendGrid.Helpers.Mail.Attachment;
+using ContentType = MimeKit.ContentType;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 {
@@ -145,7 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
             using var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1);
             
-            MailMessage mailMessage = new MailMessage();
+            /*MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(settings.SenderAddress);
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subject;
@@ -165,7 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                     var mailAttachment = new System.Net.Mail.Attachment(ms, attachment.Filename, attachment.ContentType);
                     mailMessage.Attachments.Add(mailAttachment);
                 }
-            }
+            }*/
 
            
             /*var messageBuilder = new RawMessageBuilder();
@@ -186,13 +188,43 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 RawMessage = new RawMessage(messageStream),
             };*/
             
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(string.Empty, settings.SenderAddress));
+            message.To.Add(new MailboxAddress(string.Empty, to));
+            message.Subject = subject;
+            
+            var body = new BodyBuilder()
+            {
+                HtmlBody = htmlBody,
+                TextBody = textBody,
+            };
+            if (attachments != null)
+            {
+                foreach (var attachment in attachments)
+                {
+                    var bytes = Convert.FromBase64String(attachment.Base64String);
+                    body.Attachments.Add(attachment.Filename, bytes, ContentType.Parse(attachment.ContentType));
+                }
+            }
+            
+            message.Body = body.ToMessageBody();
+            
+            var messageStream = new MemoryStream();
+            await message.WriteToAsync(messageStream);
+            
+            var sendRequest = new SendRawEmailRequest
+            {
+                Source = settings.SenderAddress,
+                Destinations = new List<string>() { to },
+                RawMessage = new RawMessage(messageStream),
+            };
             
             try
             {
-                // var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
-                // return response.MessageId;
-                await SendMessageAsync(mailMessage, settings);
-                return "1";
+                var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
+                return response.MessageId;
+                // await SendMessageAsync(mailMessage, settings);
+                // return "1";
             }
             catch (AggregateException ae)
             {
