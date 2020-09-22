@@ -31,17 +31,22 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            if (ViewModel?.ScrollToIdentity != null)
+            if (ViewModel?.ScrollToIdentity == null) return;
+            
+            var nestedScrollView = view.FindViewById<NestedScrollView>(Resource.Id.tv_coverNestedScrollView);
+            nestedScrollView?.Post(new InnerRunnable(() =>
             {
-                var nestedScrollView = view.FindViewById<NestedScrollView>(Resource.Id.tv_coverNestedScrollView);
-                nestedScrollView.Post(new InnerRunnable(() =>
+                var entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
+                var parent = (View) entityControl?.Parent;
+                if (parent != null)
                 {
-                    var entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
-                    var topOffset = entityControl.Top + ((View)entityControl.Parent).Top;
+                    var topOffset = entityControl.Top + parent.Top;
                     nestedScrollView.ScrollTo(0, topOffset);
-                    this.ViewModel.ScrollToIdentity = null;
-                }));
-            }
+                }
+
+                this.ViewModel.ScrollToIdentity = null;
+
+            }));
         }
     }
 }
