@@ -22,6 +22,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using AmazonContent = Amazon.SimpleEmail.Model.Content;
 using Attachment = SendGrid.Helpers.Mail.Attachment;
+using ContentDisposition = MimeKit.ContentDisposition;
 using ContentType = MimeKit.ContentType;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
@@ -96,8 +97,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 msg.Attachments = attachments.Select(a =>
                     new Attachment()
                     {
-                        ContentId = Guid.NewGuid().ToString(),
-                        Disposition = "attachment",
+                        ContentId = a.ContentId ?? Guid.NewGuid().ToString(),
+                        Disposition = a.Disposition == EmailAttachmentDisposition.Inline ? "inline" : "attachment",
                         Filename = a.Filename,
                         Content = a.Base64String,
                         Type = a.ContentType,
@@ -147,13 +148,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
             using var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1);
             
-            /*MailMessage mailMessage = new MailMessage();
+            MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(settings.SenderAddress);
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subject;
             mailMessage.Body = htmlBody;
             mailMessage.IsBodyHtml = true;
-            mailMessage.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(textBody));
+            //mailMessage.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(textBody));
 
             if (!string.IsNullOrEmpty(settings.ReplyAddress))
                 mailMessage.ReplyToList.Add(new MailAddress(settings.ReplyAddress));
@@ -165,9 +166,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                     var bytes = Convert.FromBase64String(attachment.Base64String);
                     var ms = new MemoryStream(bytes);
                     var mailAttachment = new System.Net.Mail.Attachment(ms, attachment.Filename, attachment.ContentType);
+                    if (attachment.Disposition == EmailAttachmentDisposition.Inline)
+                    {
+                        mailAttachment.ContentDisposition.Inline = true;
+                        mailAttachment.ContentId = attachment.ContentId;
+                    }
+                    
                     mailMessage.Attachments.Add(mailAttachment);
                 }
-            }*/
+            }
 
            
             /*var messageBuilder = new RawMessageBuilder();
@@ -188,7 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 RawMessage = new RawMessage(messageStream),
             };*/
             
-            var message = new MimeMessage();
+            /*var message = new MimeMessage();
             message.From.Add(new MailboxAddress(string.Empty, settings.SenderAddress));
             message.To.Add(new MailboxAddress(string.Empty, to));
             message.Subject = subject;
@@ -203,7 +210,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 foreach (var attachment in attachments)
                 {
                     var bytes = Convert.FromBase64String(attachment.Base64String);
-                    body.Attachments.Add(attachment.Filename, bytes, ContentType.Parse(attachment.ContentType));
+                    var attachEntity = body.Attachments.Add(attachment.Filename, bytes, ContentType.Parse(attachment.ContentType));
+                    attachEntity.ContentDisposition = attachment.Disposition == EmailAttachmentDisposition.Inline 
+                        ? new ContentDisposition(ContentDisposition.Inline)
+                        : new ContentDisposition(ContentDisposition.Attachment);
+                    attachEntity.ContentId = attachment.ContentId ?? Guid.NewGuid().ToString();
                 }
             }
             
@@ -217,14 +228,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 Source = settings.SenderAddress,
                 Destinations = new List<string>() { to },
                 RawMessage = new RawMessage(messageStream),
-            };
+            };*/
             
             try
             {
-                var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
-                return response.MessageId;
-                // await SendMessageAsync(mailMessage, settings);
-                // return "1";
+                // var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
+                // return response.MessageId;
+                await SendMessageAsync(mailMessage, settings);
+                return "1";
             }
             catch (AggregateException ae)
             {

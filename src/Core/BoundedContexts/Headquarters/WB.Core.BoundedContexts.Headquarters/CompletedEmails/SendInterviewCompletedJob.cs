@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 return;
             }
             
-            List<EmailAttachment>? attachments = null;
+            List<EmailAttachment>? attachments = new List<EmailAttachment>();
             if (webInterviewConfig.AttachAnswersInEmail)
             {
                 var stream = pdfInterviewGenerator.Generate(interview.Id, PdfView.Interviewer);
@@ -151,6 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var address = invitation.Assignment.Email;
             var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
             emailContent.RenderInterviewData(interview, questionnaire);
+            attachments.AddRange(emailContent.Attachments);
 
             var emailParamsId = $"{Guid.NewGuid():N}-{invitation.Id}-Complete";
             var emailParams = new EmailParameters

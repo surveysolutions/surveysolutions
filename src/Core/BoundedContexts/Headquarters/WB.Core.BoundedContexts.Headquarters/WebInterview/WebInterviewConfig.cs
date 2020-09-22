@@ -157,16 +157,10 @@ Thank you for cooperation!";
 
         public class CompleteEmail
         {
-            public static string Subject => "Your action is required in %SURVEYNAME%";
-            public static string Message => @"Thank you for taking part in %SURVEYNAME%!
- 
-While processing your response our staff has found some issues, which you are hereby asked to review.
- 
-We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your response.
- 
-Thank you for cooperation!";
-            public static string PasswordDescription => "This interview is protected. Please use following password:";
-            public static string LinkText => "CONTINUE INTERVIEW";
+            public static string Subject => "Thank you for taking part in %SURVEYNAME%!";
+            public static string Message => @"This interview has been completed!";
+            public static string PasswordDescription => null;
+            public static string LinkText => null;
         }
 
     }

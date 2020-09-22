@@ -65,8 +65,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public EmailTextTemplateType Type { get; set; }
             [Required] public string Subject { get; set; }
             [Required] public string Message { get; set; }
-            [Required] public string PasswordDescription { get; set; }
-            [Required] public string LinkText { get; set; }
+            public string PasswordDescription { get; set; }
+            public string LinkText { get; set; }
         }
 
         [Route(@"{id}/emailTemplate")]
