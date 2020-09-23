@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             barcode.StartChar = Convert.ToChar("*");
             barcode.EndChar = Convert.ToChar("*");
             barcode.Direction = CodeDirection.LeftToRight;
-            XFont fontBarcode = new XFont("Arial", 14, XFontStyle.Regular);
+            XFont fontBarcode = new XFont(DefinePdfStyles.DefaultFonts, 14, XFontStyle.Regular);
             var position = new XPoint(Convert.ToDouble(37), Convert.ToDouble(0));
             XSize size = new XSize(Convert.ToDouble(149), Convert.ToDouble(53));
             barcode.Size = size;

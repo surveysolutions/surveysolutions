@@ -118,9 +118,8 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                 var interviewLocator = new StatefulInterview(
                     Create.Service.SubstitutionTextFactory(),
                     Create.Service.InterviewTreeBuilder(),
-                    Mock.Of<IQuestionOptionsRepository>(),
-                    new SystemClock()
-                );
+                    Mock.Of<IQuestionOptionsRepository>());
+
                 interviewLocator.ServiceLocatorInstance = ServiceLocator.Current;
                 SetUp.InstanceToMockedServiceLocator<StatefulInterview>(interviewLocator);
 

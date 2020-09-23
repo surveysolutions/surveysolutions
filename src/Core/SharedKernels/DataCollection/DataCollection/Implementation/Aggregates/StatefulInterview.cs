@@ -29,9 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public StatefulInterview(
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository optionsRepository,
-            IClock clock)
-            : base(substitutionTextFactory, treeBuilder, optionsRepository, clock)
+            IQuestionOptionsRepository optionsRepository)
+            : base(substitutionTextFactory, treeBuilder, optionsRepository)
         {
         }
 
@@ -99,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage)
             {
-                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null, removeLinkedAnswers: false);
+                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null, DateTimeOffset.UtcNow, removeLinkedAnswers: false);
             }
             else
             {
@@ -273,7 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (isNeedFirePassiveEvents)
             {
                 var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
-                this.ApplyPassiveEvents(treeDifference);
+                this.ApplyPassiveEvents(treeDifference, originDate);
             }
 
             this.ApplyEvent(new InterviewCompleted(userId, originDate, comment));
@@ -351,7 +350,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview, command.OriginDate));
 
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, entityIdentity: null);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, entityIdentity: null, command.OriginDate);
         }
 
         #endregion

@@ -1,0 +1,34 @@
+# core:
+#   - src/Core/**/*
+#   - src/Infrastructure/**/*
+#   - '!src/Core/BoundedContexts/**/*'
+#   - '!src/Infrastructure/WB.Persistence.*/**/*'
+# hq:
+#   - src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/**/*
+#   - src/UI/WB.UI.Headquarters.Core/**/*
+#   - src/UI/WB.UI.Frontend/**/*
+migrations:
+  - src/Infrastructure/WB.Persistence.*/**/*
+# export:
+#   - src/Services/**/*
+# android:
+#   - src/UI/Interviewer/WB.UI.Interviewer/**/*
+#   - src/UI/Supervisor/**/*
+#   - src/UI/Tester/**/*
+#   - src/UI/Shared/WB.UI.Shared.Enumerator/**/*
+#   - src/Core/BoundedContexts/Interviewer/WB.Core.BoundedContexts.Interviewer/**/*
+#   - src/Core/BoundedContexts/Supervisor/WB.Core.BoundedContexts.Supervisor/**/*
+#   - src/Core/BoundedContexts/Tester/**/*
+# designer:
+#   - src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/**/*
+#   - src/UI/Designer/WB.UI.Designer/**/*
+tests:
+  - src/Tests/**/*
+  - src/Services/Export/WB.Services.Export.Tests/**/*
+# vue:
+#   - src/UI/WB.UI.Frontend/**/*
+#   - src/UI/WB.UI.Designer/questionnaire-app/**/*
+installator:
+  - src/Installation/**/*
+# version_bump:
+#   - src/.version
