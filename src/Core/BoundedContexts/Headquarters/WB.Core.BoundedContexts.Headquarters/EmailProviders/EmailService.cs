@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             mailMessage.Subject = subject;
             mailMessage.Body = htmlBody;
             mailMessage.IsBodyHtml = true;
-            //mailMessage.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(textBody));
+            mailMessage.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(textBody));
 
             if (!string.IsNullOrEmpty(settings.ReplyAddress))
                 mailMessage.ReplyToList.Add(new MailAddress(settings.ReplyAddress));
