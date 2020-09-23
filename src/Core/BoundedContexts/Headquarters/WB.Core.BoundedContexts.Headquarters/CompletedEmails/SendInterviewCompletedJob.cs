@@ -143,11 +143,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailParamsId = SaveEmailForOnlineAccess(senderInfo, emailTemplate, questionnaire, interview, invitation);
 
+            var htmlEmailParams = CreateEmailParameters(EmailContentTextMode.Html, senderInfo, emailTemplate, questionnaire, interview, attachments, emailParamsId, invitation);
+            var htmlEmail = await webInterviewEmailRenderer.RenderHtmlEmail(htmlEmailParams).ConfigureAwait(false);
+
+            var textEmailParams = CreateEmailParameters(EmailContentTextMode.Text, senderInfo, emailTemplate, questionnaire, interview, attachments, emailParamsId, invitation);
+            var textEmail = await webInterviewEmailRenderer.RenderTextEmail(textEmailParams).ConfigureAwait(false);
+
+            try
+            {
+                var emailId = await emailService.SendEmailAsync(email, 
+                    textEmailParams.Subject,
+                    htmlEmail,
+                    textEmail,
+                    attachments).ConfigureAwait(false);
+
+                completedEmailsQueue.Remove(interviewId);
+            }
+            catch (EmailServiceException e)
+            {
+                completedEmailsQueue.MarkAsFailedToSend(interviewId);
+                this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
+            }
+        }
+
+        private static EmailParameters CreateEmailParameters(EmailContentTextMode textMode,
+            ISenderInformation senderInfo,
+            WebInterviewEmailTemplate emailTemplate, IQuestionnaire questionnaire, IStatefulInterview interview,
+            List<EmailAttachment> attachments, string emailParamsId, Invitation invitation)
+        {
             var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
             emailContent.AttachmentMode = EmailContentAttachmentMode.InlineAttachment;
+            emailContent.TextMode = textMode;
             emailContent.RenderInterviewData(interview, questionnaire);
             attachments.AddRange(emailContent.Attachments);
-            
+
             var emailParams = new EmailParameters
             {
                 Id = emailParamsId,
@@ -163,24 +192,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 SenderName = senderInfo.SenderName,
                 Link = null
             };
-
-            var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
-
-            try
-            {
-                var emailId = await emailService.SendEmailAsync(email, 
-                    emailParams.Subject,
-                    interviewEmail.MessageHtml,
-                    interviewEmail.MessageText,
-                    attachments).ConfigureAwait(false);
-
-                completedEmailsQueue.Remove(interviewId);
-            }
-            catch (EmailServiceException e)
-            {
-                completedEmailsQueue.MarkAsFailedToSend(interviewId);
-                this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
-            }
+            return emailParams;
         }
 
         private async Task<EmailAttachment> CreateInterviewPdfAttachment(IStatefulInterview interview)
