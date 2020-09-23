@@ -149,9 +149,55 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             
             Invitation invitation = invitationService.GetInvitationByAssignmentId(assignmentId.Value);
             var address = invitation.Assignment.Email;
+            
+            var emailParamsId = SaveEmailForOnlineAccess(senderInfo, emailTemplate, questionnaire, interview, invitation);
+
             var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
+            emailContent.AttachmentMode = EmailContentAttachmentMode.InlineAttachment;
             emailContent.RenderInterviewData(interview, questionnaire);
             attachments.AddRange(emailContent.Attachments);
+            
+            var emailParams = new EmailParameters
+            {
+                Id = emailParamsId,
+                AssignmentId = invitation.AssignmentId,
+                InvitationId = invitation.Id,
+                Subject = emailContent.Subject,
+                LinkText = emailContent.LinkText,
+                MainText = emailContent.MainText,
+                PasswordDescription = emailContent.PasswordDescription,
+                Password = null,
+                Address = senderInfo.Address,
+                SurveyName = questionnaire.Title,
+                SenderName = senderInfo.SenderName,
+                Link = null
+            };
+
+            var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
+
+            try
+            {
+                var emailId = await emailService.SendEmailAsync(address, 
+                    emailParams.Subject,
+                    interviewEmail.MessageHtml,
+                    interviewEmail.MessageText,
+                    attachments).ConfigureAwait(false);
+
+                completedEmailsQueue.Remove(interviewId);
+            }
+            catch (EmailServiceException e)
+            {
+                completedEmailsQueue.MarkAsFailedToSend(interviewId);
+                this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
+            }
+        }
+
+        private string SaveEmailForOnlineAccess(ISenderInformation senderInfo, WebInterviewEmailTemplate emailTemplate,
+            IQuestionnaire questionnaire, IStatefulInterview interview, Invitation invitation)
+        {
+            var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
+            emailContent.AttachmentMode = EmailContentAttachmentMode.Base64String;
+            emailContent.RenderInterviewData(interview, questionnaire);
 
             var emailParamsId = $"{Guid.NewGuid():N}-{invitation.Id}-Complete";
             var emailParams = new EmailParameters
@@ -170,27 +216,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 Link = null
             };
             emailParamsStorage.Store(emailParams, emailParamsId);
-
-            var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
-
-            // await inScopeExecutor.ExecuteAsync(async (locator) =>
-            // {
-            try
-            {
-                var emailId = await emailService.SendEmailAsync(address, 
-                    emailParams.Subject,
-                    interviewEmail.MessageHtml,
-                    interviewEmail.MessageText,
-                    attachments).ConfigureAwait(false);
-
-                completedEmailsQueue.Remove(interviewId);
-            }
-            catch (EmailServiceException e)
-            {
-                completedEmailsQueue.MarkAsFailedToSend(interviewId);
-                this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
-            }
-            // }).ConfigureAwait(false);
+            
+            return emailParamsId;
         }
     }
 
