@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             this.nearbyConnection.RemoteEndpoints.CollectionChanged += (sender, args) =>
             {
-                Endpoint = this.nearbyConnection.RemoteEndpoints.FirstOrDefault()?.Enpoint;
+                Endpoint = this.nearbyConnection.RemoteEndpoints.FirstOrDefault()?.Endpoint;
             };
         }
 
@@ -86,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 }
 
                 responseHash = response.ContentMD5;
-                content = content ?? new byte[response.Total];
+                content ??= new byte[response.Total];
 
                 Array.Copy(response.Content, 0, content, response.Skipped, response.Length);
 

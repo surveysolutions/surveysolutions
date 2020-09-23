@@ -5,6 +5,6 @@ namespace WB.UI.Designer.Services.Restore
 {
     public interface IQuestionnaireRestoreService
     {
-        void RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state);
+        Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew);
     }
 }
