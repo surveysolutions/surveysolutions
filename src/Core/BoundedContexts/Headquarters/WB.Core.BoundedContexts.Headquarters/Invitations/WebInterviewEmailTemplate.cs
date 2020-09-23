@@ -33,6 +33,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         InlineAttachment,
     }
 
+    public enum EmailContentTextMode
+    {
+        Text,
+        Html,
+    }
+
     public class EmailContent
     {
         private const string Password = "%PASSWORD%";
@@ -41,6 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private const string QuestionnaireTitle = "%QUESTIONNAIRE%";
 
         public EmailContentAttachmentMode AttachmentMode { get; set; } = EmailContentAttachmentMode.Base64String;
+        public EmailContentTextMode TextMode { get; set; } = EmailContentTextMode.Html;
         
         public EmailContent(WebInterviewEmailTemplate template, string questionnaireTitle, string link, string password)
         {
@@ -62,8 +69,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public string Subject { get; private set; }
         public string MainText { get; private set; }
-        public string HtmlSubject { get; private set; }
-        public string HtmlMainText { get; private set; }
         public string PasswordDescription { get; }
         public string LinkText { get; }
         
@@ -71,9 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void RenderInterviewData(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            HtmlSubject = ReplaceVariablesWithData(Subject, interview, questionnaire);
-            HtmlMainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
-            Subject = ReplaceVariablesWithData(Subject, interview, questionnaire);
             MainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
         }
 
@@ -84,16 +86,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 var variableWithMode = match.Value.Trim('%').Split(':');
                 var variable = variableWithMode[0];
+                var displayMode = variableWithMode.Length > 1 ? variableWithMode[1] : null;
+
                 var questionId = questionnaire.GetQuestionIdByVariable(variable);
                 if (!questionId.HasValue)
                     return String.Empty;
                 
                 var answer = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
 
-                if (variableWithMode.Length > 0)
+                if (TextMode == EmailContentTextMode.Html && displayMode != null)
                 {
-                    var displayMode = variableWithMode[1];
-                    
                     if (displayMode == "barcode" || displayMode == "qrcode")
                     {
                         var imageStream = displayMode == "barcode"
@@ -139,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         private MemoryStream RenderBarCode(string text)
         {
-            var width = 149;
+            var width = 250;
             var height = 53;
             
             MultiFormatWriter writer = new MultiFormatWriter();
