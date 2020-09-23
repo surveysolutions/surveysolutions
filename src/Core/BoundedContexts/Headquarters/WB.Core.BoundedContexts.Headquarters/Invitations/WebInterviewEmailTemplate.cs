@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using ZXing;
+using ZXing.QrCode;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -61,6 +62,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public string Subject { get; private set; }
         public string MainText { get; private set; }
+        public string HtmlSubject { get; private set; }
+        public string HtmlMainText { get; private set; }
         public string PasswordDescription { get; }
         public string LinkText { get; }
         
@@ -68,61 +71,65 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void RenderInterviewData(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
+            HtmlSubject = ReplaceVariablesWithData(Subject, interview, questionnaire);
+            HtmlMainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
             Subject = ReplaceVariablesWithData(Subject, interview, questionnaire);
             MainText = ReplaceVariablesWithData(MainText, interview, questionnaire);
         }
 
-        private static Regex FindBarcodeVariables = new Regex("%[A-Za-z0-9_]+:barcode%", RegexOptions.Compiled);
-        private static Regex FindVariables = new Regex("%[A-Za-z0-9_]+%", RegexOptions.Compiled);
+        private static readonly Regex FindVariables = new Regex("%[A-Za-z0-9_]+(:[a-z]+)?%", RegexOptions.Compiled);
         private string ReplaceVariablesWithData(string text, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            text = FindBarcodeVariables.Replace(text, match =>
+            return FindVariables.Replace(text, match =>
             {
-                var variable = match.Value.Trim('%').Replace(":barcode", "");
+                var variableWithMode = match.Value.Trim('%').Split(':');
+                var variable = variableWithMode[0];
                 var questionId = questionnaire.GetQuestionIdByVariable(variable);
                 if (!questionId.HasValue)
                     return String.Empty;
+                
                 var answer = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
 
-                switch (AttachmentMode)
+                if (variableWithMode.Length > 0)
                 {
-                    case EmailContentAttachmentMode.InlineAttachment:
+                    var displayMode = variableWithMode[1];
+                    
+                    if (displayMode == "barcode" || displayMode == "qrcode")
                     {
-                        var attachment = CreateBarCodeAttachment(answer);
-                        Attachments.Add(attachment);
+                        var imageStream = displayMode == "barcode"
+                            ? RenderBarCode(answer)
+                            : RenderQrCode(answer);
 
-                        return $"<img src='cid:{attachment.ContentId}'/>";
+                        switch (AttachmentMode)
+                        {
+                            case EmailContentAttachmentMode.InlineAttachment:
+                            {
+                                var attachment = CreateAttachment(imageStream);
+                                Attachments.Add(attachment);
+                                return $"<img src='cid:{attachment.ContentId}'/>";
+                            }
+                            case EmailContentAttachmentMode.Base64String:
+                            {
+                                var base64String = Convert.ToBase64String(imageStream.ToArray());
+                                return $"<img src='data:image/png;base64,{base64String}'/>";
+                            }
+                            default:
+                                throw new ArgumentException($"Unsupported attachment mode {AttachmentMode}");
+                        }
                     }
-                    case EmailContentAttachmentMode.Base64String:
-                    {
-                        var attachmentStream = RenderBarCode(answer);
-                        var base64String = Convert.ToBase64String(attachmentStream.ToArray());
-                        return $"<img src='data:image/png;base64,{base64String}'/>";
-                    }
-                    default:
-                        throw new ArgumentException($"Unsupported attachment mode {AttachmentMode}");
                 }
                 
-            });
-            
-            return FindVariables.Replace(text, match =>
-            {
-                var questionId = questionnaire.GetQuestionIdByVariable(match.Value.Trim('%'));
-                if (!questionId.HasValue)
-                    return String.Empty;
-                var answer = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
                 return answer;
             });
         }
 
-        private EmailAttachment CreateBarCodeAttachment(string answer)
+        private EmailAttachment CreateAttachment(MemoryStream imageStream)
         {
-            var barCodeStream = RenderBarCode(answer);
             var id = Guid.NewGuid();
             
             return new EmailAttachment()
             {
-                Base64String = Convert.ToBase64String(barCodeStream.ToArray()),
+                Base64String = Convert.ToBase64String(imageStream.ToArray()),
                 ContentType = "image/jpeg",
                 Filename = id.ToString() + ".jpeg",
                 ContentId = id.ToString(),
@@ -139,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var bm = writer.encode(text, BarcodeFormat.CODE_128, width, 1);
             int bmWidth = bm.Width;
 
-            Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppArgb);
+            Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppRgb);
 
             for (int x = 0; x < bmWidth; x++) 
             {
@@ -149,6 +156,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
             
             //imageBitmap.Save("c:\\Temp\\barcode.jpeg", ImageFormat.Jpeg);
+
+            var ms = new MemoryStream();
+            imageBitmap.Save(ms, ImageFormat.Jpeg);
+            return ms;
+        }
+
+        private MemoryStream RenderQrCode(string text)
+        {
+            var width = 250;
+            var height = 250;
+            
+            QRCodeWriter writer = new QRCodeWriter();
+            var bm = writer.encode(text, BarcodeFormat.QR_CODE, width, height);
+            int bmWidth = bm.Width;
+            int bmHeight = bm.Height;
+
+            Bitmap imageBitmap = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppRgb);
+            for (int x = 0; x < bmWidth; x++) 
+            {
+                for (int y = 0; y < bmHeight; y++)
+                {
+                    var color = bm[x, y] ? Color.Black : Color.White;
+                    imageBitmap.SetPixel(x, y, color);
+                }
+            }
+            
+            //imageBitmap.Save("c:\\Temp\\qrcode.jpeg", ImageFormat.Jpeg);
 
             var ms = new MemoryStream();
             imageBitmap.Save(ms, ImageFormat.Jpeg);

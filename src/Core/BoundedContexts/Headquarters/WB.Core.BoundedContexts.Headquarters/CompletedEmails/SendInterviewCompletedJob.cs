@@ -124,32 +124,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 return;
             }
             
+            Invitation invitation = invitationService.GetInvitationByAssignmentId(assignmentId.Value);
+            var email = invitation?.Assignment?.Email;
+            if (invitation == null || string.IsNullOrEmpty(email))
+            {
+                completedEmailsQueue.Remove(interviewId);
+                return;
+            }
+
             List<EmailAttachment>? attachments = new List<EmailAttachment>();
             if (webInterviewConfig.AttachAnswersInEmail)
             {
-                var stream = pdfInterviewGenerator.Generate(interview.Id, PdfView.Interviewer);
-                if (stream == null)
-                    throw new ArgumentException($"Failed to generate pdf for interview {interviewId}");
-
-                await using var ms = new MemoryStream();
-                await stream.CopyToAsync(ms);
-
-                var attachment = new EmailAttachment()
-                {
-                    Filename = interview.GetInterviewKey() + ".pdf",
-                    ContentType = "application/pdf",
-                    Base64String = Convert.ToBase64String(ms.ToArray()),
-                };
-                
-                attachments = new List<EmailAttachment>() { attachment };
+                var attachment = await CreateInterviewPdfAttachment(interview);
+                attachments.Add(attachment);
             }
-
             
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.CompleteInterviewEmail);
-            
-            Invitation invitation = invitationService.GetInvitationByAssignmentId(assignmentId.Value);
-            var address = invitation.Assignment.Email;
-            
+
             var emailParamsId = SaveEmailForOnlineAccess(senderInfo, emailTemplate, questionnaire, interview, invitation);
 
             var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
@@ -177,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             try
             {
-                var emailId = await emailService.SendEmailAsync(address, 
+                var emailId = await emailService.SendEmailAsync(email, 
                     emailParams.Subject,
                     interviewEmail.MessageHtml,
                     interviewEmail.MessageText,
@@ -190,6 +181,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 completedEmailsQueue.MarkAsFailedToSend(interviewId);
                 this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
             }
+        }
+
+        private async Task<EmailAttachment> CreateInterviewPdfAttachment(IStatefulInterview interview)
+        {
+            var stream = pdfInterviewGenerator.Generate(interview.Id, PdfView.Interviewer);
+            if (stream == null)
+                throw new ArgumentException($"Failed to generate pdf for interview {interview.Id}");
+
+            await using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+
+            var attachment = new EmailAttachment()
+            {
+                Filename = interview.GetInterviewKey() + ".pdf",
+                ContentType = "application/pdf",
+                Base64String = Convert.ToBase64String(ms.ToArray()),
+            };
+
+            return attachment;
         }
 
         private string SaveEmailForOnlineAccess(ISenderInformation senderInfo, WebInterviewEmailTemplate emailTemplate,
