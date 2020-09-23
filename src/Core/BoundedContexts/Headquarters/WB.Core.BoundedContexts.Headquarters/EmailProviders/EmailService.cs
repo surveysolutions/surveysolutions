@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             return settings;
         }
 
-        public async Task<string> SendEmailWithSendGrid(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, ISendGridEmailSettings settings)
+        private async Task<string> SendEmailWithSendGrid(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, ISendGridEmailSettings settings)
         {
             var client = new SendGridClient(settings.SendGridApiKey);
             var msg = new SendGridMessage
@@ -143,59 +143,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             public string Field { get; set; }
         }
 
-        public async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, IAmazonEmailSettings settings)
+        private async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, IAmazonEmailSettings settings)
         {
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
             using var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1);
             
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(settings.SenderAddress);
-            mailMessage.To.Add(new MailAddress(to));
-            mailMessage.Subject = subject;
-            mailMessage.Body = htmlBody;
-            mailMessage.IsBodyHtml = true;
-            mailMessage.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(textBody));
-
-            if (!string.IsNullOrEmpty(settings.ReplyAddress))
-                mailMessage.ReplyToList.Add(new MailAddress(settings.ReplyAddress));
-
-            if (attachments != null)
-            {
-                foreach (var attachment in attachments)
-                {
-                    var bytes = Convert.FromBase64String(attachment.Base64String);
-                    var ms = new MemoryStream(bytes);
-                    var mailAttachment = new System.Net.Mail.Attachment(ms, attachment.Filename, attachment.ContentType);
-                    if (attachment.Disposition == EmailAttachmentDisposition.Inline)
-                    {
-                        mailAttachment.ContentDisposition.Inline = true;
-                        mailAttachment.ContentId = attachment.ContentId;
-                    }
-                    
-                    mailMessage.Attachments.Add(mailAttachment);
-                }
-            }
-
-           
-            /*var messageBuilder = new RawMessageBuilder();
-            messageBuilder.From = settings.SenderAddress;
-            messageBuilder.To = to;
-            messageBuilder.ReplyAddress = settings.ReplyAddress;
-            messageBuilder.Subject = subject;
-            messageBuilder.HtmlBody = htmlBody;
-            messageBuilder.TextBody = textBody;
-            messageBuilder.Attachments = attachments;
-            var rawMessage = messageBuilder.Build();
-
-            var messageStream = new MemoryStream(Encoding.UTF8.GetBytes(rawMessage));
-            var sendRequest = new SendRawEmailRequest
-            {
-                Source = settings.SenderAddress,
-                Destinations = new List<string>() { to },
-                RawMessage = new RawMessage(messageStream),
-            };*/
-            
-            /*var message = new MimeMessage();
+            var message = new MimeMessage();
             message.From.Add(new MailboxAddress(string.Empty, settings.SenderAddress));
             message.To.Add(new MailboxAddress(string.Empty, to));
             message.Subject = subject;
@@ -219,23 +172,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             }
             
             message.Body = body.ToMessageBody();
-            
-            var messageStream = new MemoryStream();
+
+            await using var messageStream = new MemoryStream();
             await message.WriteToAsync(messageStream);
             
             var sendRequest = new SendRawEmailRequest
             {
-                Source = settings.SenderAddress,
-                Destinations = new List<string>() { to },
                 RawMessage = new RawMessage(messageStream),
-            };*/
+            };
             
             try
             {
-                // var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
-                // return response.MessageId;
-                await SendMessageAsync(mailMessage, settings);
-                return "1";
+                var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
+                return response.MessageId;
             }
             catch (AggregateException ae)
             {
@@ -246,24 +195,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             {
                 throw new EmailServiceException(to, HttpStatusCode.Accepted, ex, ex.Message);
             }
-        }
-        
-        private async Task SendMessageAsync(MailMessage emailMessage, IAmazonEmailSettings settings)
-        {
-            using var client = new SmtpClient();
-            var credential = new NetworkCredential
-            {
-                UserName = settings.AwsAccessKeyId,
-                Password = settings.AwsSecretAccessKey
-            };
-
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.Credentials = credential;
-            client.Host = "email-smtp.us-east-1.amazonaws.com";
-            client.Port = 587;
-            client.EnableSsl = true;
-
-            await client.SendMailAsync(emailMessage);
         }
     }
 
