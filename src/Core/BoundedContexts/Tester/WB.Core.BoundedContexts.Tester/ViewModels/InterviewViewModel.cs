@@ -47,15 +47,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override async Task NavigateBack()
         {
-            if (this.HasPrefilledQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
-                this.Dispose();
-            }
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            this.Dispose();
         }
 
         private async Task ReloadQuestionnaire()

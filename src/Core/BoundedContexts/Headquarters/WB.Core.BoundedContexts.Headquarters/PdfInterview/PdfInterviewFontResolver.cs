@@ -7,6 +7,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public class PdfInterviewFontResolver : FontResolver
     {
+        readonly FontResolver defaultResolver = new FontResolver();
+        
         public PdfInterviewFontResolver()
         {
             NullIfFontNotFound = true;
@@ -22,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                     return fontResolverInfo;
             }
 
-            return null;
+            return defaultResolver.ResolveTypeface(defaultResolver.DefaultFontName, isBold, isItalic);
         }
     }
 }
