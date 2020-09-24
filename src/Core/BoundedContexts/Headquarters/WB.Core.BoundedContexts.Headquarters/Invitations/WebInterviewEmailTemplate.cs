@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using ZXing;
-using ZXing.QrCode;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -98,9 +94,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 {
                     if (displayMode == "barcode" || displayMode == "qrcode")
                     {
+                        var barCodeUtilities = new BarCodeUtilities();
                         var imageStream = displayMode == "barcode"
-                            ? RenderBarCode(answer)
-                            : RenderQrCode(answer);
+                            ? barCodeUtilities.RenderBarCodeImage(answer)
+                            : barCodeUtilities.RenderQrCodeImage(answer);
 
                         switch (AttachmentMode)
                         {
@@ -133,62 +130,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 Base64String = Convert.ToBase64String(imageStream.ToArray()),
                 ContentType = "image/jpeg",
-                Filename = id.ToString() + ".jpeg",
+                Filename = id + ".jpeg",
                 ContentId = id.ToString(),
                 Disposition = EmailAttachmentDisposition.Inline,
             };
-        }
-
-        private MemoryStream RenderBarCode(string text)
-        {
-            var width = 250;
-            var height = 53;
-            
-            MultiFormatWriter writer = new MultiFormatWriter();
-            var bm = writer.encode(text, BarcodeFormat.CODE_128, width, 1);
-            int bmWidth = bm.Width;
-
-            Bitmap imageBitmap = new Bitmap(bmWidth, height, PixelFormat.Format32bppRgb);
-
-            for (int x = 0; x < bmWidth; x++) 
-            {
-                var color = bm[x, 0] ? Color.Black : Color.White;
-                for (int y = 0; y < height; y++)
-                    imageBitmap.SetPixel(x, y, color);
-            }
-            
-            //imageBitmap.Save("c:\\Temp\\barcode.jpeg", ImageFormat.Jpeg);
-
-            var ms = new MemoryStream();
-            imageBitmap.Save(ms, ImageFormat.Jpeg);
-            return ms;
-        }
-
-        private MemoryStream RenderQrCode(string text)
-        {
-            var width = 250;
-            var height = 250;
-            
-            QRCodeWriter writer = new QRCodeWriter();
-            var bm = writer.encode(text, BarcodeFormat.QR_CODE, width, height);
-            int bmWidth = bm.Width;
-            int bmHeight = bm.Height;
-
-            Bitmap imageBitmap = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppRgb);
-            for (int x = 0; x < bmWidth; x++) 
-            {
-                for (int y = 0; y < bmHeight; y++)
-                {
-                    var color = bm[x, y] ? Color.Black : Color.White;
-                    imageBitmap.SetPixel(x, y, color);
-                }
-            }
-            
-            //imageBitmap.Save("c:\\Temp\\qrcode.jpeg", ImageFormat.Jpeg);
-
-            var ms = new MemoryStream();
-            imageBitmap.Save(ms, ImageFormat.Jpeg);
-            return ms;
         }
     }
 }
