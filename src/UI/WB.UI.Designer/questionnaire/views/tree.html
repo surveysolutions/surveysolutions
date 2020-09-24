@@ -15,7 +15,7 @@
                 <span ng-bind-html="currentChapter.title | escape"></span>
                 <span ng-if="currentChapter.isCover && currentChapter.isReadOnly" class="warning-message" ng-i18next>VirtualCoverPage</span>
                 <help ng-if="currentChapter.isCover && currentChapter.isReadOnly" key="virtualCoverPage" />
-                <a  ng-if="currentChapter.isCover && currentChapter.isReadOnly" href="javascript:void(0);" ng-click="migrateToNewVersion();$event.stopPropagation()" ng-i18next>MigrateToNewCover</a>
+                <a ng-if="!questionnaire.isReadOnlyForUser && currentChapter.isCover && currentChapter.isReadOnly" href="javascript:void(0);" ng-click="migrateToNewVersion();$event.stopPropagation()" ng-i18next>MigrateToNewCover</a>
             </a>
             <ul class="controls-right">
                 <li>
