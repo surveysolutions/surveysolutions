@@ -85,7 +85,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 assignmentId: null,
                 isAudioRecordingEnabled: false);
 
-            await this.commandService.ExecuteAsync(createInterview);
+            this.commandService.Execute(createInterview);
 
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
             var scenario = this.serializer.Deserialize(scenarioSerialized);
@@ -102,7 +102,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 foreach (var existingInterviewCommand in commands)
                 {
                     existingInterviewCommand.InterviewId = designerToken;
-                    await this.commandService.ExecuteAsync(existingInterviewCommand);
+                    this.commandService.Execute(existingInterviewCommand);
                 }
 
                 return CreationResult.DataRestored;
