@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
+using System.Web;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 
@@ -50,11 +52,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             Subject = template.Subject
                 .Replace(SurveyName, questionnaireTitle)
                 .Replace(QuestionnaireTitle, questionnaireTitle);
-            MainText = template.MainText
+            MainText = HttpUtility.HtmlEncode(template.MainText
                 .Replace(SurveyName, questionnaireTitle)
                 .Replace(QuestionnaireTitle, questionnaireTitle)
                 .Replace(SurveyLink, link)
-                .Replace(Password, password);
+                .Replace(Password, password));
             LinkText = template.LinkText?
                 .Replace(SurveyName, questionnaireTitle)
                 .Replace(QuestionnaireTitle, questionnaireTitle);
