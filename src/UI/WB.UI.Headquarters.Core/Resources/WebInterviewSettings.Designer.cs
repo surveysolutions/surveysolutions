@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to answer on {{variable}}.
+        /// </summary>
+        public static string AnswerOn {
+            get {
+                return ResourceManager.GetString("AnswerOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -282,6 +291,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string FinishPage {
             get {
                 return ResourceManager.GetString("FinishPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %question_variable:barcode% - display answer as Barcode Code 128.
+        /// </summary>
+        public static string InterviewDataInsertBarcodeDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertBarcodeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In this email template you can use %question_variable% placeholder in the text as an answer on question in interview. Question must be from top level of questionnaire..
+        /// </summary>
+        public static string InterviewDataInsertInTextDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertInTextDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %question_variable:qrcode% - display answer as QR Code.
+        /// </summary>
+        public static string InterviewDataInsertQrCodeDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertQrCodeDescription", resourceCulture);
             }
         }
         
