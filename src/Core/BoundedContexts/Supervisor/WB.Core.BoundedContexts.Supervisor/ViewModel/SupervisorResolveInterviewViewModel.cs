@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             try
             {
-                if (this.interviews.GetById(interviewId.FormatGuid()).Status != InterviewStatus.ApprovedBySupervisor)
+                if (this.interview.Status != InterviewStatus.ApprovedBySupervisor)
                 {
                     var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             try
             {
-                if (this.interviews.GetById(interviewId.FormatGuid()).Status != InterviewStatus.RejectedBySupervisor)
+                if (this.interview.Status != InterviewStatus.RejectedBySupervisor)
                 {
                     var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
