@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
@@ -20,10 +17,6 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using AmazonContent = Amazon.SimpleEmail.Model.Content;
-using Attachment = SendGrid.Helpers.Mail.Attachment;
-using ContentDisposition = MimeKit.ContentDisposition;
-using ContentType = MimeKit.ContentType;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 {
