@@ -27,9 +27,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests
                 isPreFilled: false);
             questionnaire.AddTextQuestion(Id.g3, questionnaire.QuestionnaireDocument.Children[1].PublicKey, responsibleId, 
                 isPreFilled: true);
+            var command = Create.Command.MigrateToNewVersion(questionnaire.Id, responsibleId);
 
             // act
-            questionnaire.MigrateToNewVersion();
+            questionnaire.MigrateToNewVersion(command);
 
             // assert
             var cover = questionnaire.QuestionnaireDocument.Find<IGroup>(coverId);
@@ -59,10 +60,12 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests
         public void when_run_migrate_on_new_version_should_receive_exception()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
+            var responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId);
+            var command = Create.Command.MigrateToNewVersion(questionnaire.Id, responsibleId);
 
             // act
-            var exception = Assert.Catch(() => questionnaire.MigrateToNewVersion());
+            var exception = Assert.Catch(() => questionnaire.MigrateToNewVersion(command));
 
             // assert
             Assert.That(exception, Is.Not.Null);

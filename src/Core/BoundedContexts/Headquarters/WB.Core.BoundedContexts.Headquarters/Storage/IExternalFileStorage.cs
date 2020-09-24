@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             throw new NotImplementedException();
         }
 
+        public Task RemoveAsync(IEnumerable<string> paths)
+        {
+            throw new NotImplementedException();
+        }
+
         public FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null)
         {
             throw new NotImplementedException();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
         }
 
-        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        public async Task DeleteInterviewsAndQuestionnaireAfterAsync(Guid questionnaireId, long questionnaireVersion, Guid userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
 
@@ -116,8 +118,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
                 var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+                if (questionnaireDocument == null)
+                    throw new ArgumentException($"questionnaire not found {questionnaireIdentity}");
 
-                this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
+                await this.DeleteInterviewsAsync(questionnaireIdentity);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity, questionnaireDocument);
                 this.DeleteReusableCategories(questionnaireIdentity, questionnaireDocument);
@@ -131,7 +135,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 if (!isAssignmentImportIsGoing)
                 {
                     this.DeleteInvitations(questionnaireIdentity);
-                    this.DeleteAssignments(questionnaireIdentity, userId);
+                    await this.DeleteAssignmentsAsync(questionnaireIdentity);
                     this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
                 }
             }
@@ -156,37 +160,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             invitationsDeletionService.Delete(questionnaireIdentity);
         }
 
-        private void DeleteAssignments(QuestionnaireIdentity questionnaireIdentity, Guid? userId)
+        private async Task DeleteAssignmentsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            var exceptionsDuringDelete = new List<Exception>();
-            List<Assignment> assignments;
-
-            do
-            {
-                assignments = this.assignmentsToDeleteFactory.LoadBatch(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-
-                try
-                {
-                    foreach (var assignment in assignments)
-                    {
-                        this.commandService.Execute(new DeleteAssignment(assignment.PublicKey, userId ?? assignment.ResponsibleId));
-
-                        // to reduce memory pressure during deleting of thousands assignments
-                        this.aggregateRootCache.Evict(assignment.PublicKey);
-                    }
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error(e.Message, e);
-                    exceptionsDuringDelete.Add(e);
-                }
-
-            } while (exceptionsDuringDelete.Count == 0 && assignments.Count > 0);
-
-            if (exceptionsDuringDelete.Count > 0)
-                throw new AggregateException(
-                    $"assignment delete process failed for questionnaire {questionnaireIdentity}", exceptionsDuringDelete);
-
+            await assignmentsToDeleteFactory.RemoveAllAssignmentsDataAsync(questionnaireIdentity);
+            aggregateRootCache.Clear();
         }
 
         private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
@@ -208,37 +185,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
-        private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        private async Task DeleteInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            var exceptionsDuringDelete = new List<Exception>();
-            List<InterviewSummary> listOfInterviews;
-
-            do
-            {
-                listOfInterviews = this.interviewsToDeleteFactory.LoadBatch(questionnaireId, questionnaireVersion);
-
-                try
-                {
-                    foreach (var interviewSummary in listOfInterviews)
-                    {
-                        this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
-                            userId ?? interviewSummary.ResponsibleId));
-
-                        // to reduce memory pressure during deleting of thousands interviews
-                        this.aggregateRootCache.Evict(interviewSummary.InterviewId);
-                    }
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error(e.Message, e);
-                    exceptionsDuringDelete.Add(e);
-                }
-
-            } while (exceptionsDuringDelete.Count == 0 && listOfInterviews.Count > 0);
-
-            if (exceptionsDuringDelete.Count > 0)
-                throw new AggregateException(
-                    $"interview delete process failed for questionnaire {questionnaireId.FormatGuid()} v. {questionnaireVersion}", exceptionsDuringDelete);
+            await interviewsToDeleteFactory.RemoveAllInterviewsDataAsync(questionnaireIdentity);
+            aggregateRootCache.Clear();
         }
     }
 }
