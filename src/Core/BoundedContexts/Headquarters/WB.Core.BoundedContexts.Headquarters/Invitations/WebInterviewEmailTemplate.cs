@@ -109,9 +109,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     if (displayMode == "barcode" || displayMode == "qrcode")
                     {
                         var barCodeUtilities = new BarCodeUtilities();
-                        var imageStream = displayMode == "barcode"
-                            ? barCodeUtilities.RenderBarCodeImage(text)
-                            : barCodeUtilities.RenderQrCodeImage(text);
+
+                        MemoryStream imageStream;
+
+                        try
+                        {
+                            imageStream = displayMode == "barcode"
+                                ? barCodeUtilities.RenderBarCodeImage(text)
+                                : barCodeUtilities.RenderQrCodeImage(text);
+                        }
+                        catch
+                        {
+                            return text;
+                        }
 
                         switch (AttachmentMode)
                         {
