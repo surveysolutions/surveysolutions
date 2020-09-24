@@ -84,11 +84,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var variable = variableWithMode[0];
                 var displayMode = variableWithMode.Length > 1 ? variableWithMode[1] : null;
 
-                var questionId = questionnaire.GetQuestionIdByVariable(variable);
-                if (!questionId.HasValue)
-                    return String.Empty;
+                string text = null;
                 
-                var answer = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
+                var questionId = questionnaire.GetQuestionIdByVariable(variable);
+                if (questionId.HasValue)
+                {
+                    text = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
+                }
+                else if (questionnaire.HasVariable(variable))
+                {
+                    var variableId = questionnaire.GetVariableIdByVariableName(variable);
+                    var treeVariable = interview.GetVariable(new Identity(variableId, RosterVector.Empty));
+                    if (treeVariable.HasValue)
+                        text = treeVariable.Value.ToString();
+                }
+                
+                if (text == null)
+                    return string.Empty;
 
                 if (TextMode == EmailContentTextMode.Html && displayMode != null)
                 {
@@ -96,8 +108,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     {
                         var barCodeUtilities = new BarCodeUtilities();
                         var imageStream = displayMode == "barcode"
-                            ? barCodeUtilities.RenderBarCodeImage(answer)
-                            : barCodeUtilities.RenderQrCodeImage(answer);
+                            ? barCodeUtilities.RenderBarCodeImage(text)
+                            : barCodeUtilities.RenderQrCodeImage(text);
 
                         switch (AttachmentMode)
                         {
@@ -118,7 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     }
                 }
                 
-                return answer;
+                return text;
             });
         }
 
