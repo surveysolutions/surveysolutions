@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             
             return new EmailAttachment()
             {
-                Base64String = Convert.ToBase64String(imageStream.ToArray()),
+                Content = imageStream,
                 ContentType = "image/jpeg",
                 Filename = id + ".jpeg",
                 ContentId = id.ToString(),
