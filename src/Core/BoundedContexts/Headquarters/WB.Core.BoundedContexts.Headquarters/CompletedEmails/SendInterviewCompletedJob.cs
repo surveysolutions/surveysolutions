@@ -208,7 +208,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 Filename = interview.GetInterviewKey() + ".pdf",
                 ContentType = "application/pdf",
-                Base64String = Convert.ToBase64String(ms.ToArray()),
+                Content = ms,
+                Disposition = EmailAttachmentDisposition.Attachment,
             };
 
             return attachment;
