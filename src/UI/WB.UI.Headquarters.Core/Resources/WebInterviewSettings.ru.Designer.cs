@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ответ на {{variable}}.
+        /// </summary>
+        public static string AnswerOn {
+            get {
+                return ResourceManager.GetString("AnswerOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Отменить.
         /// </summary>
         public static string Cancel {
@@ -284,6 +293,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string FinishPage {
             get {
                 return ResourceManager.GetString("FinishPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %question_variable:barcode% - отображение ответа в виде Barcode Code 128.
+        /// </summary>
+        public static string InterviewDataInsertBarcodeDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertBarcodeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to В этом шаблоне письма вы можите использовать %question_variable% в тексте для подстановки значения ответа из интервью. Вопрос должет быть с верхнего уровня опросника..
+        /// </summary>
+        public static string InterviewDataInsertInTextDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertInTextDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %question_variable:qrcode% - отображение ответа в виде QR Code.
+        /// </summary>
+        public static string InterviewDataInsertQrCodeDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertQrCodeDescription", resourceCulture);
             }
         }
         
