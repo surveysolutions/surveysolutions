@@ -1052,7 +1052,7 @@
                             data-vv-name="attachAnswersInEmail"
                             id="attachAnswersInEmail"
                             type="checkbox"
-                            :disabled="!emailOnComplete"
+                            :disabled="!emailOnCompleteIsEnabled"
                             v-model="attachAnswersInEmailIsEnabled">
                         <label for="attachAnswersInEmail">
                             <span class="tick"></span>{{$t('WebInterviewSetup.AttachAnswersToCompleteEmail')}}
