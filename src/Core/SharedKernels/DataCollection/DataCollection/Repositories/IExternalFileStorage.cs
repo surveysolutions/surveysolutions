@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         Task<List<FileObject>?> ListAsync(string prefix);
 
         Task RemoveAsync(string path);
+        Task RemoveAsync(IEnumerable<string> paths);
 
         FileObject Store(string path, byte[] data, string contentType, IProgress<int>? progress = null);
 

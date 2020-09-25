@@ -1317,6 +1317,11 @@ namespace WB.Tests.Unit.Designer
                 linkedFilterExpression,
                 isFilteredCombobox,
                 categoriesId);
+
+            public static MigrateToNewVersion MigrateToNewVersion(Guid questionnaireId, Guid userId)
+            {
+                return new MigrateToNewVersion(questionnaireId, userId); 
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
