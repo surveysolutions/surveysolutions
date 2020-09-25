@@ -56,12 +56,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnResume();
             this.CreateFragments();
 
+            this.RestoreGoogleApiConnectionIfNeeded();
             var notificationsPublisher = Mvx.IoCProvider.Resolve<INotificationPublisher>();
             notificationsPublisher.CancelAllNotifications(this);
         }
 
         protected override void OnCreate(Bundle bundle)
         {
+            this.RestoreGoogleApiConnectionIfNeeded();
+
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
@@ -296,6 +299,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             if (!this.CheckPlayServices()) return;
             this.RestoreGoogleApiConnectionIfNeeded();
+             this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
 
         /// <summary>
@@ -325,9 +329,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
             apiClientFactory.ConnectionsClient = NearbyClass.GetConnectionsClient(this);
-            System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
+            // System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
             
-            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
+            // this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
         #endregion
     }
