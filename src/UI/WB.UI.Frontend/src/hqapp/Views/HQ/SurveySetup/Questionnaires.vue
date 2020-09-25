@@ -24,9 +24,11 @@
                     {{deletionWarnMsg}}
                 </p>
                 <div class="form-group">
-                    <label
+                    <label style="white-space: pre;"
                         class="control-label"
-                        for="deleteConfirmInput">{{deletionApproveLabel}}</label>
+                        for="deleteConfirmInput">
+                        {{deletionApproveLabel}}
+                    </label>
                     <input type="text"
                         class="form-control"
                         id="deleteConfirmInput"
