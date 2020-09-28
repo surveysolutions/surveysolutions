@@ -13,6 +13,7 @@
             local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
                 style="@style/ToolbarTitle"
+                android:id="@+id/tv_Finish_ApplicationName"
                 local:MvxBind="Text Localization('Interviewer_ApplicationName')"/>
     </androidx.appcompat.widget.Toolbar>
     <ProgressBar style="@style/Progress_Indicator"
