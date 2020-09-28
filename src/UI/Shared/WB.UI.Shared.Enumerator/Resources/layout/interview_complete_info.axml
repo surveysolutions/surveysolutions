@@ -4,6 +4,7 @@
     <TextView
           style="@style/Interview_Question_Title"
           android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+          android:id="@+id/tv_Complete_Screen_Title"
           local:MvxBind="Text CompleteScreenTitle;" />
 
     <View style="@style/Interview_Entity_Divider" />
@@ -11,6 +12,7 @@
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
         <LinearLayout style="@style/Interview_Question_Header">
             <TextView style="@style/Interview_Complete_Screen_Text"
+                      android:id="@+id/tv_Complete_Questions_Status"
                       local:MvxBind="Text Localization('Interview_Complete_Questions_Status')" />
         </LinearLayout>
 
