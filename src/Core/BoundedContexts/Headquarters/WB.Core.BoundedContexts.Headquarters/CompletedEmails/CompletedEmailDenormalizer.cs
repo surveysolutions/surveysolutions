@@ -1,4 +1,6 @@
-﻿using Ncqrs.Eventing.ServiceModel.Bus;
+﻿#nullable enable
+
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

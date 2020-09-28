@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System.Data;
+using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.PlainStore
 {
@@ -9,6 +10,8 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
         {
             Create.Table("completedemailrecords")
                 .WithColumn("interviewid").AsGuid().PrimaryKey()
+                    .ForeignKey("fk_completedemailrecords_interviewid_interviewsummaries_interviewid", "readside", "interviewsummaries", "interviewid")
+                    .OnDelete(Rule.Cascade)
                 .WithColumn("requesttime").AsDateTime().NotNullable()
                 .WithColumn("failedcount").AsInt32().NotNullable();
         }

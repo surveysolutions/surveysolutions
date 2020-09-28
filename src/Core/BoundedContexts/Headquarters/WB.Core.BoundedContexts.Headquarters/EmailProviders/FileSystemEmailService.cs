@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 foreach (var attachment in attachments)
                 {
                     var attachmentPath = Path.Combine(directory, guid.ToString(), attachment.Filename);
-                    var bytes = attachment.Content.ToArray();
+                    var bytes = attachment.Content;
                     File.WriteAllBytes(attachmentPath, bytes);
                 }
             }
