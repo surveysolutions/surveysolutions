@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 return;
             }
 
-            List<EmailAttachment>? attachments = new List<EmailAttachment>();
+            List<EmailAttachment> attachments = new List<EmailAttachment>();
             if (webInterviewConfig.AttachAnswersInEmail)
             {
                 var attachment = await CreateInterviewPdfAttachment(interview);
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 Filename = interview.GetInterviewKey() + ".pdf",
                 ContentType = "application/pdf",
-                Content = ms,
+                Content = ms.ToArray(),
                 Disposition = EmailAttachmentDisposition.Attachment,
             };
 

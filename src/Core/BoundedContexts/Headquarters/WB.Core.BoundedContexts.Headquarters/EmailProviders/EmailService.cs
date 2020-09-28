@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                         ContentId = a.ContentId ?? Guid.NewGuid().ToString(),
                         Disposition = a.Disposition == EmailAttachmentDisposition.Inline ? "inline" : "attachment",
                         Filename = a.Filename,
-                        Content = Convert.ToBase64String(a.Content.ToArray()),
+                        Content = Convert.ToBase64String(a.Content),
                         Type = a.ContentType,
                     }).ToList();
             }
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             {
                 foreach (var attachment in attachments)
                 {
-                    var bytes = attachment.Content.ToArray();
+                    var bytes = attachment.Content;
                     var attachmentEntity = body.Attachments.Add(attachment.Filename, bytes, ContentType.Parse(attachment.ContentType));
                     attachmentEntity.ContentDisposition = attachment.Disposition == EmailAttachmentDisposition.Inline 
                         ? new ContentDisposition(ContentDisposition.Inline)
