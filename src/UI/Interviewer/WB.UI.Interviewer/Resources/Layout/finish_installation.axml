@@ -106,9 +106,9 @@
     </ScrollView>
     <LinearLayout
             style="@style/Login_Footer"
-            android:id="@+id/login_page_footer"
             android:layout_alignParentBottom="true">
         <TextView
+                android:id="@+id/login_page_footer"
                 style="@style/Login_Footer_Message"
                 local:MvxBind="Html Localization('Login_FinishInstallation_Message')"/>
     </LinearLayout>
