@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -33,14 +34,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ILogger logger;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IArchiveUtils archiveUtils;
-        
+        private readonly IDesignerUserCredentials designerUserCredentials;
+
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
             ILogger logger,
             IAuthorizedUser authorizedUser,
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
-            IArchiveUtils archiveUtils)
+            IArchiveUtils archiveUtils,
+            IDesignerUserCredentials designerUserCredentials)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
@@ -48,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.questionnaireImportStatuses = questionnaireImportStatuses;
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.archiveUtils = archiveUtils;
+            this.designerUserCredentials = designerUserCredentials;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -93,15 +97,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (questionnaireImportResult.Status != QuestionnaireImportStatus.NotStarted)
                 return questionnaireImportResult;
 
+            var designerCredentials = designerUserCredentials.Get();
+
             var bgTask = Task.Run(async () =>
             {
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
+                    var designerServiceCredentials = serviceLocatorLocal.GetInstance<IDesignerUserCredentials>();
+                    designerServiceCredentials.SetTaskCredentials(designerCredentials);
+
                     var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
-                    var designerApi = serviceLocatorLocal.GetInstance<IDesignerApi>();
-                    var result = await questionnaireImportService.ImportImpl(designerApi, serviceLocatorLocal, userId, userName, 
+                    
+                    var result = await questionnaireImportService.ImportImpl(designerCredentials, serviceLocatorLocal, userId, userName, 
                         questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
                         shouldMigrateAssignments, migrateFrom, includePdf);
+                    
+                    designerServiceCredentials.SetTaskCredentials(null);
+
                     return result;
                 });
             });
@@ -141,12 +153,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         //import should have it's own scope
         //all scope dependent references should come into the method or resolved inside
-        private async Task<QuestionnaireImportResult> ImportImpl(IDesignerApi designerApi,
+        private async Task<QuestionnaireImportResult> ImportImpl(RestCredentials credentials,
             IServiceLocator serviceLocator, Guid userId, string userName, Guid questionnaireId, 
             QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
             string comment, string requestUrl, bool shouldMigrateAssignments, 
             QuestionnaireIdentity migrateFrom, bool includePdf = true)
         {
+            var designerApi = serviceLocator.GetInstance<IDesignerApi>();
+
             try
             {
                 await designerApi.IsLoggedIn();
