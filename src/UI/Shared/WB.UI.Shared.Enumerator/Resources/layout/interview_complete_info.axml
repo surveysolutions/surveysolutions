@@ -97,6 +97,7 @@
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
         <TextView
           style="@style/Interview_Complete_Screen_Text"
+          android:id="@+id/tv_Complete_NoteToSupervisorTxt"
           local:MvxBind="Text CommentLabel" />
         <EditText
           android:id="@+id/Complete_NoteToSupervisorTxt"
