@@ -49,6 +49,7 @@
                         local:errorEnabled="true"
                         local:endIconMode="custom"
                         local:endIconDrawable="@drawable/scan_icon"
+                        android:id="@+id/LoginPage_endpoint_layout"
                         local:MvxBind="Hint Localization('EndpointHint'); EndIconClick ScanCommand; Error EndpointValidationError">
                     <com.google.android.material.textfield.TextInputEditText
                             style="@style/Login_Editor"
@@ -62,6 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         local:hintEnabled="true"
+                        android:id="@+id/LoginPage_login_layout"
                         local:MvxBind="Hint Localization('LoginNameHint')">
                     <com.google.android.material.textfield.TextInputEditText
                             style="@style/Login_Editor"
@@ -75,6 +77,7 @@
                         local:endIconMode="password_toggle"
                         local:hintEnabled="true"
                         local:errorEnabled="true"
+                        android:id="@+id/LoginPage_password_layout"
                         local:MvxBind="Hint Localization('PasswordHint'); Error PasswordError">
                     <com.google.android.material.textfield.TextInputEditText
                             style="@style/Login_Editor"
