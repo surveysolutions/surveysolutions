@@ -94,6 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             NearbyStatus result;
             try
             {
+                this.StopDiscovery();
                 result = await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken);
             }
             catch (Exception e)
