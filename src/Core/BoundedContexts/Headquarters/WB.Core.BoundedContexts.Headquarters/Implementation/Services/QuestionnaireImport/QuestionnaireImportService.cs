@@ -104,17 +104,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
                     var designerServiceCredentials = serviceLocatorLocal.GetInstance<IDesignerUserCredentials>();
-                    designerServiceCredentials.SetTaskCredentials(designerCredentials);
 
-                    var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
-                    
-                    var result = await questionnaireImportService.ImportImpl(designerCredentials, serviceLocatorLocal, userId, userName, 
-                        questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
-                        shouldMigrateAssignments, migrateFrom, includePdf);
-                    
-                    designerServiceCredentials.SetTaskCredentials(null);
+                    try
+                    {
+                        designerServiceCredentials.SetTaskCredentials(designerCredentials);
 
-                    return result;
+                        var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
+                        var result = await questionnaireImportService.ImportImpl(designerCredentials, serviceLocatorLocal, userId, userName, 
+                            questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
+                            shouldMigrateAssignments, migrateFrom, includePdf);
+                        return result;
+                    }
+                    finally
+                    {
+                        designerServiceCredentials.SetTaskCredentials(null);
+                    }
                 });
             });
             
