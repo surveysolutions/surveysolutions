@@ -251,9 +251,11 @@
     <value>Resume</value>
   </data>
   <data name="EmailOnComplete" xml:space="preserve">
-    <value>Send email after complete web interview</value>
+    <value>Send email after web interview completion</value>
+
   </data>
   <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
-    <value>Attach Pdf with answers to email</value>
+    <value>Attach Pdf transcript</value>
+
   </data>
 </root>
