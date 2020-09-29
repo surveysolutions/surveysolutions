@@ -438,7 +438,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 globalInfoProvider,
                 new QuestionnaireImportStatuses(),
                 Mock.Of<IAssignmentsUpgradeService>(),
-                archiveUtils ?? Mock.Of<IArchiveUtils>());
+                archiveUtils ?? Mock.Of<IArchiveUtils>(),
+                Mock.Of<IDesignerUserCredentials>());
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>())
