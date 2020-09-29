@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.UI.Headquarters.Models.Api;
 
@@ -11,6 +12,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     public class AssignmentDetails : AssignmentViewItem
     {
         [DataMember] public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; }
+    }
+
+    public class InterviewAnswer
+    {
+        public Identity Identity { get; set; }
+        public AbstractAnswer Answer { get; set; }
+        public string Variable { get; set; }
     }
 
     public class FullAssignmentDetails : AssignmentDetails
