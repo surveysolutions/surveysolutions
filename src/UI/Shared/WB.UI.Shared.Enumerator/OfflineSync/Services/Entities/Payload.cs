@@ -42,32 +42,29 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
             return new Payload(Android.Gms.Nearby.Connection.Payload.FromBytes(bytes), endpoint);
         }
 
-        public Task<byte[]> BytesFromStream { get; private set; }
-        
+        public byte[] BytesFromStream { get; private set; }
+
         public void ReadStream()
         {
-            BytesFromStream = Task.Run(() =>
+            using var ms = new MemoryStream();
+
+            // implementation from Stream.Copy()
+            var buffer = ArrayPool<byte>.Shared.Rent(81920);
+
+            try
             {
-                using var ms = new MemoryStream();
-
-                // implementation from Stream.Copy()
-                var buffer = ArrayPool<byte>.Shared.Rent(81920);
-
-                try
+                int read;
+                while ((read = Stream.Read(buffer, 0, buffer.Length)) != 0)
                 {
-                    int read;
-                    while ((read = Stream.Read(buffer, 0, buffer.Length)) != 0)
-                    {
-                        ms.Write(buffer, 0, read);
-                    }
+                    ms.Write(buffer, 0, read);
                 }
-                finally
-                {
-                    ArrayPool<byte>.Shared.Return(buffer);
-                }
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
 
-                return ms.ToArray();
-            });
+            BytesFromStream = ms.ToArray();
         }
 
         public override string ToString()

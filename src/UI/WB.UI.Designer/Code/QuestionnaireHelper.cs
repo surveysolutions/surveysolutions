@@ -177,9 +177,7 @@ namespace WB.UI.Designer.Code
 
             ZipOutputStream zipStream = new ZipOutputStream(output);
 
-            string questionnaireFolderName = $"{questionnaireFileName} ({id.FormatGuid()})";
-
-            zipStream.PutTextFileEntry($"{questionnaireFolderName}/{questionnaireFileName}.json", questionnaireJson);
+            zipStream.PutTextFileEntry($"document.json", questionnaireJson);
 
             for (int attachmentIndex = 0; attachmentIndex < questionnaireDocument.Attachments.Count; attachmentIndex++)
             {
@@ -193,21 +191,21 @@ namespace WB.UI.Designer.Code
                     {
                         var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
 
-                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachmentMeta?.FileName ?? "unknown-file-name"}", attachmentContent.Content);
-                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachmentContent.ContentType);
+                        zipStream.PutFileEntry($"Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachmentMeta?.FileName ?? "unknown-file-name"}", attachmentContent.Content);
+                        zipStream.PutTextFileEntry($"Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachmentContent.ContentType);
                     }
                     else
                     {
                         zipStream.PutTextFileEntry(
-                            $"{questionnaireFolderName}/Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
+                            $"Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
                             $"Attachment '{attachmentReference.Name}' is missing.");
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.logger.LogWarning($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({questionnaireFolderName}).", exception);
+                    this.logger.LogWarning($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({id}).", exception);
                     zipStream.PutTextFileEntry(
-                        $"{questionnaireFolderName}/Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
+                        $"Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
                         $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
                 }
             }
@@ -216,13 +214,13 @@ namespace WB.UI.Designer.Code
 
             foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
             {
-                zipStream.PutTextFileEntry($"{questionnaireFolderName}/Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
+                zipStream.PutTextFileEntry($"Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
             }
 
             foreach (var translation in questionnaireDocument.Translations)
             {
                 TranslationFile excelFile = this.translationsService.GetAsExcelFile(id, translation.Id);
-                zipStream.PutFileEntry($"{questionnaireFolderName}/Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
+                zipStream.PutFileEntry($"Translations/{translation.Id.FormatGuid()}.xlsx", excelFile.ContentAsExcelFile);
             }
 
             foreach (var categories in questionnaireDocument.Categories)
@@ -230,7 +228,7 @@ namespace WB.UI.Designer.Code
                 var excelFile = this.categoriesService.GetAsExcelFile(id, categories.Id);
                 if (excelFile?.Content == null)
                     continue;
-                zipStream.PutFileEntry($"{questionnaireFolderName}/Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
+                zipStream.PutFileEntry($"Categories/{categories.Id.FormatGuid()}.xlsx", excelFile.Content);
             }
 
             zipStream.Finish();

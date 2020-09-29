@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
 
             Assert.AreEqual(interviewHistoryView.Records[0].Parameters["answer"], "hi");
-            Assert.AreEqual(interviewHistoryView.Records[0].Timestamp, dateTimeOffset.LocalDateTime);
+            Assert.AreEqual(interviewHistoryView.Records[0].Timestamp, dateTimeOffset.UtcDateTime);
             Assert.AreEqual(interviewHistoryView.Records[0].Offset, dateTimeOffset.Offset);
 
         }

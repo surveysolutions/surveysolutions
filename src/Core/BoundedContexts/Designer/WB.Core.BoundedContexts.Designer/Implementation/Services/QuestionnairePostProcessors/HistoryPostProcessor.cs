@@ -81,7 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
         ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
-        ICommandPostProcessor<Questionnaire, DeleteCategories>
+        ICommandPostProcessor<Questionnaire, DeleteCategories>,
+        ICommandPostProcessor<Questionnaire, MigrateToNewVersion>
     {
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -1002,5 +1003,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 );
         }
 
+        public void Process(Questionnaire aggregate, MigrateToNewVersion command)
+        {
+            var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
+            UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
+
+            AddQuestionnaireChangeItem(command.QuestionnaireId,
+                command.ResponsibleId,
+                QuestionnaireActionType.MigrateToNewVersion,
+                QuestionnaireItemType.Questionnaire,
+                command.QuestionnaireId,
+                aggregate.QuestionnaireDocument.Title,
+                null,
+                null,
+                null,
+                aggregate.QuestionnaireDocument
+            );
+        }
     }
 }

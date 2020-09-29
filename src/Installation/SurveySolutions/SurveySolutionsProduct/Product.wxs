@@ -248,6 +248,7 @@
       </Directory>
       <Directory Id="INSTALLFOLDER">
       </Directory>
+      <Directory Id="FontsFolder" />
     </Directory>
   </Fragment>
 
@@ -255,6 +256,8 @@
     <ComponentGroup Id="ProductComponents" >
       <!--adding harvested project output-->
       <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
+      <!-- adding fronts reference-->
+      <ComponentGroupRef Id="FontFilesComponentGroup"></ComponentGroupRef>
       <ComponentRef Id="DIRTOINSTALLPath"/>
       <ComponentRef Id="cmpAppPool"/>
       <ComponentRef Id="SiteConfigPreserve"/>
@@ -319,13 +322,13 @@
 
           <Component Id="UninstallExportServiceComponent" Guid="5AB1B28B-C884-A34B-9275-4095DDD06085" Shared="no" Permanent="no">
 
-              <CreateFolder/>
+            <CreateFolder/>
 
-              <ServiceControl Id="SurveySolutionsExport_Uninstall"
-                              Name="SurveySolutionsExport"
-                              Stop="both"
-                              Remove="both"
-                              Wait="no"/>
+            <ServiceControl Id="SurveySolutionsExport_Uninstall"
+                            Name="SurveySolutionsExport"
+                            Stop="both"
+                            Remove="both"
+                            Wait="no"/>
           </Component>
         </Directory>
       </Directory>

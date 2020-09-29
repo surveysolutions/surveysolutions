@@ -1,0 +1,19 @@
+name: Auto approve
+
+on:
+  pull_request
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: hmarr/auto-approve-action@v2.0.0
+      name: rc to master
+      if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'rc' }}
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+    - uses: hmarr/auto-approve-action@v2.0.0
+      name: release to master
+      if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'release' }}
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"

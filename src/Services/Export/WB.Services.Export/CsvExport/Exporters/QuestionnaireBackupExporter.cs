@@ -41,11 +41,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var backup = await hqApi.GetBackupAsync(questionnaire.QuestionnaireId);
                 if (cancellationToken.IsCancellationRequested) return;
 
-                var backupFileName = Path.ChangeExtension(questionnaire.VariableName, ".zip");
-                backupFileName = fileSystemAccessor.MakeValidFileName(backupFileName);
-                var backupFilePath = Path.Combine(targetFolder, backupFileName);
-                
-                using (var mainStream = this.fileSystemAccessor.OpenOrCreateFile(backupFilePath, false))
+                var backupFilePath = Path.Combine(targetFolder, "content.zip");
+
+                await using (var mainStream = this.fileSystemAccessor.OpenOrCreateFile(backupFilePath, false))
                 {
                     await backup.CopyToAsync(mainStream);
                 }
