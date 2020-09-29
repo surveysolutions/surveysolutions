@@ -23,12 +23,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             this.EnsureBindingContextIsSet(inflater);
             var view = this.BindingInflate(ViewResourceId, container, false);
-            var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
             this.recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.overview_recycler);
 
             this.recyclerView.SetLayoutManager(new LinearLayoutManager(this.Context));
             this.recyclerView.Adapter.ItemClick = new MvxAsyncCommand<OverviewNode>(async node =>
             {
+                var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
                 await viewModelNavigationService.NavigateToAsync<OverviewNodeDetailsViewModel, OverviewNodeDetailsViewModelArgs>(
                     new OverviewNodeDetailsViewModelArgs
                     {
