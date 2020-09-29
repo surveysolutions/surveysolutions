@@ -452,6 +452,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              { "UpdateAreaQuestion", typeof (UpdateAreaQuestion) },
              { "UpdateAudioQuestion", typeof (UpdateAudioQuestion) },
              { "ReplaceOptionsWithClassification", typeof(ReplaceOptionsWithClassification)},
+             { "MigrateToNewVersion", typeof (MigrateToNewVersion) },
                     
              //Static text commands
              { "AddStaticText", typeof (AddStaticText) },

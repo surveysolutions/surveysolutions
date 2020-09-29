@@ -8,8 +8,6 @@ using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
@@ -25,20 +23,18 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IGoogleApiService GoogleApiService { get; }
         private readonly IInterviewViewModelFactory viewModelFactory;
 
-        private ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
 
         public SupervisorOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
-            IEnumeratorSettings settings,
             INearbyCommunicator communicator,
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory,
             IDeviceSynchronizationProgress deviceSynchronizationProgress,
             IUserInteractionService userInteractionService,
-            IRestService restService,
             IGoogleApiService googleApiService)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             UserInteractionService = userInteractionService;
             GoogleApiService = googleApiService;
@@ -101,31 +97,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
 
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
-            //var test = new ConnectedDeviceViewModel();
-            //test.InterviewerName = "Interviewer1";
-            //test.Synchronization.ProgressOnProgressChanged(this, new SyncProgressInfo
-            //{
-            //    Description = "description",
-            //    Statistics = new SynchronizationStatistics
-            //    {
-            //        RemovedAssignmentsCount = 1,
-            //        NewAssignmentsCount = 1,
-            //        DeletedInterviewsCount = 5,
-            //        FailedToCreateInterviewsCount = 4,
-            //        TotalCompletedInterviewsCount = 12,
-            //        FailedToUploadInterviwesCount = 21,
-            //        NewInterviewsCount = 21,
-            //        RejectedInterviewsCount = 21,
-            //        SuccessfullyUploadedInterviewsCount = 12,
-            //        SuccessfullyDownloadedQuestionnairesCount = 1225,
-            //        TotalDeletedInterviewsCount = 19,
-            //        TotalNewInterviewsCount = 676,
-            //        TotalRejectedInterviewsCount = 12
-            //    },
-            //    Status = SynchronizationStatus.Upload,
-            //    Title = "title"
-            //});
-            //this.ConnectedDevices.Add(test);
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)

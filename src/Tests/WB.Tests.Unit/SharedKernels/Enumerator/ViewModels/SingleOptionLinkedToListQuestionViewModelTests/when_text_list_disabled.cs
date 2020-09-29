@@ -7,7 +7,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedToListQuestionViewModelTests
 {
     [TestOf(typeof(SingleOptionLinkedToListQuestionViewModel))]
-    public class when_text_list_disabled
+    public class when_text_list_disabled : SingleOptionLinkedToListQuestionViewModelTests
     {
         [Test]
         public void should_view_model_has_empty_options()

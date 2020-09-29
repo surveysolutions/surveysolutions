@@ -414,4 +414,10 @@
   <data name="MissingPermissions_Microphone" xml:space="preserve">
     <value>Додатку необхідний дозвіл на використання мікрофона для відповіді на дане питання</value>
   </data>
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+      <value>Додатку необхідний дозвіл на використання мікрофона</value>
+  </data>
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+      <value>Додатку необхідний дозвіл на використання накопичувача</value>
+  </data>
 </root>

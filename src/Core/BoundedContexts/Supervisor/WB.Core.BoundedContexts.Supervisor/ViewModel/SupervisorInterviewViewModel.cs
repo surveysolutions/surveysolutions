@@ -22,14 +22,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override async Task NavigateBack()
         {
-            if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            }
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
