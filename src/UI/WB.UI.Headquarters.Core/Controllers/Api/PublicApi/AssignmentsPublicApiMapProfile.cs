@@ -4,6 +4,7 @@ using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using AggregateInterviewAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.InterviewAnswer;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
@@ -22,6 +23,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .ForMember(x => x.IsAudioRecordingEnabled, opts => opts.MapFrom(x => x.AudioRecording))
                 .ForMember(x => x.Answers, opts => opts.MapFrom(x => x.Answers));
 
+            this.CreateMap<AggregateInterviewAnswer, InterviewAnswer>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
+                .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.Variable, opts => opts.UseDestinationValue())
+                .AfterMap((row, item, ctx) =>
+                    item.Variable = GetVariableName(ctx, item.Variable, item.Identity.Id.ToString()));
+
             this.CreateMap<Assignment, AssignmentDetails>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
                 .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
@@ -34,11 +42,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.CreateMap<IdentifyingAnswer, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
                 .ForMember(x => x.Variable, opts => opts.MapFrom(x => x.VariableName))
+                .AfterMap((row, item, ctx) => item.Variable = GetVariableName(ctx, item.Variable, item.Identity))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 
             this.CreateMap<AssignmentIdentifyingQuestionRow, AssignmentIdentifyingDataItem>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
                 .ForMember(x => x.Variable, opts => opts.MapFrom(x => x.Variable))
+                    .AfterMap((row, item, ctx) => item.Variable = GetVariableName(ctx, item.Variable, item.Identity))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 
             this.CreateMap<AssignmentRow, AssignmentViewItem>()
@@ -53,6 +63,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .ForMember(x => x.ReceivedByTabletAtUtc, opts => opts.MapFrom(x => x.ReceivedByTabletAtUtc))
                 .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived))
                 .ForMember(x => x.IsAudioRecordingEnabled, opts => opts.MapFrom(x => x.IsAudioRecordingEnabled));
+        }
+
+        private string GetVariableName(ResolutionContext ctx, string value, string identity)
+        {
+            if (string.IsNullOrWhiteSpace(value) 
+                && ctx != ctx.Mapper.DefaultContext
+                && ctx.Items.TryGetValue("questionnaire", out var ctxItem) 
+                && ctxItem is IQuestionnaire questionnaire)
+            {
+                return questionnaire.GetEntityVariableOrThrow(Guid.Parse(identity));
+            }
+
+            return value;
         }
     }
 }
