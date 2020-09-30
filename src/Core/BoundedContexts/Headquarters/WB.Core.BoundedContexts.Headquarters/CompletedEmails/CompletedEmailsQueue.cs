@@ -16,11 +16,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.storage = storage;
         }
 
-        public IEnumerable<Guid> GetInterviewIdsForSend()
+        public List<Guid> GetInterviewIdsForSend(int batchSize = 100)
         {
             return storage.Query(_ => _
                 .OrderBy(r => r.RequestTime)
-                .Select(r => r.InterviewId));
+                .Select(r => r.InterviewId))
+                .Take(batchSize)
+                .ToList();
         }
 
         public void Add(Guid interviewId)
