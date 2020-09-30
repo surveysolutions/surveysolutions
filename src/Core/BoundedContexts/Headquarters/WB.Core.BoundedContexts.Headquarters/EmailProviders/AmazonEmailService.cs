@@ -8,6 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
+using Amazon.Runtime.Internal;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using MimeKit;
@@ -28,23 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
         }
         
-        /*public async Task<bool> CanSendEmailAsync()
-        {
-            EmailProviderSettings settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
-            if (!IsConfigured())
-                throw new Exception("Email provider was not set up properly");
-
-            var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
-            var regionEndpoint = RegionEndpoint.GetBySystemName(settings.AwsRegion);
-            using var client = new AmazonSimpleEmailServiceClient(credentials, regionEndpoint);
-            var response = await client.GetSendQuotaAsync();
-            response.
-
-                return await SendEmailWithAmazon(to, subject, htmlBody, textBody, attachments, settings).ConfigureAwait(false);
-
-        }*/
-
-
         public async Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody, List<EmailAttachment>? attachments)
         {
             var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
@@ -53,7 +37,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
             var regionEndpoint = RegionEndpoint.GetBySystemName(settings.AwsRegion);
-            using var client = new AmazonSimpleEmailServiceClient(credentials, regionEndpoint);
+            using var client = new AmazonSimpleEmailServiceClient(credentials, new AmazonSimpleEmailServiceConfig()
+            {
+                RegionEndpoint = regionEndpoint,
+                RetryMode = RequestRetryMode.Adaptive,
+                ThrottleRetries = true,
+                MaxErrorRetry = 4,
+            });
             
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(string.Empty, settings.SenderAddress));
@@ -91,15 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             try
             {
                 var response = await client.SendRawEmailAsync(sendRequest).ConfigureAwait(false);
-                //if (response.HttpStatusCode == HttpStatusCode.OK)
-                    return response.MessageId;
-                
-                
+                return response.MessageId;
             }
-            /*catch (AmazonServiceException ae)
-            {
-                ae.Message == "Maximum sending rate exceeded.";
-            }*/
             catch (AggregateException ae)
             {
                 throw new EmailServiceException(to, HttpStatusCode.Accepted, ae, 
