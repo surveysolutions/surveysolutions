@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Metrics;
@@ -138,6 +139,11 @@ namespace WB.UI.Headquarters.Metrics
 
             result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)", memoryCache.Count));
 
+            var completedEmailCount = CompletedEmailStatsCollector.DatabaseTableRowsCount.Labels("completedemailrecords").Value;
+            result.Add(new MetricState(
+                "Completed emails query size", $"Query size: {completedEmailCount}", 
+                completedEmailCount));
+            
             return new ServerStatusResponse
             {
                 LastUpdateTime = DateTime.UtcNow,
