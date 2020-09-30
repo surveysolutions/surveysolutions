@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -71,20 +72,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 if (!emailService.IsConfigured())
                     return;
 
-                var interviewIds = completedEmailsQueue.GetInterviewIdsForSend();
-                
                 var sw = new Stopwatch();
                 sw.Start();
 
                 ISenderInformation senderInfo = emailService.GetSenderInfo();
+                var interviewIds = completedEmailsQueue.GetInterviewIdsForSend();
 
-                foreach (Guid interviewId in interviewIds)
+                while (interviewIds.Count > 0)
                 {
-                    await SendInterviewCompleteEmail(interviewId, senderInfo)
-                        .ConfigureAwait(false);
+                    foreach (var interviewId in interviewIds.AsParallel())
+                    {
+                        await SendInterviewCompleteEmail(interviewId, senderInfo)
+                            .ConfigureAwait(false);
+                    }
+                    
+                    interviewIds = completedEmailsQueue.GetInterviewIdsForSend();
                 }
 
                 sw.Stop();
+                this.logger.LogInformation("Send completed emails job: FINISHED {time}", sw.Elapsed);
             }
             catch (OperationCanceledException)
             {
@@ -141,7 +147,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 completedEmailsQueue.Remove(interviewId);
                 return;
             }
-            
 
             var email = assignment.Email;
 
@@ -176,6 +181,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 completedEmailsQueue.MarkAsFailedToSend(interviewId);
                 this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
+            }
+            catch (Exception e)
+            {
+                completedEmailsQueue.MarkAsFailedToSend(interviewId);
+                this.logger.LogError(e, "Complete email was not sent {interviewId}", interviewId);
+                throw;
             }
         }
 
