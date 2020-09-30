@@ -206,7 +206,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
         {
             if (RegionEndpoint.EnumerableAllRegions.All(r => r.SystemName != settings.AwsRegion))
-                return Ok(new {sucess = false});
+                return Ok(new {sucess = false, error = Settings.EmailProvider_AwsRegion_Unknown });
             
             var currentsSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
