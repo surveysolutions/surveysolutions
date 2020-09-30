@@ -52,7 +52,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 var mainPdf = await hqApi.GetPdfAsync(questionnaire.QuestionnaireId);
                 if (cancellationToken.IsCancellationRequested) return;
-                var mainFilePath = Path.Combine(targetFolder, targetFileName);
+                var defaultTranslationName = string.IsNullOrEmpty(questionnaire.DefaultLanguageName)
+                    ? String.Empty
+                    : questionnaire.DefaultLanguageName.Unidecode() + " ";
+                var mainFilePath = Path.Combine(targetFolder, $"{defaultTranslationName}{targetFileName}");
                 Directory.CreateDirectory(targetFolder);
                 using (var mainStream = this.fileSystemAccessor.OpenOrCreateFile(mainFilePath, false))
                 {
