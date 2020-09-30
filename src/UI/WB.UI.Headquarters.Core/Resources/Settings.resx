@@ -303,6 +303,9 @@
   <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
     <value>Region for the AWS Management Console</value>
   </data>
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>Selected unknown region. Please check it.</value>
+  </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>You can find it on API Keys page under SendGrid settings menu item</value>
   </data>

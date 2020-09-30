@@ -205,6 +205,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected unknown region. Please check it..
+        /// </summary>
+        public static string EmailProvider_AwsRegion_Unknown {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsRegion_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Region for the AWS Management Console.
         /// </summary>
         public static string EmailProvider_AwsRegionHelp {
