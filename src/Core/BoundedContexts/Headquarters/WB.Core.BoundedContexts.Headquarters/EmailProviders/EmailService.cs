@@ -139,7 +139,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         private async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments, IAmazonEmailSettings settings)
         {
             var credentials = new BasicAWSCredentials(settings.AwsAccessKeyId, settings.AwsSecretAccessKey);
-            using var client = new AmazonSimpleEmailServiceClient(credentials, RegionEndpoint.USEast1);
+            var regionEndpoint = RegionEndpoint.GetBySystemName(settings.AwsRegion);
+            using var client = new AmazonSimpleEmailServiceClient(credentials, regionEndpoint);
             
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(string.Empty, settings.SenderAddress));

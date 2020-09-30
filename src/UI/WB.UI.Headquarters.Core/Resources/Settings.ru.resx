@@ -281,6 +281,12 @@
   <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
     <value>Может быть найден в разделе «Учетные данные безопасности» на консоли управления AWS</value>
   </data>
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>Регион</value>
+  </data>
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>Регион для вашей Консоли управления AWS</value>
+  </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>Вы можете найти его на странице API Keys в пункте меню настроек Sendgrid</value>
   </data>
