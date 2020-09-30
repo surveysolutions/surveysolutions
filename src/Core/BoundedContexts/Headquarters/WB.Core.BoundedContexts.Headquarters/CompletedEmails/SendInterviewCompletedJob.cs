@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPdfInterviewGenerator pdfInterviewGenerator;
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
+        private readonly IAssignmentsService assignmentsService;
 
         public SendInterviewCompletedJob(
             ILogger<SendInterviewCompletedJob> logger, 
@@ -45,7 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             IWebInterviewEmailRenderer webInterviewEmailRenderer,
             IQuestionnaireStorage questionnaireStorage,
             IPdfInterviewGenerator pdfInterviewGenerator,
-            IPlainKeyValueStorage<EmailParameters> emailParamsStorage
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage,
+            IAssignmentsService assignmentsService
             )
         {
             this.logger = logger;
@@ -58,6 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.questionnaireStorage = questionnaireStorage;
             this.pdfInterviewGenerator = pdfInterviewGenerator;
             this.emailParamsStorage = emailParamsStorage;
+            this.assignmentsService = assignmentsService;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -123,14 +127,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 completedEmailsQueue.Remove(interviewId);
                 return;
             }
-            
-            Invitation invitation = invitationService.GetInvitationByAssignmentId(assignmentId.Value);
-            var email = invitation?.Assignment?.Email;
-            if (invitation == null || string.IsNullOrEmpty(email))
+
+            var assignment = assignmentsService.GetAssignment(assignmentId.Value);
+            if (assignment == null || string.IsNullOrEmpty(assignment.Email))
             {
                 completedEmailsQueue.Remove(interviewId);
                 return;
             }
+            
+            Invitation invitation = invitationService.GetInvitationByAssignmentId(assignmentId.Value);
+            if (invitation == null)
+            {
+                completedEmailsQueue.Remove(interviewId);
+                return;
+            }
+            
+
+            var email = assignment.Email;
 
             List<EmailAttachment> attachments = new List<EmailAttachment>();
             if (webInterviewConfig.AttachAnswersInEmail)
