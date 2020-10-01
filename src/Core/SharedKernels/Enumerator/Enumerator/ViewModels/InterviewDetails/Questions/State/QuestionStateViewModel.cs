@@ -85,8 +85,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isAnswered;
         public bool IsAnswered
         {
-            get { return this.isAnswered; }
-            protected set { this.isAnswered = value; this.RaisePropertyChanged(); }
+            get => this.isAnswered;
+            set => SetProperty(ref this.isAnswered, value);
         }
 
         public void Handle(TAnswerEvent @event)

@@ -1,45 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
-    public class InterviewDetailsBackgroundSchedulerTask
+    public class InterviewDetailsBackgroundSchedulerTask : BaseTask
     {
-        private readonly IScheduler scheduler;
-        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
-
-        public InterviewDetailsBackgroundSchedulerTask(IScheduler scheduler,
-            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting)
+        public InterviewDetailsBackgroundSchedulerTask(IScheduler scheduler) : base(scheduler, "interview packages ", typeof(SyncPackagesReprocessorBackgroundJob))
         {
-            if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
-            if (syncPackagesProcessorBackgroundJobSetting == null) throw new ArgumentNullException(nameof(syncPackagesProcessorBackgroundJobSetting));
-            this.scheduler = scheduler;
-            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
-        }
-
-        public async Task Configure()
-        {
-            await RunSyncPackagesReprocessorBackgroundJob();
-        }
-
-        public async Task RunSyncPackagesReprocessorBackgroundJob()
-        {
-            IJobDetail job = JobBuilder.Create<SyncPackagesReprocessorBackgroundJob>()
-                .WithIdentity("Capi interview packages reprocesing", "Reprocessor")
-                .StoreDurably(true)
-                .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("Interview packages reproces trigger", "Reprocessor")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(this.syncPackagesProcessorBackgroundJobSetting.SynchronizationInterval)
-                    .RepeatForever())
-                .Build();
-
-            await this.scheduler.ScheduleJob(job, trigger);
-            await this.scheduler.AddJob(job, true);
         }
     }
 }
