@@ -752,6 +752,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize, excludedOptionIds);
 
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity,
+            int? parentQuestionValue, string filter, int itemsCount = 200, int[] excludedOptionIds = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            if (questionnaire.IsLinkedToListQuestion(questionIdentity.Id))
+            {
+                return OptionsForLinkedToTextListQuestion(questionIdentity)
+                    .Where(x => filter.IsNullOrEmpty() || x.Title.Contains(filter, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(x => excludedOptionIds == null || !excludedOptionIds.Contains(x.Value))
+                    .Take(itemsCount)
+                    .ToList();
+            }
+
+            var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
+            
+            if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
+                return options.Take(itemsCount).ToList();
+
+            if (this.UsesExpressionStorage)
+                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
+
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity, options).Take(itemsCount).ToList();
+        }
+        
+        private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
+        {
+            var questionnaire = GetQuestionnaireOrThrow(Language);
+            var linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId.Id);
+            var listQuestion = FindQuestionInQuestionBranch(linkedToQuestionId, questionId);
+            if (listQuestion == null || listQuestion.IsDisabled()) yield break;
+
+            var asInterviewTreeTextListQuestion = listQuestion.GetAsInterviewTreeTextListQuestion();
+            var listOptions = asInterviewTreeTextListQuestion.GetAnswer()?.Rows;
+            var filteredOptions = GetSingleOptionLinkedToListQuestion(questionId)?.Options;
+            
+            if (listOptions == null || filteredOptions == null) yield break;
+
+            foreach (var textListAnswerRow in listOptions)
+            {
+                if (filteredOptions.Contains(textListAnswerRow.Value))
+                    yield return new CategoricalOption
+                    {
+                        Title = textListAnswerRow.Text,
+                        Value = textListAnswerRow.Value
+                    };
+            }
+        }
+
         public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
         {
             var question = this.GetCascadingQuestion(questionIdentity);
@@ -772,9 +821,59 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithoutFilter(question, value, parentQuestionValue);
 
+        public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            if (questionnaire.IsLinkedToListQuestion(question.Id))
+            {
+                var linkedQuestion = GetSingleOptionLinkedToListQuestion(question);
+                var answer = linkedQuestion.GetAnswer();
+                if (answer == null) return null;
+                
+                
+                var listQuestion = FindQuestionInQuestionBranch(linkedQuestion.LinkedSourceId, question)
+                    .GetAsInterviewTreeTextListQuestion();
+
+                var linkedToText = listQuestion.GetTitleByItemCode(answer.SelectedValue);
+                    
+                return new CategoricalOption
+                {
+                    Title = linkedToText,
+                    Value = answer.SelectedValue
+                };
+            }
+            
+            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value, parentQuestionValue);
+        }
+        
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
+        public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            if (questionnaire.IsLinkedToListQuestion(question.Id))
+            {
+                return GetFirstTopFilteredOptionsForQuestion(question, null, optionText, 1, Array.Empty<int>())
+                    .FirstOrDefault();
+            }
+            
+            CategoricalOption filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
+
+            if (filteredOption == null)
+                return null;
+
+            if (questionnaire.IsSupportFilteringForOptions(question.Id))
+            {
+                if (this.UsesExpressionStorage)
+                {
+                    return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
+                }
+                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
+            }
+            return filteredOption;
+        }
+        
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
                 userId: commentDto.UserId,

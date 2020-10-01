@@ -63,6 +63,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public string ItemTag => this.QuestionState.Header.Identity + "_Opt_" + (RosterVector == null ? "<null>" : new RosterVector(RosterVector).ToString());
-        
+        public MvxNotifyPropertyChanged Parent { get; set; }
+
+
+        public override string ToString()
+        {
+            return this.title;
+        }
     }
 }

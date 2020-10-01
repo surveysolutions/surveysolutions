@@ -130,7 +130,8 @@ namespace WB.UI.Headquarters.Controllers
                 BaseReportUrl = Url.Action("InterviewersAndDevices", "Reports", new { id = (Guid?)null }),
                 DataUrl = Url.Action("DeviceInterviewers", "ReportDataApi"),
                 InterviewersBaseUrl = Url.Action("Interviewers", "Users"),
-                InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
+                InterviewerProfileUrl = Url.Action("Profile", "Interviewer"),
+                SupervisorProfileUrl = Url.Action("Manage", "Users"),
             };
             return this.View("InterviewersAndDevices", devicesInterviewersModel);
         }

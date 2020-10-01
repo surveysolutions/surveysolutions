@@ -169,5 +169,16 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new OptionsRepository(plainStore);
         }
+
+        public IQuestionnaireStorage QuestionnaireStorage(IQuestionnaire questionnaire)
+        {
+            var result = new Mock<IQuestionnaireStorage>();
+            result.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(questionnaire);
+            result.Setup(x => x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(questionnaire);
+
+            return result.Object;
+        }
     }
 }

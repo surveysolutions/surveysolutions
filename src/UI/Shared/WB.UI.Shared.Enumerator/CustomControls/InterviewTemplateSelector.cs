@@ -26,6 +26,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (MultimediaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (AutoCompleteSingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_linked_combobox},
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (CategoricalComboboxAutocompleteViewModel), Resource.Layout.interview_question_categorical_combobox},

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.UI.Headquarters.Models.Api;
 
@@ -11,6 +12,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     public class AssignmentDetails : AssignmentViewItem
     {
         [DataMember] public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; }
+    }
+
+    public class InterviewAnswer
+    {
+        public Identity Identity { get; set; }
+        public AbstractAnswer Answer { get; set; }
+        public string Variable { get; set; }
     }
 
     public class FullAssignmentDetails : AssignmentDetails
@@ -171,7 +179,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     {
         public AssignmentDetails Assignment { get; set; }
         public ImportDataVerificationState VerificationStatus { get; set; }
-        public string? WebInterviewLink { get; set; }
+        public string WebInterviewLink { get; set; }
     }
 
     public class CreateAssignmentApiRequest
@@ -187,7 +195,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public int? Quantity { get; set; }
 
         /// <summary>
-        /// QuestionnaireId for assignemnt
+        /// QuestionnaireId for assignment
         /// </summary>
         [DataMember]
         [Required]
@@ -207,5 +215,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
         [DataMember] public string Comments { get; set; }
+        
+        /// <summary>
+        /// List of protected variables
+        /// </summary> 
+        [DataMember]
+        public List<string> ProtectedVariables { get; set; } = new List<string>();
     }
 }
