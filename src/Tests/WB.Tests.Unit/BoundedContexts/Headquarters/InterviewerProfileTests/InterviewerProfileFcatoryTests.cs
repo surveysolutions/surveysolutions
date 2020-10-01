@@ -118,9 +118,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
                 { Id.g1, 30000 }
             };
 
+            var syncStats = new Dictionary<Guid, SyncStats>
+            {
+                {Id.g1, new SyncStats(0,0,null)}
+            };
+            var averageSpeed = new Dictionary<Guid, double>();
+
             var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x
                 => x.GetLastSyncByInterviewersList(interviewersIdsToExport) == deviceSyncInfos
-                && x.GetInterviewersTrafficUsage(interviewersIdsToExport) == trafficUsage);
+                && x.GetInterviewersTrafficUsage(interviewersIdsToExport) == trafficUsage
+                && x.GetSynchronizationsStats(interviewersIdsToExport) == syncStats
+                && x.GetAverageSynchronizationSpeedInBytesPerSeconds(interviewersIdsToExport) == averageSpeed);
 
             var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
 

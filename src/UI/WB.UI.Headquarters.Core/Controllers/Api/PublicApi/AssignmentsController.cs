@@ -243,7 +243,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             var assignmentToImport =
-                this.assignmentsImportService.ConvertToAssignmentToImport(assignmentRows, questionnaire, null);
+                this.assignmentsImportService.ConvertToAssignmentToImport(assignmentRows, questionnaire, createItem.ProtectedVariables);
 
             var importError = this.verifier.VerifyWithInterviewTree(assignmentToImport.Answers,
                 this.authorizedUser.Id, questionnaire);

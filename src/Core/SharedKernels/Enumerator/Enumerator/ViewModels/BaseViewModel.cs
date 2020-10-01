@@ -39,11 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         // it's much more performant, as original extension call new Action<...> on every call
         protected void RaiseAndSetIfChanged<TReturn>(ref TReturn backingField, TReturn newValue, 
-            [CallerMemberName] string propertyName = "")
+            [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<TReturn>.Default.Equals(backingField, newValue)) return;
-            backingField = newValue;
-            this.RaisePropertyChanged(propertyName);
+            SetProperty(ref backingField, newValue, propertyName);
         }
     }
 }

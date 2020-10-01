@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                 w.UseStartup(exportHost.GetType("WB.Services.Export.Host.Startup"));
             });
 
-            var host = exportHostBuilder?.Build();
+            var host = exportHostBuilder.Build();
 
             var lifetime = host.Services.GetService<IHostApplicationLifetime>();
 

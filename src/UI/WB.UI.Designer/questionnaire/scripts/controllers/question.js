@@ -716,7 +716,6 @@
 
                 $scope.activeQuestion.isLinked = true;
                 $scope.activeQuestion.isCascade = false;
-                $scope.activeQuestion.isFilteredCombobox = false;
                 $scope.activeQuestion.isLinkedToReusableCategories = null;
                 $scope.activeQuestion.categoriesId = null;
 
@@ -736,7 +735,6 @@
                 if ($scope.activeQuestion.isFilteredCombobox === true) return;
 
                 $scope.activeQuestion.isCascade = false;
-                $scope.activeQuestion.isLinked = false;
                 $scope.activeQuestion.isFilteredCombobox = true;
 
                 markFormAsChanged();

@@ -113,8 +113,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 var tsc = new TaskCompletionSourceWithProgress(payload, progress, logger, cancellationToken);
                 pending.TryAdd(payload.CorrelationId, tsc);
 
+                var sw = Stopwatch.StartNew();
+                logger.Verbose(
+                    $"[{connection.GetEndpointName(endpoint) ?? endpoint}] {typeof(TRequest).Name} => {typeof(TResponse).Name}");
+
                 await SendOverWireAsync(connection, endpoint, payload);
                 var response = await tsc.Task.ConfigureAwait(false);
+
+                sw.Stop();
+                logger.Debug(
+                   $"[{connection.GetEndpointName(endpoint) ?? endpoint}] {typeof(TRequest).Name} => {typeof(TResponse).Name} done in {sw.ElapsedMilliseconds:0.00}ms");
 
                 switch (response)
                 {
@@ -491,7 +499,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             public void SetCanceled()
             {
-                logger.Verbose($"Payload: {Payload.Comment}");
+                //logger.Verbose($"Payload: {Payload.Comment}");
                 TaskCompletionSource.TrySetCanceled();
             }
 
