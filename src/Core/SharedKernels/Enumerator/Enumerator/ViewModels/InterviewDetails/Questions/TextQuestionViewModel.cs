@@ -28,8 +28,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public event EventHandler AnswerRemoved;
-
         private Identity questionIdentity;
         private string interviewId;
 
@@ -121,8 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             get
             {
-                return this.answerRemoveCommand ??
-                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
+                return this.answerRemoveCommand ??= new MvxCommand(async () => await this.RemoveAnswer());
             }
         }
 
@@ -136,7 +133,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
-                AnswerRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (InterviewException ex)
             {

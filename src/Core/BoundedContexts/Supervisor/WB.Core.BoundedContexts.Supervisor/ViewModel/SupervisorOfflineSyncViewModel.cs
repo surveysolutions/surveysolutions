@@ -97,7 +97,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
 
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
-            await StartDiscoveryAsyncCommand.ExecuteAsync();
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)

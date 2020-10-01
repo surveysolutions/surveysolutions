@@ -58,7 +58,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300,
             VariableModel = 400,
             ReadOnlyQuestion = 500,
-            FlatRoster = 600
+            FlatRoster = 600,
+            AutocompleteLinkedSingleOptionQuestionModel = 700
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -88,6 +89,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {
                             InterviewEntityType.LinkedToRosterSingleOptionQuestionModel,
                             Load<SingleOptionRosterLinkedQuestionViewModel>
+                        },
+                        {
+                            InterviewEntityType.AutocompleteLinkedSingleOptionQuestionModel,
+                            Load<AutoCompleteSingleOptionLinkedQuestionViewModel>
                         },
                         {
                             InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel,
@@ -222,13 +227,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     case QuestionType.SingleOption:
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
-                            return questionnaire.IsLinkedToListQuestion(entityId)
-                                ? InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel
-                                : InterviewEntityType.LinkedSingleOptionQuestionModel;
+                            
+
+                            if (questionnaire.IsLinkedToListQuestion(entityId))
+                                return InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel;
+                            
+                            if(questionnaire.IsQuestionFilteredCombobox(entityId))
+                                return InterviewEntityType.AutocompleteLinkedSingleOptionQuestionModel;
+                            return InterviewEntityType.LinkedSingleOptionQuestionModel;
                         }
 
                         if (questionnaire.IsQuestionLinkedToRoster(entityId))
                         {
+                            if (questionnaire.IsQuestionFilteredCombobox(entityId))
+                                return InterviewEntityType.AutocompleteLinkedSingleOptionQuestionModel;
+                            
                             return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
                         }
 

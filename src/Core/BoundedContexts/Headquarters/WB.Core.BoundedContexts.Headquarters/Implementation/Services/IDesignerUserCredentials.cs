@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         RestCredentials Get();
         void Set(RestCredentials restCredentials);
+        void SetTaskCredentials(RestCredentials restCredentials);
     }
 }
