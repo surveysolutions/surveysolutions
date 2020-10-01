@@ -269,7 +269,10 @@ export default {
         },
 
         resetChanges() {
-            this.reloadCategories(() => (this.snacks.formReverted = true));
+            this.reloadCategories(() => {
+                this.snacks.formReverted = true;
+                this.errors = [];
+            });
         },
 
         tabChange(tab) {

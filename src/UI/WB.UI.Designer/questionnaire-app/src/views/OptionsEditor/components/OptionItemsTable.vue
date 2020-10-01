@@ -64,7 +64,7 @@
                         v-if="parentCategories && parentCategories.length > 0"
                         class="caption text--disabled .d-none .d-md-flex .d-lg-none"
                         >{{
-                            captionForParentValue(props.item.parentValue).title
+                            captionForParentValue(props.item.parentValue)
                         }}</span
                     >
                 </div>
@@ -211,7 +211,8 @@ export default {
         },
 
         captionForParentValue(value) {
-            return this.parentCategories.find(p => p.value == value);
+            const category = this.parentCategories.find(p => p.value == value);
+            return category != null ? category.title : null;
         }
     }
 };
