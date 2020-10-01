@@ -159,7 +159,7 @@ export default {
         },
 
         isCascading() {
-            return this.cascading || this.isCascadingCategory;
+            return this.cascading === true || this.isCascadingCategory === true;
         },
 
         formTitle() {
