@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.HealthChecks
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
-            var unexpected = BrokenPackagesStatsCollector.BrokenPackagesCount.Labels("Unexpected").Value;
+            var unexpected = DatabaseStatsCollector.BrokenPackagesCount.Labels("Unexpected").Value;
 
             if (unexpected > 0)
             {

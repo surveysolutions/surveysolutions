@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 RegionEndpoint = regionEndpoint,
                 RetryMode = RequestRetryMode.Adaptive,
                 ThrottleRetries = true,
-                MaxErrorRetry = 4,
+                MaxErrorRetry = 3,
             });
             
             var message = new MimeMessage();
