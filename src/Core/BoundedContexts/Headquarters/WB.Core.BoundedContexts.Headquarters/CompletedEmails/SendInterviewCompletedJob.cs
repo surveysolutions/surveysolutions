@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public class SendInterviewCompletedJob : IJob
     {
         private readonly ILogger<SendInterviewCompletedJob> logger;
-        private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
         private readonly ICompletedEmailsQueue completedEmailsQueue;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -40,7 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public SendInterviewCompletedJob(
             ILogger<SendInterviewCompletedJob> logger, 
-            IInvitationService invitationService, 
             IEmailService emailService, 
             ICompletedEmailsQueue completedEmailsQueue,
             IStatefulInterviewRepository interviewRepository,
@@ -53,7 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             )
         {
             this.logger = logger;
-            this.invitationService = invitationService;
             this.emailService = emailService;
             this.completedEmailsQueue = completedEmailsQueue;
             this.interviewRepository = interviewRepository;
@@ -141,13 +138,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 return;
             }
             
-            Invitation invitation = invitationService.GetInvitationByAssignmentId(assignmentId.Value);
-            if (invitation == null)
-            {
-                completedEmailsQueue.Remove(interviewId);
-                return;
-            }
-
             var email = assignment.Email;
 
             List<EmailAttachment> attachments = new List<EmailAttachment>();
@@ -159,17 +149,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.CompleteInterviewEmail);
 
-            var emailParamsId = SaveEmailForOnlineAccess(senderInfo, emailTemplate, questionnaire, interview, invitation);
+            var emailParamsId = SaveEmailForOnlineAccess(senderInfo, emailTemplate, questionnaire, interview, assignment);
 
-            var htmlEmailParams = CreateEmailParameters(EmailContentTextMode.Html, senderInfo, emailTemplate, questionnaire, interview, attachments, emailParamsId, invitation);
+            var htmlEmailParams = CreateEmailParameters(EmailContentTextMode.Html, senderInfo, emailTemplate, questionnaire, interview, attachments, emailParamsId, assignment);
             var htmlEmail = await webInterviewEmailRenderer.RenderHtmlEmail(htmlEmailParams).ConfigureAwait(false);
 
-            var textEmailParams = CreateEmailParameters(EmailContentTextMode.Text, senderInfo, emailTemplate, questionnaire, interview, attachments, emailParamsId, invitation);
+            var textEmailParams = CreateEmailParameters(EmailContentTextMode.Text, senderInfo, emailTemplate, questionnaire, interview, attachments, emailParamsId, assignment);
             var textEmail = await webInterviewEmailRenderer.RenderTextEmail(textEmailParams).ConfigureAwait(false);
 
             try
             {
-                var emailId = await emailService.SendEmailAsync(email, 
+                await emailService.SendEmailAsync(email, 
                     textEmailParams.Subject,
                     htmlEmail,
                     textEmail,
@@ -193,7 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private static EmailParameters CreateEmailParameters(EmailContentTextMode textMode,
             ISenderInformation senderInfo,
             WebInterviewEmailTemplate emailTemplate, IQuestionnaire questionnaire, IStatefulInterview interview,
-            List<EmailAttachment> attachments, string emailParamsId, Invitation invitation)
+            List<EmailAttachment> attachments, string emailParamsId, Assignment assignment)
         {
             var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
             emailContent.AttachmentMode = EmailContentAttachmentMode.InlineAttachment;
@@ -204,8 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var emailParams = new EmailParameters
             {
                 Id = emailParamsId,
-                AssignmentId = invitation.AssignmentId,
-                InvitationId = invitation.Id,
+                AssignmentId = assignment.Id,
                 Subject = emailContent.Subject,
                 LinkText = emailContent.LinkText,
                 MainText = emailContent.MainText,
@@ -240,18 +229,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         private string SaveEmailForOnlineAccess(ISenderInformation senderInfo, WebInterviewEmailTemplate emailTemplate,
-            IQuestionnaire questionnaire, IStatefulInterview interview, Invitation invitation)
+            IQuestionnaire questionnaire, IStatefulInterview interview, Assignment assignment)
         {
             var emailContent = new EmailContent(emailTemplate, questionnaire.Title, null, null);
             emailContent.AttachmentMode = EmailContentAttachmentMode.Base64String;
             emailContent.RenderInterviewData(interview, questionnaire);
 
-            var emailParamsId = $"{Guid.NewGuid():N}-{invitation.Id}-Complete";
+            var emailParamsId = $"{Guid.NewGuid():N}-{assignment.Id}-Complete";
             var emailParams = new EmailParameters
             {
                 Id = emailParamsId,
-                AssignmentId = invitation.AssignmentId,
-                InvitationId = invitation.Id,
+                AssignmentId = assignment.Id,
                 Subject = emailContent.Subject,
                 LinkText = emailContent.LinkText,
                 MainText = emailContent.MainText,
