@@ -19,10 +19,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
     {
         private DesignerEngineVersionService CreateDesignerEngineVersionService(
             IAttachmentService attachments = null,
-            IDesignerTranslationService translaitonsService = null)
+            IDesignerTranslationService translationsService = null)
         {
             return new DesignerEngineVersionService(attachments ?? Mock.Of<IAttachmentService>(),
-                translaitonsService ?? Mock.Of<IDesignerTranslationService>());
+                translationsService ?? Mock.Of<IDesignerTranslationService>());
         }
 
         [Test]
@@ -240,11 +240,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             dbContext.SaveChanges();
 
             var translationsService = Create.TranslationsService(dbContext);
-            var service = CreateDesignerEngineVersionService(translaitonsService: translationsService);
+            var service = CreateDesignerEngineVersionService(translationsService: translationsService);
 
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
 
             Assert.That(contentVersion, Is.EqualTo(31));
+        }
+
+        [Test]
+        public void should_return_32_when_linked_to_roster_question_is_filtered_combobox()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.FixedRoster(Id.g1),
+                Create.SingleQuestion(linkedToRosterId: Id.g1, isFilteredCombobox: true));
+            
+            var service = CreateDesignerEngineVersionService();
+
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(32));
+        }
+        
+        [Test]
+        public void should_return_32_when_linked_to_question_question_is_filtered_combobox()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.TextListQuestion(Id.g1),
+                Create.SingleQuestion(linkedToQuestionId: Id.g1, isFilteredCombobox: true));
+            
+            var service = CreateDesignerEngineVersionService();
+
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(32));
         }
     }
 }

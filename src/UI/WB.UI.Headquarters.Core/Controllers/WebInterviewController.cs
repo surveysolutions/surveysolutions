@@ -183,7 +183,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
-            var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
             if (questionnaire.IsCoverPage(sectionIdentity.Id) && !IsNeedShowCoverPage(interview, questionnaire))
             {
                 var firstSectionUrl = GenerateUrl(nameof(Section), id, questionnaire.GetFirstSectionId().FormatGuid());
@@ -207,7 +207,8 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity) 
+                                ?? throw new ArgumentNullException("Questionnaire not found");
             
             foreach (var messageKey in webInterviewConfig.CustomMessages.Keys.ToList())
             {
@@ -459,8 +460,12 @@ namespace WB.UI.Headquarters.Controllers
                 //if no answers were given
                 if (this.statefulInterviewRepository.Get(pendingInterviewId.FormatGuid()) != null)
                 {
-                    RememberCapchaFilled(invitation.InterviewId);
-                    HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
+                    if (invitation.InterviewId != null)
+                    {
+                        RememberCapchaFilled(invitation.InterviewId);
+                        HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
+                    }
+
                     return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
                 }
             }
@@ -532,7 +537,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, null);
 
             if (IsNeedShowCoverPage(interview, questionnaire))
             {
@@ -861,7 +866,7 @@ namespace WB.UI.Headquarters.Controllers
             return view;
         }
 
-        public static string SubstituteQuestionnaireName(string template, string questionnaireName)
+        public static string SubstituteQuestionnaireName(string? template, string questionnaireName)
         {
             if (string.IsNullOrWhiteSpace(template)) return string.Empty;
 
