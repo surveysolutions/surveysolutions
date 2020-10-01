@@ -59,13 +59,16 @@ class OptionsApi {
 
     async uploadCategory(file) {
         const formData = new FormData();
+
         formData.append('csvFile', file);
 
         return await axios.post(`/questionnaire/EditCategories`, formData);
     }
 
-    async uploadOptions(file) {
+    async uploadOptions(questionnaire, question, file) {
         const formData = new FormData();
+        formData.append('id', questionnaire);
+        formData.append('questionId', question);
         formData.append('csvFile', file);
 
         return await axios.post('/questionnaire/EditOptions', formData);

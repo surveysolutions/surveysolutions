@@ -289,10 +289,14 @@ export default {
             this.errors = [];
 
             const apiRequest = this.isCategory
-                ? optionsApi.uploadCategory
-                : optionsApi.uploadOptions;
+                ? optionsApi.uploadCategory(file)
+                : optionsApi.uploadOptions(
+                      this.questionnaireRev,
+                      this.id,
+                      file
+                  );
 
-            apiRequest(file).then(r => {
+            apiRequest.then(r => {
                 this.errors = r.data.errors;
                 this.categories = r.data.options;
                 this.file = null;
