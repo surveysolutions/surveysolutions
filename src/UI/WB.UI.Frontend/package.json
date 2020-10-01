@@ -37,6 +37,7 @@
         "jquery-highlight": "^3.4.0",
         "jquery-mask-plugin": "^1.14.16",
         "lodash": "^4.17.15",
+        "marked": "^1.2.0",
         "moment": "^2.24.0",
         "moment-duration-format": "^2.3.2",
         "pnotify": "^3.2.1",
