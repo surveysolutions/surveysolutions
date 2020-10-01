@@ -10,10 +10,16 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
         {
             Create.Table("completedemailrecords")
                 .WithColumn("interviewid").AsGuid().PrimaryKey()
-                    .ForeignKey("fk_completedemailrecords_interviewid_interviewsummaries_interviewid", "readside", "interviewsummaries", "interviewid")
-                    .OnDelete(Rule.Cascade)
                 .WithColumn("requesttime").AsDateTime().NotNullable()
                 .WithColumn("failedcount").AsInt32().NotNullable();
+            
+            if (this.Schema.Schema("readside").Exists() && this.Schema.Schema("readside").Table("interviewsummaries").Exists())
+            {
+                Create.ForeignKey("fk_completedemailrecords_interviewid_interviewsummaries_interviewid")
+                .FromTable("completedemailrecords").InSchema("plainstore").ForeignColumn("interviewid")
+                .ToTable("interviewsummaries").InSchema("readside").PrimaryColumn("interviewid")
+                .OnDelete(Rule.Cascade);
+            }
         }
     }
 }
