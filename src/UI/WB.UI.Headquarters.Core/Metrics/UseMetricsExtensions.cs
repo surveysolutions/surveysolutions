@@ -22,10 +22,9 @@ namespace WB.UI.Headquarters.Metrics
 
             services.AddHostedService<IDashboardStatisticsService, DashboardStatisticsService>();
             
-            services.AddTransient<IOnDemandCollector, BrokenPackagesStatsCollector>();
+            services.AddTransient<IOnDemandCollector, DatabaseStatsCollector>();
             services.AddTransient<IOnDemandCollector, NHibernateStatsCollector>();
             services.AddTransient<IOnDemandCollector, ThreadPoolStatsCollector>();
-            services.AddTransient<IOnDemandCollector, CompletedEmailStatsCollector>();
         }
   
         public static void UseMetrics(this IApplicationBuilder app, IConfiguration configuration)
