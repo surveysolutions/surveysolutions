@@ -101,7 +101,7 @@
                                                         ref="welcomeTextDescription"
                                                         :min-height="56"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea font-bold"
+                                                        class="form-control js-elasticArea"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -227,7 +227,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['invitation'].text)}}</p>
+                                                        <p v-html="previewHtml(webInterviewPageMessages['invitation'].text)"></p>
                                                     </div>
                                                     <div class="row-element mb-40">
                                                         <a href="javascript:void(0);"
@@ -293,7 +293,7 @@
                                                         ref="resumeInvitation"
                                                         :min-height="56"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea font-bold"
+                                                        class="form-control js-elasticArea"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -417,7 +417,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['resumeInvitation'].text)}}</p>
+                                                        <p v-html="previewHtml(webInterviewPageMessages['resumeInvitation'].text)"></p>
                                                     </div>
                                                     <div class="row-element">
                                                         <a href="javascript:void(0);"
@@ -590,7 +590,7 @@
                                                         ref="finishInterview"
                                                         :min-height="56"
                                                         maxlength="200"
-                                                        class="form-control js-elasticArea font-bold"
+                                                        class="form-control js-elasticArea"
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
                                                     <button type="button"
@@ -687,7 +687,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['finishInterview'].text)}}</p>
+                                                        <p v-html="previewHtml(webInterviewPageMessages['finishInterview'].text)"></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1146,6 +1146,7 @@
 </template>
 <script>
 import Vue from 'vue'
+import marked from 'marked'
 import {map, isNil} from 'lodash'
 export default {
     data() {
@@ -1386,9 +1387,14 @@ export default {
             this.singleResponseIsEnabled = this.cancelSingleResponseIsEnabled
             this.$validator.reset('additionalSettings')
         },
+        previewHtml(text) {
+            var html = marked.parseInline(this.previewText(text))
+            return html
+        },
         previewText(text) {
             if (text == null)
                 return ''
+
             return text
                 .replace(/%SURVEYNAME%/g, this.questionnaireTitle)
                 .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle)

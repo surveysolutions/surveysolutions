@@ -74,7 +74,7 @@
 </template>
 
 <script>
-
+import marked from 'marked'
 import VueRecaptcha from 'vue-recaptcha'
 
 export default {
