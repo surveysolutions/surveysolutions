@@ -435,8 +435,8 @@ export default {
             this.assignToQuestion.isAnswered = this.newResponsibleId != null
             this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
-        async create() {
-            event.target.disabled = true
+        async create(evnt) {
+            evnt.target.disabled = true
             var validationResult = await this.$validator.validateAll()
             const self = this
             this.sizeQuestion.validity.isValid = !this.errors.has('size')
@@ -467,7 +467,7 @@ export default {
                     })
             }
             else
-                event.target.disabled = false
+                evnt.target.disabled = false
         },
 
         webModeChange() {
