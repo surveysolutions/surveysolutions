@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public ActionResult<EditOptionsResponse> EditOptions([FromQuery] QuestionnaireRevision id, [FromQuery] Guid questionId, [FromBody] IFormFile? csvFile)
+        public ActionResult<EditOptionsResponse> EditOptions([FromForm] QuestionnaireRevision id, [FromForm] Guid questionId, [FromForm] IFormFile? csvFile)
         {
             List<string> errors = new List<string>();
 
