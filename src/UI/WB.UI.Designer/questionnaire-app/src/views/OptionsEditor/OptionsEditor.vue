@@ -16,12 +16,6 @@
                         <v-toolbar-title v-if="options">{{
                             formTitle
                         }}</v-toolbar-title>
-
-                        <v-spacer></v-spacer>
-                        <!-- 
-                        <v-btn icon class="hidden-xs-only" @click="close()">
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn> -->
                     </v-toolbar>
                     <v-tabs v-model="tab" grow @change="tabChange">
                         <v-tab key="table">{{
