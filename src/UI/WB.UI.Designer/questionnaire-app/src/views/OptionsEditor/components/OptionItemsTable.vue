@@ -178,7 +178,6 @@ export default {
         },
 
         editItem(item) {
-            console.log('editItem', Object.assign({}, item));
             this.editedIndex = this.categories.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
