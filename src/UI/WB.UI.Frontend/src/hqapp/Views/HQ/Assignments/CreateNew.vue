@@ -238,7 +238,7 @@
                     <div class="action-container">
                         <button
                             type="button"
-                            @click="create"
+                            @click="create($event)"
                             class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
                     </div>
                 </div>
@@ -435,7 +435,8 @@ export default {
             this.assignToQuestion.isAnswered = this.newResponsibleId != null
             this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
-        async create() {
+        async create(evnt) {
+            evnt.target.disabled = true
             var validationResult = await this.$validator.validateAll()
             const self = this
             this.sizeQuestion.validity.isValid = !this.errors.has('size')
@@ -465,6 +466,8 @@ export default {
                         else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
                     })
             }
+            else
+                evnt.target.disabled = false
         },
 
         webModeChange() {

@@ -1,7 +1,8 @@
+using System;
+using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -10,29 +11,32 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly IHttpContextAccessor contextAccessor;
 
-        // DesignerUserCredentials is scoped service. current will contains credentials per scope.
-        private RestCredentials current = null;
-
         public DesignerUserCredentials(IHttpContextAccessor contextAccessor)
         {
             this.contextAccessor = contextAccessor;
         }
 
+        private static readonly AsyncLocal<RestCredentials> taskValue = new AsyncLocal<RestCredentials>();
+
         public virtual RestCredentials Get()
         {
-            if (current != null) return current;
-
+            if (taskValue.Value != null) 
+                return taskValue.Value;
+            
             var restCredentials = contextAccessor.HttpContext?.Session.GetString("designerCredentials");
-            if (restCredentials == null) return null;
-
-            current = JsonConvert.DeserializeObject<RestCredentials>(restCredentials);
-            return current;
+            if (restCredentials == null)
+                return null;
+            return JsonConvert.DeserializeObject<RestCredentials>(restCredentials);
         }
 
         public void Set(RestCredentials credentials)
         {
-            current = credentials;
             contextAccessor.HttpContext.Session.SetString("designerCredentials", JsonConvert.SerializeObject(credentials));
+        }
+
+        public void SetTaskCredentials(RestCredentials restCredentials)
+        {
+            taskValue.Value = restCredentials;
         }
     }
 }

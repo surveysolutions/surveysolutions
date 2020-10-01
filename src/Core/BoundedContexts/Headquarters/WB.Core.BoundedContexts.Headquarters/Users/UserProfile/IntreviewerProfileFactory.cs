@@ -215,8 +215,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
             var registeredDeviceCount = this.deviceSyncInfoRepository.GetRegisteredDeviceCount(userId);
             var trafficUsed = (await this.deviceSyncInfoRepository.GetTotalTrafficUsageForInterviewer(userId)).InKb();
+            var lastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(userId);
+            var totalSuccessSynchronizationCount =
+                this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(interviewer.Id);
+            var totalFailedSynchronizationCount =
+                this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(interviewer.Id);
+            var lastSynchronizationDate =
+                this.deviceSyncInfoRepository.GetLastSynchronizationDate(interviewer.Id);
+            var averageSyncSpeedBytesPerSecond =
+                this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(interviewer.Id);
+
             InterviewerProfileModel profile = 
-                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo, trafficUsed) as InterviewerProfileModel;
+                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), 
+                    interviewer, supervisor, lastSuccessDeviceInfo,
+                    lastFailedDeviceInfo, 
+                    totalSuccessSynchronizationCount,
+                    totalFailedSynchronizationCount,
+                    lastSynchronizationDate,
+                    averageSyncSpeedBytesPerSecond,
+                    trafficUsed) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -388,6 +405,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                 .GetLastSyncByInterviewersList(interviewersIds)
                 .ToDictionary(x => x.InterviewerId, x => x);
 
+            var deviceFailedSyncInfos = this.deviceSyncInfoRepository
+                .GetLastFailedByInterviewerIds(interviewersIds)
+                .ToDictionary(x => x.InterviewerId, x => x);
+
+            var syncStats = this.deviceSyncInfoRepository.GetSynchronizationsStats(interviewersIds);
+            var averageSynchronizationSpeed = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(interviewersIds);
+
             var trafficUsages = this.deviceSyncInfoRepository.GetInterviewersTrafficUsage(interviewersIds);
 
             return interviewerProfiles
@@ -395,15 +419,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                         new InterviewerProfileToExport(), 
                         interviewer, 
                         interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null,
-                    deviceSyncInfos.GetOrNull(interviewer.Id),
-                    trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0))
+                        deviceSyncInfos.GetOrNull(interviewer.Id),
+                        deviceFailedSyncInfos.GetOrNull(interviewer.Id),
+                        syncStats.GetOrNull(interviewer.Id)?.SuccessSynchronizationsCount ?? 0,
+                        syncStats.GetOrNull(interviewer.Id)?.FailedSynchronizationsCount ?? 0,
+                        syncStats.GetOrNull(interviewer.Id)?.LastSynchronizationDate,
+                        averageSynchronizationSpeed.ContainsKey(interviewer.Id)? averageSynchronizationSpeed[interviewer.Id] : (double?)null,
+                        trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0))
                 .OrderBy(x=> x.InterviewerName);
         }
 
+        //is used in bulk operations
+        //all db queries inside could affect performance
         private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile,
             HqUser interviewer, 
             HqUser supervisor, 
             DeviceSyncInfo lastSuccessDeviceInfo,
+            DeviceSyncInfo lastFailedDeviceInfo,
+            int totalSuccessSynchronizationCount,
+            int totalFailedSynchronizationCount,
+            DateTime? lastSynchronizationDate,
+            double? averageSyncSpeedBytesPerSecond,
             long trafficUsed)
         {
             var interviewerId = interviewer.Id;
@@ -417,24 +453,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                 supervisorName = supervisor.UserName;
             }
 
-            var lastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(interviewerId);
             var hasUpdateForInterviewerApp = false;
-
             if (lastSuccessDeviceInfo != null)
             {
                 int? interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
                 hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
                                              interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
             }
-
-            var totalSuccessSynchronizationCount =
-                this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(interviewerId);
-            var totalFailedSynchronizationCount =
-                this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(interviewerId);
-
-            var lastSynchronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(interviewerId);
-            var averageSyncSpeedBytesPerSecond =
-                this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(interviewerId);
 
             profile.Email = interviewer.Email;
             profile.IsArchived = interviewer.IsArchived;

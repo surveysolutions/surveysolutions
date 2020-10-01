@@ -179,7 +179,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     {
         public AssignmentDetails Assignment { get; set; }
         public ImportDataVerificationState VerificationStatus { get; set; }
-        public string? WebInterviewLink { get; set; }
+        public string WebInterviewLink { get; set; }
     }
 
     public class CreateAssignmentApiRequest
@@ -195,7 +195,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public int? Quantity { get; set; }
 
         /// <summary>
-        /// QuestionnaireId for assignemnt
+        /// QuestionnaireId for assignment
         /// </summary>
         [DataMember]
         [Required]
@@ -215,5 +215,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
         [DataMember] public string Comments { get; set; }
+        
+        /// <summary>
+        /// List of protected variables
+        /// </summary> 
+        [DataMember]
+        public List<string> ProtectedVariables { get; set; } = new List<string>();
     }
 }
