@@ -15,7 +15,7 @@ const routes = [
             questionnaireRev: route.params.questionnaireId,
             id: route.query.categoriesid,
             isCategory: true,
-            cascading: route.query.cascading
+            cascading: route.query.cascading == 'true'
         })
     },
     {
@@ -28,7 +28,7 @@ const routes = [
             questionnaireRev: route.params.questionnaireId,
             id: route.query.questionid,
             isCategory: false,
-            cascading: route.query.cascading
+            cascading: route.query.cascading == 'true'
         })
     },
     {
