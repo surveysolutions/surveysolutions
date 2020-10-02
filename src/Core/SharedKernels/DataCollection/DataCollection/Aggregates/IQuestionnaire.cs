@@ -322,5 +322,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetAttachmentNameForEntity(Guid entityId);
         IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
         Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
+        bool IsInsideRoster(Guid entityId);
     }
 }
