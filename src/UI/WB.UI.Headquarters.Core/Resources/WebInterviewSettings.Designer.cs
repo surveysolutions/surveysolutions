@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In this email template you can use %question_variable% placeholder in the text as an answer on question in interview. Question must be from top level of questionnaire..
+        ///   Looks up a localized string similar to In this email template you can use %question_variable% placeholder in the text as an answer on question in interview. Question must be from top level of questionnaire (not inside rosters)..
         /// </summary>
         public static string InterviewDataInsertInTextDescription {
             get {
