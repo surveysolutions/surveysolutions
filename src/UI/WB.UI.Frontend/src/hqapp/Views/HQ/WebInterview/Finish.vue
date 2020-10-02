@@ -4,8 +4,7 @@
         <h2>{{ $config.model.webSurveyHeader }}</h2>
         <div class="additional-info-block">
             <ul class="list-unstyled">
-                <li>
-                    {{ $config.model.finishInterview }}
+                <li v-html="finishInterviewHtml">
                 </li>
                 <li>
                     {{ $config.model.surveyName }}
@@ -40,8 +39,14 @@
 
 <script>
 
-export default {
+import marked from 'marked'
 
+export default {
+    computed: {
+        finishInterviewHtml() {
+            return marked.parseInline(this.$config.model.finishInterview)
+        },
+    },
 }
 
 </script>

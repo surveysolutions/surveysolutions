@@ -15,6 +15,7 @@
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
         "@microsoft/signalr": "^3.1.6",
+        "@toast-ui/vue-editor": "^2.4.0",
         "ag-grid-community": "^22.1.1",
         "ag-grid-vue": "^22.1.1",
         "append-query": "^2.1.0",
