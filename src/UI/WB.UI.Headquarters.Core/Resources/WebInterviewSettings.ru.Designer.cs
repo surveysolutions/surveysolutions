@@ -306,7 +306,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to В этом шаблоне письма вы можите использовать %question_variable% в тексте для подстановки значения ответа из интервью. Вопрос должет быть с верхнего уровня опросника..
+        ///   Looks up a localized string similar to В этом шаблоне письма Вы можете использовать %question_variable% в тексте для подстановки значения ответа из интервью. Только вопросы верхнего уровня могут быть использованы (не из ростеров)..
         /// </summary>
         public static string InterviewDataInsertInTextDescription {
             get {

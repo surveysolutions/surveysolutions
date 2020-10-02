@@ -62,14 +62,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var questionId = questionnaire.GetQuestionIdByVariable(variable);
                 if (questionId.HasValue)
                 {
-                    text = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
+                    if (!questionnaire.IsInsideRoster(questionId.Value))
+                        text = interview.GetAnswerAsString(new Identity(questionId.Value, RosterVector.Empty));
                 }
                 else if (questionnaire.HasVariable(variable))
                 {
                     var variableId = questionnaire.GetVariableIdByVariableName(variable);
-                    var treeVariable = interview.GetVariable(new Identity(variableId, RosterVector.Empty));
-                    if (treeVariable.HasValue)
-                        text = treeVariable.Value.ToString();
+                    if (!questionnaire.IsInsideRoster(variableId))
+                    {
+                        var treeVariable = interview.GetVariable(new Identity(variableId, RosterVector.Empty));
+                        if (treeVariable.HasValue)
+                            text = treeVariable.Value.ToString();
+                    }
                 }
                 
                 if (text == null)
