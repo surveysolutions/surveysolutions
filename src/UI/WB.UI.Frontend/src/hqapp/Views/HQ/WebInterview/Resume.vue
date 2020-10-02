@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="row-element mb-40">
-            <p class="font-bold">{{ $config.model.resumeInvitation }}</p>
+            <p v-html="resumeInvitation"></p>
         </div>
         <div class="additional-info-block">
             <ul class="list-unstyled">
@@ -25,11 +25,17 @@
 
 <script>
 
+import marked from 'marked'
 import StartOrResumeForm from './_StartOrResumeForm'
 
 export default {
     components: {
         StartOrResumeForm,
+    },
+    computed: {
+        resumeInvitation() {
+            return marked.parseInline(this.$config.model.resumeInvitation)
+        },
     },
 }
 
