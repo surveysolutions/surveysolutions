@@ -80,7 +80,7 @@ type Interview {
   assignmentId: Int
   "Key that was generated on interviewer tablet when interview was created for the first time"
   clientKey: String!
-  "Utc creation date"
+  "Date when interview was created"
   createdDate: DateTime!
   "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1"
   errorsCount: Int!
