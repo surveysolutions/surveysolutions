@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -97,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         protected abstract void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> answeredViewModels);
         protected abstract TInterviewAnswer[] GetAnsweredOptionsFromInterview(IStatefulInterview interview);
-        protected abstract void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel, TInterviewAnswer[] answers);
+        protected abstract void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel, TInterviewAnswer answer);
         protected abstract AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId);
         protected abstract IEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> GetOptions(IStatefulInterview interview);
         protected abstract bool IsInterviewAnswer(TInterviewAnswer interviewAnswer, TOptionValue optionValue);
@@ -144,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (ex.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     // reset to previous state
-                    await this.UpdateOptionsFromInterviewAsync();
+                    await this.UpdateOptionsFromInterviewAsync(true);
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
@@ -191,41 +192,48 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        private async Task UpdateOptionsFromInterviewAsync()
+        private async Task UpdateOptionsFromInterviewAsync(bool force = false)
         {
+            if (!force && throttlingModel.HasPendingAction)
+                return;
+            
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            await this.UpdateViewModelsByAnsweredOptionsAsync(answeredOptions);
+            await this.UpdateViewModelsByAnsweredOptionsAsync(answeredOptions, force);
         }
 
-        protected async Task UpdateViewModelsByAnsweredOptionsAsync(TInterviewAnswer[] answeredOptions)
+        protected async Task UpdateViewModelsByAnsweredOptionsAsync(TInterviewAnswer[] answeredOptions, bool force = false)
         {
-            answeredOptions = answeredOptions ?? Array.Empty<TInterviewAnswer>();
+            if (!force && throttlingModel.HasPendingAction)
+                return;
 
-            var filteredAnswers = this.FilterAnsweredOptions(answeredOptions).ToList();
+            Trace.WriteLine("UpdateOptions: " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            answeredOptions ??= Array.Empty<TInterviewAnswer>();
+
+            var filteredAnswers = this.FilterAnsweredOptions(answeredOptions);
 
             await this.InvokeOnMainThreadAsync(() =>
             {
                 foreach (var option in this.Options)
                 {
-                    var answeredOption = answeredOptions.Where(x => this.IsInterviewAnswer(x, option.Value)).Take(1)
-                        .ToArray();
+                    var answeredOption = answeredOptions
+                        .FirstOrDefault(x => this.IsInterviewAnswer(x, option.Value));
 
                     this.SetAnswerToOptionViewModel(option, answeredOption);
 
                     if (this.areAnswersOrdered)
-                        option.CheckedOrder = option.Checked && answeredOption.Any()
-                            ? filteredAnswers.IndexOf(answeredOption[0]) + 1
+                        option.CheckedOrder = option.Checked && answeredOption != null
+                            ? Array.IndexOf(filteredAnswers, answeredOption) + 1
                             : (int?) null;
 
                     if (this.maxAllowedAnswers.HasValue)
-                        option.CanBeChecked = option.Checked || filteredAnswers.Count < this.maxAllowedAnswers;
+                        option.CanBeChecked = option.Checked || filteredAnswers.Length < this.maxAllowedAnswers;
                 }
 
                 if (this.maxAllowedAnswers.HasValue)
                 {
-                    this.bottomInfoViewModel.MaxAnswersCountMessage = filteredAnswers.Count < this.maxAllowedAnswers
+                    this.bottomInfoViewModel.MaxAnswersCountMessage = filteredAnswers.Length < this.maxAllowedAnswers
                         ? string.Empty 
                         : string.Format(UIResources.Interview_MaxAnswersCountSelected, this.maxAllowedAnswers.Value);
                 }
@@ -243,7 +251,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public virtual async Task HandleAsync(AnswersRemoved @event)
         {
-            if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
+            if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))
+                || throttlingModel.HasPendingAction)
+                return;
 
             await this.UpdateOptionsFromInterviewAsync();
         }

@@ -62,11 +62,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override AnsweredYesNoOption[] GetAnsweredOptionsFromInterview(IStatefulInterview interview)
         => interview.GetYesNoQuestion(this.Identity).GetAnswer()?.ToAnsweredYesNoOptions().ToArray();
 
-        protected override void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<decimal> optionViewModel, AnsweredYesNoOption[] answers)
+        protected override void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<decimal> optionViewModel, AnsweredYesNoOption answer)
         {
             var yesNoViewModel = (CategoricalYesNoOptionViewModel) optionViewModel;
-
-            var answer = answers.FirstOrDefault(x => x.OptionValue == optionViewModel.Value);
 
             yesNoViewModel.Checked = answer?.Yes == true;
             yesNoViewModel.NoSelected = answer?.Yes == false;
@@ -90,7 +88,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task HandleAsync(YesNoQuestionAnswered @event)
         {
-            if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
+            if (@event.QuestionId != this.Identity.Id 
+                || !@event.RosterVector.Identical(this.Identity.RosterVector)
+                || throttlingModel.HasPendingAction) 
+                return;
+            
             await this.UpdateViewModelsByAnsweredOptionsAsync(@event.AnsweredOptions);
         }
 
