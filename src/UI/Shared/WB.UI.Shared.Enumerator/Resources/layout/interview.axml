@@ -1,54 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                           xmlns:local="http://schemas.android.com/apk/res-auto"
-                                           android:id="@+id/rootLayout"
-                                           android:layout_width="match_parent"
-                                           android:layout_height="match_parent"
-                                           android:fitsSystemWindows="true"
-                                           local:MvxBind="StatusBarColorByInterviewStatus Status;">
-    <LinearLayout android:layout_width="match_parent"
+                                        xmlns:local="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/rootLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fitsSystemWindows="true"
+                                        local:MvxBind="StatusBarColorByInterviewStatus Status;">
+  <LinearLayout android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="vertical">
+    <LinearLayout style="@style/Interview_BreadCrumbsContainer"
+                  local:MvxBind="ColorByInterviewStatus Status;">
+      <FlowLayout orienation="horizontal"
+                  android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:orientation="vertical">
-        <LinearLayout style="@style/Interview_BreadCrumbsContainer"
-                      local:MvxBind="ColorByInterviewStatus Status;">
-            <FlowLayout orienation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        local:MvxBind="ItemsSource BreadCrumbs.Items;"
-                        local:MvxItemTemplate="@layout/interview_breadcrumb_item">
-            </FlowLayout>
-        </LinearLayout>
-        <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
-                                           android:layout_width="match_parent"
-                                           android:layout_height="wrap_content"
-                                           android:background="?attr/colorPrimary"
-                                           android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                                           local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                                           local:MvxBind="ColorByInterviewStatus Status;">
-            <TextView style="@style/InterviewToolbarTitle"
-                      local:MvxBind="Html CurrentStage.Stage.Name.PlainText"/>
-        </androidx.appcompat.widget.Toolbar>
+                  local:MvxBind="ItemsSource BreadCrumbs.Items;"
+                  local:MvxItemTemplate="@layout/interview_breadcrumb_item">
+      </FlowLayout>
+    </LinearLayout>
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:background="?attr/colorPrimary"
+                                       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                       local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       local:MvxBind="ColorByInterviewStatus Status;">
+      <TextView style="@style/InterviewToolbarTitle"
+                local:MvxBind="Html CurrentStage.Stage.Name.PlainText" />
+    </androidx.appcompat.widget.Toolbar>
 
-        <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-                     local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;"/>
-        <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:isScrollContainer="true"
-                android:measureAllChildren="true"
-        >
-            <FrameLayout
-                    android:animateLayoutChanges="false"
-                    android:id="@+id/interviewCurrentStepFrame"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:descendantFocusability="beforeDescendants"
-                    android:focusableInTouchMode="true"
-                    local:MvxBind="CurrentScreen CurrentStage;"
-            />
-        </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
-    <LinearLayout style="@style/Interview_Sidebar">
-        <include layout="@layout/interview_left_side_panel"/>
-    </LinearLayout>
+    <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+                 local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;" />
+    <FrameLayout
+      android:animateLayoutChanges="false"
+      android:id="@+id/interviewCurrentStepFrame"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:descendantFocusability="beforeDescendants"
+      android:focusableInTouchMode="true"
+      local:MvxBind="CurrentScreen CurrentStage;"
+      />
+    
+  </LinearLayout>
+  <LinearLayout style="@style/Interview_Sidebar">
+    <include layout="@layout/interview_left_side_panel" />
+  </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
