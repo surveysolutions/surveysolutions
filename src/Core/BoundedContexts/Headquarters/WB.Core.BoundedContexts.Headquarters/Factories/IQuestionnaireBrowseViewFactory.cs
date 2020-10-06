@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Factories
     public interface IQuestionnaireBrowseViewFactory
     {
         QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input);
-        QuestionnaireBrowseItem GetByVariableName(string variable, long version);
         QuestionnaireBrowseItem GetById(QuestionnaireIdentity identity);
         List<QuestionnaireBrowseItem> GetByIds(params QuestionnaireIdentity[] identities);
         IEnumerable<QuestionnaireIdentity> GetAllQuestionnaireIdentities();

@@ -14,21 +14,21 @@ namespace WB.UI.Headquarters.Resources {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Assignments {
+    public class Assignments_ru {
         
         private static System.Resources.ResourceManager resourceMan;
         
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Assignments() {
+        internal Assignments_ru() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Assignments", typeof(Assignments).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Assignments_ru", typeof(Assignments_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -75,12 +75,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string AssignmentsSelected_plural {
-            get {
-                return ResourceManager.GetString("AssignmentsSelected_plural", resourceCulture);
-            }
-        }
-        
         public static string SizeExplanation {
             get {
                 return ResourceManager.GetString("SizeExplanation", resourceCulture);
@@ -117,12 +111,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string NumberOfAssignmentsAffected_plural {
-            get {
-                return ResourceManager.GetString("NumberOfAssignmentsAffected_plural", resourceCulture);
-            }
-        }
-        
         public static string Size {
             get {
                 return ResourceManager.GetString("Size", resourceCulture);
@@ -132,30 +120,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string SelectResponsible {
             get {
                 return ResourceManager.GetString("SelectResponsible", resourceCulture);
-            }
-        }
-        
-        public static string ResponsibleRequired {
-            get {
-                return ResourceManager.GetString("ResponsibleRequired", resourceCulture);
-            }
-        }
-        
-        public static string WebModeNonInterviewer {
-            get {
-                return ResourceManager.GetString("WebModeNonInterviewer", resourceCulture);
-            }
-        }
-        
-        public static string WebModeReassignToNonInterviewer {
-            get {
-                return ResourceManager.GetString("WebModeReassignToNonInterviewer", resourceCulture);
-            }
-        }
-        
-        public static string WebModeReassignToNonInterviewer_plural {
-            get {
-                return ResourceManager.GetString("WebModeReassignToNonInterviewer_plural", resourceCulture);
             }
         }
         
@@ -177,18 +141,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string InterviewsNeeded {
-            get {
-                return ResourceManager.GetString("InterviewsNeeded", resourceCulture);
-            }
-        }
-        
-        public static string CreateInterview {
-            get {
-                return ResourceManager.GetString("CreateInterview", resourceCulture);
-            }
-        }
-        
         public static string UpdatedAt {
             get {
                 return ResourceManager.GetString("UpdatedAt", resourceCulture);
@@ -207,6 +159,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CreateInterview {
+            get {
+                return ResourceManager.GetString("CreateInterview", resourceCulture);
+            }
+        }
+        
         public static string Questionnaire {
             get {
                 return ResourceManager.GetString("Questionnaire", resourceCulture);
@@ -216,6 +174,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string AllAssignments {
             get {
                 return ResourceManager.GetString("AllAssignments", resourceCulture);
+            }
+        }
+        
+        public static string InterviewsNeeded {
+            get {
+                return ResourceManager.GetString("InterviewsNeeded", resourceCulture);
             }
         }
         
@@ -291,18 +255,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string SelectQuestionnaire {
-            get {
-                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
-            }
-        }
-        
-        public static string UpgradeDescription {
-            get {
-                return ResourceManager.GetString("UpgradeDescription", resourceCulture);
-            }
-        }
-        
         public static string SelectQuestionnaireToUpgradeFrom {
             get {
                 return ResourceManager.GetString("SelectQuestionnaireToUpgradeFrom", resourceCulture);
@@ -315,9 +267,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string UpgradeProgressTitle {
+        public static string SelectQuestionnaire {
             get {
-                return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
             }
         }
         
@@ -327,21 +279,33 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string UpgradeProgressTitle {
+            get {
+                return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+            }
+        }
+        
         public static string Stop {
             get {
                 return ResourceManager.GetString("Stop", resourceCulture);
             }
         }
         
-        public static string UpgradePreparation {
+        public static string UpgradeDescription {
             get {
-                return ResourceManager.GetString("UpgradePreparation", resourceCulture);
+                return ResourceManager.GetString("UpgradeDescription", resourceCulture);
             }
         }
         
         public static string UpgradeCancelled {
             get {
                 return ResourceManager.GetString("UpgradeCancelled", resourceCulture);
+            }
+        }
+        
+        public static string UpgradePreparation {
+            get {
+                return ResourceManager.GetString("UpgradePreparation", resourceCulture);
             }
         }
         
@@ -375,15 +339,15 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string ReceivedByTablet_All {
+        public static string ReceivedByTablet {
             get {
-                return ResourceManager.GetString("ReceivedByTablet_All", resourceCulture);
+                return ResourceManager.GetString("ReceivedByTablet", resourceCulture);
             }
         }
         
-        public static string ReceivedByTablet_Received {
+        public static string ReceivedByTablet_All {
             get {
-                return ResourceManager.GetString("ReceivedByTablet_Received", resourceCulture);
+                return ResourceManager.GetString("ReceivedByTablet_All", resourceCulture);
             }
         }
         
@@ -393,27 +357,27 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string ReceivedByTablet_Received {
+            get {
+                return ResourceManager.GetString("ReceivedByTablet_Received", resourceCulture);
+            }
+        }
+        
         public static string Tooltip_Filter_Received {
             get {
                 return ResourceManager.GetString("Tooltip_Filter_Received", resourceCulture);
             }
         }
         
-        public static string ReceivedByTablet {
+        public static string AssignTo {
             get {
-                return ResourceManager.GetString("ReceivedByTablet", resourceCulture);
+                return ResourceManager.GetString("AssignTo", resourceCulture);
             }
         }
         
         public static string CreatingNewAssignment {
             get {
                 return ResourceManager.GetString("CreatingNewAssignment", resourceCulture);
-            }
-        }
-        
-        public static string AssignTo {
-            get {
-                return ResourceManager.GetString("AssignTo", resourceCulture);
             }
         }
         
@@ -426,18 +390,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string ErrorToCreateAssignment {
             get {
                 return ResourceManager.GetString("ErrorToCreateAssignment", resourceCulture);
-            }
-        }
-        
-        public static string IsAudioRecordingEnabled {
-            get {
-                return ResourceManager.GetString("IsAudioRecordingEnabled", resourceCulture);
-            }
-        }
-        
-        public static string Tooltip_Table_IsAudioRecordingEnabled {
-            get {
-                return ResourceManager.GetString("Tooltip_Table_IsAudioRecordingEnabled", resourceCulture);
             }
         }
         
@@ -456,6 +408,18 @@ namespace WB.UI.Headquarters.Resources {
         public static string AudioRecordingExplanation {
             get {
                 return ResourceManager.GetString("AudioRecordingExplanation", resourceCulture);
+            }
+        }
+        
+        public static string IsAudioRecordingEnabled {
+            get {
+                return ResourceManager.GetString("IsAudioRecordingEnabled", resourceCulture);
+            }
+        }
+        
+        public static string Tooltip_Table_IsAudioRecordingEnabled {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_IsAudioRecordingEnabled", resourceCulture);
             }
         }
         
@@ -585,6 +549,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
         public static string MultipleAssignmentsClose {
             get {
                 return ResourceManager.GetString("MultipleAssignmentsClose", resourceCulture);
@@ -594,12 +564,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string SingleAssignmentCloseConfirm {
             get {
                 return ResourceManager.GetString("SingleAssignmentCloseConfirm", resourceCulture);
-            }
-        }
-        
-        public static string Close {
-            get {
-                return ResourceManager.GetString("Close", resourceCulture);
             }
         }
         
@@ -615,12 +579,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Action_Archived {
-            get {
-                return ResourceManager.GetString("Action_Archived", resourceCulture);
-            }
-        }
-        
         public static string DetailsComments {
             get {
                 return ResourceManager.GetString("DetailsComments", resourceCulture);
@@ -633,15 +591,39 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string EnterComments {
+            get {
+                return ResourceManager.GetString("EnterComments", resourceCulture);
+            }
+        }
+        
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        public static string Action_Archived {
+            get {
+                return ResourceManager.GetString("Action_Archived", resourceCulture);
+            }
+        }
+        
         public static string Action_AudioRecordingChanged {
             get {
                 return ResourceManager.GetString("Action_AudioRecordingChanged", resourceCulture);
             }
         }
         
-        public static string EnterComments {
+        public static string Action_AudioRecordingChanged_False {
             get {
-                return ResourceManager.GetString("EnterComments", resourceCulture);
+                return ResourceManager.GetString("Action_AudioRecordingChanged_False", resourceCulture);
+            }
+        }
+        
+        public static string Action_AudioRecordingChanged_True {
+            get {
+                return ResourceManager.GetString("Action_AudioRecordingChanged_True", resourceCulture);
             }
         }
         
@@ -663,81 +645,15 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Action_ReceivedByTablet {
-            get {
-                return ResourceManager.GetString("Action_ReceivedByTablet", resourceCulture);
-            }
-        }
-        
-        public static string Action_UnArchived {
-            get {
-                return ResourceManager.GetString("Action_UnArchived", resourceCulture);
-            }
-        }
-        
-        public static string Action_Reassigned {
-            get {
-                return ResourceManager.GetString("Action_Reassigned", resourceCulture);
-            }
-        }
-        
-        public static string Action_WebModeChanged {
-            get {
-                return ResourceManager.GetString("Action_WebModeChanged", resourceCulture);
-            }
-        }
-        
-        public static string Action {
-            get {
-                return ResourceManager.GetString("Action", resourceCulture);
-            }
-        }
-        
-        public static string Actor {
-            get {
-                return ResourceManager.GetString("Actor", resourceCulture);
-            }
-        }
-        
-        public static string Date {
-            get {
-                return ResourceManager.GetString("Date", resourceCulture);
-            }
-        }
-        
-        public static string Action_AudioRecordingChanged_False {
-            get {
-                return ResourceManager.GetString("Action_AudioRecordingChanged_False", resourceCulture);
-            }
-        }
-        
-        public static string Action_AudioRecordingChanged_True {
-            get {
-                return ResourceManager.GetString("Action_AudioRecordingChanged_True", resourceCulture);
-            }
-        }
-        
-        public static string Action_WebModeChanged_False {
-            get {
-                return ResourceManager.GetString("Action_WebModeChanged_False", resourceCulture);
-            }
-        }
-        
-        public static string Action_WebModeChanged_True {
-            get {
-                return ResourceManager.GetString("Action_WebModeChanged_True", resourceCulture);
-            }
-        }
-        
         public static string Action_QuantityChanged_To {
             get {
                 return ResourceManager.GetString("Action_QuantityChanged_To", resourceCulture);
             }
         }
         
-        public static string Action_QuantityChanged_To_Unlimited {
+        public static string Action_Reassigned {
             get {
-                return ResourceManager.GetString("Action_QuantityChanged_To_Unlimited", resourceCulture);
+                return ResourceManager.GetString("Action_Reassigned", resourceCulture);
             }
         }
         
@@ -753,9 +669,51 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string Action_ReceivedByTablet {
+            get {
+                return ResourceManager.GetString("Action_ReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        public static string Action_UnArchived {
+            get {
+                return ResourceManager.GetString("Action_UnArchived", resourceCulture);
+            }
+        }
+        
+        public static string Action_WebModeChanged {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged", resourceCulture);
+            }
+        }
+        
+        public static string Action_WebModeChanged_False {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged_False", resourceCulture);
+            }
+        }
+        
+        public static string Action_WebModeChanged_True {
+            get {
+                return ResourceManager.GetString("Action_WebModeChanged_True", resourceCulture);
+            }
+        }
+        
+        public static string Actor {
+            get {
+                return ResourceManager.GetString("Actor", resourceCulture);
+            }
+        }
+        
         public static string AssignmentHistory {
             get {
                 return ResourceManager.GetString("AssignmentHistory", resourceCulture);
+            }
+        }
+        
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
@@ -777,9 +735,33 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string Action_QuantityChanged_To_Unlimited {
+            get {
+                return ResourceManager.GetString("Action_QuantityChanged_To_Unlimited", resourceCulture);
+            }
+        }
+        
         public static string StartWebInterview {
             get {
                 return ResourceManager.GetString("StartWebInterview", resourceCulture);
+            }
+        }
+        
+        public static string ResponsibleRequired {
+            get {
+                return ResourceManager.GetString("ResponsibleRequired", resourceCulture);
+            }
+        }
+        
+        public static string WebModeNonInterviewer {
+            get {
+                return ResourceManager.GetString("WebModeNonInterviewer", resourceCulture);
+            }
+        }
+        
+        public static string WebModeReassignToNonInterviewer {
+            get {
+                return ResourceManager.GetString("WebModeReassignToNonInterviewer", resourceCulture);
             }
         }
         

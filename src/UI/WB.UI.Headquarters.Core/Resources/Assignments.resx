@@ -487,4 +487,7 @@
   <data name="StartWebInterview" xml:space="preserve">
     <value>Start web interview</value>
   </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+      <value>Assignment cannot be finished. It has web mode enabled, while questionnaire has web collection mode disabled</value>
+  </data>  
 </root>
