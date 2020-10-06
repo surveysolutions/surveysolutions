@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
+        private readonly IWebInterviewConfigProvider WebInterviewConfigProvider;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IHeadquartersEventStore hqEventStore;
         private readonly IUserViewFactory userViewFactory;
@@ -31,13 +33,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
             IQuestionnaireStorage questionnaireStorage,
             IHeadquartersEventStore hqEventStore,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory, 
+            IWebInterviewConfigProvider webInterviewConfigProvider)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.summaries = summaries;
             this.questionnaireStorage = questionnaireStorage;
             this.hqEventStore = hqEventStore ?? throw new ArgumentNullException(nameof(hqEventStore));
             this.userViewFactory = userViewFactory;
+            WebInterviewConfigProvider = webInterviewConfigProvider;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
@@ -90,6 +94,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     InterviewsCount = gr.Count()
                 }).ToList());
 
+            var questionnaires = assignments.Select(x => x.QuestionnaireId).Distinct();
+            var webConfigs = questionnaires.Select(x => this.WebInterviewConfigProvider.Get(x))
+                .ToList(); 
+            
             var result = new AssignmentsWithoutIdentifingData
             {
                 Page = input.Page,
@@ -102,6 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         CreatedAtUtc = x.CreatedAtUtc,
                         ResponsibleId = x.ResponsibleId,
                         UpdatedAtUtc = x.UpdatedAtUtc,
+                        WebModeEnabledOnQuestionnaire = webConfigs.First(w => w.QuestionnaireId.Equals(x.QuestionnaireId)).Started,
                         Quantity = x.Quantity ?? -1,
                         InterviewsCount = counts.FirstOrDefault(c => c.Key == x.Id)?.InterviewsCount ?? 0,
                         Id = x.Id,

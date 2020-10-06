@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -107,6 +110,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(1));
         }
 
-        IFixture NewFixture() => Create.Other.AutoFixture();
+        IFixture NewFixture()
+        {
+            var autoFixture = Create.Other.AutoFixture();
+            var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
+            webInterviewConfigProvider.Setup(x => x.Get(It.IsAny<QuestionnaireIdentity>()))
+                .Returns((QuestionnaireIdentity arg) => new WebInterviewConfig
+                {
+                    QuestionnaireId = arg
+                });
+            
+            autoFixture.Register(() => webInterviewConfigProvider.Object);
+            return autoFixture;
+        }
     }
 }
