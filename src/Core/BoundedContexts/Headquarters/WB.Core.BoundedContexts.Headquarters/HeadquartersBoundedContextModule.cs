@@ -454,6 +454,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<RejectInterviewCommand>()
                     .SkipValidationFor<HqRejectInterviewCommand>()
                     .SkipValidationFor<UnapproveByHeadquartersCommand>()
+                    .SkipValidationFor<ApproveInterviewCommand>()
+                    .SkipValidationFor<HqApproveInterviewCommand>()
             );
 
             return Task.CompletedTask;
