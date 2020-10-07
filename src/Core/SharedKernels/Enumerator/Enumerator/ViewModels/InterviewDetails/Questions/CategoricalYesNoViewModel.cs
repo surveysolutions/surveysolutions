@@ -70,6 +70,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             yesNoViewModel.NoSelected = answer?.Yes == false;
         }
 
+        protected override void RemoveAnswerFromOptionViewModel(CategoricalMultiOptionViewModel<decimal> optionViewModel)
+        {
+            var yesNoViewModel = (CategoricalYesNoOptionViewModel) optionViewModel;
+            yesNoViewModel.Checked = false;
+            yesNoViewModel.NoSelected = false;
+        }
+
         protected override AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId)
         => new AnswerYesNoQuestion(interviewId, userId, this.Identity.Id, this.Identity.RosterVector, this.selectedOptionsToSave);
 

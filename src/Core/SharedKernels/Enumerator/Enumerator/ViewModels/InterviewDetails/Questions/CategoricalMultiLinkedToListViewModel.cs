@@ -50,6 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<int> optionViewModel, int answer)
             => optionViewModel.Checked = answer == optionViewModel.Value;
 
+        protected override void RemoveAnswerFromOptionViewModel(CategoricalMultiOptionViewModel<int> optionViewModel)
+            => optionViewModel.Checked = false;
+
         protected override AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId)
             => new AnswerMultipleOptionsQuestionCommand(interviewId, userId, this.Identity.Id, this.Identity.RosterVector, this.selectedOptionsToSave);
 

@@ -99,6 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected abstract void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> answeredViewModels);
         protected abstract TInterviewAnswer[] GetAnsweredOptionsFromInterview(IStatefulInterview interview);
         protected abstract void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel, TInterviewAnswer answer);
+        protected abstract void RemoveAnswerFromOptionViewModel(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel);
         protected abstract AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId);
         protected abstract IEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> GetOptions(IStatefulInterview interview);
         protected abstract bool IsInterviewAnswer(TInterviewAnswer interviewAnswer, TOptionValue optionValue);
@@ -217,11 +218,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 foreach (var option in this.Options)
                 {
-                    var answeredOption = answeredOptions
-                        .FirstOrDefault(x => this.IsInterviewAnswer(x, option.Value));
-
-                    this.SetAnswerToOptionViewModel(option, answeredOption);
-
+                    if (TryGetAnswer(answeredOptions, option.Value, out TInterviewAnswer answeredOption))
+                        this.SetAnswerToOptionViewModel(option, answeredOption);
+                    else
+                        this.RemoveAnswerFromOptionViewModel(option);
+                    
                     if (this.areAnswersOrdered)
                         option.CheckedOrder = option.Checked && answeredOption != null
                             ? Array.IndexOf(filteredAnswers, answeredOption) + 1
@@ -241,6 +242,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.HasOptions = this.Options.Any();
                 this.UpdateBorders();
             });
+        }
+
+        
+        private bool TryGetAnswer(TInterviewAnswer[] answeredOptions, TOptionValue optionValue, out TInterviewAnswer interviewAnswer)
+        {
+            foreach (var option in answeredOptions) 
+            {
+                if (IsInterviewAnswer(option, optionValue))
+                {
+                    interviewAnswer = option;
+                    return true;
+                }
+            }
+
+            interviewAnswer = default;
+            return false;
         }
 
         protected virtual void UpdateBorders()
