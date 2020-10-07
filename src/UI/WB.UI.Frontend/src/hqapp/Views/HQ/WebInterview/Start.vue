@@ -4,7 +4,6 @@
             <h2>{{ $config.model.welcomeText }}</h2>
             <p v-if="$config.model.description"
                 v-html="description">
-                {{$config.model.description}}
             </p>
         </div>
         <StartOrResumeForm :buttonTitle="$config.model.startNewButton"
