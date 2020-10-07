@@ -53,6 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<RosterVector> optionViewModel, RosterVector answer)
             => optionViewModel.Checked = answer == optionViewModel.Value;
 
+        protected override void RemoveAnswerFromOptionViewModel(CategoricalMultiOptionViewModel<RosterVector> optionViewModel)
+            => optionViewModel.Checked = false;
+        
         protected override AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId)
         => new AnswerMultipleOptionsLinkedQuestionCommand(
                 interviewId,
