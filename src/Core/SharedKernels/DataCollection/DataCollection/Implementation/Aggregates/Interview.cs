@@ -504,7 +504,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(QuestionsDisabled @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.Tree.GetQuestion(questionIdentity)?.Disable();
+                this.Tree.GetQuestion(questionIdentity).Disable();
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.DisableQuestions(@event.Questions);
