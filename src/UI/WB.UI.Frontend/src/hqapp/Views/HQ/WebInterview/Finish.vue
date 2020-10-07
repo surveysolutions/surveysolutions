@@ -3,13 +3,11 @@
     <div class="centered-box-table">
         <h2>{{ $config.model.webSurveyHeader }}</h2>
         <div class="additional-info-block">
-            <ul class="list-unstyled">
-                <li v-html="finishInterviewHtml">
-                </li>
-                <li>
-                    {{ $config.model.surveyName }}
-                </li>
-            </ul>
+            <p v-html="finishInterviewHtml">
+            </p>
+            <p>
+                {{ $config.model.surveyName }}
+            </p>
         </div>
         <div class="additional-info-block">
             <ul class="list-unstyled">
