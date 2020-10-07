@@ -186,7 +186,8 @@ namespace WB.Tests.Integration.InterviewTests
         protected static Interview SetupInterviewWithExpressionStorage(
             AssemblyLoadContext assemblyLoadContext,
             QuestionnaireDocument questionnaireDocument,
-            IEnumerable<object> events = null)
+            IEnumerable<object> events = null,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
             questionnaireDocument.IsUsingExpressionStorage = true;
@@ -196,7 +197,7 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
-            var optionRepo = Create.Storage.QuestionnaireQuestionOptionsRepository();
+            var optionRepo = optionsRepository ?? Create.Storage.QuestionnaireQuestionOptionsRepository();
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null, null, optionRepo);
             
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
@@ -215,9 +216,9 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument)
+        protected static Interview SetupInterview(AssemblyLoadContext assemblyLoadContext, QuestionnaireDocument questionnaireDocument, IQuestionOptionsRepository optionsRepository = null)
         {
-            return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, null);
+            return SetupInterviewWithExpressionStorage(assemblyLoadContext, questionnaireDocument, null, optionsRepository);
         }
 
         protected static Interview SetupInterview(
