@@ -207,11 +207,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.permissions.AssureHasPermissionOrThrow<MicrophonePermission>().ConfigureAwait(false);
-                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>();
+                await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
                 this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
-                this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
+
+                await InvokeOnMainThreadAsync(() =>
+                    this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText));
             }
             catch (MissingPermissionsException e) when (e.PermissionType == typeof(MicrophonePermission))
             {
