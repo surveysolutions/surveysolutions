@@ -182,6 +182,8 @@ namespace WB.UI.Headquarters.Controllers
             model.Started = config.Started;
             model.UseCaptcha = config.UseCaptcha;
             model.SingleResponse = config.SingleResponse;
+            model.EmailOnComplete = config.EmailOnComplete;
+            model.AttachAnswersInEmail = config.AttachAnswersInEmail;
 
             return View(model);
         }
@@ -195,6 +197,7 @@ namespace WB.UI.Headquarters.Controllers
                 case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ReminderNoResponseEmailMessage;
                 case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ReminderPartialResponseEmailMessage;
                 case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.RejectEmailMessage;
+                case EmailTextTemplateType.CompleteInterviewEmail: return WebInterviewSettings.CompleteEmailMessage;
                 default:
                     throw new ArgumentException("Unknown email template type "+ type.ToString());
             }
@@ -202,12 +205,12 @@ namespace WB.UI.Headquarters.Controllers
 
         private QuestionnaireBrowseItem FindQuestionnaire(string id)
         {
-            if (!QuestionnaireIdentity.TryParse(id, out var questionnarieId))
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireId))
             {
                 return null;
             }
 
-            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnarieId);
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireId);
             return questionnaire;
         }
     }
@@ -245,6 +248,8 @@ namespace WB.UI.Headquarters.Controllers
         public bool Started { get; set; }
         public bool SingleResponse { get; set; }
         public long QuestionnaireVersion { get; set; }
+        public bool EmailOnComplete { get; set; }
+        public bool AttachAnswersInEmail { get; set; }
     }
 
     public class EmailTextTemplateViewModel
