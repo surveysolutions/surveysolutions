@@ -247,6 +247,7 @@
 
                     <div class="action-container">
                         <button
+                            :class="{'shake' : buttonAnimated}"
                             type="button"
                             @click="create($event)"
                             class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
@@ -260,6 +261,28 @@
             :interviewId="interviewId" />
     </main>
 </template>
+
+<style scoped>
+
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+</style>
 
 <script>
 import Vue from 'vue'
@@ -319,6 +342,7 @@ Validator.extend('responsibleShouldBeInterviewer', {
 export default {
     data() {
         return {
+            buttonAnimated: false,
             assignToQuestion: {
                 id: 'assignTo',
                 acceptAnswer: true,
@@ -481,15 +505,21 @@ export default {
             }
             else {
                 evnt.target.disabled = false
+                self.buttonAnimated = true
 
-                const firstField = Object.keys(this.errors.collect())[0]
+                setTimeout(() => {
+                    self.buttonAnimated = false
 
-                this.$nextTick(() => {
-                    var elToScroll = self.$refs[`ref_${firstField}`]
-                    if (elToScroll)
-                        elToScroll.$el.scrollIntoView()
-                    return
-                })
+                    const firstField = Object.keys(self.errors.collect())[0]
+
+                    self.$nextTick(() => {
+                        var elToScroll = self.$refs[`ref_${firstField}`]
+                        if (elToScroll)
+                            elToScroll.$el.scrollIntoView()
+                        return
+                    })
+
+                }, 1000)
             }
         },
 
