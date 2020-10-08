@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
@@ -180,6 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<InterviewExportedCommentariesDenormalizer>();
             registry.Bind<CumulativeChartDenormalizer>();
             registry.Bind<AssignmentDenormalizer>();
+            registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
@@ -238,6 +240,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
+            registry.RegisterDenormalizer<CompletedEmailDenormalizer>();
             registry.Bind<InterviewCacheWarmupPreProcessor>();
             registry.Bind<InterviewSummaryErrorsCountPostProcessor>();
             registry.Bind<InterviewReceivedByInterviewerCommandValidator>();
@@ -283,6 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IEncryptionService, RsaEncryptionService>();
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
+            registry.Bind<ICompletedEmailsQueue , CompletedEmailsQueue >();
 
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
             registry.Bind<IAuditLogService, AuditLogService>();
@@ -343,6 +347,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentsVerificationJob>();
             registry.Bind<SendRemindersJob>();
             registry.Bind<DeleteQuestionnaireJob>();
+            registry.Bind<SendInterviewCompletedJob>();
+            registry.Bind<SendInterviewCompletedTask>();
+            registry.Bind<SendInterviewCompletedJob>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -351,6 +358,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterFunctional<CumulativeChartDenormalizer>();
             registry.RegisterFunctional<AssignmentDenormalizer>();
+            registry.Register<CompletedEmailDenormalizer>();
             
             CommandRegistry
                 .Setup<Questionnaire>()
