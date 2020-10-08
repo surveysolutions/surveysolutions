@@ -9,6 +9,7 @@ export default {
             // { id: id, ...}
         ],
         interview: {},
+        isLoaded: false,
     },
 
     actions: {
