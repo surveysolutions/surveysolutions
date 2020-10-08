@@ -2,7 +2,14 @@
     <main class="web-interview web-interview-for-supervisor">
         <div class="container-fluid">
             <div class="row">
-                <div class="unit-section complete-section">
+                <div v-if="!isLoaded"
+                    class="loading">
+                    <div style="margin-top:90px">
+                        {{ $t("WebInterviewUI.LoadingWait") }}
+                    </div>
+                </div>
+                <div class="unit-section complete-section"
+                    v-else>
                     <div class="wrapper-info error">
                         <div class="container-info">
                             <h2>
@@ -18,8 +25,8 @@
                         :id="entity.identity"
                         fetchOnMount
                         noComments="true"></component>
-
                     <wb-question
+                        ref="ref_newResponsibleId"
                         :question="assignToQuestion"
                         noValidation="true"
                         :noComments="true"
@@ -50,6 +57,7 @@
                     </wb-question>
 
                     <wb-question
+                        ref="ref_size"
                         :question="sizeQuestion"
                         noValidation="true"
                         noComments="true"
@@ -117,6 +125,7 @@
                     </wb-question>
 
                     <wb-question
+                        ref="ref_email"
                         :question="emailQuestion"
                         noValidation="true"
                         noComments="true"
@@ -147,6 +156,7 @@
                     </wb-question>
 
                     <wb-question
+                        ref="ref_password"
                         :question="passwordQuestion"
                         noValidation="true"
                         noComments="true"
@@ -407,6 +417,9 @@ export default {
         entities() {
             return this.$store.state.takeNew.takeNew.entities
         },
+        isLoaded() {
+            return this.$store.state.takeNew.takeNew.isLoaded
+        },
         questionnaireTitle() {
             return this.$store.state.takeNew.takeNew.interview.questionnaireTitle
         },
@@ -466,8 +479,18 @@ export default {
                         else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
                     })
             }
-            else
+            else {
                 evnt.target.disabled = false
+
+                const firstField = Object.keys(this.errors.collect())[0]
+
+                this.$nextTick(() => {
+                    var elToScroll = self.$refs[`ref_${firstField}`]
+                    if (elToScroll)
+                        elToScroll.$el.scrollIntoView()
+                    return
+                })
+            }
         },
 
         webModeChange() {
