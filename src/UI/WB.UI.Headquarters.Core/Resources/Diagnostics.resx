@@ -106,6 +106,9 @@
   <data name="ServerMetrics" xml:space="preserve">
     <value>Server metrics</value>
   </data>
+  <data name="WaitingForMetrics" xml:space="preserve">
+    <value>Calculating metrics</value>
+  </data>
   <data name="hq_baseurl_check" xml:space="preserve">
     <value>BaseUrl configuration check</value>
   </data>
