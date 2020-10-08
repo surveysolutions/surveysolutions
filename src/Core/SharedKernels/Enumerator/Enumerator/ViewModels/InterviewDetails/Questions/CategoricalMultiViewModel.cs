@@ -86,7 +86,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public virtual async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
-            if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
+            if (@event.QuestionId != this.Identity.Id 
+                || !@event.RosterVector.Identical(this.Identity.RosterVector)
+                || throttlingModel.HasPendingAction) 
+                return;
 
             await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
         }
