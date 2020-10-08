@@ -72,8 +72,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<int>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => x.Value).ToArray();
         
-        protected override void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<int> optionViewModel, int[] answers)
-            => optionViewModel.Checked = answers.Contains(optionViewModel.Value);
+        protected override void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<int> optionViewModel, int answer)
+            => optionViewModel.Checked = answer == optionViewModel.Value;
+
+        protected override void RemoveAnswerFromOptionViewModel(CategoricalMultiOptionViewModel<int> optionViewModel)
+            => optionViewModel.Checked = false;
 
         protected override AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId) =>
             new AnswerMultipleOptionsQuestionCommand(interviewId, userId, this.Identity.Id, this.Identity.RosterVector, this.selectedOptionsToSave);
@@ -83,7 +86,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public virtual async Task HandleAsync(MultipleOptionsQuestionAnswered @event)
         {
-            if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
+            if (@event.QuestionId != this.Identity.Id 
+                || !@event.RosterVector.Identical(this.Identity.RosterVector)
+                || throttlingModel.HasPendingAction) 
+                return;
 
             await this.UpdateViewModelsByAnsweredOptionsAsync(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
         }
