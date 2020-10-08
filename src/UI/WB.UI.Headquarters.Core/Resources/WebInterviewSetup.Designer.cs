@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterviewSetup {
@@ -57,6 +57,15 @@ namespace WB.UI.Headquarters.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attach Pdf with answers to email.
+        /// </summary>
+        public static string AttachAnswersToCompleteEmail {
+            get {
+                return ResourceManager.GetString("AttachAnswersToCompleteEmail", resourceCulture);
             }
         }
         
@@ -102,6 +111,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string DownloadTitle {
             get {
                 return ResourceManager.GetString("DownloadTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send email after complete web interview.
+        /// </summary>
+        public static string EmailOnComplete {
+            get {
+                return ResourceManager.GetString("EmailOnComplete", resourceCulture);
             }
         }
         
@@ -394,6 +412,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        public static string WebInterviewUserMessages_ResumeButton_Descr {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_ResumeButton_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text shown to returning user when interview is resumed. %QUESTIONNAIRE% is substituted with questionnaire name.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeInvitation_Descr {
@@ -408,6 +435,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebInterviewUserMessages_ResumeWelcome_Descr {
             get {
                 return ResourceManager.GetString("WebInterviewUserMessages_ResumeWelcome_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string WebInterviewUserMessages_StartNewButton_Descr {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_StartNewButton_Descr", resourceCulture);
             }
         }
         

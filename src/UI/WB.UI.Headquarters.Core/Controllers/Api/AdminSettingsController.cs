@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
@@ -204,10 +205,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public IActionResult UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
         {
+            if (RegionEndpoint.EnumerableAllRegions.All(r => r.SystemName != settings.AwsRegion))
+                return Ok(new {sucess = false, error = Settings.EmailProvider_AwsRegion_Unknown });
+            
             var currentsSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
 
-            
             if (settings.Provider != (currentsSettings?.Provider ?? EmailProvider.None))
             {
                 auditLog.EmailProviderWasChanged((currentsSettings?.Provider ?? EmailProvider.None).ToString(), settings.Provider.ToString());

@@ -103,7 +103,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 try
                 {
                     await Policy.Handle<InitializationException>(e => e.IsTransient)
-                        .WaitAndRetryAsync(10, i => TimeSpan.FromSeconds(i),
+                        .WaitAndRetryForeverAsync(i => TimeSpan.FromSeconds(Math.Max(i, 5)),
                             (exception, span) => status.Run())
                         .ExecuteAsync(async () =>
                         {

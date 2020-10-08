@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         public string SenderAddress{ get; set; }
         public string AwsAccessKeyId{ get; set; }
         public string AwsSecretAccessKey{ get; set; }
+        public string AwsRegion{ get; set; } = "us-east-1";
         public string SendGridApiKey{ get; set; }
         public string SenderName{ get; set; }
         public string ReplyAddress{ get; set; }
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         string SenderAddress{ get; }
         string AwsAccessKeyId{ get; }
         string AwsSecretAccessKey{ get; }
+        string AwsRegion{ get; }
         string ReplyAddress { get; set; }
     }
 

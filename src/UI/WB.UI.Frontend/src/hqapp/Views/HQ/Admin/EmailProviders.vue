@@ -232,6 +232,33 @@
                                                 class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                                         </div>
                                     </div>
+
+                                    <div
+                                        class="form-group"
+                                        :class="{ 'has-error': errors.has('settings.awsRegion') }">
+                                        <label
+                                            class="h5">{{ $t('Settings.EmailProvider_AwsRegion')}}</label>
+                                        <div
+                                            class="field"
+                                            :class="{ 'answered': awsRegion }">
+                                            <select
+                                                v-validate="'required'"
+                                                data-vv-as="AWS region"
+                                                name="awsRegion"
+                                                id="awsRegion"
+                                                v-model="awsRegion"
+                                                class="form-control"                                                >
+                                                <option :key="awsRegion.key"
+                                                    :value="awsRegion.key"
+                                                    v-for="awsRegion in $config.model.awsRegions"
+                                                    v-html="awsRegion.value" />
+                                            </select>
+                                            <span
+                                                class="gray-text help-block">{{ $t('Settings.EmailProvider_AwsRegionHelp')}}</span>
+                                            <span
+                                                class="help-block">{{ errors.first('settings.awsRegion') }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -395,6 +422,7 @@ export default {
                 self.senderAddress = settings.senderAddress
                 self.awsAccessKeyId = settings.awsAccessKeyId
                 self.awsSecretAccessKey = settings.awsSecretAccessKey
+                self.awsRegion = settings.awsRegion
                 self.sendGridApiKey = settings.sendGridApiKey
                 self.senderName = settings.senderName
                 self.replyAddress = settings.replyAddress

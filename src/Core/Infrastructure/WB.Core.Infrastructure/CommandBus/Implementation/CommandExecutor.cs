@@ -98,7 +98,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            bool canPromotePrototype = false;
+            bool mustPromotePrototype = false;
 
             if (aggregate == null)
             {
@@ -112,7 +112,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             else if (prototypeService.IsPrototype(aggregateId))
             {
-                canPromotePrototype = true;
+                mustPromotePrototype = true;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -137,7 +137,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             catch (OnEventApplyException)
             {
-                // evict AR only if exception occured on event apply
+                // evict AR only if exception occurred on event apply
                 aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
             }
@@ -153,6 +153,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 this.eventBus.PublishCommittedEvents(committedEvents);
 
+                if (mustPromotePrototype)
+                {
+                    promoterService.MaterializePrototypeIfRequired(aggregateId);
+                }
+
                 foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
                 {
                     postProcessor.Invoke(aggregate, command);
@@ -162,11 +167,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
-            }
-
-            if (canPromotePrototype)
-            {
-                promoterService.MaterializePrototypeIfRequired(aggregateId);
             }
         }
 
