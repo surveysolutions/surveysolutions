@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
@@ -46,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             this.pathResolver = pathResolver;
         }
 
-        public Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody)
+        public Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody, List<EmailAttachment> attachments)
         {
             if (string.IsNullOrWhiteSpace(settings.EmailFolder))
                 throw new ArgumentException();
@@ -61,6 +63,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var guid = Guid.NewGuid();
             File.WriteAllText(Path.Combine(directory, guid + ".html"), htmlBody);
             File.WriteAllText(Path.Combine(directory, guid + ".txt"), textBody);
+
+            if (attachments != null)
+            {
+                foreach (var attachment in attachments)
+                {
+                    var attachmentPath = Path.Combine(directory, guid.ToString(), attachment.Filename);
+                    var bytes = attachment.Content;
+                    File.WriteAllBytes(attachmentPath, bytes);
+                }
+            }
+            
             return Task.FromResult(guid.ToString());
         }
 

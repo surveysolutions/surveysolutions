@@ -12,7 +12,10 @@
 @Model.Password
 }
 
+@if (!string.IsNullOrWhiteSpace(Model.Link))
+{
 <a href="@Model.Link">@Model.LinkText</a>
+}
 
 
 @Model.SenderName. @Model.Address
