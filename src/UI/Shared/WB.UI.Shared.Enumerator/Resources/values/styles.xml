@@ -60,6 +60,8 @@
     <item name="android:smoothScrollbar">true</item>
     <item name="android:scrollingCache">false</item>
     <item name="android:animationCache">false</item>
+    <item name="android:paddingBottom">@dimen/Interview_BottomPadding</item>
+    <item name="android:clipToPadding">false</item>
   </style>
 
 
