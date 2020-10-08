@@ -22,14 +22,14 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Diagnostics {
+    public class Diagnostics_ru {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Diagnostics() {
+        internal Diagnostics_ru() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Diagnostics", typeof(Diagnostics).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Diagnostics.ru", typeof(Diagnostics_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database connection check.
+        ///   Looks up a localized string similar to Проверка соединения с базой данных.
         /// </summary>
         public static string database_connection_check {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successful connection to Database.
+        ///   Looks up a localized string similar to Успешное соединение с Базой Данных.
         /// </summary>
         public static string database_connection_check_Healthy {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error connection to Database: {0}.
+        ///   Looks up a localized string similar to Ошибка соединения с Базой Данных: {0}.
         /// </summary>
         public static string database_connection_check_Unhealty {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Embedded Export Service Host.
+        ///   Looks up a localized string similar to Встроенная служба Экспорта.
         /// </summary>
         public static string embedded_export_service_check {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Service is not running.
+        ///   Looks up a localized string similar to Встроенный служба Экспорта не работает.
         /// </summary>
         public static string embedded_export_service_check_Degraded {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Service is running.
+        ///   Looks up a localized string similar to Встроенная служба Экспорта работает.
         /// </summary>
         public static string embedded_export_service_check_Healty {
             get {
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Service check.
+        ///   Looks up a localized string similar to Проверка соединения с Экспорт Сервисом.
         /// </summary>
         public static string export_service_check {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export service at {0} responded with version: v{1}.
+        ///   Looks up a localized string similar to Экспорт сервис по адресу {0} ответил с версией v{1}.
         /// </summary>
         public static string export_service_check_Healthy {
             get {
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Service connectivity check.
+        ///   Looks up a localized string similar to Проверка доступности Headquarters Экспорт сервисом.
         /// </summary>
         public static string export_service_connectivity_check {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to Export Service at {0}.
+        ///   Looks up a localized string similar to Нет соединения с Экспорт сервисом по адресу {0}.
         /// </summary>
         public static string export_service_connectivity_check_Degraded {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export service at {0} responded with status {1}.
+        ///   Looks up a localized string similar to Экспорт сервис по адресу {0} ответил {1}.
         /// </summary>
         public static string export_service_connectivity_check_Healthy {
             get {
@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export service at {0} responded with status {1}.
+        ///   Looks up a localized string similar to Экспорт сервис по адресу {0} ответил с ошибкой: {1}.
         /// </summary>
         public static string export_service_connectivity_check_Unhealthy {
             get {
@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Health status: {{ status }}.
+        ///   Looks up a localized string similar to Статус проверки здоровья: {{ status }}.
         /// </summary>
         public static string HealthCheckStatus {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BaseUrl configuration check.
+        ///   Looks up a localized string similar to Проверка конфигурации BaseUrl.
         /// </summary>
         public static string hq_baseurl_check {
             get {
@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters configured with Headquarters:BaseUrl: {0} is different from the current URL in browser address bar. This may cause issues with Email links and Export Service functionality.
+        ///   Looks up a localized string similar to Конфигурация Headquarters:BaseUrl &apos;{0}&apos; не совпадает с текущим адресом в адресной строке браузера. Это может привести с ошибке работы Экспорт сервиса и отсылке приглашений на email.
         /// </summary>
         public static string hq_baseurl_check_Degraded {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters configured with Headquarters:BaseUrl: {0} is same as current Url in browser address bar..
+        ///   Looks up a localized string similar to Конфигурация Headquarters:BaseUrl {0} совпадает с текущим адресом в адресной строке браузера.
         /// </summary>
         public static string hq_baseurl_check_Healthy {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server metrics.
+        ///   Looks up a localized string similar to Метрики сервера.
         /// </summary>
         public static string ServerMetrics {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is {0} Unexpected broken packages detected.
+        ///   Looks up a localized string similar to Обнаружены {0} пакеты(ов) с ошибками.
         /// </summary>
         public static string UnexpectedBrokenPackages {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Waiting for health check results.
+        ///   Looks up a localized string similar to Ожидаем ответ от о состоянии здоровья сервиса.
         /// </summary>
         public static string WaitForHealthcheck {
             get {
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculating metrics.
+        ///   Looks up a localized string similar to Вычисление метрик.
         /// </summary>
         public static string WaitingForMetrics {
             get {
