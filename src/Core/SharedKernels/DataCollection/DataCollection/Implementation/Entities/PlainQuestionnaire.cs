@@ -1276,6 +1276,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             throw new QuestionnaireException($"Cannot return id of referenced question because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
         }
 
+        public bool IsInsideRoster(Guid entityId)
+        {
+            var entity = GetEntityOrThrow(entityId);
+            var parent = entity.GetParent();
+            while (parent != null)
+            {
+                if (entity is IGroup @group && @group.IsRoster)
+                    return true;
+                
+                entity = parent;
+                parent = entity.GetParent();
+            }
+
+            return false;
+        }
+
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);

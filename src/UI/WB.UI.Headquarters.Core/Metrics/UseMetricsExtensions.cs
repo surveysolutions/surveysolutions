@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Prometheus;
+using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -21,7 +22,7 @@ namespace WB.UI.Headquarters.Metrics
 
             services.AddHostedService<IDashboardStatisticsService, DashboardStatisticsService>();
             
-            services.AddTransient<IOnDemandCollector, BrokenPackagesStatsCollector>();
+            services.AddTransient<IOnDemandCollector, DatabaseStatsCollector>();
             services.AddTransient<IOnDemandCollector, NHibernateStatsCollector>();
             services.AddTransient<IOnDemandCollector, ThreadPoolStatsCollector>();
         }

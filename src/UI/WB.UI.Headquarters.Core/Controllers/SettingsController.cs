@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Amazon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +59,9 @@ namespace WB.UI.Headquarters.Controllers
                     UpdateSettings = Url.Action("UpdateEmailProviderSettings", "AdminSettings"),
                     GetSettings = Url.Action("EmailProviderSettings", "AdminSettings"),
                     SendTestEmail = Url.Action("SendTestEmail", "AdminSettings"),
-                }
+                },
+                AwsRegions = RegionEndpoint.EnumerableAllRegions.Select(s => 
+                    new KeyValuePair<string,string>(s.SystemName, s.DisplayName)).ToList()
             });
         }
 
