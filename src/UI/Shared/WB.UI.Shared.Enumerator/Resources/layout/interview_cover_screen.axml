@@ -78,7 +78,8 @@
 
         <LinearLayout style="@style/Interview_Entity" 
                       android:orientation="vertical"
-                      android:layout_marginTop="@dimen/Interview_Group_margin_top">
+                      android:layout_marginTop="@dimen/Interview_Group_margin_top"
+                    android:paddingBottom="@dimen/Interview_BottomPadding">
             
             <Button
                 style="@style/Interview_Group_Navigation_Button"
