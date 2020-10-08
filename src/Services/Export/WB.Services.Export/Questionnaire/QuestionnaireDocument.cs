@@ -218,5 +218,7 @@ namespace WB.Services.Export.Questionnaire
             databaseStructure ??= new QuestionnaireDatabaseStructure(this);
 
         public bool IsDeleted { get; set; }
+
+        public string? DefaultLanguageName { get; set; }
     }
 }
