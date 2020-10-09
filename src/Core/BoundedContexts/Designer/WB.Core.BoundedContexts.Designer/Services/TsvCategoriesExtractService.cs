@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     internal class TsvCategoriesExtractService : ICategoriesExtractService
     {
-        private ICategoriesVerifier verifier;
+        private readonly ICategoriesVerifier verifier;
 
         public TsvCategoriesExtractService(ICategoriesVerifier verifier)
         {
