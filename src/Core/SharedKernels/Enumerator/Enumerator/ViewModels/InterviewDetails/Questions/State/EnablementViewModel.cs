@@ -29,33 +29,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public EnablementViewModel(IStatefulInterviewRepository interviewRepository, IViewModelEventRegistry eventRegistry, 
             IQuestionnaireStorage questionnaireRepository)
         {
-            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
-            if (eventRegistry == null) throw new ArgumentNullException(nameof(eventRegistry));
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
-
-            this.interviewRepository = interviewRepository;
-            this.eventRegistry = eventRegistry;
-            this.questionnaireRepository = questionnaireRepository;
+            this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
+            this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
+            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
         }
 
-        public string InterviewId { get; private set; }
+        private string InterviewId { get; set; }
     
         private Identity entityIdentity;
 
+        private bool initiated = false;
+        
         public void Init(string interviewId, Identity entityIdentity)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.InterviewId = interviewId;
-            this.entityIdentity = entityIdentity;
+            this.InterviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            this.entityIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             var interview = this.interviewRepository.Get(this.InterviewId);
+            
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
 
             this.UpdateSelfFromModel();
             this.eventRegistry.Subscribe(this, interviewId);
+
+            initiated = true;
         }
 
         public bool HideIfDisabled { get; private set; }
@@ -77,7 +75,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool GetEnablementFromInterview()
         {
+            if(!initiated)
+                throw new InvalidOperationException("Model was not initiated.");
             var interview = this.interviewRepository.Get(this.InterviewId);
+            
+            if(interview == null)
+                throw new InvalidOperationException($"Interview was not found for interview [{this.InterviewId}]");
+            
             return interview.IsEnabled(this.entityIdentity);
         }
 
