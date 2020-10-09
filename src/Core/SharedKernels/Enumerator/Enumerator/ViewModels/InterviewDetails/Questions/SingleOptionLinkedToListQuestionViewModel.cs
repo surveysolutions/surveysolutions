@@ -52,7 +52,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
             this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
 
-            this.questionState = questionStateViewModel;
             this.throttlingModel = throttlingModel;
             this.questionnaireRepository = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.throttlingModel.Init(SaveAnswer);
@@ -60,7 +59,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Guid linkedToQuestionId;
         private CovariantObservableCollection<SingleOptionQuestionOptionViewModel> options;
-        private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options
         {
@@ -278,7 +276,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var result = new CompositeCollection<ICompositeEntity>();
                 this.optionsTopBorderViewModel =
-                    new OptionBorderViewModel(this.questionState, true)
+                    new OptionBorderViewModel(this.QuestionState, true)
                     {
                         HasOptions = HasOptions
                     };
@@ -293,7 +291,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
                     
                 this.optionsBottomBorderViewModel =
-                    new OptionBorderViewModel(this.questionState, false)
+                    new OptionBorderViewModel(this.QuestionState, false)
                     {
                         HasOptions = HasOptions
                     };
@@ -385,10 +383,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var option = new SingleOptionQuestionOptionViewModel
             {
-                Enablement = this.questionState.Enablement,
+                Enablement = this.QuestionState.Enablement,
                 Title = optionValue.Text,
                 Value = optionValue.Value,
-                QuestionState = this.questionState
+                QuestionState = this.QuestionState
             };
 
             option.BeforeSelected += this.OptionSelected;
