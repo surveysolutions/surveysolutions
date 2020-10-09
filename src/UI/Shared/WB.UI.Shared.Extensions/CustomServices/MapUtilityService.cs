@@ -56,8 +56,7 @@ namespace WB.UI.Shared.Extensions.CustomServices
                         await newRasterLayer.LoadAsync().ConfigureAwait(false);
 
                         //add error display
-                        //
-                        if (newRasterLayer.SpatialReference.IsProjected)
+                        if (newRasterLayer.LoadError == null)
                         {
                             return new Basemap(newRasterLayer);
                         }
