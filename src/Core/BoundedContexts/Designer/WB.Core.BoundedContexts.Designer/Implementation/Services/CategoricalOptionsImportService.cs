@@ -12,7 +12,6 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using MissingFieldException = CsvHelper.MissingFieldException;
