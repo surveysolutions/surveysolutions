@@ -1,11 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.Vtester" android:versionCode="101" android:versionName="1.0.1">
-	<application android:label="Tester" android:icon="@drawable/icon" android:largeHeap="true" android:theme="@style/AppTheme" android:allowBackup="false">
-		<provider android:name="androidx.core.content.FileProvider" android:authorities="org.worldbank.solutions.Vtester.fileprovider" android:exported="false" android:grantUriPermissions="true">
-			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+          android:installLocation="preferExternal" 
+          package="org.worldbank.solutions.Vtester" 
+          android:versionCode="101" 
+          android:versionName="1.0.1">
+	<application android:label="Tester" 
+                 android:icon="@drawable/icon" 
+                 android:largeHeap="true" 
+                 android:theme="@style/AppTheme" 
+                 android:allowBackup="false" 
+                 android:requestLegacyExternalStorage="true">
+		<provider android:name="androidx.core.content.FileProvider" 
+                  android:authorities="org.worldbank.solutions.Vtester.fileprovider" 
+                  android:exported="false" 
+                  android:grantUriPermissions="true">
+			<meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                       android:resource="@xml/file_paths"></meta-data>
 		</provider>
-		<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="e77a488dd76b43009a378716f5b2faa7" />
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
+		<meta-data android:name="net.hockeyapp.android.appIdentifier" 
+                   android:value="e77a488dd76b43009a378716f5b2faa7" />
+		<meta-data android:name="com.google.android.geo.API_KEY" 
+                   android:value="@string/google_maps_api_key" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
