@@ -46,5 +46,5 @@
   <dimen name="Interview_Audio_Dialog_Visualizer_Max_Width">150dp</dimen>
   <dimen name="Interview_Assign_To_Interviewer_List_Max_Width">250dp</dimen>
   <dimen name="Interview_Audio_Dialog_Visualizer_Dot_Width">7dp</dimen>
-
+  <dimen name="Interview_BottomPadding">250dp</dimen>
 </resources>
