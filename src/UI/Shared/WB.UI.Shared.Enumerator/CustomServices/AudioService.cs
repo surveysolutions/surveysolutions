@@ -164,38 +164,43 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private void Record(string audioFilePath, int maxDuration)
         {
-            this.ReleaseAudioRecorder();
-
-            this.recorder = new MediaRecorder();
-
-            this.recorder.SetAudioSource(AudioSource.Mic);
-            this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
-            this.recorder.SetAudioEncoder(AudioEncoder.Aac);
-            this.recorder.SetAudioChannels(1);
-            this.recorder.SetAudioSamplingRate(44100);
-            this.recorder.SetAudioEncodingBitRate(64000);
-            this.recorder.SetOutputFile(audioFilePath);
-            this.recorder.SetMaxDuration(maxDuration);
-
-            this.audioRecorderInfoListener = new AudioRecorderInfoListener();
-            this.audioRecorderInfoListener.OnMaxDurationReached += this.AudioRecorderInfoListenerOnMaxDurationReached;
-            this.recorder.SetOnInfoListener(audioRecorderInfoListener);
-
-            try
-            {
-                this.recorder.Prepare();
-                this.recorder.Start();
-                this.logger.Info($"Started recording to file {audioFilePath}");
-            }
-            catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
+            lock (this.lockObject)
             {
                 this.ReleaseAudioRecorder();
-                throw new AudioException(AudioExceptionType.Io, "Could not write audio file", ex);
-            }
-            catch (Exception ex) when (ex.GetSelfOrInnerAs<IllegalStateException>() != null)
-            {
-                this.ReleaseAudioRecorder();
-                throw new AudioException(AudioExceptionType.Unhandled, "Unexpected exception during start audio recording", ex);
+
+                this.recorder = new MediaRecorder();
+
+                this.recorder.SetAudioSource(AudioSource.Mic);
+                this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
+                this.recorder.SetAudioEncoder(AudioEncoder.Aac);
+                this.recorder.SetAudioChannels(1);
+                this.recorder.SetAudioSamplingRate(44100);
+                this.recorder.SetAudioEncodingBitRate(64000);
+                this.recorder.SetOutputFile(audioFilePath);
+                this.recorder.SetMaxDuration(maxDuration);
+
+                this.audioRecorderInfoListener = new AudioRecorderInfoListener();
+                this.audioRecorderInfoListener.OnMaxDurationReached +=
+                    this.AudioRecorderInfoListenerOnMaxDurationReached;
+                this.recorder.SetOnInfoListener(audioRecorderInfoListener);
+
+                try
+                {
+                    this.recorder.Prepare();
+                    this.recorder.Start();
+                    this.logger.Info($"Started recording to file {audioFilePath}");
+                }
+                catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
+                {
+                    this.ReleaseAudioRecorder();
+                    throw new AudioException(AudioExceptionType.Io, "Could not write audio file", ex);
+                }
+                catch (Exception ex) when (ex.GetSelfOrInnerAs<IllegalStateException>() != null)
+                {
+                    this.ReleaseAudioRecorder();
+                    throw new AudioException(AudioExceptionType.Unhandled,
+                        "Unexpected exception during start audio recording", ex);
+                }
             }
         }
 
@@ -215,12 +220,26 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             if (this.recorder == null)
                 return;
-
-            this.recorder.Stop();
-            this.duration.Stop();
-            this.ReleaseAudioRecorder();
-            this.OnMaxDurationReached -= AudioAudit_OnMaxDurationReached;
-            this.logger.Info($"Stopped recording");
+            
+            lock (this.lockObject)
+            {
+                try
+                {
+                    this.recorder.Stop();
+                }
+                catch (Exception ex) when (ex.GetSelfOrInnerAs<IllegalStateException>() != null)
+                {
+                    throw new AudioException(AudioExceptionType.Unhandled,
+                        "Unexpected exception during stop audio recording", ex);
+                }
+                finally
+                {
+                    this.duration.Stop();
+                    this.ReleaseAudioRecorder();
+                    this.OnMaxDurationReached -= AudioAudit_OnMaxDurationReached;
+                    this.logger.Info($"Stopped recording");
+                }
+            }
         }
 
         public void StopAuditRecording()
