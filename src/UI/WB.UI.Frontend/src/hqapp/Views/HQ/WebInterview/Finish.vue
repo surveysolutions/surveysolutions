@@ -42,7 +42,7 @@ import marked from 'marked'
 export default {
     computed: {
         finishInterviewHtml() {
-            return marked.parseInline(this.$config.model.finishInterview)
+            return marked(this.$config.model.finishInterview)
         },
     },
 }
