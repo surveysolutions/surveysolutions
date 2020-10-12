@@ -20,11 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool HasOptions
         {
             get => this.hasOptions;
-            set
-            {
-                this.hasOptions = value; 
-                this.RaisePropertyChanged();
-            }
+            set => this.SetProperty(ref this.hasOptions, value);
         }
 
         public IQuestionStateViewModel QuestionState { get; set; }
