@@ -1135,8 +1135,6 @@ import marked from 'marked'
 import {map, isNil} from 'lodash'
 import { escape } from 'lodash'
 import mdEditor from '../../../components/MdEditor'
-import _sanitizeHtml  from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 export default {
     components: {mdEditor: mdEditor},
@@ -1394,7 +1392,7 @@ export default {
             this.$validator.reset('additionalSettings')
         },
         previewHtml(text) {
-            var html = marked(this.previewText(text), { sanitizer: sanitizeHtml, xhtml: true})
+            var html = marked(this.previewText(text))
             return html
         },
         previewText(text) {
