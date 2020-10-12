@@ -8,7 +8,10 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using NHibernate.Criterion;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Tests.Abc;
 using WB.UI.Designer.Controllers;
 
 
@@ -32,25 +35,22 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream && pf.FileName == "data.csv");
-            controller.questionWithOptionsViewModel = new QuestionnaireController.EditOptionsViewModel
-            (
-                questionnaireId : questionnaireId.FormatGuid(),
-                questionId : questionId,
-                options:new QuestionnaireCategoricalOption[0]
-            );
             BecauseOf();
         }
 
-        private void BecauseOf() => view = controller.EditOptions(postedFile) as ViewResult;
+        private void BecauseOf() => view =  controller.EditOptions(new QuestionnaireRevision(Id.g1), Id.g2, postedFile).Value;
 
-        [NUnit.Framework.Test] public void should_return_list_with_1_option () =>
-            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.Count().Should().Be(1);
+        [NUnit.Framework.Test]
+        public void should_return_no_errors() =>
+           view.Errors.Count.Should().Be(0);
 
-        [NUnit.Framework.Test] public void should_return_first_option_with_value_equals_1 () =>
-            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.First().Value.Should().Be(1);
+        [NUnit.Framework.Test]
+        public void should_add_one_option() =>
+            view.Options.Length.Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
-            ((QuestionnaireController.EditOptionsViewModel)view.Model).Options.First().Title.Should().Be("Street 1");
+        [NUnit.Framework.Test]
+        public void should_add_one_option_with_expected_value() =>
+            view.Options.Single().Title.Should().Equals("First");
 
         [NUnit.Framework.OneTimeTearDown]
         public void cleanup()
@@ -61,6 +61,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private static QuestionnaireController controller;
         private static IFormFile postedFile;
         private static Stream stream = new MemoryStream();
-        private static ViewResult view;
+        private static QuestionnaireController.EditOptionsResponse view;
     }
 }

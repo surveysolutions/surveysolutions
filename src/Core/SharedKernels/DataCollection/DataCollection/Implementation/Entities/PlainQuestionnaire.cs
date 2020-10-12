@@ -433,10 +433,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private ReadOnlyCollection<int> GetMultiSelectAnswerOptionsAsValuesImpl(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-            CheckShouldQestionProvideOptions(question, questionId);
-
-            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, null, null)
+            return GetOptionsForQuestion(questionId, null, null, null)
                 .Select(x => x.Value).ToReadOnlyCollection();
         }
 

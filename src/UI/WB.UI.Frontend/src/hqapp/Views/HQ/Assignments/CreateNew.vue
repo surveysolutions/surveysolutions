@@ -2,7 +2,14 @@
     <main class="web-interview web-interview-for-supervisor">
         <div class="container-fluid">
             <div class="row">
-                <div class="unit-section complete-section">
+                <div v-if="!isLoaded"
+                    class="loading">
+                    <div style="margin-top:90px">
+                        {{ $t("WebInterviewUI.LoadingWait") }}
+                    </div>
+                </div>
+                <div class="unit-section complete-section"
+                    v-else>
                     <div class="wrapper-info error">
                         <div class="container-info">
                             <h2>
@@ -18,8 +25,8 @@
                         :id="entity.identity"
                         fetchOnMount
                         noComments="true"></component>
-
                     <wb-question
+                        ref="ref_newResponsibleId"
                         :question="assignToQuestion"
                         noValidation="true"
                         :noComments="true"
@@ -50,6 +57,7 @@
                     </wb-question>
 
                     <wb-question
+                        ref="ref_size"
                         :question="sizeQuestion"
                         noValidation="true"
                         noComments="true"
@@ -117,6 +125,7 @@
                     </wb-question>
 
                     <wb-question
+                        ref="ref_email"
                         :question="emailQuestion"
                         noValidation="true"
                         noComments="true"
@@ -147,6 +156,7 @@
                     </wb-question>
 
                     <wb-question
+                        ref="ref_password"
                         :question="passwordQuestion"
                         noValidation="true"
                         noComments="true"
@@ -237,6 +247,7 @@
 
                     <div class="action-container">
                         <button
+                            :class="{'shake' : buttonAnimated}"
                             type="button"
                             @click="create($event)"
                             class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
@@ -250,6 +261,28 @@
             :interviewId="interviewId" />
     </main>
 </template>
+
+<style scoped>
+
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+</style>
 
 <script>
 import Vue from 'vue'
@@ -309,6 +342,7 @@ Validator.extend('responsibleShouldBeInterviewer', {
 export default {
     data() {
         return {
+            buttonAnimated: false,
             assignToQuestion: {
                 id: 'assignTo',
                 acceptAnswer: true,
@@ -407,6 +441,9 @@ export default {
         entities() {
             return this.$store.state.takeNew.takeNew.entities
         },
+        isLoaded() {
+            return this.$store.state.takeNew.takeNew.isLoaded
+        },
         questionnaireTitle() {
             return this.$store.state.takeNew.takeNew.interview.questionnaireTitle
         },
@@ -466,8 +503,24 @@ export default {
                         else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
                     })
             }
-            else
+            else {
                 evnt.target.disabled = false
+                self.buttonAnimated = true
+
+                setTimeout(() => {
+                    self.buttonAnimated = false
+
+                    const firstField = Object.keys(self.errors.collect())[0]
+
+                    self.$nextTick(() => {
+                        var elToScroll = self.$refs[`ref_${firstField}`]
+                        if (elToScroll)
+                            elToScroll.$el.scrollIntoView()
+                        return
+                    })
+
+                }, 1000)
+            }
         },
 
         webModeChange() {

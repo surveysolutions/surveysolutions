@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -131,31 +132,48 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public void Store(Guid questionnaireId, Guid categoriesId, Stream file, CategoriesFileType fileType)
         {
             if (categoriesId == null) throw new ArgumentNullException(nameof(categoriesId));
-            if (file == null) throw new ArgumentNullException(nameof(file));
-
-            var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
-
+            
             try
             {
-                var categoriesRows = extractService.Extract(file);
-
-                this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select((x, i) => new CategoriesInstance
-                {
-                    SortIndex = i,
-                    QuestionnaireId = questionnaireId,
-                    CategoriesId = categoriesId,
-                    Value = int.Parse(x.Id),
-                    Text = x.Text,
-                    ParentId = string.IsNullOrEmpty(x.ParentId)
-                        ? (int?) null
-                        : int.Parse(x.ParentId)
-                }));
+                var categoriesRows = GetRowsFromFile(file, fileType);
+                this.Store(questionnaireId, categoriesId, categoriesRows);
 
             }
             catch (Exception e) when (e is NullReferenceException || e is InvalidDataException || e is COMException)
             {
                 throw new InvalidFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
             }
+        }
+
+        public List<CategoriesRow> GetRowsFromFile(Stream file, CategoriesFileType fileType)
+        {
+            if (file == null) throw new ArgumentNullException(nameof(file));
+
+            var extractService = this.categoriesExtractFactory.GetExtractService(fileType);
+
+            try
+            {
+                return extractService.Extract(file);
+            }
+            catch (Exception e) when (e is NullReferenceException || e is InvalidDataException || e is COMException)
+            {
+                throw new InvalidFileException(ExceptionMessages.CategoriesCantBeExtracted, e);
+            }
+        }
+
+        public void Store(Guid questionnaireId, Guid categoriesId, List<CategoriesRow> categoriesRows)
+        {
+            this.dbContext.CategoriesInstances.AddRange(categoriesRows.Select((x, i) => new CategoriesInstance
+            {
+                SortIndex = i,
+                QuestionnaireId = questionnaireId,
+                CategoriesId = categoriesId,
+                Value = int.Parse(x.Id),
+                Text = x.Text,
+                ParentId = string.IsNullOrEmpty(x.ParentId)
+                    ? (int?)null
+                    : int.Parse(x.ParentId)
+            }));
         }
     }
 }

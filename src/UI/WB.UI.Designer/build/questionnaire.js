@@ -76,12 +76,18 @@ const scripts = () =>
     );
 
 const inject = () =>
-  injectSections(src("questionnaire/index.cshtml"), dist, {
+  injectSections(src(["questionnaire/index.cshtml"]), dist, {
     quiet: true,
     
     //addPrefix: PRODUCTION ? "~" : "~/src",
     transform(filepath, file) {
-      if (filepath.endsWith(".js") && filepath.indexOf("libs") < 0) {
+
+      if (filepath.endsWith(".js") && filepath.indexOf("cat__") >= 0) {
+        var fileName = filepath.slice(0, -3).substring(1);
+        var varName = fileName.split("-")[0].split("/").join("_");        
+        return '<script> var ' + varName + '_path =\'' + fileName + '\';</script>';
+      }
+      else if (filepath.endsWith(".js") && filepath.indexOf("libs") < 0) {
         return '<script defer src="' + filepath + '"></script>';
       }
 

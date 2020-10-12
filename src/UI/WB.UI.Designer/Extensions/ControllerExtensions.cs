@@ -1,5 +1,9 @@
 ﻿using System;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer.Extensions
@@ -26,6 +30,16 @@ namespace WB.UI.Designer.Extensions
             {
                 controller.TempData.Add(key, message);
             }
+        }
+        
+        public static HtmlString RenderConfig(this IHtmlHelper helper, object model)
+        {
+            var json = model != null ? JsonConvert.SerializeObject(model, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }) : "null";
+
+            return new HtmlString($@"<script>window.CONFIG={json}</script>");
         }
     }
 }
