@@ -15,7 +15,6 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 
 import { Editor } from '@toast-ui/vue-editor'
 
-
 export default {
     components:{
         mdEditor: Editor,
@@ -29,6 +28,8 @@ export default {
             return {
                 usageStatistics: false,
                 hideModeSwitch: true,
+                useDefaultHTMLSanitizer: true,
+                //customHTMLSanitizer:
                 toolbarItems: [
                     'bold',
                     'italic',
@@ -39,11 +40,17 @@ export default {
             }
         },
     },
-    watch:{
-        value(newValue){
-            this.$refs.mdEditor.invoke('setMarkdown', newValue)
-        },
+
+    mounted() {
+        this.$refs.mdEditor.invoke('setMarkdown', this.value)
     },
+    /*watch:{
+        value(newValue){
+            if (newValue != this.value) {
+                this.$refs.mdEditor.invoke('setMarkdown', newValue)
+            }
+        },
+    },*/
     methods: {
         onEditorChange() {
             const markDown = this.$refs.mdEditor.invoke('getMarkdown')

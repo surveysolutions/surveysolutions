@@ -34,7 +34,7 @@ export default {
     },
     computed: {
         resumeInvitation() {
-            return marked.parseInline(this.$config.model.resumeInvitation)
+            return marked(this.$config.model.resumeInvitation)
         },
     },
 }
