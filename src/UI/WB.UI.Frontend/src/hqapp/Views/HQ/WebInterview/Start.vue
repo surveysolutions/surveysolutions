@@ -22,7 +22,7 @@ export default {
     },
     computed:{
         description() {
-            return marked.parseInline(this.$config.model.description)
+            return marked(this.$config.model.description)
         },
     },
 }
