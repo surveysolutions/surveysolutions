@@ -37,6 +37,7 @@
                         </h3><span class="pull-right">{{ lastUpdate }}</span>
                     </div>
                     <div class="panel-body">
+                        <p v-if="metrics == null || metrics.length == 0">{{ $t("Diagnostics.WaitingForMetrics")}}</p>
                         <ul class="list-group">
                             <li class="list-group-item"
                                 v-for="metric in metrics"
@@ -65,6 +66,7 @@ export default {
         }
     },
     mounted() {
+        this.getMetrics()
         this.getHealth()
     },
 
@@ -90,10 +92,13 @@ export default {
                 self.report = response.data
                 setTimeout(this.getHealth, 5000)
             })
-
+        },
+        getMetrics() {
+            const self = this
             this.$hq.ControlPanel.getMetricsState().then(response => {
                 self.metrics = response.data.metrics
                 self.lastUpdate =  moment(response.data.lastUpdateTime).format(DateFormats.dateTime)
+                setTimeout(this.getMetrics, 5000)
             })
         },
 

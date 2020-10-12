@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class QuestionnaireEditor {
@@ -66,6 +66,15 @@ namespace WB.UI.Designer.Resources {
         public static string Add {
             get {
                 return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add cascading values.
+        /// </summary>
+        public static string AddCascading {
+            get {
+                return ResourceManager.GetString("AddCascading", resourceCulture);
             }
         }
         
@@ -358,6 +367,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Network error.
+        /// </summary>
+        public static string CommunicationError {
+            get {
+                return ResourceManager.GetString("CommunicationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} error found.
         /// </summary>
         public static string CompilationErrorsCounter {
@@ -439,6 +457,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data changes reverted.
+        /// </summary>
+        public static string DataChangesReverted {
+            get {
+                return ResourceManager.GetString("DataChangesReverted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New roster.
         /// </summary>
         public static string DefaultNewRoster {
@@ -511,6 +538,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this item?.
+        /// </summary>
+        public static string DeleteItemCofirm {
+            get {
+                return ResourceManager.GetString("DeleteItemCofirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string Download {
@@ -525,6 +561,15 @@ namespace WB.UI.Designer.Resources {
         public static string DownloadPdf {
             get {
                 return ResourceManager.GetString("DownloadPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit item.
+        /// </summary>
+        public static string EditItem {
+            get {
+                return ResourceManager.GetString("EditItem", resourceCulture);
             }
         }
         
@@ -660,6 +705,24 @@ namespace WB.UI.Designer.Resources {
         public static string Export {
             get {
                 return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File uploaded.
+        /// </summary>
+        public static string FileUploaded {
+            get {
+                return ResourceManager.GetString("FileUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string Filter {
+            get {
+                return ResourceManager.GetString("Filter", resourceCulture);
             }
         }
         
@@ -1051,7 +1114,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Numeric integer code of the category (invisible to the interviewer).
+        ///   Looks up a localized string similar to Numeric integer code of the category (not visible to the interviewer).
         /// </summary>
         public static string HelpOptionValue {
             get {
@@ -1434,7 +1497,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Migrate to new cover support.
+        ///   Looks up a localized string similar to Generate cover.
         /// </summary>
         public static string MigrateToNewCover {
             get {
@@ -1493,6 +1556,15 @@ namespace WB.UI.Designer.Resources {
         public static string MyClassifications {
             get {
                 return ResourceManager.GetString("MyClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New item.
+        /// </summary>
+        public static string NewItem {
+            get {
+                return ResourceManager.GetString("NewItem", resourceCulture);
             }
         }
         
@@ -1560,6 +1632,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///You entered an invalid input. Each line should follow the format: &quot;Title...ParentValue/Value&quot;. &apos;Value&apos; and &apos;ParentValue&apos; must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed..
+        /// </summary>
+        public static string OptionsCascadingListError {
+            get {
+                return ResourceManager.GetString("OptionsCascadingListError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close Window?.
         /// </summary>
         public static string OptionsCloseWindow {
@@ -1578,7 +1660,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply.
+        ///   Looks up a localized string similar to Maximum {{ max }} rows allowed.
+        /// </summary>
+        public static string OptionsSizeLimit {
+            get {
+                return ResourceManager.GetString("OptionsSizeLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply changes.
         /// </summary>
         public static string OptionsUploadApply {
             get {
@@ -1601,6 +1692,15 @@ namespace WB.UI.Designer.Resources {
         public static string OptionsUploadParent {
             get {
                 return ResourceManager.GetString("OptionsUploadParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revert changes.
+        /// </summary>
+        public static string OptionsUploadRevert {
+            get {
+                return ResourceManager.GetString("OptionsUploadRevert", resourceCulture);
             }
         }
         
@@ -2109,6 +2209,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove cascading values.
+        /// </summary>
+        public static string RemoveCascading {
+            get {
+                return ResourceManager.GetString("RemoveCascading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to replace existing categories for question &quot;{{trimmedTitle}}&quot;?.
         /// </summary>
         public static string ReplaceOptionsConfirmation {
@@ -2123,6 +2232,15 @@ namespace WB.UI.Designer.Resources {
         public static string RequestFailedUnexpectedly {
             get {
                 return ResourceManager.GetString("RequestFailedUnexpectedly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required field.
+        /// </summary>
+        public static string RequiredField {
+            get {
+                return ResourceManager.GetString("RequiredField", resourceCulture);
             }
         }
         
@@ -2276,6 +2394,15 @@ namespace WB.UI.Designer.Resources {
         public static string RosterVariableName {
             get {
                 return ResourceManager.GetString("RosterVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Row added.
+        /// </summary>
+        public static string RowAdded {
+            get {
+                return ResourceManager.GetString("RowAdded", resourceCulture);
             }
         }
         
@@ -2802,6 +2929,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new category.
+        /// </summary>
+        public static string SideBarCategoriesAddNew {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesAddNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Categories.
         /// </summary>
         public static string SideBarCategoriesCounter {
@@ -2829,7 +2965,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to will be showed in list of reusable categories for any types of categorical questions..
+        ///   Looks up a localized string similar to will be added to list of reusable categories for any types of categorical questions.
         /// </summary>
         public static string SideBarCategoriesEmptyLine3 {
             get {
@@ -2897,6 +3033,15 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarCommentsTitle {
             get {
                 return ResourceManager.GetString("SideBarCommentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Categories.
+        /// </summary>
+        public static string SideBarEditCategories {
+            get {
+                return ResourceManager.GetString("SideBarEditCategories", resourceCulture);
             }
         }
         
@@ -3576,6 +3721,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text view.
+        /// </summary>
+        public static string StringsView {
+            get {
+                return ResourceManager.GetString("StringsView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table view.
+        /// </summary>
+        public static string TableView {
+            get {
+                return ResourceManager.GetString("TableView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
         public static string Test {
@@ -3842,6 +4005,15 @@ namespace WB.UI.Designer.Resources {
         public static string ValidationCondition {
             get {
                 return ResourceManager.GetString("ValidationCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value is too big.
+        /// </summary>
+        public static string ValidationIntValue {
+            get {
+                return ResourceManager.GetString("ValidationIntValue", resourceCulture);
             }
         }
         
