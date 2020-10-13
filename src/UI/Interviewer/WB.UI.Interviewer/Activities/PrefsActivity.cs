@@ -2,7 +2,10 @@ using System;
 using System.Globalization;
 using Android.App;
 using Android.OS;
-using Android.Preferences;
+using Android.Text;
+using Android.Widget;
+using AndroidX.AppCompat.App;
+using AndroidX.Preference;
 using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -14,26 +17,22 @@ namespace WB.UI.Interviewer.Activities
         NoHistory = false, 
         Theme = "@style/GrayAppTheme",
         Exported = false)]
-    public class PrefsActivity : PreferenceActivity
+    public class PrefsActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            FragmentManager.BeginTransaction().Replace(Android.Resource.Id.Content, new PrefsFragment()).Commit();
+            this.SupportFragmentManager
+                .BeginTransaction()
+                .Replace(Android.Resource.Id.Content, new PrefsFragment())
+                .Commit();
         }
 
-        [Obsolete]
-        protected override bool IsValidFragment(string fragmentName)
+        public class PrefsFragment : PreferenceFragmentCompat
         {
-            return nameof(PrefsFragment).Equals(fragmentName);
-        }
-
-        public class PrefsFragment : PreferenceFragment
-        {
-            [Obsolete]
-            public override void OnCreate(Bundle savedInstanceState)
+            public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
-                base.OnCreate(savedInstanceState);
+                //this.SetPreferencesFromResource(Resource.Xml.preferences, rootKey);
                 this.AddPreferencesFromResource(Resource.Xml.preferences);
                 this.SetupPreferences();
             }
@@ -49,7 +48,9 @@ namespace WB.UI.Interviewer.Activities
                 this.SetPreferenceTitleAndSummary("version", EnumeratorUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
                 this.SetPreferenceTitleAndSummary("deviceid", EnumeratorUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
 
-                this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.GpsDesiredAccuracy)
+                    .SetEditTextDecimalMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     if (double.TryParse(e.NewValue.ToString(), out var newValue))
                     {
@@ -59,12 +60,16 @@ namespace WB.UI.Interviewer.Activities
                     this.UpdateSettings();
                 };
 
-                this.FindPreference(SettingsNames.Endpoint).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.Endpoint)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetEndpoint(e.NewValue.ToString());
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.EventChunkSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
                     this.UpdateSettings();
@@ -191,6 +196,38 @@ namespace WB.UI.Interviewer.Activities
                     checkBoxPreference.Checked = defaultValue;
                 }
             }
+        }
+    }
+    
+    public static class PreferenceExtensions
+    {
+        class OnBindEditTextListener : Java.Lang.Object, EditTextPreference.IOnBindEditTextListener
+        {
+            private readonly InputTypes inputType;
+
+            public OnBindEditTextListener(InputTypes inputType)
+            {
+                this.inputType = inputType;
+            }
+
+            public void OnBindEditText(EditText editText)
+            {
+                editText.InputType = inputType;
+            }
+        }
+                
+        public static Preference SetEditTextNumericMode(this Preference preference)
+        {
+            var editTextPreference = (EditTextPreference) preference;
+            editTextPreference.SetOnBindEditTextListener(new OnBindEditTextListener(InputTypes.ClassNumber));
+            return preference;
+        }
+
+        public static Preference SetEditTextDecimalMode(this Preference preference)
+        {
+            var editTextPreference = (EditTextPreference) preference;
+            editTextPreference.SetOnBindEditTextListener(new OnBindEditTextListener(InputTypes.NumberFlagDecimal));
+            return preference;
         }
     }
 }
