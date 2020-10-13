@@ -15,6 +15,9 @@ import 'codemirror/lib/codemirror.css'
 import '@toast-ui/editor/dist/toastui-editor.css'
 
 import { Editor } from '@toast-ui/vue-editor'
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
 
 export default {
     components:{
@@ -29,7 +32,8 @@ export default {
             return {
                 usageStatistics: false,
                 hideModeSwitch: true,
-                useDefaultHTMLSanitizer: true,
+                //useDefaultHTMLSanitizer: true,
+                customHTMLSanitizer: sanitizeHtml,
                 toolbarItems: [
                     'heading',
                     'bold',
