@@ -17,6 +17,7 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/vue-editor'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+import { escape } from 'lodash'
 
 
 export default {
@@ -26,6 +27,7 @@ export default {
 
     props:{
         value: {type: String, required: true},
+        supportHtml: {type: Boolean, required: false, default:false},
     },
     computed: {
         editorOptions() {
@@ -60,9 +62,13 @@ export default {
     },*/
     methods: {
         onEditorChange() {
-            const markDown = this.$refs.mdEditor.invoke('getMarkdown')
-            if(this.value != markDown)
-            {
+            let markDown = this.$refs.mdEditor.invoke('getMarkdown')
+
+            if (this.supportHtml != true) {
+                markDown = escape(markDown)
+            }
+
+            if(this.value != markDown) {
                 this.$emit('input', markDown)
             }
         },
