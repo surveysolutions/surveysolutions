@@ -228,6 +228,12 @@
   <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
     <value>Approve interview</value>
   </data>
+  <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">
+    <value>Current responsible interviewer will not be notified about the interview approving until the next synchronization. If interviewer has started working on the interview already, all the data that interviewer has entered before the next synchronization will be DISCARDED!</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
+    <value>Apply on interview which Interviewer already received</value>
+  </data>
   <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
     <value>Comment</value>
   </data>

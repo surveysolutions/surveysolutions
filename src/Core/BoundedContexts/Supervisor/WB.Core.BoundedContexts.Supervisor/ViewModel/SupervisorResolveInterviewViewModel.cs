@@ -29,8 +29,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainStorage<InterviewView> interviews;
+        private readonly IUserInteractionService userInteractionService;
 
-        
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IViewModelNavigationService navigationService,
             ILogger logger,
             IAuditLogService auditLogService,
-            IPlainStorage<InterviewView> interviews) : 
+            IPlainStorage<InterviewView> interviews,
+            IUserInteractionService userInteractionService) : 
                 base(navigationService,
                 commandService,
                 principal,
@@ -58,6 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
             this.interviews = interviews;
+            this.userInteractionService = userInteractionService;
         }
 
         private InterviewStatus status;
@@ -94,6 +96,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             {
                 if (this.interview.Status != InterviewStatus.ApprovedBySupervisor)
                 {
+                    if (receivedByInterviewerTabletAt != null)
+                    {
+                        var approveConfirmed = await userInteractionService.ConfirmAsync(
+                            SupervisorUIResources.Confirm_Approve_Synchronized_Interview_Message,
+                            okButton: UIResources.Yes,
+                            cancelButton: UIResources.No);
+
+                        if (!approveConfirmed)
+                        {
+                            return;
+                        }
+                    }
+
                     var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
@@ -108,7 +123,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters ||
-                 this.status == InterviewStatus.RejectedBySupervisor && this.receivedByInterviewerTabletAt == null);
+                 this.status == InterviewStatus.RejectedBySupervisor);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
