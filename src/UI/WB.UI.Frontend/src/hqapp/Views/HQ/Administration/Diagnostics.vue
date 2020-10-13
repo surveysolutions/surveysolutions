@@ -57,7 +57,8 @@
                         <ol >
                             <li v-dateTimeFormatting
                                 v-for="(m, index) in signalrDiagMessages"
-                                :key="index">
+                                :key="index"
+                                :class="{'text-danger': m.isError}">
                                 [<time :datetime="m.date"></time>]
                                 {{m.msg}}
                             </li>
@@ -106,10 +107,11 @@ export default {
     },
 
     methods: {
-        pushSignalrMessage(msg){
+        pushSignalrMessage(msg, isError){
             this.signalrDiagMessages.push({
                 date: new Date(),
                 msg: msg,
+                isError: isError || false,
             })
         },
         async startSignalrDiag() {
@@ -135,7 +137,7 @@ export default {
                 }
             }
             catch(err) {
-                this.pushSignalrMessage('Failed to invoke server method with error: ' + err.toString())
+                this.pushSignalrMessage('Failed to invoke server method with error: ' + err.toString(), true)
             }
         },
         getHealth() {

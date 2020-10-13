@@ -160,4 +160,7 @@
   <data name="embedded_export_service_check_Degraded">
     <value>Export Service is not running</value>
   </data>
+  <data name="Connectivity" xml:space="preserve">
+      <value>Web socket connectivity</value>
+  </data>
 </root>
