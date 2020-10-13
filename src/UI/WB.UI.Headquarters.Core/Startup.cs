@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -58,6 +59,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
+using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
 using WB.UI.Headquarters.Filters;
@@ -438,6 +440,8 @@ namespace WB.UI.Headquarters
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview");
+                endpoints.MapHub<SignalrDiagnosticHub>("signalrdiag",
+                    options => { options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling; });
 
                 endpoints.MapGet("/Index", ctx =>
                 {
