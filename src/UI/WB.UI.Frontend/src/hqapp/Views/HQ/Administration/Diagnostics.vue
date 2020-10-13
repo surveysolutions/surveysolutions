@@ -47,6 +47,23 @@
                         </ul>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>
+                            {{ $t("Diagnostics.Connectivity") }}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <ol >
+                            <li v-dateTimeFormatting
+                                v-for="(m, index) in signalrDiagMessages"
+                                :key="index">
+                                [<time :datetime="m.date"></time>]
+                                {{m.msg}}
+                            </li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
     </HqLayout>
@@ -55,6 +72,7 @@
 <script>
 
 import moment from 'moment'
+import * as signalR from '@microsoft/signalr'
 import { DateFormats } from '~/shared/helpers'
 
 export default {
@@ -63,11 +81,13 @@ export default {
             report: null,
             metrics: [],
             lastUpdate: null,
+            signalrDiagMessages: [],
         }
     },
     mounted() {
         this.getMetrics()
         this.getHealth()
+        this.startSignalrDiag()
     },
 
     computed: {
@@ -86,6 +106,38 @@ export default {
     },
 
     methods: {
+        pushSignalrMessage(msg){
+            this.signalrDiagMessages.push({
+                date: new Date(),
+                msg: msg,
+            })
+        },
+        async startSignalrDiag() {
+            this.pushSignalrMessage('Building connection to server using `/signalrdiag` url')
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl('/signalrdiag')
+                .configureLogging(signalR.LogLevel.Debug)
+                .build()
+
+
+            connection.on('Pong', () => {
+                this.pushSignalrMessage(`Pong from server received using ${connection.connection.transport.constructor.name}`)
+            })
+
+            try {
+                await connection.start()
+                this.pushSignalrMessage(`Started connection using ${connection.connection.transport.constructor.name}`)
+
+                for(let i = 0; i < 30; i++) {
+                    await connection.invoke('Ping')
+                    this.pushSignalrMessage('Ping method called')
+                    await new Promise(r => setTimeout(r, 2000))
+                }
+            }
+            catch(err) {
+                this.pushSignalrMessage('Failed to invoke server method with error: ' + err.toString())
+            }
+        },
         getHealth() {
             const self = this
             this.$hq.ControlPanel.getHealthResult().then(response => {
