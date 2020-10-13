@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Metrics;
 
@@ -12,13 +13,15 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         private readonly IMemoryCache memoryCache;
         private CancellationTokenSource resetCacheToken = new CancellationTokenSource();
 
-        public AggregateRootCache(IMemoryCache memoryCache)
+        public AggregateRootCache(IMemoryCache memoryCache, ILogger logger)
         {
             this.memoryCache = memoryCache;
+            this.logger = logger;
         }
 
         protected virtual TimeSpan Expiration { get; } = TimeSpan.FromMinutes(5);
         private static readonly TimeSpan MaxCachePeriod = TimeSpan.FromHours(1);
+        private ILogger logger;
 
         protected virtual string Key(Guid id) => "ar::" + id;
 
@@ -48,6 +51,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         private void CacheItemRemoved(object key, object value, EvictionReason reason, object state)
         {
+            logger.Info($"Aggregate root was removed from cache. Key: {key}. Reason: {reason}");
+            
             if (value is AggregateRootCacheItem cacheItem)
             {
                 CacheItemRemoved(cacheItem.Id, reason);
