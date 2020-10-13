@@ -3,8 +3,9 @@
         v-bind:initialValue="value"
         v-on:change="onEditorChange"
         v-bind="$attrs"
-        initialEditType="wysiwyg"
+        initialEditType="markdown"
         ref="mdEditor"
+        previewStyle="tab"
         :options="editorOptions"
         v-on="$listeners" >
     </md-editor>
@@ -29,12 +30,14 @@ export default {
                 usageStatistics: false,
                 hideModeSwitch: true,
                 useDefaultHTMLSanitizer: true,
-                //customHTMLSanitizer:
                 toolbarItems: [
+                    'heading',
                     'bold',
                     'italic',
                     'ul',
                     'ol',
+                    'divider',
+                    'image',
                     'link',
                 ],
             }
