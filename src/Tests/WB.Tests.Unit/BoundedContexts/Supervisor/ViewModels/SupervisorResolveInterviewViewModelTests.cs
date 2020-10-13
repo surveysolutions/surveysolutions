@@ -229,7 +229,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             IViewModelNavigationService navigationService = null,
             ILogger logger = null,
             IAuditLogService auditLogService = null,
-            IPlainStorage<InterviewView> interviewsList = null)
+            IPlainStorage<InterviewView> interviewsList = null,
+            IUserInteractionService userInteractionService = null)
         {
             
             var stubInterviewsList = new SqliteInmemoryStorage<InterviewView>();
@@ -252,7 +253,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
-                interviewsList ?? stubInterviewsList
+                interviewsList ?? stubInterviewsList,
+                userInteractionService ?? Mock.Of<IUserInteractionService>()
             );
         }
     }
