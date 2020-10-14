@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccessForbidden" xml:space="preserve">
-    <value>El servidor no está registrado con Questionnaire Designer. Por favor, póngase en contacto con soporte para el registro.</value>
+    <value>El servidor no está registrado con Designer. Por favor, póngase en contacto con soporte para el registro.</value>
   </data>
   <data name="DesignerAppDescription" xml:space="preserve">
     <value>Esta es una herramienta gratuita para crear cuestionarios para la plataforma CAPI del Banco Mundial. Puede encontrarla en</value>
@@ -127,7 +127,7 @@
     <value>El usuario no está autorizado. Por favor, compruebe su nombre de usuario y contraseña.</value>
   </data>
   <data name="LoginWatermark" xml:space="preserve">
-    <value>Login</value>
+    <value>Usuario o correo electrónico</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
     <value>Use sus credenciales de Survey Solutions Designer para acceder a sus cuestionarios.</value>

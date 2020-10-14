@@ -172,7 +172,7 @@
     <value>Especifique la llave (XX-XX-XX-XX) o identificador de una entrevista para realizar la búsqueda</value>
   </data>
   <data name="NoData_Filters_InterviewKey" xml:space="preserve">
-    <value>llave o identificador de entrevista </value>
+    <value>llave o identificador de entrevista</value>
   </data>
   <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
     <value>Introduzca una llave o identificador de encuesta</value>
@@ -190,12 +190,12 @@
     <value>Identificador de entrevista</value>
   </data>
   <data name="TableTitle_LastUpdate" xml:space="preserve">
-    <value>Ultima actualización</value>
+    <value>Última actualización</value>
   </data>
   <data name="TableTitle_Status" xml:space="preserve">
     <value>Estado</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Solución de problemas</value>
+    <value>Title:</value>
   </data>
 </root>

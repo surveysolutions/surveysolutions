@@ -126,9 +126,6 @@
   <data name="ServerMetrics" xml:space="preserve">
     <value>Метрики сервера</value>
   </data>
-  <data name="WaitingForMetrics" xml:space="preserve">
-    <value>Вычисление метрик</value>
-  </data>
   <data name="hq_baseurl_check" xml:space="preserve">
     <value>Проверка конфигурации BaseUrl</value>
   </data>
@@ -172,12 +169,12 @@
     <value>Конфигурация Headquarters:BaseUrl '{0}' не совпадает с текущим адресом в адресной строке браузера. Это может привести с ошибке работы Экспорт сервиса и отсылке приглашений на email</value>
   </data>
   <data name="embedded_export_service_check">
-      <value>Встроенная служба Экспорта</value>
+    <value>Встроенная служба Экспорта</value>
   </data>
   <data name="embedded_export_service_check_Healty">
-      <value>Встроенная служба Экспорта работает</value>
+    <value>Встроенная служба Экспорта работает</value>
   </data>
   <data name="embedded_export_service_check_Degraded">
-      <value>Встроенный служба Экспорта не работает</value>
+    <value>Встроенный служба Экспорта не работает</value>
   </data>
 </root>

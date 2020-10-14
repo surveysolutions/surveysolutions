@@ -142,7 +142,7 @@
     <value>Modo de importación de cuestionario</value>
   </data>
   <data name="LastModifiedAt" xml:space="preserve">
-    <value>Ultima modificación en</value>
+    <value>Última modificación en</value>
   </data>
   <data name="ListOfMyQuestionnaires" xml:space="preserve">
     <value>lista de mis cuestionarios</value>
@@ -176,5 +176,14 @@
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
     <value>Iniciar sesión en Designer</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importando {{percent}}%</value>
+  </data>
+  <data name="Prepare" xml:space="preserve">
+    <value>Recibir datos del cuestionario</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Actualizar asignaciones</value>
   </data>
 </root>
