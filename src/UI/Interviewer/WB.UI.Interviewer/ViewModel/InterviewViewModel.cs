@@ -71,15 +71,15 @@ namespace WB.UI.Interviewer.ViewModel
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
-            await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId,
+            await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId,
                 this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToMapsCommand =>
-            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
+            new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
         public override async Task NavigateBack()
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         }
 
@@ -109,7 +109,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (!this.Principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                this.ViewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
                 return;
             }
 
@@ -132,7 +132,7 @@ namespace WB.UI.Interviewer.ViewModel
                     catch (MissingPermissionsException missingPermissionsException)
                     {
                         this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
-                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                        await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
                             .ConfigureAwait(false);
 
                         if (missingPermissionsException.PermissionType == typeof(MicrophonePermission))
@@ -151,7 +151,7 @@ namespace WB.UI.Interviewer.ViewModel
                     catch (Exception exc)
                     {
                         logger.Warn("Audio audit failed to start.", exception: exc);
-                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                        await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
                             .ConfigureAwait(false);
                         this.userInteractionService.ShowToast(exc.Message);
                     }

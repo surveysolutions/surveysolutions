@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                this.ViewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
                 return;
             }
 
@@ -195,7 +195,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
 
         private bool isInProgress;
@@ -272,9 +272,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RunSynchronization()
         {
-            if (this.viewModelNavigationService.HasPendingOperations)
+            if (this.ViewModelNavigationService.HasPendingOperations)
             {
-                this.viewModelNavigationService.ShowWaitMessage();
+                this.ViewModelNavigationService.ShowWaitMessage();
                 return;
             }
 
@@ -285,7 +285,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private Task NavigateToDiagnostics()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
         }
 
         private Task SignOut()
@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.CancelSynchronizationCommand.Execute();
             var userName = this.Principal.CurrentUserIdentity.Name;
             this.auditLogService.Write(new LogoutAuditLogEntity(userName));
-            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
@@ -355,7 +355,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<SearchViewModel>);
+            new MvxAsyncCommand(ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         #region Offline synchronization
 

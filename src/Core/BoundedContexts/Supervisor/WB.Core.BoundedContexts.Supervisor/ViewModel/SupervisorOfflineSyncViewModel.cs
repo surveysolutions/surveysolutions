@@ -198,10 +198,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         });
 
         public IMvxAsyncCommand ExitOfflineSyncCommand => new MvxAsyncCommand(async () =>
-            await this.viewModelNavigationService.NavigateToDashboardAsync());
+            await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
         public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
-            => viewModelNavigationService.NavigateToDashboardAsync());
+            => ViewModelNavigationService.NavigateToDashboardAsync());
 
         protected override async Task OnStartDiscovery()
         {

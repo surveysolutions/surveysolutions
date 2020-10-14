@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPlainStorage<QuestionnaireListItem> questionnairesStorage, 
             IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             IPlainStorage<TesterUserIdentity> userStorage)
-            : base(principal, viewModelNavigationService)
+            : base(principal, viewModelNavigationService, false)
         {
             this.designerApiService = designerApiService;
             this.userInteractionService = userInteractionService;
@@ -44,8 +44,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.userStorage = userStorage;
         }
-
-        public override bool IsAuthenticationRequired => false;
 
         private bool isInProgress = false;
         public bool IsInProgress
@@ -103,9 +101,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                             this.userStorage.RemoveAll();
                             this.dashboardLastUpdateStorage.RemoveAll();
                             this.questionnairesStorage.RemoveAll();
-                            this.principal.SignIn(userName: this.LoginName, password: this.Password,
+                            this.Principal.SignIn(userName: this.LoginName, password: this.Password,
                                 staySignedIn: this.StaySignedIn);
-                            await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
+                            await this.ViewModelNavigationService.NavigateToAsync<DashboardViewModel>();
                         }
                     }
                     catch (RestException ex)

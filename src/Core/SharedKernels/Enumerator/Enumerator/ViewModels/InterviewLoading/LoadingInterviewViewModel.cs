@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             var interview = await LoadInterviewAsync(interviewId);
             if (interview == null)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync()
+                await this.ViewModelNavigationService.NavigateToDashboardAsync()
                     .ConfigureAwait(false);
                 return;
             }
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
                 var restartInterviewCommand = new RestartInterviewCommand(interviewId,
-                    this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                    this.Principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                 await this.commandService.ExecuteAsync(restartInterviewCommand)
                     .ConfigureAwait(false);
             }
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             {
                 var targetIdentity = this.serializer.Deserialize<Identity>(interviewView.LastVisitedSectionId);
                     
-                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), 
+                await this.ViewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), 
                     navigationIdentity: new NavigationIdentity
                     {
                         TargetScreen = interviewView.LastVisitedScreenType.GetValueOrDefault(ScreenType.Group),
@@ -113,11 +113,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
              
             if (interview.HasEditableIdentifyingQuestions)
             {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+                await this.ViewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
             }
             else
             {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
+                await this.ViewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
             }
         }
 
