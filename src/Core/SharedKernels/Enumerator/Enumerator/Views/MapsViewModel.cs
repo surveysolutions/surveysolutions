@@ -47,10 +47,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         private async Task SignOutAsync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
@@ -75,9 +75,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         
         private async Task RunMapSyncAsync()
         {
-            if (this.viewModelNavigationService.HasPendingOperations)
+            if (this.ViewModelNavigationService.HasPendingOperations)
             {
-                this.viewModelNavigationService.ShowWaitMessage();
+                this.ViewModelNavigationService.ShowWaitMessage();
                 return;
             }
 
@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand =>
-            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+            new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public override async Task Initialize()
         {

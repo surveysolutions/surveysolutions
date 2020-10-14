@@ -519,7 +519,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
                     }
                 }
 
-                await viewModelNavigationService.NavigateToInterviewAsync(interviewId, null);
+                await ViewModelNavigationService.NavigateToInterviewAsync(interviewId, null);
             }
         }
 
@@ -528,7 +528,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
             if(calloutTag != null && (Int32.TryParse(calloutTag as string, out int assignmentId)))
             {
                 //create interview from assignment
-                viewModelNavigationService.NavigateToCreateAndLoadInterview(assignmentId);
+                ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignmentId);
             }
         }
 
@@ -715,7 +715,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.MapDashboard
         }
 
         public IMvxCommand NavigateToDashboardCommand => 
-            new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
+            new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
         
         public void Dispose()
         {

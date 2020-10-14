@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (interview == null)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
+                await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
                 this.Dispose();
                 return;
             }
@@ -352,17 +352,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
 
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
-        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
