@@ -41,7 +41,7 @@ namespace WB.Services.Export.Tests.CsvExport
                 .Returns<string>(arg => arg);
             var mockMainStream = new MemoryStream();
             var mockTranslatedStream = new MemoryStream();
-            fileSystem.Setup(x => x.OpenOrCreateFile($"testPath{Path.DirectorySeparatorChar}Questionnaire{Path.DirectorySeparatorChar}Pdf{Path.DirectorySeparatorChar}{questionnaire.VariableName}.pdf", false))
+            fileSystem.Setup(x => x.OpenOrCreateFile($"testPath{Path.DirectorySeparatorChar}Questionnaire{Path.DirectorySeparatorChar}Pdf{Path.DirectorySeparatorChar}Original {questionnaire.VariableName}.pdf", false))
                 .Returns(mockMainStream);
             fileSystem.Setup(x => x.OpenOrCreateFile($"testPath{Path.DirectorySeparatorChar}Questionnaire{Path.DirectorySeparatorChar}Pdf{Path.DirectorySeparatorChar}language name {questionnaire.VariableName}.pdf", false))
                 .Returns(mockTranslatedStream);

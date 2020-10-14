@@ -123,6 +123,9 @@
   <data name="BackToSupervisors" xml:space="preserve">
     <value>Back to supervisors</value>
   </data>
+  <data name="BackToTeams" xml:space="preserve">
+    <value>Back to teams</value>
+  </data>
   <data name="Day" xml:space="preserve">
     <value>Days</value>
   </data>

@@ -463,6 +463,10 @@
                 <div class="foldback-button"></div>
             </div>
             <div class="categories">
+                <div id="show-reload-details-promt" class="ng-cloak" ng-show="shouldUserSeeReloadPromt">
+                    <div class="inner">{{'QuestionToUpdateOptions' | i18next}} <a href="#" onclick="window.location.reload(true);" ng-i18next="QuestionClickReload"></a></div>
+                </div>
+
                 <perfect-scrollbar class="scroller">
                     <h3 ng-i18next="[i18next]({count: categoriesList.length })SideBarCategoriesCounter"></h3>
 
@@ -490,13 +494,13 @@
                                                ng-model="categories.name"
                                                name="name"
                                                class="form-control table-name"
-                                               type="text" />
+                                               type="text"/>
                                         <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
                                             Drop File here
                                         </div>
                                         <div class="actions" ng-class="{dirty: categories.form.$dirty }">
                                             <div ng-show="categories.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover" 
+                                                <button type="submit" ng-disabled="categories.form.$invalid" class="btn lighter-hover"
                                                         ng-click="saveCategories(categories);$event.stopPropagation()"
                                                         ng-i18next>
                                                     Save
@@ -505,11 +509,17 @@
                                             </div>
 
                                             <div class="permanent-actions pull-right">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    class="btn btn-link"
+                                                    ng-click="editCategories(questionnaire.questionnaireId, categories.categoriesId)" ng-i18next="SideBarEditCategories">
+                                                </a>
+
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + categories.categoriesId}}" class="btn btn-default"
                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
 
-                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser" 
-                                                        class="btn btn-default" ngf-select="" ngf-max-size="10MB" 
+                                                <button ng-hide="categories.form.$dirty" ng-disabled="isReadOnlyForUser"
+                                                        class="btn btn-default" ngf-select="" ngf-max-size="10MB"
                                                         accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                                         ngf-change="fileSelected(categories, $file);$event.stopPropagation()" type="button">
                                                     <span ng-i18next>Update</span>
@@ -529,13 +539,19 @@
                             </a>
                         </p>
                         <p>
+                            <input type="button" ng-i18next="[value]SideBarCategoriesAddNew" value="ADD new category"
+                                   class="btn lighter-hover" 
+                                   ng-click="addNewCategory();$event.stopPropagation()"
+                                   ng-disabled="isReadOnlyForUser" />
+                        </p>
+                        <p>
                             <input type="button" ng-i18next="[value]SideBarCategoriesUploadNew" value="Upload new categories"
                                    class="btn lighter-hover" ngf-select
                                    ngf-change="createAndUploadFile($file);$event.stopPropagation()"
                                    ngf-max-size="10MB"
                                    accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab"
                                    ngf-select-disabled="isReadOnlyForUser"
-                                   ngf-drop-disabled="isReadOnlyForUser" />
+                                   ngf-drop-disabled="isReadOnlyForUser"/>
                         </p>
                     </div>
                 </perfect-scrollbar>

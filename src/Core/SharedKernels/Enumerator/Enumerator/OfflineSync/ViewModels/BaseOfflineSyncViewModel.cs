@@ -121,7 +121,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
             if (connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
                 connectionStatus.Status == ConnectionStatusCode.StatusOutOfOrderApiCall)
+            {
+                this.OnDeviceConnectionAccepted(name);
                 return;
+            }
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);

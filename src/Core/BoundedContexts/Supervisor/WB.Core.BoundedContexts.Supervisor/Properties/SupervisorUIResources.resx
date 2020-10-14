@@ -154,4 +154,7 @@ Your device ID is '{0}'</value>
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
     <value>Synchronize with Interviewers</value>
   </data>
+  <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>Current responsible interviewer will not be notified about the interview approving until the next synchronization. If interviewer has started working on the interview already, all the data that interviewer has entered before the next synchronization will be DISCARDED!</value>
+  </data>
 </root>

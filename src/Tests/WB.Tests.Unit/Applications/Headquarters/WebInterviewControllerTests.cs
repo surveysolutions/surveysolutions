@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var user = Mock.Of<UserViewLite>();
             var usersRepository = Mock.Of<IUserViewFactory>(u => u.GetUser(It.IsAny<Guid>()) == user);
             
-            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r => r.Get(interviewId) == Mock.Of<IStatefulInterview?>());
+            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r => r.Get(interviewId) == Mock.Of<IStatefulInterview>());
 
             var controller = new WebInterviewController(
                 Mock.Of<ICommandService>(),

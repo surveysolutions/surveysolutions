@@ -602,6 +602,7 @@ namespace WB.Tests.Abc.TestFactories
             Answer[] textAnswers = null, 
             string variable = "mo_question",
             string linkedFilterExpression = null,
+            Guid? categoryId = null,
             params int[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
@@ -617,6 +618,7 @@ namespace WB.Tests.Abc.TestFactories
                 LinkedToRosterId = linkedToRosterId,
                 LinkedFilterExpression = linkedFilterExpression,
                 YesNoView = isYesNo,
+                CategoriesId = categoryId,
                 Answers = textAnswers?.ToList() ?? answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
                 Properties = new QuestionProperties(false, false)
                 {
@@ -1784,7 +1786,7 @@ namespace WB.Tests.Abc.TestFactories
             result.Quantity = quantity;
             result.Id = id ?? 0;
             result.PublicKey = publicKey ?? Guid.NewGuid();
-            result.QuestionnaireId = questionnaireIdentity;
+            result.QuestionnaireId = questionnaireIdentity ?? Create.Entity.QuestionnaireIdentity();
             result.Archived = isArchived;
 
             var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };

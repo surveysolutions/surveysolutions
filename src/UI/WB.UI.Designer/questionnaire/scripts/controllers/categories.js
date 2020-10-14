@@ -5,6 +5,22 @@
 
             $scope.downloadBaseUrl = '../../categories';
             $scope.isReadOnlyForUser = false;
+            $scope.shouldUserSeeReloadPromt = false;
+            $scope.openEditor = null
+            
+            $scope.bcChannel = null
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
+            // Automatically reload window on popup close. If supported by browser
+            if('BroadcastChannel' in window){
+                $scope.bcChannel = new BroadcastChannel("editcategory")
+                $scope.bcChannel.onmessage = function(ev) {
+                    console.log(ev.data)
+                    if(ev.data === 'close#' + $scope.openEditor) {
+                        window.location.reload();
+                    }
+                }
+            }
 
             var hideCategoriesPane = 'ctrl+shift+c';
 
@@ -46,6 +62,7 @@
                 if ($scope.questionnaire.categories === null)
                     return;
 
+                $scope.categoriesList = []
                 _.each($scope.questionnaire.categories, function (categoriesDto) {
                     var categories = { checkpoint: {} };
                     if (!_.any($scope.categoriesList, function (elem) { return elem.categoriesId === categoriesDto.categoriesId; })) {
@@ -54,6 +71,9 @@
                         $scope.categoriesList.push(categories);
                     }
                 });
+
+                $scope.shouldUserSeeReloadPromt = false;
+                // $scope.$apply()
             };
 
 
@@ -62,6 +82,31 @@
             $scope.unfold = function () {
                 $scope.isFolded = true;
             };
+
+            $scope.addNewCategory = function() {
+                if ($scope.isReadOnlyForUser) {
+                    notificationService.notice($i18next.t('NoPermissions'));
+                    return;
+                }
+
+                var categories = { categoriesId: utilityService.guid() };
+                
+                commandService.updateCategories($state.params.questionnaireId, categories)
+                    .then(function (response) {
+                        if (response.status !== 200) return;
+
+                        categories.checkpoint = categories.checkpoint || {};
+
+                        dataBind(categories.checkpoint, categories);
+                        $scope.categoriesList.push(categories);
+                        updateQuestionnaireCategories();
+
+                        setTimeout(function() {
+                                utilityService.focus("focusCategories" + categories.categoriesId);
+                            },
+                            500);
+                    });
+            }
 
             $scope.createAndUploadFile = function (file) {
                 if (_.isNull(file) || _.isUndefined(file)) {
@@ -177,6 +222,25 @@
                     }
                 });
             };
+
+            $scope.editCategories = function (questionnaireId, categoriesId)
+            {
+                if ($scope.questionnaire.isReadOnlyForUser) {
+                    confirmService.open({
+                        title: $i18next.t('ReadOnlyQuestion'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
+                        isReadOnly: true
+                    }).result;
+                    return;
+                }
+
+                $scope.shouldUserSeeReloadPromt = true;
+                $scope.openEditor = categoriesId
+
+                window.open("../../questionnaire/editcategories/" + questionnaireId + "?categoriesid=" + categoriesId,
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 
+                    + ", left= " + (screen.width - 960) / 2, true);
+            }
 
             $scope.foldback = function () {
                 $scope.isFolded = false;

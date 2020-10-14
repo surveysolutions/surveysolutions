@@ -227,25 +227,25 @@
       <Version>1.1.3.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.1.0.3</Version>
+      <Version>1.1.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Migration">
-      <Version>1.0.7</Version>
+      <Version>1.0.7.1</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
-      <Version>7.0.0</Version>
+      <Version>7.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.3</Version>
+      <Version>1.0.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.1.0.3</Version>
+      <Version>1.1.0.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.3.4.4</Version>
+      <Version>2.3.4.6</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material">
-      <Version>1.1.0.3-rc3</Version>
+      <Version>1.1.0.5-rc3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
