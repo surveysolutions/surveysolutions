@@ -19,6 +19,6 @@
                    Tag ItemTag;" />
 
     <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
-               local:MvxBind="Visible IsProtected" 
+               local:MvxBind="Visible IsProtected; Tag Format('iv_Lock_', ItemTag)" 
                local:srcCompat="@drawable/lock_icon" />
 </LinearLayout>

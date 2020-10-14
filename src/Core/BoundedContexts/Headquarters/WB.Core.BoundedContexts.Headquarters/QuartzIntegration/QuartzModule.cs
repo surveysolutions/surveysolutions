@@ -70,15 +70,19 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             var dbUpgradeSettings = new DbUpgradeSettings(migrationsAssembly, nameSpace);
             DbMigrationsRunner.MigrateToLatest(connectionString.ConnectionString, "quartz", dbUpgradeSettings,
                 serviceLocator.GetInstance<ILoggerProvider>());
+            
+            var jobSetting = serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
+            var importSettings = serviceLocator.GetInstance<AssignmentImportOptions>(); 
 
-            await serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            await serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Schedule(repeatIntervalInSeconds: jobSetting.SynchronizationInterval);
             await serviceLocator.GetInstance<UsersImportTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
-            await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
+            await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Schedule(importSettings.BackgroundExportIntervalInSeconds);
             await serviceLocator.GetInstance<SendInvitationsTask>().ScheduleRunAsync();
             await serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
+            await serviceLocator.GetInstance<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 10);
         }
     }
 }

@@ -196,6 +196,9 @@ namespace WB.UI.Shared.Enumerator
 
             registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnItemSelected",
                 (ctrl) => new InstantAutoCompleteTextViewOnItemSelectedBinding(ctrl));
+            
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("DisableDefaultSearch",
+                (ctrl) => new InstantAutoCompleteTextViewDisableDefaultSearchBinding(ctrl));
 
             registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnFocusOut",
                 (ctrl) => new InstantAutoCompleteTextViewOnFocusOutBinding(ctrl));

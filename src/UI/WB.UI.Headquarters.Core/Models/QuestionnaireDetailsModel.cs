@@ -32,6 +32,8 @@ namespace WB.UI.Headquarters.Models
         public string Variable { get; set; }
         public bool IsObserving { get; set; }
 
+        public string DefaultLanguageName { get; set; }
+
         public class User
         {
             public string Role { get; set; }

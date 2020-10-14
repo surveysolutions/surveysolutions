@@ -6,8 +6,13 @@
               android:layout_height="wrap_content"
               local:MvxBind="Hidden HasOptions; HideKeyboardOnClick .">
   <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="Hidden HasOptions; BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, And(QuestionState.IsAnswered, HasOptions), false));">
+                local:MvxBind="Hidden HasOptions;
+                               BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, And(QuestionState.IsAnswered, HasOptions), false));
+                               ">
     <TextView style="@style/Interview_Question_EmptyOptions"
-              local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Hidden HasOptions"/>
+              local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); 
+                             Hidden HasOptions;
+                             Tag Format('tv_noOptions_{0}', Identity) "
+                            />
   </LinearLayout>
 </LinearLayout>

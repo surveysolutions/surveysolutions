@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.AutoCompleteSuggestions = this.GetSuggestions(initialFilter).ToList();
             this.FilterText = initialFilter;
-            this.RaisePropertyChanged(() => this.FilterText);
+            this.RaisePropertyChanged(nameof(FilterText));
         }
 
         private int[] excludedOptions = Array.Empty<int>();
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
             get => this.autoCompleteSuggestions;
-            set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
+            set => this.SetProperty(ref this.autoCompleteSuggestions, value);
         }
         
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(async () =>
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task ShowErrorIfNoAnswer()
         {
-            await InvokeAllHandlers<EventArgs>(this.OnShowErrorIfNoAnswer, EventArgs.Empty);
+            await InvokeAllHandlers(this.OnShowErrorIfNoAnswer, EventArgs.Empty).ConfigureAwait(false);
 
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
@@ -91,10 +91,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (isValidOption)
             {
-                await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value);
+                await InvokeAllHandlers<int>(this.OnItemSelected, selectedOption.Value).ConfigureAwait(false);
                 if (displaySelectedValue)
                 {
-                    await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null);
+                    await this.UpdateFilter(displaySelectedValue ? selectedOption.Title : null).ConfigureAwait(false);
                 }
                 else
                 {
@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             else
             {
                 var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage).ConfigureAwait(false);
             }
         }
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             // When options is selected, FocusOut will be always fired after. 
             // We change filter text and we safe answer on focus out event
             this.FilterText = option.Title;
-            this.RaisePropertyChanged(() => this.FilterText);
+            this.RaisePropertyChanged(nameof(this.FilterText));
         }
 
         private async Task InvokeAllHandlers<T>(Func<object, T, Task> handler, T value)
@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InvokeOnMainThread(() =>
             {
                 this.AutoCompleteSuggestions = suggestions;
-                this.RaisePropertyChanged(() => this.FilterText);
+                this.RaisePropertyChanged(nameof(this.FilterText));
             });
         }
 

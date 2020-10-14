@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Settings {
@@ -192,6 +192,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string EmailProvider_AwsAccessKeyIdHelp {
             get {
                 return ResourceManager.GetString("EmailProvider_AwsAccessKeyIdHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string EmailProvider_AwsRegion {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected unknown region. Please check it..
+        /// </summary>
+        public static string EmailProvider_AwsRegion_Unknown {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsRegion_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region for the AWS Management Console.
+        /// </summary>
+        public static string EmailProvider_AwsRegionHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsRegionHelp", resourceCulture);
             }
         }
         

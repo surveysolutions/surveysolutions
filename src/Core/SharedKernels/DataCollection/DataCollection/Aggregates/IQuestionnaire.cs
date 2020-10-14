@@ -168,8 +168,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId);
 
-        ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
-
         IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId);
@@ -323,5 +321,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid CoverPageSectionId { get; }
         string GetAttachmentNameForEntity(Guid entityId);
         IEnumerable<Guid> GetStaticTextsThatUseVariableAsAttachment(Guid variableId);
+        Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId);
+        bool IsInsideRoster(Guid entityId);
     }
 }

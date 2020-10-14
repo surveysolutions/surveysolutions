@@ -650,6 +650,9 @@
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
   <data name="SelectParentQuestion" xml:space="preserve">
     <value>Выберите родительский вопрос</value>
   </data>
@@ -871,7 +874,10 @@
     <value>Закрыть?</value>
   </data>
   <data name="OptionsUploadApply" xml:space="preserve">
-    <value>Применить</value>
+    <value>Применить изменения</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Отменить изменения</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
     <value>Категории не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {0} категорий.</value>
@@ -899,6 +905,9 @@
   </data>
   <data name="SideBarTranslationName" xml:space="preserve">
     <value>название перевода</value>
+  </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Редактировать категории</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Родительское значение</value>
@@ -1374,7 +1383,7 @@
     <value>Вы можете скачать и обновить списки категорий.</value>
   </data>
   <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
-    <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>ent>
+    <value>будет отображаться в списке повторно используемых категорий для любого типа категориальных вопросов.</value>
   </data>
   <data name="SideBarCategoriesTitle" xml:space="preserve">
     <value>Категории</value>
@@ -1436,7 +1445,56 @@
   <data name="HelpOptionTitle" xml:space="preserve">
     <value>Текстовое название категории (отображается интервьюеру)</value>
   </data>
-    <data name="Forum" xml:space="preserve">
+  <data name="NewItem" xml:space="preserve">
+    <value>Новый элемент</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Редактирование элемента</value>
+  </data>
+  <data name="DeleteItemCofirm" xml:space="preserve">
+    <value>Вы действительно хотите удалить этот элемент?</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
     <value>Форум</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+    <value>Табличный вид</value>
+  </data>
+  <data name="StringsView" xml:space="preserve">
+    <value>Текстовый вид</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+    <value>Слишком большое значение</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Обязательное поле</value>
+  </data>
+  <data name="FileUploaded" xml:space="preserve">
+    <value>Файл загружен</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Data changes reverted</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Максимально допустимо только {{ max }} строк</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Ошибка сети</value>
+  </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+    <value>Добавить новую категорию</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+    <value>Строка добавлена</value>
+  </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>Ввод не верен. Каждая строка должна следовать следующему формату: "Текст...Родительское/
+Значение". 'Текст' должен содержать символы или цифры. 'Значение' должно быть целочисленным. Пустые строки не разрешены.</value>
+  </data>
+  <data name="AddCascading" xml:space="preserve">
+    <value>Добавить каскадные значения</value>
+  </data>
+  <data name="RemoveCascading" xml:space="preserve">
+    <value>Удалить каскадные значения</value>
   </data>
 </root>

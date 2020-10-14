@@ -45,8 +45,10 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content">
           <Button style="@style/Relink_Button"
+                  android:id="@+id/btnRelinkOk"
                   local:MvxBind="Click RelinkCommand; Text Localization('Interviewer_RelinkDevice_RelinkButtonText');" />
           <Button style="@style/Relink_Cancel_Button"
+                  android:id="@+id/btnRelinkCancel"
                   local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
         </LinearLayout>
       </LinearLayout>

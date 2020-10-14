@@ -192,6 +192,9 @@
   <data name="RejectEmailMessage" xml:space="preserve">
     <value>Reject</value>
   </data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Complete</value>
+  </data>
   <data name="InvitationEmailMessage" xml:space="preserve">
     <value>Invitation</value>
   </data>
@@ -239,6 +242,18 @@
   </data>
   <data name="EmailTemplateDescription" xml:space="preserve">
     <value>You can use %SURVEYNAME% placeholder in the text as a name of survey</value>
+  </data>
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+    <value>In this email template you can use %question_variable% placeholder in the text as an answer on question in interview. Question must be from top level of questionnaire (not inside rosters).</value>
+  </data>
+  <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+    <value>%question_variable:barcode% - display answer as Barcode Code 128</value>
+  </data>
+  <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+    <value>%question_variable:qrcode% - display answer as QR Code</value>
+  </data>
+  <data name="AnswerOn" xml:space="preserve">
+    <value>answer on {{variable}}</value>
   </data>
   <data name="CompletePage" xml:space="preserve">
     <value>Complete</value>
