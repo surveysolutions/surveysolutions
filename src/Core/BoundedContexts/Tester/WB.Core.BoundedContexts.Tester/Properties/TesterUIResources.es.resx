@@ -121,7 +121,7 @@
     <value>La lista no ha sido actualizada</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+    <value>lista ha sido actualizada {0}</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Conectando al servidor</value>
@@ -178,10 +178,10 @@
     <value>Tiempo de espera para la recepción de GPS</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+    <value>Número de segundos para esperar respuesta del servidor</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+    <value>Tiempo de respuesta de servidor</value>
   </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
     <value>Versión: {0}</value>
@@ -205,12 +205,21 @@
     <value>Mostrar variables</value>
   </data>
   <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+    <value>Se muestran las variables en la entrevista con sus valores y descripciones</value>
   </data>
   <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
     <value>Las variables están ocultas</value>
   </data>
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+    <value>Los datos de la entrevista no se pueden aplicar a la nueva versión del cuestionario. Entrevista vacía creada</value>
+  </data>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Favor ingresar el usuario correcto</value>
+  </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Mostrar el tiempo transcurrido por respuesta</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Activación el tiempo de activación, validación y propagación del roster. El tiempo de recepción de datos GPS y tiempo para tomar fotografías no están incluidos.</value>
   </data>
 </root>

@@ -144,4 +144,28 @@
   <data name="UpdateDate" xml:space="preserve">
     <value>Importado en</value>
   </data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Se produjo un error. El archivo no es una pestaña.</value>
+  </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>Maps component was not initialized. Please contact system administrator.</value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>El archivo '{0}' contiene datos que el sistema no puede procesar. Error: {1}</value>
+  </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Se produjo un error. El archivo no contiene archivos de mapas</value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Se produjo un error. El archivo no contiene archivos de mapas</value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Se produjo un error al cargar los enlaces del mapa.</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>los enlaces para {0} mapas se procesaron con {1} inválidos</value>
+  </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} mapas se procesaron con {1} archivos de mapas no válidos</value>
+  </data>
 </root>

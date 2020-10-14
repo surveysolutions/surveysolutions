@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Action" xml:space="preserve">
-    <value>Acción</value>
+    <value>Action</value>
   </data>
   <data name="Assign" xml:space="preserve">
     <value>Asignar</value>
@@ -205,9 +205,7 @@
     <value>Exportar como PDF</value>
   </data>
   <data name="FoldersDescription" xml:space="preserve">
-    <value>Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;br/&gt; - "Crear carpeta" para crear una subcarpeta
-&lt;br/&gt; - "Editar" para cambiar el nombre de la carpeta
-&lt;br/&gt; - "Eliminar" para eliminar la carpeta con subcarpetas</value>
+    <value>Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;br/&gt; - "Crear carpeta" para crear una subcarpeta &lt;br/&gt; - "Editar" para cambiar el nombre de la carpeta &lt;br/&gt; - "Eliminar" para eliminar la carpeta con subcarpetas</value>
   </data>
   <data name="FoldersManagement" xml:space="preserve">
     <value>Administración de carpetas</value>
@@ -249,7 +247,7 @@
     <value>Cuestionarios públicos</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
-    <value>Titulo del cuestionario</value>
+    <value>título del cuestionario</value>
   </data>
   <data name="QuestionnaireTreeFolders" xml:space="preserve">
     <value>Carpetas</value>
@@ -264,21 +262,57 @@
     <value>Intentar de nuevo exportar PDF</value>
   </data>
   <data name="SelectTabFile" xml:space="preserve">
-    <value>Favor escoja el archivo a cargar que contiene valores separados por tabí </value>
+    <value>Favor escoja el archivo a cargar que contiene valores separados por tabí</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Cuestionario "{0}"eliminado satisfactoriamente</value>
+    <value>Cuestionario "{0}" eliminado satisfactoriamente</value>
   </data>
   <data name="TabFilesOnly" xml:space="preserve">
     <value>Solamente se aceptan archivos conteniendo valores separados por tab</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Titulo</value>
+    <value>Título:</value>
   </data>
   <data name="Untitled" xml:space="preserve">
-    <value>Sin titulo</value>
+    <value>Sin título</value>
   </data>
   <data name="You" xml:space="preserve">
     <value>Usted</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Elija traducción</value>
+  </data>
+  <data name="Classifications" xml:space="preserve">
+    <value>Clasificaciones</value>
+  </data>
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Panel de control</value>
+  </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Creando HTML para "{0}"</value>
+  </data>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>¿Está seguro de querer eliminar la carpeta {0}?</value>
+  </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Exportar como HTML</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Exportar HTML</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Ubicación:</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>Nueva carpeta</value>
+  </data>
+  <data name="NotSupportedBrowserUsed" xml:space="preserve">
+    <value>El navegador de Internet no es compatible. Utilice otro navegador.</value>
+  </data>
+  <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+    <value>Está utilizando un navegador Internet Explorer que no es compatible. Es posible que algunas funciones no funcionen correctamente.</value>
+  </data>
+  <data name="SharedQuestionnaires" xml:space="preserve">
+    <value>Cuestionarios compartidos conmigo</value>
   </data>
 </root>

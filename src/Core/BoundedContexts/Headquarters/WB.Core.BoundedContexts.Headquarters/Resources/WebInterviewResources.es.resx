@@ -126,4 +126,31 @@
   <data name="ResumeInterview" xml:space="preserve">
     <value>Reanudar entrevista</value>
   </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>Esta entrevista ha sido finalizada</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>No se puede modificar una entrevista que ha sido recibida en el dispositivo</value>
+  </data>
+  <data name="InvitationText" xml:space="preserve">
+    <value>Usted ha sido invitado a participar en la siguiente encuesta: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Nota para el supervisor</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+    <value>Puede navegar a la entrevista en la siguiente encuesta: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+    <value>Hola, sea bienvenido a la Encuesta Web de Survey Solutions</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Encuesta: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Encuesta Web de Survey Solutions</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Hola, sea bienvenido a la Encuesta Web de Survey Solutions</value>
+  </data>
 </root>
