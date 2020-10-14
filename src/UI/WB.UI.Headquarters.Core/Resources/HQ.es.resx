@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateOneMore" xml:space="preserve">
-    <value>Crear uno mas?</value>
+    <value>Crear uno más?</value>
   </data>
   <data name="InterviewWasCreated" xml:space="preserve">
     <value>Entrevista fue creada satisfactoriamente</value>

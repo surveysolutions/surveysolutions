@@ -121,7 +121,7 @@
     <value>Acciones</value>
   </data>
   <data name="AllData" xml:space="preserve">
-    <value>Todo los datos</value>
+    <value>Toda la información</value>
   </data>
   <data name="AllDataSpss" xml:space="preserve">
     <value>Todos los datos Spss</value>
@@ -145,7 +145,7 @@
     <value>Clonar cuestionario</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Creado</value>
+    <value>Cuenta creada</value>
   </data>
   <data name="DeleteMap" xml:space="preserve">
     <value>Eliminar mapa</value>
@@ -187,7 +187,7 @@
     <value>Haga clic en un cuestionario de la lista para crear asignaciones de entrevistas</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Titulo</value>
+    <value>Title:</value>
   </data>
   <data name="UploadAssignments" xml:space="preserve">
     <value>Cargar asignaciones</value>
@@ -197,5 +197,44 @@
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Configuración de entrevista web</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalles</value>
+  </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Descargar enlaces web</value>
+  </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Exportar cuestionario</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Importado por</value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} usuario {{name}}</value>
+  </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>{{receivedInterviews}} entrevistas y {{receivedAssignments}} asignaciones para nuevas entrevistas fueron recibidas por el entrevistador/supervisor quienes trabajan en modo offline. Después de confirmar la eliminación de la encuesta, el servidor ya no aceptará la información basada en estas entrevistas / asignaciones, y desaparecerán en la próxima sincronización sin posibilidad de recuperación, aun si éstas contienen información recién ingresada / editada. Es su responsabilidad advertir / notificar a los entrevistadores que dejen de completar esas entrevistas / asignaciones, ya que no serán notificados automáticamente. ¿Desea continuar?</value>
+  </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Grabar audio</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>La aplicación Interviewer grabará el audio de la entrevista cuando la auditoría de audio esté habilitada. Tenga en cuenta que la cantidad de datos de sincronización sería significativamente mayor.</value>
+  </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Enviar invitaciones</value>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Mostrar en Designer</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Escriba "{{título del cuestionario}}" para confirmar</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Actualizar asignaciones</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modo web</value>
   </data>
 </root>

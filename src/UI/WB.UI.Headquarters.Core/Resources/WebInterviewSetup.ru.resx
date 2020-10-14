@@ -250,10 +250,4 @@
   <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
     <value>Продолжить</value>
   </data>
-  <data name="EmailOnComplete" xml:space="preserve">
-    <value>Отправить email после завершения web интервью</value>
-  </data>
-  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
-    <value>Вложить в письмо Pdf с ответами</value>
-  </data>
 </root>

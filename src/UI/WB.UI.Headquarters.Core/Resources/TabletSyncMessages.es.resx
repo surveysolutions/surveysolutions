@@ -139,7 +139,7 @@
     <value>Identificador de dispositivo no es válido. Algo ha sucedido con la instalación de la aplicación cliente. Por favor envíe la información de la tableta</value>
   </data>
   <data name="InvalidSequenceIdentifier" xml:space="preserve">
-    <value>La sincronización ha fallado. Secuencia de identificador no es válida. Algo ha sucedido con la aplicación con la instalación de la aplicación cliente. Por favor presión el botón "enviar información" de su tableta.</value>
+    <value>La sincronización ha fallado. Secuencia de identificador no es válida. Algo ha sucedido con la aplicación con la instalación de la aplicación cliente. Por favor presione el botón "enviar información" de su tableta.</value>
   </data>
   <data name="InvalidUserFormat" xml:space="preserve">
     <value>La sincronización ha fallado. El usuario no está autorizado. Por favor revise el login y clave para {0}</value>
@@ -148,7 +148,7 @@
     <value>Su cuenta pertenece a un rol sin el privilegio de ejecutar esta operación.</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>El servidor se encuentra en mantenimiento en este momento. Sentimos la inconveniencia. Por favor intente nuevamente mas tarde.</value>
+    <value>El servidor se encuentra en mantenimiento en este momento. Sentimos la inconveniencia. Por favor intente nuevamente más tarde.</value>
   </data>
   <data name="NoClientIdentifier" xml:space="preserve">
     <value>La sincronización ha fallado. Por favor reinstale la aplicación. El identificador de la aplicación no se ha encontrado. Por favor contacte a los desarrolladores de la herramienta.</value>

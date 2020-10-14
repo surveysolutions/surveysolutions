@@ -133,7 +133,7 @@
     <value>No es posible incrustar la pregunta</value>
   </data>
   <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
-    <value>No es posible eliminar del cuestionario la ultima sección</value>
+    <value>No es posible eliminar del cuestionario la última sección</value>
   </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>No es posible eliminar el usuario ya que no se encuentra en la lista de trabajo</value>
@@ -142,10 +142,10 @@
     <value>Las categorías de pregunta en cascada no pueden tener una columna de valor padre vacía.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Las categorías de preguntas en cascada no pueden tener un valor numerico en la columna ParentValue</value>
+    <value>Las categorías de preguntas en cascada no pueden tener un valor numérico en la columna ParentValue</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Existe al menos un duplicado en cuanto a Titulo + Valor del Padre. La lista no debe contener ningún tipo de duplicados</value>
+    <value>Existe al menos un duplicado en cuanto a título + Valor del Padre. La lista no debe contener ningún tipo de duplicados</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>No se ha encontrado ninguna pregunta en la caja combo con la llave {0}</value>
@@ -154,16 +154,16 @@
     <value>Ha fallado el intento por adicionar el grupo {0} en el grupo {1} . El grupo {1} no existe en el documento {2}</value>
   </data>
   <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
-    <value>Intentando importar la plantilla del cuestionario eliminado </value>
+    <value>Intentando importar la plantilla del cuestionario eliminado</value>
   </data>
   <data name="InvalidFixedTitle" xml:space="preserve">
-    <value>Título de lista es inválido </value>
+    <value>Título de lista es inválido</value>
   </data>
   <data name="InvalidValueOfFixedTitle" xml:space="preserve">
-    <value>Es necesario indicar el número de ítems de la lista </value>
+    <value>Es necesario indicar el número de ítems de la lista</value>
   </data>
   <data name="ItemWithIdExistsAlready" xml:space="preserve">
-    <value>Uno o mas ítems del cuestionario con el mismo id ya existe {0}</value>
+    <value>Uno o más ítems del cuestionario con el mismo id ya existe {0}</value>
   </data>
   <data name="LookupTableAlreadyExist" xml:space="preserve">
     <value>Ya existe tabla de búsqueda con el mismo id</value>
@@ -178,7 +178,7 @@
     <value>Tabla de búsqueda con id {0} inexistente</value>
   </data>
   <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
-    <value>No es posible cargar un archivo vacío </value>
+    <value>No es posible cargar un archivo vacío</value>
   </data>
   <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
     <value>El valor {0} no es posible tratarlo como número decimal. Columna {1}, Fila {2}</value>
@@ -205,16 +205,16 @@
     <value>Número de líneas:{1}. El número máximo de filas ({0}) ha sido excedido</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
-    <value>Ya existe una macro como la indicada </value>
+    <value>Ya existe una macro como la indicada</value>
   </data>
   <data name="MacroIsAbsent" xml:space="preserve">
     <value>No existe una macro como la indicada</value>
   </data>
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
-    <value>Una o mas preguntas presentan el mismo id {0}, el cual existe {1}{2}</value>
+    <value>Una o más preguntas presentan el mismo id {0}, el cual existe {1}{2}</value>
   </data>
   <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
-    <value>Una o mas sub-secciones el mismo id {0}, el cual existe {1}{2}</value>
+    <value>Una o más sub-secciones el mismo id {0}, el cual existe {1}{2}</value>
   </data>
   <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
     <value>No posee privilegios para cambiar este cuestionario</value>
@@ -238,7 +238,7 @@
     <value>El elemento del cuestionario con ID {0} no se puede encontrar.</value>
   </data>
   <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
-    <value>No fue posible encontrar la pregunta {0} de la versión {1} </value>
+    <value>No fue posible encontrar la pregunta {0} de la versión {1}</value>
   </data>
   <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
     <value>El título del cuestionario no puede ser vacío o contener solamente espacios en blanco</value>
@@ -247,16 +247,16 @@
     <value>El tipo de la pregunta no está soportado {0}</value>
   </data>
   <data name="RosterCantBePaste" xml:space="preserve">
-    <value>No es posible incrustar la lista en este lugar</value>
+    <value>No es posible incrustar el roster en este lugar</value>
   </data>
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
-    <value>La sección no puede tener mas de {0} ítems</value>
+    <value>La sección no puede tener más de {0} ítems</value>
   </data>
   <data name="StaticTextCantBePaste" xml:space="preserve">
-    <value>No es posible incrustar texto estático en este lugar </value>
+    <value>No es posible incrustar texto estático en este lugar</value>
   </data>
   <data name="SubSectionCantBeFound" xml:space="preserve">
-    <value>No ha sido posible encontrar la sub-sección con llave {0} </value>
+    <value>No ha sido posible encontrar la sub-sección con llave {0}</value>
   </data>
   <data name="SubSectionDepthLimit" xml:space="preserve">
     <value>La profundidad de la sección o la lista no pueda ser mayor a {0}</value>
@@ -292,12 +292,102 @@
     <value>Usuario {0} es un propietario del cuestionario. Por favor ingrese otro email</value>
   </data>
   <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
-    <value>El valor que indica el número de ítems de la lista solo puede contener caracteres numéricos</value>
+    <value>El valor que indica el número de ítems del roster solo puede contener caracteres numéricos</value>
   </data>
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>No es posible incrustar variables</value>
   </data>
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Variable con id {0} no fue encontrada en el cuestionario {1}</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>No puede editar ni reordenar preguntas en la sección de portada, esta es solo de lectura.</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>La sección de portada no puede ser eliminada del cuestionario</value>
+  </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>No fué posible extraer las categorías del archivo cargado</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>column</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
+    <value>La sección de portada solo puede contener preguntas y textos estáticos</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>La sección de portada debe ser la primera sección del cuestionario</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Categorías duplicadas en filas: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Algunas categorías no tienen una identificación de padre</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Texto vacío</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Valor vacío</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Valor numérico no válido</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>El conjunto de categorías debe tener al menos 2 categorías</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>El conjunto de categorías tiene más de {0} categorías</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] El texto de la categoría debe tener menos de 250 caracteres</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>No hay categorías en el archivo</value>
+  </data>
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>Categoría duplicada '{0}' con valor padre '{1}'</value>
+  </data>
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>La pregunta principal "{0}" tiene {1} categorías con el valor "{2}"</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Valor vacío</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Faltan algunas columnas. Asegúrese de subir el archivo con las columnas requeridas</value>
+  </data>
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Valor entero de 32 bits no válido '{0}'. El valor debe estar entre -2147483647 y 2147483647</value>
+  </data>
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>La pregunta principal no tiene una categoría con el valor "{0}"</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Solo se aceptan archivos de valores separados por tabulaciones (* .tab, * .txt, * .tsv) o excel (* .xslx, * .xls, * .ods)</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>El título es demasiado largo. La longitud del título debe ser inferior a {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Categoría duplicada '{0}' con valor '{1}'</value>
+  </data>
+  <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>No se encontraron categorías para la pregunta principal en cascada "{0}"</value>
+  </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>Errores encontrados en el archivo proporcionado</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>El cuestionario ya admite la portada</value>
+  </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>La sección de portada ya es soportada por el cuestionario.</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>El encabezado {0} no se encontró en el archivo de Excel</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Fila</value>
   </data>
 </root>
