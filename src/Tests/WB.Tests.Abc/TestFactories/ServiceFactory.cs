@@ -424,7 +424,8 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewerPrincipal(
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<ILogger>());
         }
 
         public SupervisorPrincipal SupervisorPrincipal(IPlainStorage<SupervisorIdentity> storage,

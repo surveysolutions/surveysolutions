@@ -8,33 +8,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        protected readonly IPrincipal principal;
-        protected readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IPrincipal Principal;
+        protected readonly IViewModelNavigationService ViewModelNavigationService;
 
-        protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
+        protected BaseViewModel(IPrincipal principal, 
+            IViewModelNavigationService viewModelNavigationService, 
+            bool isAuthenticationRequired = true)
         {
-            this.principal = principal;
-            this.viewModelNavigationService = viewModelNavigationService;
+            this.Principal = principal;
+            this.ViewModelNavigationService = viewModelNavigationService;
+            
+            BaseViewModelSetupMethods.CheckAuthentication(isAuthenticationRequired, this.Principal, this.ViewModelNavigationService);
         }
-
-        public virtual bool IsAuthenticationRequired => true;
-
-        public override void Prepare()
-        {
-            base.Prepare();
-            BaseViewModelSetupMethods.Prepare(this.IsAuthenticationRequired, this.principal, this.viewModelNavigationService);
-        }
-
+        
         protected override void ReloadFromBundle(IMvxBundle parameters)
         {
             base.ReloadFromBundle(parameters);
-            BaseViewModelSetupMethods.ReloadStateFromBundle(this.principal, parameters);
+            BaseViewModelSetupMethods.ReloadStateFromBundle(this.Principal, parameters);
         }
 
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            BaseViewModelSetupMethods.SaveStateToBundle(this.principal, bundle);
+            BaseViewModelSetupMethods.SaveStateToBundle(this.Principal, bundle);
         }
 
         // it's much more performant, as original extension call new Action<...> on every call
