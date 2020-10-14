@@ -8,19 +8,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public abstract class BaseViewModel<T> : MvxViewModel<T>
     {
         protected readonly IPrincipal Principal;
-        protected readonly IViewModelNavigationService viewModelNavigationService;
-        protected virtual bool IsAuthenticationRequired => true;
-
-        protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
+        protected readonly IViewModelNavigationService ViewModelNavigationService;
+        
+        protected BaseViewModel(IPrincipal principal,
+            IViewModelNavigationService viewModelNavigationService,
+            bool isAuthenticationRequired = true)
         {
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
-            this.viewModelNavigationService = viewModelNavigationService ?? throw new ArgumentNullException(nameof(viewModelNavigationService));
-        }
-
-        public override void Prepare()
-        {
-            base.Prepare();
-            BaseViewModelSetupMethods.Prepare(this.IsAuthenticationRequired, this.Principal, this.viewModelNavigationService);
+            this.ViewModelNavigationService = viewModelNavigationService ?? throw new ArgumentNullException(nameof(viewModelNavigationService));
+            
+            BaseViewModelSetupMethods.CheckAuthentication(isAuthenticationRequired, this.Principal, this.ViewModelNavigationService);
         }
 
         protected override void ReloadFromBundle(IMvxBundle state)
