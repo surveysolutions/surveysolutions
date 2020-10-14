@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Invitations
+﻿using System.Text.Encodings.Web;
+
+namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class WebInterviewEmailTemplate
     {
@@ -14,37 +16,6 @@
             this.PasswordDescription = passwordDescription;
             this.LinkText = linkText;
         }
-    }
-
-    public class EmailContent
-    {
-        private const string Password = "%PASSWORD%";
-        private const string SurveyLink = "%SURVEYLINK%";
-        private const string SurveyName = "%SURVEYNAME%";
-        private const string QuestionnaireTitle = "%QUESTIONNAIRE%";
-
-        public EmailContent(WebInterviewEmailTemplate template, string questionnaireTitle, string link, string password)
-        {
-            Subject = template.Subject
-                .Replace(SurveyName, questionnaireTitle)
-                .Replace(QuestionnaireTitle, questionnaireTitle);
-            MainText = template.MainText
-                .Replace(SurveyName, questionnaireTitle)
-                .Replace(QuestionnaireTitle, questionnaireTitle)
-                .Replace(SurveyLink, link)
-                .Replace(Password, password);
-            LinkText = template.LinkText
-                .Replace(SurveyName, questionnaireTitle)
-                .Replace(QuestionnaireTitle, questionnaireTitle);
-            PasswordDescription = template.PasswordDescription
-                .Replace(SurveyName, questionnaireTitle)
-                .Replace(QuestionnaireTitle, questionnaireTitle);
-        }
-
-        public string Subject { get; }
-        public string MainText { get; }
-        public string PasswordDescription { get; }
-        public string LinkText { get; }
     }
 }
 

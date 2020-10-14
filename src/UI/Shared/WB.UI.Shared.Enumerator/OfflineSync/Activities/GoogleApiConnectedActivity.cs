@@ -17,6 +17,13 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
 
+        protected override void OnStart()
+        {
+            this.RestoreGoogleApiConnectionIfNeeded();
+            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
+            base.OnStart();
+        }
+
         protected override void OnResume()
         {
             base.OnResume();

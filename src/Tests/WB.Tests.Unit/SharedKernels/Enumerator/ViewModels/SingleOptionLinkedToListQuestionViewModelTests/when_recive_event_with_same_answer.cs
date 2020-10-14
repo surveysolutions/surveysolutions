@@ -13,7 +13,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedToListQuestionViewModelTests
 {
     [TestOf(typeof(SingleOptionLinkedToListQuestionViewModel))]
-    public class when_recive_event_with_same_answer
+    public class when_recive_event_with_same_answer : SingleOptionLinkedToListQuestionViewModelTests
     {
         [Test]
         public async Task should_dont_send_answer_command()

@@ -2443,8 +2443,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private bool IsCoverPage(Guid publicKey) => publicKey == QuestionnaireDocument.CoverPageSectionId;
 
-        public void MigrateToNewVersion()
+        public void MigrateToNewVersion(MigrateToNewVersion command)
         {
+            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
             if (QuestionnaireDocument.IsCoverPageSupported)
                 throw new QuestionnaireException(DomainExceptionType.MigrateToNewVersion, ExceptionMessages.QuestionnaireAlreadySupportedCover);
 

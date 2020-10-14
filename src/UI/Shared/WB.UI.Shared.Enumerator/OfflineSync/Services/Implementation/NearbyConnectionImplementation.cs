@@ -77,14 +77,22 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             logger.Verbose($"({name}, {endpoint}) EXECUTE");
 
-            await Api.RequestConnectionAsync(name, endpoint,
-                    new OnConnectionLifecycleCallback(
-                        new NearbyConnectionLifeCycleCallback(
-                            OnInitiatedConnection,
-                            OnConnectionResult,
-                            OnDisconnected), cancellationToken));
+            try
+            {
+                await Api.RequestConnectionAsync(name, endpoint,
+                        new OnConnectionLifecycleCallback(
+                            new NearbyConnectionLifeCycleCallback(
+                                OnInitiatedConnection,
+                                OnConnectionResult,
+                                OnDisconnected), cancellationToken));
 
-            return NearbyStatus.Ok;
+                return NearbyStatus.Ok;
+            }
+            catch (ApiException api)
+            {
+                logger.Error($"({endpoint})", api);
+                return Error(api);
+            }
         }
 
         public async Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
@@ -118,7 +126,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
-            this.logger.Verbose($"({to}, '{payload}') ENTER");
+            // this.logger.Verbose($"({to}, '{payload}') ENTER");
 
             if (!(payload is Entities.Payload send))
                 throw new ArgumentException($"Cannot handle payload of type: {payload.GetType().FullName}",

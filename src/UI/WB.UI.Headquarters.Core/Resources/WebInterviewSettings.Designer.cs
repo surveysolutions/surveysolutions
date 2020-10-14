@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterviewSettings {
@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to answer on {{variable}}.
+        /// </summary>
+        public static string AnswerOn {
+            get {
+                return ResourceManager.GetString("AnswerOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -120,6 +129,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Complete {
             get {
                 return ResourceManager.GetString("Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        public static string CompleteEmailMessage {
+            get {
+                return ResourceManager.GetString("CompleteEmailMessage", resourceCulture);
             }
         }
         
@@ -273,6 +291,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string FinishPage {
             get {
                 return ResourceManager.GetString("FinishPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %question_variable:barcode% - display answer as Barcode Code 128.
+        /// </summary>
+        public static string InterviewDataInsertBarcodeDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertBarcodeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In this email template you can use %question_variable% placeholder in the text as an answer on question in interview. Question must be from top level of questionnaire (not inside rosters)..
+        /// </summary>
+        public static string InterviewDataInsertInTextDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertInTextDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %question_variable:qrcode% - display answer as QR Code.
+        /// </summary>
+        public static string InterviewDataInsertQrCodeDescription {
+            get {
+                return ResourceManager.GetString("InterviewDataInsertQrCodeDescription", resourceCulture);
             }
         }
         
