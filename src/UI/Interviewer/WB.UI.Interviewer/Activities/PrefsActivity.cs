@@ -60,9 +60,7 @@ namespace WB.UI.Interviewer.Activities
                     this.UpdateSettings();
                 };
 
-                this.FindPreference(SettingsNames.Endpoint)
-                    .SetEditTextNumericMode()
-                    .PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.Endpoint).PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetEndpoint(e.NewValue.ToString());
                     this.UpdateSettings();
@@ -74,17 +72,23 @@ namespace WB.UI.Interviewer.Activities
                     interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.HttpResponseTimeout)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.BufferSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.BufferSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.BufferSize));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.GpsReceiveTimeoutSec).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.GpsReceiveTimeoutSec)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetGpsResponseTimeout(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
                     this.UpdateSettings();
@@ -226,7 +230,7 @@ namespace WB.UI.Interviewer.Activities
         public static Preference SetEditTextDecimalMode(this Preference preference)
         {
             var editTextPreference = (EditTextPreference) preference;
-            editTextPreference.SetOnBindEditTextListener(new OnBindEditTextListener(InputTypes.NumberFlagDecimal));
+            editTextPreference.SetOnBindEditTextListener(new OnBindEditTextListener(InputTypes.ClassNumber | InputTypes.NumberFlagDecimal));
             return preference;
         }
     }
