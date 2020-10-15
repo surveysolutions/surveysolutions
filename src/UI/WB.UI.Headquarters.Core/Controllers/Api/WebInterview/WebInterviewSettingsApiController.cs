@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             [Required] public WebInterviewUserMessages TitleType { get; set; }
             [Required] public string TitleText { get; set; }
             [Required] public WebInterviewUserMessages MessageType { get; set; }
-            [Required] public string MessageText { get; set; }
+            public string MessageText { get; set; }
 
             public WebInterviewUserMessages? ButtonType { get; set; }
             public string ButtonText { get; set; }
