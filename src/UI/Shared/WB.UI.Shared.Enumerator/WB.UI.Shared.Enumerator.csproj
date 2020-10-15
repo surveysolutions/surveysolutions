@@ -231,6 +231,7 @@
     <Compile Include="Settings\AndroidBattery.cs" />
     <Compile Include="Settings\AndroidDeviceOrientation.cs" />
     <Compile Include="Settings\GsmSignalStrengthListener.cs" />
+    <Compile Include="Settings\PreferenceExtensions.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
     <Compile Include="Utils\ContextExtensions.cs" />
     <Compile Include="Utils\CrashReporting.cs" />

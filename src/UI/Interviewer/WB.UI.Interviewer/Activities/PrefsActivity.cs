@@ -10,6 +10,7 @@ using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.SharedPreferences;
+using WB.UI.Shared.Enumerator.Settings;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -200,38 +201,6 @@ namespace WB.UI.Interviewer.Activities
                     checkBoxPreference.Checked = defaultValue;
                 }
             }
-        }
-    }
-    
-    public static class PreferenceExtensions
-    {
-        class OnBindEditTextListener : Java.Lang.Object, EditTextPreference.IOnBindEditTextListener
-        {
-            private readonly InputTypes inputType;
-
-            public OnBindEditTextListener(InputTypes inputType)
-            {
-                this.inputType = inputType;
-            }
-
-            public void OnBindEditText(EditText editText)
-            {
-                editText.InputType = inputType;
-            }
-        }
-                
-        public static Preference SetEditTextNumericMode(this Preference preference)
-        {
-            var editTextPreference = (EditTextPreference) preference;
-            editTextPreference.SetOnBindEditTextListener(new OnBindEditTextListener(InputTypes.ClassNumber));
-            return preference;
-        }
-
-        public static Preference SetEditTextDecimalMode(this Preference preference)
-        {
-            var editTextPreference = (EditTextPreference) preference;
-            editTextPreference.SetOnBindEditTextListener(new OnBindEditTextListener(InputTypes.ClassNumber | InputTypes.NumberFlagDecimal));
-            return preference;
         }
     }
 }

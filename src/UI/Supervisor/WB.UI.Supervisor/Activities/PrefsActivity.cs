@@ -7,6 +7,7 @@ using AndroidX.Preference;
 using MvvmCross;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.UI.Shared.Enumerator.Settings;
 using WB.UI.Supervisor.SharedPreferences;
 
 namespace WB.UI.Supervisor.Activities
@@ -55,18 +56,24 @@ namespace WB.UI.Supervisor.Activities
                     settings.SetEndpoint(e.NewValue.ToString());
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.EventChunkSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     settings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, settings.EventChunkSize));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.HttpResponseTimeout)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     settings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue,
                         (int) settings.Timeout.TotalSeconds));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.BufferSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.BufferSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     settings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, settings.BufferSize));
                     this.UpdateSettings();
