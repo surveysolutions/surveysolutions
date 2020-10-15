@@ -1,6 +1,6 @@
 <template>
     <md-editor
-        v-bind:initialValue="value"
+        v-bind:initialValue="initialValue"
         v-on:change="onEditorChange"
         v-bind="$attrs"
         initialEditType="markdown"
@@ -29,6 +29,11 @@ export default {
         value: {type: String, required: true},
         supportHtml: {type: Boolean, required: false, default:false},
     },
+    data() {
+        return {
+            initialValue: '',
+        }
+    },
     computed: {
         editorOptions() {
             return {
@@ -52,18 +57,19 @@ export default {
 
     mounted() {
         var val = this.value
+        this.initialValue = this.value
         if (this.supportHtml != true) {
             val = unescape(val)
         }
         this.$refs.mdEditor.invoke('setMarkdown', val)
     },
-    /*watch:{
-        value(newValue){
-            if (newValue != this.value) {
+    watch:{
+        value(newValue, oldValue) {
+            if (newValue != this.value || newValue == this.initialValue) {
                 this.$refs.mdEditor.invoke('setMarkdown', newValue)
             }
         },
-    },*/
+    },
     methods: {
         onEditorChange() {
             let markDown = this.$refs.mdEditor.invoke('getMarkdown')
