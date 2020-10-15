@@ -786,7 +786,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
-                @event.Payload.OriginDate?.Offset);
+                @event.Payload.OriginDate?.Offset, new Dictionary<string, string>
+                {
+                    {"deviceType", @event.Payload.DeviceType.ToString() }
+                });
 
             return state;
         }
