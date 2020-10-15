@@ -5,7 +5,7 @@
         v-bind="$attrs"
         initialEditType="markdown"
         ref="mdEditor"
-        previewStyle="tab"
+        previewStyle="global"
         :options="editorOptions"
         v-on="$listeners" >
     </md-editor>
