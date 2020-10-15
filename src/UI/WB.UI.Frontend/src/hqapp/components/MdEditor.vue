@@ -17,7 +17,7 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/vue-editor'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
-import { escape } from 'lodash'
+import { escape, unescape } from 'lodash'
 
 
 export default {
@@ -35,7 +35,7 @@ export default {
                 usageStatistics: false,
                 hideModeSwitch: true,
                 //useDefaultHTMLSanitizer: true,
-                customHTMLSanitizer: sanitizeHtml,
+                //customHTMLSanitizer: sanitizeHtml,
                 toolbarItems: [
                     'heading',
                     'bold',
@@ -51,7 +51,11 @@ export default {
     },
 
     mounted() {
-        this.$refs.mdEditor.invoke('setMarkdown', this.value)
+        var val = this.value
+        if (this.supportHtml != true) {
+            val = unescape(val)
+        }
+        this.$refs.mdEditor.invoke('setMarkdown', val)
     },
     /*watch:{
         value(newValue){
