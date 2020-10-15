@@ -87,7 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
 
                 sw.Stop();
-                this.logger.LogInformation("Send completed emails job: FINISHED {time}", sw.Elapsed);
             }
             catch (OperationCanceledException)
             {
