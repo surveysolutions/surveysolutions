@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
-using Moq;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Tests.Abc;
 
@@ -15,7 +13,7 @@ namespace WB.Tests.Unit.Infrastructure
         public void when_call_clear_should_remove_all_cache_entities()
         {
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
-            var aggregateRootCache = new AggregateRootCache(memoryCache, Mock.Of<ILogger>());
+            var aggregateRootCache = new AggregateRootCache(memoryCache);
             aggregateRootCache.CreateEntry(Id.g1, item => item, TimeSpan.FromDays(5));
             aggregateRootCache.CreateEntry(Id.g2, item => item, TimeSpan.FromDays(5));
             aggregateRootCache.CreateEntry(Id.g3, item => item, TimeSpan.FromDays(5));
@@ -32,7 +30,7 @@ namespace WB.Tests.Unit.Infrastructure
         public void when_call_clear_should_allow_save_new_items()
         {
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
-            var aggregateRootCache = new AggregateRootCache(memoryCache, Mock.Of<ILogger>());
+            var aggregateRootCache = new AggregateRootCache(memoryCache);
             aggregateRootCache.CreateEntry(Id.g1, item => item, TimeSpan.FromDays(5));
             aggregateRootCache.Clear();
             
