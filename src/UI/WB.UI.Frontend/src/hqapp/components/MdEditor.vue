@@ -66,10 +66,11 @@ export default {
     watch:{
         value(newValue, oldValue) {
             let val = newValue
-            if (this.supportHtml != true) {
-                val = unescape(val)
-            }
             if (val != this.value || val == this.initialValue) {
+                if (this.supportHtml != true) {
+                    val = unescape(val)
+                }
+
                 this.$refs.mdEditor.invoke('setMarkdown', val)
             }
         },
