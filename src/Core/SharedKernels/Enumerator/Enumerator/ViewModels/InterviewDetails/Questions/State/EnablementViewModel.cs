@@ -49,11 +49,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
+            
+            this.eventRegistry.Subscribe(this, interviewId);
+            initiated = true;
 
             this.UpdateSelfFromModel();
-            this.eventRegistry.Subscribe(this, interviewId);
-
-            initiated = true;
         }
 
         public bool HideIfDisabled { get; private set; }
