@@ -15,6 +15,7 @@
     "dependencies": {
         "@google/markerclustererplus": "^4.0.1",
         "@microsoft/signalr": "^3.1.6",
+        "@toast-ui/vue-editor": "^2.4.0",
         "ag-grid-community": "^22.1.1",
         "ag-grid-vue": "^22.1.1",
         "append-query": "^2.1.0",
@@ -37,6 +38,7 @@
         "jquery-highlight": "^3.4.0",
         "jquery-mask-plugin": "^1.14.16",
         "lodash": "^4.17.15",
+        "marked": "^1.2.0",
         "moment": "^2.24.0",
         "moment-duration-format": "^2.3.2",
         "pnotify": "^3.2.1",
