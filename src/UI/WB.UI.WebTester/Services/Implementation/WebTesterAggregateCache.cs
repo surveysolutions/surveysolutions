@@ -10,8 +10,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IEvictionNotifier notify;
 
         public WebTesterAggregateCache(IMemoryCache memoryCache,
-            IEvictionNotifier notify,
-            ILogger logger) : base(memoryCache, logger)
+            IEvictionNotifier notify) : base(memoryCache)
         {
             this.notify = notify;
         }
