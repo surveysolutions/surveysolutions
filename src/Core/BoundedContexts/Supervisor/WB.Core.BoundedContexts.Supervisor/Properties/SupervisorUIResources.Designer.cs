@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current responsible interviewer will not be notified about the interview approving until the next synchronization. If interviewer has started working on the interview already, all the data that interviewer has entered before the next synchronization will be DISCARDED!.
+        /// </summary>
+        public static string Confirm_Approve_Synchronized_Interview_Message {
+            get {
+                return ResourceManager.GetString("Confirm_Approve_Synchronized_Interview_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No sending devices detected.
         ///Your device ID is &apos;{0}&apos;.
         /// </summary>

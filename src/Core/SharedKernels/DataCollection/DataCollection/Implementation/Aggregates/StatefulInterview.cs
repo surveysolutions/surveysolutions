@@ -974,7 +974,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
             }
             
-            ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
+            ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate, command.DeviceType));
         }
 
         public void Pause(PauseInterviewCommand command)

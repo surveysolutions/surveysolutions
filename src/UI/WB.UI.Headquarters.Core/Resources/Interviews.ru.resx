@@ -231,6 +231,9 @@
   <data name="AssignReceivedWarning" xml:space="preserve">
     <value>Текущие интервьюверы не будут уведомлены о смене ответственного. Данные, которые они начали собирать, будут удалены.</value>
   </data>
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Текущие интервьюверы не будут уведомлены об утверждении интервью. Данные, которые они начали собирать, будут удалены.</value>
+  </data>
   <data name="RejectToOriginal" xml:space="preserve">
     <value>Вернуть отправителю</value>
   </data>

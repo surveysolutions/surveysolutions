@@ -37,7 +37,7 @@
 
     <!--server OS-->
     <!--AND MsiNTProductType > 1-->
-    <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
+    <Condition Message="This application requires server operating system such as Windows Server 2012 R2 or newer.">
       <![CDATA[Installed OR (VersionNT64 >= 603) AND MsiNTProductType > 1]]>
     </Condition>
 

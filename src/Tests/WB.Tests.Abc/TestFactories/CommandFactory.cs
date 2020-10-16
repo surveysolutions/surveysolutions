@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -329,7 +330,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public ResumeInterviewCommand ResumeInterview(Guid interviewId, DateTimeOffset? originDate = null)
         {
-            return new ResumeInterviewCommand(interviewId, Guid.NewGuid())
+            return new ResumeInterviewCommand(interviewId, Guid.NewGuid(), AgentDeviceType.Unknown)
             {
                 OriginDate = originDate ?? DateTimeOffset.Now
             };
