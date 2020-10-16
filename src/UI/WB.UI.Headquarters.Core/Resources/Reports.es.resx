@@ -280,7 +280,7 @@
     <value>El mes pasado</value>
   </data>
   <data name="LastNDays" xml:space="preserve">
-    <value>Últimos {{días}} días</value>
+    <value>Últimos {{days}} días</value>
   </data>
   <data name="LastUpdatedDate" xml:space="preserve">
     <value>Actualizado en</value>

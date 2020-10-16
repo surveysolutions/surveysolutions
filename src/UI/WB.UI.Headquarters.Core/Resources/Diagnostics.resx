@@ -101,7 +101,7 @@
     <value>Waiting for health check results</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Health status: {{ status }}</value>
+    <value>Health status: {{status}}</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
     <value>Server metrics</value>

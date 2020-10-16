@@ -232,10 +232,10 @@
     <value>Creado</value>
   </data>
   <data name="Action_Created_Comment" xml:space="preserve">
-    <value>Comentario: {{comentario}}</value>
+    <value>Comentario: {{comment}}</value>
   </data>
   <data name="Action_Created_Responsible" xml:space="preserve">
-    <value>Asignado a {{responsable}}</value>
+    <value>Asignado a {{responsible}}</value>
   </data>
   <data name="Action_Deleted" xml:space="preserve">
     <value>Eliminado</value>
@@ -244,7 +244,7 @@
     <value>Tamaño cambiado</value>
   </data>
   <data name="Action_QuantityChanged_To" xml:space="preserve">
-    <value>El tamaño cambió a {{cantidad}}</value>
+    <value>El tamaño cambió a {{quantity}}</value>
   </data>
   <data name="Action_QuantityChanged_To_Unlimited" xml:space="preserve">
     <value>El tamaño cambió a ilimitado</value>
@@ -256,7 +256,7 @@
     <value>Reasignado a {{newResponsible}}</value>
   </data>
   <data name="Action_Reassigned_To_Comment" xml:space="preserve">
-    <value>Comentario: {{comentario}}</value>
+    <value>Comentario: {{comment}}</value>
   </data>
   <data name="Action_ReceivedByTablet" xml:space="preserve">
     <value>Recibido por tableta</value>
@@ -412,7 +412,7 @@
     <value>Seleccione el cuestionario a actualizar</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>El tamaño de la asignación seleccionada {{id}} se cambiará de {{cantidad}} a {{recopilada}} (número de entrevistas recopiladas actualmente)</value>
+    <value>El tamaño de la asignación seleccionada {{id}} se cambiará de {{quantity}} a {{collected}} (número de entrevistas recopiladas actualmente)</value>
   </data>
   <data name="SizeForWebMode" xml:space="preserve">
     <value>La asignación con el tamaño 1 para el modo web debe incluir un correo electrónico o una contraseña.</value>
@@ -460,7 +460,7 @@
     <value>Done</value>
   </data>
   <data name="UpgradeProgressDoneCount" xml:space="preserve">
-    <value>Actualizado correctamente: {{procesado}}</value>
+    <value>Actualizado correctamente: {{processed}}</value>
   </data>
   <data name="UpgradeProgressDoneTitle" xml:space="preserve">
     <value>La actualización de {{from}} a {{to}} ha finalizado</value>
@@ -469,7 +469,7 @@
     <value>No actualizado: {{count}}</value>
   </data>
   <data name="UpgradeProgressNumbers" xml:space="preserve">
-    <value>Actualización de {{procesado}} de {{totalCount}}</value>
+    <value>Actualización de {{processed}} de {{totalCount}}</value>
   </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Actualización de asignaciones de {{from}} a {{to}}</value>
