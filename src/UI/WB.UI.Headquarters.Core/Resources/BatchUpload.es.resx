@@ -304,7 +304,7 @@
       <value>Importando información de {{fileName}} para {{title}}</value>
   </data>
   <data name="Importing" xml:space="preserve">
-    <value>Importando {{percent}}%</value>
+    <value>Importando</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
     <value>Se está ejecutando otro proceso de importación de asignación. Solo se permite un proceso de importación de asignaciones a la vez. Espere hasta que finalice el proceso y luego cargue un nuevo archivo de muestra. Siga el enlace si desea obtener información de progreso más detallada sobre el otro proceso de importación.</value>

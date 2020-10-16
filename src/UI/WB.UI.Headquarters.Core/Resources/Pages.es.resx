@@ -1294,10 +1294,10 @@
     <value>Nombre completo</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Los entrevistadores {{entrevistadores}} serán trasladados a un equipo de supervisor {{supervisor}}.</value>
+    <value>Los entrevistadores {{interviewers}} serán trasladados a un equipo de supervisor {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>El (los) entrevistador (es) {{entrevistadores}} están en el equipo del supervisor {{supervisor}} y no se realizará ninguna acción.</value>
+    <value>El (los) entrevistador (es) {{interviewers}} están en el equipo del supervisor {{supervisor}} y no se realizará ninguna acción.</value>
   </data>
   <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
     <value>Último acceso</value>
@@ -1309,7 +1309,7 @@
     <value>Mueva a los entrevistadores con sus asignaciones y entrevistas al equipo de supervisor {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-    <value>Seleccione un equipo a dónde mover {{nombres}}</value>
+    <value>Seleccione un equipo a dónde mover {{names}}</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>Mover a otro equipo</value>
