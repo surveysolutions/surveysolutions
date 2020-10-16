@@ -30,14 +30,14 @@
                         <li role="presentation"
                             class="active">
                             <a href="#welcome"
-                                @click="setPageActive('welcomeTextTitle')"
+                                @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
                                 aria-controls="welcome"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a>
                         </li>
                         <li role="presentation">
                             <a href="#resume"
-                                @click="setPageActive('resumeWelcome')"
+                                @click="setPageActive('resumeWelcome', 'resumeInvitation')"
                                 aria-controls="resume"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a>
@@ -98,7 +98,9 @@
                                             <div class="h5">
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
-                                            <md-editor v-validate=""
+                                            <md-editor
+                                                ref="welcomeTextDescription"
+                                                v-validate=""
                                                 data-vv-name="invitation"
                                                 v-model="webInterviewPageMessages['invitation'].text">
                                             </md-editor>
@@ -271,6 +273,7 @@
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
                                             <md-editor
+                                                ref="resumeInvitation"
                                                 v-validate=""
                                                 data-vv-name="resumeInvitation"
                                                 v-model="webInterviewPageMessages['resumeInvitation'].text">
@@ -1223,6 +1226,15 @@ export default {
         self.$validator.reset('$finishPage')
         self.$validator.reset('$completePage')
     },
+    mounted() {
+        const jqEl = $(this.$el)
+
+        jqEl.on('shown.bs.tab', (event) => {
+            //debugger
+            //alert(event.target)
+        })
+
+    },
     methods: {
         setActive(emailTemplate) {
             map(this.emailTemplates, option => {
@@ -1241,8 +1253,9 @@ export default {
                     const input = self.$refs[titleType]
                     input.resize()
                 }
-                if(messageType)
-                    self.$refs[messageType].resize()
+                if(messageType) {
+                    self.$refs[messageType].refresh()
+                }
             })
         },
         cancelEditEmailTemplate(emailTemplate) {
