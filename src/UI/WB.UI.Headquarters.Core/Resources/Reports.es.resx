@@ -220,7 +220,7 @@
     <value>Reiniciado</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Conteo de dias de la entrevista en esl estado</value>
+    <value>Conteo de días de la entrevista en el estado</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
     <value>Supervisor asignado</value>
@@ -229,7 +229,7 @@
     <value>Supervisores y Encuestas</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
-    <value>Titulo de cuestionario</value>
+    <value>título de cuestionario</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Encuestas y estados</value>
@@ -245,5 +245,143 @@
   </data>
   <data name="Version" xml:space="preserve">
     <value>Versión</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Toda la información</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Promedio</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Filtrar por valor numérico</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Pregunta de condición</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Contar</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>El Cuadro de entrevistas acumuladas muestra la evolución del número de entrevistas en cada estado a lo largo del tiempo.</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Mostrar superposición de mapa de calor</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Radio de calor</value>
+  </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Importar plantilla de usuarios</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Entrevistadores</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>El mes pasado</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Últimos {{days}} días</value>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Actualizado en</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>La semana pasada</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Se están cargando los datos del mapa</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Mediana</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Percentil 05</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Percentil 50</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Percentil 95</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Tabla dinámica</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Mes anterior</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Semana pasada</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Pregunta</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Etiqueta de pregunta</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Existen problemas de compatibilidad entre las versiones del cuestionario. Se ignoraron las respuestas de versiones anteriores del cuestionario que ya no existen en la última versión del cuestionario.</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Texto de la pregunta</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Intervalos de fechas rápidos</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Rango relativo a los datos</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Guardar como imagen</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Seleccionar pregunta de condición</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Seleccionar pregunta</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Suma</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>Por equipos</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>El informe de equipos y estados muestra el número de entrevistas en cada estado por equipos</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>El informe de equipos y estados muestra el número de entrevistas en cada estado por entrevistador</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Este mes</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Esta semana</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Volver a cuestionarios</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Actualizado {0}</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Actualizar ahora</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Actualización en progreso</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>Ver opciones</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>Por miembros del equipo</value>
   </data>
 </root>

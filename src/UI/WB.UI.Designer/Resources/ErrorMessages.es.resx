@@ -145,7 +145,7 @@
     <value>No es una dirección de correo electrónico válida</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>El servidor se encuentra en mantenimiento en este momento. Lamentamos los inconvenientes. Favor inténtelo mas tarde</value>
+    <value>El servidor se encuentra en mantenimiento en este momento. Sentimos la inconveniencia. Por favor intente nuevamente más tarde.</value>
   </data>
   <data name="NoAccessToQuestionnaire" xml:space="preserve">
     <value>El usuario no tiene privilegios para abrir el cuestionario</value>
@@ -154,7 +154,7 @@
     <value>No se ha proporcionado el identificador del cuestionario para verificar los permisos</value>
   </data>
   <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
-    <value>Importación del cuestionario ha fallado. Su cuestionario {0} tienen una versión {1}. La aplicación Headquarters soporta solamente la versión {2} </value>
+    <value>Importación del cuestionario ha fallado. Su cuestionario {0} tienen una versión {1}. La aplicación Headquarters soporta solamente la versión {2}</value>
   </data>
   <data name="OldClientPleaseUpdate" xml:space="preserve">
     <value>Usted posee una versión anterior de la aplicación Headquarters. Favor contacte support@mysurvey.solutions para solicitar una actualización</value>
@@ -175,10 +175,10 @@
     <value>No es posible restablecer la clave</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Su cuestionario posee errores. Favor revisar el cuestionario en Designer </value>
+    <value>Su cuestionario posee errores. Favor revisar el cuestionario en Designer</value>
   </data>
   <data name="QuestionnaireTitle_required" xml:space="preserve">
-    <value>Se requiere un titulo para el cuestionario</value>
+    <value>Se requiere un título para el cuestionario</value>
   </data>
   <data name="RequestAnotherEmail" xml:space="preserve">
     <value>Solicite otro</value>
@@ -187,7 +187,7 @@
     <value>Se ha enviado un mensaje a su correo electrónico. Favor sigas las instrucciones del correo para restablecer su clave</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Ha ocurrido un error en el servidor. Favor contactar support@mysurveys.support</value>
+    <value>La sincronización ha fallado. Ha ocurrido un error interno del servidor. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
     <value>No ha sido posible encontrar el cuestionario con identificador {0}. Favor verifique en la lista de cuestionarios disponibles o contacte al colega que le compartió el enlace al cuestionario</value>
@@ -208,10 +208,10 @@
     <value>Usuario {0} ya existe en el sistema. Favo ingrese su login y clave para iniciar Designer</value>
   </data>
   <data name="User_does_not_exist" xml:space="preserve">
-    <value>Usuario {0} no existe. Favor ingrese un nombre de usuario o correo electrónico válido </value>
+    <value>Usuario {0} no existe. Favor ingrese un nombre de usuario o correo electrónico válido</value>
   </data>
   <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
-    <value>Usuario {0} no existe. Favor ingrese un nombre de usuario o correo electrónico válido </value>
+    <value>Usuario {0} no existe. Favor ingrese un nombre de usuario o correo electrónico válido</value>
   </data>
   <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
     <value>El nombre de usuario necesita contener entre 3 y 15 caracteres, solamente puede contener letras , números y símbolos de subrayado</value>
@@ -220,7 +220,7 @@
     <value>Usuario no está autorizado. Favor revise login y clave</value>
   </data>
   <data name="UserLockedOut" xml:space="preserve">
-    <value>Su cuenta esta bloqueada. Por favor, póngase en contacto con support@mysurvey.solutions para desbloquearla</value>
+    <value>Su cuenta está bloqueada. Por favor, póngase en contacto con support@mysurvey.solutions para desbloquearla</value>
   </data>
   <data name="UserName_required" xml:space="preserve">
     <value>El login es requerido</value>
@@ -244,6 +244,30 @@
     <value>Ha cambiado su clave satisfactoriamente</value>
   </data>
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
-    <value>Su cuestionario {0} contiene nueva funcionalidad : {1}. Las nuevas características no son están soportadas en su versión instalada. Favor actualícela </value>
+    <value>Su cuestionario {0} contiene nueva funcionalidad : {1}. Las nuevas características no son están soportadas en su versión instalada. Favor actualícela</value>
+  </data>
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>Se requiere iniciar sesión o correo electrónico</value>
+  </data>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>El nombre completo no puede contener más de {1} caracteres</value>
+  </data>
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>El título del cuestionario no puede tener más de {1} símbolos.</value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>Solo se pueden usar los siguientes caracteres en el título del cuestionario: A..Z a..z 0..9 () \ / _ - y espacio, y no deben tener dos o más caracteres de subrayado consecutivos.</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>Variable names and roster IDs may be from 1 to {1} characters long</value>
+  </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>Se requiere la variable del cuestionario</value>
+  </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>La variable del cuestionario se utiliza como prefijo para formar los nombres de los archivos de exportación. Los nombres de las variables y los ID de la lista deben contener solo los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
+  </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>No se pudo actualizar la información del usuario. Por favor, inténtelo de nuevo más tarde.</value>
   </data>
 </root>

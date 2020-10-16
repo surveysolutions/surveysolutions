@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BatchUploadModel_FileName" xml:space="preserve">
-    <value>Archivo C.V.</value>
+    <value>Archivo CSV</value>
   </data>
   <data name="BatchUploadModel_Required" xml:space="preserve">
     <value>Debe seleccionar un archivo para cargar</value>
@@ -133,10 +133,10 @@
     <value>No se pudo actualizar la información del usuario porque el usuario actual está archivado</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>El titulo de cuestionario es requerido</value>
+    <value>El título de cuestionario es requerido</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
-    <value>Titulo</value>
+    <value>título</value>
   </data>
   <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
     <value>Confirmar la clave</value>
@@ -190,7 +190,7 @@
     <value>La clave debe tener como mínimo {2} caracteres</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>El nombre de la persona tiene caracteres no válidos. Solo letras, puntos, espacios y apóstrofos están permitidos</value>
+    <value>El nombre de la persona tiene caracteres no válidos. Solo letras, puntos, espacios y apóstrofes están permitidos</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>El nombre de la persona no puede contener más de {1} caracteres</value>
@@ -202,7 +202,7 @@
     <value>El número de teléfono no puede contener más de {1} caracteres</value>
   </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Número de teléfono invalido</value>
+    <value>Número de teléfono inválido</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Número de teléfono</value>
@@ -242,5 +242,32 @@
   </data>
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Nombre de usuario</value>
+  </data>
+  <data name="MandatoryField" xml:space="preserve">
+    <value>Este campo es obligatorio</value>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>Las contraseñas deben tener al menos un dígito ('0' - '9').</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>Las contraseñas deben tener al menos una minúscula ('a' - 'z').</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Las contraseñas deben tener al menos un carácter no alfanumérico.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+    <value>Las contraseñas deben utilizar al menos {0} caracteres diferentes.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Las contraseñas deben tener al menos una mayúscula ('A' - 'Z').</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>Las contraseñas deben tener al menos {0} caracteres.</value>
+  </data>
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>El usuario está bloqueado por la sede</value>
+  </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Verification code</value>
   </data>
 </root>

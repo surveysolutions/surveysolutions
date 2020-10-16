@@ -127,7 +127,7 @@
     <value>No hay datos disponibles en la tabla</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Mostrando de _START_ a _END_ deun total de _TOTAL_ registros</value>
+    <value>Mostrando de _START_ a _END_ de un total de _TOTAL_ registros</value>
   </data>
   <data name="InfoEmpty" xml:space="preserve">
     <value>Mostrando de 0 a 0 de un total de 0 entradas</value>
@@ -139,7 +139,7 @@
     <value>,</value>
   </data>
   <data name="LengthMenu" xml:space="preserve">
-    <value>Show _MENU_ entries</value>
+    <value>Mostrar entradas _MENU_</value>
   </data>
   <data name="LoadingRecords" xml:space="preserve">
     <value>Cargando..</value>
@@ -160,7 +160,7 @@
     <value>Procesando…</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Buscar:</value>
+    <value>Buscar</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Buscar..</value>

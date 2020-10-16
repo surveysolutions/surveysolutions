@@ -121,6 +121,6 @@
     <value>Se han detectado excesivo número de intentos.</value>
   </data>
   <data name="TryLater" xml:space="preserve">
-    <value>Intente nuevamente mas tarde</value>
+    <value>Intente nuevamente más tarde</value>
   </data>
 </root>
