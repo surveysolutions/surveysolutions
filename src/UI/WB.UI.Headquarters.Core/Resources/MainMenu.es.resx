@@ -181,7 +181,7 @@
     <value>Iniciado</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Duración del estado</value>
+    <value>Conteo de días de la entrevista en esl estado</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisores</value>
@@ -196,7 +196,7 @@
     <value>Equipo y roles</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Miembros del equipo y estados</value>
+    <value>Miembros de equipo y estados</value>
   </data>
   <data name="TeamsAndRoles" xml:space="preserve">
     <value>Equipo y roles</value>
@@ -212,5 +212,11 @@
   </data>
   <data name="Users" xml:space="preserve">
     <value>Usuarios</value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administración</value>
+  </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Estadísticas de encuestas</value>
   </data>
 </root>

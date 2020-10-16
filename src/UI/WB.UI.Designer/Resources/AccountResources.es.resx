@@ -133,7 +133,7 @@
     <value>Cambiar</value>
   </data>
   <data name="ChangePassword" xml:space="preserve">
-    <value>Cambiar clave</value>
+    <value>Restablecer contraseña de usuario</value>
   </data>
   <data name="CompanyName" xml:space="preserve">
     <value>The World Bank Group</value>
@@ -160,13 +160,13 @@
     <value>Ayuda</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>La dirección de correo electrónico provista es inválida. Por favor revise e intente nuevamente.</value>
+    <value>el correo electrónico es inválido</value>
   </data>
   <data name="InvalidPassword" xml:space="preserve">
-    <value>La clave provista es inválida. Por favor revise e intente nuevamente.</value>
+    <value>La contraseña no es válida</value>
   </data>
   <data name="InvalidResetPasswordLink" xml:space="preserve">
-    <value>El enlace para reiniciar su clave no es valido o ha caducado. Por favor intente nuevamente.</value>
+    <value>El enlace para reiniciar su clave no es válido o ha caducado. Por favor intente nuevamente.</value>
   </data>
   <data name="InvalidRetrievalAnswer" xml:space="preserve">
     <value>La respuesta a la pregunta de recuperación de clave es inválida. Por favor revise e intente nuevamente.</value>
@@ -178,13 +178,13 @@
     <value>El nombre de usuario provisto es inválido.  Por favor revise e intente nuevamente.</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Nota Legal</value>
+    <value>Legal</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Inicio de sesión</value>
+    <value>Ingreso</value>
   </data>
   <data name="LoginMessage" xml:space="preserve">
-    <value>Favor ingresar </value>
+    <value>Favor ingresar</value>
   </data>
   <data name="LoginName" xml:space="preserve">
     <value>Login</value>
@@ -205,7 +205,7 @@
     <value>Clave</value>
   </data>
   <data name="PasswordChanged" xml:space="preserve">
-    <value>Su clave ha sido cambiada</value>
+    <value>Tu contraseña ha sido cambiada.</value>
   </data>
   <data name="PasswordReset" xml:space="preserve">
     <value>restablecer clave</value>
@@ -226,7 +226,7 @@
     <value>Error en el registro</value>
   </data>
   <data name="RegistrationErrorDescription" xml:space="preserve">
-    <value>Se obtuvo un error al momento de confirmar su correo electrónico. Favor intentar nuevamente</value>
+    <value>Se obtuvo un error al momento de confirmar su correo electrónico. Favor intenta nuevamente</value>
   </data>
   <data name="RepeatPassword" xml:space="preserve">
     <value>Repetir clave</value>
@@ -250,7 +250,7 @@
     <value>Un error desconocido ha ocurrido. Por favor, verifique su entrada y vuelva a intentarlo. Si el problema persiste, contacte al administrador del sistema.</value>
   </data>
   <data name="UpgradeYourBrowser" xml:space="preserve">
-    <value>Favor &lt;a href="http://browsehappy.com/"&gt;actualice su navegador&lt;/a&gt; paa usar la aplicación de diseño</value>
+    <value>Favor &lt;a href="http://browsehappy.com/"&gt;actualice su navegador&lt;/a&gt; para usar la aplicación de diseño</value>
   </data>
   <data name="UserCreationRequestCanceled" xml:space="preserve">
     <value>La solicitud de creación del usuario fue cancelada. Por favor, verifique su entrada e inténtelo nuevamente. Si el problema persiste, contacte al administrador del sistema.</value>
@@ -263,5 +263,35 @@
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Bienvenido a Survey Solutions</value>
+  </data>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>La información de la cuenta se actualizó correctamente</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Edit profile</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>Foro</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nombre completo</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Bloqueado</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Tu cuenta está bloqueada. Póngase en contacto con el administrador para desbloquear su cuenta</value>
+  </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>Ha cerrado la sesión con éxito de la aplicación.</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Administrar cuenta</value>
+  </data>
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Por favor revise su correo electrónico para restablecer su contraseña.</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Mostrar contraseña</value>
   </data>
 </root>
