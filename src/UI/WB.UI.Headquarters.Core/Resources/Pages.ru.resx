@@ -144,10 +144,10 @@
   <data name="Interviewers_OutdatedOption" xml:space="preserve">
     <value>Устаревшая</value>
   </data>
-    <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
+  <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
       <value>Вы переносите интервьюера у которого есть задания по web интервью. Эти задания будут назначены на текущего супервизора. Если Вы уже отправили ссылки для этих заданий, респонденты не смогут проходить интервью до тех пор пока задания не будут назначены на интервьюра.</value>
   </data>
-    <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+  <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Утвердить</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">

@@ -3,6 +3,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -12,10 +13,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerPrincipal : EnumeratorPrincipal, IInterviewerPrincipal
     {
         private readonly IPlainStorage<InterviewerIdentity> usersStorage;
+        private ILogger logger;
 
         public InterviewerPrincipal(IPlainStorage<InterviewerIdentity> usersStorage,
-            IPasswordHasher passwordHasher) : base(passwordHasher)
+            IPasswordHasher passwordHasher,
+            ILogger logger) : base(passwordHasher)
         {
+            this.logger = logger;
+            logger.Trace($"Creating InterviewerPrincipal");
             this.usersStorage = usersStorage;
         }
 

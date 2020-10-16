@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await base.Initialize().ConfigureAwait(false);
             if (this.InterviewId == null)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                await this.ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
                 return;
             }
 

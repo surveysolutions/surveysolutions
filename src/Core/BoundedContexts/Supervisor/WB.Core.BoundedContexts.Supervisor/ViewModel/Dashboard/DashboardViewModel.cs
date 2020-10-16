@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxCommand ShowDefaultListCommand =>
             new MvxAsyncCommand(async () =>
-                await viewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
+                await ViewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
 
         public IMvxCommand ShowOutboxCommand =>
             new MvxAsyncCommand(async () =>
@@ -105,32 +105,32 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 await mvxNavigationService.Navigate<WaitingForSupervisorActionViewModel, Guid?>(this.LastVisitedInterviewId));
 
         public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () =>
-            await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
+            await ViewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 
         public IMvxCommand NavigateToOfflineSyncCommand => new MvxAsyncCommand(this.NavigateToOfflineSync);
 
         private Task NavigateToOfflineSync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<SupervisorOfflineSyncViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<SupervisorOfflineSyncViewModel>();
         }
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(() =>
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
         });
 
-        public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<SearchViewModel>);
+        public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         private Task RunSynchronization()
         {
             if (this.Synchronization.IsSynchronizationInProgress)
                 return Task.CompletedTask;
 
-            if (this.viewModelNavigationService.HasPendingOperations)
+            if (this.ViewModelNavigationService.HasPendingOperations)
             {
-                this.viewModelNavigationService.ShowWaitMessage();
+                this.ViewModelNavigationService.ShowWaitMessage();
             }
             else
             {
@@ -144,13 +144,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private Task NavigateToDiagnostics()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            return this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
         }
 
         private Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         protected override void InitFromBundle(IMvxBundle parameters)

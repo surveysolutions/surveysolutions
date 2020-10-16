@@ -118,27 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IncorrectUserNameOrPassword" xml:space="preserve">
-    <value>Nombre de usuario o clave incorrectos</value>
+    <value>Login o clave son incorrectos, Favor intente de nuevo</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Favor ingrese el capacha </value>
+    <value>Por favor, rellene el campo capacha</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>El cuestionario {0} posee errores de compilación. Favor corrija los errores en Designer</value>
+    <value>Su cuestionario "{0}" posee errores. Favor revisar el cuestionario en Designer</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Excesivo tiempo de espera al intentar conectar a Designer. Favor revise su conexión a internet</value>
+    <value>Tiempo de espera cuando se conecta a la Página Web de Surrey Solutions Supervisor. Compruebe su conexión a internet.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
-    <value>Ha ocurrido un error interno en el servidor. Favor contacte al servicio al cliente de Survey Solutions en support@mysurvey.solutions</value>
+    <value>La sincronización ha fallado. Ha ocurrido un error interno del servidor. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>La aplicación Designer no esta disponible. Favor asegúrese que el Designer no se encuentra bajo mantenimiento</value>
+    <value>No hay conexión con el Survey Solutions Supervisor. Por favor, asegúrese de que el sitio web está disponible.</value>
   </data>
   <data name="SiteAccessNotAllowed" xml:space="preserve">
     <value>No posee privilegios para acceder al sitio. Contacte su administrador</value>
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
-    <value>El cuestionario {0} no fue encontrado. Favor refresque la lista de cuestionarios</value>
+    <value>No ha sido posible encontrar el cuestionario con identificador {0}. Favor verifique en la lista de cuestionarios disponibles o contacte al colega que le compartió el enlace al cuestionario</value>
+  </data>
+  <data name="InvalidAuthenticatorCode" xml:space="preserve">
+    <value>Código de autenticador no válido.</value>
+  </data>
+  <data name="InvalidRecoveryCode" xml:space="preserve">
+    <value>Se ingresó un código de recuperación no válido.</value>
+  </data>
+  <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+    <value>Ahora se está importando otro cuestionario a la Sede.</value>
   </data>
 </root>

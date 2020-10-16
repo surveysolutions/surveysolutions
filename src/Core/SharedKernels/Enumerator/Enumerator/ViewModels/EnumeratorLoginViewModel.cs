@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
-            : base(principal, viewModelNavigationService)
+            : base(principal, viewModelNavigationService, false)
         {
             this.passwordHasher = passwordHasher;
             this.logoStorage = logoStorage;
@@ -42,8 +42,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.logger = logger;
             this.auditLogService = auditLogService;
         }
-
-        public override bool IsAuthenticationRequired => false;
 
         public string UserName { get; set; }
 
@@ -98,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
-        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public abstract bool HasUser();
         public abstract string GetUserName();
@@ -120,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (this.HasUser()) return;
 
-            await this.viewModelNavigationService.NavigateToFinishInstallationAsync();
+            await this.ViewModelNavigationService.NavigateToFinishInstallationAsync();
         }
 
         public byte[] CustomLogo { get; private set; }
@@ -130,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var userName = this.UserName;
 
             this.logger.Trace($"Logging in {userName}");
-            this.IsUserValid = this.principal.SignIn(userName, this.Password, true);
+            this.IsUserValid = this.Principal.SignIn(userName, this.Password, true);
 
             if (!this.IsUserValid)
             {
@@ -143,8 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 auditLogService.Write(new LoginAuditLogEntity(userName));
             }
 
-            await this.viewModelNavigationService.NavigateToDashboardAsync();
-            await this.viewModelNavigationService.Close(this);
+            await this.ViewModelNavigationService.NavigateToDashboardAsync();
+            await this.ViewModelNavigationService.Close(this);
         }
 
         private async Task RemoteSignInAsync()

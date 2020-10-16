@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A</value>
+    <value>[PL0002] N/A. Contacte al equipo de soporte en support@mysurvey.solutions</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
-    <value>La columna no puede asignarse a ninguna pregunta del cuestionario</value>
+    <value>La columna no puede mapeada a ninguna pregunta del cuestionario</value>
   </data>
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>Archivo no puede ser asignado a ninguna lista del cuestionario</value>
   </data>
-    <data name="PL0006_IdDublication" xml:space="preserve">
+  <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Se encontraron identificadores duplicados</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
-    <value>Una o mas columnas de identificación padre hacen falta</value>
+    <value>Una o más columnas de identificación padre hacen falta</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
-    <value>Registro de la lista no tiene padre</value>
+    <value>Registro del roster no tiene padre</value>
   </data>
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
-    <value>El identificador de lista es inconsistente con el tamaño de la lista</value>
+    <value>El identificador del roster es inconsistente con su tamaño</value>
   </data>
-    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>Valor de pregunta provisto no es permitido</value>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>Valor de pregunta no es permitido</value>
   </data>
-    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
-    <value>Se han ingresado valores de fecha u hora no validos en la pregunta </value>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Se han ingresado valores de fecha u hora no válidos en la pregunta</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
     <value>Valor de GPS no es válido</value>
@@ -154,16 +154,16 @@
     <value>Solamente se permiten valores decimales</value>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
-    <value>La pregunta que define el tamaño de la lista no puede contener un número negativo</value>
+    <value>La pregunta que define el tamaño del roster no puede contener un número negativo</value>
   </data>
-    <data name="PL0024_DataWasNotFound" xml:space="preserve">
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Datos precargados no se encontraron</value>
   </data>
-    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>No existe responsable para una o mas observaciones.</value>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>No existe responsable para una o más observaciones.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>El responsable de una o mas observaciones se encuentra bloqueado.</value>
+    <value>El responsable de una o más observaciones se encuentra bloqueado.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>La respuesta a una pregunta que define el tamaño de la lista no puede ser mayor a {0}</value>
@@ -172,7 +172,7 @@
     <value>La pregunta GPS requiere columnas separadas para Latitud y Longitud</value>
   </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
-    <value>Dos o mas columnas posee el mismo nombre</value>
+    <value>Dos o más columnas posee el mismo nombre</value>
   </data>
   <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
     <value>Latitud debe ser mayor a -90° y menor a 90°</value>
@@ -189,7 +189,70 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>La cantidad debe ser mayor o igual a -1</value>
   </data>
-    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>No se ha encontrado el archivo con los datos de nivel del cuestionario</value>
+  </data>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>No se admiten archivos protegidos por contraseña</value>
+  </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>El usuario no es Sede, Supervisor o Entrevistador para 1 o más observaciones.</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>La pregunta de GPS requiere que se establezcan la latitud y la longitud.</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Las respuestas a una pregunta de opción múltiple no pueden más que el número máximo de respuestas permitidas.</value>
+  </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>La columna de identificación no tiene ningún valor.</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>Falta la columna obligatoria {0}.</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>La variable protegida no se encuentra en el cuestionario proporcionado.</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>El tipo de variable no se puede proteger.</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>No se permite el valor negativo para la pregunta de selección múltiple categórica.</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>La lista de la lista debe tener una columna para las respuestas de la lista de texto</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Código de lista incoherente para la lista numérica. La secuencia de códigos de lista debe ser 0, 1, ... para contar las instancias de rosters</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>La cantidad máxima no debe ser superior a {0}.</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>El correo no es válido</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Contraseña invalida. Al menos 6 números y letras mayúsculas o un solo símbolo '?' para generar contraseña</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Para asignaciones con el correo electrónico proporcionado, la cantidad permitida es 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>El modo web debe estar activado para las asignaciones que tienen correo electrónico</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>El modo web debe estar activado para las asignaciones que tienen contraseña</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>La asignación con el tamaño 1 para el modo web debe incluir un correo electrónico o una contraseña.</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>La contraseña no es única. La contraseña por asignación para el modo web con la cantidad 1 debe ser única</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Todas las asignaciones para entrevistas web deben hacerse a un entrevistador</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>La respuesta a una pregunta con el nombre de variable {0} no se puede cargar previamente, ya que es de un tipo no admitido. Consulte el siguiente artículo de soporte https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type para obtener detalles sobre lo que se puede precargar en la versión actual.</value>
   </data>
 </root>
