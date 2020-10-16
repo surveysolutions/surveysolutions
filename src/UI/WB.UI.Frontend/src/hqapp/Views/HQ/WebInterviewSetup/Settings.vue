@@ -44,14 +44,14 @@
                         </li>
                         <li role="presentation">
                             <a href="#complete"
-                                @click="setPageActive()"
+                                @click="setPageActive('completeNoteToSupervisor')"
                                 aria-controls="complete"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.CompletePage')}}</a>
                         </li>
                         <li role="presentation">
                             <a href="#finish"
-                                @click="setPageActive('webSurveyHeader')"
+                                @click="setPageActive('webSurveyHeader', 'finishInterview')"
                                 aria-controls="finish"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a>
@@ -554,6 +554,7 @@
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
                                             <md-editor
+                                                ref="finishInterview"
                                                 v-validate=""
                                                 data-vv-name="finishInterview"
                                                 v-model="webInterviewPageMessages['finishInterview'].text">
@@ -1225,15 +1226,6 @@ export default {
         self.$validator.reset('$resumePage')
         self.$validator.reset('$finishPage')
         self.$validator.reset('$completePage')
-    },
-    mounted() {
-        const jqEl = $(this.$el)
-
-        jqEl.on('shown.bs.tab', (event) => {
-            //debugger
-            //alert(event.target)
-        })
-
     },
     methods: {
         setActive(emailTemplate) {
