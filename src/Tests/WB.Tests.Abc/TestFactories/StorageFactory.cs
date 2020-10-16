@@ -3,7 +3,6 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Moq;
@@ -139,8 +138,8 @@ namespace WB.Tests.Abc.TestFactories
         private static IMemoryCache cache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         public IMemoryCache NewMemoryCache() => cache;
 
-        public AggregateRootCache NewAggregateRootCache(ILogger logger = null) 
-            => new AggregateRootCache(NewMemoryCache(), logger ?? Mock.Of<ILogger>());
+        public AggregateRootCache NewAggregateRootCache() 
+            => new AggregateRootCache(NewMemoryCache());
 
         public IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {
