@@ -121,7 +121,7 @@
     <value>Ожидаем ответ от о состоянии здоровья сервиса</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Статус проверки здоровья: {{ status }}</value>
+    <value>Статус проверки здоровья: {{status}}</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
     <value>Метрики сервера</value>
