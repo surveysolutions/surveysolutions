@@ -28,26 +28,34 @@
                         role="tablist"
                         id="start-screen-example">
                         <li role="presentation"
-                            class="active"><a href="#welcome"
-                                @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
+                            class="active">
+                            <a href="#welcome"
+                                @click="setPageActive('welcomeTextTitle')"
                                 aria-controls="welcome"
                                 role="tab"
-                                data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a></li>
-                        <li role="presentation"><a href="#resume"
-                            @click="setPageActive('resumeWelcome', 'resumeInvitation')"
-                            aria-controls="resume"
-                            role="tab"
-                            data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a></li>
-                        <li role="presentation"><a href="#complete"
-                            @click="setPageActive()"
-                            aria-controls="complete"
-                            role="tab"
-                            data-toggle="tab">{{$t('WebInterviewSettings.CompletePage')}}</a></li>
-                        <li role="presentation"><a href="#finish"
-                            @click="setPageActive('finishInterview', 'webSurveyHeader')"
-                            aria-controls="finish"
-                            role="tab"
-                            data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a></li>
+                                data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#resume"
+                                @click="setPageActive('resumeWelcome')"
+                                aria-controls="resume"
+                                role="tab"
+                                data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#complete"
+                                @click="setPageActive()"
+                                aria-controls="complete"
+                                role="tab"
+                                data-toggle="tab">{{$t('WebInterviewSettings.CompletePage')}}</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#finish"
+                                @click="setPageActive('webSurveyHeader')"
+                                aria-controls="finish"
+                                role="tab"
+                                data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel"
@@ -90,31 +98,11 @@
                                             <div class="h5">
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
-                                            <div class="form-group"
-                                                :class="{ 'has-error': errors.has('welcomePage.welcomeTextDescription') }">
-                                                <div class="field"
-                                                    :class="{ 'answered': webInterviewPageMessages['invitation'].text }">
-                                                    <textarea-autosize
-                                                        v-model="webInterviewPageMessages['invitation'].text"
-                                                        v-validate="'required'"
-                                                        data-vv-name="welcomeTextDescription"
-                                                        ref="welcomeTextDescription"
-                                                        :min-height="56"
-                                                        maxlength="200"
-                                                        class="form-control js-elasticArea font-bold"
-                                                        placeholder="Please enter the main text">
-                                                    </textarea-autosize>
-                                                    <button type="button"
-                                                        @click="webInterviewPageMessages['invitation'].text=''"
-                                                        class="btn btn-link btn-clear">
-                                                        <span></span>
-                                                    </button>
-                                                    <span class="help-block"
-                                                        v-if="errors.first('welcomePage.welcomeTextDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
-                                                </div>
-                                            </div>
+                                            <md-editor v-validate=""
+                                                data-vv-name="invitation"
+                                                v-model="webInterviewPageMessages['invitation'].text">
+                                            </md-editor>
                                         </div>
-
 
                                         <div class="row-element mb-30">
                                             <div class="h5">
@@ -227,7 +215,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['invitation'].text)}}</p>
+                                                        <p v-html="previewHtml(webInterviewPageMessages['invitation'].text)"></p>
                                                     </div>
                                                     <div class="row-element mb-40">
                                                         <a href="javascript:void(0);"
@@ -282,29 +270,12 @@
                                             <div class="h5">
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
-                                            <div class="form-group"
-                                                :class="{ 'has-error': errors.has('resumePage.resumeInvitation') }">
-                                                <div class="field"
-                                                    :class="{ 'answered': webInterviewPageMessages['resumeInvitation'].text }">
-                                                    <textarea-autosize
-                                                        v-model="webInterviewPageMessages['resumeInvitation'].text"
-                                                        v-validate="'required'"
-                                                        data-vv-name="resumeInvitation"
-                                                        ref="resumeInvitation"
-                                                        :min-height="56"
-                                                        maxlength="200"
-                                                        class="form-control js-elasticArea font-bold"
-                                                        placeholder="Please enter the main text">
-                                                    </textarea-autosize>
-                                                    <button type="button"
-                                                        @click="webInterviewPageMessages['resumeInvitation'].text=''"
-                                                        class="btn btn-link btn-clear">
-                                                        <span></span>
-                                                    </button>
-                                                    <span class="help-block"
-                                                        v-if="errors.first('resumePage.resumeInvitation')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
-                                                </div>
-                                            </div>
+                                            <md-editor
+                                                v-validate=""
+                                                data-vv-name="resumeInvitation"
+                                                v-model="webInterviewPageMessages['resumeInvitation'].text">
+                                            </md-editor>
+
                                         </div>
 
                                         <div class="row-element mb-30">
@@ -417,7 +388,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['resumeInvitation'].text)}}</p>
+                                                        <p v-html="previewHtml(webInterviewPageMessages['resumeInvitation'].text)"></p>
                                                     </div>
                                                     <div class="row-element">
                                                         <a href="javascript:void(0);"
@@ -579,29 +550,12 @@
                                             <div class="h5">
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
-                                            <div class="form-group"
-                                                :class="{ 'has-error': errors.has('finishPage.finishInterview') }">
-                                                <div class="field"
-                                                    :class="{ 'answered': webInterviewPageMessages['finishInterview'].text }">
-                                                    <textarea-autosize
-                                                        v-model="webInterviewPageMessages['finishInterview'].text"
-                                                        v-validate="'required'"
-                                                        data-vv-name="finishInterview"
-                                                        ref="finishInterview"
-                                                        :min-height="56"
-                                                        maxlength="200"
-                                                        class="form-control js-elasticArea font-bold"
-                                                        placeholder="Please enter the main text">
-                                                    </textarea-autosize>
-                                                    <button type="button"
-                                                        @click="webInterviewPageMessages['finishInterview'].text=''"
-                                                        class="btn btn-link btn-clear">
-                                                        <span></span>
-                                                    </button>
-                                                    <span class="help-block"
-                                                        v-if="errors.first('finishPage.finishInterview')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
-                                                </div>
-                                            </div>
+                                            <md-editor
+                                                v-validate=""
+                                                data-vv-name="finishInterview"
+                                                v-model="webInterviewPageMessages['finishInterview'].text">
+                                            </md-editor>
+
                                         </div>
                                         <div class="">
                                             <button type="submit"
@@ -687,7 +641,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold">{{previewText(webInterviewPageMessages['finishInterview'].text)}}</p>
+                                                        <p v-html="previewHtml(webInterviewPageMessages['finishInterview'].text)"></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1177,10 +1131,13 @@
 </template>
 <script>
 import Vue from 'vue'
+import marked from 'marked'
 import {map, isNil} from 'lodash'
 import { escape } from 'lodash'
+import mdEditor from '../../../components/MdEditor'
 
 export default {
+    components: {mdEditor: mdEditor},
     data() {
         return {
             emailTemplates: [],
@@ -1280,7 +1237,10 @@ export default {
             var self = this
             this.$nextTick(function() {
                 if(titleType)
-                    self.$refs[titleType].resize()
+                {
+                    const input = self.$refs[titleType]
+                    input.resize()
+                }
                 if(messageType)
                     self.$refs[messageType].resize()
             })
@@ -1431,9 +1391,14 @@ export default {
             this.attachAnswersInEmailIsEnabled = this.cancelAttachAnswersInEmailIsEnabled
             this.$validator.reset('additionalSettings')
         },
+        previewHtml(text) {
+            var html = marked(this.previewText(text))
+            return html
+        },
         previewText(text) {
             if (text == null)
                 return ''
+
             return text
                 .replace(/%SURVEYNAME%/g, this.questionnaireTitle)
                 .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle)
