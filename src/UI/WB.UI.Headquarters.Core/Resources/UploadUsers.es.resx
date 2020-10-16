@@ -148,7 +148,7 @@
     <value>Correo electrónico</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
-    <value>Quedan aproximadamente {{tiempo estimado}}</value>
+    <value>Quedan aproximadamente {{estimatedTime}}</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Nombre completo</value>
@@ -157,7 +157,7 @@
     <value>Importando información de usuario de</value>
   </data>
   <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
-    <value>{{supervisores Count}} supervisores y {{entrevistadores Count}} entrevistadores</value>
+    <value>{{supervisorsCount}} supervisores y {{interviewersCount}} entrevistadores</value>
   </data>
   <data name="Line" xml:space="preserve">
     <value>line</value>
@@ -211,7 +211,7 @@
     <value>Cargar archivo .tab</value>
   </data>
   <data name="Uploading" xml:space="preserve">
-    <value>Importando {{PublishedUsersCount}} de {{totalUsersToImportCount}}</value>
+    <value>Importando {{importedUsersCount}} de {{totalUsersToImportCount}}</value>
   </data>
   <data name="UploadInProgress" xml:space="preserve">
     <value>Advertencia: Se está realizando otra carga por lotes de "{{userName}}".</value>

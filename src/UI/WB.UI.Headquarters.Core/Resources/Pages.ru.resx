@@ -150,6 +150,12 @@
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Утвердить</value>
   </data>
+  <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">
+    <value>Текущий интервьюер, ответственный за интервью не будет уведомлен об утверждении до следующей синхронизации. Если работа будет начата к тому моменту, то все введенные данные будут утеряны!</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
+    <value>Применить к интервью, которое уже получено интервьюером</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
     <value>Утвердить интервью</value>
   </data>

@@ -229,7 +229,7 @@
     <value>Mostrar en Designer</value>
   </data>
   <data name="TypeQuestionnaireName" xml:space="preserve">
-    <value>Escriba "{{título del cuestionario}}" para confirmar</value>
+    <value>Escriba "{{questionnaireTitle}}" para confirmar</value>
   </data>
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Actualizar asignaciones</value>

@@ -403,7 +403,7 @@
     <value>A</value>
   </data>
   <data name="Translation_CardLabel" xml:space="preserve">
-    <value>Traducción: {{idioma}}</value>
+    <value>Traducción: {{language}}</value>
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Archivo zip</value>
