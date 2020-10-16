@@ -470,7 +470,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewResumed InterviewResumed(DateTimeOffset? originDate = null)
         {
-            return new InterviewResumed(Guid.NewGuid(), originDate ?? DateTimeOffset.Now);
+            return new InterviewResumed(Guid.NewGuid(), originDate ?? DateTimeOffset.Now, AgentDeviceType.Unknown);
         }
 
         public InterviewOpenedBySupervisor InterviewOpenedBySupervisor(DateTime? localTime = null)

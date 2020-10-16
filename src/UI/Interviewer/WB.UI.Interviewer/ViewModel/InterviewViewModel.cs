@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -119,7 +120,7 @@ namespace WB.UI.Interviewer.ViewModel
                 if (interview == null) return;
 
                 commandService.Execute(new ResumeInterviewCommand(interviewId,
-                    Principal.CurrentUserIdentity.UserId));
+                    Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
                 {
