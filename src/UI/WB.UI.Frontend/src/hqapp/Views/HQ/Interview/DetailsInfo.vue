@@ -101,7 +101,27 @@
             id="confirmApprove"
             slot="modals"
             :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')"
-            :okTitle="$t('Common.Approve')">
+            :okTitle="$t('Common.Approve')"
+            :disableOk="receivedByInterviewer && !doApproveReceivedByInterviewer">
+            <div v-if="receivedByInterviewer">
+                <input
+                    type="checkbox"
+                    id="reassignReceivedByInterviewer"
+                    v-model="doApproveReceivedByInterviewer"
+                    class="checkbox-filter"/>
+                <label for="reassignReceivedByInterviewer"
+                    style="font-weight: normal">
+                    <span class="tick"></span>
+                    {{$t("Pages.ApproveRejectPartialView_ApproveReceivedConfirm")}}
+                </label>
+                <br />
+                <span v-if="doApproveReceivedByInterviewer"
+                    class="text-danger">
+                    {{$t("Pages.ApproveRejectPartialView_ApproveReceivedWarning")}}
+                </span>
+                <br />
+            </div>
+
             <label for="txtApproveComment">
                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
             </label>
@@ -177,6 +197,7 @@ export default {
             commentMaxLength: 1500,
             newResponsibleId: null,
             rejectToNewResponsible: false,
+            doApproveReceivedByInterviewer: false,
         }
     },
     methods: {
@@ -230,9 +251,12 @@ export default {
         },
         showApproveButton() {
             return (
-                this.$config.model.approveReject.supervisorApproveAllowed ||
-        this.$config.model.approveReject.hqOrAdminApproveAllowed
+                this.$config.model.approveReject.supervisorApproveAllowed
+                || this.$config.model.approveReject.hqOrAdminApproveAllowed
             )
+        },
+        receivedByInterviewer(){
+            return this.$config.model.approveReject.receivedByInterviewer
         },
         showUnapproveButton() {
             return this.$config.model.approveReject.hqOrAdminUnapproveAllowed
@@ -249,7 +273,7 @@ export default {
         canChangeLanguage() {
             return (
                 this.$store.state.webinterview.languages != undefined &&
-        this.$store.state.webinterview.languages.length > 0
+                this.$store.state.webinterview.languages.length > 0
             )
         },
         changeLanguageDisabled() {

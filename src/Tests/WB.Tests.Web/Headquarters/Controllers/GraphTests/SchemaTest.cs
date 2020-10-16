@@ -1,4 +1,5 @@
-﻿using ApprovalTests;
+﻿using System;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
 using HotChocolate;
@@ -17,7 +18,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             var schema = GraphQLIntegration.HeadquartersSchema;
 
             var sdl = schema.ToString();
-
+            if (!sdl.EndsWith(Environment.NewLine))
+            {
+                sdl += Environment.NewLine;
+            }
+            
             Approvals.Verify(sdl);
         }
     }

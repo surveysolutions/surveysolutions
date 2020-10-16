@@ -152,12 +152,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                                                authorizedUser.IsSupervisor;
                 approveRejectAllowed.HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
                                                                 interviewSummary.Status == InterviewStatus.ApprovedBySupervisor ||
-                                                                interviewSummary.Status == InterviewStatus.RejectedBySupervisor && interviewSummary.ReceivedByInterviewerAtUtc == null) &&
+                                                                interviewSummary.Status == InterviewStatus.RejectedBySupervisor /*&& interviewSummary.ReceivedByInterviewerAtUtc == null*/) &&
                                                                (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
                 approveRejectAllowed.SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed ||
                                                                  interviewSummary.Status == InterviewStatus.RejectedByHeadquarters ||
-                                                                 interviewSummary.Status == InterviewStatus.RejectedBySupervisor && interviewSummary.ReceivedByInterviewerAtUtc == null)
+                                                                 interviewSummary.Status == InterviewStatus.RejectedBySupervisor /*&& interviewSummary.ReceivedByInterviewerAtUtc == null*/)
                                                                 &&  authorizedUser.IsSupervisor;
+
+                approveRejectAllowed.ReceivedByInterviewer = interviewSummary.ReceivedByInterviewerAtUtc != null;
             }
 
             approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed
