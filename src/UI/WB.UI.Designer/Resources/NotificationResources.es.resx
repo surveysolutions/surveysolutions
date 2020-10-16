@@ -142,7 +142,7 @@
     <value>Hola {0}, &lt;br&gt; {1} ha revocado el acceso a {2} para su cuestionario: {3}</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
-    <value>restablecer clave</value>
+    <value>Reset Password</value>
   </data>
   <data name="ResetPasswordEmail" xml:space="preserve">
     <value>Hola {0}, para completar el restablecimiento de su clave de clic en:</value>
@@ -170,5 +170,8 @@
   </data>
   <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
     <value>Hola {0} , &lt;br&gt; {1} ha dejado de compartir con usted el cuestionario {2}</value>
+  </data>
+  <data name="TranfserOwnershipNotification" xml:space="preserve">
+    <value>Hola, {0}: &lt;br&gt; {1} le ha transferido la propiedad del cuestionario {2}.</value>
   </data>
 </root>
