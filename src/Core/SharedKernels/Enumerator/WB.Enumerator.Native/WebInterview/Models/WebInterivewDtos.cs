@@ -242,6 +242,11 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
     }
 
+    public class InterviewVariable : InterviewEntity
+    {
+        public string Value { get; set; }
+    }
+
     public class InterviewGroupOrRosterInstance : InterviewEntity
     {
         public bool IsRoster { set; get; }
