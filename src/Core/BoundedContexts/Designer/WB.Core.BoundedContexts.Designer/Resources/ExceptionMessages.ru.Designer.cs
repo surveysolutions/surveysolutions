@@ -205,6 +205,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Секция &quot;Обложка&quot; может содержать только вопросы, статические тексты и переменные.
+        /// </summary>
+        public static string CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables {
+            get {
+                return ResourceManager.GetString("CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Секция &quot;Обложка&quot; должна быть первой секцией в опроснике.
         /// </summary>
         public static string CoverPageMustBeFirstInQuestionnaire {
