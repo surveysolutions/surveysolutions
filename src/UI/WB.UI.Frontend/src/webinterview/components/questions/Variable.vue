@@ -4,17 +4,9 @@
         :id="hash">
         <div class="question-editor">
             <div>
-                <wb-title />
-                <div class="question-unit">
-                    <div class="options-group">
-                        <div class="form-group">
-                            <div class="field"
-                                :class="{answered: $me.value}">
-                                {{ $me.value }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h5 v-dateTimeFormatting
+                    v-linkToRoute
+                    v-html="title"></h5>
             </div>
         </div>
     </div>
@@ -44,6 +36,12 @@ export default {
     computed: {
         hash() {
             return getLocationHash(this.$me.id)
+        },
+        title() {
+            let value = this.$me.value
+                ? this.$me.value
+                : 'Not calculated'
+            return this.$me.title + ' - ' + value
         },
     },
     methods : {
