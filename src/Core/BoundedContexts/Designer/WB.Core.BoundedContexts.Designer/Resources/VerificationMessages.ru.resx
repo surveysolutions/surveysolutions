@@ -840,4 +840,7 @@
     <data name="WB0391" xml:space="preserve">
     <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
   </data>
+  <data name="WB0310_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>Переменные на обложке длжны иметь описание</value>
+  </data>
 </root>
