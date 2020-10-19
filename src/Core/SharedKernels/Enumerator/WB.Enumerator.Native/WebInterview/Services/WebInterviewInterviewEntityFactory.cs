@@ -356,7 +356,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (variable != null)
             {
                 var result = this.autoMapper.Map<InterviewTreeVariable, InterviewVariable>(variable);
-                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                result.Title = questionnaire.GetVariableLabel(identity.Id);
                 return result;
             }
 
