@@ -1013,6 +1013,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPrefilled(Guid questionId)
         {
+            var entity = GetEntity(entitiesCache, questionId);
+            if (IsCoverPageSupported)
+            {
+                var parent = entity.GetParent();
+                return parent?.PublicKey == CoverPageSectionId;
+            }
+            
             var question = this.GetQuestionOrThrow(questionId);
             return question.Featured;
         }

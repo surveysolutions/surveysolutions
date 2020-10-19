@@ -26,6 +26,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         Area,
         GroupTitle,
         TableRoster,
-        MatrixRoster
+        MatrixRoster,
+        Variable
     }
 }
