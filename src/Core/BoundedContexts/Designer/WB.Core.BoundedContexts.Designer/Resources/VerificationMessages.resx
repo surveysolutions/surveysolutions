@@ -822,4 +822,8 @@
   <data name="WB0391" xml:space="preserve">
     <value>Static text can not reference variable that has deeper roster scope then itself</value>
   </data>
+  <data name="WB0310_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>Variables in Сover section must have label.
+</value>
+  </data>
 </root>
