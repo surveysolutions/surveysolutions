@@ -14,6 +14,10 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
     }
 
+    public class IdentifyingVariable : IdentifyingEntity
+    {
+    }
+
     public class IdentifyingQuestion : IdentifyingEntity
     {
         public string Answer { get; set; }

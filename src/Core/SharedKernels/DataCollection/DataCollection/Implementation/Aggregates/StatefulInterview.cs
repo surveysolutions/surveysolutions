@@ -208,6 +208,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
         }
 
+        public string GetVariableValueAsString(Identity variableIdentity)
+        {
+            var variable = this.Tree.GetVariable(variableIdentity);
+            return variable.GetValueAsString();
+        }
+
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);

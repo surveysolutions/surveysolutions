@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string SupervisorRejectComment { get; }
         
         string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null);
+        string GetVariableValueAsString(Identity variableIdentity);
 
         string Language { get; }
 
