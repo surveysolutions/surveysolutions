@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         public Task Ping()
         {
-            return Clients.All.SendAsync("Pong");
+            return Clients.Caller.SendAsync("Pong");
         }
     }
 }
