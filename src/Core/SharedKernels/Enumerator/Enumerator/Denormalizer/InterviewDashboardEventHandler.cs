@@ -10,11 +10,13 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
@@ -44,6 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<InterviewOnClientCreated>,
                                          IEventHandler<InterviewFromPreloadedDataCreated>,
                                          IEventHandler<AnswerRemoved>,
+                                         
+                                         IEventHandler<VariablesChanged>,
                                          
                                          IEventHandler<TranslationSwitched>,
                                          IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
@@ -392,6 +396,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                     interviewView.LocationLongitude = gpsCoordinates.Longitude;
                     interviewView.LocationLatitude = gpsCoordinates.Latitude;
                 }
+                
+                this.interviewViewRepository.Store(interviewView);
             }
             else
             {
@@ -406,8 +412,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
                 this.prefilledQuestions.Store(interviewPrefilledQuestion);
             }
-
-            this.interviewViewRepository.Store(interviewView);
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
@@ -569,6 +573,48 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             interviewView.LastInterviewerOrSupervisorComment = @event.Payload.Comment;
             this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<VariablesChanged> evnt)
+        {
+            //this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVector,
+            //    evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
+
+            var interviewId = evnt.EventSourceId;
+            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            if (interviewView == null) return;
+
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(questionnaireIdentity, interviewView.Language);
+
+            foreach (var changedVariable in evnt.Payload.ChangedVariables)
+            {
+                var variableId = changedVariable.Identity.Id;
+                if (!questionnaire.IsPrefilled(variableId))
+                    return;
+
+                var stringValue = VariableToString(changedVariable.NewValue, variableId, questionnaire);
+                var newPrefilledQuestionToStore = this.GetAnswerOnPrefilledQuestion(variableId, questionnaire, changedVariable.NewValue, interviewId);
+
+                var interviewPrefilledEntity = this.prefilledQuestions.Where(entity => entity.QuestionId == variableId && entity.InterviewId == interviewId).FirstOrDefault()
+                                                 ?? newPrefilledQuestionToStore;
+                if (interviewPrefilledEntity != null)
+                {
+                    interviewPrefilledEntity.Answer = newPrefilledQuestionToStore.Answer;
+                }
+
+                this.prefilledQuestions.Store(interviewPrefilledEntity);
+            }
+        }
+
+        private string VariableToString(object value, Guid variableId, IQuestionnaire questionnaire)
+        {
+            if(!questionnaire.IsPrefilled(variableId)) 
+                throw new NotSupportedException("Only identifying variables can be converted to string");
+
+            return value == null 
+                ? null 
+                : AnswerUtils.AnswerToString(value, null);
         }
     }
 }

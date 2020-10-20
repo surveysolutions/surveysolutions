@@ -1013,7 +1013,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPrefilled(Guid questionId)
         {
-            var entity = GetEntity(entitiesCache, questionId);
+            var entity = GetEntityOrThrow(questionId);
             if (IsCoverPageSupported)
             {
                 var parent = entity.GetParent();
@@ -1779,7 +1779,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
-        private IVariable GetVariable(Guid questionId) => GetVariable(this.VariablesCache, questionId);
+        private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
 
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 

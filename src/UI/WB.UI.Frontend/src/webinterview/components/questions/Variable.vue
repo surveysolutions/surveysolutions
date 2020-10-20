@@ -38,9 +38,9 @@ export default {
             return getLocationHash(this.$me.id)
         },
         title() {
-            let value = this.$me.value
+            let value = this.$me.value && this.$me.value != ''
                 ? this.$me.value
-                : 'Not calculated'
+                : this.$t('WebInterviewUI.NotCalculated')
             return this.$me.title + ' - ' + value
         },
     },
