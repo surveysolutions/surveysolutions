@@ -432,7 +432,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value can not be parsed as decimal value.
+        ///   Looks up a localized string similar to Entered value cannot be parsed as decimal value.
         /// </summary>
         public static string DecimalCannotParse {
             get {
@@ -774,7 +774,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value can not be less than protected answer.
+        ///   Looks up a localized string similar to Not calculated.
+        /// </summary>
+        public static string NotCalculated {
+            get {
+                return ResourceManager.GetString("NotCalculated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered value cannot be less than protected answer.
         /// </summary>
         public static string NumberCannotBeLessThanProtected {
             get {
@@ -783,7 +792,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
+        ///   Looks up a localized string similar to Entered value cannot be parsed as integer value.
         /// </summary>
         public static string NumberCannotParse {
             get {

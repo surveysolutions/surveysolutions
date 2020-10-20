@@ -200,6 +200,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Answer was not saved</value>
   </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Not calculated</value>
+  </data>
   <data name="ClickToAnswer" xml:space="preserve">
     <value>Click to answer</value>
   </data>
