@@ -30,11 +30,12 @@ namespace WB.Infrastructure.AspNetCore
         {
             services.AddTransient<IHttpClientConfigurator<TApi>, TConfigurator>();
             return services.AddRefitClient<TApi>(settings)
-
                 .ConfigureHttpClient((sp, hc) =>
-                    sp.GetService<IHttpClientConfigurator<TApi>>()
-                        .ConfigureHttpClient(hc))
-
+                {
+                    using var scope = sp.CreateScope();
+                    var configurator = scope.ServiceProvider.GetService<IHttpClientConfigurator<TApi>>();
+                    configurator.ConfigureHttpClient(hc);
+                })
                 .AddTransientHttpErrorsHandling();
         }
     }
