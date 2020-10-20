@@ -594,14 +594,18 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                     return;
 
                 var stringValue = VariableToString(changedVariable.NewValue, variableId, questionnaire);
-                var newPrefilledQuestionToStore = this.GetAnswerOnPrefilledQuestion(variableId, questionnaire, changedVariable.NewValue, interviewId);
+                var newPrefilledQuestionToStore = new PrefilledQuestionView
+                {
+                    Id = $"{interviewId:N}${variableId:N}",
+                    InterviewId = interviewId,
+                    QuestionId = variableId,
+                    QuestionText = questionnaire.GetVariableLabel(variableId),
+                    Answer = stringValue
+                };
 
                 var interviewPrefilledEntity = this.prefilledQuestions.Where(entity => entity.QuestionId == variableId && entity.InterviewId == interviewId).FirstOrDefault()
                                                  ?? newPrefilledQuestionToStore;
-                if (interviewPrefilledEntity != null)
-                {
-                    interviewPrefilledEntity.Answer = newPrefilledQuestionToStore.Answer;
-                }
+                interviewPrefilledEntity.Answer = newPrefilledQuestionToStore.Answer;
 
                 this.prefilledQuestions.Store(interviewPrefilledEntity);
             }
