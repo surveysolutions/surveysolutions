@@ -1,9 +1,6 @@
-using System;
 using System.Globalization;
 using Android.App;
 using Android.OS;
-using Android.Text;
-using Android.Widget;
 using AndroidX.AppCompat.App;
 using AndroidX.Preference;
 using MvvmCross;
@@ -33,7 +30,6 @@ namespace WB.UI.Interviewer.Activities
         {
             public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
-                //this.SetPreferencesFromResource(Resource.Xml.preferences, rootKey);
                 this.AddPreferencesFromResource(Resource.Xml.preferences);
                 this.SetupPreferences();
             }

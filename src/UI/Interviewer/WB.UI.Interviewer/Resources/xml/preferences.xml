@@ -2,8 +2,8 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
   <PreferenceCategory android:key="interview_settings_category">
-    <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" /><!--android:inputType="numeric"-->
-    <EditTextPreference android:key="GpsDesiredAccuracy" android:inputType="number" /><!--android:inputType="numeric"-->
+    <EditTextPreference android:key="GpsReceiveTimeoutSec" />
+    <EditTextPreference android:key="GpsDesiredAccuracy" />
     <CheckBoxPreference android:key="ShowLocationOnMap" />
     <CheckBoxPreference android:key="VibrateOnError" />
   </PreferenceCategory>
@@ -11,9 +11,9 @@
   <PreferenceCategory android:key="connection_settings_category">
     <CheckBoxPreference android:key="AllowSyncWithHq" />
     <EditTextPreference android:key="SyncAddress"/>
-    <EditTextPreference android:key="HttpResponseTimeout" /><!--android:numeric="integer"-->
-    <EditTextPreference android:key="BufferSize" /><!--android:numeric="integer"-->
-    <EditTextPreference android:key="EventChunkSize" /><!--android:numeric="integer"-->
+    <EditTextPreference android:key="HttpResponseTimeout" />
+    <EditTextPreference android:key="BufferSize" />
+    <EditTextPreference android:key="EventChunkSize" />
   </PreferenceCategory>
 
   <PreferenceCategory android:key="about_category">
