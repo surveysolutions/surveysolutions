@@ -39,7 +39,6 @@ namespace WB.UI.Headquarters.Services
         public void ConfigureHttpClient(HttpClient hc)
         {
             var valueBaseUrl = headquarterOptions.Value.BaseUrl;
-            this.logger.LogTrace("Using {baseUrl} as export service url", valueBaseUrl);
             if (!Uri.TryCreate(valueBaseUrl, UriKind.Absolute, out var baseUrl))
             {
                 var context = httpContextAccessor.HttpContext;
@@ -51,6 +50,8 @@ namespace WB.UI.Headquarters.Services
                     baseUrl = new Uri($"{request.Scheme}://{request.Host}/");
                 }
             }
+            
+            this.logger.LogTrace("Using {baseUrl} as export service url. Parsed value {baseUrlUri}", valueBaseUrl, baseUrl);
 
             string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
             hc.BaseAddress = new Uri(exportOptions.Value.ExportServiceUrl);
