@@ -195,6 +195,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Ответ не сохранен</value>
   </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Не посчитано</value>
+  </data>
   <data name="ClickToAnswer" xml:space="preserve">
     <value>Кликните чтобы ответить</value>
   </data>
