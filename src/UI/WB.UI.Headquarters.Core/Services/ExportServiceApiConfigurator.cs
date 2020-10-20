@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Services
         public void ConfigureHttpClient(HttpClient hc)
         {
             var valueBaseUrl = headquarterOptions.Value.BaseUrl;
-            this.logger.LogDebug("Using {baseUrl} as export service url", valueBaseUrl);
+            this.logger.LogTrace("Using {baseUrl} as export service url", valueBaseUrl);
             if (!Uri.TryCreate(valueBaseUrl, UriKind.Absolute, out var baseUrl))
             {
                 var context = httpContextAccessor.HttpContext;
