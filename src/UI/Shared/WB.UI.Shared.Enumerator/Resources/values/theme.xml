@@ -19,10 +19,11 @@
         <item name="editTextStyle">@style/EditTextTheme</item>
         <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
         <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+        <item name="alertDialogTheme">@style/AppMaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/AppMaterialAlertDialog</item>
     </style>
 
-    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="AppMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.App.NegativeButton</item>
     </style>
