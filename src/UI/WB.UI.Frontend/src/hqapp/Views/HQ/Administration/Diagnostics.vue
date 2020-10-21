@@ -122,13 +122,13 @@ export default {
                 .build()
 
 
-            connection.on('Pong', () => {
-                this.pushSignalrMessage(`Pong from server received using ${connection.connection.transport.constructor.name}`)
+            connection.on('Pong', (response) => {
+                this.pushSignalrMessage(`Pong from server received using ${response}`)
             })
 
             try {
                 await connection.start()
-                this.pushSignalrMessage(`Started connection using ${connection.connection.transport.constructor.name}`)
+                this.pushSignalrMessage('Started connection')
 
                 for(let i = 0; i < 30; i++) {
                     await connection.invoke('Ping')
