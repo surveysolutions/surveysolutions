@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateText()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
+            var interview = this.interviewRepository.GetOrThrow(this.interviewId);
 
             if (isInstructions)
             {
@@ -127,7 +127,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                var titleText = interview.GetBrowserReadyTitleHtml(this.identity) ?? "";
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+
+                var titleText = questionnaire.IsVariable(this.identity.Id)
+                    ? questionnaire.GetVariableLabel(this.identity.Id)
+                    : interview.GetBrowserReadyTitleHtml(this.identity);
+
+                titleText ??= "";
 
                 this.HtmlText = this.shouldAppendRosterTitle
                     ? $"{titleText} - {interview.GetRosterTitle(this.identity) ?? this.substitutionService.DefaultSubstitutionText}"
