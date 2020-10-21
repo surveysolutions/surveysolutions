@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
 
 namespace WB.UI.Headquarters.Controllers
@@ -9,7 +11,8 @@ namespace WB.UI.Headquarters.Controllers
     {
         public Task Ping()
         {
-            return Clients.Caller.SendAsync("Pong");
+            HttpTransportType transportType = Context.Features.Get<IHttpTransportFeature>().TransportType;
+            return Clients.Caller.SendAsync("Pong", transportType.ToString());
         }
     }
 }
