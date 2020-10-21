@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -185,42 +186,53 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 LastInterviewerOrSupervisorComment = comments
             };
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(questionnaireIdentity, interviewView.Language);
 
-            var prefilledQuestionsList = new List<PrefilledQuestionView>();
-            var featuredQuestions = questionnaireDocumentView.Children
-                                                             .TreeToEnumerableDepthFirst(x => x.Children)
-                                                             .OfType<IQuestion>()
-                                                             .Where(q => q.Featured).ToList();
+            var prefilledEntitiesList = new List<PrefilledQuestionView>();
 
+            var featuredEntities = questionnaire.GetPrefilledEntities()
+                .Select(id => questionnaireDocumentView.Find<IComposite>(id))
+                .Where(entity => entity is IQuestion || entity is IVariable)
+                .ToList();
+            
             InterviewGpsCoordinatesView gpsCoordinates = null;
             Guid? prefilledGpsQuestionId = null;
 
-            int prefilledQuestionSortIndex = 0;
-            foreach (var featuredQuestion in featuredQuestions)
+            int prefilledEntitySortIndex = 0;
+            foreach (var featuredEntity in featuredEntities)
             {
-                var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-
-                if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
+                if (featuredEntity is IQuestion featuredQuestion)
                 {
-                    var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
-                    answerOnPrefilledQuestion.SortIndex = prefilledQuestionSortIndex;
-                    prefilledQuestionSortIndex++;
-                    prefilledQuestionsList.Add(answerOnPrefilledQuestion);
-                }
-                else
-                {
-                    prefilledGpsQuestionId = featuredQuestion.PublicKey;
+                    var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
 
-                    var answerOnPrefilledGeolocationQuestion = GetGeoPositionAnswer(item);
-                    if (answerOnPrefilledGeolocationQuestion != null)
+                    if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
                     {
-                        gpsCoordinates = new InterviewGpsCoordinatesView
-                        {
-                            Latitude = answerOnPrefilledGeolocationQuestion.Latitude,
-                            Longitude = answerOnPrefilledGeolocationQuestion.Longitude
-                        };
+                        var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
+                        answerOnPrefilledQuestion.SortIndex = prefilledEntitySortIndex;
+                        prefilledEntitySortIndex++;
+                        prefilledEntitiesList.Add(answerOnPrefilledQuestion);
                     }
+                    else
+                    {
+                        prefilledGpsQuestionId = featuredQuestion.PublicKey;
+
+                        var answerOnPrefilledGeolocationQuestion = GetGeoPositionAnswer(item);
+                        if (answerOnPrefilledGeolocationQuestion != null)
+                        {
+                            gpsCoordinates = new InterviewGpsCoordinatesView
+                            {
+                                Latitude = answerOnPrefilledGeolocationQuestion.Latitude,
+                                Longitude = answerOnPrefilledGeolocationQuestion.Longitude
+                            };
+                        }
+                    }
+                }
+                else if (featuredEntity is IVariable featuredVariable)
+                {
+                    var prefilledVariable = this.GetPrefilledVariable(featuredVariable.PublicKey, questionnaire, null, interviewId);
+                    prefilledVariable.SortIndex = prefilledEntitySortIndex;
+                    prefilledEntitySortIndex++;
+                    prefilledEntitiesList.Add(prefilledVariable);
                 }
             }
 
@@ -230,7 +242,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
-            this.prefilledQuestions.Store(prefilledQuestionsList);
+            this.prefilledQuestions.Store(prefilledEntitiesList);
 
             if (gpsCoordinates != null)
             {
@@ -577,9 +589,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         public void Handle(IPublishedEvent<VariablesChanged> evnt)
         {
-            //this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVector,
-            //    evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
-
             var interviewId = evnt.EventSourceId;
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
             if (interviewView == null) return;
@@ -593,15 +602,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 if (!questionnaire.IsPrefilled(variableId))
                     return;
 
-                var stringValue = VariableToString(changedVariable.NewValue, variableId, questionnaire);
-                var newPrefilledQuestionToStore = new PrefilledQuestionView
-                {
-                    Id = $"{interviewId:N}${variableId:N}",
-                    InterviewId = interviewId,
-                    QuestionId = variableId,
-                    QuestionText = questionnaire.GetVariableLabel(variableId),
-                    Answer = stringValue
-                };
+                var newPrefilledQuestionToStore = GetPrefilledVariable(variableId, questionnaire, changedVariable.NewValue, interviewId);
 
                 var interviewPrefilledEntity = this.prefilledQuestions.Where(entity => entity.QuestionId == variableId && entity.InterviewId == interviewId).FirstOrDefault()
                                                  ?? newPrefilledQuestionToStore;
@@ -620,5 +621,20 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 ? null 
                 : AnswerUtils.AnswerToString(value, null);
         }
+        
+        private PrefilledQuestionView GetPrefilledVariable(Guid variableId, IQuestionnaire questionnaire, object value, Guid interviewId)
+        {
+            var stringValue = VariableToString(value, variableId, questionnaire);
+            var prefilledView = new PrefilledQuestionView
+            {
+                Id = $"{interviewId:N}${variableId:N}",
+                InterviewId = interviewId,
+                QuestionId = variableId,
+                QuestionText = questionnaire.GetVariableLabel(variableId),
+                Answer = stringValue,
+            };
+            return prefilledView;
+        }
+
     }
 }
