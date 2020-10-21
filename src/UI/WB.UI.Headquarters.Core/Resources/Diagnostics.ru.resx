@@ -180,4 +180,7 @@
   <data name="embedded_export_service_check_Degraded">
     <value>Встроенный служба Экспорта не работает</value>
   </data>
+  <data name="Connectivity" xml:space="preserve">
+      <value>Соединение WebSocket</value>
+  </data>
 </root>
