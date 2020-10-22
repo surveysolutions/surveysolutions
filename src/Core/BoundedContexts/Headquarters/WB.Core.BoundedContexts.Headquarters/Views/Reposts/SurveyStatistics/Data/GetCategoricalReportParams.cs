@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
 {
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public Guid? TeamLeadId { get; set; }
         public Guid? ConditionVariable { get; set; }
         public long[] Condition { get; set; }
+        public InterviewStatus[] Statuses { get; set; }
 
         public GetCategoricalReportParams(string questionnaireId, long? version,
             bool detailed, Guid variable, Guid? teamLeadId = null,
