@@ -19,6 +19,11 @@
       <DependentUpon>EnumeratorUIResources.ru.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Update="Properties\UIResources.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UIResources.ru.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
