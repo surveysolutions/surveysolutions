@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -131,6 +132,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             SubscribeOnMessages();
 
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
+
+            Task.Run(CheckTabletTimeAndWarn);
+        }
+
+        private async Task CheckTabletTimeAndWarn()
+        {
+            var allowedThresholdInSeconds = 180 * 24 * 60 * 60;
+            
+            long? lastHqSyncTimestamp = interviewerSettings.LastHqSyncTimestamp;
+            var nowSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            
+            if (lastHqSyncTimestamp != null 
+                && (nowSeconds > lastHqSyncTimestamp + allowedThresholdInSeconds 
+                    || nowSeconds < lastHqSyncTimestamp - allowedThresholdInSeconds))
+            {
+                if (await this.UserInteractionService.ConfirmAsync(
+                    UIResources.InvalidTimeMessage.FormatString(DateTime.Now),
+                    okButton: UIResources.Adjust))
+                {
+                    ViewModelNavigationService.NavigateToSystemDateSettings();
+                }
+            }
         }
 
         public override void ViewDisappeared()
