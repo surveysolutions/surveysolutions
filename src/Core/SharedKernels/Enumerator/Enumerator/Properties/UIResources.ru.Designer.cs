@@ -22,14 +22,14 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class UIResources {
+    public class UIResources_ru {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal UIResources() {
+        internal UIResources_ru() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.Enumerator.Properties.UIResources", typeof(UIResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.Enumerator.Properties.UIResources.ru", typeof(UIResources_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjust.
+        ///   Looks up a localized string similar to Установить.
         /// </summary>
         public static string Adjust {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer accepted. Took {0} to process.
+        ///   Looks up a localized string similar to Ответ записан. Продолжительность {0}.
         /// </summary>
         public static string AnswerRecordedMsg {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dismiss.
+        ///   Looks up a localized string similar to Скрыть.
         /// </summary>
         public static string AnswerRecordedMsgDismiss {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ACTIVE MAP:.
+        ///   Looks up a localized string similar to АКТИВНАЯ КАРТА:.
         /// </summary>
         public static string AreaMap_Active_Map_Title {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Area: {0:0.00} m2.
+        ///   Looks up a localized string similar to Площадь: {0:0.00} кв.м..
         /// </summary>
         public static string AreaMap_AreaFormat {
             get {
@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MAPS AVAILABLE ON DEVICE.
+        ///   Looks up a localized string similar to ДОСТУПНЫЕ НА УСТРОЙСТВЕ КАРТЫ.
         /// </summary>
         public static string AreaMap_Available_Maps_Title {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string AreaMap_Cancel {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Close.
+        ///   Looks up a localized string similar to Закрыть.
         /// </summary>
         public static string AreaMap_Close {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit.
+        ///   Looks up a localized string similar to Редактировать.
         /// </summary>
         public static string AreaMap_Edit {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured on loading. Shapefile cannot be opened.
+        ///   Looks up a localized string similar to Ошибка загрузки. Шейп-файл не может быть открыт.
         /// </summary>
         public static string AreaMap_ErrorOnShapefileLoading {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Length: {0:0.00} m.
+        ///   Looks up a localized string similar to Длинна: {0:0.00} метров.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Load shapefile.
+        ///   Looks up a localized string similar to Загрузить шейп-файл.
         /// </summary>
         public static string AreaMap_LoadShapefile {
             get {
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location.
+        ///   Looks up a localized string similar to Положение.
         /// </summary>
         public static string AreaMap_Location {
             get {
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting.
+        ///   Looks up a localized string similar to Не удается получить ваше расположение. Выйдите на открытое пространство, включите GPS или увеличте значение таймаута в настройках..
         /// </summary>
         public static string AreaMap_LocationDataSourceFailed {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your location is outside the boundaries of the map..
+        ///   Looks up a localized string similar to Ваше местоположение вне границ карты.
         /// </summary>
         public static string AreaMap_LocationOutOfBoundaries {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loaded map is outside of visible boundaries.
+        ///   Looks up a localized string similar to Загруженая карта расположена вне границ видимой зоны.
         /// </summary>
         public static string AreaMap_MapIsOutOfVisibleBoundaries {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map.
+        ///   Looks up a localized string similar to Карта.
         /// </summary>
         public static string AreaMap_MapTitle {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No changes to be saved..
+        ///   Looks up a localized string similar to Нет изменений, чтобы сохранять..
         /// </summary>
         public static string AreaMap_NoChangesInfo {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No maps were found. Please update maps.
+        ///   Looks up a localized string similar to Карты не найдены. Попробуйте обновить карты..
         /// </summary>
         public static string AreaMap_NoMapsFound {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perimeter: {0:0.00} m.
+        ///   Looks up a localized string similar to Периметр: {0:0.00} метров.
         /// </summary>
         public static string AreaMap_PerimeterFormat {
             get {
@@ -241,7 +241,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Points: {0}.
+        ///   Looks up a localized string similar to Отмечено точек: {0}.
         /// </summary>
         public static string AreaMap_PointsFormat {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save.
+        ///   Looks up a localized string similar to Сохранить.
         /// </summary>
         public static string AreaMap_Save {
             get {
@@ -259,7 +259,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Undo.
+        ///   Looks up a localized string similar to Отменить.
         /// </summary>
         public static string AreaMap_Undo {
             get {
@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update maps.
+        ///   Looks up a localized string similar to Обновить карты.
         /// </summary>
         public static string AreaMap_Update_Maps {
             get {
@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update failed.
+        ///   Looks up a localized string similar to Обновление не удалось.
         /// </summary>
         public static string AreaMap_UpdateFailed {
             get {
@@ -286,7 +286,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update maps.
+        ///   Looks up a localized string similar to Обновить карты.
         /// </summary>
         public static string AreaMap_UpdateMaps {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment #{0}.
+        ///   Looks up a localized string similar to Задача номер: {0}.
         /// </summary>
         public static string AssignmentN {
             get {
@@ -304,7 +304,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not save audio file. Please check whether the device has internal storage available..
+        ///   Looks up a localized string similar to Не удалось записать аудиофайл. Убедитесь, что в устройстве есть свободное пространство во внутреннем хранилище.
         /// </summary>
         public static string Audio_Io_Exception_Message {
             get {
@@ -313,7 +313,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected exception during start audio recording.
+        ///   Looks up a localized string similar to Непредвиденная ошибка во время начала записи.
         /// </summary>
         public static string Audio_Unhandled_Exception_Message {
             get {
@@ -322,7 +322,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of audio recording.
+        ///   Looks up a localized string similar to {0} аудио записи.
         /// </summary>
         public static string AudioQuestion_DurationFormat {
             get {
@@ -331,7 +331,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string Cancel {
             get {
@@ -340,9 +340,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No questionnaires yet
+        ///   Looks up a localized string similar to Опросники не обнаружены
         ///
-        ///You can create or edit your questionnaires in Survey Solutions Designer.
+        ///Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer.
         /// </summary>
         public static string Dashboard_EmptyQuestionnairesList {
             get {
@@ -351,7 +351,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No questionnaires found.
+        ///   Looks up a localized string similar to Опросники не найдены.
         /// </summary>
         public static string Dashboard_EmptySearchResult {
             get {
@@ -369,7 +369,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My.
+        ///   Looks up a localized string similar to Мои.
         /// </summary>
         public static string Dashboard_MyQuestionnairesLinkText {
             get {
@@ -378,7 +378,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public.
+        ///   Looks up a localized string similar to Общие.
         /// </summary>
         public static string Dashboard_PublicQuestionnairesLinkText {
             get {
@@ -387,7 +387,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shared with me.
+        ///   Looks up a localized string similar to Общие со мной.
         /// </summary>
         public static string Dashboard_SharedWithMeLinkText {
             get {
@@ -396,7 +396,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
+        ///   Looks up a localized string similar to Опросники.
         /// </summary>
         public static string Dashboard_ToolbarText {
             get {
@@ -405,7 +405,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter date.
+        ///   Looks up a localized string similar to Нажмите для ввода даты.
         /// </summary>
         public static string DateQuestion_Hint {
             get {
@@ -414,7 +414,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your device doesn&apos;t support this functionality.
+        ///   Looks up a localized string similar to Ваше устройство не поддерживает данный функционал.
         /// </summary>
         public static string Device_Does_Not_Support {
             get {
@@ -423,7 +423,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization endpoint.
+        ///   Looks up a localized string similar to Домен синхронизации.
         /// </summary>
         public static string EndpointHint {
             get {
@@ -432,7 +432,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Service Endpoint:.
+        ///   Looks up a localized string similar to Адрес веб-сервиса:.
         /// </summary>
         public static string EndpointText {
             get {
@@ -441,7 +441,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error.
+        ///   Looks up a localized string similar to Ошибка.
         /// </summary>
         public static string Error {
             get {
@@ -450,7 +450,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your user account is locked. Please contact the support team at support@mysurvey.solutions..
+        ///   Looks up a localized string similar to Ваша учетная запись заблокирована. Обратитесь в службу поддержки по адресу support@mysurvey.solutions..
         /// </summary>
         public static string ErrorMessage_AccountIsLockedOnServer {
             get {
@@ -459,7 +459,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first..
+        ///   Looks up a localized string similar to Ваша учетная запись не подтверждена на сервере. Пожалуйста, прежде чем войти, подтвердите Вашу учетную запись, с помощью ссылки которую мы выслали Вам на почтовый ящик..
         /// </summary>
         public static string ErrorMessage_AccountIsNotApprovedOnServer {
             get {
@@ -468,7 +468,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions.
+        ///   Looks up a localized string similar to На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время.
         /// </summary>
         public static string ErrorMessage_InternalServerError {
             get {
@@ -477,7 +477,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Survey Solutions Designer URL is invalid. Check settings..
+        ///   Looks up a localized string similar to Указан неверный адрес Survey Solutions Designer. Проверьте настройки..
         /// </summary>
         public static string ErrorMessage_InvalidEndpoint {
             get {
@@ -486,7 +486,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience.
+        ///   Looks up a localized string similar to The website of survey solutions designer is in maintenance mode now. Sorry for the inconvenience.
         /// </summary>
         public static string ErrorMessage_Maintenance {
             get {
@@ -495,7 +495,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no permission granted to application to self update. Please enable &quot;Allow from this source&quot; option in &apos;App info&apos; settings menu..
+        ///   Looks up a localized string similar to У приложения не хватает прав для обновления. Пожалуйста разрешите этому приложению &quot;Установку неизвестных приложений&quot; в настройках.
         /// </summary>
         public static string ErrorMessage_PermissionForUnkownSourcesRequired {
             get {
@@ -504,7 +504,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout when connecting to the Survey Solutions Designer website. Check your internet connection..
+        ///   Looks up a localized string similar to Время ожидания ответа от сервера Survey Solutions Designer истекло. Пожалуйста, проверьте Ваше интернет соединение..
         /// </summary>
         public static string ErrorMessage_RequestTimeout {
             get {
@@ -513,7 +513,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to the Survey Solutions Designer. Please make sure that the website is available..
+        ///   Looks up a localized string similar to Нет связи с Survey Solutions Designer..
         /// </summary>
         public static string ErrorMessage_ServiceUnavailable {
             get {
@@ -522,7 +522,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your login or password is incorrect.
+        ///   Looks up a localized string similar to Вы ввели неправильное имя или пароль.
         /// </summary>
         public static string ErrorMessage_Unauthorized {
             get {
@@ -531,7 +531,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New version of application was released. Please, update the application.
+        ///   Looks up a localized string similar to Выпущена новая версия приложения. Обновитесь, пожалуйста..
         /// </summary>
         public static string ErrorMessage_UpgradeRequired {
             get {
@@ -540,7 +540,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter text.
+        ///   Looks up a localized string similar to Нажмите для ввода текста.
         /// </summary>
         public static string FilteredComboboxQuestion_Hint {
             get {
@@ -549,7 +549,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application does not have enough permissions to execute requested action. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use device location..
+        ///   Looks up a localized string similar to Приложению необходимо разрешение на использование текущего положения устройства для ответа на данный вопрос.
         /// </summary>
         public static string GpsQuestion_MissingPermissions {
             get {
@@ -558,7 +558,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting.
+        ///   Looks up a localized string similar to Не удается получить вашу гео позицию. Выйдите на открытое пространство или увеличте значение таймаута в настройках..
         /// </summary>
         public static string GpsQuestion_Timeout {
             get {
@@ -567,7 +567,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter number.
+        ///   Looks up a localized string similar to Нажмите для ввода числа.
         /// </summary>
         public static string IntegerQuestion_Hint {
             get {
@@ -576,7 +576,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your comment.
+        ///   Looks up a localized string similar to Ваш комментарий.
         /// </summary>
         public static string Interview_Comment_Interviewer_Caption {
             get {
@@ -585,7 +585,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On previous answer.
+        ///   Looks up a localized string similar to На предыдущий ответ.
         /// </summary>
         public static string Interview_Comment_OnPreviousAnswer {
             get {
@@ -594,7 +594,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resolve.
+        ///   Looks up a localized string similar to Вопрос решён.
         /// </summary>
         public static string Interview_Comment_Resolve {
             get {
@@ -603,7 +603,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answered.
+        ///   Looks up a localized string similar to Отвеченных.
         /// </summary>
         public static string Interview_Complete_Answered {
             get {
@@ -612,7 +612,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complete.
+        ///   Looks up a localized string similar to Завершить.
         /// </summary>
         public static string Interview_Complete_Button {
             get {
@@ -621,7 +621,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization.
+        ///   Looks up a localized string similar to По закрытию этого интервью оно будет помечено как законченное и будет загружено супервизору во время вашей следующей синхронизации.
         /// </summary>
         public static string Interview_Complete_Consequences_Instrunction {
             get {
@@ -630,7 +630,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entities with errors:.
+        ///   Looks up a localized string similar to Объекты с ошибками:.
         /// </summary>
         public static string Interview_Complete_Entities_With_Errors {
             get {
@@ -639,7 +639,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error(s).
+        ///   Looks up a localized string similar to Ошибок.
         /// </summary>
         public static string Interview_Complete_Errors {
             get {
@@ -648,7 +648,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {0} entities with errors:.
+        ///   Looks up a localized string similar to Первые {0} объектов с ошибкам:.
         /// </summary>
         public static string Interview_Complete_First_n_Entities_With_Errors {
             get {
@@ -657,7 +657,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No.
+        ///   Looks up a localized string similar to Нет.
         /// </summary>
         public static string Interview_Complete_No {
             get {
@@ -666,7 +666,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note for supervisor.
+        ///   Looks up a localized string similar to Заметка для супервизора.
         /// </summary>
         public static string Interview_Complete_Note_For_Supervisor {
             get {
@@ -675,7 +675,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions status.
+        ///   Looks up a localized string similar to Статусы вопросов.
         /// </summary>
         public static string Interview_Complete_Questions_Status {
             get {
@@ -684,7 +684,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to complete this interview.
+        ///   Looks up a localized string similar to Вы на финальной стадии работы с интервью.
         /// </summary>
         public static string Interview_Complete_Screen_Description {
             get {
@@ -693,7 +693,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to complete interview {0}.
+        ///   Looks up a localized string similar to Вы на финальной стадии работы с интервью {0}.
         /// </summary>
         public static string Interview_Complete_Screen_DescriptionWithInterviewKey {
             get {
@@ -702,7 +702,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complete.
+        ///   Looks up a localized string similar to Окончание.
         /// </summary>
         public static string Interview_Complete_Screen_Title {
             get {
@@ -711,7 +711,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unanswered.
+        ///   Looks up a localized string similar to Неотвеченных.
         /// </summary>
         public static string Interview_Complete_Unanswered {
             get {
@@ -720,7 +720,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To complete screen.
+        ///   Looks up a localized string similar to Завершить интервью.
         /// </summary>
         public static string Interview_CompleteScreen_ButtonText {
             get {
@@ -729,7 +729,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {0} questions with comments:.
+        ///   Looks up a localized string similar to Первые {0} вопросов с комментариями:.
         /// </summary>
         public static string Interview_Cover_First_n_Questions_With_Comments {
             get {
@@ -738,7 +738,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions with supervisor comments:.
+        ///   Looks up a localized string similar to Вопросы с комментариями супервизора:.
         /// </summary>
         public static string Interview_Cover_Questions_With_Comments {
             get {
@@ -747,7 +747,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cover.
+        ///   Looks up a localized string similar to Обложка.
         /// </summary>
         public static string Interview_Cover_Screen_Title {
             get {
@@ -756,7 +756,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No comments from supervisor.
+        ///   Looks up a localized string similar to Комментариев от супервизора нет.
         /// </summary>
         public static string Interview_Cover_Supervisor_Comments_does_not_exists {
             get {
@@ -765,7 +765,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor note:.
+        ///   Looks up a localized string similar to Замечания супервизора.
         /// </summary>
         public static string Interview_Cover_Supervisor_Note {
             get {
@@ -774,7 +774,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} answers.
+        ///   Looks up a localized string similar to ответов: {0}.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
             get {
@@ -783,7 +783,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to one answer.
+        ///   Looks up a localized string similar to один ответ.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_One {
             get {
@@ -792,7 +792,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors.
+        ///   Looks up a localized string similar to ошибок: {0}.
         /// </summary>
         public static string Interview_Group_InvalidAnswers_ManyFormat {
             get {
@@ -801,7 +801,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to one error.
+        ///   Looks up a localized string similar to одна ошибка.
         /// </summary>
         public static string Interview_Group_InvalidAnswers_One {
             get {
@@ -810,7 +810,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section completed: {0}.
+        ///   Looks up a localized string similar to Секция заполнена ({0}).
         /// </summary>
         public static string Interview_Group_Status_CompletedFormat {
             get {
@@ -819,7 +819,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section not started.
+        ///   Looks up a localized string similar to Секция не содержит ни одного ответа.
         /// </summary>
         public static string Interview_Group_Status_NotStarted {
             get {
@@ -828,7 +828,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section started: {0}.
+        ///   Looks up a localized string similar to Секция частично заполнена ({0}).
         /// </summary>
         public static string Interview_Group_Status_StartedIncompleteFormat {
             get {
@@ -837,7 +837,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} sub-sections.
+        ///   Looks up a localized string similar to вложенных секций: {0}.
         /// </summary>
         public static string Interview_Group_Subgroups_ManyFormat {
             get {
@@ -846,7 +846,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to one sub-section.
+        ///   Looks up a localized string similar to одна вложенная секция.
         /// </summary>
         public static string Interview_Group_Subgroups_One {
             get {
@@ -855,7 +855,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to no sub-sections.
+        ///   Looks up a localized string similar to вложенных секций нет.
         /// </summary>
         public static string Interview_Group_Subgroups_Zero {
             get {
@@ -864,7 +864,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters comment.
+        ///   Looks up a localized string similar to Комментарий хедквотера.
         /// </summary>
         public static string Interview_Headquarters_Comment_Caption {
             get {
@@ -873,7 +873,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show instruction.
+        ///   Looks up a localized string similar to Показать инструкцию.
         /// </summary>
         public static string Interview_Instruction_ShowInstruction {
             get {
@@ -882,7 +882,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instruction.
+        ///   Looks up a localized string similar to Инструкция.
         /// </summary>
         public static string Interview_Instruction_Title {
             get {
@@ -891,7 +891,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer comment.
+        ///   Looks up a localized string similar to Комментарий интервьюера.
         /// </summary>
         public static string Interview_Interviewer_Comment_Caption {
             get {
@@ -900,7 +900,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories will appear only after answering the question that defines this questions categories..
+        ///   Looks up a localized string similar to Опции будут доступны после ответа на соответствующий вопрос.
         /// </summary>
         public static string Interview_LinkedQuestion_Empty {
             get {
@@ -909,7 +909,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} out of {1} categories selected.
+        ///   Looks up a localized string similar to {0} из {1} опций выбрано.
         /// </summary>
         public static string Interview_MaxAnswersCount {
             get {
@@ -918,7 +918,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The maximum number of selections ({0}) in this question has been made.
+        ///   Looks up a localized string similar to Максимальное число опций ({0}) для вопроса выбрано.
         /// </summary>
         public static string Interview_MaxAnswersCountSelected {
             get {
@@ -927,7 +927,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next section.
+        ///   Looks up a localized string similar to Следующая секция.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
             get {
@@ -936,7 +936,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User comment.
+        ///   Looks up a localized string similar to Комментарий пользователя.
         /// </summary>
         public static string Interview_Other_Comment_Caption {
             get {
@@ -945,7 +945,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Overview.
+        ///   Looks up a localized string similar to Обзор.
         /// </summary>
         public static string Interview_Overview {
             get {
@@ -954,7 +954,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Additional info.
+        ///   Looks up a localized string similar to Дополнительная информация.
         /// </summary>
         public static string Interview_Overview_AdditionalInfo {
             get {
@@ -963,7 +963,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments.
+        ///   Looks up a localized string similar to Комментарии.
         /// </summary>
         public static string Interview_Overview_Comments {
             get {
@@ -972,7 +972,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Overview.
+        ///   Looks up a localized string similar to Обзор.
         /// </summary>
         public static string Interview_Overview_Name {
             get {
@@ -981,7 +981,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not answered.
+        ///   Looks up a localized string similar to Не отвечен.
         /// </summary>
         public static string Interview_Overview_NotAnswered {
             get {
@@ -990,7 +990,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning(s).
+        ///   Looks up a localized string similar to Ошибки.
         /// </summary>
         public static string Interview_Overview_Warnings {
             get {
@@ -999,7 +999,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All {0} questions answered.
+        ///   Looks up a localized string similar to Все ({0}) вопросы отвечены.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
             get {
@@ -1008,7 +1008,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note: {0} questions is unanswered.
+        ///   Looks up a localized string similar to Внимание: неотвеченных вопросов - {0}.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_UnansweredQuestions {
             get {
@@ -1017,7 +1017,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; not allowed for this question.
+        ///   Looks up a localized string similar to Ответ &quot;{0}&quot; не соответствует ни с одной опцией.
         /// </summary>
         public static string Interview_Question_Cascading_NoMatchingValue {
             get {
@@ -1026,7 +1026,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; not allowed for this question.
+        ///   Looks up a localized string similar to Ответ &quot;{0}&quot; не соответствует ни с одной опцией.
         /// </summary>
         public static string Interview_Question_Filter_MatchError {
             get {
@@ -1035,7 +1035,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide resolved.
+        ///   Looks up a localized string similar to Показать решённые.
         /// </summary>
         public static string Interview_Question_HideResolvedComments {
             get {
@@ -1044,7 +1044,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty value cannot be saved.
+        ///   Looks up a localized string similar to Нельзя сохранить пустое значение.
         /// </summary>
         public static string Interview_Question_Integer_EmptyValueError {
             get {
@@ -1053,7 +1053,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because question is a roster source question and specified answer is negative.
+        ///   Looks up a localized string similar to Ответ &apos;{0}&apos; неверный, поскольку нельзя задать отрицательное количество элементов в списке.
         /// </summary>
         public static string Interview_Question_Integer_NegativeRosterSizeAnswer {
             get {
@@ -1062,7 +1062,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value cannot be parsed as integer value.
+        ///   Looks up a localized string similar to Введенное значение не может быть интерпретировано как целое число.
         /// </summary>
         public static string Interview_Question_Integer_ParsingError {
             get {
@@ -1071,7 +1071,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because answer is greater than Roster upper bound &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Ответ &apos;{0}&apos; неверный, поскольку он больше значения максимального количества элементов в списке: &apos;{1}&apos;..
         /// </summary>
         public static string Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue {
             get {
@@ -1080,7 +1080,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty values are not allowed.
+        ///   Looks up a localized string similar to Пустые значения не разрешены.
         /// </summary>
         public static string Interview_Question_List_Empty_Values_Are_Not_Allowed {
             get {
@@ -1089,7 +1089,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove {0} row(s) from each related roster?.
+        ///   Looks up a localized string similar to Вы уверены, что хотите удалить {0} строк(у) у зависимых списков?.
         /// </summary>
         public static string Interview_Question_NumberRosterRemoveConfirm {
             get {
@@ -1098,7 +1098,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value cannot be parsed as decimal value.
+        ///   Looks up a localized string similar to Введенное значение не может быть интерпретировано как вещественное число.
         /// </summary>
         public static string Interview_Question_Real_ParsingError {
             get {
@@ -1107,7 +1107,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show resolved.
+        ///   Looks up a localized string similar to Скрыть решённые.
         /// </summary>
         public static string Interview_Question_ShowResolvedComments {
             get {
@@ -1116,7 +1116,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer should not be empty.
+        ///   Looks up a localized string similar to Ответ не может быть пустым.
         /// </summary>
         public static string Interview_Question_Text_Empty {
             get {
@@ -1125,7 +1125,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please, fill in all the required values.
+        ///   Looks up a localized string similar to Заполните ответ на вопрос полностью.
         /// </summary>
         public static string Interview_Question_Text_MaskError {
             get {
@@ -1134,7 +1134,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to edit area.
+        ///   Looks up a localized string similar to Редактировать область.
         /// </summary>
         public static string Interview_Questions_Area_SaveAnswer {
             get {
@@ -1143,7 +1143,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record new.
+        ///   Looks up a localized string similar to Перезаписать.
         /// </summary>
         public static string Interview_Questions_Audio_RecordNew {
             get {
@@ -1152,7 +1152,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to record audio.
+        ///   Looks up a localized string similar to Записать звук.
         /// </summary>
         public static string Interview_Questions_Audio_SaveAnswer {
             get {
@@ -1161,7 +1161,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to record GPS.
+        ///   Looks up a localized string similar to Определить местоположение.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {
             get {
@@ -1170,7 +1170,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New answer to a protected question should be greater or equal to {0}.
+        ///   Looks up a localized string similar to Новый ответ на защищённый вопрос должен быть больше либо равен {0}.
         /// </summary>
         public static string Interview_Questions_Integer_ProtectedValue {
             get {
@@ -1179,7 +1179,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to take a photo.
+        ///   Looks up a localized string similar to Нажмите, чтобы сделать фото.
         /// </summary>
         public static string Interview_Questions_Multimedia_TapToTakePhoto {
             get {
@@ -1188,7 +1188,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to take barcode.
+        ///   Looks up a localized string similar to Отсканировать штрих-код.
         /// </summary>
         public static string Interview_Questions_QrBarcode_SaveAnswer {
             get {
@@ -1197,7 +1197,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related rosters?.
+        ///   Looks up a localized string similar to Вы уверены, что хотите удалить строку у зависимого списка?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterListMessage {
             get {
@@ -1206,7 +1206,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{0}&apos; from each related roster?.
+        ///   Looks up a localized string similar to Вы уверены, что хотите удалить строку &apos;{0}&apos; у зависимых списков?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
@@ -1215,7 +1215,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to record current time.
+        ///   Looks up a localized string similar to Сохранить текущее время.
         /// </summary>
         public static string Interview_Questions_Timestamp_SaveAnswer {
             get {
@@ -1224,7 +1224,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show PDF .
+        ///   Looks up a localized string similar to Показать PDF.
         /// </summary>
         public static string Interview_ShowPdf {
             get {
@@ -1233,7 +1233,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear.
+        ///   Looks up a localized string similar to Очистить.
         /// </summary>
         public static string Interview_SignatureClear {
             get {
@@ -1242,7 +1242,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign here.
+        ///   Looks up a localized string similar to Подпись.
         /// </summary>
         public static string Interview_SignatureSignHere {
             get {
@@ -1251,7 +1251,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor comment.
+        ///   Looks up a localized string similar to Комментарий супервизора.
         /// </summary>
         public static string Interview_Supervisor_Comment_Caption {
             get {
@@ -1260,7 +1260,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Store signature.
+        ///   Looks up a localized string similar to Сохранить подпись.
         /// </summary>
         public static string Interview_TakeSignature {
             get {
@@ -1278,7 +1278,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audio recording.
+        ///   Looks up a localized string similar to Аудио запись.
         /// </summary>
         public static string Interviewer_AudioRecording {
             get {
@@ -1287,7 +1287,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Diagnostics.
+        ///   Looks up a localized string similar to Диагностика.
         /// </summary>
         public static string Interviewer_Diagnostics {
             get {
@@ -1296,7 +1296,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Done.
+        ///   Looks up a localized string similar to Сохранить.
         /// </summary>
         public static string Interviewer_Done {
             get {
@@ -1305,7 +1305,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leave comment for a new responsible.
+        ///   Looks up a localized string similar to Оставьте комментарий для нового ответственного.
         /// </summary>
         public static string Interviewer_Reassign_Comment {
             get {
@@ -1314,7 +1314,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string Interviewer_RelinkDevice_Cancel {
             get {
@@ -1323,7 +1323,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are already assigned to another device.
+        ///   Looks up a localized string similar to Ваша учетная запись уже привязана к другому устройству.
         /// </summary>
         public static string Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage {
             get {
@@ -1332,7 +1332,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Relink.
+        ///   Looks up a localized string similar to Перепривязать.
         /// </summary>
         public static string Interviewer_RelinkDevice_RelinkButtonText {
             get {
@@ -1341,7 +1341,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you relink to this device &lt;br/&gt; all data on the old one will be lost.
+        ///   Looks up a localized string similar to Если вы перепревяжетесь к этому устройству, то все данные собранные на других устройствах будут удалены.
         /// </summary>
         public static string Interviewer_RelinkDevice_RelinkMessage {
             get {
@@ -1350,7 +1350,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try to sign in online.
+        ///   Looks up a localized string similar to Попробуйте войти онлайн.
         /// </summary>
         public static string Interviewer_TryOnlineLogin {
             get {
@@ -1359,7 +1359,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview Key: {0}.
+        ///   Looks up a localized string similar to Идентификатор: {0}.
         /// </summary>
         public static string InterviewKey {
             get {
@@ -1368,7 +1368,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is important that the clock setting is accurate. Your clock indicates that current date is {0} which is wrong. Adjust the clock by setting the correct date/time before continuing your work..
+        ///   Looks up a localized string similar to Важно, чтобы часы были поставлены правильно на устройстве. Часы показывают, то текущая дата {0}, которая неправильная. Установите часы в правильное состояние прежде чем пролжать работу..
         /// </summary>
         public static string InvalidTimeMessage {
             get {
@@ -1377,7 +1377,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your login.
+        ///   Looks up a localized string similar to Имя пользователя.
         /// </summary>
         public static string LoginNameHint {
             get {
@@ -1386,7 +1386,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in.
+        ///   Looks up a localized string similar to Войти.
         /// </summary>
         public static string LoginText {
             get {
@@ -1404,7 +1404,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All questionnaires.
+        ///   Looks up a localized string similar to Все опросники.
         /// </summary>
         public static string MapDashboard_AllQuestionnaires {
             get {
@@ -1413,7 +1413,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignments.
+        ///   Looks up a localized string similar to Задачи.
         /// </summary>
         public static string MapDashboard_Assignments {
             get {
@@ -1422,7 +1422,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to only items with known coordinates are shown.
+        ///   Looks up a localized string similar to Показаны только элементы с координатами.
         /// </summary>
         public static string MapDashboard_Disclaimer {
             get {
@@ -1431,7 +1431,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filters.
+        ///   Looks up a localized string similar to Фильтры.
         /// </summary>
         public static string MapDashboard_FiltersTitle {
             get {
@@ -1440,7 +1440,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews.
+        ///   Looks up a localized string similar to Интервью.
         /// </summary>
         public static string MapDashboard_Interviews {
             get {
@@ -1449,7 +1449,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire.
+        ///   Looks up a localized string similar to Опросник.
         /// </summary>
         public static string MapDashboard_QuestionnaireTitle {
             get {
@@ -1458,7 +1458,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type.
+        ///   Looks up a localized string similar to Тип.
         /// </summary>
         public static string MapDashboard_TypeTitle {
             get {
@@ -1467,7 +1467,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exit Map Editor.
+        ///   Looks up a localized string similar to Выйти из редактора.
         /// </summary>
         public static string MenuItem_Title_AreaCancel {
             get {
@@ -1476,7 +1476,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear all.
+        ///   Looks up a localized string similar to Очистить все.
         /// </summary>
         public static string MenuItem_Title_AreaCancelEdit {
             get {
@@ -1485,7 +1485,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dashboard.
+        ///   Looks up a localized string similar to Опросники.
         /// </summary>
         public static string MenuItem_Title_Dashboard {
             get {
@@ -1494,7 +1494,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please wait until the current operation is completed.
+        ///   Looks up a localized string similar to Пожалуйста подождите пока завершится текущая операция.
         /// </summary>
         public static string Messages_WaitPendingOperation {
             get {
@@ -1503,7 +1503,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application has not enough permissions to execute requested action.
+        ///   Looks up a localized string similar to У приложения нет необходимых разрешений для выполнения действия.
         /// </summary>
         public static string MissingPermission {
             get {
@@ -1512,7 +1512,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use camera..
+        ///   Looks up a localized string similar to Приложению необходимо разрешение на использование камеры для ответа на данный вопрос.
         /// </summary>
         public static string MissingPermissions_Camera {
             get {
@@ -1521,7 +1521,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use microphone..
+        ///   Looks up a localized string similar to Приложению необходим доступ к микрофону для ответа на данный вопрос.
         /// </summary>
         public static string MissingPermissions_Microphone {
             get {
@@ -1530,7 +1530,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use microphone. Retry last action and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use microphone..
+        ///   Looks up a localized string similar to Приложению необходим доступ к микрофону..
         /// </summary>
         public static string MissingPermissions_Microphone_Global {
             get {
@@ -1539,7 +1539,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use storage..
+        ///   Looks up a localized string similar to Приложению необходимо разрешение на использование хранилища для ответа на данный вопрос.
         /// </summary>
         public static string MissingPermissions_Storage {
             get {
@@ -1548,7 +1548,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use storage. Retry last action and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use storage..
+        ///   Looks up a localized string similar to Приложению необходимо разрешение на использование хранилища.
         /// </summary>
         public static string MissingPermissions_Storage_Global {
             get {
@@ -1557,7 +1557,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick from gallery.
+        ///   Looks up a localized string similar to Выбрать из галереи.
         /// </summary>
         public static string Multimedia_PickFromGallery {
             get {
@@ -1566,7 +1566,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select an option.
+        ///   Looks up a localized string similar to Выберите опцию.
         /// </summary>
         public static string Multimedia_PictureSource {
             get {
@@ -1575,7 +1575,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Take photo.
+        ///   Looks up a localized string similar to Сделать фото.
         /// </summary>
         public static string Multimedia_TakePhoto {
             get {
@@ -1584,7 +1584,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No.
+        ///   Looks up a localized string similar to Нет.
         /// </summary>
         public static string No {
             get {
@@ -1593,7 +1593,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} notifications.
+        ///   Looks up a localized string similar to {0} уведомлений.
         /// </summary>
         public static string Notifications_SummaryTitle {
             get {
@@ -1602,7 +1602,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abort.
+        ///   Looks up a localized string similar to Прервать.
         /// </summary>
         public static string OfflineSync_Abort {
             get {
@@ -1611,7 +1611,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to dashboard.
+        ///   Looks up a localized string similar to К списку заданий.
         /// </summary>
         public static string OfflineSync_BackToDashboard {
             get {
@@ -1620,7 +1620,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string OfflineSync_Cancel {
             get {
@@ -1629,7 +1629,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This device is not supported..
+        ///   Looks up a localized string similar to Это устройство не поддерживается..
         /// </summary>
         public static string OfflineSync_DeviceNotSupported {
             get {
@@ -1638,7 +1638,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Play Services must be installed..
+        ///   Looks up a localized string similar to Должны быть установлены Google Play Services..
         /// </summary>
         public static string OfflineSync_InstallPlayServices {
             get {
@@ -1647,7 +1647,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Speed: {0}, Time left: {1}.
+        ///   Looks up a localized string similar to Скорость: {0}, Осталось: {1}.
         /// </summary>
         public static string OfflineSync_NetworkInfo {
             get {
@@ -1656,7 +1656,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retry.
+        ///   Looks up a localized string similar to Попробывать еще раз.
         /// </summary>
         public static string OfflineSync_Retry {
             get {
@@ -1665,7 +1665,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization of assignments and interviews.
+        ///   Looks up a localized string similar to Синхронизация заданий и интервью.
         /// </summary>
         public static string OfflineSync_Supervisor_Title {
             get {
@@ -1674,7 +1674,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ok.
+        ///   Looks up a localized string similar to Да.
         /// </summary>
         public static string Ok {
             get {
@@ -1683,7 +1683,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password.
+        ///   Looks up a localized string similar to Пароль.
         /// </summary>
         public static string PasswordHint {
             get {
@@ -1692,7 +1692,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Play Services are not available.
+        ///   Looks up a localized string similar to Сервис Google Play недоступен.
         /// </summary>
         public static string PlayServicesLocationWatcher_Google_Play_Services_are_not_available {
             get {
@@ -1701,7 +1701,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location Client not started.
+        ///   Looks up a localized string similar to Клиент местоположения не запущен.
         /// </summary>
         public static string PlayServicesLocationWatcher_Location_Client_not_started {
             get {
@@ -1710,7 +1710,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot start MvxLocation service more than once.
+        ///   Looks up a localized string similar to Вы не можете запустить более одного сервиса MvxLocation.
         /// </summary>
         public static string PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once {
             get {
@@ -1719,7 +1719,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to START.
+        ///   Looks up a localized string similar to НАЧАТЬ.
         /// </summary>
         public static string PrefilledQuestions_StartInterview {
             get {
@@ -1728,7 +1728,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download updates for Interviewer application.
+        ///   Looks up a localized string similar to Загружать обновления для интервьюер приложения.
         /// </summary>
         public static string Prefs_DownloadUpdatesForInterviewerApp {
             get {
@@ -1737,7 +1737,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If interviewers don&apos;t have an access to the internet, this functionality should be enabled, because it makes it possible to update their applications during offline synchronization with the Supervisor application.
+        ///   Looks up a localized string similar to Если у интервьюеров нет доступа к интернету и они работают в оффлайн режиме, то эта настройка должна быть влючена, чтобы при оффлайновой синхронизации с супервизором интервьюер мог обновить свое приложение через приложение супервизора.
         /// </summary>
         public static string Prefs_DownloadUpdatesForInterviewerAppSummary {
             get {
@@ -1746,7 +1746,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of meters to set accuracy.
+        ///   Looks up a localized string similar to Значение в метрах для задания точности..
         /// </summary>
         public static string Prefs_GpsDesiredAccuracySubTitle {
             get {
@@ -1755,7 +1755,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Desired accuracy of GPS questions.
+        ///   Looks up a localized string similar to Желаемая точность GPS вопроса.
         /// </summary>
         public static string Prefs_GpsDesiredAccuracyTitle {
             get {
@@ -1764,7 +1764,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show location on map.
+        ///   Looks up a localized string similar to Показывать положение на карте.
         /// </summary>
         public static string Prefs_ShowLocationOnMap {
             get {
@@ -1773,7 +1773,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Load map to show location for GPS questions.
+        ///   Looks up a localized string similar to Загружать карту для отображения текущего положения на GPS вопросах.
         /// </summary>
         public static string Prefs_ShowLocationOnMapSummary {
             get {
@@ -1782,7 +1782,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tablet is going to vibrate when an answer didn&apos;t pass the validation.
+        ///   Looks up a localized string similar to Таблет будет вибрировать когда ответ не проходит валидацию.
         /// </summary>
         public static string Prefs_VibrateOnErrorSummary {
             get {
@@ -1791,7 +1791,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vibrate when invalid answer is given.
+        ///   Looks up a localized string similar to Вибрировать когда дан не валидный ответ.
         /// </summary>
         public static string Prefs_VibrateOnErrorTitle {
             get {
@@ -1800,7 +1800,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter decimal.
+        ///   Looks up a localized string similar to Нажмите для ввода числа.
         /// </summary>
         public static string RealQuestion_Hint {
             get {
@@ -1809,7 +1809,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stay signed in.
+        ///   Looks up a localized string similar to Запомнить меня.
         /// </summary>
         public static string StaySignedInText {
             get {
@@ -1827,7 +1827,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approve.
+        ///   Looks up a localized string similar to Утвердить.
         /// </summary>
         public static string Supervisor_Complete_Approve_btn {
             get {
@@ -1836,7 +1836,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assign.
+        ///   Looks up a localized string similar to Назначить.
         /// </summary>
         public static string Supervisor_Complete_Assign_btn {
             get {
@@ -1845,7 +1845,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reject.
+        ///   Looks up a localized string similar to Отклонить.
         /// </summary>
         public static string Supervisor_Complete_Reject_btn {
             get {
@@ -1854,7 +1854,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Found interviewer device ({0}).
+        ///   Looks up a localized string similar to Найдено устройство интервьюра ({0}).
         /// </summary>
         public static string Synchronization_FoundDevice {
             get {
@@ -1863,7 +1863,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have any assignments on this device. Send tablet information, clear application&apos;s data and login by another account.
+        ///   Looks up a localized string similar to У вас нет ни одного интервью на устройстве. Отправьте информацию о таблете, очистите данные приложения и войдите под другой учетной записью.
         /// </summary>
         public static string Synchronization_UserLinkedToAnotherDevice_Description {
             get {
@@ -1872,7 +1872,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter new item.
+        ///   Looks up a localized string similar to Нажмите для добавления нового элемента.
         /// </summary>
         public static string TextListQuestion_Hint {
             get {
@@ -1881,7 +1881,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter text.
+        ///   Looks up a localized string similar to Нажмите для ввода текста.
         /// </summary>
         public static string TextQuestion_Hint {
             get {
@@ -1890,7 +1890,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap to enter text ({0}).
+        ///   Looks up a localized string similar to Нажмите для ввода текста ({0}).
         /// </summary>
         public static string TextQuestion_MaskHint {
             get {
@@ -1899,7 +1899,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer is invalid.
+        ///   Looks up a localized string similar to Ответ недействителен.
         /// </summary>
         public static string Validity_Answered_Invalid_ErrorCaption {
             get {
@@ -1908,7 +1908,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interview contains more data than the system allows. If possible, delete unnecessary roster rows and/or unanswer questions..
+        ///   Looks up a localized string similar to Количество ростеров и вопросов в интервью превысило лимиты..
         /// </summary>
         public static string Validity_InterviewSizeLimitReached {
             get {
@@ -1917,7 +1917,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer was not saved.
+        ///   Looks up a localized string similar to Ответ не сохранён.
         /// </summary>
         public static string Validity_NotAnswered_InterviewException_ErrorCaption {
             get {
@@ -1926,7 +1926,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current roster does not exist anymore. Please navigate to the next available section or roster using the navigation menu..
+        ///   Looks up a localized string similar to Текущий ростер удален или выключен. Пожалуйста, перейдите в следующую активную секцию или ростер используя панель навигации..
         /// </summary>
         public static string Validity_QuestionDoesntExist {
             get {
@@ -1935,7 +1935,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;empty&gt;.
+        ///   Looks up a localized string similar to &lt;пусто&gt;.
         /// </summary>
         public static string VariableEmptyValue {
             get {
@@ -1944,7 +1944,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your version of application doesn&apos;t support this functionality.
+        ///   Looks up a localized string similar to Версия вашего приложения не поддерживает данный функционал.
         /// </summary>
         public static string Version_Not_Supports {
             get {
@@ -1953,7 +1953,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning.
+        ///   Looks up a localized string similar to Предупреждение.
         /// </summary>
         public static string Warning {
             get {
@@ -1962,7 +1962,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warnings.
+        ///   Looks up a localized string similar to Предупреждения.
         /// </summary>
         public static string Warnings {
             get {
@@ -1971,7 +1971,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes.
+        ///   Looks up a localized string similar to Да.
         /// </summary>
         public static string Yes {
             get {
