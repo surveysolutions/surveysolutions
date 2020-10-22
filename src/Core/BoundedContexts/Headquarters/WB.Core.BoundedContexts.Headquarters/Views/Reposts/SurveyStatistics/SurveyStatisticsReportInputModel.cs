@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
@@ -18,5 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         public long[] Condition { get; set; }
         public bool Pivot { get; set; }
         public string[] Columns { get; set; }
+
+        public string[] Statuses { get; set; }
     }
 }

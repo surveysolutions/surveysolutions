@@ -107,6 +107,7 @@ export default {
             data.expandTeams = this.filter.expandTeams
             data.min = this.filter.min
             data.max = this.filter.max
+            data.statuses = this.filter.status
             data.version = this.filter.version
 
             if (this.filter.condition != null) {
