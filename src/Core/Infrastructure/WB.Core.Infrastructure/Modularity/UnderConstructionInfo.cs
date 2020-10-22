@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.Modularity
 {
