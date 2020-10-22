@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Microsoft.Extensions.Logging;
@@ -79,21 +80,40 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            var initTask = Task.Run(() => InitModules(Container, restartOnInitializationError));
+            var initTask = Task.Run(async () =>
+            {
+                try
+                {
+                    await InitModules(Container);
+                }
+                catch (Exception e)
+                {
+                    if (Container != null)
+                    {
+                        var log = Container.Resolve<ILogger<AutofacKernel>>();
+                        log.LogError(e, "Unable to start modules init");
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("Unable to start modules init: " + e.ToString());
+                    }
+                }
+            });
             return initTask;
         }
 
-        private async Task InitModules(ILifetimeScope container, bool restartOnInitializationError)
+        private async Task InitModules(ILifetimeScope container)
         {
-            var status = Container.Resolve<UnderConstructionInfo>();
-            var log = Container.Resolve<ILogger<AutofacKernel>>();
+            var status = container.Resolve<UnderConstructionInfo>();
+            var log = container.Resolve<ILogger<AutofacKernel>>();
+            log.LogDebug("Initiating modules");
+
             status.Run();
             
             using var scope = container.BeginLifetimeScope();
 
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
             var global = Stopwatch.StartNew();
-            log.LogDebug("Initiating modules");
             
             foreach (var module in initModules)
             {
