@@ -183,8 +183,6 @@
                                 </div>
                             </div>
 
-
-
                             <div
                                 class="mb-30"
                                 v-if="dataType == 'surveyData' && questionnaireVersion">
