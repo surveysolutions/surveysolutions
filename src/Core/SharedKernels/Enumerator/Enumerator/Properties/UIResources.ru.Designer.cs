@@ -1368,7 +1368,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Важно, чтобы часы были поставлены правильно на устройстве. Часы показывают, то текущая дата {0}, которая неправильная. Установите часы в правильное состояние прежде чем пролжать работу..
+        ///   Looks up a localized string similar to Важно, время на устройстве установлено не верно. Текущее время значительно отличается от времени сервера. Установите часы в правильное состояние прежде чем продолжать работу..
         /// </summary>
         public static string InvalidTimeMessage {
             get {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/notification_panel"
+              style="@style/VerticalContentHeightWrappingLayout"
+              local:MvxBind="Visible IsNotificationPanelVisible;">
+    
+  <LinearLayout style="@style/Dashboard_Synchronization_Holder"
+                android:layout_height ="80dp">
+  <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+      
+      <LinearLayout style="@style/VerticalContentHeightWrappingLayout" >
+          <TextView style="@style/Dashboard_Synchronization_WithError_Title"
+                    android:id="@+id/tvInvalidTimeMessage"
+                    local:MvxBind="Text Localization('InvalidTimeMessage');" />
+      </LinearLayout>
+
+      <RelativeLayout style="@style/FullWidthWrappingLayout">         
+          <TextView style="@style/Dashboard_Synchronization_Cancel_Text"
+                    android:id="@+id/btnAdjust"
+                    local:MvxBind="Text Localization('Adjust'); Click OpenSystemSettingsDateAdjust;"/>
+      </RelativeLayout>     
+      
+    </LinearLayout>
+  </LinearLayout>
+  <View style="@style/Dashboard_Synchronization_Divider"></View>
+</LinearLayout>

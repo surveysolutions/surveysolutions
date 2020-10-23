@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -9,9 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -133,27 +130,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
 
-            Task.Run(CheckTabletTimeAndWarn);
+            CheckTabletTimeAndWarn();
         }
 
-        private async Task CheckTabletTimeAndWarn()
+        private void CheckTabletTimeAndWarn()
         {
             var allowedThresholdInSeconds = 180 * 24 * 60 * 60;
             
             long? lastHqSyncTimestamp = interviewerSettings.LastHqSyncTimestamp;
             var nowSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            
-            if (lastHqSyncTimestamp != null 
-                && (nowSeconds > lastHqSyncTimestamp + allowedThresholdInSeconds 
-                    || nowSeconds < lastHqSyncTimestamp - allowedThresholdInSeconds))
-            {
-                if (await this.UserInteractionService.ConfirmAsync(
-                    UIResources.InvalidTimeMessage.FormatString(DateTime.Now),
-                    okButton: UIResources.Adjust))
-                {
-                    ViewModelNavigationService.NavigateToSystemDateSettings();
-                }
-            }
+
+            IsNotificationPanelVisible = 
+                lastHqSyncTimestamp != null 
+                && (nowSeconds > lastHqSyncTimestamp + allowedThresholdInSeconds
+                    || nowSeconds < lastHqSyncTimestamp - allowedThresholdInSeconds);
         }
 
         public override void ViewDisappeared()
@@ -203,6 +193,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard());
 
+        public IMvxCommand OpenSystemSettingsDateAdjust => 
+            new MvxCommand(() => ViewModelNavigationService.NavigateToSystemDateSettings());
+
+        
+        private bool isNotificationPanelVisible;
+        public bool IsNotificationPanelVisible
+        {
+            get => this.isNotificationPanelVisible;
+            set => SetProperty(ref this.isNotificationPanelVisible, value);
+        }
+        
         private async Task NavigateToMapDashboard()
         {
             try
