@@ -547,6 +547,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
         {
+            if (IsCoverPageSupported)
+            {
+                this.QuestionnaireDocument.Children
+                    .First(c => c.PublicKey == CoverPageSectionId)
+                    .Children
+                    .Where(e => e is IQuestion)
+                    .Select(e => e.PublicKey)
+                    .ToReadOnlyCollection();
+            }
+            
             return this
                 .QuestionnaireDocument
                 .Find<IQuestion>(question => question.Featured)
