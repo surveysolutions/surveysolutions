@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewSummary()
         {
-            this.AnswersToFeaturedQuestions = new List<QuestionAnswer>();
+            this.IdentifyEntitiesValues = new List<IdentifyEntityValue>();
             this.InterviewCommentedStatuses = new List<InterviewCommentedStatus>();
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
             this.Comments = new HashSet<InterviewComment>();
@@ -31,19 +31,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     (questionnaire.IsQuestion(x) && questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates)
                     || questionnaire.IsVariable(x)))
             {
-                var result = new QuestionAnswer
+                var result = new IdentifyEntityValue
                 {
-                    Question = new Questionnaire.QuestionnaireCompositeItem
+                    Entity = new Questionnaire.QuestionnaireCompositeItem
                     {
                         Id = questionnaire.GetEntityIdMapValue(entityId)
                     },
-                    Answer = string.Empty,
+                    Value = string.Empty,
                     InterviewSummary = this,
                     Position = position
                 };
                 position++;
 
-                this.AnswersToFeaturedQuestions.Add(result);
+                this.IdentifyEntitiesValues.Add(result);
             }
 
             this.QuestionnaireVariable = questionnaire.VariableName ?? string.Empty;
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string LastStatusChangeComment { get; set; }
 
         public virtual bool WasRejectedBySupervisor { get; set; }
-        public virtual IList<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
+        public virtual IList<IdentifyEntityValue> IdentifyEntitiesValues { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
         public virtual DateTime? ReceivedByInterviewerAtUtc { get; set; }
@@ -143,13 +143,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
         {
-            this.AnswersToFeaturedQuestions.First(x => x.Question.Id == questionId).Answer = answer;
-            this.AnswersToFeaturedQuestions.First(x => x.Question.Id == questionId).AnswerCode = optionCode;
+            this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).Value = answer;
+            this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).AnswerCode = optionCode;
         }
 
         public virtual bool CanAnswerFeaturedQuestion(int questionId)
         {
-            return this.AnswersToFeaturedQuestions.Any(x => x.Question.Id == questionId);
+            return this.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId);
         }
 
         protected bool Equals(InterviewSummary other)

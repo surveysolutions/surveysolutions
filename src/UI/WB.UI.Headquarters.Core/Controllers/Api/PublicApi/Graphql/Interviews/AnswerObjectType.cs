@@ -10,19 +10,19 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
-    public class AnswerObjectType : ObjectType<QuestionAnswer>
+    public class AnswerObjectType : ObjectType<IdentifyEntityValue>
     {
-        protected override void Configure(IObjectTypeDescriptor<QuestionAnswer> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<IdentifyEntityValue> descriptor)
         {
             descriptor.BindFieldsExplicitly();
             
             descriptor.Name("IdentifyingEntity");
             
-            descriptor.Field(x => x.Answer)
+            descriptor.Field(x => x.Value)
                 .Name("value")
                 .Type<StringType>();
 
-            descriptor.Field(x => x.AnswerLowerCase)
+            descriptor.Field(x => x.ValueLowerCase)
                 .Description("Lower cased version of answer")
                 .Type<StringType>();
             
@@ -31,10 +31,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Name("answerValue")
                 .Description("Answer value for categorical questions");
 
-            descriptor.Field(x => x.Question)
+            descriptor.Field(x => x.Entity)
                 .Name("entity")
                 .Resolver(context => {
-                        var parent = context.Parent<QuestionAnswer>();
+                        var parent = context.Parent<IdentifyEntityValue>();
 
                         return context.BatchDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
                         {
@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                                 .ToListAsync()
                                 .ConfigureAwait(false);
                             return items.ToDictionary(x => x.Id);
-                        }).LoadAsync(parent.Question.Id);
+                        }).LoadAsync(parent.Entity.Id);
                     }
                 )
                 .Type<NonNullType<EntityItemObjectType>>();
