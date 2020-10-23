@@ -209,6 +209,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     state.WasCompleted = true;
                 }
+
+                if (@event.Payload.Status == InterviewStatus.ApprovedBySupervisor 
+                    ||@event.Payload.Status == InterviewStatus.ApprovedByHeadquarters)
+                {
+                    interview.ReceivedByInterviewerAtUtc = null;
+                }
             });
         }
 
