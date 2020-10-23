@@ -26,14 +26,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary(IQuestionnaire questionnaire) : this()
         {
             int position = 0;
-            foreach (var featuredQuestionId in questionnaire.GetPrefilledQuestions()
-                .Where(x => questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates))
+            foreach (var entityId in questionnaire.GetPrefilledEntities()
+                .Where(x =>
+                    (questionnaire.IsQuestion(x) && questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates)
+                    || questionnaire.IsVariable(x)))
             {
                 var result = new QuestionAnswer
                 {
                     Question = new Questionnaire.QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(featuredQuestionId)
+                        Id = questionnaire.GetEntityIdMapValue(entityId)
                     },
                     Answer = string.Empty,
                     InterviewSummary = this,

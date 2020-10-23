@@ -435,13 +435,13 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       actionFlags
       questionnaireVersion
       notAnsweredCount
-      identifyingQuestions {
-        question {
+      identifyingData {
+        entity {
           variable
           questionText
           label
         }
-        answer
+        value
       }
     }
   }
@@ -570,7 +570,7 @@ export default {
                     width: '50px',
                 },
                 {
-                    data: 'identifyingQuestions',
+                    data: 'identifyingData',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
@@ -578,8 +578,8 @@ export default {
                     render(data) {
                         const delimiter = self.mode == 'dense'
 
-                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
-                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
+                        var questionsWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
                         })
 
                         const dom = join(questionsWithTitles, ', ')

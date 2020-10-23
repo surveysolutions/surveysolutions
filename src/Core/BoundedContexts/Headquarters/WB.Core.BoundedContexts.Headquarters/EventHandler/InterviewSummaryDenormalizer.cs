@@ -52,7 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewResumed>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
         IUpdateHandler<InterviewSummary, AnswerCommentResolved>,
-        IUpdateHandler<InterviewSummary, SubstitutionTitlesChanged>
+        IUpdateHandler<InterviewSummary, SubstitutionTitlesChanged>,
+        IUpdateHandler<InterviewSummary, VariablesChanged>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMemoryCache memoryCache;
@@ -525,6 +526,24 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 state.HasSmallSubstitutions = true;
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<VariablesChanged> @event)
+        {
+            var questionnaire = GetQuestionnaire(state);
+
+            var updateDateTime = @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp;
+            return this.UpdateInterviewSummary(state, updateDateTime, interview =>
+            {
+                foreach (var changedVariable in @event.Payload.ChangedVariables)
+                {
+                    var variableId = questionnaire.GetEntityIdMapValue(changedVariable.Identity.Id);
+                    if (interview.CanAnswerFeaturedQuestion(variableId))
+                    {
+                        interview.AnswerFeaturedQuestion(variableId, AnswerUtils.AnswerToString(changedVariable.NewValue));
+                    }
+                }
             });
         }
     }
