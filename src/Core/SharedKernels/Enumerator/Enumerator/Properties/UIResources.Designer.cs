@@ -1368,7 +1368,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is important that the clock setting is accurate. Your clock indicates that current date is {0} which is wrong. Adjust the clock by setting the correct date/time before continuing your work..
+        ///   Looks up a localized string similar to It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work..
         /// </summary>
         public static string InvalidTimeMessage {
             get {
