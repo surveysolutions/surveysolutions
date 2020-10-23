@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var question in @event.Payload.Questions)
                 {
                     var questionId = questionnaire.GetEntityIdMapValue(question.Id);
-                    if (interview.AnswersToFeaturedQuestions.Any(x => x.Question.Id == questionId))
+                    if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId))
                     {
                         interview.AnswerFeaturedQuestion(questionId, string.Empty);
                     }
@@ -382,7 +382,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         foreach (var questionFromDto in @event.Payload.FeaturedQuestionsMeta)
                         {
                             var questionId = questionnaire.GetEntityIdMapValue(questionFromDto.Id);
-                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Question.Id == questionId))
+                            if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId))
                             {
                                 var questionnaire = GetQuestionnaire(interview);
                                 var questionType = questionnaire.GetQuestionType(questionFromDto.Id);

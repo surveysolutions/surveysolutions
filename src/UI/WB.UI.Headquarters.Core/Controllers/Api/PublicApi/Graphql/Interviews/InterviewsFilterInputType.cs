@@ -88,20 +88,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Filter(x => x.ErrorsCount).BindFiltersExplicitly()
                 .AllowEquals().And().AllowGreaterThan();
             
-            descriptor.List(x => x.AnswersToFeaturedQuestions)
+            descriptor.List(x => x.IdentifyEntitiesValues)
                 .BindExplicitly()
                 .AllowSome(y =>
                 {
                     y.BindFieldsExplicitly();
                     
-                    y.Filter(f => f.Answer)
+                    y.Filter(f => f.Value)
                         .BindFiltersExplicitly()
                         .AllowEquals().Description("Allows case sensitive equals comparison of answer")
                             .And().AllowNotEquals().Description("Allows case sensitive not equals comparison of answer")
                             .And().AllowStartsWith().Description("Allows case sensitive starts with comparison of answer")
                             .And().AllowNotStartsWith().Description("Allows case sensitive not starts with comparison of answer");
                     
-                    y.Filter(f => f.AnswerLowerCase)
+                    y.Filter(f => f.ValueLowerCase)
                         .BindFiltersExplicitly()
                         .AllowEquals().Description("Allows case insensitive equals comparison of answer")
                         .And().AllowNotEquals().Description("Allows case insensitive not equals comparison of answer")
@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         .BindFiltersExplicitly()
                         .AllowEquals().And().AllowIn().And().AllowNotEquals().And().AllowNotIn();
                     
-                    y.Object(x => x.Question)
+                    y.Object(x => x.Entity)
                         .AllowObject<QuestionsFilterType>();
                 }).Name("identifyingQuestions_some");
         }

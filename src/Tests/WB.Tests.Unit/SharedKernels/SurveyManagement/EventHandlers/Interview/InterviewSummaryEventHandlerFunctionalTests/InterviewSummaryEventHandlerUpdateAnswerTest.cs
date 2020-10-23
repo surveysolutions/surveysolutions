@@ -28,7 +28,6 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
-using QuestionAnswer = WB.Core.BoundedContexts.Headquarters.Views.Interview.QuestionAnswer;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
@@ -43,9 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var categoriesId = Id.g1;
             var answerText = "answer text";
 
-            var savedInterviewSummary = CreateInterviewSummaryQuestions(new QuestionAnswer
+            var savedInterviewSummary = CreateInterviewSummaryQuestions(new IdentifyEntityValue
             {
-                Question = new QuestionnaireCompositeItem { EntityId = questionId}
+                Entity = new QuestionnaireCompositeItem { EntityId = questionId}
             });
 
             savedInterviewSummary.QuestionnaireId = questionnaireIdentity.QuestionnaireId;
@@ -83,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == questionId).Answer, Is.EqualTo(answerText));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == questionId).Value, Is.EqualTo(answerText));
         }
 
         [Test]
@@ -95,9 +94,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var savedInterviewSummary =
                 CreateInterviewSummaryQuestions(
-                    new QuestionAnswer()
+                    new IdentifyEntityValue()
                     {
-                        Question = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
                     });
 
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
@@ -111,7 +110,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == questionId).Answer, Is.EqualTo(answerText));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == questionId).Value, Is.EqualTo(answerText));
         }
 
         [Test]
@@ -122,9 +121,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var savedInterviewSummary =
                 CreateInterviewSummaryQuestions(
-                    new QuestionAnswer
+                    new IdentifyEntityValue
                     {
-                        Question = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
                     });
 
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
@@ -135,7 +134,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
                         new decimal[] { 1, 3, 8 })));
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == questionId).Answer, Is.EqualTo("1,3,8"));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == questionId).Value, Is.EqualTo("1,3,8"));
         }
 
         [Test]
@@ -151,9 +150,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var savedInterviewSummary =
                 CreateInterviewSummaryQuestions(
-                    new QuestionAnswer()
+                    new IdentifyEntityValue()
                     {
-                        Question = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
                     });
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(
@@ -166,7 +165,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 this.CreateQuestionAnsweredEventByQuestionType(questionId, type, answer));
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == questionId).Answer, Is.EqualTo(answer.ToString()));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == questionId).Value, Is.EqualTo(answer.ToString()));
         }
 
         [Test]
@@ -177,13 +176,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var savedInterviewSummary =
                 CreateInterviewSummaryQuestions(
-                    new QuestionAnswer()
+                    new IdentifyEntityValue()
                     {
-                        Question = new QuestionnaireCompositeItem { Id = 1, EntityId = dateQuestionId }
+                        Entity = new QuestionnaireCompositeItem { Id = 1, EntityId = dateQuestionId }
                     },
-                    new QuestionAnswer()
+                    new IdentifyEntityValue()
                     {
-                        Question = new QuestionnaireCompositeItem { Id = 2,EntityId = dateTimeQuestionId }
+                        Entity = new QuestionnaireCompositeItem { Id = 2,EntityId = dateTimeQuestionId }
                     });
 
             savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
@@ -206,8 +205,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 this.CreatePublishableEvent(Create.Event.DateTimeQuestionAnswered(dateTimeQuestionId, timestampAnswer)));
 
             // assert
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == dateQuestionId).Answer, Is.EqualTo(dateAnswer.ToString(DateTimeFormat.DateFormat)));
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == dateTimeQuestionId).Answer, Is.EqualTo(timestampAnswer.ToString(DateTimeFormat.DateWithTimeFormat)));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == dateQuestionId).Value, Is.EqualTo(dateAnswer.ToString(DateTimeFormat.DateFormat)));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == dateTimeQuestionId).Value, Is.EqualTo(timestampAnswer.ToString(DateTimeFormat.DateWithTimeFormat)));
         }
 
         [Test]
@@ -221,9 +220,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children:Create.Entity.TextQuestion(questionId));
             var savedInterviewSummary = CreateInterviewSummaryQuestions(
-                    new QuestionAnswer()
+                    new IdentifyEntityValue()
                     {
-                        Question = new QuestionnaireCompositeItem { EntityId = questionId }
+                        Entity = new QuestionnaireCompositeItem { EntityId = questionId }
                     });
 
             savedInterviewSummary.WasCreatedOnClient = true;
@@ -239,7 +238,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
 
-            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Question.EntityId == questionId).Answer, Is.EqualTo(answer.ToString()));
+            Assert.That(updatedInterviewSummary.IdentifyEntitiesValues.First(x => x.Entity.EntityId == questionId).Value, Is.EqualTo(answer.ToString()));
         }
 
         private QuestionAnswered CreateQuestionAnsweredEventByQuestionType(Guid questionId, QuestionType type, object answer)
@@ -296,12 +295,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 Create.Storage.NewMemoryCache());
         }
 
-        protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)
+        protected static InterviewSummary CreateInterviewSummaryQuestions(params IdentifyEntityValue[] questions)
         {
             var interviewSummary = new InterviewSummary();
             foreach (var questionAnswer in questions)
             {
-                interviewSummary.AnswersToFeaturedQuestions.Add(questionAnswer);
+                interviewSummary.IdentifyEntitiesValues.Add(questionAnswer);
             }
             return interviewSummary;
         }
