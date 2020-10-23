@@ -17,6 +17,7 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -41,7 +42,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             try
             {
-                
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
                 
                 status.Message = Modules.InitializingDb;
