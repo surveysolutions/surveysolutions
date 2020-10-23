@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.QuestionnaireVersion).Type<NonNullType<LongType>>();
             
             descriptor.Field(x => x.AnswersToFeaturedQuestions)
-                .Name("identifyingQuestions")
+                .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
                 .Resolver(context => 
                     context.GroupDataLoader<string, QuestionAnswer>

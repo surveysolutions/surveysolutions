@@ -16,7 +16,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
         {
             descriptor.BindFieldsExplicitly();
             
+            descriptor.Name("IdentifyingEntity");
+            
             descriptor.Field(x => x.Answer)
+                .Name("value")
                 .Type<StringType>();
 
             descriptor.Field(x => x.AnswerLowerCase)
@@ -29,21 +32,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Answer value for categorical questions");
 
             descriptor.Field(x => x.Question)
+                .Name("entity")
                 .Resolver(context => {
-                    var parent = context.Parent<QuestionAnswer>();
+                        var parent = context.Parent<QuestionAnswer>();
 
-                    return context.BatchDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
-                    {
-                        var unitOfWork = context.Service<IUnitOfWork>();
-                        var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                            .Where(q => keys.Contains(q.Id))
-                            .ToListAsync()
-                            .ConfigureAwait(false);
-                        return items.ToDictionary(x => x.Id);
-                    }).LoadAsync(parent.Question.Id);
+                        return context.BatchDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
+                        {
+                            var unitOfWork = context.Service<IUnitOfWork>();
+                            var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
+                                .Where(q => keys.Contains(q.Id))
+                                .ToListAsync()
+                                .ConfigureAwait(false);
+                            return items.ToDictionary(x => x.Id);
+                        }).LoadAsync(parent.Question.Id);
                     }
                 )
-                .Type<NonNullType<QuestionItemObjectType>>();
+                .Type<NonNullType<EntityItemObjectType>>();
         }
     }
 }
