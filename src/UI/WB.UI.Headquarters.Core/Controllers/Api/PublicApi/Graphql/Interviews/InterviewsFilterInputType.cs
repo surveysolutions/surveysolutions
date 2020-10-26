@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     
                     y.Object(x => x.Entity)
                         .AllowObject<QuestionsFilterType>();
-                }).Name("identifyingQuestions_some");
+                }).Name("identifyingData_some");
         }
     }
 }
