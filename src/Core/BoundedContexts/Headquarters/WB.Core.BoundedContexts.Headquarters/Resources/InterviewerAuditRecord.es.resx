@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Entrevista {0} aprobada</value>
+  </data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Asignar responsable {0} a la tarea n.º {1}</value>
+  </data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Asignar {0} responsable a la entrevista {1}</value>
+  </data>
+  <data name="CloseInterview" xml:space="preserve">
+    <value>Entrevista {0} cerrada</value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Entrevista {0} completada</value>
+  </data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve">
+    <value>Entrevista {0} creada a partir de la asignación {1}</value>
+  </data>
+  <data name="DeleteInterview" xml:space="preserve">
+    <value>Entrevista {0} eliminada</value>
+  </data>
+  <data name="DetailedActionLog" xml:space="preserve">
+    <value>Registro de acciones detallado</value>
+  </data>
+  <data name="DownloadTabLog" xml:space="preserve">
+    <value>Descargar el registro completo en formato de pestaña</value>
+  </data>
+  <data name="FinishInstallation" xml:space="preserve">
+    <value>Finalizar instalación</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Usario {0} dado de alta en la aplicación</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Usario {0} fuera de la aplicación</value>
+  </data>
+  <data name="OpenApplication" xml:space="preserve">
+    <value>Aplicación abierta</value>
+  </data>
+  <data name="OpenInterview" xml:space="preserve">
+    <value>Entrevista {0} abierta</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Bitácora de acción</value>
+  </data>
+  <data name="RecordsMissing" xml:space="preserve">
+    <value>Aún no hay registros</value>
+  </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Entrevista {0} rechazada</value>
+  </data>
+  <data name="Relink" xml:space="preserve">
+    <value>El usuario se vinculó a una nueva tableta</value>
+  </data>
+  <data name="ShowPrevious7Days" xml:space="preserve">
+    <value>Mostrar 7 días activos anteriores</value>
+  </data>
+  <data name="SynchronizationCanceled" xml:space="preserve">
+    <value>Sincronización cancelada</value>
+  </data>
+  <data name="SynchronizationCompleted" xml:space="preserve">
+    <value>Sincronización completada:</value>
+  </data>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
+    <value>{0} nuevas asignaciones descargadas</value>
+  </data>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+    <value>Se removieron {0} asignaciones</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
+    <value>{0} nuevas entrevistas descargadas</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>{0} entrevista (s) actualizadas desde la sede</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} entrevista (s) subidas parcialmente</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
+    <value>{0} entrevista (s) rechazada</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
+    <value>Se removieron {0} entrevista (s)</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
+    <value>{0} entrevista(s) subidas</value>
+  </data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
+    <value>nada por sincronizar</value>
+  </data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>Se reabrieron {0} entrevista (s) después de recibir comentarios</value>
+  </data>
+  <data name="SynchronizationFailed" xml:space="preserve">
+    <value>Sincronización fallida</value>
+  </data>
+  <data name="SynchronizationStarted" xml:space="preserve">
+    <value>Sincronización iniciada ({0})</value>
+  </data>
+</root>

@@ -139,7 +139,7 @@
     <value>Y {0} otros símbolos {1}</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Cuestionario creado por {0}</value>
+    <value>Creado por {0}</value>
   </data>
   <data name="EnablementCondition" xml:space="preserve">
     <value>Condición habilitante:</value>
@@ -148,7 +148,7 @@
     <value>{0} ultimo editado {1}</value>
   </data>
   <data name="LastModifiedBy" xml:space="preserve">
-    <value>Ultima modificación hecha por {0}</value>
+    <value>Última modificación hecha por {0}</value>
   </data>
   <data name="Legend" xml:space="preserve">
     <value>Leyenda</value>
@@ -169,7 +169,7 @@
     <value>oculto</value>
   </data>
   <data name="QuestionScope_Identifying" xml:space="preserve">
-    <value>identificando</value>
+    <value>identificador</value>
   </data>
   <data name="QuestionScope_Supervisor" xml:space="preserve">
     <value>supervisor</value>
@@ -232,7 +232,7 @@
     <value>si/no</value>
   </data>
   <data name="Roster" xml:space="preserve">
-    <value>Lista:</value>
+    <value>Roster:</value>
   </data>
   <data name="Roster_GeneretedByFixedList" xml:space="preserve">
     <value>generada por lista fija</value>
@@ -241,13 +241,13 @@
     <value>generada por {0} pregunta {1}</value>
   </data>
   <data name="RosterType_List" xml:space="preserve">
-    <value>lista</value>
+    <value>Lista de preguntas</value>
   </data>
   <data name="RosterType_Multi" xml:space="preserve">
-    <value>seleccion-multiple</value>
+    <value>pregunta de selección-múltiple</value>
   </data>
   <data name="RosterType_Numeric" xml:space="preserve">
-    <value>numérico</value>
+    <value>Pregunta numérica</value>
   </data>
   <data name="Scope" xml:space="preserve">
     <value>Alcance: {0}</value>
@@ -259,7 +259,7 @@
     <value>Sin preguntas</value>
   </data>
   <data name="Stat_NoRosters" xml:space="preserve">
-    <value>Sin listas</value>
+    <value>Sin rosters</value>
   </data>
   <data name="Stat_NoSubsections" xml:space="preserve">
     <value>Sin sub-secciones</value>
@@ -292,12 +292,99 @@
     <value>Texto estático</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
-    <value>Condición de Validación:</value>
+    <value>Condición de validación</value>
   </data>
   <data name="ValidationMessage" xml:space="preserve">
     <value>Mensaje de Validación:</value>
   </data>
   <data name="Variable" xml:space="preserve">
     <value>Variable</value>
+  </data>
+  <data name="Appendix_SpecialValues" xml:space="preserve">
+    <value>Apéndice {0} {1} valores especiales</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Generado por {0}</value>
+  </data>
+  <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Acepta hacer público este cuestionario</value>
+  </data>
+  <data name="MetadataConsultants" xml:space="preserve">
+    <value>Consultores</value>
+  </data>
+  <data name="MetadataCountry" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="MetadataCoverage" xml:space="preserve">
+    <value>Covertura</value>
+  </data>
+  <data name="MetadataFunding" xml:space="preserve">
+    <value>Financiamiento</value>
+  </data>
+  <data name="MetadataKeywords" xml:space="preserve">
+    <value>Palabras clave</value>
+  </data>
+  <data name="MetadataKindOfData" xml:space="preserve">
+    <value>Tipo de datos</value>
+  </data>
+  <data name="MetadataLanguages" xml:space="preserve">
+    <value>Idiomas</value>
+  </data>
+  <data name="MetadataModeOfDataCollection" xml:space="preserve">
+    <value>Modalidad de recolección de datos</value>
+  </data>
+  <data name="MetadataNotes" xml:space="preserve">
+    <value>Notas</value>
+  </data>
+  <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Investigador Principal</value>
+  </data>
+  <data name="MetadataSectionSubTitle" xml:space="preserve">
+    <value>descripción del cuestionario</value>
+  </data>
+  <data name="MetadataSectionTitle" xml:space="preserve">
+    <value>Información de identificación de la encuesta</value>
+  </data>
+  <data name="MetadataStudyType" xml:space="preserve">
+    <value>Tipo de estudio</value>
+  </data>
+  <data name="MetadataSubtitle" xml:space="preserve">
+    <value>Subtítulo</value>
+  </data>
+  <data name="MetadataTitle" xml:space="preserve">
+    <value>Cargo</value>
+  </data>
+  <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unidad de análisis</value>
+  </data>
+  <data name="MetadataUniverse" xml:space="preserve">
+    <value>Universo</value>
+  </data>
+  <data name="MetadataVersionIdentificator" xml:space="preserve">
+    <value>Identificador de versión</value>
+  </data>
+  <data name="MetadataVersionNotes" xml:space="preserve">
+    <value>Notas sobre la versión</value>
+  </data>
+  <data name="MetadataYear" xml:space="preserve">
+    <value>Año</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Información adicional</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Información básica</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Datos de Encuesta</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Información de la encuesta</value>
+  </data>
+  <data name="SpecialValues" xml:space="preserve">
+    <value>Valores especiales</value>
+  </data>
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>Esta variable está excluida de los datos exportados.</value>
   </data>
 </root>

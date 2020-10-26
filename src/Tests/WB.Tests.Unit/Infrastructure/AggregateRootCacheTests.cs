@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Tests.Abc;

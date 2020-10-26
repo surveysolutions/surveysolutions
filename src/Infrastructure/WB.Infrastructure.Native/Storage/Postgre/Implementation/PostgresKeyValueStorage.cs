@@ -4,7 +4,6 @@ using System.Data.Common;
 using Humanizer;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using System.Linq;
 
@@ -15,15 +14,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly string connectionString;
         protected readonly string tableName;
-        private readonly ILogger logger;
         protected readonly IEntitySerializer<TEntity> serializer;
 
         static ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
             
-        public PostgresKeyValueStorage(string connectionString, string schemaName, ILogger logger, IEntitySerializer<TEntity> serializer)
+        public PostgresKeyValueStorage(string connectionString, string schemaName, IEntitySerializer<TEntity> serializer)
         {
             this.connectionString = connectionString;
-            this.logger = logger;
             this.serializer = serializer;
 
             tableName = _tableNamesMap.GetOrAdd(typeof(TEntity), 
@@ -155,7 +152,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             using (var connection = new NpgsqlConnection(this.connectionString))
             {
                 connection.Open();
-                var command = @"CREATE TABLE IF NOT EXISTS " + this.tableName + @" (
+                var command = $@"CREATE TABLE IF NOT EXISTS {this.tableName} (
     id        text PRIMARY KEY,
     value       JSON NOT NULL
 )";

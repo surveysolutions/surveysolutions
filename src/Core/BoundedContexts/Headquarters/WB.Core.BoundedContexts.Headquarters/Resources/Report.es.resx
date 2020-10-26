@@ -154,7 +154,7 @@
     <value>VERSIÓN ANTERIOR</value>
   </data>
   <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
-    <value>TITULO DEL CUESTIONARIO</value>
+    <value>título DEL CUESTIONARIO</value>
   </data>
   <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
     <value>RECHAZADO POR HQ</value>
@@ -185,5 +185,11 @@
   </data>
   <data name="TOTAL" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+    <value>TAMAÑO DEL EQUIPO</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Tiempo restante</value>
   </data>
 </root>

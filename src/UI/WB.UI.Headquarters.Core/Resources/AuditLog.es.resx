@@ -121,9 +121,21 @@
     <value>La bitácora está vacía</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>Bitácora de auditoria</value>
+    <value>La inicialización del servidor está en curso. Por favor esperar ...</value>
   </data>
   <data name="ServerFilePath" xml:space="preserve">
     <value>Ubicación del archivo en el servidor</value>
+  </data>
+  <data name="EventType" xml:space="preserve">
+    <value>Tipo de evento</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Bitácora</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Fecha de registro</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Usuario</value>
   </data>
 </root>
