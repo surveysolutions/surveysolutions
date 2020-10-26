@@ -55,6 +55,7 @@
                                 :loading="loading"
                                 :show-parent-value="isCascading"
                                 :categories="categories"
+                                @valid="v => (stringsIsValid = v)"
                                 @change="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
@@ -68,6 +69,7 @@
             <v-btn
                 class="ma-2"
                 color="success"
+                :disabled="!canApplyChanges"
                 :loading="submitting"
                 @click="apply"
                 >{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn
@@ -135,6 +137,7 @@ export default {
             file: null,
 
             isCascadingCategory: false,
+            stringsIsValid: true,
 
             snacks: {
                 fileUploaded: false,
@@ -187,8 +190,18 @@ export default {
                 this.isCategory,
                 this.isCascading
             );
+        },
+
+        canApplyChanges() {
+            return this.currentTab == 1 ? this.stringsIsValid : true;
         }
     },
+
+    // watch: {
+    //     tab(to, from) {
+    //         console.log('tab', to, from);
+    //     }
+    // },
 
     mounted() {
         const self = this;
@@ -265,6 +278,7 @@ export default {
         resetChanges() {
             this.reloadCategories(() => {
                 this.snacks.formReverted = true;
+                this.isCascadingCategory = this.cascading;
                 this.errors = [];
             });
         },
@@ -310,6 +324,8 @@ export default {
 
         apply() {
             if (this.ajax) return;
+
+            if (this.$refs.strings.valid != true) return;
 
             if (this.inEditMode || this.convert) {
                 setTimeout(() => this.apply(), 100);
