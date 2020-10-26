@@ -729,7 +729,7 @@ export default {
                             { clientKey_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
-                            { identifyingQuestions_some: {
+                            { identifyingData_some: {
                                 answerLowerCase_starts_with: search.toLowerCase(),
                             },
                             }],
@@ -824,11 +824,11 @@ export default {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    let identifyingQuestions_some = { question: {variable: cond.variable}}
+                    let identifyingData_some = { question: {variable: cond.variable}}
 
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
-                    identifyingQuestions_some[cond.field] = value
-                    and.push({ identifyingQuestions_some })
+                    identifyingData_some[cond.field] = value
+                    and.push({ identifyingData_some })
                 })
             }
 
