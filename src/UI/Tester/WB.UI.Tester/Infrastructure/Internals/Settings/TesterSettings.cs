@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Preferences;
+using AndroidX.Preference;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings

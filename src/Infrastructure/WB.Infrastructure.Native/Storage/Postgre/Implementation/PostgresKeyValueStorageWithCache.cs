@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             ILogger logger,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(connectionString, schemaName, logger, serializer)
+            : base(connectionString, schemaName, serializer)
         {
             this.memoryCache = memoryCache;
         }

@@ -127,7 +127,7 @@
     <value>Los datos de la entrevista {0} se encontraron corruptos. Póngase en contacto con soporte para recuperar esa entrevista.</value>
   </data>
   <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
-    <value>Por favor, contacte a soporte para proveer mas detalles</value>
+    <value>Por favor, contacte a soporte para proveer más detalles</value>
   </data>
   <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
     <value>La entrevista {0} no ha sido sincronizada aun</value>

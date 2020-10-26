@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dapper;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
@@ -52,11 +53,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public List<GetReportCategoricalPivotReportItem> GetCategoricalPivotData(Guid? teamLeadId,
             string questionnaireIdentity,
             long? version,
-            Guid variableA, Guid variableB)
+            Guid variableA, Guid variableB, InterviewStatus[] interviewStatuses)
         {
             var connection = this.sessionProvider.Session.Connection;
+            string statuses = GetStatusesWhereExpression(interviewStatuses);
 
-            return connection.Query<GetReportCategoricalPivotReportItem>(@"with
+            return connection.Query<GetReportCategoricalPivotReportItem>($@"with
                  vara as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableA),
                  varb as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableB),
                  rep_a as (select * from readside.report_statistics_categorical where entity_id in (select id from vara)),
@@ -71,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
 				                or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
 			                )
 	                join readside.interviewsummaries s on s.id = v1.interview_id
-	                where @teamLeadId is null or @teamLeadId = s.teamleadid
+	                where (@teamLeadId is null or @teamLeadId = s.teamleadid) {statuses}
                 )
                 select  a1 as colvalue, a2 as rowvalue, count(interview_id)
                 from agg
@@ -85,12 +87,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             }).ToList();
         }
 
+        private string GetStatusesWhereExpression(InterviewStatus[] statuses, string interviewSummariesAlias = "s")
+        {
+            return statuses != null && statuses.Any()
+                ? $"and {interviewSummariesAlias}.status in ({string.Join(", ", statuses.Select(s => (int)s))})"
+                : "";
+        }
+
         public List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params)
         {
             var connection = this.sessionProvider.Session.Connection;
 
             string IfWithCondition(string sql) => @params.ConditionVariable != null ? sql: string.Empty;
             string IfSupervisor(string sql) => @params.TeamLeadId != null ? sql : string.Empty;
+
+            string statuses = GetStatusesWhereExpression(@params.Statuses);
 
             string SqlQuery = $@"with
 	        lookupVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
@@ -117,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                     )")
                 }
                 join readside.interviewsummaries s on s.id = v1.interview_id
-                where true = true
+                where true = true {statuses}
                     {IfSupervisor(" and (@teamleadid is null or s.teamleadid = @teamleadid) ")}                    
                     {IfWithCondition(" and array[v2.answer] && @condition")}
             ) as agg 
@@ -130,13 +141,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             return result.Concat(totals).ToList();
         }
         
-        public List<GetNumericalReportItem> GetNumericalReportData(
-            string questionnaireId, long? version,
+        public List<GetNumericalReportItem> GetNumericalReportData(string questionnaireId, long? version,
             Guid questionId, Guid? teamLeadId,
-            bool detailedView, long minAnswer = Int64.MinValue, long maxAnswer = Int64.MaxValue)
+            bool detailedView, long minAnswer = Int64.MinValue, long maxAnswer = Int64.MaxValue,
+            InterviewStatus[] interviewStatuses = null)
         {
             var session = this.sessionProvider.Session;
-            var result = session.Connection.Query<GetNumericalReportItem>(@"
+            string statuses = GetStatusesWhereExpression(interviewStatuses);
+
+            var result = session.Connection.Query<GetNumericalReportItem>($@"
                 with countables as (
                     select s.teamleadname,
                         case when @detailedView then s.responsiblename else null end as responsiblename, 
@@ -148,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                         qe.entityid = @questionId and
                         (@teamleadid is null or s.teamleadid = @teamleadid) and
                         qe.questionnaireidentity like @questionnaireIdentity and
-                        answer >= @minanswer and answer <= @maxanswer
+                        answer >= @minanswer and answer <= @maxanswer {statuses}
                 )
                 select c.teamleadname, c.responsiblename,
                     count(c.answer) as count, avg(c.answer) as average, 

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
@@ -92,7 +94,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
                 It.IsAny<Guid?>(),
                 It.IsAny<bool>(),
                 It.IsAny<long>(), 
-                It.IsAny<long>()
+                It.IsAny<long>(),
+                It.IsAny<InterviewStatus[]>()
             ), Times.Once);
         }
 
@@ -113,7 +116,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
 
             Mock.Get(this.interviewReportDataRepository).Verify(r => r.GetCategoricalPivotData(
                 It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<long?>(),
-                It.IsAny<Guid>(), It.IsAny<Guid>()
+                It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<InterviewStatus[]>()
             ), Times.Once);
         }
 

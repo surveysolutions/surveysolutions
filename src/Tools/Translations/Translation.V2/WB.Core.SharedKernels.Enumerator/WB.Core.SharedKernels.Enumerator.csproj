@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{40A9A791-1D2E-4306-8889-EFC39BEA73C5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.SharedKernels.Enumerator</RootNamespace>
+    <AssemblyName>WB.Core.SharedKernels.Enumerator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.Designer.cs">
+      <Link>EnumeratorUIResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ru.Designer.cs">
+      <Link>EnumeratorUIResources.ru.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.Designer.cs">
+      <Link>UIResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ar.resx">
+      <Link>EnumeratorUIResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.es.resx">
+      <Link>EnumeratorUIResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.fr.resx">
+      <Link>EnumeratorUIResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.id.resx">
+      <Link>EnumeratorUIResources.id.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ka.resx">
+      <Link>EnumeratorUIResources.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.km.resx">
+      <Link>EnumeratorUIResources.km.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.pt.resx">
+      <Link>EnumeratorUIResources.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.resx">
+      <Link>EnumeratorUIResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ro.resx">
+      <Link>EnumeratorUIResources.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.ru.resx">
+      <Link>EnumeratorUIResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.sq.resx">
+      <Link>EnumeratorUIResources.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.th.resx">
+      <Link>EnumeratorUIResources.th.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.uk.resx">
+      <Link>EnumeratorUIResources.uk.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.vi.resx">
+      <Link>EnumeratorUIResources.vi.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\EnumeratorUIResources.zh.resx">
+      <Link>EnumeratorUIResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ar.resx">
+      <Link>UIResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.es.resx">
+      <Link>UIResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.fr.resx">
+      <Link>UIResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.id.resx">
+      <Link>UIResources.id.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ka.resx">
+      <Link>UIResources.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.km.resx">
+      <Link>UIResources.km.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.pt.resx">
+      <Link>UIResources.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx">
+      <Link>UIResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ro.resx">
+      <Link>UIResources.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ru.resx">
+      <Link>UIResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.sq.resx">
+      <Link>UIResources.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.th.resx">
+      <Link>UIResources.th.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.uk.resx">
+      <Link>UIResources.uk.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.vi.resx">
+      <Link>UIResources.vi.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.zh.resx">
+      <Link>UIResources.zh.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
