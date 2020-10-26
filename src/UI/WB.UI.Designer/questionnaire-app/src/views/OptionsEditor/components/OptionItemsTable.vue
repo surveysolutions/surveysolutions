@@ -57,6 +57,9 @@
             style="overflow-wrap:anywhere;"
             dense
         >
+            <template #item.value="{ item }">
+                <span class="text-no-wrap">{{ item.value }}</span>
+            </template>
             <template v-slot:item.parentValue="props">
                 <div>
                     {{ props.item.parentValue }}
@@ -80,7 +83,7 @@
             <template v-slot:no-data>
                 {{
                     $t('QuestionnaireEditor.OptionsUploadLimit', {
-                        limit: 15000
+                        0: 15000
                     })
                 }}
             </template>
@@ -128,13 +131,13 @@ export default {
             const headers = [
                 {
                     text: this.$t('QuestionnaireEditor.OptionsUploadValue'),
-                    sortable: true,
+                    sortable: false,
                     width: '10%',
                     value: 'value'
                 },
                 {
                     text: this.$t('QuestionnaireEditor.OptionsUploadTitle'),
-                    sortable: true,
+                    sortable: false,
                     value: 'title',
                     width: this.isCascading ? '60%' : '70%'
                 }
@@ -143,7 +146,7 @@ export default {
             if (this.isCascading) {
                 headers.push({
                     text: this.$t('QuestionnaireEditor.OptionsUploadParent'),
-                    sortable: true,
+                    sortable: false,
                     width: '15%',
                     value: 'parentValue'
                 });

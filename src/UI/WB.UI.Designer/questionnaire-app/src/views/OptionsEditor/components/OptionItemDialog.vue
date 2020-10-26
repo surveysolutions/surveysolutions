@@ -12,7 +12,8 @@
                                 <v-text-field
                                     v-model="itemTitle"
                                     :label="
-                                        $t('QuestionnaireEditor.GroupTitle')
+                                        $t('QuestionnaireEditor.GroupTitle') +
+                                            '*'
                                     "
                                     :rules="[required]"
                                 ></v-text-field>
