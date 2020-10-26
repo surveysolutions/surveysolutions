@@ -105,8 +105,8 @@ export default {
     },
 
     methods: {
-        save() {
-            this.$refs.form.validate();
+        async save() {
+            await this.$refs.form.validate();
             if (this.valid) {
                 this.$emit('change', {
                     title: this.itemTitle,
