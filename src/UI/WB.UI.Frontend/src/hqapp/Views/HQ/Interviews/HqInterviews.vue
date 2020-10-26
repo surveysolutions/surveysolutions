@@ -730,7 +730,7 @@ export default {
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
                             { identifyingData_some: {
-                                answerLowerCase_starts_with: search.toLowerCase(),
+                                valueLowerCase_starts_with: search.toLowerCase(),
                             },
                             }],
                         })
@@ -824,7 +824,7 @@ export default {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    let identifyingData_some = { question: {variable: cond.variable}}
+                    let identifyingData_some = { entity: {variable: cond.variable}}
 
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
                     identifyingData_some[cond.field] = value
