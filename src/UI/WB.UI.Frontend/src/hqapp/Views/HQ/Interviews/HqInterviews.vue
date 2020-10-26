@@ -226,8 +226,8 @@
                     <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor', status3: 'Rejected by Supervisor'} )"></p>
                 </div>
 
-                <div class="form-group" 
-				    v-if="CountReceivedByInterviewerItems() > 0">
+                <div class="form-group"
+                    v-if="CountReceivedByInterviewerItems() > 0">
                     <br />
                     <input
                         type="checkbox"
