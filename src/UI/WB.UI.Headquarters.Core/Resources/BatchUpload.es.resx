@@ -127,7 +127,7 @@
     <value>Todos</value>
   </data>
   <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Esta seguro de querer borrar este archivo ?</value>
+    <value>Está seguro de querer borrar este archivo ?</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
     <value>Asignado a {0} enumeradores</value>
@@ -145,7 +145,7 @@
     <value>No se creo ninguna asignación</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
-    <value>Regresar a importar</value>
+    <value>Volver a importar</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>La verificación del archivo cargado ha fallado</value>
@@ -172,7 +172,7 @@
     <value>Columna</value>
   </data>
   <data name="CreateAssignments" xml:space="preserve">
-    <value>Crear asignaciones </value>
+    <value>Crear asignaciones</value>
   </data>
   <data name="CreateInterviews" xml:space="preserve">
     <value>Crear entrevistas</value>
@@ -193,10 +193,10 @@
     <value>Creando usuarios</value>
   </data>
   <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
-    <value>Se encontraron datos para {0} asignaciones</value>
+    <value>Se encontraron {0} datos para asignaciones</value>
   </data>
   <data name="DataForMultipleInterviewsFound" xml:space="preserve">
-    <value>Se encontraron datos para {0} entrevistas</value>
+    <value>Se encontraron {0} datos para entrevistas</value>
   </data>
   <data name="DataForSingleAssignmentFound" xml:space="preserve">
     <value>Se encontró datos para 1 asignación</value>
@@ -214,7 +214,7 @@
     <value>Detalles</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>Variables marcadas como identificadores en Designar. </value>
+    <value>Variables marcadas como identificadores en Designar.</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
     <value>Descargar asignaciones inválidas</value>
@@ -235,7 +235,7 @@
     <value>Si no se especifican los nombres de usuario, deberá asignar a un supervisor todas las asignaciones en un paso posterior.</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
-    <value>Tiempo estimado</value>
+    <value>Tiempo estimado {{tiempo estimado}}</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>Archivo</value>
@@ -262,10 +262,10 @@
     <value>Finalizado con errores. Razón:</value>
   </data>
   <data name="FormatNotSupported" xml:space="preserve">
-    <value>El formato no esta soportado. Los datos contenidos en el archivo serán ignorados</value>
+    <value>El formato no está soportado. Los datos contenidos en el archivo serán ignorados</value>
   </data>
   <data name="HideListPrefilledData" xml:space="preserve">
-    <value>Ocultar lista de datos requeridos de identificación </value>
+    <value>Ocultar lista de datos requeridos de identificación</value>
   </data>
   <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
     <value>1 asignación verificada satisfactoriamente</value>
@@ -307,7 +307,7 @@
     <value>Importando</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Se está ejecutando otro proceso de importación de asignación. Solo se permite un proceso de importación de asignación a la vez. Espere hasta que finalice el proceso y luego cargue un nuevo archivo de muestra. Siga el enlace si desea obtener información de progreso más detallada sobre el otro proceso de importación.</value>
+    <value>Se está ejecutando otro proceso de importación de asignación. Solo se permite un proceso de importación de asignaciones a la vez. Espere hasta que finalice el proceso y luego cargue un nuevo archivo de muestra. Siga el enlace si desea obtener información de progreso más detallada sobre el otro proceso de importación.</value>
   </data>
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
     <value>Escoja un archivo a cargar</value>
@@ -349,7 +349,7 @@
     <value>es inválido. Favor corrija los errores siguientes y cargue de nuevo</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
-    <value>Ultima actualización</value>
+    <value>Última actualización</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
       <value>Puede crear asignaciones individuales ingresando todos los datos requeridos en {{url}}</value>
@@ -361,7 +361,7 @@
     <value>Mensaje</value>
   </data>
   <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-      <value>{{count}} asignaciones no se pudieron crear </value>
+      <value>{{count}} asignaciones no se pudieron crear</value>
   </data>
   <data name="MultipleAssignmentsCreated" xml:space="preserve">
       <value>{{count}} asignaciones creados</value>
@@ -397,7 +397,7 @@
     <value>El cuestionario no se puede usar para precarga</value>
   </data>
   <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
-    <value>Solamente se permiten cargar archivos de tipo .tab y .texto </value>
+    <value>Solamente se permiten cargar archivos de tipo .tab y .texto</value>
   </data>
   <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
     <value>Los siguientes archivos no son soportados : {0}</value>
@@ -406,7 +406,7 @@
     <value>Solamente es posible cargar archivos de tipo .zip</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>Procesando..</value>
+    <value>Procesando…</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
     <value>Listo para crear usuario</value>
@@ -445,7 +445,7 @@
     <value>Seleccione el responsable de este lote</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
-    <value>Solamente datos de identificación </value>
+    <value>Solamente datos de identificación</value>
   </data>
   <data name="SingleAssignmentCreated" xml:space="preserve">
     <value>1 asignación creada</value>
@@ -460,7 +460,7 @@
     <value>1 entrevista creada</value>
   </data>
   <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
-    <value>ha fallado la creación de 1 entrevista </value>
+    <value>ha fallado la creación de 1 entrevista</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
@@ -542,5 +542,38 @@
   </data>
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
     <value>Importando entrevistas</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Cargue un archivo zip con uno o más archivos separados por tab que correspondan al nivel de entrevista principal y los rosters subordinados. Permite precargar variables en cualquier nivel de la entrevista. &lt;br/&gt; Todos los archivos de datos deben contener la variable interview__id con una cadena única o identificador numérico de la entrevista. Los enlaces dentro de los rosters y rosters anidados se establecen de la misma manera que en los datos exportados. &lt;br/&gt; &lt;br/&gt; Opcionalmente, puede especificar las siguientes columnas en el archivo de nivel de entrevista principal: &lt;br/&gt; _responsible - nombre de usuario sede, supervisor o un entrevistador que será responsable de la asignación; &lt;br/&gt; _quantity - capacidad de la asignación; &lt;br/&gt; _email - correo electrónico del encuestado (solo para entrevistas web); &lt;br/&gt; _password - contraseña para iniciar una entrevista ( solo para entrevistas web); &lt;br/&gt; _webmode - ¿esta asignación está en el modo web (se debe usar el valor 1); &lt;br/&gt; _record_audio - la grabación de audio está habilitada para entrevistas (1 - habilitado, 0 - deshabilitado, en blanco - obtenga este valor del cuestionario); &lt;br/&gt; _comment - comentarios para la tarea</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Guarde el archivo en codificación UTF8 para admitir textos específicos del idioma.</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Preguntas ocultas</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Preguntas de identificación</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>El campo es mandatorio</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Preguntas fuentes del roster</value>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Seleccionar responsable por defecto (obligatorio)</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Si no hay un responsable asignado en el archivo por lotes, use esta cuenta de la sede / supervisor / entrevistador:</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Cargue un archivo separado por tabulaciones con valores para preguntas en el nivel de entrevista únicamente. Incluya valores para identificar preguntas y otras preguntas en el nivel de la entrevista principal. No permite precargar valores dentro de rosters. &lt;br/&gt; &lt;br/&gt; Opcionalmente puede especificar las siguientes columnas: &lt;br/&gt; _responsible - nombre de usuario de una oficina central, supervisor o entrevistador que será responsable de la asignación; &lt;br/&gt; _quiantity - capacidad de la tarea; &lt;br/&gt; _email - correo electrónico del encuestado (solo para entrevistas web); &lt;br/&gt; _password - contraseña para iniciar una entrevista (solo para entrevistas web); &lt;br/&gt; _webmode - esta asignación está en el modo web (se debe usar el valor 1); &lt;br/&gt; _record_audio - la grabación de audio está habilitada para las entrevistas (1 - habilitado, 0 - deshabilitado, en blanco - obtenga este valor del cuestionario); &lt;br/&gt; _comment - comentarios para la tarea</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Cargue un archivo con datos identificadores para crear nuevas asignaciones. Especifique nombres de usuario sede, supervisores o entrevistadores para realizar asignaciones por lotes.</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Ver lista de valores precargados</value>
   </data>
 </root>

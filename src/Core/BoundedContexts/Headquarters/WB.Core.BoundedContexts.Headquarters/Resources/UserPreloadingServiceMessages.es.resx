@@ -120,4 +120,16 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>El archivo '{0}' contiene las siguientes columnas que no se pueden asignar a ninguna propiedad del usuario (por ejemplo, nombre completo, número de teléfono, etc.): {1}</value>
   </data>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>El archivo proporcionado tiene un error en la fila {0} y no se puede analizar</value>
+  </data>
+  <data name="FileColumnsMissingFormat" xml:space="preserve">
+    <value>El archivo '{0}' no contiene columnas obligatorias: {1}</value>
+  </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>Espere hasta que se complete la importación anterior de usuarios</value>
+  </data>
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>El número máximo permitido de registros es {0}</value>
+  </data>
 </root>

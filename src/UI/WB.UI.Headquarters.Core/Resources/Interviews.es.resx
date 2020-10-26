@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-      <value>{{count}} entrevista (s) será aprobada. </value>
+      <value>{{count}} entrevista (s) será aprobada.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt;,  &lt;i&gt; {{status2}} &lt;/ i&gt; y &lt;i&gt;{{status3}}&lt;/i&gt;</value>
@@ -130,7 +130,7 @@
     <value>Asignación</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Aplicar en {{count}} entrevista (s) que el Entrevistador ya recibió</value>
+    <value>Aplicar en {{count}} entrevista(s) que el entrevistador ya recibió</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt; podrían reasignarse.</value>
@@ -196,15 +196,51 @@
     <value>Estado de la entrevista en el flujo de trabajo de la encuesta. Haga clic en el icono de ordenar para ordenar por estado.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {{status1}} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {{status1}} &lt;/ i&gt;.</value>
   </data>
   <data name="Note" xml:space="preserve">
-      <value> ¡Nota!</value>
+      <value>¡Nota!</value>
   </data>
   <data name="ApproveConfirmMessage_plural" xml:space="preserve">
-      <value>{{count}} entrevistas será aprobada.  </value>
+      <value>{{count}} entrevistas será aprobada.</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>Solo puede aprobar entrevistas con los siguientes estados: {{status1}},  {{status2}}, {{status3}}</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Los entrevistadores responsables actuales no serán notificados sobre la reasignación hasta la próxima sincronización. Si ya han comenzado a trabajar en la entrevista, ¡todos los datos que hayan ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
+  </data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Elija preguntas de identificación para usar en el filtro</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Conteo de errores</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtra por preguntas</value>
+  </data>
+  <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Sin respuesta</value>
+  </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Los filtros por preguntas solo están disponibles cuando se selecciona una versión específica del cuestionario</value>
+  </data>
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Selector de preguntas</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Rechazar y elegir nuevo responsable</value>
+  </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Rechazar al responsable original</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Seleccione un cuestionario para ver sus entrevistas asociadas en la lista. Seleccione "Todos los cuestionarios" para ver las entrevistas asociadas con cualquier cuestionario.</value>
+  </data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Muestra el número total de preguntas y textos estáticos no válidas en la entrevista. Varias condiciones de validación fallidas en la misma entidad se cuentan como 1.</value>
+  </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
   </data>
 </root>

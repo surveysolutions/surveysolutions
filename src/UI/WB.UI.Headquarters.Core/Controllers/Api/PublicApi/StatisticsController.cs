@@ -268,6 +268,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 Columns = query?.ColummnsList?.Select(c => c.Name)?.ToArray(),
                 Pivot = query.Pivot,
                 Orders = query.ToOrderRequestItems(),
+                Statuses = query.Statuses
             };
 
             if (this.authorizedUser.IsSupervisor)
