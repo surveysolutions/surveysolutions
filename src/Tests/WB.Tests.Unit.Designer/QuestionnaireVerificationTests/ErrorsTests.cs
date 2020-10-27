@@ -416,6 +416,24 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Variable(Id1, expression: "@rowname.Contains(\"a\");" )
                 })
                 .ExpectError("WB0276");
+        
+        
+        [Test]
+        public void should_not_allow_links_to_hidden_variable_in_title()
+            => Create.QuestionnaireDocumentWithOneChapter(
+                    Create.TextQuestion(variable: "var1", scope: QuestionScope.Hidden), 
+                    Create.StaticText(text: "static text [link to hidden var](var1)"))
+                .ExpectError("WB0310");
 
+        [Test]
+        public void should_not_allow_links_to_hidden_variable_in_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(
+                    Create.TextQuestion(variable: "var1", scope: QuestionScope.Hidden), 
+                    Create.StaticText(validationConditions: new []
+                    {
+                        Create.ValidationCondition(message: "[link to hidden var](var1)")
+                    }))
+                .ExpectError("WB0310");
+        
     }
 }
