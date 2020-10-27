@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
             var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(x => 
                 x.Get(this.interview.Id.ToString()) == this.interview
+                && x.GetOrThrow(this.interview.Id.ToString()) == this.interview
             );
 
             this.interview.AnswerMultipleOptionsQuestion(interviewerId, rosterQuestionId, Create.Entity.RosterVector(), DateTime.UtcNow, new[] { 1, 2 });
