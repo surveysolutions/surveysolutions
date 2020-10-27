@@ -11,7 +11,7 @@
         }}</v-snackbar>
         <v-row align="start" justify="center">
             <v-col lg="10">
-                <v-card class="mx-4 elevation-12">
+                <v-card class="mx-4 elevation-12" min-width="680">
                     <v-toolbar dense dark color="primary">
                         <v-toolbar-title v-if="options">{{
                             formTitle
@@ -40,6 +40,7 @@
                     <v-tabs-items v-model="tab">
                         <v-tab-item key="table">
                             <category-table
+                                ref="table"
                                 :categories="categories"
                                 :parent-categories="parentCategories"
                                 :loading="loading"
@@ -65,7 +66,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-footer fixed>
+        <v-footer fixed min-width="680">
             <v-btn
                 class="ma-2"
                 color="success"
@@ -122,8 +123,6 @@ export default {
             categories: [],
             parentCategories: null,
             categoriesAsText: '',
-
-            search: null,
             submitting: false,
             errors: [],
 
@@ -296,6 +295,10 @@ export default {
                 this.categories = r.data.options;
                 this.file = null;
                 this.snacks.fileUploaded = true;
+
+                if (this.$refs.table != null) {
+                    this.$refs.table.reset();
+                }
             });
         },
 
