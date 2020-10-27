@@ -53,8 +53,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
             this.navigationService = navigationService;
-
-            this.MapView = new MapView(Application.Context);
         }
 
         public override async Task Initialize()
@@ -163,7 +161,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.map, value);
         }
 
-        public MapView MapView { get; set; }
+        private MapView mapView;
+        public MapView MapView => mapView ??= new MapView(Application.Context);
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
