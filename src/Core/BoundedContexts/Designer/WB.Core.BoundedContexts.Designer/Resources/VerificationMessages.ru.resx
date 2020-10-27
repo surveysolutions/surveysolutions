@@ -840,4 +840,7 @@
     <data name="WB0391" xml:space="preserve">
     <value>Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам</value>
   </data>
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+      <value>Ссылка на скрытую переменную запрещена</value>
+  </data>
 </root>

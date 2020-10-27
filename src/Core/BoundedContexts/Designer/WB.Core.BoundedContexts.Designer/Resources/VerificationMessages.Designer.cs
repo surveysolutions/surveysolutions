@@ -1455,5 +1455,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0391", resourceCulture);
             }
         }
+        
+        public static string WB3010_LinkToHiddenQuestionNotAllowed {
+            get {
+                return ResourceManager.GetString("WB3010_LinkToHiddenQuestionNotAllowed", resourceCulture);
+            }
+        }
     }
 }
