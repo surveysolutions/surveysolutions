@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add cascading values.
+        ///   Looks up a localized string similar to Show Parent values.
         /// </summary>
         public static string AddCascading {
             get {
@@ -2209,7 +2209,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove cascading values.
+        ///   Looks up a localized string similar to Hide Parent values.
         /// </summary>
         public static string RemoveCascading {
             get {
