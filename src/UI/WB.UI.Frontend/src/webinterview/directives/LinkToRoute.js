@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 Vue.directive('linkToRoute', {
-    bind: (el, binding, vnode) => {
+    bind: (el, _, vnode) => {
         el.addEventListener('click', event => {
             // ensure we use the link, in case the click has been received by a subelement
             let { target } = event
@@ -29,7 +29,8 @@ Vue.directive('linkToRoute', {
                     event.preventDefault()
 
                     // do not go into interview from take new page
-                    if (vnode.context.$store.getters.isTakeNewAssignment === true) return
+                    if (vnode.context.$store.getters.isTakeNewAssignment === true || to.includes('void(0)'))
+                        return
 
                     var toPath = vnode.context.$router.options.base == '/'
                         ? to
