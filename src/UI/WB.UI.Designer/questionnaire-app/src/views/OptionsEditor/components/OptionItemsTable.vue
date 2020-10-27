@@ -170,6 +170,10 @@ export default {
     },
 
     methods: {
+        reset() {
+            this.search = null;
+        },
+
         newRow() {
             this.editedIndex = -1;
             this.editedItem = {};
