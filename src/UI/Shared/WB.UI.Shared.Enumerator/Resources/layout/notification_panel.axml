@@ -3,10 +3,9 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:id="@+id/notification_panel"
               style="@style/VerticalContentHeightWrappingLayout"
-              local:MvxBind="Visible IsNotificationPanelVisible;">
+              local:MvxBind="Visible DashboardNotifications.IsNotificationPanelVisible;">
     
-  <LinearLayout style="@style/Dashboard_Synchronization_Holder"
-                android:layout_height ="80dp">
+  <LinearLayout style="@style/Dashboard_Notifications_Holder">
   <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
       
       <LinearLayout style="@style/VerticalContentHeightWrappingLayout" >
@@ -18,7 +17,7 @@
       <RelativeLayout style="@style/FullWidthWrappingLayout">         
           <TextView style="@style/Dashboard_Synchronization_Cancel_Text"
                     android:id="@+id/btnAdjust"
-                    local:MvxBind="Text Localization('Adjust'); Click OpenSystemSettingsDateAdjust;"/>
+                    local:MvxBind="Text Localization('Adjust'); Click DashboardNotifications.OpenSystemSettingsDateAdjust;"/>
       </RelativeLayout>     
       
     </LinearLayout>

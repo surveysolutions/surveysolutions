@@ -145,21 +145,9 @@
     <AndroidResource Include="Resources\layout\Login.axml" />
     <AndroidResource Include="Resources\layout\Diagnostics.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__tabletinformation.axml" />
-    <AndroidResource Include="Resources\layout\notification_panel.axml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\SyncLogin.axml" />
     <AndroidResource Include="Resources\layout\InterviewActionBar.axml" />
     <AndroidResource Include="Resources\layout\splash.axml" />
-    <AndroidResource Include="Resources\values\dashboard_notifications.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\dimensions_notifications.xml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\layout\dashboard.axml" />
     <AndroidResource Include="Resources\layout\relink.axml" />
