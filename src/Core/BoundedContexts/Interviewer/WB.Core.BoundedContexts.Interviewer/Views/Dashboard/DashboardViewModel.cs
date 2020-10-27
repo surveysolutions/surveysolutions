@@ -64,7 +64,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
-            IMapInteractionService mapInteractionService) : base(principal, viewModelNavigationService, permissionsService,
+            IMapInteractionService mapInteractionService,
+            DashboardNotificationsViewModel dashboardNotifications) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -74,6 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.auditLogService = auditLogService;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
+            this.DashboardNotifications = dashboardNotifications;
 
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
@@ -88,7 +90,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             GoogleApiService = googleApiService;
             this.mapInteractionService = mapInteractionService;
 
-
             SubscribeOnMessages();
 
             this.Synchronization.Init();
@@ -102,6 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
         }
 
+        public DashboardNotificationsViewModel DashboardNotifications { get; set; }
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -130,22 +132,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
 
-            CheckTabletTimeAndWarn();
+            DashboardNotifications.CheckTabletTimeAndWarn();
         }
-
-        private void CheckTabletTimeAndWarn()
-        {
-            var allowedThresholdInSeconds = 180 * 24 * 60 * 60;
-            
-            long? lastHqSyncTimestamp = interviewerSettings.LastHqSyncTimestamp;
-            var nowSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-            IsNotificationPanelVisible = 
-                lastHqSyncTimestamp != null 
-                && (nowSeconds > lastHqSyncTimestamp + allowedThresholdInSeconds
-                    || nowSeconds < lastHqSyncTimestamp - allowedThresholdInSeconds);
-        }
-
+        
         public override void ViewDisappeared()
         {
             UnsubscribeFromMessages();
@@ -193,17 +182,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard());
 
-        public IMvxCommand OpenSystemSettingsDateAdjust => 
-            new MvxCommand(() => ViewModelNavigationService.NavigateToSystemDateSettings());
-
-        
-        private bool isNotificationPanelVisible;
-        public bool IsNotificationPanelVisible
-        {
-            get => this.isNotificationPanelVisible;
-            set => SetProperty(ref this.isNotificationPanelVisible, value);
-        }
-        
         private async Task NavigateToMapDashboard()
         {
             try
