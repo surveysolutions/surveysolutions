@@ -66,16 +66,18 @@ namespace WB.Tests.Abc.TestFactories
               x.ExpressionStorageType == typeof(DummyInterviewExpressionStorage));
 
             return Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
+                && repository.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         public IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(QuestionnaireDocument questionnaire)
         {
-            var repository = new Mock<IQuestionnaireStorage>();
-            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
-            repository.SetReturnsDefault(plainQuestionnaire);
-            repository.SetReturnsDefault(questionnaire);
-            return repository.Object;
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+            return Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == plainQuestionnaire
+                   && repository.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == plainQuestionnaire
+                   && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire
+                   && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaire);
         }
 
         public IQuestionnaireStorage QuestionnaireRepository(
@@ -91,6 +93,9 @@ namespace WB.Tests.Abc.TestFactories
                 
                 questionnairesStorage.Setup(repository =>
                     repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key))
+                    .Returns(plainQuestionnaire);
+                questionnairesStorage.Setup(repository =>
+                    repository.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key))
                     .Returns(plainQuestionnaire);
             }
             

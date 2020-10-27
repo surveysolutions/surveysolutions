@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
             BecauseOf();
