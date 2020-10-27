@@ -58,7 +58,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             LocalSynchronizationViewModel synchronization = null,
             IMvxMessenger messenger = null,
             IPlainStorage<InterviewView> interviewsRepository = null,
-            ISynchronizationCompleteSource synchronizationCompleteSource = null)
+            ISynchronizationCompleteSource synchronizationCompleteSource = null,
+            DashboardNotificationsViewModel dashboardNotifications = null)
         {
             return new DashboardViewModel(
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
@@ -78,7 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     syncClient: Mock.Of<IOfflineSyncClient>(),
                     userInteractionService: Mock.Of<IUserInteractionService>(),
                     googleApiService: Mock.Of<IGoogleApiService>(),
-                    mapInteractionService: Mock.Of<IMapInteractionService>());
+                    mapInteractionService: Mock.Of<IMapInteractionService>(),
+                    dashboardNotifications: dashboardNotifications ?? Mock.Of<DashboardNotificationsViewModel>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
