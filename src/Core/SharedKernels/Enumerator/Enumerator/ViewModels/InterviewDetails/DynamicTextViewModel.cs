@@ -65,8 +65,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.identity = entityIdentity;
 
-            var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             this.shouldAppendRosterTitle = questionnaire.IsRosterGroup(this.identity.Id) &&
                 !questionnaire.HasCustomRosterTitle(this.identity.Id);
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateText()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
+            var interview = this.interviewRepository.GetOrThrow(this.interviewId);
 
             if (isInstructions)
             {
@@ -127,9 +127,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
-                var titleText = questionnaire?.IsVariable(this.identity.Id) ?? false
+                var titleText = questionnaire.IsVariable(this.identity.Id)
                     ? questionnaire.GetVariableLabel(this.identity.Id)
                     : interview.GetBrowserReadyTitleHtml(this.identity);
 

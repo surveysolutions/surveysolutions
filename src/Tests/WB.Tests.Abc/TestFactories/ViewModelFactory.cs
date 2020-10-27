@@ -68,8 +68,7 @@ namespace WB.Tests.Abc.TestFactories
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 interviewRepository: interviewRepository,
                 substitutionService: Create.Service.SubstitutionService(),
-                questionnaireStorage: questionnaireStorage ?? 
-                    Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Mock.Of<IQuestionnaire>()));
+                questionnaireStorage: questionnaireStorage ?? SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>()));
 
         public ErrorMessageViewModel ErrorMessageViewModel(
             IViewModelEventRegistry eventRegistry = null,
@@ -147,12 +146,9 @@ namespace WB.Tests.Abc.TestFactories
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
         {
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(_ =>
-                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
-                (questionnaire ?? Mock.Of<IQuestionnaire>()));
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? Mock.Of<IQuestionnaire>());
 
-            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(_ =>
-                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>()));
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview ?? Mock.Of<IStatefulInterview>());
 
             return new CategoricalMultiLinkedToListViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(eventRegistry, statefulInterviewRepository, questionnaireRepository),
@@ -267,7 +263,8 @@ namespace WB.Tests.Abc.TestFactories
 
             var headerViewModel = new QuestionHeaderViewModel(
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(eventRegistry: liteEventRegistry,
-                    interviewRepository: interviewRepository));
+                    interviewRepository: interviewRepository,
+                    questionnaireStorage: questionnaireRepository));
 
             var validityViewModel = new ValidityViewModel(
                 liteEventRegistry: liteEventRegistry,
@@ -330,10 +327,9 @@ namespace WB.Tests.Abc.TestFactories
             NavigationState navigationState = null)
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
-                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview);
+            var interviewsRepository = SetUp.StatefulInterviewRepository(interview);
 
             var sideBarSectionViewModelsFactory = new SideBarSectionViewModelFactory(ServiceLocator.Current);
             
@@ -343,7 +339,7 @@ namespace WB.Tests.Abc.TestFactories
             SideBarSectionViewModel SideBarSectionViewModel()
             {
                 return new SideBarSectionViewModel(interviewsRepository, questionnaireRepository, mvxMessenger, liteEventRegistry,
-                    Create.ViewModel.DynamicTextViewModel(liteEventRegistry, interviewsRepository),
+                    Create.ViewModel.DynamicTextViewModel(liteEventRegistry, interviewsRepository, questionnaireRepository),
                     Create.Entity.AnswerNotifier(liteEventRegistry))
                 {
                     NavigationState = navigationState,
@@ -360,20 +356,23 @@ namespace WB.Tests.Abc.TestFactories
                 .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
                 .Returns(() => new SideBarCoverSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
+                        interviewRepository: interviewsRepository,
+                        questionnaireRepository), Mock.Of<CoverStateViewModel>()));
 
             
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
                 .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                     liteEventRegistry,
-                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(), Mock.Of<AnswerNotifier>()));
+                    interviewRepository: interviewsRepository,
+                    questionnaireRepository), Mock.Of<InterviewStateViewModel>(), Mock.Of<AnswerNotifier>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
                 .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
+                        interviewRepository: interviewsRepository,
+                        questionnaireRepository), Mock.Of<InterviewStateViewModel>(),
                         Create.Entity.AnswerNotifier(liteEventRegistry)));
 
             Mock.Get(ServiceLocator.Current)
@@ -428,12 +427,9 @@ namespace WB.Tests.Abc.TestFactories
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
         {
-            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(_ =>
-                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>()));
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview ?? Mock.Of<IStatefulInterview>());
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(_ =>
-                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
-                (questionnaire ?? Mock.Of<IQuestionnaire>()));
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? Mock.Of<IQuestionnaire>());
 
             return new CategoricalMultiLinkedToRosterTitleViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(eventRegistry, statefulInterviewRepository, questionnaireRepository),
@@ -589,7 +585,7 @@ namespace WB.Tests.Abc.TestFactories
         public FlatRosterTitleViewModel FlatRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage)
         {
-            return new FlatRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
+            return new FlatRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository, questionnaireStorage: questionnaireStorage),
                 Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
         }
 
@@ -633,15 +629,13 @@ namespace WB.Tests.Abc.TestFactories
             AnsweringViewModel answering = null)
         {
             var answeringViewModel = answering ?? Create.ViewModel.AnsweringViewModel();
-            var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
-            statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>()))
-                .Returns(interview);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview);
 
 
             var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.Id == Id.gA.ToString()));
             return new TimestampQuestionViewModel(principal,
-                statefulInterviewRepository.Object,
-                Create.ViewModel.QuestionState<DateTimeQuestionAnswered>(interviewRepository: statefulInterviewRepository.Object),
+                statefulInterviewRepository,
+                Create.ViewModel.QuestionState<DateTimeQuestionAnswered>(interviewRepository: statefulInterviewRepository),
                 Create.ViewModel.QuestionInstructionViewModel(),
                 answeringViewModel,
                 Create.Service.LiteEventRegistry());
