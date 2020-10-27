@@ -124,7 +124,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 {
                     await Policy.Handle<InitializationException>(e => e.IsTransient)
                         .WaitAndRetryForeverAsync(i => TimeSpan.FromSeconds(Math.Max(i, 5)),
-                            (exception, span) => status.Run())
+                            (exception, span) => status.Run($"Retry in {span.TotalSeconds:0}s due to error: {exception.Message}"))
                         .ExecuteAsync(async () =>
                         {
                             await module.Init(serviceLocatorLocal, status);
