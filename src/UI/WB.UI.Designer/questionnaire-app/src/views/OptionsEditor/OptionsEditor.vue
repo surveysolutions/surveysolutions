@@ -17,8 +17,8 @@
                             formTitle
                         }}</v-toolbar-title>
                     </v-toolbar>
-                    <v-tabs v-model="tab" grow @change="tabChange">
-                        <v-tab key="table">{{
+                    <v-tabs v-model="tab" grow>
+                        <v-tab key="table" :disabled="!stringsIsValid">{{
                             $t('QuestionnaireEditor.TableView')
                         }}</v-tab>
                         <v-tab key="strings">{{
@@ -37,7 +37,7 @@
                             </v-alert>
                         </v-card-text>
                     </div>
-                    <v-tabs-items v-model="currentTab">
+                    <v-tabs-items v-model="tab">
                         <v-tab-item key="table">
                             <category-table
                                 :categories="categories"
@@ -118,8 +118,7 @@ export default {
 
     data() {
         return {
-            tab: 'table',
-            currentTab: 0,
+            tab: 0,
             categories: [],
             parentCategories: null,
             categoriesAsText: '',
@@ -193,15 +192,9 @@ export default {
         },
 
         canApplyChanges() {
-            return this.currentTab == 1 ? this.stringsIsValid : true;
+            return this.tab == 1 ? this.stringsIsValid : true;
         }
     },
-
-    // watch: {
-    //     tab(to, from) {
-    //         console.log('tab', to, from);
-    //     }
-    // },
 
     mounted() {
         const self = this;
@@ -283,18 +276,6 @@ export default {
             });
         },
 
-        tabChange(tab) {
-            if (
-                this.loading ||
-                (tab == 0 && this.currentTab == 1 && !this.$refs.strings.valid)
-            ) {
-                this.$nextTick(() => (this.tab = this.currentTab));
-                return;
-            }
-
-            this.currentTab = this.tab;
-        },
-
         uploadFile(files) {
             if (!files) return;
 
@@ -325,7 +306,7 @@ export default {
         apply() {
             if (this.ajax) return;
 
-            if (this.$refs.strings.valid != true) return;
+            if (!this.canApplyChanges) return;
 
             if (this.inEditMode || this.convert) {
                 setTimeout(() => this.apply(), 100);
