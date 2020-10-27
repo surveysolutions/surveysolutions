@@ -28,11 +28,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             
             if (e is PostgresException pe)
             {
-                if (pe.SqlState.StartsWith("28"))
-                {
-                    return NewDbException(Modules.ErrorDatabaseUnauthorized);
-                }
-
                 // assume all other errors as transient
                 return NewDbException(pe.Message, true);
             }
