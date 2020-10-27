@@ -242,7 +242,8 @@ namespace WB.Tests.Abc.TestFactories
             Identity entityIdentity = null)
         {
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
-                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
+                && x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
 
             return new VariableViewModel(
                 questionnaireRepository,
