@@ -128,7 +128,7 @@
     "OptionsCloseWindow": "确认要关闭窗口吗？",
     "OptionsListError": "您的输入无效。每一行应遵循以下格式：“标题...值”，\"值\"必须是整数。标题必须是α-数字字符串。不允许有空的行。",
     "OptionsUploadApply": "应用",
-    "OptionsUploadLimit": "没有选项。用tab分隔文件。文件最多可以包含{0}个选项。",
+    "OptionsUploadLimit": "没有选项。用tab分隔文件。文件最多可以包含{limit}个选项。",
     "OptionsUploadParent": "上级值",
     "OptionsUploadTitle": "标题",
     "OptionsUploadValue": "值",
@@ -450,7 +450,7 @@
     "SideBarCategoriesAddNew": "Add new category",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
-    "AddCascading": "Add cascading values",
-    "RemoveCascading": "Remove cascading values"
+    "ShowParentValues": "Show Parent values",
+    "HideParentValues": "Hide Parent values"
   }
 }
