@@ -336,4 +336,7 @@
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Edit Calendar Event</value>
+  </data>
 </root>
