@@ -328,7 +328,7 @@
     "OptionsUploadRevert": "Revert changes",
     "OptionsWindowTitle": "Edit categories",
     "CascadingOptionsWindowTitle": "Edit cascading categories",
-    "OptionsUploadLimit": "No categories. Choose tab separated file. The file can contain up to {0} categories.",
+    "OptionsUploadLimit": "No categories. Choose tab separated file. The file can contain up to {limit} categories.",
     "OptionsUploadTitle": "Title",
     "OptionsUploadValue": "Value",
     "OptionsUploadParent": "Parent value",
@@ -450,7 +450,7 @@
     "SideBarCategoriesAddNew": "Add new category",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
-    "AddCascading": "Add cascading values",
-    "RemoveCascading": "Remove cascading values"
+    "ShowParentValues": "Show Parent values",
+    "HideParentValues": "Hide Parent values"
   }
 }

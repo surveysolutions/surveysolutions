@@ -502,7 +502,7 @@
     <value>应用</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>没有选项。用tab分隔文件。文件最多可以包含{0}个选项。</value>
+    <value>没有选项。用tab分隔文件。文件最多可以包含{limit}个选项。</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>上级值</value>

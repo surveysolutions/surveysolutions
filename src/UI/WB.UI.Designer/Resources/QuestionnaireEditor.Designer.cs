@@ -70,15 +70,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add cascading values.
-        /// </summary>
-        public static string AddCascading {
-            get {
-                return ResourceManager.GetString("AddCascading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {
@@ -1245,6 +1236,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide Parent values.
+        /// </summary>
+        public static string HideParentValues {
+            get {
+                return ResourceManager.GetString("HideParentValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide resolved comments.
         /// </summary>
         public static string HideResolvedComments {
@@ -1678,7 +1678,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No categories. Choose tab separated file. The file can contain up to {0} categories..
+        ///   Looks up a localized string similar to No categories. Choose tab separated file. The file can contain up to {limit} categories..
         /// </summary>
         public static string OptionsUploadLimit {
             get {
@@ -2205,15 +2205,6 @@ namespace WB.UI.Designer.Resources {
         public static string Recompile {
             get {
                 return ResourceManager.GetString("Recompile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove cascading values.
-        /// </summary>
-        public static string RemoveCascading {
-            get {
-                return ResourceManager.GetString("RemoveCascading", resourceCulture);
             }
         }
         
@@ -2790,6 +2781,15 @@ namespace WB.UI.Designer.Resources {
         public static string ShowList {
             get {
                 return ResourceManager.GetString("ShowList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Parent values.
+        /// </summary>
+        public static string ShowParentValues {
+            get {
+                return ResourceManager.GetString("ShowParentValues", resourceCulture);
             }
         }
         
