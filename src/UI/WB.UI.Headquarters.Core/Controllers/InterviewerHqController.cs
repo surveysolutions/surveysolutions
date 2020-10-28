@@ -147,6 +147,23 @@ namespace WB.UI.Headquarters.Controllers
             return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
         
+        [HttpPost]
+        public IActionResult UpdateInterviewCalendarEvent([FromBody] UpdateInterviewCalendarEventRequest request)
+        {
+            var interview = interviewSummaryReader.GetById(request.InterviewId);
+            if (interview == null)
+                return BadRequest();
+            
+            
+            /*var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);
+
+            this.commandService.Execute(restartCommand);
+
+            return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));*/
+            
+            return this.Content("ok");
+        }
+        
         private List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaires(InterviewStatus[] interviewStatuses)
         {
             var queryResult = this.interviewSummaryReader.Query(_ =>
@@ -176,5 +193,13 @@ namespace WB.UI.Headquarters.Controllers
 
         private string GenerateUrl(string action, string interviewId, string sectionId = null) =>
             $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
+    }
+
+    public class UpdateInterviewCalendarEventRequest
+    {
+        public Guid? Id { get; set; }
+        public Guid InterviewId { get; set; }
+        public DateTime NewDate { get; set; }
+        public string Comment { get; set; }
     }
 }
