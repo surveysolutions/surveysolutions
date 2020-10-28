@@ -1110,7 +1110,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Edit cascading categories</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>No categories. Choose tab separated file. The file can contain up to {0} categories.</value>
+    <value>No categories. Choose tab separated file. The file can contain up to {limit} categories.</value>
   </data>
   <data name="OptionsUploadTitle" xml:space="preserve">
     <value>Title</value>
@@ -1476,10 +1476,10 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>
 You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
   </data>
-  <data name="AddCascading" xml:space="preserve">
+  <data name="ShowParentValues" xml:space="preserve">
     <value>Show Parent values</value>
   </data>
-  <data name="RemoveCascading" xml:space="preserve">
+  <data name="HideParentValues" xml:space="preserve">
     <value>Hide Parent values</value>
   </data>
 </root>

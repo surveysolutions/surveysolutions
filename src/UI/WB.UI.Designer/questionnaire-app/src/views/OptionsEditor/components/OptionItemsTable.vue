@@ -18,13 +18,13 @@
                 v-if="isCategory && !isCascading"
                 class="ma-2"
                 @click="setCascading(true)"
-                >{{ $t('QuestionnaireEditor.AddCascading') }}</v-btn
+                >{{ $t('QuestionnaireEditor.ShowParentValues') }}</v-btn
             >
             <v-btn
                 v-if="isCategory && isCascading"
                 class="ma-2"
                 @click="setCascading(null)"
-                >{{ $t('QuestionnaireEditor.RemoveCascading') }}</v-btn
+                >{{ $t('QuestionnaireEditor.HideParentValues') }}</v-btn
             >
         </v-card-title>
 
@@ -83,7 +83,7 @@
             <template v-slot:no-data>
                 {{
                     $t('QuestionnaireEditor.OptionsUploadLimit', {
-                        0: 15000
+                        limit: 15000
                     })
                 }}
             </template>
