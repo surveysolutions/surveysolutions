@@ -67,6 +67,46 @@
             ref="confirmDiscard"
             id="discardConfirm"
             slot="modals">{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
+
+        <ModalFrame ref="editCalendarModal"
+            :title="$t('Common.EditCalendarEvent')">
+            <form onsubmit="return false;">
+
+                <div class="form-group">
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDate">
+                    </DatePicker>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"
+                        for="commentsId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea
+                        control-id="commentsId"
+                        v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="6"
+                        maxlength="500"
+                        class="form-control"/>
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    role="confirm"
+                    @click="updateCalendarEvent">
+                    {{ $t("Common.Save") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 
@@ -109,6 +149,10 @@ export default {
             questionnaireId: null,
             questionnaireVersion: null,
             assignmentId: null,
+            editCalendarComment: null,
+            editCalendarDate : null,
+            newCalendarDate : null,
+            interviewId : null,
             draw: 0,
         }
     },
@@ -230,6 +274,24 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
+        selectedDate(){
+            return this.editCalendarDate
+        },
+        datePickerConfig() {
+            var self = this
+            return {
+                mode: 'single',
+                minDate: 'today',
+                enableTime: true,
+                wrap: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? selectedDates[0] : null
+                    if(start != null ){
+                        self.newCalendarDate = start
+                    }
+                },
+            }
+        },
     },
 
     methods: {
@@ -244,6 +306,25 @@ export default {
 
         reload() {
             this.$refs.table.reload()
+        },
+
+        editCalendarEvent(interviewId) {
+            this.interviewId = interviewId
+            this.$refs.editCalendarModal.modal({keyboard: false})
+        },
+
+        updateCalendarEvent() {
+            const self = this
+
+            this.$refs.editCalendarModal.hide()
+
+            self.$store.dispatch('saveCalendarEvent', {
+                interviewId : self.interviewId,
+                id : '',
+                newDate : self.newCalendarDate,
+                comment : self.editCalendarComment,
+                callback: self.reload,
+            })
         },
 
         contextMenuItems({rowData, rowIndex}) {
@@ -275,6 +356,14 @@ export default {
                     },
                 })
             }
+
+            const canCalendarBeEdited =  rowData.actionFlags.indexOf('CANBEOPENED') >= 0
+            menu.push({
+                name: self.$t('Common.EditCalendarEvent'),
+                className: canCalendarBeEdited ? 'primary-text' : '',
+                callback: () => self.editCalendarEvent(rowData.id),
+                disabled: !canCalendarBeEdited,
+            })
 
             return menu
         },

@@ -100,6 +100,11 @@
 
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Content\**\*.*" />
+    <Compile Update="Resources\Common.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Common.ru.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
     
   </ItemGroup>
 
