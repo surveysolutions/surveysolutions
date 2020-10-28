@@ -111,7 +111,7 @@
     "OptionsCloseWindow": "Cera ventana?",
     "OptionsListError": "Usted ha ingresado una entrada inválida. Cada línea debe seguir el formato: \"Título ... Valor\". 'Valor' debe ser un número entero. El título debe ser una cadena alfanumérica. No se permiten líneas vacías.",
     "OptionsUploadApply": "Aplicar",
-    "OptionsUploadLimit": "Sin categorías. Elija archivo separado por tabs. El archivo puede contener hasta {0} categorías",
+    "OptionsUploadLimit": "Sin categorías. Elija archivo separado por tabs. El archivo puede contener hasta {limit} categorías",
     "OptionsUploadParent": "Valor del padre",
     "OptionsUploadTitle": "título",
     "OptionsUploadValue": "Valor",
@@ -450,7 +450,7 @@
     "SideBarCategoriesAddNew": "Add new category",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
-    "AddCascading": "Show Parent values",
-    "RemoveCascading": "Hide Parent values"
+    "ShowParentValues": "Show Parent values",
+    "HideParentValues": "Hide Parent values"
   }
 }

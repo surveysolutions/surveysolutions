@@ -451,7 +451,7 @@
     <value>Aplicar</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Sin categorías. Elija archivo separado por tabs. El archivo puede contener hasta {0} categorías</value>
+    <value>Sin categorías. Elija archivo separado por tabs. El archivo puede contener hasta {limit} categorías</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Valor del padre</value>
