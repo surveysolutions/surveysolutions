@@ -12,7 +12,8 @@
                                 <v-text-field
                                     v-model="itemTitle"
                                     :label="
-                                        $t('QuestionnaireEditor.GroupTitle')
+                                        $t('QuestionnaireEditor.GroupTitle') +
+                                            '*'
                                     "
                                     :rules="[required]"
                                 ></v-text-field>
@@ -96,7 +97,7 @@ export default {
             required: value =>
                 !!value || this.$t('QuestionnaireEditor.RequiredField'),
             maxValue: v =>
-                Math.abs(parseInt(v)) < 2147483647 ||
+                (/^\d+$/.test(v) && Math.abs(parseInt(v)) < 2147483647) ||
                 this.$t('QuestionnaireEditor.ValidationIntValue'),
 
             valid: true
@@ -104,8 +105,8 @@ export default {
     },
 
     methods: {
-        save() {
-            this.$refs.form.validate();
+        async save() {
+            await this.$refs.form.validate();
             if (this.valid) {
                 this.$emit('change', {
                     title: this.itemTitle,
