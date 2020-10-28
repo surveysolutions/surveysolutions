@@ -225,12 +225,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private void OnConnectionClientResult(object sender, NearbyConnectionResolution resolution)
         {
-            var endpoint = resolution.Endpoint;
-            this.logger.Verbose($"[OnConnectionClientResult] ({endpoint}, {resolution.IsSuccess}) ENTER. Remove pending request");
-            pendingRequestConnections.TryRemove(endpoint, out _);
+            this.logger.Verbose($"[OnConnectionClientResult] ({resolution.Endpoint}, {resolution.IsSuccess}) ENTER. Remove pending request");
 
-            if (resolution.IsSuccess)
+            if (resolution.IsSuccess && !string.IsNullOrWhiteSpace(resolution.Endpoint))
             {
+                var endpoint = resolution.Endpoint;
+                pendingRequestConnections.TryRemove(endpoint, out _);
+
                 var existing = this.RemoteEndpoints.FirstOrDefault(re => re.Endpoint == endpoint);
 
                 if (existing != null)
