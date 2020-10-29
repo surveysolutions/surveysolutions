@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -150,17 +151,27 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public IActionResult UpdateInterviewCalendarEvent([FromBody] UpdateInterviewCalendarEventRequest request)
         {
-            var interview = interviewSummaryReader.GetById(request.InterviewId);
-            if (interview == null)
-                return BadRequest();
+            if (request.NewDate == null)
+                request.NewDate = DateTimeOffset.Now;
             
-            
-            /*var restartCommand = new RestartInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow);
-
-            this.commandService.Execute(restartCommand);
-
-            return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));*/
-            
+            if (request.Id == null)
+            {
+                this.commandService.Execute(new CreateCalendarEventCommand(
+                    Guid.NewGuid(), 
+                    this.authorizedUser.Id, 
+                    request.NewDate.Value,
+                    request.InterviewId,
+                    request.AssignmentId,
+                    request.Comment));
+            }
+            else
+            {
+                this.commandService.Execute(new UpdateCalendarEventCommand(
+                    request.Id.Value, 
+                    this.authorizedUser.Id, 
+                    request.NewDate.Value,
+                    request.Comment));
+            }
             return this.Content("ok");
         }
         
@@ -198,8 +209,10 @@ namespace WB.UI.Headquarters.Controllers
     public class UpdateInterviewCalendarEventRequest
     {
         public Guid? Id { get; set; }
-        public Guid InterviewId { get; set; }
-        public DateTime NewDate { get; set; }
+        public Guid? InterviewId { get; set; }
+
+        public int AssignmentId { get; set; }
+        public DateTimeOffset? NewDate { get; set; }
         public string Comment { get; set; }
     }
 }

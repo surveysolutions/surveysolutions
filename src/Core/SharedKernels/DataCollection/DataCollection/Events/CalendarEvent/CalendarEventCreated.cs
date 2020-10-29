@@ -6,11 +6,22 @@ namespace WB.Core.SharedKernels.DataCollection.Events.CalendarEvent
     {
         public string Comment { get; set; }
         public DateTimeOffset Start { get; set; }
-        public CalendarEventCreated(Guid userId, DateTimeOffset originDate, string comment, DateTimeOffset start) 
+        public CalendarEventCreated(Guid userId, 
+            DateTimeOffset originDate, 
+            string comment, 
+            DateTimeOffset start,
+            Guid? interviewId,
+            long assignmentId)
             : base(userId, originDate)
         {
             this.Comment = comment;
             this.Start = start;
+            this.AssignmentId = assignmentId;
+            this.InterviewId = interviewId;
         }
+
+        public Guid? InterviewId { get; set; }
+
+        public long AssignmentId { get; set; }
     }
 }
