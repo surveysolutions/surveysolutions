@@ -41,7 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ISerializer serializer,
             IUserInteractionService userInteractionService,
             IAuditLogService auditLogService,
-            IDeviceInformationService deviceInformationService) : base(principal, viewModelNavigationService)
+            IDeviceInformationService deviceInformationService) 
+                :base(principal, viewModelNavigationService, false)
         {
             this.deviceSettings = deviceSettings;
             this.synchronizationService = synchronizationService;
@@ -54,8 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.serializer = serializer;
         }
         
-        protected override bool IsAuthenticationRequired => false;
-
         private string endpoint;
         public string Endpoint
         {
@@ -105,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private IMvxAsyncCommand signInCommand;
         public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress);
 
-        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public override void Prepare(FinishInstallationViewModelArg parameter)
         {
@@ -215,7 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.auditLogService.Write(new FinishInstallationAuditLogEntity(this.Endpoint));
                 this.auditLogService.Write(new LoginAuditLogEntity(this.UserName));
 
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                await this.ViewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
             {

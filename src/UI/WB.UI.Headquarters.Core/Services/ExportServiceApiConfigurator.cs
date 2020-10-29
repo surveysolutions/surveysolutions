@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -17,6 +18,7 @@ namespace WB.UI.Headquarters.Services
         private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
+        private ILogger<ExportServiceApiConfigurator> logger;
 
         private readonly IHttpContextAccessor httpContextAccessor;
 
@@ -24,17 +26,20 @@ namespace WB.UI.Headquarters.Services
             IOptionsSnapshot<ExportServiceConfig> exportOptions,
             IOptions<HeadquartersConfig> headquarterOptions,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<ExportServiceApiConfigurator> logger)
         {
             this.exportOptions = exportOptions;
             this.headquarterOptions = headquarterOptions;
             this.exportServiceSettings = exportServiceSettings;
             this.httpContextAccessor = httpContextAccessor;
+            this.logger = logger;
         }
 
         public void ConfigureHttpClient(HttpClient hc)
         {
-            if (!Uri.TryCreate(headquarterOptions.Value.BaseUrl, UriKind.RelativeOrAbsolute, out var baseUrl))
+            var valueBaseUrl = headquarterOptions.Value.BaseUrl;
+            if (!Uri.TryCreate(valueBaseUrl, UriKind.Absolute, out var baseUrl))
             {
                 var context = httpContextAccessor.HttpContext;
 
@@ -42,9 +47,11 @@ namespace WB.UI.Headquarters.Services
                 {
                     var request = context.Request;
 
-                    baseUrl = new Uri($"{request.Scheme}://{request.Host}{"/"}");
+                    baseUrl = new Uri($"{request.Scheme}://{request.Host}/");
                 }
             }
+            
+            this.logger.LogTrace("Using {baseUrl} as export service url. Parsed value {baseUrlUri}", valueBaseUrl, baseUrl);
 
             string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
             hc.BaseAddress = new Uri(exportOptions.Value.ExportServiceUrl);

@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             csvWriter.Flush();
             streamWriter.Flush();
 
+            resultStream.Seek(0, SeekOrigin.Begin);
             return File(archiveUtils.CompressStream(resultStream, "notSentInvitations.tab"),
                 "application/octet-stream",
                 "notSentInvitations.zip",

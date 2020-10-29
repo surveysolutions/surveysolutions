@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
 
-            var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
+            var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.Principal.CurrentUserIdentity.Name);
 
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
         }
@@ -248,7 +248,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.CancelLoadServerQuestionnaires();
             
-            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
 
@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 this.dashboardLastUpdateStorage.Store(new DashboardLastUpdate
                 {
-                    Id = this.principal.CurrentUserIdentity.Name,
+                    Id = this.Principal.CurrentUserIdentity.Name,
                     LastUpdateDate = lastUpdateDate
                 });
 

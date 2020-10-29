@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Geolocator.Abstractions;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -21,7 +22,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<GpsLocation> GetLocation(int timeoutSec, double desiredAccuracy)
         {
-            await this.permissions.AssureHasPermission(Permission.Location);
+            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>();
             this.Geolocator.DesiredAccuracy = desiredAccuracy;
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSec));
             Position position = await this.Geolocator.GetPositionAsync(token: cancellationToken.Token)

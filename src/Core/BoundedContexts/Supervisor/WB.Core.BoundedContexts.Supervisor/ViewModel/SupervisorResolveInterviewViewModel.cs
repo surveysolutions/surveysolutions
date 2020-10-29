@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -28,8 +29,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainStorage<InterviewView> interviews;
+        private readonly IUserInteractionService userInteractionService;
 
-        
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
@@ -42,7 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IViewModelNavigationService navigationService,
             ILogger logger,
             IAuditLogService auditLogService,
-            IPlainStorage<InterviewView> interviews) : 
+            IPlainStorage<InterviewView> interviews,
+            IUserInteractionService userInteractionService) : 
                 base(navigationService,
                 commandService,
                 principal,
@@ -57,6 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
             this.interviews = interviews;
+            this.userInteractionService = userInteractionService;
         }
 
         private InterviewStatus status;
@@ -89,21 +92,57 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
         {
-            var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                Comment);
-            await this.commandService.ExecuteAsync(command);
-            auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
+            try
+            {
+                if (this.interview.Status != InterviewStatus.ApprovedBySupervisor)
+                {
+                    if (receivedByInterviewerTabletAt != null)
+                    {
+                        var approveConfirmed = await userInteractionService.ConfirmAsync(
+                            SupervisorUIResources.Confirm_Approve_Synchronized_Interview_Message,
+                            okButton: UIResources.Yes,
+                            cancelButton: UIResources.No);
+
+                        if (!approveConfirmed)
+                        {
+                            return;
+                        }
+                    }
+
+                    var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
+                        Comment);
+                    await this.commandService.ExecuteAsync(command);
+                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
+                }
+            }
+            catch (InterviewException e)
+            {
+                logger.Warn($"Error on Interview Approve. Interview: {interviewId}", e);
+            }
+
             await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters ||
-                 this.status == InterviewStatus.RejectedBySupervisor && this.receivedByInterviewerTabletAt == null);
+                 this.status == InterviewStatus.RejectedBySupervisor);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
-            var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                Comment);
-            await this.commandService.ExecuteAsync(command);
-            auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
+            try
+            {
+                if (this.interview.Status != InterviewStatus.RejectedBySupervisor)
+                {
+                    var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
+                        Comment);
+                    await this.commandService.ExecuteAsync(command);
+                    auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId,
+                        interview.GetInterviewKey().ToString()));
+                }
+            }
+            catch (InterviewException e)
+            {
+                logger.Warn($"Error on Interview Reject. Interview: {interviewId}", e);
+            }
+
             await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);

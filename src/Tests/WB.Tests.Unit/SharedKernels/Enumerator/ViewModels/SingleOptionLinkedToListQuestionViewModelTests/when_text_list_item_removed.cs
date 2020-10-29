@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedToListQuestionViewModelTests
 {
     [TestOf(typeof(SingleOptionLinkedToListQuestionViewModel))]
-    public class when_text_list_with_2_options_and_1_option_removed
+    public class when_text_list_with_2_options_and_1_option_removed : SingleOptionLinkedToListQuestionViewModelTests
     {
         [Test]
         public void should_view_model_has_1_option_only()

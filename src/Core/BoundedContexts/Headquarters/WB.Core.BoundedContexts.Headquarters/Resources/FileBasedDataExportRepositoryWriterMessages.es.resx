@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Administrator" xml:space="preserve">
-    <value>Administrador</value>
+    <value>Administración</value>
   </data>
   <data name="ApiUser" xml:space="preserve">
-    <value>Usuario API</value>
+    <value>Usuario para la interfaz de programación de aplicaciones</value>
   </data>
   <data name="FileContentIsMissingForFileNameAndInterviewFormat" xml:space="preserve">
     <value>Contenido inexistente en el archivo {0} entrevista {1}</value>
   </data>
   <data name="Headquarter" xml:space="preserve">
-    <value>Headquarter</value>
+    <value>Sede</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
-    <value>Interviewer</value>
+    <value>Entrevistador</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
     <value>Entrevista con identificador {0} no ha sido encontrada</value>

@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     })
                 );
 
-                var interview = SetupInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
+                var interview = SetupStatefullInterview(appDomainContext.AssemblyLoadContext, questionnaireDocument);
 
                 results = new InvokeResults
                 {

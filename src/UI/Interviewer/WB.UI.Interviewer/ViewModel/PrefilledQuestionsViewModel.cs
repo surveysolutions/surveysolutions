@@ -47,34 +47,34 @@ namespace WB.UI.Interviewer.ViewModel
             this.userInteractionService = userInteractionService;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
 
         public async Task NavigateBack()
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
         }
 
         public override void ViewAppeared()
         {
             if (!this.Principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                this.ViewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
                 return;
             }
 
@@ -93,7 +93,7 @@ namespace WB.UI.Interviewer.ViewModel
                     catch (MissingPermissionsException e)
                     {
                         this.userInteractionService.ShowToast(e.Message);
-                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+                        await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
                     }
                 });
             }

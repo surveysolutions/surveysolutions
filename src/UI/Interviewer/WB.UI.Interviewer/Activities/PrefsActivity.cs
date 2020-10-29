@@ -1,12 +1,13 @@
-using System;
 using System.Globalization;
 using Android.App;
 using Android.OS;
-using Android.Preferences;
+using AndroidX.AppCompat.App;
+using AndroidX.Preference;
 using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.SharedPreferences;
+using WB.UI.Shared.Enumerator.Settings;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -14,26 +15,21 @@ namespace WB.UI.Interviewer.Activities
         NoHistory = false, 
         Theme = "@style/GrayAppTheme",
         Exported = false)]
-    public class PrefsActivity : PreferenceActivity
+    public class PrefsActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            FragmentManager.BeginTransaction().Replace(Android.Resource.Id.Content, new PrefsFragment()).Commit();
+            this.SupportFragmentManager
+                .BeginTransaction()
+                .Replace(Android.Resource.Id.Content, new PrefsFragment())
+                .Commit();
         }
 
-        [Obsolete]
-        protected override bool IsValidFragment(string fragmentName)
+        public class PrefsFragment : PreferenceFragmentCompat
         {
-            return nameof(PrefsFragment).Equals(fragmentName);
-        }
-
-        public class PrefsFragment : PreferenceFragment
-        {
-            [Obsolete]
-            public override void OnCreate(Bundle savedInstanceState)
+            public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
-                base.OnCreate(savedInstanceState);
                 this.AddPreferencesFromResource(Resource.Xml.preferences);
                 this.SetupPreferences();
             }
@@ -49,7 +45,9 @@ namespace WB.UI.Interviewer.Activities
                 this.SetPreferenceTitleAndSummary("version", EnumeratorUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
                 this.SetPreferenceTitleAndSummary("deviceid", EnumeratorUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
 
-                this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.GpsDesiredAccuracy)
+                    .SetEditTextDecimalMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     if (double.TryParse(e.NewValue.ToString(), out var newValue))
                     {
@@ -64,22 +62,30 @@ namespace WB.UI.Interviewer.Activities
                     interviewerSettings.SetEndpoint(e.NewValue.ToString());
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.EventChunkSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.HttpResponseTimeout)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.BufferSize).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.BufferSize)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.BufferSize));
                     this.UpdateSettings();
                 };
-                this.FindPreference(SettingsNames.GpsReceiveTimeoutSec).PreferenceChange += (sender, e) =>
+                this.FindPreference(SettingsNames.GpsReceiveTimeoutSec)
+                    .SetEditTextNumericMode()
+                    .PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetGpsResponseTimeout(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
                     this.UpdateSettings();

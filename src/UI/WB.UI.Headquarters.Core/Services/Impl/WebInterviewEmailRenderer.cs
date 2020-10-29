@@ -45,6 +45,16 @@ namespace WB.UI.Headquarters.Services.Impl
             return RenderEmailWithControllerContext(emailParams);
         }
 
+        public Task<string> RenderHtmlEmail(EmailParams emailParams)
+        {
+            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl);
+        }
+
+        public Task<string> RenderTextEmail(EmailParams emailParams)
+        {
+            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl);
+        }
+
         private async Task<PersonalizedWebInterviewEmail> RenderEmailWithControllerContext(EmailParams emailParams)
         {
             string html = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl);

@@ -806,18 +806,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId)
              => this.cacheOfUnderlyingStaticTexts.GetOrAdd(groupId, this.GetAllUnderlyingStaticTextsImpl);
 
-        public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
-        {
-            if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
-                this.cacheOfUnderlyingInterviewerQuestions[groupId] = this
-                    .GetGroupOrThrow(groupId)
-                    .Find<IQuestion>(IsInterviewierQuestion)
-                    .Select(question => question.PublicKey)
-                    .ToReadOnlyCollection();
-
-            return this.cacheOfUnderlyingInterviewerQuestions[groupId];
-        }
-
         public ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId)
         {
             if (!this.cacheOfChildQuestions.ContainsKey(groupId))
@@ -1268,6 +1256,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfUnderlyingRosters[groupId] = this.GetAllUnderlyingRostersImpl(groupId);
 
             return this.cacheOfUnderlyingRosters[groupId];
+        }
+
+        public Guid GetEntityReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            var linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+            if (linkedQuestion.LinkedToQuestionId != null)
+            {
+                return this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
+            }
+            if (linkedQuestion.LinkedToRosterId != null)
+            {
+                return GetRosterReferencedByLinkedQuestion(linkedQuestionId);
+            }
+            
+            throw new QuestionnaireException($"Cannot return id of referenced question because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
+        }
+
+        public bool IsInsideRoster(Guid entityId)
+        {
+            var entity = GetEntityOrThrow(entityId);
+            var parent = entity.GetParent();
+            while (parent != null)
+            {
+                if (entity is IGroup @group && @group.IsRoster)
+                    return true;
+                
+                entity = parent;
+                parent = entity.GetParent();
+            }
+
+            return false;
         }
 
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)

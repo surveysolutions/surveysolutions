@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>La entrevista no tiene responsabilidad. Por favor, elija entrevistador responsable</value>
+    <value>No se ha elegido responsable para alguna entrevista(s). Por favor elija un supervisor o entrevistador responsable.</value>
   </data>
   <data name="FlagTitleFlagged" xml:space="preserve">
     <value>Marcado</value>
@@ -133,6 +133,36 @@
     <value>Responsable</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Estado : {{ name }}</value>
+    <value>Estado</value>
+  </data>
+  <data name="Area_ShowCoordinates" xml:space="preserve">
+    <value>Mostrar coordenadas</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duración</value>
+  </data>
+  <data name="NoAnswer" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>No se encontraron artículos</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Vista general</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Cuestionario: {{ name }}</value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{ count }} item encontrados:</value>
+  </data>
+  <data name="SearchResult_Count_plural" xml:space="preserve">
+    <value>{{ count }} items encontrados:</value>
+  </data>
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+    <value>Mostrar detalles del cuestionario</value>
+  </data>
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>Puede cambiar de responsable de la entrevista al rechazarla. Por favor, elija entrevistador responsable</value>
   </data>
 </root>

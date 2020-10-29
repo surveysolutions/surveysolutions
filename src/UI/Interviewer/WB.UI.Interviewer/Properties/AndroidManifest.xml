@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.interviewer" android:versionCode="25532" android:versionName="20.05 (build 25532)">
-	<application android:label="Interviewer" android:icon="@drawable/icon" android:theme="@android:style/Theme.DeviceDefault.Light" android:largeHeap="true" android:allowBackup="false">
+	<application android:label="Interviewer" 
+                 android:icon="@drawable/icon" 
+                 android:theme="@android:style/Theme.DeviceDefault.Light" 
+                 android:largeHeap="true" 
+                 android:allowBackup="false"
+                 android:requestLegacyExternalStorage="true">
 		<provider android:name="androidx.core.content.FileProvider" android:authorities="org.worldbank.solutions.interviewer.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>

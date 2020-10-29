@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Extensions.CustomServices.AreaEditor;
 using WB.UI.Shared.Extensions.CustomServices.MapDashboard;
@@ -46,16 +48,16 @@ namespace WB.UI.Shared.Extensions.CustomServices
 
         public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
-            await this.permissions.AssureHasPermission(Permission.Location);
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             return await this.EditAreaImplAsync(area, geometryType);
         }
 
         public async Task OpenMapDashboardAsync()
         {
-            await this.permissions.AssureHasPermission(Permission.Location);
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             await this.viewModelNavigationService.NavigateToAsync<MapDashboardViewModel>().ConfigureAwait(false);
         }

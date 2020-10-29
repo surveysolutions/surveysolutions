@@ -2,7 +2,7 @@
     'use strict';
     var localizationInitPromise = $.Deferred();
     window.i18next
-        .use(window.i18nextXHRBackend);
+        .use(window.i18nextHttpBackend);
     window.i18next.init({
         debug: false,
         lng: $('html').attr('lang'), 

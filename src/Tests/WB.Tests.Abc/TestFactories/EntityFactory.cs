@@ -1786,7 +1786,7 @@ namespace WB.Tests.Abc.TestFactories
             result.Quantity = quantity;
             result.Id = id ?? 0;
             result.PublicKey = publicKey ?? Guid.NewGuid();
-            result.QuestionnaireId = questionnaireIdentity;
+            result.QuestionnaireId = questionnaireIdentity ?? Create.Entity.QuestionnaireIdentity();
             result.Archived = isArchived;
 
             var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };

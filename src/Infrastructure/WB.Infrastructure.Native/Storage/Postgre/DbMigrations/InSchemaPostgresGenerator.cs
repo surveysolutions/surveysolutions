@@ -47,7 +47,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         public override string Generate(CreateForeignKeyExpression expression)
         {
             expression.ForeignKey.ForeignTableSchema = this.schemaName;
-            expression.ForeignKey.PrimaryTableSchema = this.schemaName;
+            if (expression.ForeignKey.PrimaryTableSchema == null)
+                expression.ForeignKey.PrimaryTableSchema = this.schemaName;
             return base.Generate(expression);
         }
 
@@ -96,7 +97,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         public override string Generate(DeleteForeignKeyExpression expression)
         {
             expression.ForeignKey.ForeignTableSchema = this.schemaName;
-            expression.ForeignKey.PrimaryTableSchema = this.schemaName;
+            if (expression.ForeignKey.PrimaryTableSchema == null)
+                expression.ForeignKey.PrimaryTableSchema = this.schemaName;
             return base.Generate(expression);
         }
 
@@ -151,7 +153,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         public override string GenerateForeignKeyName(ForeignKeyDefinition foreignKey)
         {
             foreignKey.ForeignTableSchema = this.schemaName;
-            foreignKey.PrimaryTableSchema = this.schemaName;
+            if (foreignKey.PrimaryTableSchema == null)
+                foreignKey.PrimaryTableSchema = this.schemaName;
             return base.GenerateForeignKeyName(foreignKey);
         }
 

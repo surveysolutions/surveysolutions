@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -195,6 +196,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.expressionProcessor = expressionProcessor;
         }
+
+        public CategoriesView? GetCategoriesView(QuestionnaireRevision questionnaireId, Guid entityid)
+        {
+            var document = this.questionnaireDocumentReader.Get(questionnaireId);
+            if (document == null)
+                throw new InvalidOperationException($"Questionnaire was not found ({questionnaireId}).");
+
+            var categories = document.Categories.FirstOrDefault(x => x.Id == entityid);
+
+            return categories == null
+                ? null
+                : new CategoriesView(categoriesId: categories.Id.FormatGuid(), categories.Name);
+        }
+
 
         public Guid GetSectionIdForItem(QuestionnaireRevision questionnaireId, Guid? entityid)
         {

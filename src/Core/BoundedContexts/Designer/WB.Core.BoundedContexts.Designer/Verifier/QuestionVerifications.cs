@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -20,6 +21,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly ICategoriesService categoriesService;
+
+        private readonly Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>> categoriesCache
+            = new Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>>();
 
         public QuestionVerifications(ISubstitutionService substitutionService, ICategoriesService categoriesService)
         {
@@ -102,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<GpsCoordinateQuestion>(Any, "WB0264", VerificationMessages.WB0264_GpsQuestion),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
-            
+
             Warning(MoreThan30PercentQuestionsAreText, "WB0265", string.Format(VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText, TextQuestionsLengthInPercents)),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
@@ -113,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool IdentifyingQuestionInSectionWithEnablingCondition(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!Prefilled(question)) return false;
-            
+
             var parentSections = (question.GetParent() ?? throw new InvalidOperationException("Parent was not found."))
                 .UnwrapReferences(x => x.GetParent()).OfType<IConditional>();
             return parentSections.Any(x => !string.IsNullOrEmpty(x.ConditionExpression));
@@ -149,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 case QuestionType.GpsCoordinates:
                 case QuestionType.SingleOption:
                     return false;
-                
+
                 case QuestionType.Audio:
                 case QuestionType.Area:
                 case QuestionType.QRBarcode:
@@ -260,7 +264,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!question.IsFilteredCombobox ?? false) return false;
 
             return question.CategoriesId.HasValue
-                ? this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count() < 10
+                ? GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count() < 10
                 : question.Answers.Count < 10;
         }
 
@@ -292,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => questionnaire.Find<IQuestion>().Count() > 100
                && questionnaire.Find<IGroup>(IsSection).Count() < 3;
 
-       
+
         private static bool NoValidation(IQuestion question) => !question.ValidationConditions.Any();
 
         private static bool TooManyQuestions(MultiLanguageQuestionnaireDocument questionnaire)
@@ -306,7 +310,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.TextList
         };
 
-     
+
 
         private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
         {
@@ -325,13 +329,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static IEnumerable<ValidationCondition> GetValidationConditionsOrEmpty(IComposite entity)
         {
-            var entityAsIConditional = entity as IValidatable;
-
-            return entityAsIConditional != null
+            return entity is IValidatable entityAsIConditional
                 ? entityAsIConditional.ValidationConditions
                 : Enumerable.Empty<ValidationCondition>();
         }
-        
+
         private static bool ValidationMessageIsTooLong(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => validationCondition.Message?.Length > 250;
 
@@ -342,7 +344,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             foreach (var question in categoricalQuestions)
             {
                 var optionsWithNotEqualsNumericValueAndTitle = question.Answers
-                    .Select((option, index) => new {
+                    .Select((option, index) => new
+                    {
                         value = option.AnswerValue.ParseIntOrNull(),
                         title = option.AnswerText.ParseIntOrNull(),
                         index = index,
@@ -363,14 +366,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
         private IEnumerable<QuestionnaireEntityReference[]> QuestionsHasSameCategories(MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var questionsWithDuplicates  = new HashSet<Guid>();
+            var questionsWithDuplicates = new HashSet<Guid>();
 
             foreach (var question in questionnaire.Find<ICategoricalQuestion>())
             {
                 var categories = question.Answers?.Where(y => y.HasValue())?.ToArray();
 
-                if(categories == null || categories.Length == 0) continue;
-                if(questionsWithDuplicates.Contains(question.PublicKey)) continue;
+                if (categories == null || categories.Length == 0) continue;
+                if (questionsWithDuplicates.Contains(question.PublicKey)) continue;
 
                 var duplicatedQuestionsByCategories = questionnaire
                     .Find<ICategoricalQuestion>(x =>
@@ -415,7 +418,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     yield return LinkedQuestionReferencesNotExistingQuestion(linkedQuestion);
                     continue;
                 }
-                
+
                 var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
                 if (sourceQuestion == null)
                 {
@@ -459,7 +462,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
             {
-                if(!questionLinkedOnRoster.LinkedToRosterId.HasValue)
+                if (!questionLinkedOnRoster.LinkedToRosterId.HasValue)
                     throw new InvalidOperationException("Invalid value.");
 
                 var sourceRoster = questionnaire.Find<IGroup>(questionLinkedOnRoster.LinkedToRosterId.Value);
@@ -523,7 +526,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool SpecialValuesHasNonIntegerOptionsValues(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return OptionsHaveNonIntegerValues(question.Answers);
+            return OptionsHaveNonIntegerValues(question.Answers, a => a.AnswerValue);
         }
 
         private static bool SpecialValuesHasOptionsWithLongTexts(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -531,12 +534,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return OptionsHasLongText(question.Answers);
         }
 
-        private bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 
+        private bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
         private static bool SpecialValuesCountMoreThanMaxOptionCount(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return  question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
+            return question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
 
         private static bool SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -548,7 +551,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var rosterLimit = questionnaire.Questionnaire.IsTriggerForLongRoster(question) ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
 
-            return  question.Answers.Any(x => x.GetParsedValue() > rosterLimit);
+            return question.Answers.Any(x => x.GetParsedValue() > rosterLimit);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldBeInRange1And60(IQuestion question,
@@ -563,7 +566,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return false;
             return !Enumerable.Range(1, Constants.MaxLongRosterRowCount).Contains(rosterSizeQuestionMaxValue.Value);
         }
-       
+
 
         private static int? GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options(IQuestion question)
         {
@@ -581,7 +584,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return !string.IsNullOrWhiteSpace(question.Properties?.OptionsFilterExpression) && questionnaire.Questionnaire.IsPreFilledQuestion(question);
         }
 
-       
         private static bool LinkedQuestionIsInterviewersOnly(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
@@ -594,7 +596,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (question.Answers != null && question.CascadeFromQuestionId.HasValue)
             {
-                var enumerable = question.Answers.Select(x => new {x.AnswerText, x.ParentValue})
+                var enumerable = question.Answers.Select(x => new { x.AnswerText, x.ParentValue })
                     .Distinct().ToList();
                 var uniqueCount = enumerable.Count();
                 var result = uniqueCount != question.Answers.Count;
@@ -612,7 +614,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (question.CascadeFromQuestionId == null)
-                return new EntityVerificationResult<SingleQuestion> {HasErrors = false};
+                return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
 
             var referencedEntities = new HashSet<SingleQuestion>();
 
@@ -640,7 +642,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 referencedEntities.Add(ancestor);
             }
 
-            return new EntityVerificationResult<SingleQuestion> {HasErrors = false};
+            return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
         }
 
         private static bool CascadingQuestionReferencesMissingParent(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -653,34 +655,47 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool CategoricalQuestionHasOptionsWithLongTexts(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
+            if (question.CategoriesId != null)
+            {
+                List<CategoriesItem>? options = GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value);
+                return options.Any(option => !(option.Text.Length >= 1 && option.Text.Length <= MaxOptionLength));
+            }
+
             return OptionsHasLongText(question.Answers);
         }
 
         private static bool OptionsHasLongText(List<Answer> options)
         {
             if (options == null)
+            {
                 return false;
-
+            }
             return options.Any(option => !(option.AnswerText.Length >= 1 && option.AnswerText.Length <= MaxOptionLength));
         }
 
         private bool CategoricalQuestionHasNonIntegerOptionsValues(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return OptionsHaveNonIntegerValues(question.Answers);
+            if (question.CategoriesId != null)
+            {
+                return false;
+            }
+
+            return OptionsHaveNonIntegerValues(question.Answers, a => a.AnswerValue);
         }
 
-        private static bool OptionsHaveNonIntegerValues(List<Answer> answers)
+        private static bool OptionsHaveNonIntegerValues<T>(List<T> answers, Func<T, string> getter)
         {
             if (answers == null)
                 return false;
 
             foreach (var option in answers)
             {
-                if (string.IsNullOrWhiteSpace(option.AnswerValue))
+                var value = getter(option);
+
+                if (string.IsNullOrWhiteSpace(value))
                     continue;
 
-                int optionValue;
-                if (!int.TryParse(option.AnswerValue, out optionValue))
+                if (!int.TryParse(value, out _))
                 {
                     return true;
                 }
@@ -693,11 +708,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
-                return new EntityVerificationResult<IComposite> {HasErrors = false};
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             var parentQuestion = questionnaire.Find<IQuestion>(question.CascadeFromQuestionId.Value);
             if (parentQuestion == null)
-                return new EntityVerificationResult<IComposite> {HasErrors = false};
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             var parentRosters = questionnaire.Questionnaire.GetRosterScope(parentQuestion);
             var questionRosters = questionnaire.Questionnaire.GetRosterScope(question);
@@ -708,11 +723,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return new EntityVerificationResult<IComposite>
                 {
                     HasErrors = true,
-                    ReferencedEntities = new IComposite[] {question, parentQuestion},
+                    ReferencedEntities = new IComposite[] { question, parentQuestion },
                 };
             }
 
-            return new EntityVerificationResult<IComposite> {HasErrors = false};
+            return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
 
@@ -722,11 +737,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             bool hasErrors = false;
 
             if (categoricalQuestion == null || !question.CascadeFromQuestionId.HasValue)
-                return new EntityVerificationResult<IComposite> {HasErrors = hasErrors};
+                return new EntityVerificationResult<IComposite> { HasErrors = hasErrors };
 
             var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
             if (parentQuestion == null)
-                return new EntityVerificationResult<IComposite> {HasErrors = hasErrors};
+                return new EntityVerificationResult<IComposite> { HasErrors = hasErrors };
 
             if (!categoricalQuestion.CategoriesId.HasValue && !parentQuestion.CategoriesId.HasValue)
             {
@@ -734,29 +749,29 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     parentQuestion.Answers.Any(
                         parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
             }
-            else if(categoricalQuestion.CategoriesId.HasValue && !parentQuestion.CategoriesId.HasValue)
+            else if (categoricalQuestion.CategoriesId.HasValue && !parentQuestion.CategoriesId.HasValue)
             {
-                var categories = this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value)
-                    .Select(x => new {x.Id, x.ParentId}).ToList();
+                var categories = this.GetCategoriesItem(document.PublicKey, categoricalQuestion.CategoriesId.Value)
+                    .Select(x => new { x.Id, x.ParentId }).ToList();
 
                 hasErrors = !categories.All(childAnswer =>
                     parentQuestion.Answers.Any(
                         parentAnswer => parentAnswer.GetParsedValue() == childAnswer.ParentId));
             }
-            else if(!categoricalQuestion.CategoriesId.HasValue && parentQuestion.CategoriesId.HasValue)
+            else if (!categoricalQuestion.CategoriesId.HasValue && parentQuestion.CategoriesId.HasValue)
             {
-                var parentCategories = this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value)
-                    .Select(x => new {x.Id, x.ParentId}).ToList();
+                var parentCategories = this.GetCategoriesItem(document.PublicKey, parentQuestion.CategoriesId.Value)
+                    .Select(x => new { x.Id, x.ParentId }).ToList();
 
                 hasErrors = !question.Answers.All(childAnswer =>
                     parentCategories.Any(parentAnswer => parentAnswer.Id == childAnswer.GetParsedParentValue()));
             }
-            else if(categoricalQuestion.CategoriesId != null && parentQuestion.CategoriesId != null)
+            else if (categoricalQuestion.CategoriesId != null && parentQuestion.CategoriesId != null)
             {
-                var categories = 
-                    this.categoriesService.GetCategoriesById(document.PublicKey, categoricalQuestion.CategoriesId.Value);
-                var parentCategories = 
-                    this.categoriesService.GetCategoriesById(document.PublicKey, parentQuestion.CategoriesId.Value);
+                var categories =
+                    this.GetCategoriesItem(document.PublicKey, categoricalQuestion.CategoriesId.Value);
+                var parentCategories =
+                    this.GetCategoriesItem(document.PublicKey, parentQuestion.CategoriesId.Value);
 
                 hasErrors = !categories.All(child => parentCategories.Any(parent => child.ParentId == parent.Id));
             }
@@ -764,7 +779,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return new EntityVerificationResult<IComposite>
             {
                 HasErrors = hasErrors,
-                ReferencedEntities = new List<IComposite> {question, parentQuestion}
+                ReferencedEntities = new List<IComposite> { question, parentQuestion }
             };
         }
 
@@ -781,11 +796,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool CategoricalOptionsCountMoreThanMaxOptionCount(ICategoricalQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if(question.CascadeFromQuestionId.HasValue) return false;
+            if (question.CascadeFromQuestionId.HasValue) return false;
             if (questionnaire.Questionnaire.IsFilteredComboboxQuestion(question)) return false;
 
             if (question.CategoriesId.HasValue)
-                return this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count() > MaxOptionsCountInCategoricalOptionQuestion;
+                return this.GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count() > MaxOptionsCountInCategoricalOptionQuestion;
 
             return question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
@@ -799,7 +814,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return !isExistReusableCategory;
         }
 
-        private static bool FilteredComboboxContainsMoreThanMaxOptions(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 
+        private static bool FilteredComboboxContainsMoreThanMaxOptions(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire.Questionnaire.IsFilteredComboboxQuestion(question) && question.Answers?.Count > MaxOptionsCountInFilteredComboboxQuestion;
 
         private static bool CategoricalQuestionIsLinked(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -808,7 +823,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                    (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private bool SpecialValueTitlesMustBeUnique(INumericQuestion question, 
+        private bool SpecialValueTitlesMustBeUnique(INumericQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire) => HasUniqueOptionTitles(question, questionnaire.PublicKey);
 
         private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
@@ -817,7 +832,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
                 return false;
 
-            if (question.CascadeFromQuestionId.HasValue) 
+            if (question.CascadeFromQuestionId.HasValue)
                 return false;
 
             return HasUniqueOptionTitles(question, questionnaire.PublicKey);
@@ -827,7 +842,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
             {
-                return this.categoriesService.GetCategoriesById(questionnaireId, categoriesQuestion.CategoriesId.Value)
+                return this.GetCategoriesItem(questionnaireId, categoriesQuestion.CategoriesId.Value)
                     .Where(x => x.Text != null)
                     .GroupBy(x => x.Text.Trim())
                     .Any(x => x.Count() > 1);
@@ -844,7 +859,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!question.CascadeFromQuestionId.HasValue)
                 return OptionsHaveUniqueValues(question, questionnaire.PublicKey);
 
-            if (CascadingHasCircularReference((SingleQuestion) question, questionnaire).HasErrors) return false;
+            if (CascadingHasCircularReference((SingleQuestion)question, questionnaire).HasErrors) return false;
 
             var list = new List<int[]>();
             var parentQuestions = new List<ICategoricalQuestion>();
@@ -863,11 +878,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (question.CategoriesId.HasValue) return false;
 
-            var categories = question.Answers.Select(x => new {Id = (int) x.GetParsedValue(), ParentId = x.GetParsedParentValue()}).ToList();
+            var categories = question.Answers.Select(x => new { Id = (int)x.GetParsedValue(), ParentId = x.GetParsedParentValue() }).ToList();
 
             foreach (var questionAnswer in categories)
             {
-                var valueAndParentValues = new List<int> {questionAnswer.Id};
+                var valueAndParentValues = new List<int> { questionAnswer.Id };
                 var parsedParentValue = questionAnswer.ParentId;
 
                 if (parsedParentValue != null)
@@ -882,7 +897,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                         continue;
                     }
 
-                    parsedParentValue = parentQuestion.Answers.Find(x => (int) x.GetParsedValue() == lastParentId)?.GetParsedParentValue();
+                    parsedParentValue = parentQuestion.Answers.Find(x => (int)x.GetParsedValue() == lastParentId)?.GetParsedParentValue();
 
                     if (parsedParentValue != null)
                         valueAndParentValues.Add(parsedParentValue.Value);
@@ -904,7 +919,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (question is ICategoricalQuestion categoriesQuestion && categoriesQuestion.CategoriesId.HasValue)
             {
-                return this.categoriesService.GetCategoriesById(questionnaireId, categoriesQuestion.CategoriesId.Value)
+                return this.GetCategoriesItem(questionnaireId, categoriesQuestion.CategoriesId.Value)
                     .GroupBy(x => x.Id)
                     .Any(x => x.Count() > 1);
             }
@@ -939,7 +954,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) return false;
 
             if (question.CategoriesId.HasValue)
-                return question.MaxAllowedAnswers.Value > this.categoriesService.GetCategoriesById(questionnaire.PublicKey, question.CategoriesId.Value).Count();
+                return question.MaxAllowedAnswers.Value > this.GetCategoriesItem(questionnaire.PublicKey, question.CategoriesId.Value).Count();
 
             return (question.MaxAllowedAnswers.Value > question.Answers.Count);
         }
@@ -1034,7 +1049,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 where verificationResult.HasErrors
                 select QuestionnaireVerificationMessage.Error(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
-        
+
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
             where TEntity : class, IComposite
         {
@@ -1180,7 +1195,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
-            
+
             var entityToSubstitute = GetEntityByVariable(substitutionReference, questionnaire);
             if (entityToSubstitute == null) return null;
 
@@ -1197,6 +1212,18 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return null;
+        }
+
+        private List<CategoriesItem> GetCategoriesItem(Guid questionnaire, Guid category)
+        {
+            if (categoriesCache.TryGetValue((questionnaire, category), out var items))
+            {
+                return items;
+            }
+
+            items = this.categoriesService.GetCategoriesById(questionnaire, category).ToList();
+            categoriesCache.Add((questionnaire, category), items);
+            return items;
         }
 
         private static IComposite GetEntityByVariable(string identifier, MultiLanguageQuestionnaireDocument questionnaire)

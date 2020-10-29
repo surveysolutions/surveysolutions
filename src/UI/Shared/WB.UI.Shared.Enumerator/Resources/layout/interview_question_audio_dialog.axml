@@ -61,9 +61,11 @@
       local:MvxBind="Text Duration;"/>
 
     <Button style="@style/Link_Button"
+            android:id="@+id/btn_AudioDialog_Cancel"
             local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
     <Button
       style="@style/Done_Button"
+      android:id="@+id/btn_AudioDialog_Done"
       local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
   </LinearLayout>
 </LinearLayout>

@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (interview == null)
             {
                 logger.Error("Interview is null. interviewId: " + InterviewId);
-                await viewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                await ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
                 return;
             }
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public virtual Task NavigateToPreviousViewModelAsync()
         {
-            return this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            return this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
         }
 
         public Task StartInterviewAsync() => this.startButton.StartInterviewCommand.ExecuteAsync();
