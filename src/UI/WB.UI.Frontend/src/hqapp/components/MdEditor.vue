@@ -56,8 +56,8 @@ export default {
     },
 
     mounted() {
-        var val = this.value
-        this.initialValue = this.value
+        let val = this.value
+        this.initialValue = val
         if (this.supportHtml != true) {
             val = unescape(val)
         }
@@ -65,8 +65,13 @@ export default {
     },
     watch:{
         value(newValue, oldValue) {
-            if (newValue != this.value || newValue == this.initialValue) {
-                this.$refs.mdEditor.invoke('setMarkdown', newValue)
+            let val = newValue
+            if (val != this.value || val == this.initialValue) {
+                if (this.supportHtml != true) {
+                    val = unescape(val)
+                }
+
+                this.$refs.mdEditor.invoke('setMarkdown', val)
             }
         },
     },
@@ -81,6 +86,12 @@ export default {
             if(this.value != markDown) {
                 this.$emit('input', markDown)
             }
+        },
+        refresh() {
+            var self = this
+            setTimeout(() => {
+                this.$refs.mdEditor.invoke('moveCursorToStart')
+            }, 100)
         },
     },
 }
