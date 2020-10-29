@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             var identity = await GenerateInterviewerIdentity(credentials, token);
 
-            await this.viewModelNavigationService
+            await this.ViewModelNavigationService
                 .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(
                     new RelinkDeviceViewModelArg { Identity = identity });
         }

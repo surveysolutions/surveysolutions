@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             #endregion Overrides of Filter
         }
 
-        public Func<object, string, bool> DefaultFilterPredicate = (item, filterString) => item.ToString().ToLowerInvariant().Contains(filterString.ToLowerInvariant());
+        public Func<object, string, bool> DefaultFilterPredicate = (item, filterString) => string.IsNullOrEmpty(filterString) || item.ToString().ToLowerInvariant().Contains(filterString.ToLowerInvariant());
         public Func<object, string, bool> FilterPredicate { get; set; }
 
         protected virtual IEnumerable FilterValues(string constraint)

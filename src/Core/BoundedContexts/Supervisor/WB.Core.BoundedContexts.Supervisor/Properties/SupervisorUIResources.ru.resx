@@ -143,18 +143,21 @@
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Загружено {0} из {1}</value>
   </data>
-    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+  <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
     <value>Синхронизировать с Хедквотером</value>
   </data>
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
     <value>Синхронизировать с Интервьюерами</value>
   </data>
-    <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
+  <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
     <value>Загрузка обновлений для интервьюер приложения</value>
     <comment>Загрузка обновлений для интервьюер приложения</comment>
   </data>
-    <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
+  <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
     <value>Загрузка обновлений. {0} из {1} загружено</value>
     <comment>Загрузка обновлений. {0} из {1} загружено</comment>
+  </data>
+  <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>Текущий интервьюер, ответственный за интервью не буюден уведомлен об утверждении до следующей синхронизации. Если работа будет начата к тому моменту, то все введенные данные будут утеряны!</value>
   </data>
 </root>

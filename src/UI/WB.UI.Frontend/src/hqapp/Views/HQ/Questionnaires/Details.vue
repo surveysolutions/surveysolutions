@@ -71,7 +71,7 @@
                             <td>
                                 <ul class="list-unstyled">
                                     <li>
-                                        <a :href="model.mainPdfUrl">{{$t('WebInterview.Original_Language')}}</a>
+                                        <a :href="model.mainPdfUrl">{{getDefaultTranslationName()}}</a>
                                     </li>
                                     <li
                                         v-for="lang in model.translatedPdfVersions"
@@ -177,6 +177,11 @@ export default {
         },
         cancelSetAudio() {
             this.audioAudit = false
+        },
+        getDefaultTranslationName(){
+            if (this.model.defaultLanguageName === null || this.model.defaultLanguageName === undefined || this.model.defaultLanguageName === '')
+                this.$t('WebInterview.Original_Language')
+            return this.model.defaultLanguageName
         },
     },
 }

@@ -1,10 +1,10 @@
+#nullable enable
 using System;
 using Android.OS;
 using Android.Views;
 using AndroidX.Core.Widget;
 using Java.Lang;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using Object = Java.Lang.Object;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -12,7 +12,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.interview_cover_screen;
 
-        private class InnerRunnable : Object, IRunnable
+        private class InnerRunnable :  Java.Lang.Object, IRunnable
         {
             private readonly Action action;
 
@@ -36,16 +36,20 @@ namespace WB.UI.Shared.Enumerator.Activities
             var nestedScrollView = view.FindViewById<NestedScrollView>(Resource.Id.tv_coverNestedScrollView);
             nestedScrollView?.Post(new InnerRunnable(() =>
             {
-                var entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
-                var parent = (View) entityControl?.Parent;
-                if (parent != null)
+                View? entityControl = nestedScrollView.FindViewWithTag($"tv_Title_{ViewModel.ScrollToIdentity}");
+                if (entityControl != null)
                 {
-                    var topOffset = entityControl.Top + parent.Top;
-                    nestedScrollView.ScrollTo(0, topOffset);
+                    View? parent = (View?) entityControl.Parent;
+                    if (parent != null)
+                    {
+                        {
+                            var topOffset = entityControl.Top + parent.Top;
+                            nestedScrollView.ScrollTo(0, topOffset);
+                        }
+                    }
+
+                    this.ViewModel.ScrollToIdentity = null;
                 }
-
-                this.ViewModel.ScrollToIdentity = null;
-
             }));
         }
     }

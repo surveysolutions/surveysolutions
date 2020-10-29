@@ -109,7 +109,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             Assignment assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
                 return NotFound();
-            var result = this.mapper.Map<FullAssignmentDetails>(assignment);
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
+
+            var result = this.mapper.Map<FullAssignmentDetails>(assignment, o => o.Items["questionnaire"] = questionnaire);
             return result;
         }
 
@@ -197,7 +200,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
-        //[ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public ActionResult<CreateAssignmentResult> Create(
             [FromBody] CreateAssignmentApiRequest createItem)
         {
@@ -241,7 +243,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             var assignmentToImport =
-                this.assignmentsImportService.ConvertToAssignmentToImport(assignmentRows, questionnaire, null);
+                this.assignmentsImportService.ConvertToAssignmentToImport(assignmentRows, questionnaire, createItem.ProtectedVariables);
 
             var importError = this.verifier.VerifyWithInterviewTree(assignmentToImport.Answers,
                 this.authorizedUser.Id, questionnaire);

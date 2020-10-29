@@ -29,12 +29,20 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>InterviewMessages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\SupervisorUIResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SupervisorUIResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Properties\InterviewMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\SupervisorUIResources.resx">
+      <LastGenOutput>SupervisorUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

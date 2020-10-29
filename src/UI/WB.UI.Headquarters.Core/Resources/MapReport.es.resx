@@ -132,4 +132,10 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Ver contenido de la entrevista</value>
   </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Asignación</value>
+  </data>
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>No hay preguntas de tipo GPS en el cuestionario seleccionado</value>
+  </data>
 </root>

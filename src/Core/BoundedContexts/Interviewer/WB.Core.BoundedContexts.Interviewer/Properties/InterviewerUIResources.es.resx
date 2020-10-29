@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>La aplicación Interviewer no puede determinar el estado del Bluetooth (encendido/apagado, conectado/desconectado). Reinicie los dispositivos de el entrevistador y el supervisor primero y despues  intente sincronizar nuevamente.</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Verifique que el dispositivo del Supervisor tenga WiFi y Bluetooth activados y que se encuentre cerca</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Asegúrese que ambos dispositivos se encuentran cerca. Tanto el WIFI como el Bluetooth deben estar encendidos en ambos dispositivos. La aplicación del Supervisor debe estar abierta en el dispositivo. </value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Conectado al dispositivo del supervisor</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Esperando la aprobación de la conexión del supervisor</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Se encontró el dispositivo del supervisor. Solicitando conexión</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Buscando el dispositivo del supervisor</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Trasladando todas las entrevistas completadas al dispositivo del Supervisor.</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Trasladar todas las entrevistas completadas a "{0}"</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Nota: esta acción llevará más tiempo de lo habitual, no apague este dispositivo</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Reintentar</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Algunas entrevistas se encuentran ahora en otro dispositivo.</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>No se ha iniciado la transferencia. No se puede localizar el dispositivo del supervisor</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>La transferencia se canceló en el segundo dispositivo.</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>La transferencia ha finalizado. Todas las entrevistas completadas ahora están en otro dispositivo</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>La transferencia ha finalizado. {0} entrevistas(s) han fallado en ser sincronizadas.</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Transferencia en progreso</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Transferencia fue abortada</value>
+  </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
 </root>

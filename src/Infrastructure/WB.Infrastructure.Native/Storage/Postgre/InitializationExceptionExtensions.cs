@@ -28,18 +28,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             
             if (e is PostgresException pe)
             {
-                return pe.SqlState switch
-                {
-                    // Invalid authorization
-                    "28P01" => NewDbException(Modules.ErrorDatabaseUnauthorized),
-                    
-                    // Database is starting up
-                    "57P03" => NewDbException(null, isTransient: true),
-                    _ => NewDbException(null, false)
-                };
+                // assume all other errors as transient
+                return NewDbException(pe.Message, true);
             }
 
-            if (e is NpgsqlException npe)
+            if (e is NpgsqlException)
             {
                 return NewDbException(Modules.ErrorConnectingToDatabase, true);
             }

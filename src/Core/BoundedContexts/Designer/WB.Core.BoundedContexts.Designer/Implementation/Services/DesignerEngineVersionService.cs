@@ -206,7 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 31,
                 NewFeatures = new[]
                 {
                     new QuestionnaireFeature
@@ -234,7 +234,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         description: "Translated questionnaire title"
                     ),
                 }
+            },
+            new QuestionnaireContentVersion
+            {
+            Version = ApiVersion.MaxQuestionnaireVersion,
+            NewFeatures = new []
+            {
+                new QuestionnaireFeature
+                (
+                    hasQuestionnaire: questionnaire => 
+                        questionnaire.FirstOrDefault<IQuestion>(x => x.IsFilteredCombobox == true && (x.LinkedToQuestionId != null || x.LinkedToRosterId != null)) != null,
+                    description: "Linked question displayed as combobox"
+                ),
             }
+        },
         };
 
         private bool HasTranslatedTitle(QuestionnaireDocument questionnaire)

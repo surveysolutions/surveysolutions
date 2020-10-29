@@ -2442,5 +2442,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private bool IsCoverPage(Guid publicKey) => publicKey == QuestionnaireDocument.CoverPageSectionId;
+
+        public void MigrateToNewVersion(MigrateToNewVersion command)
+        {
+            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            if (QuestionnaireDocument.IsCoverPageSupported)
+                throw new QuestionnaireException(DomainExceptionType.MigrateToNewVersion, ExceptionMessages.QuestionnaireAlreadySupportedCover);
+
+            var cover = CreateGroup(QuestionnaireDocument.CoverPageSectionId, QuestionnaireEditor.CoverPageSection, String.Empty, String.Empty, String.Empty, false);
+            this.innerDocument.Insert(0, cover, null);
+
+            var featuredQuestions = QuestionnaireDocument.Children
+                .TreeToEnumerableDepthFirst(c => c.Children)
+                .Where(entity => entity is IQuestion question && question.Featured)
+                .Reverse()
+                .ToList();
+
+            var coverId = QuestionnaireDocument.CoverPageSectionId;
+            foreach (var question in featuredQuestions)
+            {
+                QuestionnaireDocument.MoveItem(question.PublicKey, coverId, 0);
+            }
+        }
     }
 }

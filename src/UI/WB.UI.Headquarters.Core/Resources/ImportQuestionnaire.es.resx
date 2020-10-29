@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageHeader" xml:space="preserve">
-    <value>Seleccione un cuestionario a importar</value>
+    <value>Use sus credenciales de Survey Solutions Designer para acceder a sus cuestionarios.</value>
   </data>
   <data name="QuestionnaireCannotBeFound" xml:space="preserve">
     <value>El cuestionario solicitado no pudo ser encontrado. Por favor actualice la lista de cuestionarios</value>
@@ -133,9 +133,9 @@
     <value>Creado por</value>
   </data>
   <data name="Table_LastModified" xml:space="preserve">
-    <value>Ultima modificación</value>
+    <value>Última modificación</value>
   </data>
   <data name="Table_Title" xml:space="preserve">
-    <value>titulo</value>
+    <value>título</value>
   </data>
 </root>
