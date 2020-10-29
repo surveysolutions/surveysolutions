@@ -74,6 +74,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation;
@@ -268,7 +269,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<SampleImportSettings>(() => sampleImportSettings);
 
-            
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
             registry.BindAsSingleton<IQuestionnaireImportStatuses, QuestionnaireImportStatuses>();
@@ -350,6 +350,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<SendInterviewCompletedJob>();
+            
+            registry.Bind<CalendarEvent>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -435,6 +437,14 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
+            
+            CommandRegistry
+                .Setup<CalendarEvent>()
+                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
+                .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent)
+                .StatelessHandles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent);
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration
                 .PreProcessBy<InterviewCacheWarmupPreProcessor>()
