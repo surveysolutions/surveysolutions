@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -21,15 +21,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IAudioService audioAuditService, 
             IAudioAuditFileStorage audioAuditFileStorage, 
             IPermissionsService permissions,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            ILogger logger)
         {
             this.audioAuditService = audioAuditService;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.logger = logger;
         }
 
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ILogger logger;
 
         public async Task StartAudioRecordingAsync(Guid interviewId)
         {
@@ -41,7 +44,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public void StopAudioRecording(Guid interviewId)
         {
-            audioAuditService.StopAuditRecording();
+            try
+            {
+                audioAuditService.StopAuditRecording();
+            }
+            catch (Exception e)
+            {
+                logger.Trace("Exception during stop of audio recording", e);
+            }
+
             CheckAndProcessAllAuditFiles();
         }
 
