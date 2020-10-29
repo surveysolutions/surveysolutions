@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 Status = SynchronizationStatus.Download
             });
 
-            await this.permissions.AssureHasPermission(Permission.Storage);
+            await this.permissions.AssureHasPermissionOrThrow<StoragePermission>().ConfigureAwait(false);
 
             var apksBySupervisorAppVersion = this.PreparePathToInterviewerApksDirectoryBySupervisorAppVersion();
 

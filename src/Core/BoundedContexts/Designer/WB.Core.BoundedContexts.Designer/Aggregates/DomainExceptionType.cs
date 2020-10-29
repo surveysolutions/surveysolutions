@@ -163,5 +163,6 @@
         CoverSectionMustBeFirst,
         CanNotAddElementToCoverPage,
         CanNotEditElementIntoCoverPage,
+        MigrateToNewVersion,
     }
 }

@@ -1,24 +1,23 @@
 ﻿using System;
-using Plugin.Permissions.Abstractions;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     public class MissingPermissionsException : Exception
     {
-        public Permission Permission { get; }
+        public Type PermissionType { get; }
 
         public MissingPermissionsException()
         {
         }
 
-        public MissingPermissionsException(string message, Permission permission) : base(message)
+        public MissingPermissionsException(string message, Type permissionType) : base(message)
         {
-            this.Permission = permission;
+            this.PermissionType = permissionType;
         }
 
-        public MissingPermissionsException(string message, Permission permission, Exception inner) : base(message, inner)
+        public MissingPermissionsException(string message, Type permissionType, Exception inner) : base(message, inner)
         {
-            this.Permission = permission;
+            this.PermissionType = permissionType;
         }
     }
 }

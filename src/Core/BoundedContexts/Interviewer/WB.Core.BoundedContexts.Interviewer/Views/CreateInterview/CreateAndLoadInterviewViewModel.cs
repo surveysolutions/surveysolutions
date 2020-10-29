@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             var interviewId = await CreateInterviewAsync(this.AssignmentId, this.InterviewId);
             if (!interviewId.HasValue)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                await this.ViewModelNavigationService.NavigateToDashboardAsync();
                 return;
             }
 

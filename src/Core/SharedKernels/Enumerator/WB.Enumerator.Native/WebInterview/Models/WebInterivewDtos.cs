@@ -52,6 +52,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class InterviewLinkedSingleQuestion : LinkedCategoricalQuestion
     {
         public RosterVector Answer { get; set; }
+        public bool RenderAsCombobox { get; set; }
     }
 
     public class InterviewTextQuestion : GenericQuestion
@@ -82,6 +83,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class InterviewSingleOptionQuestion : CategoricalQuestion
     {
         public int? Answer { get; set; }
+        public bool RenderAsCombobox { get; set; }
     }
     
     public class InterviewFilteredQuestion : GenericQuestion

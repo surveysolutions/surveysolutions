@@ -8,7 +8,7 @@
                 :href="interviewersAndDevicesUrl"
                 class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-left"></span>
-                {{ $t('PeriodicStatusReport.BackToSupervisors') }}
+                {{ $t('PeriodicStatusReport.BackToTeams') }}
             </a>
         </div>
         <DataTables ref="table"
@@ -55,6 +55,11 @@ export default {
 
             return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`
         },
+        getLinkToSupervisorProfile(data, supervisorId){
+            const formatedNumber = this.formatNumber(data)
+
+            return `<a href='${this.$config.model.supervisorProfileUrl}/${supervisorId}'><hi>${formatedNumber}</hi></a>`
+        },
     },
     computed: {
         config() {
@@ -77,6 +82,10 @@ export default {
                         title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t('DevicesInterviewers.Teams'),
                         orderable: true,
                         render: function(data, type, row) {
+
+                            if(self.supervisorId && row.DT_RowClass == 'total-row') {
+                                return self.getLinkToSupervisorProfile(data, self.supervisorId)
+                            }
 
                             if(row.DT_RowClass == 'total-row') {
                                 return `<span>${data}</span>`

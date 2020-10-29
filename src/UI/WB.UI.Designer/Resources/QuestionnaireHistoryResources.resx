@@ -351,4 +351,8 @@
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
     <value>Imported questionnaire to Headquarters ({0}) as {2} by {1}</value>
   </data>
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>Cover page generated</value>
+
+  </data>
 </root>

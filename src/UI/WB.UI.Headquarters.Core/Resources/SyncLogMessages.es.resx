@@ -160,7 +160,7 @@
     <value>Descargar paquete de entrevista: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackages" xml:space="preserve">
-    <value>Descargar lista de paquetes de entrevista. &lt;/bar&gt; &lt;ul&gt; {1} &lt;/ul&gt;Ultima sincronización de paquetes: &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>Descargar lista de paquetes de entrevista. &lt;/bar&gt; &lt;ul&gt; {1} &lt;/ul&gt;Última sincronización de paquetes: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviews" xml:space="preserve">
     <value>Descargar lista de entrevistas.  &lt;/bar&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
@@ -196,7 +196,7 @@
     <value>Asocie un entrevistador al dispositivo</value>
   </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>No hay mas paquetes de entrevistas por descargar</value>
+    <value>No hay más paquetes de entrevistas por descargar</value>
   </data>
   <data name="PostPackage" xml:space="preserve">
     <value>Cargar entrevista: {0}</value>
@@ -209,5 +209,53 @@
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Actualizar entrevista: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, paquete: {1}, índice de ordenamiento: {2}&lt;/li&gt;</value>
+  </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>New application file requested</value>
+  </data>
+  <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Asignación &lt;b&gt; {0} &lt;/b&gt; recibida y almacenada por dispositivo</value>
+  </data>
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Compruebe si hay entrevistas duplicadas. Entrevista: &lt;pre&gt; {0} &lt;/pre&gt;</value>
+  </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Compruebe si hay entrevistas obsoletas. Solicitud: &lt;pre&gt; {0} &lt;/pre&gt;</value>
+  </data>
+  <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Descarga de categoría {0} reutilizable</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>Nuevo archivo de aplicación ampliado solicitado</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Archivo de revisión solicitado para la versión extendida {0}</value>
+  </data>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
+  </data>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Descargar cambios de entrevistas desde la sede: {0}</value>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>Descargar mapa: {0}</value>
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Descargar lista de mapas. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+  </data>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>No hay mapas para descargar</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Archivo de revisión solicitado para la versión {0}</value>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt; V3 &lt;/b&gt; Subir entrevista: {0}</value>
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>New Supervisor application file requested</value>
+  </data>
+  <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>Supervisor patch file requested for version {0}</value>
   </data>
 </root>

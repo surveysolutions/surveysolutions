@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
@@ -68,11 +69,8 @@ namespace WB.UI.Headquarters.Code
             {
                 script += $"window.CONFIG.title=\"{helper.ToSafeJavascriptMessage(titleString)}\"";
             }
-
-            var json = model != null ? JsonConvert.SerializeObject(model, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }) : "null";
+            
+            var json = model != null ? JsonConvert.SerializeObject(model, JavascriptSerializerSettings) : "null";
 
             return new HtmlString($@"<script>{script};window.CONFIG.model={json}</script>");
         }
@@ -121,8 +119,17 @@ namespace WB.UI.Headquarters.Code
             });
         }
 
-        private static Regex tabletVersionRegex = new Regex(@"org\.worldbank\.solutions\.(?<appname>\w+)/(?<version>[\d\.]+) \(build (?<build>\d+)\)", RegexOptions.Compiled);
-
+        private static Regex tabletVersionRegex = new Regex(@"org\.worldbank\.solutions\.(?<appname>\w+)/(?<version>[\d\.]+) \(build (?<build>\d+)\)", 
+            RegexOptions.Compiled);
+        
+        private static readonly JsonSerializerSettings JavascriptSerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            Converters = new List<JsonConverter>
+            {
+                new JsonJavaScriptEncodeConverter()   
+            }
+        };
 
         public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
         {

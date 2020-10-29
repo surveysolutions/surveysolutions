@@ -4,6 +4,7 @@ const path = require("path");
 const vendor = require("./build/vendor");
 const questionnaire = require("./build/questionnaire");
 const bundler = require("./build/bundler");
+const vue = require("./build/vue");
 
 const config = require("./build/config");
 const rimraf = require("rimraf");
@@ -16,13 +17,14 @@ module.exports = Object.assign(
     {
       vendor,
       questionnaire,
-      bundler
+      bundler, 
+      vue
     }, ":", true
   ),
   {
     default: series(
       cleanup,
-      parallel(vendor.default, bundler.default),
+      parallel(vendor.default, bundler.default, vue.default),
       questionnaire.default
     ),
     cleanup

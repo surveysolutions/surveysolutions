@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -22,5 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         VariableView? GetVariableEditView(QuestionnaireRevision questionnaireId, Guid variableId);
 
         Guid GetSectionIdForItem(QuestionnaireRevision questionnaireId, Guid? entityid);
+
+        CategoriesView? GetCategoriesView(QuestionnaireRevision questionnaireId, Guid entityid);
     }
 }

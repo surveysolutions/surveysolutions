@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireDownloader = questionnaireDownloader;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 
@@ -74,13 +74,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            await this.ViewModelNavigationService.NavigateToDashboardAsync();
             this.Dispose();
         });
-        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
+        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
     }

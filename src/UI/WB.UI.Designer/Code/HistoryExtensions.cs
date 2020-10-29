@@ -37,6 +37,9 @@ namespace WB.UI.Designer.Code
                 case QuestionnaireActionType.Revert:
                     text = ToRevertQuestionnireMessage(record);
                     break;
+                case QuestionnaireActionType.MigrateToNewVersion:
+                    text = QuestionnaireHistoryResources.MigratedNewCoverSupport;
+                    break;
                 case QuestionnaireActionType.Add:
                 case QuestionnaireActionType.Update:
                 case QuestionnaireActionType.Delete:

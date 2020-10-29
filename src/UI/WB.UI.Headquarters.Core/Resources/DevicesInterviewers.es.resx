@@ -124,7 +124,7 @@
     <value>Nunca se ha conectado</value>
   </data>
   <data name="NeverUploaded" xml:space="preserve">
-    <value>Nunca cargado</value>
+    <value>Nunca ha subido datos</value>
   </data>
   <data name="NoAssignments" xml:space="preserve">
     <value>No se han recibido asignaciones</value>
@@ -143,5 +143,11 @@
   </data>
   <data name="WrongDateOnTablet" xml:space="preserve">
     <value>La hora de la tableta está incorrecta</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Entrevistadores</value>
+  </data>
+  <data name="TeamSize" xml:space="preserve">
+    <value>Tamaño del equipo</value>
   </data>
 </root>

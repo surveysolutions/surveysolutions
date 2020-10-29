@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     internal static class BaseViewModelSetupMethods
     {
-        public static void Prepare(bool isAuthenticationRequired, IPrincipal principal, IViewModelNavigationService navigationService)
+        public static void CheckAuthentication(bool isAuthenticationRequired, IPrincipal principal, IViewModelNavigationService navigationService)
         {
             if (isAuthenticationRequired && !principal.IsAuthenticated)
             {

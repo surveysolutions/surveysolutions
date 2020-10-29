@@ -39,8 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var queue = new Queue<string>(emailIds);
 
             emailService
-                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Callback<string,string,string,string>((email, subject, html, text) => 
+                .Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<EmailAttachment>>()))
+                .Callback<string,string,string,string, List<EmailAttachment>>((email, subject, html, text, attachments) => 
                 {
                     sentEmails.Add(new SentEmailForTests
                     {

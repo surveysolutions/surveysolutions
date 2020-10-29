@@ -225,6 +225,27 @@
                     v-else>
                     <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {count: this.getFilteredToApprove().length, status1: 'Completed', status2: 'Approved by Supervisor', status3: 'Rejected by Supervisor'} )"></p>
                 </div>
+
+                <div class="form-group"
+                    v-if="CountReceivedByInterviewerItems() > 0">
+                    <br />
+                    <input
+                        type="checkbox"
+                        id="approveReceivedByInterviewer"
+                        v-model="isApproveReceivedByInterviewer"
+                        class="checkbox-filter"/>
+                    <label for="approveReceivedByInterviewer"
+                        style="font-weight: normal">
+                        <span class="tick"></span>
+                        {{$t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems())}}
+                    </label>
+                    <br />
+                    <span v-if="isApproveReceivedByInterviewer"
+                        class="text-danger">
+                        {{$t("Interviews.ApproveReceivedWarning")}}
+                    </span>
+                </div>
+
                 <div>
                     <label
                         for="txtStatusApproveComment">{{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:</label>
@@ -480,7 +501,7 @@ export default {
             unactiveDateStart: null,
             unactiveDateEnd: null,
             statuses: this.$config.model.statuses,
-
+            isApproveReceivedByInterviewer:false,
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
 
@@ -1004,6 +1025,12 @@ export default {
         approveInterviews() {
             const self = this
             var filteredItems = this.getFilteredToApprove()
+
+            if (!this.isApproveReceivedByInterviewer) {
+                filteredItems = this.arrayFilter(filteredItems, function(item) {
+                    return item.receivedByInterviewerAtUtc === null
+                })
+            }
 
             if (filteredItems.length == 0) {
                 this.$refs.approveModal.hide()

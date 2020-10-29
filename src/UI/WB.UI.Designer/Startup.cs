@@ -12,14 +12,15 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.SpaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Net.Http.Headers;
 using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
+using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -33,7 +34,6 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
-using WB.UI.Designer.HealthChecks;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
@@ -49,6 +49,7 @@ namespace WB.UI.Designer
 {
     public class Startup
     {
+        private const string SpaRoot = "questionnaire-app";
         internal const string WebTesterCorsPolicy = "_webTester";
         private readonly IWebHostEnvironment hostingEnvironment;
 
@@ -145,9 +146,9 @@ namespace WB.UI.Designer
                     return Task.CompletedTask;
                 };
             });
-            
+
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc()                    
+            services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddNewtonsoftJson(options =>
                 {
@@ -163,7 +164,7 @@ namespace WB.UI.Designer
                     var st = Configuration.GetSection("WebTester").GetValue<string>("BaseUri");
                     Uri uri = new Uri(st);
                     var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
-                    if (Regex.IsMatch(st, ":\\d+")) 
+                    if (Regex.IsMatch(st, ":\\d+"))
                     {
                         webTesterOrigin += ":" + uri.Port;
                     }
@@ -199,6 +200,7 @@ namespace WB.UI.Designer
                 opt.Password.RequiredLength = membershipSection.GetValue("RequiredLength", 6);
                 opt.User.RequireUniqueEmail = membershipSection.GetValue("RequireUniqueEmail", true);
             });
+
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));
             services.AddTransient<IEmailSender, MailSender>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
@@ -213,6 +215,12 @@ namespace WB.UI.Designer
             services.Configure<DeskSettings>(Configuration.GetSection("Desk"));
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = $"{SpaRoot}/dist";
+            });
 
             aspCoreKernel = new AspCoreKernel(services);
 
@@ -232,7 +240,7 @@ namespace WB.UI.Designer
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseExceptional();
-          
+
             if (!env.IsDevelopment())
             {
                 app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
@@ -258,25 +266,13 @@ namespace WB.UI.Designer
                     }
                 }
             });
-
-            if (env.IsDevelopment())
-            {
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    RequestPath = "/js/app",
-                    FileProvider = new PhysicalFileProvider(env.ContentRootPath + @"/questionnaire/scripts"),
-                    OnPrepareResponse = ctx =>
-                    {
-                        // remove cache
-                    }
-                });
-            }
+            app.UseSpaStaticFiles();
             
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
             app.UseCors(WebTesterCorsPolicy);
-            
+
             app.UseRequestLocalization(opt =>
             {
                 opt.DefaultRequestCulture = new RequestCulture("en-US");
@@ -300,7 +296,7 @@ namespace WB.UI.Designer
 
             app.UseRouting();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(routes =>
             {
                 routes.MapVersionEndpoint();
@@ -311,9 +307,27 @@ namespace WB.UI.Designer
                     defaults: new { action = "Index" });
 
                 routes.MapControllerRoute(
-                    name: "default", 
+                    name: "default",
                     pattern: "{controller=Questionnaire}/{action=Index}/{id?}");
                 routes.MapRazorPages();
+
+                if (env.IsDevelopment())
+                {
+                    routes.MapToVueCliProxy("{*path}", new SpaOptions
+                        {
+                            SourcePath = SpaRoot
+                        },
+                        port: 0,
+                        npmScript: "serve", //(System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
+                        regex: "Compiled successfully",
+                        forceKill: true
+                    );
+                }
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = SpaRoot;
             });
 
             if (aspCoreKernel == null) return;

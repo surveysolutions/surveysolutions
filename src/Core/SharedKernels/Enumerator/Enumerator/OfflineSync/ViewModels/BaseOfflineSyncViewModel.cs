@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.Services;
@@ -77,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             try
             {
-                await this.permissions.AssureHasPermission(Permission.Location);
+                await this.permissions.AssureHasPermissionOrThrow<LocationPermission>().ConfigureAwait(false);
             }
             catch (MissingPermissionsException)
             {

@@ -125,11 +125,6 @@
   
 
   <ItemGroup>
-    <Folder Include="Services\WebTester\" />
-  </ItemGroup> 
-  
-
-  <ItemGroup>
     <Compile Update="Resources\Common.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
