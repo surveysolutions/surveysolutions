@@ -150,9 +150,9 @@ export default {
             questionnaireVersion: null,
             assignmentId: null,
             editCalendarComment: null,
-            editCalendarDate : null,
             newCalendarDate : null,
-            interviewId : null,
+            calendarInterviewId : null,
+            calendarAssinmentId : null,
             draw: 0,
         }
     },
@@ -275,7 +275,7 @@ export default {
             }
         },
         selectedDate(){
-            return this.editCalendarDate
+            return this.newCalendarDate
         },
         datePickerConfig() {
             var self = this
@@ -284,9 +284,10 @@ export default {
                 minDate: 'today',
                 enableTime: true,
                 wrap: true,
+                dateFormat: 'Y-m-d',
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? selectedDates[0] : null
-                    if(start != null ){
+                    if(start != null && start != self.newCalendarDate){
                         self.newCalendarDate = start
                     }
                 },
@@ -308,8 +309,9 @@ export default {
             this.$refs.table.reload()
         },
 
-        editCalendarEvent(interviewId) {
+        editCalendarEvent(interviewId, assignmentId) {
             this.interviewId = interviewId
+            this.calendarAssinmentId = assignmentId
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
 
@@ -319,10 +321,12 @@ export default {
             this.$refs.editCalendarModal.hide()
 
             self.$store.dispatch('saveCalendarEvent', {
-                interviewId : self.interviewId,
-                id : '',
+                interviewId : self.calendarInterviewId,
+                assignmentId : self.calendarAssinmentId,
+                id : '', //calendar event id would be here
                 newDate : self.newCalendarDate,
                 comment : self.editCalendarComment,
+
                 callback: self.reload,
             })
         },
@@ -361,7 +365,7 @@ export default {
             menu.push({
                 name: self.$t('Common.EditCalendarEvent'),
                 className: canCalendarBeEdited ? 'primary-text' : '',
-                callback: () => self.editCalendarEvent(rowData.id),
+                callback: () => self.editCalendarEvent(rowData.id, rowData.assignmentId),
                 disabled: !canCalendarBeEdited,
             })
 

@@ -20,22 +20,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        
         #region Apply
 
         protected void Apply(CalendarEventCreated @event)
         {
             this.properties.PublicKey = this.EventSourceId;
-            
+
             this.properties.Start = @event.Start;
             this.properties.Comment = @event.Comment;
+
+            properties.InterviewId = @event.InterviewId;
+            properties.AssignmentId = @event.AssignmentId;
+            this.properties.CreatedAt = @event.OriginDate;
+            this.properties.UpdatedAt = @event.OriginDate;
         }
         
         protected void Apply(CalendarEventUpdated @event)
         {
             this.properties.Start = @event.Start;
             this.properties.Comment = @event.Comment;
+            
+            this.properties.UpdatedAt = @event.OriginDate;
         }
+        
+        protected void Apply(CalendarEventCompleted @event)
+        {
+            this.properties.IsCompleted = true;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+        
+        protected void Apply(CalendarEventDeleted @event)
+        {
+            this.properties.IsDeleted = true;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+        
         #endregion
 
         public void CreateCalendarEvent(CreateCalendarEventCommand command)
@@ -44,7 +63,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 userId: command.UserId,
                 originDate: command.OriginDate,
                 comment: command.Comment,
-                start: command.Start));
+                start: command.Start,
+                interviewId: command.InterviewId,
+                assignmentId: command.AssignmentId));
         }
         
         public void UpdateCalendarEvent(UpdateCalendarEventCommand command)
@@ -54,6 +75,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 originDate: command.OriginDate,
                 comment: command.Comment,
                 start: command.Start));
+        }
+
+        public void CompleteCalendarEvent(CompleteCalendarEventCommand command)
+        {
+            ApplyEvent(new CalendarEventCompleted(
+                userId: command.UserId,
+                originDate: command.OriginDate));
+        }
+        
+        public void DeleteCalendarEvent(DeleteCalendarEventCommand command)
+        {
+            ApplyEvent(new CalendarEventDeleted(
+                userId: command.UserId,
+                originDate: command.OriginDate));
         }
     }
 }
