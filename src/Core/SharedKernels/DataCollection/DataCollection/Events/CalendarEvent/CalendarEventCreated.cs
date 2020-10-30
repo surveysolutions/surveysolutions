@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.CalendarEvent
             string comment, 
             DateTimeOffset start,
             Guid? interviewId,
-            long assignmentId)
+            int assignmentId)
             : base(userId, originDate)
         {
             this.Comment = comment;
@@ -22,6 +22,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.CalendarEvent
 
         public Guid? InterviewId { get; set; }
 
-        public long AssignmentId { get; set; }
+        public int AssignmentId { get; set; }
     }
 }

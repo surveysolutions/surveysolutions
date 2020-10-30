@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -96,6 +97,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
+using CalendarEvent = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.CalendarEvent;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -184,6 +186,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentDenormalizer>();
             registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
+            
+            registry.Bind<CalendarEventDenormalizer>();
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
@@ -238,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IExportFactory, ExportFactory>();
 
             registry.RegisterDenormalizer<AssignmentDenormalizer>();
-
+            registry.RegisterDenormalizer<CalendarEventDenormalizer>();
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
             registry.RegisterDenormalizer<CompletedEmailDenormalizer>();
@@ -361,6 +365,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterFunctional<CumulativeChartDenormalizer>();
             registry.RegisterFunctional<AssignmentDenormalizer>();
             registry.Register<CompletedEmailDenormalizer>();
+            registry.RegisterFunctional<CalendarEventDenormalizer>();
             
             CommandRegistry
                 .Setup<Questionnaire>()
