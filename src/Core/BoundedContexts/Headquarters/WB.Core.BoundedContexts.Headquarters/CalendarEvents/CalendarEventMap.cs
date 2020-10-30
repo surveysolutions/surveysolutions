@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
     {
         public CalendarEventMap()
         {
-            Id(x => x.PublicKey, mapper => mapper.Column("PublicKey"));
+            Id(x => x.PublicKey, mapper => mapper.Column("EventId"));
             
             Property(x => x.Comment);
             Property(x => x.Start);
