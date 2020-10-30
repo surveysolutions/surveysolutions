@@ -284,9 +284,10 @@ export default {
                 minDate: 'today',
                 enableTime: true,
                 wrap: true,
-                dateFormat: 'Y-m-d',
+                static: true,
                 onChange: (selectedDates, dateStr, instance) => {
-                    const start = selectedDates.length > 0 ? selectedDates[0] : null
+                    const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+
                     if(start != null && start != self.newCalendarDate){
                         self.newCalendarDate = start
                     }
