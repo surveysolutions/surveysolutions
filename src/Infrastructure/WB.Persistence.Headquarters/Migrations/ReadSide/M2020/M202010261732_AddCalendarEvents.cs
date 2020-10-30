@@ -9,7 +9,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Create.Table("calendarevents")
-                .WithColumn("eventid").AsString(255).PrimaryKey()
+                .WithColumn("eventid").AsGuid().PrimaryKey()
                 .WithColumn("start").AsDateTime().Nullable()
                 .WithColumn("comment").AsString().Nullable()
                 .WithColumn("updatedate").AsDateTime().Nullable()
