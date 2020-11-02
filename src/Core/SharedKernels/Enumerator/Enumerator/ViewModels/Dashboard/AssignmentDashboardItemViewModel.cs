@@ -1,11 +1,18 @@
 ﻿#nullable enable
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using MvvmCross.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
@@ -49,34 +56,60 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             BindTitles();
             BindDetails();
             BindActions();
+            this.RaiseAllPropertiesChanged();
         }
 
         protected virtual void BindTitles()
         {
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, Assignment.Title, questionnaireIdentity.Version);
             IdLabel = "#" + Assignment.Id;
+            string subTitle;
 
             if (Assignment.Quantity.HasValue)
             {
                 if (InterviewsLeftByAssignmentCount == 1)
                 {
-                    SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
+                    subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
                 }
                 else
                 {
-                    SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
+                    subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
                         .FormatString(InterviewsLeftByAssignmentCount, Assignment.Quantity);
                 }
             }
             else
             {
-                SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
+                subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
                     .FormatString(Assignment.Quantity.GetValueOrDefault());
             }
+            
+            if (Assignment.CalendarEvent.HasValue && Assignment.Quantity == 1)
+            {
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, Assignment.CalendarEvent.Value.UtcDateTime);
+                string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
+                subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
+            }
+
+            this.SubTitle = subTitle;
         }
 
         protected virtual void BindActions()
         {
+            Actions.Clear();
+
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.SetCalendarEventAsync),
+                Label = EnumeratorUIResources.Dashboard_SetCalendarEvent
+            });
+
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxCommand(this.RemoveCalendarEvent, () => Assignment.CalendarEvent.HasValue),
+                Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
+            });
         }
 
         private void BindDetails()
@@ -107,6 +140,41 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             get => responsible;
             set => SetProperty(ref this.responsible, value);
+        }
+
+        protected async Task SetCalendarEventAsync()
+        {
+            var navigationService = serviceLocator.GetInstance<IViewModelNavigationService>();
+            await navigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(new CalendarEventViewModelArgs()
+            {
+                InterviewId = null,
+                AssignmentId = Assignment.Id,
+                CalendarEventId = Assignment.CalendarEventId,
+                Start = Assignment.CalendarEvent,
+                Comment = Assignment.CalendarEventComment,
+            });
+        }
+
+        protected void RemoveCalendarEvent()
+        {
+            if (Assignment.CalendarEventId == null)
+                throw new ArgumentException("Cant delete calendar event, because it didn't setup early");
+
+            var commandService = serviceLocator.GetInstance<ICommandService>();
+            var principal = serviceLocator.GetInstance<IPrincipal>();
+            var command = new DeleteCalendarEventCommand(Assignment.CalendarEventId.Value,
+                principal.CurrentUserIdentity.UserId);
+            commandService.Execute(command);
+        }
+
+        private string FormatDateTimeString(string formatString, DateTime? utcDateTimeWithOutKind)
+        {
+            if (!utcDateTimeWithOutKind.HasValue)
+                return string.Empty;
+
+            var utcDateTime = DateTime.SpecifyKind(utcDateTimeWithOutKind.Value, DateTimeKind.Utc);
+            var culture = CultureInfo.CurrentUICulture;
+            return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
 
         protected override void Dispose(bool disposing)

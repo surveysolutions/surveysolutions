@@ -40,6 +40,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 Label = EnumeratorUIResources.Dashboard_StartNewInterview
             });
+            
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.SetCalendarEventAsync, () => Assignment.Quantity == 1),
+                Label = EnumeratorUIResources.Dashboard_SetCalendarEvent
+            });
+
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxCommand(this.RemoveCalendarEvent, () => Assignment.Quantity == 1 && Assignment.CalendarEvent.HasValue),
+                Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
+            });
         }
 
         protected override void Dispose(bool disposing)

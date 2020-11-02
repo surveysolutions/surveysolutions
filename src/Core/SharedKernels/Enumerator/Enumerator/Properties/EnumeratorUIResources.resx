@@ -795,6 +795,15 @@ your next synchronization</value>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Discard</value>
   </data>
+  <data name="Dashboard_SetCalendarEvent" xml:space="preserve">
+    <value>Set calendar event</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Delete calendar event</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Plan to visit {0}</value>
+  </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
     <value>{0} question(s) answered</value>
   </data>

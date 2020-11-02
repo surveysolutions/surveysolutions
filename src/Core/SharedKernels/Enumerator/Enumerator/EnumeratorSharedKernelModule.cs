@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.Implementation.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -211,6 +212,14 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
                 .Handles<ResumeInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Resume)
                 .Handles<PauseInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Pause);
+
+            CommandRegistry
+                .Setup<CalendarEvent>()
+                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
+                .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent)
+                .StatelessHandles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent);
 
             return Task.CompletedTask;
         }

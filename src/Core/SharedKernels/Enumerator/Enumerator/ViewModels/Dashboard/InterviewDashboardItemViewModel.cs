@@ -7,6 +7,8 @@ using MvvmCross.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -36,6 +38,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         
         private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
             serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
+
+        private ICommandService CommandService =>
+            serviceLocator.GetInstance<ICommandService>();
+
+        private IPrincipal Principal =>
+            serviceLocator.GetInstance<IPrincipal>();
 
         protected ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetForType(typeof(InterviewDashboardItemViewModel));
 
@@ -73,6 +81,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             Actions.Add(new ActionDefinition
             {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.SetCalendarEventAsync, () => this.isInterviewReadyToLoad),
+                Label = EnumeratorUIResources.Dashboard_SetCalendarEvent
+            });
+
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxCommand(this.RemoveCalendarEvent, () => this.isInterviewReadyToLoad && interview.CalendarEvent.HasValue),
+                Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
+            });
+
+            Actions.Add(new ActionDefinition
+            {
                 ActionType = ActionType.Primary,
                 Command = new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad),
                 Label = MainLabel()
@@ -83,14 +105,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad && interview.CanBeDeleted),
                 Label = DiscardLabel()
-            });
-
-            Actions.Add(new ActionDefinition
-            {
-                ActionType = ActionType.Context,
-                Command = new MvxAsyncCommand(this.SetCalendarEventAsync, () => this.isInterviewReadyToLoad && interview.CanBeDeleted),
-                Label = "Calendar Event"
-
             });
 
             string MainLabel()
@@ -151,8 +165,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var dateComment = GetInterviewDateCommentByStatus(interview);
 
             string separator = !string.IsNullOrEmpty(comment) ? Environment.NewLine : string.Empty;
-            this.SubTitle = $"{dateComment}{separator}{comment}";
-            
+            var subTitle = $"{dateComment}{separator}{comment}";
+
+            if (interview.CalendarEvent.HasValue)
+            {
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, interview.CalendarEvent.Value.UtcDateTime);
+                string separatorVisit = !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
+                subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{interview.CalendarEventComment}";
+            }
+
+            this.SubTitle = subTitle;
+
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
                 : EnumeratorUIResources.Dashboard_CensusAssignment;
@@ -303,6 +326,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     Start = interview.CalendarEvent,
                     Comment = interview.CalendarEventComment,
                 });
+            }
+        }
+
+        private void RemoveCalendarEvent()
+        {
+            if (interview.Assignment.HasValue)
+            {
+                var command = new DeleteCalendarEventCommand(interview.CalendarEventId.Value,
+                    Principal.CurrentUserIdentity.UserId);
+                CommandService.Execute(command);
             }
         }
 
