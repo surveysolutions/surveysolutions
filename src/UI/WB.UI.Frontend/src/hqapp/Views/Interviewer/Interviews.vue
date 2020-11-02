@@ -102,6 +102,14 @@
                     {{ $t("Common.Save") }}</button>
                 <button
                     type="button"
+                    class="btn btn-danger"
+                    role="delete"
+                    :visible="calendarEventId != null"
+                    @click="deleteCalendarEvent">
+                    {{ $t("Common.Delete") }}</button>
+
+                <button
+                    type="button"
                     class="btn btn-link"
                     data-dismiss="modal"
                     role="cancel">{{ $t("Common.Cancel") }}</button>
@@ -131,6 +139,11 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       status
       receivedByInterviewerAtUtc
       actionFlags
+      calendarEvent {
+          publicKey
+          comment
+          start
+      }
       identifyingQuestions {
         question {
           questionText
@@ -151,6 +164,7 @@ export default {
             assignmentId: null,
             editCalendarComment: null,
             newCalendarDate : null,
+            calendarEventId : null,
             calendarInterviewId : null,
             calendarAssinmentId : null,
             draw: 0,
@@ -310,9 +324,10 @@ export default {
             this.$refs.table.reload()
         },
 
-        editCalendarEvent(interviewId, assignmentId) {
-            this.interviewId = interviewId
+        editCalendarEvent(interviewId, assignmentId, calendarEventId) {
+            this.calendarInterviewId = interviewId
             this.calendarAssinmentId = assignmentId
+            this.calendarEventId = calendarEventId
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
 
@@ -324,14 +339,19 @@ export default {
             self.$store.dispatch('saveCalendarEvent', {
                 interviewId : self.calendarInterviewId,
                 assignmentId : self.calendarAssinmentId,
-                id : '', //calendar event id would be here
+                id : self.calendarEventId, //calendar event id would be here
                 newDate : self.newCalendarDate,
                 comment : self.editCalendarComment,
 
                 callback: self.reload,
             })
         },
+        deleteCalendarEvent() {
+            const self = this
 
+            this.$refs.editCalendarModal.hide()
+
+        },
         contextMenuItems({rowData, rowIndex}) {
             const menu = []
             const self = this
@@ -366,7 +386,7 @@ export default {
             menu.push({
                 name: self.$t('Common.EditCalendarEvent'),
                 className: canCalendarBeEdited ? 'primary-text' : '',
-                callback: () => self.editCalendarEvent(rowData.id, rowData.assignmentId),
+                callback: () => self.editCalendarEvent(rowData.id, rowData.assignmentId, rowData.calendarEvent != null ? rowData.calendarEvent.publicKey : null),
                 disabled: !canCalendarBeEdited,
             })
 
@@ -461,6 +481,19 @@ export default {
                             .utc(data)
                             .local()
                             .format(DateFormats.dateTimeInList)
+                    },
+                    width: '180px',
+                },
+                {
+                    data: 'calendarEvent',
+                    title: this.$t('Assignments.CalendarEvent'),
+                    searchable: false,
+                    render(data) {
+                        if(data != null && data.start != null)
+                            return moment
+                                .utc(data.start)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
                     },
                     width: '180px',
                 },

@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         {
         }
 
-        public CalendarEvent(Guid publicKey, DateTimeOffset start, string comment, 
+        public CalendarEvent(Guid publicKey, DateTime start, string comment, 
             Guid? interviewId, int assignmentId, bool isCompleted, DateTimeOffset updateDate,
             Guid userId, string userName)
         {
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 
         public virtual Guid PublicKey { get; set; }
 
-        public virtual DateTimeOffset Start { set; get; }
+        public virtual DateTime Start { set; get; }
 
         public virtual string Comment { get; set; }
         
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         
         public virtual bool IsCompleted { get; set; }
         
-        public virtual DateTimeOffset UpdateDate { set; get; }
+        public virtual DateTime UpdateDate { set; get; }
         
         public virtual Guid UserId { get; set; }
         public virtual string UserName { get; set; }
