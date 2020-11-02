@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Календарь.
+        /// </summary>
+        public static string CalendarEvent {
+            get {
+                return ResourceManager.GetString("CalendarEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string Cancel {
