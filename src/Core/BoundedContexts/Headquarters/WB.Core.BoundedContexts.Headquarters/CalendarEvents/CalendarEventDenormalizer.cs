@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         private CalendarEvent UpdateCalendarEvent(CalendarEvent calendarEvent, DateTimeOffset dateTimeOffset, Action<CalendarEvent> updater)
         {
             updater.Invoke(calendarEvent);
-            calendarEvent.UpdateDate = dateTimeOffset;
+            calendarEvent.UpdateDate = dateTimeOffset.UtcDateTime;
             return calendarEvent;
         }
     }
