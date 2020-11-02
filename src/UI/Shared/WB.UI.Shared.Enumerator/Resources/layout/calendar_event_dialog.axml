@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+  <MvxDatePicker
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="20dp"
+      android:datePickerMode="spinner"
+      android:calendarViewShown="false"
+      local:MvxBind="Value DateEvent" />
+  <MvxTimePicker
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="20dp"
+      android:timePickerMode="spinner"
+      local:MvxBind="Value TimeEvent" />
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      local:MvxBind="Text Localization('Comment');" />
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="20dp"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      local:MvxBind="Value Comment" />
+  <LinearLayout  android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:layout_marginLeft="20dp"
+                 android:layout_marginRight="20dp">
+      <View
+          android:layout_width="20dp"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+      />
+      <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          style="@style/Widget.App.Button"
+          local:MvxBind="Text Localization('Ok'); Click OkCommand" />
+      <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          style="@style/Widget.App.NegativeButton"
+          local:MvxBind="Text Localization('Cancel'); Click CloseCommand" />
+  </LinearLayout>
+</LinearLayout>

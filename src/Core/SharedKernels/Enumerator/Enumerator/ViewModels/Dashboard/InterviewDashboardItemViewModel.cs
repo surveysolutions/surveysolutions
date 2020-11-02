@@ -85,6 +85,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 Label = DiscardLabel()
             });
 
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.SetCalendarEventAsync, () => this.isInterviewReadyToLoad && interview.CanBeDeleted),
+                Label = "Calendar Event"
+
+            });
+
             string MainLabel()
             {
                 switch (Status) {
@@ -283,7 +291,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        
+        private async Task SetCalendarEventAsync()
+        {
+            if (interview.Assignment.HasValue)
+            {
+                await ViewModelNavigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(new CalendarEventViewModelArgs()
+                {
+                    InterviewId = interview.InterviewId,
+                    AssignmentId = interview.Assignment.Value,
+                    CalendarEventId = interview.CalendarEventId,
+                    Start = interview.CalendarEvent,
+                    Comment = interview.CalendarEventComment,
+                });
+            }
+        }
+
+
+
         private string responsible;
         public string Responsible
         {

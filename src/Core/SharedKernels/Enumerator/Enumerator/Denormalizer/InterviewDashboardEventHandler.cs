@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -49,22 +50,29 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
                                          IEventHandler<SingleOptionLinkedQuestionAnswered>,
                                          IEventHandler<AreaQuestionAnswered>,
-                                         IEventHandler<InterviewKeyAssigned>
+                                         IEventHandler<InterviewKeyAssigned>,
+                                         
+                                         IEventHandler<CalendarEventCreated>,
+                                         IEventHandler<CalendarEventCompleted>,
+                                         IEventHandler<CalendarEventDeleted>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
+        private readonly IAssignmentDocumentsStorage assignmentStorage;
 
         public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
-            IAnswerToStringConverter answerToStringConverter)
+            IAnswerToStringConverter answerToStringConverter,
+            IAssignmentDocumentsStorage assignmentStorage)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.prefilledQuestions = prefilledQuestions;
             this.questionnaireRepository = questionnaireRepository;
             this.answerToStringConverter = answerToStringConverter;
+            this.assignmentStorage = assignmentStorage;
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
@@ -569,6 +577,74 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             interviewView.LastInterviewerOrSupervisorComment = @event.Payload.Comment;
             this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<CalendarEventCreated> @event)
+        {
+            if (@event.Payload.InterviewId.HasValue)
+            {
+                InterviewView interviewView = this.interviewViewRepository.GetById(@event.Payload.InterviewId.Value.FormatGuid());
+                if (interviewView == null)
+                    return;
+
+                interviewView.CalendarEventId = @event.EventSourceId;
+                interviewView.CalendarEvent = @event.Payload.Start;
+                interviewView.CalendarEventComment = @event.Payload.Comment;
+                this.interviewViewRepository.Store(interviewView);
+            }
+            else
+            {
+                var assignment = assignmentStorage.GetById(@event.Payload.AssignmentId);
+                if (assignment == null)
+                    return;
+
+                assignment.CalendarEventId = @event.EventSourceId;
+                assignment.CalendarEvent = @event.Payload.Start;
+                assignment.CalendarEventComment = @event.Payload.Comment;
+                this.assignmentStorage.Store(assignment);
+            }
+        }
+
+        public void Handle(IPublishedEvent<CalendarEventCompleted> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
+            if (interviewView != null)
+            {
+                interviewView.CalendarEvent = null;
+                interviewView.CalendarEventComment = null;
+                this.interviewViewRepository.Store(interviewView);
+                return;
+            }
+
+            var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
+            if (assignment != null)
+            {
+                assignment.CalendarEvent = null;
+                assignment.CalendarEventComment = null;
+                this.assignmentStorage.Store(assignment);
+                return;
+            }
+        }
+
+        public void Handle(IPublishedEvent<CalendarEventDeleted> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
+            if (interviewView != null)
+            {
+                interviewView.CalendarEvent = null;
+                interviewView.CalendarEventComment = null;
+                this.interviewViewRepository.Store(interviewView);
+                return;
+            }
+
+            var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
+            if (assignment != null)
+            {
+                assignment.CalendarEvent = null;
+                assignment.CalendarEventComment = null;
+                this.assignmentStorage.Store(assignment);
+                return;
+            }
         }
     }
 }
