@@ -104,7 +104,7 @@
                     type="button"
                     class="btn btn-danger"
                     role="delete"
-                    :visible="calendarEventId != null"
+                    v-if="calendarEventId != null"
                     @click="deleteCalendarEvent">
                     {{ $t("Common.Delete") }}</button>
 
@@ -324,10 +324,12 @@ export default {
             this.$refs.table.reload()
         },
 
-        editCalendarEvent(interviewId, assignmentId, calendarEventId) {
+        editCalendarEvent(interviewId, assignmentId, calendarEvent) {
             this.calendarInterviewId = interviewId
             this.calendarAssinmentId = assignmentId
-            this.calendarEventId = calendarEventId
+            this.calendarEventId = calendarEvent != null ? calendarEvent.publicKey : null
+            this.editCalendarComment = calendarEvent != null ? calendarEvent.comment : null
+            this.newCalendarDate = calendarEvent != null ? calendarEvent.start : null
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
 
@@ -339,7 +341,7 @@ export default {
             self.$store.dispatch('saveCalendarEvent', {
                 interviewId : self.calendarInterviewId,
                 assignmentId : self.calendarAssinmentId,
-                id : self.calendarEventId, //calendar event id would be here
+                id : self.calendarEventId,
                 newDate : self.newCalendarDate,
                 comment : self.editCalendarComment,
 
@@ -348,9 +350,12 @@ export default {
         },
         deleteCalendarEvent() {
             const self = this
-
             this.$refs.editCalendarModal.hide()
-
+            self.$store.dispatch('deleteCalendarEvent',
+                {
+                    id: self.calendarEventId,
+                    callback: self.reload,
+                })
         },
         contextMenuItems({rowData, rowIndex}) {
             const menu = []
@@ -386,7 +391,7 @@ export default {
             menu.push({
                 name: self.$t('Common.EditCalendarEvent'),
                 className: canCalendarBeEdited ? 'primary-text' : '',
-                callback: () => self.editCalendarEvent(rowData.id, rowData.assignmentId, rowData.calendarEvent != null ? rowData.calendarEvent.publicKey : null),
+                callback: () => self.editCalendarEvent(rowData.id, rowData.assignmentId, rowData.calendarEvent),
                 disabled: !canCalendarBeEdited,
             })
 
@@ -486,14 +491,15 @@ export default {
                 },
                 {
                     data: 'calendarEvent',
-                    title: this.$t('Assignments.CalendarEvent'),
+                    title: this.$t('Common.CalendarEvent'),
+                    orderable: false,
                     searchable: false,
                     render(data) {
                         if(data != null && data.start != null)
-                            return moment
+                            return '<span data-toggle="tooltip" title="' + data.comment + '">' + moment
                                 .utc(data.start)
                                 .local()
-                                .format(DateFormats.dateTimeInList)
+                                .format(DateFormats.dateTimeInList) + '</span>'
                     },
                     width: '180px',
                 },

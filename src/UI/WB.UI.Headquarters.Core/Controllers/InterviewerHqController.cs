@@ -148,11 +148,11 @@ namespace WB.UI.Headquarters.Controllers
             return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
 
-        [HttpPost]
-        public IActionResult DeleteInterviewCalendarEvent(Guid calendarEventId)
+        [HttpDelete]
+        public IActionResult DeleteInterviewCalendarEvent(Guid id)
         {
             this.commandService.Execute(new DeleteCalendarEventCommand(
-                calendarEventId, 
+                id, 
                 this.authorizedUser.Id));
             
             return this.Content("ok");

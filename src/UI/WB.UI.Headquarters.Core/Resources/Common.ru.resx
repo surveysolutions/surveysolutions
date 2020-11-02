@@ -347,4 +347,7 @@
   <data name="EditCalendarEvent" xml:space="preserve">
     <value>Редактировать календарь</value>
   </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Календарь</value>
+  </data>  
 </root>
