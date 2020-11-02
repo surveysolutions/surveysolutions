@@ -940,7 +940,6 @@
   </data>
   <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
     <value>{0} интервью было обновлено</value>
-
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
     <value>изменения по интервью </value>
@@ -952,6 +951,15 @@
     <value>{0} из {1} частичных данных по интервью скачано</value>
   </data>
   <data name="InvalidEndpointShort" xml:space="preserve">
-      <value>Адрес не верный</value>
+    <value>Адрес не верный</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Удалить вермя посещения</value>
+  </data>
+  <data name="Dashboard_SetCalendarEvent" xml:space="preserve">
+    <value>Установить время посещения</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Запланирован визит на {0}</value>
   </data>
 </root>
