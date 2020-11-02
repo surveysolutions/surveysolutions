@@ -192,7 +192,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(Mock.Of<ILogger>()),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
+                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>(),
+                Mock.Of<IAssignmentDocumentsStorage>());
 
         public DomainRepository DomainRepository(
             IServiceLocator serviceLocator = null)

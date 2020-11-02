@@ -44,5 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTime? ReceivedByInterviewerAtUtc { get; set; }
         public string LastVisitedSectionId { get; set; }
         public ScreenType? LastVisitedScreenType { get; set; }
+        public Guid? CalendarEventId { get; set; }
+        public DateTimeOffset? CalendarEvent { get; set; }
+        public string CalendarEventComment { get; set; }
     }
 }
