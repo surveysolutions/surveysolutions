@@ -63,12 +63,12 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
                 foreach (var action in dashboardItem.ContextMenu.Where(a => a.Command.CanExecute()))
                 {
                     var menu = popup.Menu.Add(action.Label);
-                    action.Tag = menu.ItemId;
+                    action.Tag = menu.GetHashCode();
                 }
 
                 popup.MenuItemClick += (s, e) =>
                 {
-                    var action = dashboardItem.ContextMenu.SingleOrDefault(a => a.Tag == e.Item.ItemId);
+                    var action = dashboardItem.ContextMenu.SingleOrDefault(a => a.Tag == e.Item.GetHashCode());
                     action?.Command.Execute();
                 };
 
