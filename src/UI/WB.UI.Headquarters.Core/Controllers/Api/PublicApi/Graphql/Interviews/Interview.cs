@@ -117,14 +117,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 {
                     var interviewId = context.Parent<InterviewSummary>().InterviewId;
                     var unitOfWork = context.Service<IUnitOfWork>();
-                    
-                    //!!!params are shifted 
-                    //fix it
-                    
-                    /*var calendarEvent = unitOfWork.Session
+                  
+                    var calendarEvent = unitOfWork.Session
                         .Query<CalendarEvent>()
                         .FirstOrDefault(x => x.InterviewId == interviewId && x.IsCompleted != true);
-                       return calendarEvent; */
+                       return calendarEvent; 
                     
                     return null;
                 });
