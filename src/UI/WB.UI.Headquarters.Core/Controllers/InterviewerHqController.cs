@@ -147,12 +147,22 @@ namespace WB.UI.Headquarters.Controllers
 
             return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
-        
+
+        [HttpPost]
+        public IActionResult DeleteInterviewCalendarEvent(Guid calendarEventId)
+        {
+            this.commandService.Execute(new DeleteCalendarEventCommand(
+                calendarEventId, 
+                this.authorizedUser.Id));
+            
+            return this.Content("ok");
+        }
+
         [HttpPost]
         public IActionResult UpdateInterviewCalendarEvent([FromBody] UpdateInterviewCalendarEventRequest request)
         {
             if (request.NewDate == null)
-                request.NewDate = DateTimeOffset.Now;
+                request.NewDate = DateTime.Now;
             
             if (request.Id == null)
             {
@@ -160,7 +170,7 @@ namespace WB.UI.Headquarters.Controllers
                     Guid.NewGuid(), 
                     this.authorizedUser.Id, 
                     request.NewDate.Value,
-                    request.InterviewId,
+                    Guid.TryParse(request.InterviewId, out Guid pasedInterviewId)? pasedInterviewId: (Guid?)null,
                     request.AssignmentId,
                     request.Comment));
             }
@@ -209,10 +219,10 @@ namespace WB.UI.Headquarters.Controllers
     public class UpdateInterviewCalendarEventRequest
     {
         public Guid? Id { get; set; }
-        public Guid? InterviewId { get; set; }
+        public string InterviewId { get; set; }
 
         public int AssignmentId { get; set; }
-        public DateTimeOffset? NewDate { get; set; }
+        public DateTime? NewDate { get; set; }
         public string Comment { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
     {
         public CreateCalendarEventCommand(Guid publicKey, 
             Guid userId,
-            DateTimeOffset start,
+            DateTime start,
             Guid? interviewId,
             int assignmentId,
             string comment):base(publicKey, userId)
@@ -22,6 +22,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
 
         public Guid? InterviewId { get; set; }
         public int AssignmentId { get; }
-        public DateTimeOffset Start { get; set; }
+        public DateTime Start { get; set; }
     }
 }
