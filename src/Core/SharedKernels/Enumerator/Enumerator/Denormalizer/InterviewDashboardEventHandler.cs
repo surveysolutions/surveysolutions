@@ -53,6 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<InterviewKeyAssigned>,
                                          
                                          IEventHandler<CalendarEventCreated>,
+                                         IEventHandler<CalendarEventUpdated>,
                                          IEventHandler<CalendarEventCompleted>,
                                          IEventHandler<CalendarEventDeleted>
     {
@@ -610,6 +611,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
             if (interviewView != null)
             {
+                interviewView.CalendarEventId = null;
                 interviewView.CalendarEvent = null;
                 interviewView.CalendarEventComment = null;
                 this.interviewViewRepository.Store(interviewView);
@@ -619,6 +621,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
             if (assignment != null)
             {
+                assignment.CalendarEventId = null;
                 assignment.CalendarEvent = null;
                 assignment.CalendarEventComment = null;
                 this.assignmentStorage.Store(assignment);
@@ -631,6 +634,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
             if (interviewView != null)
             {
+                interviewView.CalendarEventId = null;
                 interviewView.CalendarEvent = null;
                 interviewView.CalendarEventComment = null;
                 this.interviewViewRepository.Store(interviewView);
@@ -640,8 +644,30 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
             if (assignment != null)
             {
+                assignment.CalendarEventId = null;
                 assignment.CalendarEvent = null;
                 assignment.CalendarEventComment = null;
+                this.assignmentStorage.Store(assignment);
+                return;
+            }
+        }
+
+        public void Handle(IPublishedEvent<CalendarEventUpdated> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
+            if (interviewView != null)
+            {
+                interviewView.CalendarEvent = @event.Payload.Start;
+                interviewView.CalendarEventComment = @event.Payload.Comment;
+                this.interviewViewRepository.Store(interviewView);
+                return;
+            }
+
+            var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
+            if (assignment != null)
+            {
+                assignment.CalendarEvent = @event.Payload.Start;
+                assignment.CalendarEventComment = @event.Payload.Comment;
                 this.assignmentStorage.Store(assignment);
                 return;
             }
