@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public Guid? CalendarEventId { get; set; }
         public DateTimeOffset? Start { get; set; }
         public string? Comment { get; set; }
+        public Action? OkCallback { get; set; }
     }
 
     public class CalendarEventDialogViewModel : MvxViewModel<CalendarEventViewModelArgs>
@@ -94,6 +95,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     : new UpdateCalendarEventCommand(initValues.CalendarEventId.Value, userId, dateTime, Comment);
 
                 commandService.Execute(command);
+                
+                initValues.OkCallback?.Invoke();
             }
         }
     }

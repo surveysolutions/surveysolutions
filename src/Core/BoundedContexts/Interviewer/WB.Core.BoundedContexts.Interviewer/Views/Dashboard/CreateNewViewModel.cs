@@ -104,6 +104,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
+        protected override void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        {
+            base.ListViewModel_OnItemUpdated(sender, args);
+
+            if (sender is AssignmentDashboardItemViewModel viewModel)
+            {
+                var assignment = this.assignmentsRepository.GetById(viewModel.AssignmentId);
+                viewModel.Init(assignment);
+            }
+        }
+
         public void UpdateAssignment(int? assignmentId)
         {
             if (!assignmentId.HasValue)

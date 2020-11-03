@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
@@ -34,13 +35,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 var newItems = await Task.Run(this.GetUiItems).ConfigureAwait(false);
 
-                this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
+                this.UiItems.ToList().ForEach(uiItem =>
+                {
+                    uiItem.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                    uiItem.DisposeIfDisposable();
+                });
 
                 await this.InvokeOnMainThreadAsync(() =>
                 {
                     this.UiItems.ReplaceWith(newItems);
 
                 }, false).ConfigureAwait(false);
+                this.UiItems.ForEach(item => item.OnItemUpdated += ListViewModel_OnItemUpdated);
             }
             finally
             {
@@ -49,5 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         }
+        
+        protected virtual void ListViewModel_OnItemUpdated(object sender, EventArgs args) { }
     }
 }
