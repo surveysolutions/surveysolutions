@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -91,16 +92,25 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
                 serverUrl = server.Features.Get<IServerAddressesFeature>().Addresses.FirstOrDefault(ip => ip.Contains("localhost"));
             }
 
+            var configuredFolder = configuration.GetValue<string>("FileStorage:AppData")
+                .Replace("~", Directory.GetCurrentDirectory());
+
+            configuredFolder = Path.Combine(configuredFolder, "export");
+
+            MoveExportFilesIfRequired(configuredFolder);
+
             logger.LogInformation("Configuring export service to use {serverUrl} as tenant url for {tenant}",
                 serverUrl, this.headquarterOptions.Value.TenantName);
 
             exportHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
             {
-                builder.AddInMemoryCollection(new Dictionary<string, string>
+                var keyValuePairs = new Dictionary<string, string>
                 {
                     ["ConnectionStrings:DefaultConnection"] = configuration.GetConnectionString("DefaultConnection"),
-                    ["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl
-                });
+                    ["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl,
+                    ["ExportSettings:DirectoryPath"] = configuredFolder
+                };
+                builder.AddInMemoryCollection(keyValuePairs);
             });
 
             exportHostBuilder.ConfigureWebHost(w =>
@@ -135,6 +145,26 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             {
                 healthCheck.StartupTaskCompleted = false;
             }
+        }
+
+        private void MoveExportFilesIfRequired(string configuredFolder)
+        {
+            if (!Directory.Exists(".export"))
+            {
+                return;
+            }
+
+            if (configuredFolder == null) return;
+
+            if (Directory.Exists(configuredFolder)) return;
+
+            if (Path.GetFullPath(".export") == Path.GetFullPath(configuredFolder))
+            {
+                return;
+            }
+
+            Directory.Move(".export", configuredFolder);
+            logger.LogInformation($"Export service Data Directory moved from .export folder to {configuredFolder}");
         }
     }
 }
