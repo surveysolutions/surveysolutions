@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override string TabDescription => EnumeratorUIResources.Dashboard_StartedTabText;
         
         public event EventHandler<InterviewRemovedArgs>? OnInterviewRemoved;
+        public event EventHandler<CalendarEventChangedArgs>? OnCalendarEventChanged;
 
         public StartedInterviewsViewModel(IPlainStorage<InterviewView> interviewViewRepository, 
             IInterviewViewModelFactory viewModelFactory,
@@ -36,7 +37,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         protected override void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem)
-            => interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
+        {
+            base.OnItemCreated(interviewDashboardItem);
+            interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
+        }
 
         private void InterviewDashboardItem_OnItemRemoved(object sender, EventArgs e)
         {

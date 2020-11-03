@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
+    public abstract class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
     {
         private readonly IServiceLocator serviceLocator;
         private string idLabel;
@@ -18,6 +18,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private string title;
         private bool isExpanded = true;
         private DashboardInterviewStatus status;
+
+        public event EventHandler OnItemUpdated;
+        
+        protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
 
         public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator)
         {

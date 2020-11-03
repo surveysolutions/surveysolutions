@@ -93,24 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.SubTitle = subTitle;
         }
 
-        protected virtual void BindActions()
-        {
-            Actions.Clear();
-
-            Actions.Add(new ActionDefinition
-            {
-                ActionType = ActionType.Context,
-                Command = new MvxAsyncCommand(this.SetCalendarEventAsync),
-                Label = EnumeratorUIResources.Dashboard_SetCalendarEvent
-            });
-
-            Actions.Add(new ActionDefinition
-            {
-                ActionType = ActionType.Context,
-                Command = new MvxCommand(this.RemoveCalendarEvent, () => Assignment.CalendarEvent.HasValue),
-                Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
-            });
-        }
+        protected abstract void BindActions();
 
         private void BindDetails()
         {
@@ -152,6 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 CalendarEventId = Assignment.CalendarEventId,
                 Start = Assignment.CalendarEvent,
                 Comment = Assignment.CalendarEventComment,
+                OkCallback = () => RaiseOnItemUpdated()
             });
         }
 
@@ -165,6 +149,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var command = new DeleteCalendarEventCommand(Assignment.CalendarEventId.Value,
                 principal.CurrentUserIdentity.UserId);
             commandService.Execute(command);
+            
+            RaiseOnItemUpdated();
         }
 
         private string FormatDateTimeString(string formatString, DateTime? utcDateTimeWithOutKind)
@@ -176,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var culture = CultureInfo.CurrentUICulture;
             return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
