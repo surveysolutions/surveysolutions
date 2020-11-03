@@ -48,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         protected ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetForType(typeof(InterviewDashboardItemViewModel));
 
         public event EventHandler OnItemRemoved;
+
         protected bool isInterviewReadyToLoad = true;
         private QuestionnaireIdentity questionnaireIdentity;
         protected InterviewView interview;
@@ -161,6 +162,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             
+            this.SubTitle = GetSubTitle();
+
+            this.AssignmentIdLabel = interview.Assignment.HasValue
+                ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
+                : EnumeratorUIResources.Dashboard_CensusAssignment;
+        }
+
+        private string GetSubTitle()
+        {
             var comment = GetInterviewCommentByStatus(interview);
             var dateComment = GetInterviewDateCommentByStatus(interview);
 
@@ -169,16 +179,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             if (interview.CalendarEvent.HasValue)
             {
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, interview.CalendarEvent.Value.UtcDateTime);
-                string separatorVisit = !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent,
+                    interview.CalendarEvent.Value.UtcDateTime);
+                string separatorVisit =
+                    !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{interview.CalendarEventComment}";
             }
 
-            this.SubTitle = subTitle;
-
-            this.AssignmentIdLabel = interview.Assignment.HasValue
-                ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
-                : EnumeratorUIResources.Dashboard_CensusAssignment;
+            return subTitle;
         }
 
         public string AssignmentIdLabel
@@ -325,21 +333,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     CalendarEventId = interview.CalendarEventId,
                     Start = interview.CalendarEvent,
                     Comment = interview.CalendarEventComment,
+                    OkCallback = RaiseOnItemUpdated
                 });
             }
         }
 
         private void RemoveCalendarEvent()
         {
-            if (interview.Assignment.HasValue)
+            if (interview.Assignment.HasValue && interview.CalendarEventId.HasValue)
             {
                 var command = new DeleteCalendarEventCommand(interview.CalendarEventId.Value,
                     Principal.CurrentUserIdentity.UserId);
                 CommandService.Execute(command);
+                
+                RaiseOnItemUpdated();    
             }
         }
-
-
 
         private string responsible;
         public string Responsible
