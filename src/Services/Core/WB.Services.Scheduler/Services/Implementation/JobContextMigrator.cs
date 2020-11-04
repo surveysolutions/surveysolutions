@@ -3,12 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly;
-using Polly.Retry;
-using WB.Services.Infrastructure.Storage;
 
 namespace WB.Services.Scheduler.Services.Implementation
 {

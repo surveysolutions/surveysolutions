@@ -42,7 +42,8 @@ export default {
     data() {
         return {
             categoriesAsText: null,
-            convert: false
+            convert: false,
+            validity: true
         };
     },
 
@@ -50,37 +51,8 @@ export default {
         textRules() {
             return [
                 value => {
-                    if (this.lineCount == 0) {
-                        return true;
-                    }
-
-                    if (this.lineCount > 15000) {
-                        return this.$t('QuestionnaireEditor.OptionsSizeLimit', {
-                            max: 15000
-                        });
-                    }
-
-                    const top5Errors = validateText(
-                        value,
-                        this.showParentValue
-                    ).slice(0, 5);
-
-                    if (top5Errors.length > 0) {
-                        const error = [
-                            this.showParentValue
-                                ? this.$t(
-                                      'QuestionnaireEditor.OptionsCascadingListError'
-                                  )
-                                : this.$t(
-                                      'QuestionnaireEditor.OptionsListError'
-                                  ),
-                            '',
-                            ...top5Errors
-                        ].join('\r\n');
-                        return error;
-                    }
-
-                    return true;
+                    this.validity = this.validate(value);
+                    return this.validity;
                 }
             ];
         },
@@ -101,6 +73,12 @@ export default {
     watch: {
         categories() {
             this.reload();
+        },
+
+        validity(to, from) {
+            if (to != from) {
+                this.$emit('valid', to === true);
+            }
         }
     },
 
@@ -109,6 +87,37 @@ export default {
     },
 
     methods: {
+        validate(value) {
+            if (this.lineCount == 0) {
+                return true;
+            }
+
+            if (this.lineCount > 15000) {
+                return this.$t('QuestionnaireEditor.OptionsSizeLimit', {
+                    max: 15000
+                });
+            }
+
+            const top5Errors = validateText(value, this.showParentValue).slice(
+                0,
+                5
+            );
+
+            if (top5Errors.length > 0) {
+                const error = [
+                    this.showParentValue
+                        ? this.$t(
+                              'QuestionnaireEditor.OptionsCascadingListError'
+                          )
+                        : this.$t('QuestionnaireEditor.OptionsListError'),
+                    '',
+                    ...top5Errors
+                ].join('\r\n');
+                return error;
+            }
+
+            return true;
+        },
         change(value) {
             if (this.valid) {
                 const categories = convertToTable(value, this.showParentValue);

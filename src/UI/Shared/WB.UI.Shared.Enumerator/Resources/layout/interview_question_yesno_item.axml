@@ -27,7 +27,10 @@
                local:srcCompat="@drawable/lock_icon" />
 
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
-    local:MvxBind="HideKeyboardOnClick .; Click RemoveAnswerCommand; Visible And(Or(Checked, NoSelected), Not(IsProtected));"
+    local:MvxBind="HideKeyboardOnClick .; 
+                   Click RemoveAnswerCommand;
+                   Visible And(Or(Checked, NoSelected), Not(IsProtected));
+                   Tag Format('ib_RemoveAnswer_{0}', ItemTag)" 
                local:srcCompat="@drawable/delete_button"/>
 
 </LinearLayout>

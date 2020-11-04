@@ -108,7 +108,7 @@
     "OptionsCloseWindow": "Fermer la fenêtre?",
     "OptionsListError": "Vous avez saisi une valeur non valide. Chaque ligne doit suivre le format: \"Titre ... Valeur\". 'Value' doit être un nombre entier. Le titre doit être une chaîne alphanumérique. Aucune ligne vide n'est autorisée.",
     "OptionsUploadApply": "Appliquer",
-    "OptionsUploadLimit": "Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {0} catégories.",
+    "OptionsUploadLimit": "Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {limit} catégories.",
     "OptionsUploadParent": "Valeur parente",
     "OptionsUploadTitle": "Titre",
     "OptionsUploadValue": "Valeur",
@@ -450,7 +450,7 @@
     "SideBarCategoriesAddNew": "Add new category",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
-    "AddCascading": "Add cascading values",
-    "RemoveCascading": "Remove cascading values"
+    "ShowParentValues": "Show Parent values",
+    "HideParentValues": "Hide Parent values"
   }
 }
