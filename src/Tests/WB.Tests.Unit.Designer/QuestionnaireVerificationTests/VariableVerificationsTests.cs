@@ -12,6 +12,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 {
                     Create.Variable(),
                 })
-                .ExpectError("WB0310");
+                .ExpectError("WB0311");
     }
 }

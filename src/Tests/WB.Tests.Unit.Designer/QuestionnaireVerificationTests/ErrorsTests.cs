@@ -433,7 +433,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     {
                         Create.ValidationCondition(message: "[link to hidden var](var1)")
                     }))
-                .ExpectError("WB0310");
+                .ExpectError("WB0311");
         
     }
 }
