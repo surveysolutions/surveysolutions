@@ -334,20 +334,34 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
             var allAllowedVariableNames = questionnaire
-                .Find<IComposite>(x => x is IQuestion || x is IGroup group)
+                .Find<IComposite>(x => x is IQuestion || x is IGroup)
                 .Select(x => x.VariableName?.ToLower() ?? "")
-                .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower() ?? ""))
+                .Union(questionnaire.Attachments.Select(x => x.Name.ToLower()))
                 .Where(x => !string.IsNullOrEmpty(x))
                 .Distinct()
                 .ToArray();
+            
+            var allHiddenVariableNames = questionnaire
+                .Find<IQuestion>()
+                .Where(x => x.QuestionScope == QuestionScope.Hidden)
+                .Select(x => x.VariableName?.ToLower() ?? "")
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToHashSet();
 
             foreach (var staticTextOrQuestion in questionnaire.Find<IComposite>(x => x is IStaticText || x is IQuestion))
             {
-                if (staticTextOrQuestion is IStaticText staticText && TextHasMarkdownLinkWithUnknownVariable(staticText.Text, allAllowedVariableNames))
+                var title = staticTextOrQuestion.GetTitle();
+                if (TextHasMarkdownLinkWithUnknownVariable(title, allAllowedVariableNames))
+                {
                     foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+                }
 
-                if (staticTextOrQuestion is IQuestion question && TextHasMarkdownLinkWithUnknownVariable(question.QuestionText, allAllowedVariableNames))
-                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+                if (TextHasMarkdownLinkToHiddenVariable(title, allHiddenVariableNames))
+                {
+                    foundErrors.Add(
+                        QuestionnaireVerificationMessage.Error("WB0310", VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, CreateReference(staticTextOrQuestion))
+                    );
+                }
 
                 if (staticTextOrQuestion is IValidatable entityWithValidation)
                 {
@@ -357,6 +371,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
                         if (TextHasMarkdownLinkWithUnknownVariable(validationCondition.Message, allAllowedVariableNames))
                             foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion, validationConditionIndex));
+                        
+                        if (TextHasMarkdownLinkToHiddenVariable(validationCondition.Message, allHiddenVariableNames))
+                        {
+                            foundErrors.Add(
+                                QuestionnaireVerificationMessage.Error("WB0310", VerificationMessages.WB3010_LinkToHiddenQuestionNotAllowed, CreateReference(staticTextOrQuestion, validationConditionIndex))
+                            );
+                        }
                     }
                 }
             }
@@ -367,6 +388,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
             => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
 
+        private static bool TextHasMarkdownLinkToHiddenVariable(string? text, HashSet<string> hiddenVariables)
+        {
+            foreach (var url in GroupVerifications.GetMarkdownLinksFromText(text))
+            {
+                if(hiddenVariables.Contains(url))
+                    return true;
+            }
+
+            return false;
+        }
+        
         private static bool TextHasMarkdownLinkWithUnknownVariable(string? text, string[] allAllowedVariableNames)
         {
             foreach (var url in GroupVerifications.GetMarkdownLinksFromText(text))

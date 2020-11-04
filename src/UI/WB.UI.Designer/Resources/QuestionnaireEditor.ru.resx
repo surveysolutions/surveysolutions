@@ -880,7 +880,7 @@
     <value>Отменить изменения</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Категории не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {0} категорий.</value>
+    <value>Категории не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {limit} категорий.</value>
   </data>
   <data name="OptionsUploadTitle" xml:space="preserve">
     <value>Название</value>
@@ -1491,10 +1491,10 @@
     <value>Ввод не верен. Каждая строка должна следовать следующему формату: "Текст...Родительское/
 Значение". 'Текст' должен содержать символы или цифры. 'Значение' должно быть целочисленным. Пустые строки не разрешены.</value>
   </data>
-  <data name="AddCascading" xml:space="preserve">
-    <value>Добавить каскадные значения</value>
+  <data name="ShowParentValues" xml:space="preserve">
+    <value>Показать родительские значения</value>
   </data>
-  <data name="RemoveCascading" xml:space="preserve">
-    <value>Удалить каскадные значения</value>
+  <data name="HideParentValues" xml:space="preserve">
+    <value>Спрятать родительские значения</value>
   </data>
 </root>
