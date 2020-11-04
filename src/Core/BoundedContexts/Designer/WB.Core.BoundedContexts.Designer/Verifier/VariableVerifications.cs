@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName),
             Critical<IVariable>(VariableHasEmptyExpression, "WB0004", VerificationMessages.WB0004_VariableHasEmptyExpression),
             ErrorForTranslation<IVariable>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
-            Error<IVariable>(IdentityVariablesMustHaveLabel, "WB0310", VerificationMessages.WB0310_IdentityVariablesMustHaveLabel),
+            Error<IVariable>(IdentityVariablesMustHaveLabel, "WB0311", VerificationMessages.WB0311_IdentityVariablesMustHaveLabel),
         };
 
         private bool IsNotSupportSubstitution(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)

@@ -826,7 +826,6 @@
       <value>Link to hidden question is not allowed</value>
   </data>
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
-    <value>Variables in Сover section must have label.
-</value>
+    <value>Variables in Сover section must have label.</value>
   </data>
 </root>
