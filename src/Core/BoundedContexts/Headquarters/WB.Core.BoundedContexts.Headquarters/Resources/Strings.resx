@@ -276,6 +276,9 @@
   <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
     <value>Not approved by Headquarters</value>
   </data>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Not Assigned to Interviewer</value>
+  </data>
   <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>User is not authorized to execute provided action</value>
   </data>
