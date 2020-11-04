@@ -240,7 +240,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult SurveyStatistics()
         {
-            var statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser).ToList();
+            var statuses = StatusHelper.GetSurveyStatisticsStatusItems(this.authorizedUser).ToList();
 
             return this.View("SurveyStatistics", new
             {
