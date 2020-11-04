@@ -21,10 +21,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Name("Entity");
             
-            // descriptor.Field(x => x.EntityType)
-            //     .Name("entityType")
-            //     .Type<NonNullType<EntityTypeObjectType>>();
-            
             descriptor.Field(x => x.QuestionText)
                 .Description("Question text. May contain html tags.")
                 .Type<StringType>();
