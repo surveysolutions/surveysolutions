@@ -144,7 +144,7 @@
     "OptionsCloseWindow": "Do ta mbyllni dritaren?",
     "OptionsListError": "Ju vendosët një input të pavlefshëm. Çdo rresht duhet të ndjekë formatin: \"Titull...Vlerë\". 'Vlera' duhet të jetë numër i plotë. Titulli duhet të jetë një varg alfanumerik. Nuk lejohen rreshta bosh.",
     "OptionsUploadApply": "Apliko",
-    "OptionsUploadLimit": "Asnjë kategori. Zgjidh skedarët e ndarë me tab. Skedari mund të përmbajë deri në {0} kategori.",
+    "OptionsUploadLimit": "Asnjë kategori. Zgjidh skedarët e ndarë me tab. Skedari mund të përmbajë deri në {limit} kategori.",
     "OptionsUploadParent": "Vlera mëmë",
     "OptionsUploadTitle": "Titulli",
     "OptionsUploadValue": "Vlera",
@@ -450,7 +450,7 @@
     "SideBarCategoriesAddNew": "Add new category",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
-    "AddCascading": "Add cascading values",
-    "RemoveCascading": "Remove cascading values"
+    "ShowParentValues": "Show Parent values",
+    "HideParentValues": "Hide Parent values"
   }
 }

@@ -31,7 +31,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             cts = new CancellationTokenSource();
             await Policy.Handle<NpgsqlException>(c => c.IsTransient)
-                .WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(i))
+                .WaitAndRetryForeverAsync(i => TimeSpan.FromSeconds(Math.Max(i, 5)))
                 .ExecuteAsync(async ct =>
                 {
                     if (ct.IsCancellationRequested) return;

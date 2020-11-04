@@ -53,8 +53,7 @@ export default {
 
                 commit('SET_SERVICE_STATE', true)
 
-                if (jobsToUpdate.length > 0)
-                    dispatch('getJobsUpdate', jobsToUpdate)
+                dispatch('getJobsUpdate', jobsToUpdate)
 
             } catch (error) {
                 Vue.config.errorHandler(error)
@@ -80,9 +79,9 @@ export default {
                 response.data.forEach(job => {
                     commit('UPDATE_JOB', job)
                 })
-
-                commit('SET_SERVICE_INITALIZED')
             }
+
+            commit('SET_SERVICE_INITALIZED')
         },
     },
 

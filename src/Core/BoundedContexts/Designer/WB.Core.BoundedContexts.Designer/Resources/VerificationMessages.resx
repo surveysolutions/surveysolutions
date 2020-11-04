@@ -822,7 +822,10 @@
   <data name="WB0391" xml:space="preserve">
     <value>Static text can not reference variable that has deeper roster scope then itself</value>
   </data>
-  <data name="WB0310_IdentityVariablesMustHaveLabel" xml:space="preserve">
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+      <value>Link to hidden question is not allowed</value>
+  </data>
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
     <value>Variables in Сover section must have label.
 </value>
   </data>

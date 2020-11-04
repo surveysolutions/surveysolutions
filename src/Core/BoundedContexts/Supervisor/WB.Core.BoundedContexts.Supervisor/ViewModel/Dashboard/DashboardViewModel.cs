@@ -47,17 +47,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             IDashboardItemsAccessor dashboardItemsAccessor,
             IMvxNavigationService mvxNavigationService,
             IMvxMessenger messenger,
-            LocalSynchronizationViewModel synchronization)
+            LocalSynchronizationViewModel synchronization,
+            DashboardNotificationsViewModel dashboardNotifications)
             : base(principal, viewModelNavigationService)
         {
             this.mvxNavigationService = mvxNavigationService;
             DashboardItemsAccessor = dashboardItemsAccessor;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
-
+            this.DashboardNotifications = dashboardNotifications;
+            
             this.mvxNavigationService.AfterNavigate += OnAfterNavigate;
             messengerSubscribtion = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
+
+        public DashboardNotificationsViewModel DashboardNotifications { get; set; }
 
         private void OnAfterNavigate(object sender, IMvxNavigateEventArgs args)
         {
@@ -122,6 +126,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         });
 
         public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            DashboardNotifications.CheckTabletTimeAndWarn();
+        }
 
         private Task RunSynchronization()
         {

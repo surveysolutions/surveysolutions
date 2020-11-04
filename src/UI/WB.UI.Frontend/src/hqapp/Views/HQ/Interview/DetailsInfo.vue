@@ -103,7 +103,8 @@
             :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')"
             :okTitle="$t('Common.Approve')"
             :disableOk="receivedByInterviewer && !doApproveReceivedByInterviewer">
-            <div v-if="receivedByInterviewer">
+            <div class="form-group"
+                v-if="receivedByInterviewer">
                 <input
                     type="checkbox"
                     id="reassignReceivedByInterviewer"
