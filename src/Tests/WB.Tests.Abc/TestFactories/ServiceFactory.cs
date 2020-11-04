@@ -432,7 +432,8 @@ namespace WB.Tests.Abc.TestFactories
             IPasswordHasher passwordHasher)
             => new SupervisorPrincipal(
                 storage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<ILogger>());
 
         public IInterviewerPrincipal InterviewerPrincipal(Guid userId)
             => Mock.Of<IInterviewerPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(u => u.UserId == userId));

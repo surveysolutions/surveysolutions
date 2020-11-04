@@ -125,12 +125,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.currentLanguage = interview.Language;
             this.defaultLanguageName = questionnaire.DefaultLanguageName;
 
-            this.BreadCrumbs.Init(InterviewId, this.navigationState);
-            this.Sections.Init(InterviewId, this.navigationState);
-
             this.navigationState.Init(interviewId: InterviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
 
+            this.BreadCrumbs.Init(InterviewId, this.navigationState);
+            this.Sections.Init(InterviewId, this.navigationState);
+            
             await this.navigationState.NavigateTo(this.targetNavigationIdentity ?? this.GetDefaultScreenToNavigate(questionnaire)).ConfigureAwait(false);
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
