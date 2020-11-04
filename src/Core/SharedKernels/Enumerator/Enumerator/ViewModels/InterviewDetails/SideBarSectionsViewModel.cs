@@ -181,10 +181,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                            || questionnaire.GetPrefilledQuestions().Any();
                 }
                 
-                return (
-                    !@group.IsDisabled()
-                    || @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id)
-                );
+                return !@group.IsDisabled() 
+                       || @group.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(@group.Identity.Id);
             }
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
@@ -193,7 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             List<Identity> itemsToBeExpanded = expandedSectionIdentities.Union(parentsOfCurrentGroup).Distinct().ToList();
 
-            var isSomeSectionBeingCollapled = toggledSection!=null && !toggledSection.IsExpandedNow;
+            var isSomeSectionBeingCollapled = toggledSection != null && !toggledSection.IsExpandedNow;
             if (isSomeSectionBeingCollapled)
             {
                 RemoveItemsUnderSectionBeingCollapsed(itemsToBeExpanded, toggledSection.ToggledSection, interview);
@@ -209,6 +207,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var sectionOrSubSections = interview.GetAllGroupsAndRosters().Where(x =>
                 IsSectionVisible(x) && !questionnaire.IsFlatRoster(x.Identity.Id));
+            
             foreach (var sectionOrSubSection in  sectionOrSubSections)
             {
                 if (sectionOrSubSection is InterviewTreeSection)
@@ -231,7 +230,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private List<Identity> GetCurrentSectionAndItsParentsIdentities(IStatefulInterview interview, IQuestionnaire questionnaire, Identity currentGroupIdentity)
         {
             var currentGroup = interview.GetGroup(currentGroupIdentity) 
-                               ?? interview.GetEnabledSections().First(section => !questionnaire.IsCoverPage(section.Identity.Id));
+                               ?? interview.GetEnabledSections().First();
+            
             List<Identity> parentsOfCurrentGroup = new List<Identity>{ currentGroup.Identity };
             parentsOfCurrentGroup.AddRange(currentGroup.Parents?.Select(group => @group.Identity));
             return parentsOfCurrentGroup;
