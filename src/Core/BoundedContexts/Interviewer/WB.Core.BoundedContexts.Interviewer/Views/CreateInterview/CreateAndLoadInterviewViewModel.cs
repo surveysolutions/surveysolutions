@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -138,6 +139,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 this.commandService.Execute(createInterviewCommand);
                 assignment.CreatedInterviewsCount = (assignment.CreatedInterviewsCount ?? 0) + 1;
                 assignmentsRepository.Store(assignment);
+
+                if (assignment.CalendarEventId.HasValue && assignment.CalendarEvent.HasValue)
+                {
+                    var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
+                        interviewerIdentity.UserId,
+                        assignment.CalendarEvent.Value.UtcDateTime,
+                        interviewId,
+                        assignment.Id,
+                        assignment.CalendarEventComment);
+                    commandService.Execute(createCalendarEvent);
+                }
+                
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assignment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
