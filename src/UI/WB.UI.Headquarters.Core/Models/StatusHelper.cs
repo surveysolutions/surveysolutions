@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public static class StatusHelper
     {
         private static List<ComboboxViewItem> headquartersStatuses = null;
+        private static List<ComboboxViewItem> surveyStatisticsStatuses = null;
 
         private static readonly InterviewStatus[] headquarterStatusesList =
         {
@@ -42,6 +43,53 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 InterviewStatus.ApprovedByHeadquarters,
                 InterviewStatus.Restarted,
             }).ToArray();
+
+        public static IEnumerable<ComboboxViewItem> GetSurveyStatisticsStatusItems(IAuthorizedUser authorizedUser)
+        {
+            if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            {
+                if (surveyStatisticsStatuses == null)
+                {
+                    lock (invisibleForUserStatuses)
+                    {
+                        if (surveyStatisticsStatuses == null)
+                        {
+                            surveyStatisticsStatuses = new List<ComboboxViewItem>
+                            {
+                                AsComboboxItem("AllExceptInterviewerAssigned",
+                                    Strings.AllInterviewersExceptAssignedToInterviewer,
+                                    headquarterStatusesList
+                                        .Where(status => status != InterviewStatus.InterviewerAssigned)
+                                        .ToArray()
+                                ),
+
+                                AsComboboxItem("AllExceptApprovedByHQ",
+                                    Strings.AllInterviewersExceptApprovedByHeadquarters,
+                                    headquarterStatusesList
+                                        .Where(status => status != InterviewStatus.ApprovedByHeadquarters)
+                                        .ToArray()
+                                )
+                            };
+
+                            surveyStatisticsStatuses.AddRange(headquarterStatusesList.Select(status =>
+                                AsComboboxItem(status, status)));
+                        }
+                    }
+                }
+
+                return surveyStatisticsStatuses;
+            }
+
+            var ignoreStatuses = authorizedUser.IsSupervisor
+                ? invisibleForSupervisorStatuses
+                : invisibleForUserStatuses;
+
+            return Enum.GetValues(typeof(InterviewStatus))
+                .OfType<InterviewStatus>()
+                .Where(i => !ignoreStatuses.Contains(i))
+                .Select(i => AsComboboxItem(i, i))
+                .OrderBy(s => s.Key);
+        }
 
         public static IEnumerable<ComboboxViewItem> GetOnlyActualSurveyStatusViewItems(IAuthorizedUser authorizedUser)
         {
