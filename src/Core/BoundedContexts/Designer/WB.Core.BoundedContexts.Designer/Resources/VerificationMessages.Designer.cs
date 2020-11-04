@@ -2159,12 +2159,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variables in Сover section must have label.
-        ///.
+        ///   Looks up a localized string similar to Variables in Сover section must have label..
         /// </summary>
-        public static string WB0310_IdentityVariablesMustHaveLabel {
+        public static string WB0311_IdentityVariablesMustHaveLabel {
             get {
-                return ResourceManager.GetString("WB0310_IdentityVariablesMustHaveLabel", resourceCulture);
+                return ResourceManager.GetString("WB0311_IdentityVariablesMustHaveLabel", resourceCulture);
             }
         }
         
@@ -2186,6 +2185,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Link to hidden question is not allowed.
+        /// </summary>
         public static string WB3010_LinkToHiddenQuestionNotAllowed {
             get {
                 return ResourceManager.GetString("WB3010_LinkToHiddenQuestionNotAllowed", resourceCulture);
