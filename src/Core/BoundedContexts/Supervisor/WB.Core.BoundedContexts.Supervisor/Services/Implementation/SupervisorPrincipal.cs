@@ -2,6 +2,7 @@
 using System.Linq;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -13,7 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPlainStorage<SupervisorIdentity> usersStorage;
 
         public SupervisorPrincipal(IPlainStorage<SupervisorIdentity> usersStorage,
-            IPasswordHasher passwordHasher) : base(passwordHasher)
+            IPasswordHasher passwordHasher, ILogger logger) : base(passwordHasher, logger)
         {
             this.usersStorage = usersStorage;
         }
