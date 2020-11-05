@@ -253,7 +253,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<WebModeResponsibleAssignmentValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
-
+            registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
+            
             registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
@@ -446,8 +447,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<CalendarEvent>()
                 .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
-                .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent)
-                .StatelessHandles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
+                .InitializesWith<CreateCalendarEventCommand>( aggregate => aggregate.CreateCalendarEvent)
+                .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
+                .StatelessHandles<DeleteCalendarEventCommand>( aggregate => aggregate.DeleteCalendarEvent)
                 .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
                 .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent);
             

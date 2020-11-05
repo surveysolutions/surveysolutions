@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
     {
         public UpdateCalendarEventCommand(Guid publicKey, 
             Guid userId,
-            DateTime start,
+            DateTimeOffset start,
             string comment):base(publicKey, userId)
         {
             this.Start = start;
@@ -15,6 +15,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
         }
 
         public string Comment { get; set; }
-        public DateTime Start { get; set; }
+        public DateTimeOffset Start { get; set; }
     }
 }
