@@ -116,6 +116,8 @@ module.exports = {
         '@google/markerclustererplus'
     ],
 
+    productionSourceMap: false,
+
     chainWebpack: config => {
 
         config.devtool("source-map")

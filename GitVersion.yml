@@ -1,0 +1,8 @@
+branches: {}
+ignore:
+  sha: []
+merge-message-formats: {}
+next-version: 20.10.1
+assembly-versioning-format: '{Major}.{Minor}.{Patch}.{BuildMetaData ?? 0}'
+assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{BuildMetaData ?? 0}'
+assembly-versioning-scheme: MajorMinorPatchTag

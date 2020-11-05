@@ -1,0 +1,39 @@
+ARG DOTNET_VERSION=3.1
+ARG EXPORT_BUILD=42
+ARG GIT_BRANCH=master
+
+FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
+ARG EXPORT_BUILD
+ARG GIT_BRANCH
+
+COPY libs /libs
+COPY src/Core/Infrastructure/WB.Infrastructure.AspNetCore src/Core/Infrastructure/WB.Infrastructure.AspNetCore
+COPY src/Services /src/Services
+COPY src/.version /src
+COPY src/Directory.Build.props /src
+COPY src/Directory.Build.targets /src
+
+RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
+    -c Release -o /export \
+    --version-suffix $GIT_BRANCH \
+    /p:BuildNumber=$EXPORT_BUILD
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
+
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.build-date=$BUILD_DATE
+LABEL org.label-schema.name="export-service"
+LABEL org.label-schema.description="Survey Solutions Export Service"
+LABEL org.label-schema.url="https://mysurvey.solutions"
+LABEL org.label-schema.vcs-ref=$VCS_REF
+LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
+LABEL org.label-schema.version=$BUILD_VERSION
+LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
+
+COPY --from=builder export /app
+
+WORKDIR /app
+EXPOSE 80
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc
+
+ENTRYPOINT ["dotnet", "WB.Services.Export.Host.dll"]

@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  headquarters:
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      HQ_Headquarters__BaseUrl: http://hq.lvh.me
+      HQ_Designer__DesignerAddress: http://designer
+      HQ_DataExport__ExportServiceUrl: http://export
+      HQ_ConnectionStrings__DefaultConnection: 'Server=db;Port=5432;User Id=postgres;Password=postgres;Database=hq'
+      NO_HQ_BASEURL_CHECK: 'true'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hq.rule=Host(`hq.lvh.me`)"
+  export:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Export_ConnectionStrings__DefaultConnection: 'Server=db;Port=5432;User Id=postgres;Password=postgres;Database=export'
+      NO_HQ_BASEURL_CHECK: 'true'
+  webtester:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webtester.rule=Host(`webtester.lvh.me`)"
+    environment:
+      WEBTESTER_DesignerAddress: http://designer
+  designer:
+    restart: always
+    environment:
+      Designer_ConnectionStrings__DefaultConnection: 'Server=db;Port=5432;User Id=postgres;Password=postgres;Database=designer'     
+      Designer_WebTester__BaseUri: http://webtester/WebTester/Run
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.designer.rule=Host(`designer.lvh.me`)"
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: designer
+      POSTGRES_USER: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  traefik:
+    image: "traefik:v2.3"
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"      
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: always
+    ports:
+      - "80:80"

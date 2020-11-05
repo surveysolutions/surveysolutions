@@ -1,0 +1,6 @@
+FROM caddy
+COPY build/androidFiles/*.apk /home
+
+EXPOSE 80
+
+CMD ["caddy", "file-server", "--browse", "--listen", ":80", "--root", "/home"]

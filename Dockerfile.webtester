@@ -1,0 +1,60 @@
+ARG NODEJS_VERSION=14
+ARG DOTNET_VERSION=3.1
+ARG GIT_BRANCH=master
+ARG HQ_BUILD=42
+
+FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS js_builder
+
+COPY src/UI/WB.UI.Frontend/package*.json src/UI/WB.UI.Frontend/
+RUN cd src/UI/WB.UI.Frontend && npm ci
+
+COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
+COPY src/UI/WB.UI.WebTester/Resources src/UI/WB.UI.WebTester/Resources
+COPY src/UI/WB.UI.WebTester/Views src/UI/WB.UI.WebTester/Views
+COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources
+COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
+
+WORKDIR /src/UI/WB.UI.Frontend
+RUN npm run build -- --modern --package
+
+FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
+
+ARG HQ_BUILD
+ARG GIT_BRANCH
+
+COPY libs /libs
+COPY src /src
+
+COPY --from=js_builder /src/UI/WB.UI.Frontend/dist/package/hq /src/UI/WB.UI.WebTester/
+
+RUN dotnet publish /src/UI/WB.UI.WebTester \
+    -c Release -o /webtester \
+    --version-suffix $GIT_BRANCH \
+    /p:BuildNumber=$HQ_BUILD
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
+
+# should be empty
+ARG BUILD_DATE
+ARG VCS_REF
+ARG BUILD_VERSION
+ARG GIT_BRANCH
+
+# Labels.
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.build-date=$BUILD_DATE
+LABEL org.label-schema.name="Web Tester Application"
+LABEL org.label-schema.description="Survey Solutions Web Tester application"
+LABEL org.label-schema.url="https://mysurvey.solutions"
+LABEL org.label-schema.vcs-ref=$VCS_REF
+LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
+LABEL org.label-schema.version=$BUILD_VERSION
+LABEL org.label-schema.usage="https://support.mysurvey.solutions/headquarters/config/${BUILD_VERSION}/docker"
+
+COPY --from=builder webtester /app
+
+WORKDIR /app
+EXPOSE 80
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
+
+ENTRYPOINT ["dotnet", "WB.UI.WebTester.dll"]

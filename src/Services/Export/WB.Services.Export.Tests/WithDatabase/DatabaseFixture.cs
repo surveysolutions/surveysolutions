@@ -55,8 +55,16 @@ namespace WB.Services.Export.Tests.WithDatabase
         {
             get
             {
-
                 var cs = Configuration.GetConnectionString("DefaultConnection");
+                var dbHost = Environment.GetEnvironmentVariable("TEST_DATABASE_HOST");
+
+                if(!string.IsNullOrWhiteSpace(dbHost))
+                {
+                    var npgBuilder = new NpgsqlConnectionStringBuilder(cs);
+                    npgBuilder.Host = dbHost;
+                    return npgBuilder.ConnectionString;
+                }
+
                 return cs;
             }
         }

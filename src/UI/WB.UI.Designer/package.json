@@ -52,9 +52,7 @@
   },
   "scripts": {
     "dev": "gulp",
-    "production": "gulp --production",
-    "preproduction": "bower install --force",
-    "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm"
+    "production": "gulp --production"
   },
   "author": "",
   "license": "ISC",
@@ -84,7 +82,6 @@
     "bootbox": "^4.4.0",
     "bootstrap": "3.4.0",
     "bootstrap-select": "^1.13.9",
-    "console-shim": "^1.0.3",
     "es5-shim": "^4.5.9",
     "es6-promise": "^4.2.8",
     "html5shiv": "^3.7.3",

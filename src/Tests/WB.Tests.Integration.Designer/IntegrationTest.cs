@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -23,10 +24,22 @@ namespace WB.Tests.Integration.Core
         public void InitEnvironment()
         {
             var connectionString = $"Server=127.0.0.1;Port=5432;User Id=postgres;Password=Qwerty1234;Database={"testdb_" + Guid.NewGuid().ToString("N")};";
+            var dbHost = Environment.GetEnvironmentVariable("TEST_DATABASE_HOST");
+
+            if (!string.IsNullOrWhiteSpace(dbHost))
+            {
+                TestContext.Out.WriteLine($"Overriding DB host to {dbHost}");
+                var npgBuilder = new NpgsqlConnectionStringBuilder(connectionString)
+                {
+                    Host = dbHost
+                };
+
+                connectionString = npgBuilder.ConnectionString;
+            }
 
             var migration = typeof(M001_Init);
             var schemaName = "plainstore";
-
+            TestContext.Out.WriteLine($"Creating DB at {connectionString}");
             DatabaseManagement.InitDatabase(connectionString, schemaName);
             var dbUpgradeSettings = new DbUpgradeSettings(migration.Assembly, migration.Namespace);
             DbMigrationsRunner.MigrateToLatest(connectionString, schemaName, dbUpgradeSettings);

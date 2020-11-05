@@ -36,11 +36,25 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
         if($ExcludeExtensions -eq $False){ 
             $logId = ".ext"
         }
+
+        Execute-MSBuild src\UI\Shared\WB.UI.Shared.Enumerator $BuildConfiguration @(
+            "/p:VersionCode=$VersionCode"
+             "/restore"
+              if($ExcludeExtensions -eq $True) {
+                "/p:ExcludeExtensions=$ExcludeExtensions"
+            }
+            if($null -eq $env:GIT_BRANCH) {
+                "/p:GIT_BRANCH=$branch"
+            }
+            Else {
+                "/p:GIT_BRANCH=$env:GIT_BRANCH"
+            }
+        )
+
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
             "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
             "/restore"
-            "/m:1"
             "/p:XamarinBuildDownloadAllowUnsecure=true"
 
             if(-not $NoCleanUp.IsPresent) {
