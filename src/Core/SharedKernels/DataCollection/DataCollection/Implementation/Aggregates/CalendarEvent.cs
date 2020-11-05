@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Events;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
@@ -89,6 +90,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new CalendarEventDeleted(
                 userId: command.UserId,
                 originDate: command.OriginDate));
+        }
+
+        public void SyncCalendarEventEvents(SyncCalendarEventEventsCommand command)
+        {
+            foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
+            {
+                var @event = synchronizedEvent.Payload;
+                this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
+            }
         }
     }
 }

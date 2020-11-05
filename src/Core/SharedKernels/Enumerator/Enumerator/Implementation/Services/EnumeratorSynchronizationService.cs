@@ -40,6 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
         protected virtual string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
+        
+        protected virtual string CalendarEventsController => string.Concat(ApplicationUrl, "/calendarevents");
 
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
@@ -563,6 +565,44 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
+        #endregion
+
+        #region [CalendarEvent API]
+        
+        public Task UploadCalendarEventAsync(Guid calendarEventId, 
+            CalendarEventPackageApiView completedInterview, 
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: string.Concat(CalendarEventsController, "/", calendarEventId),
+                request: completedInterview,
+                credentials: this.restCredentials,
+                token: token));
+        }
+
+        public Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, 
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
+        {
+            try
+            {
+                return this.TryGetRestResponseOrThrowAsync(
+                    () =>  this.restService.GetAsync<List<CommittedEvent>>(
+                        url: string.Concat(CalendarEventsController, "/", calendarEventId),
+                        credentials: this.restCredentials,
+                        transferProgress: transferProgress,
+                        token: token));
+            }
+            catch (SynchronizationException exception)
+            {
+                var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
+                if (httpStatusCode == HttpStatusCode.NotFound)
+                    return Task.FromResult<List<CommittedEvent>>(null);
+
+                this.logger.Error("Exception on download interview. ID:" + CalendarEventsController, exception);
+                throw;
+            }
+        }
+        
         #endregion
 
         protected async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
