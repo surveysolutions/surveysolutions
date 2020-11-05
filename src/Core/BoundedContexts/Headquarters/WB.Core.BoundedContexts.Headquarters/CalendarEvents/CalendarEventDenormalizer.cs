@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         {
             state = new CalendarEvent(
                 @event.EventSourceId,
-                @event.Payload.Start,
+                @event.Payload.Start.UtcDateTime,
                 @event.Payload.Comment,
                 @event.Payload.InterviewId,
                 @event.Payload.AssignmentId,
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             return UpdateCalendarEvent(state, @event.Payload.OriginDate,
                 calendarEvent =>
                 {
-                    calendarEvent.Start = @event.Payload.Start;
+                    calendarEvent.Start = @event.Payload.Start.UtcDateTime;
                     calendarEvent.Comment = @event.Payload.Comment;
                 });
         }
