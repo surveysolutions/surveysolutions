@@ -31,7 +31,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         private const string InterviewerUserAgent = "org.worldbank.solutions.interviewer/{0} (QuestionnaireVersion/27.0.0)";
 
         [Test]
-        public void when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
+        public async Task when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
         {
             var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
             tenantSettings.Store(new TenantSettings{ TenantPublicId = "server id"}, AppSetting.TenantSettingsKey);
@@ -39,7 +39,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
             var controller = Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
 
             // Act 
-            IStatusCodeActionResult response  = (IStatusCodeActionResult) controller.CheckCompatibility("device", 7100, "client id");
+            IStatusCodeActionResult response  = (IStatusCodeActionResult) await controller.CheckCompatibility("device", 7100, "client id");
 
             // Assert
             Assert.That(response, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
