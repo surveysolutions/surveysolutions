@@ -91,6 +91,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IMapInteractionService, WB.UI.Shared.Extensions.CustomServices.MapInteractionService>();
 #endif
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
+            registry.BindAsSingleton<CalendarEventEventHandler, CalendarEventEventHandler>();
             
             RegisterViewModels(registry);
         }
