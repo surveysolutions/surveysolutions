@@ -26,7 +26,7 @@ jobs:
           --health-retries 5
 
     env:
-      TEST_DATABASE_HOST: postgres
+      TEST_DATABASE_HOST: localhost
 
     steps:
       - uses: actions/checkout@v2
