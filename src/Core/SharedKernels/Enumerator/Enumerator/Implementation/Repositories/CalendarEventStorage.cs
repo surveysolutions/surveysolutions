@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -34,9 +35,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 e.InterviewId == null && e.AssignmentId == assignmentId);
         }
 
-        public IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents(Guid userId)
+        public IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents()
         {
-            throw new NotImplementedException();
+            return RunInTransaction(documents =>
+            {
+                var calendarEvents = documents.Connection.Table<CalendarEvent>()
+                    .Where(a => a.IsSynchronized == false)
+                    .ToList();
+
+                return calendarEvents;
+            });
+        }        
+
+        public IEnumerable<CalendarEvent> GetCalendarEventsForUser(Guid userId)
+        {
+            return RunInTransaction(documents =>
+            {
+                var calendarEvents = documents.Connection.Table<CalendarEvent>()
+                    .Where(a => a.UserId == userId)
+                    .ToList();
+
+                return calendarEvents;
+            });
         }
     }
 }
