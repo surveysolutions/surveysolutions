@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
 
         }
         [Test]
-        public void When_getting_profile_report_for_2_users()
+        public async Task When_getting_profile_report_for_2_users()
         {
             var interviewersIdsToExport = new[] { Id.g1, Id.g2 };
 
@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
 
             var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
 
-            var report = factory.GetInterviewersReport(interviewersIdsToExport);
+            var report = await factory.GetInterviewersReport(interviewersIdsToExport);
 
             Assert.That(report.Data.Length, Is.EqualTo(2));
 
