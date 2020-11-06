@@ -35,7 +35,5 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      - run: echo $POSTGRES_PORT && ping -c 1 -v postgres
-      - run: dotnet build 'src/WB without Xamarin.sln' -c Debug
       - run: dotnet test 'src/WB without Xamarin.sln' -c Debug
       - run: dotnet test src/Services/WB.Services.sln -c Debug
