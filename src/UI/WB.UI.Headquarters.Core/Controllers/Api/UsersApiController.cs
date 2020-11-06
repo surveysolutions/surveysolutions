@@ -152,7 +152,7 @@ namespace WB.UI.Headquarters.Controllers
                 supervisorId,
                 request.Facet);
 
-            var interviewersReport = this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
+            var interviewersReport = await this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
 
             return this.CreateReportResponse(type, interviewersReport, Reports.Interviewers);
         }

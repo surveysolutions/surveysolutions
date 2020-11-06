@@ -225,6 +225,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             var averageSyncSpeedBytesPerSecond =
                 this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(interviewer.Id);
 
+            int? interviewerApkVersion = await interviewerVersionReader.InterviewerBuildNumber().ConfigureAwait(false);
+            
             InterviewerProfileModel profile = 
                 this.FillInterviewerProfileForExport(new InterviewerProfileModel(), 
                     interviewer, supervisor, lastSuccessDeviceInfo,
@@ -233,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                     totalFailedSynchronizationCount,
                     lastSynchronizationDate,
                     averageSyncSpeedBytesPerSecond,
-                    trafficUsed) as InterviewerProfileModel;
+                    trafficUsed, interviewerApkVersion) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -280,9 +282,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
          * z – last synchronization
          * d – dashboard
          */
-        public ReportView GetInterviewersReport(Guid[] interviewersIdsToExport)
+        public async Task<ReportView> GetInterviewersReport(Guid[] interviewersIdsToExport)
         {
-            var userProfiles = GetProfilesForInterviewers(interviewersIdsToExport);
+            int? interviewerApkVersion = await interviewerVersionReader.InterviewerBuildNumber()
+                .ConfigureAwait(false);
+            
+            var userProfiles = GetProfilesForInterviewers(interviewersIdsToExport, interviewerApkVersion);
 
             return new ReportView
             {
@@ -385,7 +390,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             };
         }
 
-        private IEnumerable<InterviewerProfileToExport> GetProfilesForInterviewers(Guid[] interviewersIds)
+        private IEnumerable<InterviewerProfileToExport> GetProfilesForInterviewers(Guid[] interviewersIds, int? hqInterviewerVersion)
         {
             var interviewerProfiles = this.userManager.Users.Where(x => interviewersIds.Contains(x.Id))
                 .Fetch(x => x.Profile)
@@ -425,7 +430,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                         syncStats.GetOrNull(interviewer.Id)?.FailedSynchronizationsCount ?? 0,
                         syncStats.GetOrNull(interviewer.Id)?.LastSynchronizationDate,
                         averageSynchronizationSpeed.ContainsKey(interviewer.Id)? averageSynchronizationSpeed[interviewer.Id] : (double?)null,
-                        trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0))
+                        trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0,
+                        hqInterviewerVersion))
                 .OrderBy(x=> x.InterviewerName);
         }
 
@@ -440,7 +446,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             int totalFailedSynchronizationCount,
             DateTime? lastSynchronizationDate,
             double? averageSyncSpeedBytesPerSecond,
-            long trafficUsed)
+            long trafficUsed,
+            int? hqInterviewerVersion)
         {
             var interviewerId = interviewer.Id;
 
@@ -456,9 +463,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             var hasUpdateForInterviewerApp = false;
             if (lastSuccessDeviceInfo != null)
             {
-                int? interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber().Result;
-                hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
-                                             interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
+                hasUpdateForInterviewerApp = hqInterviewerVersion.HasValue &&
+                                             hqInterviewerVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
             }
 
             profile.Email = interviewer.Email;
