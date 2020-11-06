@@ -603,6 +603,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
         
+        public Task<List<CalendarEventApiView>> GetCalendarEventsAsync(CancellationToken token = default)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<List<CalendarEventApiView>>(url: this.CalendarEventsController,
+                    credentials: this.restCredentials, token: token));
+        }
+        
         #endregion
 
         protected async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
