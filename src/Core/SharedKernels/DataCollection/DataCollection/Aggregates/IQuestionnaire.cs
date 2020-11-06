@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId);
 
-        bool IsPrefilled(Guid questionId);
+        bool IsPrefilled(Guid entityId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
         string GetValidationMessage(Guid questionId, int conditionIndex);
