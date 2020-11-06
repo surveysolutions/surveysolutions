@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
@@ -6,12 +7,4 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     {
         public CalendarEventPackageApiView CalendarEvent { get; set; }
     }
-    
-    public class CalendarEventPackageApiView
-    {
-        public Guid CalendarEventId { get; set; }
-        //public InterviewMetaInfo MetaInfo { get; set; }
-        public string Events { get; set; }
-    }
-
 }

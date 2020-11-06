@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Main.Core.Events;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Supervisor.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
@@ -30,13 +27,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ILiteEventBus eventBus;
+        private readonly IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog;
+
 
         public SupervisorCalendarEventsHandler(ICalendarEventStorage calendarEventStorage,
             IEnumeratorEventStorage eventStore,
             ICommandService commandService,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
-            ILiteEventBus eventBus)
+            ILiteEventBus eventBus,
+            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog)
         {
             this.calendarEventStorage = calendarEventStorage;
             this.eventStore = eventStore;
@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.logger = logger;
             this.serializer = serializer;
             this.eventBus = eventBus;
+            this.receivedPackagesLog = receivedPackagesLog;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -78,12 +79,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             List<CalendarEventApiView> response = calendarEvents.Select(x => new CalendarEventApiView
             {
-                Id = x.Id,
-                // IsRejected = x.Status == InterviewStatus.RejectedBySupervisor,
-                // QuestionnaireIdentity = QuestionnaireIdentity.Parse(x.QuestionnaireId),
-                // ResponsibleId = x.ResponsibleId,
-                // IsMarkedAsReceivedByInterviewer = x.ReceivedByInterviewerAtUtc != null,
-                // Sequence = eventStore.GetMaxSequenceForAnyEvent(x.Id, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
+                CalendarEventId = x.Id,
+                Sequence = eventStore.GetMaxSequenceForAnyEvent(x.Id, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
+                ResponsibleId = x.UserId,
+                LastEventId = x.LastEventId,
+                //IsMarkedAsReceivedByInterviewer = x.ReceivedByInterviewerAtUtc != null,
             }).ToList();
 
             return Task.FromResult(new GetCalendarEventsResponse()
@@ -102,87 +102,78 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             try
             {
-                var aggregateRootEvents = this.serializer.Deserialize<AggregateRootEvent[]>(calendarEvent.Events);
+                var calendarEventStream = this.serializer.Deserialize<CommittedEvent[]>(calendarEvent.Events);
 
-                var firstEvent = aggregateRootEvents.FirstOrDefault();
+                var firstEvent = calendarEventStream.FirstOrDefault();
 
                 if (firstEvent != null && eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
                     calendarEvent.CalendarEventId, 
                     EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
-                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", 
-                        InterviewDomainExceptionType.PackageIsOudated);
+                    throw new ArgumentException("Provided calendar event package is outdated. New events were given to the calendar event while interviewer had calendar event on a tablet");
                 }
 
-                AssertPackageNotDuplicated(aggregateRootEvents);
+                var isPackageDuplicated = IsPackageDuplicated(calendarEventStream);
+                if (isPackageDuplicated)
+                    return Task.FromResult(new OkResponse()); // ignore
 
-                var serializedEvents = aggregateRootEvents
-                    .Select(e => e.Payload)
-                    .ToArray();
-
-                this.logger.Debug($"Interview events by {calendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Calendar events by {calendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(serializedEvents, out Guid? newSupervisorId);
-
-                if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
-                    throw new InterviewException("Can't move interview to a new team, because supervisor id is empty",
-                        exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
-
-                this.commandService.Execute(new SynchronizeInterviewEventsCommand(
-                    interviewId: calendarEvent.CalendarEventId,
-                    userId: calendarEvent.MetaInfo.ResponsibleId,
-                    questionnaireId: calendarEvent.MetaInfo.TemplateId,
-                    questionnaireVersion: calendarEvent.MetaInfo.TemplateVersion,
-                    createdOnClient: calendarEvent.MetaInfo.CreatedOnClient ?? false,
-                    interviewStatus: (InterviewStatus) calendarEvent.MetaInfo.Status,
-                    interviewKey: InterviewKey.Parse(request.InterviewKey),
-                    synchronizedEvents: aggregateRootEvents,
-                    newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
-                ), null);
-
-                RecordProcessedPackageInfo(aggregateRootEvents);
-                UpdateAssignmentQuantityByInterview(calendarEvent.InterviewId);
+                var committedEventStream = new CommittedEventStream(calendarEvent.CalendarEventId, calendarEventStream);
+                eventStore.StoreEvents(committedEventStream);
+                eventBus.PublishCommittedEvents(calendarEventStream);
+  
+                RecordProcessedPackageInfo(calendarEventStream);
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Interview events by {calendarEvent.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
-
-                var interviewException = exception as InterviewException;
-                interviewException = interviewException?.UnwrapAllInnerExceptions()
-                    .OfType<InterviewException>()
-                    .FirstOrDefault();
-
-                if (interviewException != null && interviewException.ExceptionType == InterviewDomainExceptionType.QuestionnaireIsMissing)
-                {
-                    throw;
-                }
-                var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
-
-                this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackageView
-                {
-                    InterviewId = calendarEvent.InterviewId,
-                    InterviewKey = request.InterviewKey,
-                    QuestionnaireId = calendarEvent.MetaInfo.TemplateId,
-                    QuestionnaireVersion = calendarEvent.MetaInfo.TemplateVersion,
-                    InterviewStatus = (InterviewStatus)calendarEvent.MetaInfo.Status,
-                    ResponsibleId = calendarEvent.MetaInfo.ResponsibleId,
-                    IncomingDate = DateTime.UtcNow,
-                    Events = calendarEvent.Events,
-                    PackageSize = calendarEvent.Events?.Length ?? 0,
-                    ProcessingDate = DateTime.UtcNow,
-                    ExceptionType = exceptionType,
-                    ExceptionMessage = exception.Message,
-                    ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
-                });
-
-                this.logger.Debug($"Calendar events by {calendarEvent.CalendarEventId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                this.logger.Error($"Calendar event by {calendarEvent.CalendarEventId} processing failed. Reason: '{exception.Message}'", exception);
                 innerwatch.Restart();
+                throw;
             }
 
             innerwatch.Stop();
 
             return Task.FromResult(new OkResponse());
+        }
+        
+        private bool IsPackageDuplicated(CommittedEvent[] events)
+        {
+            if (events.Length > 0)
+            {
+                var firstEvent = events[0];
+                var lastEvent = events[^1];
+
+                var existingReceivedPackageLog = this.receivedPackagesLog.Where(
+                    x => x.FirstEventId == firstEvent.EventIdentifier &&
+                         x.FirstEventTimestamp == firstEvent.EventTimeStamp &&
+                         x.LastEventId == lastEvent.EventIdentifier &&
+                         x.LastEventTimestamp == lastEvent.EventTimeStamp).Count;
+
+                if (existingReceivedPackageLog > 0)
+                {
+                    return true; // Package already received and processed
+                }
+            }
+
+            return false;
+        }
+
+        private void RecordProcessedPackageInfo(CommittedEvent[] events)
+        {
+            if (events.Length > 0)
+            {
+                var firstEvent = events[0];
+                var lastEvent = events[^1];
+                this.receivedPackagesLog.Store(new SuperivsorReceivedPackageLogEntry
+                {
+                    FirstEventId = firstEvent.EventIdentifier,
+                    FirstEventTimestamp = firstEvent.EventTimeStamp,
+                    LastEventId = lastEvent.EventIdentifier,
+                    LastEventTimestamp = lastEvent.EventTimeStamp
+                });
+            }
         }
     }
 }

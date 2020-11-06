@@ -1,4 +1,7 @@
-﻿namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
+﻿using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.WebApi;
+
+namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
     public class GetCalendarEventsResponse: ICommunicationMessage
     {
