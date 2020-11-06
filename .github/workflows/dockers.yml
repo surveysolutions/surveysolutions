@@ -56,7 +56,7 @@ jobs:
         id: prep
         # https://github.com/docker/build-push-action#complete-workflow
         run: |
-          DOCKER_IMAGE=ghcr.io/${{ github.repository }}/${{ matrix.image.name }}
+          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ matrix.image.name }}
           VERSION=${{ steps.setVersion.outputs.version }}
 
           TAGS="${DOCKER_IMAGE}:${VERSION}"
@@ -203,7 +203,7 @@ jobs:
           echo "::set-output name=version::$(dotnet gitversion /showvariable AssemblySemFileVer)"
 
           # https://github.com/docker/build-push-action#complete-workflow
-          DOCKER_IMAGE=ghcr.io/${{ github.repository }}/android
+          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/android
           VERSION=$(dotnet gitversion /showvariable AssemblySemFileVer)
 
           TAGS="${DOCKER_IMAGE}:${VERSION}"
