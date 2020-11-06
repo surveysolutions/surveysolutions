@@ -1,0 +1,814 @@
+﻿clear
+insheet using "questionnaire_var.tab", tab case names
+
+label variable interview__id `"Unique 32-character long identifier of the interview"'
+
+label variable interview__key `"Interview key (identifier in XX-XX-XX-XX format)"'
+
+label variable sssys_irnd `"Random number in the range 0..1 associated with interview"'
+
+label variable has__errors `"Errors count in the interview"'
+
+label define interview__status 0 `"Restored"' 20 `"Created"' 40 `"SupervisorAssigned"' 60 `"InterviewerAssigned"' 65 `"RejectedBySupervisor"' 80 `"ReadyForInterview"' 85 `"SentToCapi"' 95 `"Restarted"' 100 `"Completed"' 120 `"ApprovedBySupervisor"' 125 `"RejectedByHeadquarters"' 130 `"ApprovedByHeadquarters"' -1 `"Deleted"' 
+label values interview__status interview__status
+label variable interview__status `"Status of the interview"'
+
+label variable multiQuestion1__0 `""'
+
+label variable multiQuestion1__1 `""'
+
+label variable multiQuestion1__2 `""'
+
+label variable multiQuestion1__3 `""'
+
+label variable multiQuestion1__4 `""'
+
+label variable multiQuestion1__5 `""'
+
+label variable multiQuestion1__6 `""'
+
+label variable multiQuestion1__7 `""'
+
+label variable multiQuestion1__8 `""'
+
+label variable multiQuestion1__9 `""'
+
+label variable multiQuestion1__10 `""'
+
+label variable multiQuestion1__11 `""'
+
+label variable multiQuestion1__12 `""'
+
+label variable multiQuestion1__13 `""'
+
+label variable multiQuestion1__14 `""'
+
+label variable multiQuestion1__15 `""'
+
+label variable multiQuestion1__16 `""'
+
+label variable multiQuestion1__17 `""'
+
+label variable multiQuestion1__18 `""'
+
+label variable multiQuestion1__19 `""'
+
+label variable multiQuestion1__20 `""'
+
+label variable multiQuestion1__21 `""'
+
+label variable multiQuestion1__22 `""'
+
+label variable multiQuestion1__23 `""'
+
+label variable multiQuestion1__24 `""'
+
+label variable multiQuestion1__25 `""'
+
+label variable multiQuestion1__26 `""'
+
+label variable multiQuestion1__27 `""'
+
+label variable multiQuestion1__28 `""'
+
+label variable multiQuestion1__29 `""'
+
+label variable multiQuestion1__30 `""'
+
+label variable multiQuestion1__31 `""'
+
+label variable multiQuestion1__32 `""'
+
+label variable multiQuestion1__33 `""'
+
+label variable multiQuestion1__34 `""'
+
+label variable multiQuestion1__35 `""'
+
+label variable multiQuestion1__36 `""'
+
+label variable multiQuestion1__37 `""'
+
+label variable multiQuestion1__38 `""'
+
+label variable multiQuestion1__39 `""'
+
+label variable multiQuestion1__40 `""'
+
+label variable multiQuestion1__41 `""'
+
+label variable multiQuestion1__42 `""'
+
+label variable multiQuestion1__43 `""'
+
+label variable multiQuestion1__44 `""'
+
+label variable multiQuestion1__45 `""'
+
+label variable multiQuestion1__46 `""'
+
+label variable multiQuestion1__47 `""'
+
+label variable multiQuestion1__48 `""'
+
+label variable multiQuestion1__49 `""'
+
+label variable multiQuestion1__50 `""'
+
+label variable multiQuestion1__51 `""'
+
+label variable multiQuestion1__52 `""'
+
+label variable multiQuestion1__53 `""'
+
+label variable multiQuestion1__54 `""'
+
+label variable multiQuestion1__55 `""'
+
+label variable multiQuestion1__56 `""'
+
+label variable multiQuestion1__57 `""'
+
+label variable multiQuestion1__58 `""'
+
+label variable multiQuestion1__59 `""'
+
+label variable multiQuestion1__60 `""'
+
+label variable multiQuestion1__61 `""'
+
+label variable multiQuestion1__62 `""'
+
+label variable multiQuestion1__63 `""'
+
+label variable multiQuestion1__64 `""'
+
+label variable multiQuestion1__65 `""'
+
+label variable multiQuestion1__66 `""'
+
+label variable multiQuestion1__67 `""'
+
+label variable multiQuestion1__68 `""'
+
+label variable multiQuestion1__69 `""'
+
+label variable multiQuestion1__70 `""'
+
+label variable multiQuestion1__71 `""'
+
+label variable multiQuestion1__72 `""'
+
+label variable multiQuestion1__73 `""'
+
+label variable multiQuestion1__74 `""'
+
+label variable multiQuestion1__75 `""'
+
+label variable multiQuestion1__76 `""'
+
+label variable multiQuestion1__77 `""'
+
+label variable multiQuestion1__78 `""'
+
+label variable multiQuestion1__79 `""'
+
+label variable multiQuestion1__80 `""'
+
+label variable multiQuestion1__81 `""'
+
+label variable multiQuestion1__82 `""'
+
+label variable multiQuestion1__83 `""'
+
+label variable multiQuestion1__84 `""'
+
+label variable multiQuestion1__85 `""'
+
+label variable multiQuestion1__86 `""'
+
+label variable multiQuestion1__87 `""'
+
+label variable multiQuestion1__88 `""'
+
+label variable multiQuestion1__89 `""'
+
+label variable multiQuestion1__90 `""'
+
+label variable multiQuestion1__91 `""'
+
+label variable multiQuestion1__92 `""'
+
+label variable multiQuestion1__93 `""'
+
+label variable multiQuestion1__94 `""'
+
+label variable multiQuestion1__95 `""'
+
+label variable multiQuestion1__96 `""'
+
+label variable multiQuestion1__97 `""'
+
+label variable multiQuestion1__98 `""'
+
+label variable multiQuestion1__99 `""'
+
+label variable multiQuestion1__100 `""'
+
+label variable multiQuestion1__101 `""'
+
+label variable multiQuestion1__102 `""'
+
+label variable multiQuestion1__103 `""'
+
+label variable multiQuestion1__104 `""'
+
+label variable multiQuestion1__105 `""'
+
+label variable multiQuestion1__106 `""'
+
+label variable multiQuestion1__107 `""'
+
+label variable multiQuestion1__108 `""'
+
+label variable multiQuestion1__109 `""'
+
+label variable multiQuestion1__110 `""'
+
+label variable multiQuestion1__111 `""'
+
+label variable multiQuestion1__112 `""'
+
+label variable multiQuestion1__113 `""'
+
+label variable multiQuestion1__114 `""'
+
+label variable multiQuestion1__115 `""'
+
+label variable multiQuestion1__116 `""'
+
+label variable multiQuestion1__117 `""'
+
+label variable multiQuestion1__118 `""'
+
+label variable multiQuestion1__119 `""'
+
+label variable multiQuestion1__120 `""'
+
+label variable multiQuestion1__121 `""'
+
+label variable multiQuestion1__122 `""'
+
+label variable multiQuestion1__123 `""'
+
+label variable multiQuestion1__124 `""'
+
+label variable multiQuestion1__125 `""'
+
+label variable multiQuestion1__126 `""'
+
+label variable multiQuestion1__127 `""'
+
+label variable multiQuestion1__128 `""'
+
+label variable multiQuestion1__129 `""'
+
+label variable multiQuestion1__130 `""'
+
+label variable multiQuestion1__131 `""'
+
+label variable multiQuestion1__132 `""'
+
+label variable multiQuestion1__133 `""'
+
+label variable multiQuestion1__134 `""'
+
+label variable multiQuestion1__135 `""'
+
+label variable multiQuestion1__136 `""'
+
+label variable multiQuestion1__137 `""'
+
+label variable multiQuestion1__138 `""'
+
+label variable multiQuestion1__139 `""'
+
+label variable multiQuestion1__140 `""'
+
+label variable multiQuestion1__141 `""'
+
+label variable multiQuestion1__142 `""'
+
+label variable multiQuestion1__143 `""'
+
+label variable multiQuestion1__144 `""'
+
+label variable multiQuestion1__145 `""'
+
+label variable multiQuestion1__146 `""'
+
+label variable multiQuestion1__147 `""'
+
+label variable multiQuestion1__148 `""'
+
+label variable multiQuestion1__149 `""'
+
+label variable multiQuestion1__150 `""'
+
+label variable multiQuestion1__151 `""'
+
+label variable multiQuestion1__152 `""'
+
+label variable multiQuestion1__153 `""'
+
+label variable multiQuestion1__154 `""'
+
+label variable multiQuestion1__155 `""'
+
+label variable multiQuestion1__156 `""'
+
+label variable multiQuestion1__157 `""'
+
+label variable multiQuestion1__158 `""'
+
+label variable multiQuestion1__159 `""'
+
+label variable multiQuestion1__160 `""'
+
+label variable multiQuestion1__161 `""'
+
+label variable multiQuestion1__162 `""'
+
+label variable multiQuestion1__163 `""'
+
+label variable multiQuestion1__164 `""'
+
+label variable multiQuestion1__165 `""'
+
+label variable multiQuestion1__166 `""'
+
+label variable multiQuestion1__167 `""'
+
+label variable multiQuestion1__168 `""'
+
+label variable multiQuestion1__169 `""'
+
+label variable multiQuestion1__170 `""'
+
+label variable multiQuestion1__171 `""'
+
+label variable multiQuestion1__172 `""'
+
+label variable multiQuestion1__173 `""'
+
+label variable multiQuestion1__174 `""'
+
+label variable multiQuestion1__175 `""'
+
+label variable multiQuestion1__176 `""'
+
+label variable multiQuestion1__177 `""'
+
+label variable multiQuestion1__178 `""'
+
+label variable multiQuestion1__179 `""'
+
+label variable multiQuestion1__180 `""'
+
+label variable multiQuestion1__181 `""'
+
+label variable multiQuestion1__182 `""'
+
+label variable multiQuestion1__183 `""'
+
+label variable multiQuestion1__184 `""'
+
+label variable multiQuestion1__185 `""'
+
+label variable multiQuestion1__186 `""'
+
+label variable multiQuestion1__187 `""'
+
+label variable multiQuestion1__188 `""'
+
+label variable multiQuestion1__189 `""'
+
+label variable multiQuestion1__190 `""'
+
+label variable multiQuestion1__191 `""'
+
+label variable multiQuestion1__192 `""'
+
+label variable multiQuestion1__193 `""'
+
+label variable multiQuestion1__194 `""'
+
+label variable multiQuestion1__195 `""'
+
+label variable multiQuestion1__196 `""'
+
+label variable multiQuestion1__197 `""'
+
+label variable multiQuestion1__198 `""'
+
+label variable multiQuestion1__199 `""'
+
+label variable multiQuestion2__0 `""'
+
+label variable multiQuestion2__1 `""'
+
+label variable multiQuestion2__2 `""'
+
+label variable multiQuestion2__3 `""'
+
+label variable multiQuestion2__4 `""'
+
+label variable multiQuestion2__5 `""'
+
+label variable multiQuestion2__6 `""'
+
+label variable multiQuestion2__7 `""'
+
+label variable multiQuestion2__8 `""'
+
+label variable multiQuestion2__9 `""'
+
+label variable multiQuestion2__10 `""'
+
+label variable multiQuestion2__11 `""'
+
+label variable multiQuestion2__12 `""'
+
+label variable multiQuestion2__13 `""'
+
+label variable multiQuestion2__14 `""'
+
+label variable multiQuestion2__15 `""'
+
+label variable multiQuestion2__16 `""'
+
+label variable multiQuestion2__17 `""'
+
+label variable multiQuestion2__18 `""'
+
+label variable multiQuestion2__19 `""'
+
+label variable multiQuestion2__20 `""'
+
+label variable multiQuestion2__21 `""'
+
+label variable multiQuestion2__22 `""'
+
+label variable multiQuestion2__23 `""'
+
+label variable multiQuestion2__24 `""'
+
+label variable multiQuestion2__25 `""'
+
+label variable multiQuestion2__26 `""'
+
+label variable multiQuestion2__27 `""'
+
+label variable multiQuestion2__28 `""'
+
+label variable multiQuestion2__29 `""'
+
+label variable multiQuestion2__30 `""'
+
+label variable multiQuestion2__31 `""'
+
+label variable multiQuestion2__32 `""'
+
+label variable multiQuestion2__33 `""'
+
+label variable multiQuestion2__34 `""'
+
+label variable multiQuestion2__35 `""'
+
+label variable multiQuestion2__36 `""'
+
+label variable multiQuestion2__37 `""'
+
+label variable multiQuestion2__38 `""'
+
+label variable multiQuestion2__39 `""'
+
+label variable multiQuestion2__40 `""'
+
+label variable multiQuestion2__41 `""'
+
+label variable multiQuestion2__42 `""'
+
+label variable multiQuestion2__43 `""'
+
+label variable multiQuestion2__44 `""'
+
+label variable multiQuestion2__45 `""'
+
+label variable multiQuestion2__46 `""'
+
+label variable multiQuestion2__47 `""'
+
+label variable multiQuestion2__48 `""'
+
+label variable multiQuestion2__49 `""'
+
+label variable multiQuestion2__50 `""'
+
+label variable multiQuestion2__51 `""'
+
+label variable multiQuestion2__52 `""'
+
+label variable multiQuestion2__53 `""'
+
+label variable multiQuestion2__54 `""'
+
+label variable multiQuestion2__55 `""'
+
+label variable multiQuestion2__56 `""'
+
+label variable multiQuestion2__57 `""'
+
+label variable multiQuestion2__58 `""'
+
+label variable multiQuestion2__59 `""'
+
+label variable multiQuestion2__60 `""'
+
+label variable multiQuestion2__61 `""'
+
+label variable multiQuestion2__62 `""'
+
+label variable multiQuestion2__63 `""'
+
+label variable multiQuestion2__64 `""'
+
+label variable multiQuestion2__65 `""'
+
+label variable multiQuestion2__66 `""'
+
+label variable multiQuestion2__67 `""'
+
+label variable multiQuestion2__68 `""'
+
+label variable multiQuestion2__69 `""'
+
+label variable multiQuestion2__70 `""'
+
+label variable multiQuestion2__71 `""'
+
+label variable multiQuestion2__72 `""'
+
+label variable multiQuestion2__73 `""'
+
+label variable multiQuestion2__74 `""'
+
+label variable multiQuestion2__75 `""'
+
+label variable multiQuestion2__76 `""'
+
+label variable multiQuestion2__77 `""'
+
+label variable multiQuestion2__78 `""'
+
+label variable multiQuestion2__79 `""'
+
+label variable multiQuestion2__80 `""'
+
+label variable multiQuestion2__81 `""'
+
+label variable multiQuestion2__82 `""'
+
+label variable multiQuestion2__83 `""'
+
+label variable multiQuestion2__84 `""'
+
+label variable multiQuestion2__85 `""'
+
+label variable multiQuestion2__86 `""'
+
+label variable multiQuestion2__87 `""'
+
+label variable multiQuestion2__88 `""'
+
+label variable multiQuestion2__89 `""'
+
+label variable multiQuestion2__90 `""'
+
+label variable multiQuestion2__91 `""'
+
+label variable multiQuestion2__92 `""'
+
+label variable multiQuestion2__93 `""'
+
+label variable multiQuestion2__94 `""'
+
+label variable multiQuestion2__95 `""'
+
+label variable multiQuestion2__96 `""'
+
+label variable multiQuestion2__97 `""'
+
+label variable multiQuestion2__98 `""'
+
+label variable multiQuestion2__99 `""'
+
+label variable multiQuestion2__100 `""'
+
+label variable multiQuestion2__101 `""'
+
+label variable multiQuestion2__102 `""'
+
+label variable multiQuestion2__103 `""'
+
+label variable multiQuestion2__104 `""'
+
+label variable multiQuestion2__105 `""'
+
+label variable multiQuestion2__106 `""'
+
+label variable multiQuestion2__107 `""'
+
+label variable multiQuestion2__108 `""'
+
+label variable multiQuestion2__109 `""'
+
+label variable multiQuestion2__110 `""'
+
+label variable multiQuestion2__111 `""'
+
+label variable multiQuestion2__112 `""'
+
+label variable multiQuestion2__113 `""'
+
+label variable multiQuestion2__114 `""'
+
+label variable multiQuestion2__115 `""'
+
+label variable multiQuestion2__116 `""'
+
+label variable multiQuestion2__117 `""'
+
+label variable multiQuestion2__118 `""'
+
+label variable multiQuestion2__119 `""'
+
+label variable multiQuestion2__120 `""'
+
+label variable multiQuestion2__121 `""'
+
+label variable multiQuestion2__122 `""'
+
+label variable multiQuestion2__123 `""'
+
+label variable multiQuestion2__124 `""'
+
+label variable multiQuestion2__125 `""'
+
+label variable multiQuestion2__126 `""'
+
+label variable multiQuestion2__127 `""'
+
+label variable multiQuestion2__128 `""'
+
+label variable multiQuestion2__129 `""'
+
+label variable multiQuestion2__130 `""'
+
+label variable multiQuestion2__131 `""'
+
+label variable multiQuestion2__132 `""'
+
+label variable multiQuestion2__133 `""'
+
+label variable multiQuestion2__134 `""'
+
+label variable multiQuestion2__135 `""'
+
+label variable multiQuestion2__136 `""'
+
+label variable multiQuestion2__137 `""'
+
+label variable multiQuestion2__138 `""'
+
+label variable multiQuestion2__139 `""'
+
+label variable multiQuestion2__140 `""'
+
+label variable multiQuestion2__141 `""'
+
+label variable multiQuestion2__142 `""'
+
+label variable multiQuestion2__143 `""'
+
+label variable multiQuestion2__144 `""'
+
+label variable multiQuestion2__145 `""'
+
+label variable multiQuestion2__146 `""'
+
+label variable multiQuestion2__147 `""'
+
+label variable multiQuestion2__148 `""'
+
+label variable multiQuestion2__149 `""'
+
+label variable multiQuestion2__150 `""'
+
+label variable multiQuestion2__151 `""'
+
+label variable multiQuestion2__152 `""'
+
+label variable multiQuestion2__153 `""'
+
+label variable multiQuestion2__154 `""'
+
+label variable multiQuestion2__155 `""'
+
+label variable multiQuestion2__156 `""'
+
+label variable multiQuestion2__157 `""'
+
+label variable multiQuestion2__158 `""'
+
+label variable multiQuestion2__159 `""'
+
+label variable multiQuestion2__160 `""'
+
+label variable multiQuestion2__161 `""'
+
+label variable multiQuestion2__162 `""'
+
+label variable multiQuestion2__163 `""'
+
+label variable multiQuestion2__164 `""'
+
+label variable multiQuestion2__165 `""'
+
+label variable multiQuestion2__166 `""'
+
+label variable multiQuestion2__167 `""'
+
+label variable multiQuestion2__168 `""'
+
+label variable multiQuestion2__169 `""'
+
+label variable multiQuestion2__170 `""'
+
+label variable multiQuestion2__171 `""'
+
+label variable multiQuestion2__172 `""'
+
+label variable multiQuestion2__173 `""'
+
+label variable multiQuestion2__174 `""'
+
+label variable multiQuestion2__175 `""'
+
+label variable multiQuestion2__176 `""'
+
+label variable multiQuestion2__177 `""'
+
+label variable multiQuestion2__178 `""'
+
+label variable multiQuestion2__179 `""'
+
+label variable multiQuestion2__180 `""'
+
+label variable multiQuestion2__181 `""'
+
+label variable multiQuestion2__182 `""'
+
+label variable multiQuestion2__183 `""'
+
+label variable multiQuestion2__184 `""'
+
+label variable multiQuestion2__185 `""'
+
+label variable multiQuestion2__186 `""'
+
+label variable multiQuestion2__187 `""'
+
+label variable multiQuestion2__188 `""'
+
+label variable multiQuestion2__189 `""'
+
+label variable multiQuestion2__190 `""'
+
+label variable multiQuestion2__191 `""'
+
+label variable multiQuestion2__192 `""'
+
+label variable multiQuestion2__193 `""'
+
+label variable multiQuestion2__194 `""'
+
+label variable multiQuestion2__195 `""'
+
+label variable multiQuestion2__196 `""'
+
+label variable multiQuestion2__197 `""'
+
+label variable multiQuestion2__198 `""'
+
+label variable multiQuestion2__199 `""'
