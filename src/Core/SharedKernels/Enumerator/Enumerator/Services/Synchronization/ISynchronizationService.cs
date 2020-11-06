@@ -65,5 +65,13 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<bool> AreNotificationsEnabledAsync(CancellationToken token);
         Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);
         Task<RemoteTabletSettingsApiView> GetTabletSettings(CancellationToken cancellationToken);
+
+        Task UploadCalendarEventAsync(Guid calendarEventId, CalendarEventPackageApiView completedInterview,
+            IProgress<TransferProgress> transferProgress, CancellationToken token);
+
+        Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId,
+            IProgress<TransferProgress> transferProgress, CancellationToken token);
+        
+        Task<List<CalendarEventApiView>> GetCalendarEventsAsync(CancellationToken token = default);
     }
 }
