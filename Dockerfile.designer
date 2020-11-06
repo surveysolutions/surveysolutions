@@ -56,15 +56,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends libc6-dev xvfb 
     && rm -rf /var/lib/apt/lists/*
 
 # Labels.
-LABEL org.label-schema.schema-version="1.0"
-LABEL org.label-schema.build-date=$BUILD_DATE
-LABEL org.label-schema.name="designer"
-LABEL org.label-schema.description="Survey Solutions Headquarters"
-LABEL org.label-schema.url="https://mysurvey.solutions"
-LABEL org.label-schema.vcs-ref=$VCS_REF
-LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
-LABEL org.label-schema.version=$BUILD_VERSION
-LABEL org.label-schema.usage="https://support.mysurvey.solutions/headquarters/config/${BUILD_VERSION}/docker"
+LABEL org.opencontainers.image.title="Designer"
+LABEL org.opencontainers.image.description="Survey Solutions Designer"
 
 COPY --from=builder designer /app
 

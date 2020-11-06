@@ -1,6 +1,6 @@
 ARG DOTNET_VERSION=3.1
-ARG EXPORT_BUILD=42
 ARG GIT_BRANCH=master
+ARG BUILD_VERSION
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 ARG EXPORT_BUILD
@@ -20,15 +20,8 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
 
-LABEL org.label-schema.schema-version="1.0"
-LABEL org.label-schema.build-date=$BUILD_DATE
-LABEL org.label-schema.name="export-service"
-LABEL org.label-schema.description="Survey Solutions Export Service"
-LABEL org.label-schema.url="https://mysurvey.solutions"
-LABEL org.label-schema.vcs-ref=$VCS_REF
-LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
-LABEL org.label-schema.version=$BUILD_VERSION
-LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
+LABEL org.opencontainers.image.title="Export Service"
+LABEL org.opencontainers.image.description="Survey Solutions Data Export Service"
 
 COPY --from=builder export /app
 

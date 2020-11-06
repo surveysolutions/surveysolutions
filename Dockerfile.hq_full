@@ -1,7 +1,12 @@
-ARG NODEJS_VERSION
-ARG DOTNET_VERSION
+ARG NODEJS_VERSION=14
+ARG DOTNET_VERSION=3.1
+ARG GIT_BRANCH=master
+ARG HQ_BUILD=42
 
-FROM node:${NODEJS_VERSION} AS js_builder
+FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS js_builder
+
+COPY src/UI/WB.UI.Frontend/package*.json src/UI/WB.UI.Frontend/
+RUN cd src/UI/WB.UI.Frontend && npm ci
 
 COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Headquarters.Core/Resources src/UI/WB.UI.Headquarters.Core/Resources
@@ -10,13 +15,28 @@ COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/S
 COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
 
 WORKDIR /src/UI/WB.UI.Frontend
-RUN yarn && yarn build --package
+RUN  npm run build -- --modern --package
+
+FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as export_builder
+ARG EXPORT_BUILD
+ARG GIT_BRANCH
+
+COPY libs /libs
+COPY src/Core/Infrastructure/WB.Infrastructure.AspNetCore src/Core/Infrastructure/WB.Infrastructure.AspNetCore
+COPY src/Services /src/Services
+COPY src/.version /src
+COPY src/Directory.Build.props /src
+COPY src/Directory.Build.targets /src
+
+RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
+    -c Release -o /export \
+    --version-suffix $GIT_BRANCH \
+    /p:BuildNumber=$EXPORT_BUILD
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 
-ARG GIT_BRANCH
 ARG HQ_BUILD
-ARG EXPORT_BUILD
+ARG GIT_BRANCH
 
 COPY libs /libs
 COPY src /src
@@ -27,23 +47,14 @@ RUN dotnet publish /src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq \
     --version-suffix $GIT_BRANCH \
     /p:BuildNumber=$HQ_BUILD
-RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
-    -c Release \
-    -o /export \
-    --version-suffix $GIT_BRANCH \
-    /p:BuildNumber=$EXPORT_BUILD
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
 
+# should be empty
 ARG BUILD_DATE
 ARG VCS_REF
 ARG BUILD_VERSION
 ARG GIT_BRANCH
-
-ARG HQ_BUILD
-ARG IN_BUILD
-ARG SV_BUILD
-ARG EXPORT_BUILD
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -55,23 +66,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Labels.
-LABEL org.label-schema.schema-version="1.0"
-LABEL org.label-schema.build-date=$BUILD_DATE
-LABEL org.opencontainers.image.title="headquarters with export"
-LABEL org.opencontainers.image.description="Survey Solutions headquarters application with embedded export service"
-LABEL org.opencontainers.image.url="https://mysurvey.solutions"
-LABEL org.label-schema.vcs-ref=$VCS_REF
-LABEL org.label-schema.vcs-url="https://github.com/surveysolutions/surveysolutions"
-LABEL org.opencontainers.image.version=$BUILD_VERSION
-LABEL org.label-schema.usage="https://support.mysurvey.solutions/headquarters/config/${BUILD_VERSION}/docker"
-
-LABEL solutions.mysurvey.hq.build-no=$HQ_BUILD
-LABEL solutions.mysurvey.interviewer.build-no=$IN_BUILD
-LABEL solutions.mysurvey.supervisor.build-no=$SV_BUILD
-LABEL solutions.mysurvey.export.build-no=$EXPORT_BUILD
-
-# Larger files at first
-COPY build/headquarters/*.apk /app/Client/
+LABEL org.opencontainers.image.title="Headquarets All in One"
+LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
 
 COPY --from=builder hq /app
 COPY --from=builder export /app/Export.Service
@@ -82,7 +78,6 @@ ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
 ENV HQ_Geospatial__GdalHome=/usr/bin
 ENV HQ_Apks__ClientApkPath=./Client
 ENV HQ_Logging__LogsLocation=/app/AppData/logs
-ENV Export_ExportSettings__DirectoryPath=/app/AppData/Export
 ENV HQ_Scheduler__InstanceId=AUTO
 ENV HQ_Scheduler__IsClustered=true
 

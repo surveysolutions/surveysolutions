@@ -3,4 +3,7 @@ COPY build/androidFiles/*.apk /home
 
 EXPOSE 80
 
+LABEL org.opencontainers.image.title="Android Applications server"
+LABEL org.opencontainers.image.description="Survey Solutions Interviewer and Supervisor"
+
 CMD ["caddy", "file-server", "--browse", "--listen", ":80", "--root", "/home"]
