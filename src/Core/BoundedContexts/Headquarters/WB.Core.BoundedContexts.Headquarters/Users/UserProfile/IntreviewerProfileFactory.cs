@@ -456,7 +456,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             var hasUpdateForInterviewerApp = false;
             if (lastSuccessDeviceInfo != null)
             {
-                int? interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
+                int? interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber().Result;
                 hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
                                              interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
             }
