@@ -15,7 +15,6 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: Qwerty1234
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         ports:
           - 5432
         # Set health checks to wait until postgres has started
