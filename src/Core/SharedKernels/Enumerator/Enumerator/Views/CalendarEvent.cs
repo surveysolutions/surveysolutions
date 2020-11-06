@@ -15,5 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool IsCompleted { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsSynchronized { get; set; }
+        public Guid LastEventId { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Collections.Generic;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -31,6 +32,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             return this.connection.Find<CalendarEvent>(e => 
                 e.InterviewId == null && e.AssignmentId == assignmentId);
+        }
+
+        public IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents(Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

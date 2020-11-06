@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using CalendarEventPackageApiView = WB.Core.SharedKernels.DataCollection.WebApi.CalendarEventPackageApiView;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -237,6 +238,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 PartialSynchronizationEnabled = false,
             };
             return Task.FromResult(tabletSettingsApiView);
+        }
+
+        public Task UploadCalendarEventAsync(Guid calendarEventId, CalendarEventPackageApiView calendarEventsPackage,
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
+        {
+            return syncClient.SendAsync<UploadCalendarEventRequest, OkResponse>(
+                    new UploadCalendarEventRequest
+                    {
+                        CalendarEvent = calendarEventsPackage,
+                    },
+                    token);
+        }
+
+        public async Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        {
+            var response = await
+                syncClient.SendAsync<GetCalendarEventDetailsRequest, GetCalendarEventDetailsResponse>(
+                    new GetCalendarEventDetailsRequest { CalendarEventId = calendarEventId },
+                    token);
+
+            return response.Events;
+        }
+
+        public async Task<List<CalendarEventApiView>> GetCalendarEventsAsync(CancellationToken token = default)
+        {
+            var response = await
+                syncClient.SendAsync<GetCalendarEventsRequest, GetCalendarEventsResponse>(
+                    new GetCalendarEventsRequest { UserId = principal.CurrentUserIdentity.UserId },
+                    token);
+
+            return response.CalendarEvents;
         }
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken token = default)
