@@ -57,7 +57,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         private Task<GetCalendarEventDetailsResponse> Handle(GetCalendarEventDetailsRequest arg)
         {
-            var events = this.eventStore.Read(arg.CalendarEventId, 0).ToList();
+            var sequence = arg.Sequence + 1 ?? 0;
+            var events = this.eventStore.Read(arg.CalendarEventId, sequence).ToList();
 
             return Task.FromResult(new GetCalendarEventDetailsResponse
             {
@@ -75,12 +76,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         private Task<GetCalendarEventsResponse> GetCalendarEvents(GetCalendarEventsRequest arg)
         {
-            var calendarEvents = calendarEventStorage.GetNotSynchedCalendarEvents(arg.UserId);
+            var calendarEvents = calendarEventStorage.GetCalendarEventsForUser(arg.UserId);
 
             List<CalendarEventApiView> response = calendarEvents.Select(x => new CalendarEventApiView
             {
                 CalendarEventId = x.Id,
-                Sequence = eventStore.GetMaxSequenceForAnyEvent(x.Id, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
+                Sequence = eventStore.GetLastEventSequence(x.Id),
                 ResponsibleId = x.UserId,
                 LastEventId = x.LastEventId,
                 //IsMarkedAsReceivedByInterviewer = x.ReceivedByInterviewerAtUtc != null,
@@ -103,15 +104,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             try
             {
                 var calendarEventStream = this.serializer.Deserialize<CommittedEvent[]>(calendarEvent.Events);
-
-                var firstEvent = calendarEventStream.FirstOrDefault();
-
-                if (firstEvent != null && eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
-                    calendarEvent.CalendarEventId, 
-                    EventsThatChangeAnswersStateProvider.GetTypeNames()))
-                {
-                    throw new ArgumentException("Provided calendar event package is outdated. New events were given to the calendar event while interviewer had calendar event on a tablet");
-                }
 
                 var isPackageDuplicated = IsPackageDuplicated(calendarEventStream);
                 if (isPackageDuplicated)
