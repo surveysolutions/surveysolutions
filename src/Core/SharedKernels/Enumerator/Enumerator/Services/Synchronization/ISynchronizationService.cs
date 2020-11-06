@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task UploadCalendarEventAsync(Guid calendarEventId, CalendarEventPackageApiView completedInterview,
             IProgress<TransferProgress> transferProgress, CancellationToken token);
 
-        Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId,
+        Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, int? sequence,
             IProgress<TransferProgress> transferProgress, CancellationToken token);
         
         Task<List<CalendarEventApiView>> GetCalendarEventsAsync(CancellationToken token = default);

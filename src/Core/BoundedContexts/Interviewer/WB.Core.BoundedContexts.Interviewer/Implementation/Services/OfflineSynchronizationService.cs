@@ -251,11 +251,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     token);
         }
 
-        public async Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        public async Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, int? sequence, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var response = await
                 syncClient.SendAsync<GetCalendarEventDetailsRequest, GetCalendarEventDetailsResponse>(
-                    new GetCalendarEventDetailsRequest { CalendarEventId = calendarEventId },
+                    new GetCalendarEventDetailsRequest
+                    {
+                        CalendarEventId = calendarEventId,
+                        Sequence = sequence
+                    },
                     token);
 
             return response.Events;

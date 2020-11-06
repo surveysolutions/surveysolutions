@@ -35,7 +35,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 try
                 {
                     var calendarEventStream = await this.synchronizationService.GetCalendarEventStreamAsync(
-                        calendarEvent.CalendarEventId, transferProgress, Context.CancellationToken);
+                        calendarEvent.CalendarEventId,
+                        0,
+                        transferProgress, 
+                        Context.CancellationToken);
                 
                     EventStore.StoreEvents(new CommittedEventStream(calendarEvent.CalendarEventId, calendarEventStream));
                     eventBus.PublishCommittedEvents(calendarEventStream);

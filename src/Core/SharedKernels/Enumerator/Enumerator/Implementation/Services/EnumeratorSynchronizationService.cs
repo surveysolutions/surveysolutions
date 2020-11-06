@@ -581,6 +581,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public Task<List<CommittedEvent>> GetCalendarEventStreamAsync(Guid calendarEventId, 
+            int? sequence, 
             IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             try
