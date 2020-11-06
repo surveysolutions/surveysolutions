@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.Services.Impl
             HttpClient apkClient = httpClientFactory.CreateClient("apks");
             apkClient.BaseAddress = remoteUri;
 
-            var requestUri = $"/{appName}";
+            var requestUri = appName;
             var headResponse = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, requestUri));
             if (headResponse.StatusCode != HttpStatusCode.OK)
             {
