@@ -195,6 +195,9 @@
   <data name="NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Нет значения</value>
+  </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Идентификатор</value>
   </data>
