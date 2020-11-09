@@ -13,7 +13,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     {
         bool HasExpandedView { get; }
         bool IsExpanded { get; set; }
+    }
 
+    public interface IDashboardItemWithEvents : IDashboardItem
+    {
         event EventHandler? OnItemUpdated;
     }
 
