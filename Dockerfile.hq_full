@@ -18,7 +18,7 @@ WORKDIR /src/UI/WB.UI.Frontend
 RUN  npm run build -- --modern --package
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as export_builder
-ARG EXPORT_BUILD
+ARG HQ_BUILD
 ARG GIT_BRANCH
 
 COPY libs /libs
@@ -31,9 +31,9 @@ COPY src/Directory.Build.targets /src
 RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release -o /export \
     --version-suffix $GIT_BRANCH \
-    /p:BuildNumber=$EXPORT_BUILD
+    /p:BuildNumber=$HQ_BUILD
 
-FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
+FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 
 ARG HQ_BUILD
 ARG GIT_BRANCH
@@ -70,7 +70,7 @@ LABEL org.opencontainers.image.title="Headquarets All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
 
 COPY --from=builder hq /app
-COPY --from=builder export /app/Export.Service
+COPY --from=export_builder export /app/Export.Service
 
 ENV HQ_Headquarters__BaseUrl=http://localhost
 ENV HQ_Headquarters__TenantName=survey
