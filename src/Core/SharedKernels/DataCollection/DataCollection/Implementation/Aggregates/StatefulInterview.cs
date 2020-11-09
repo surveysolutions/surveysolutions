@@ -455,9 +455,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 };
             }
 
+            var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
+
             return section
                 .TreeToEnumerableDepthFirst(s => s.Children)
-                .Where(x => !(x is InterviewTreeVariable))
+                .Where(x => isCover || !(x is InterviewTreeVariable))
                 .Select(x => x.Identity);
         }
         

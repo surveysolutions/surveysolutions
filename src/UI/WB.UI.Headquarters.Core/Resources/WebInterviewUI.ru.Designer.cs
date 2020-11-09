@@ -22,14 +22,14 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class WebInterviewUI {
+    public class WebInterviewUI_ru {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal WebInterviewUI() {
+        internal WebInterviewUI_ru() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.WebInterviewUI", typeof(WebInterviewUI).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.WebInterviewUI.ru", typeof(WebInterviewUI_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer is invalid.
+        ///   Looks up a localized string similar to Ответ не валиден.
         /// </summary>
         public static string AnswerIsInvalid {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer was not saved.
+        ///   Looks up a localized string similar to Ответ не сохранен.
         /// </summary>
         public static string AnswerWasNotSaved {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit area.
+        ///   Looks up a localized string similar to Отметить область.
         /// </summary>
         public static string AreaRecord {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click to record audio.
+        ///   Looks up a localized string similar to Кликните чтобы записать аудио.
         /// </summary>
         public static string AudioClickRecord {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audio initialization failed.
+        ///   Looks up a localized string similar to Ошибка инициализации аудио.
         /// </summary>
         public static string AudioInitializationFailed {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audio recording.
+        ///   Looks up a localized string similar to Аудио запись.
         /// </summary>
         public static string AudioRecording {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{humanizedLength}} ({{formattedLength}}) of audio recording.
+        ///   Looks up a localized string similar to {{humanizedLength}} ({{formattedLength}}) аудио записи.
         /// </summary>
         public static string AudioRecordingDuration {
             get {
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record new.
+        ///   Looks up a localized string similar to Записать новое.
         /// </summary>
         public static string AudioRecordNew {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Отменить.
         /// </summary>
         public static string Cancel {
             get {
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click to answer.
+        ///   Looks up a localized string similar to Кликните чтобы ответить.
         /// </summary>
         public static string ClickToAnswer {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Web Interview supports only one active tab with the interview.&lt;/p&gt;&lt;p&gt;Please reload this page to continue using this tab or close it.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Веб Интервью поддерживается только в одной активной вкладке&lt;/p&gt;&lt;p&gt;Пожалуйста перегрузите эту страницу если хотите продолжить интервью или закройте окно&lt;/p&gt;.
         /// </summary>
         public static string CloseInterviewMessage {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interview is opened in another tab or browser.
+        ///   Looks up a localized string similar to Интервью открыто в другом браузере или вкладке.
         /// </summary>
         public static string CloseInterviewTitle {
             get {
@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comment.
+        ///   Looks up a localized string similar to Комментарий.
         /// </summary>
         public static string Comment {
             get {
@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add comment.
+        ///   Looks up a localized string similar to Добавить комментарий.
         /// </summary>
         public static string CommentAdd {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Admin comment.
+        ///   Looks up a localized string similar to Комментарий Администратора.
         /// </summary>
         public static string CommentAdmin {
             get {
@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your comment.
+        ///   Looks up a localized string similar to Введите Ваш комментарий.
         /// </summary>
         public static string CommentEnter {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters comment.
+        ///   Looks up a localized string similar to Комментарий хедквотера.
         /// </summary>
         public static string CommentHeadquarters {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide comment.
+        ///   Looks up a localized string similar to Скрыть комментарий.
         /// </summary>
         public static string CommentHide {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer comment.
+        ///   Looks up a localized string similar to Комментарий интервьюера.
         /// </summary>
         public static string CommentInterviewer {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On previous answer.
+        ///   Looks up a localized string similar to На предыдущий ответ.
         /// </summary>
         public static string CommentOnPreviousAnswer {
             get {
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Post.
+        ///   Looks up a localized string similar to Отправить.
         /// </summary>
         public static string CommentPost {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Posting....
+        ///   Looks up a localized string similar to Отправка....
         /// </summary>
         public static string CommentPosting {
             get {
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor comment.
+        ///   Looks up a localized string similar to Комментарий супервизора.
         /// </summary>
         public static string CommentSupervisor {
             get {
@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your comment.
+        ///   Looks up a localized string similar to Ваш комментарий.
         /// </summary>
         public static string CommentYours {
             get {
@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complete.
+        ///   Looks up a localized string similar to Завершить.
         /// </summary>
         public static string Complete {
             get {
@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to complete this interview.
+        ///   Looks up a localized string similar to Вы на финальной стадии работы с интервью.
         /// </summary>
         public static string CompleteAbout {
             get {
@@ -295,7 +295,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions with errors:.
+        ///   Looks up a localized string similar to Вопросы с ошибками.
         /// </summary>
         public static string CompleteErrors {
             get {
@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {{count}} entities with errors:.
+        ///   Looks up a localized string similar to Первые {{count}} объектов с ошибкам:.
         /// </summary>
         public static string CompleteFirstErrors {
             get {
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note for supervisor.
+        ///   Looks up a localized string similar to Заметка для супервизора.
         /// </summary>
         public static string CompleteNoteToSupervisor {
             get {
@@ -322,7 +322,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answered.
+        ///   Looks up a localized string similar to Отвеченных.
         /// </summary>
         public static string CompleteQuestionsAnswered {
             get {
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions status:.
+        ///   Looks up a localized string similar to Статусы вопросов:.
         /// </summary>
         public static string CompleteQuestionsStatus {
             get {
@@ -340,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unanswered.
+        ///   Looks up a localized string similar to Неотвеченных.
         /// </summary>
         public static string CompleteQuestionsUnanswered {
             get {
@@ -349,7 +349,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster?.
+        ///   Looks up a localized string similar to Вы уверены, что хотите удалить зависимый список?.
         /// </summary>
         public static string ConfirmRosterRemove {
             get {
@@ -358,7 +358,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please reload the page to restore connection and continue this interview..
+        ///   Looks up a localized string similar to Пожалуйста перегрузите страницу чтобы восстановить соединение с сервером и продолжить интервью..
         /// </summary>
         public static string ConnectionLostMessage {
             get {
@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connection to server is lost..
+        ///   Looks up a localized string similar to Соединение с сервером потеряно..
         /// </summary>
         public static string ConnectionLostTitle {
             get {
@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cover.
+        ///   Looks up a localized string similar to Обложка.
         /// </summary>
         public static string Cover {
             get {
@@ -385,9 +385,9 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attention! This interview has corrupted data, &lt;br /&gt;
-        ///only previous version of interview is available. &lt;br /&gt;
-        ///Contact support for assistance..
+        ///   Looks up a localized string similar to Внимание! Это интервью содержит поврежденные данные, &lt;br /&gt;
+        ///поэтому доступна только предыдущая версия. &lt;br /&gt;
+        ///Oбратитесь в тех. поддержку за помощью.
         /// </summary>
         public static string CoverBrokenPackegeText {
             get {
@@ -396,7 +396,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error: This interview is corrupted.
+        ///   Looks up a localized string similar to Ошибка: Это интервью не последней версии.
         /// </summary>
         public static string CoverBrokenPackegeTitle {
             get {
@@ -405,7 +405,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions with comments:.
+        ///   Looks up a localized string similar to Вопросы с комментариями:.
         /// </summary>
         public static string CoverComments {
             get {
@@ -414,7 +414,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First {{count}} entities with comments:.
+        ///   Looks up a localized string similar to Первые {{count}} вопросов с комментариями:.
         /// </summary>
         public static string CoverFirstComments {
             get {
@@ -423,7 +423,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor note:.
+        ///   Looks up a localized string similar to Замечания супервизора.
         /// </summary>
         public static string CoverSupervisorNote {
             get {
@@ -432,7 +432,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value cannot be parsed as decimal value.
+        ///   Looks up a localized string similar to Введенное значение не может быть интерпретировано как вещественное число.
         /// </summary>
         public static string DecimalCannotParse {
             get {
@@ -441,7 +441,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter decimal.
+        ///   Looks up a localized string similar to Введите число.
         /// </summary>
         public static string DecimalEnter {
             get {
@@ -450,7 +450,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value is too large. Less than 15 digits allowed.
+        ///   Looks up a localized string similar to Введенное значение слишком велико. Допускается максимум 15 цифр.
         /// </summary>
         public static string DecimalTooBig {
             get {
@@ -459,7 +459,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disconnected.
+        ///   Looks up a localized string similar to Разъеденены.
         /// </summary>
         public static string Disconnected {
             get {
@@ -468,7 +468,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Done.
+        ///   Looks up a localized string similar to Готово.
         /// </summary>
         public static string Done {
             get {
@@ -477,7 +477,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email resume link.
+        ///   Looks up a localized string similar to Отправить ссылку для продолжения.
         /// </summary>
         public static string EmailLink_EmailResumeLink {
             get {
@@ -486,7 +486,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your email address.
+        ///   Looks up a localized string similar to Введите свой e-mail..
         /// </summary>
         public static string EmailLink_Header {
             get {
@@ -495,7 +495,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{email}} is invalid email address.
+        ///   Looks up a localized string similar to {{email}} неверный e-mail.
         /// </summary>
         public static string EmailLink_InvalidEmail {
             get {
@@ -504,7 +504,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We will send you a message with the link to resume the interview if you need to continue later..
+        ///   Looks up a localized string similar to Мы отправим вас сообщение с ссылкой для продолжения интервью, если вы захотите продолжить позже..
         /// </summary>
         public static string EmailLink_Message {
             get {
@@ -513,7 +513,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter email.
+        ///   Looks up a localized string similar to Введите e-mail.
         /// </summary>
         public static string EmailLink_Placeholder {
             get {
@@ -522,7 +522,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
+        ///   Looks up a localized string similar to Вы можете закрыть это окно сейчас и продолжить отвечать на вопросы. Отправить ссылку для продолжения интервью вы можете в любой момент, нажав на &apos;Отправить ссылку для продолжения&apos; в верхнем меню..
         /// </summary>
         public static string EmailLink_ResumeAnyTime {
             get {
@@ -531,7 +531,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter date.
+        ///   Looks up a localized string similar to Введите дату.
         /// </summary>
         public static string EnterDate {
             get {
@@ -540,7 +540,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter password.
+        ///   Looks up a localized string similar to Введите пароль.
         /// </summary>
         public static string EnterPassword {
             get {
@@ -549,7 +549,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error.
+        ///   Looks up a localized string similar to Ошибка.
         /// </summary>
         public static string Error {
             get {
@@ -558,7 +558,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors.
+        ///   Looks up a localized string similar to Ошибок.
         /// </summary>
         public static string Error_plural {
             get {
@@ -567,7 +567,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The position could not be determined due to an unknown error (Code: {{strErrorCode}})..
+        ///   Looks up a localized string similar to Текущее местоположение не может быть определено из за неизвестной ошибки (Код: {{strErrorCode}}).
         /// </summary>
         public static string GPSError {
             get {
@@ -576,7 +576,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your browser does not support receiving Geolocation.
+        ///   Looks up a localized string similar to Ваш Браузер не поддерживает получение местоположения через Geolocation API.
         /// </summary>
         public static string GPSNotAvailable {
             get {
@@ -585,7 +585,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This website does not have permission to use the Geolocation API.
+        ///   Looks up a localized string similar to Пользователь не дал разрешения на получения местоположения через Geolocation API.
         /// </summary>
         public static string GPSPermissionDenied {
             get {
@@ -594,7 +594,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current position could not be determined..
+        ///   Looks up a localized string similar to Текущее местоположение не может быть определено.
         /// </summary>
         public static string GPSPositionUnavailable {
             get {
@@ -603,7 +603,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record GPS.
+        ///   Looks up a localized string similar to Записать GPS.
         /// </summary>
         public static string GPSRecord {
             get {
@@ -612,7 +612,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current position could not be determined within the specified timeout period..
+        ///   Looks up a localized string similar to Текущее местоположение не может быть определено за указанный промежуток времени.
         /// </summary>
         public static string GPSTimeout {
             get {
@@ -621,7 +621,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help.
+        ///   Looks up a localized string similar to Помощь.
         /// </summary>
         public static string Help {
             get {
@@ -630,7 +630,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide resolved.
+        ///   Looks up a localized string similar to Скрыть решённые.
         /// </summary>
         public static string HideResolved {
             get {
@@ -639,7 +639,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instruction.
+        ///   Looks up a localized string similar to Инструкция.
         /// </summary>
         public static string Instruction {
             get {
@@ -648,7 +648,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show instruction.
+        ///   Looks up a localized string similar to Показать инструкцию.
         /// </summary>
         public static string InstructionShow {
             get {
@@ -657,7 +657,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Additional question information.
+        ///   Looks up a localized string similar to Дополнительная информация о вопросе.
         /// </summary>
         public static string Interview_Overview_AdditionalInformation {
             get {
@@ -666,7 +666,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not answered.
+        ///   Looks up a localized string similar to Не отвечен.
         /// </summary>
         public static string Interview_Overview_NotAnswered {
             get {
@@ -675,7 +675,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No value.
+        ///   Looks up a localized string similar to Нет значения.
         /// </summary>
         public static string Interview_Overview_NoValue {
             get {
@@ -684,7 +684,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove related roster &apos;{{rosterTitle}}&apos;?.
+        ///   Looks up a localized string similar to Вы уверены, что хотите удалить строку &apos;{{rosterTitle}}&apos; у зависимых списков?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
@@ -693,7 +693,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview is received by interviewer and cannot be modified.
+        ///   Looks up a localized string similar to Интервью получено интервьюером и не может быть изменено.
         /// </summary>
         public static string InterviewReceivedCantModify {
             get {
@@ -702,7 +702,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading....
+        ///   Looks up a localized string similar to Загрузка....
         /// </summary>
         public static string Loading {
             get {
@@ -711,7 +711,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading questionnaire. Please wait....
+        ///   Looks up a localized string similar to Загружаем опросник. Пожалуйста подождите....
         /// </summary>
         public static string LoadingQuestionnaire {
             get {
@@ -720,7 +720,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading, please wait.
+        ///   Looks up a localized string similar to Загрузка, подождите....
         /// </summary>
         public static string LoadingWait {
             get {
@@ -729,7 +729,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The maximum number of selections ({{value}}) in this question has been made.
+        ///   Looks up a localized string similar to Максимальное число опций ({{value}}) для вопроса выбрано.
         /// </summary>
         public static string MaxAnswersCountSelected {
             get {
@@ -738,7 +738,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia playback is not supported by your browser. You can download it instead..
+        ///   Looks up a localized string similar to Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл..
         /// </summary>
         public static string MultimediaNotSupported {
             get {
@@ -747,7 +747,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Network.
+        ///   Looks up a localized string similar to Сеть.
         /// </summary>
         public static string Network {
             get {
@@ -756,7 +756,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No.
+        ///   Looks up a localized string similar to Нет.
         /// </summary>
         public static string No {
             get {
@@ -765,7 +765,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have no access to questionnaire.
+        ///   Looks up a localized string similar to У Вас нет доступа к опроснику.
         /// </summary>
         public static string NoQuestionnaireAccess {
             get {
@@ -774,7 +774,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No results found.
+        ///   Looks up a localized string similar to Ненайдено результатов.
         /// </summary>
         public static string NoResultsFound {
             get {
@@ -783,7 +783,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not calculated.
+        ///   Looks up a localized string similar to Не посчитано.
         /// </summary>
         public static string NotCalculated {
             get {
@@ -792,7 +792,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value cannot be less than protected answer.
+        ///   Looks up a localized string similar to Введенное значение не может быть меньше чем защищенный ответ.
         /// </summary>
         public static string NumberCannotBeLessThanProtected {
             get {
@@ -801,7 +801,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value cannot be parsed as integer value.
+        ///   Looks up a localized string similar to Введенное значение не может быть интерпретировано как целое число.
         /// </summary>
         public static string NumberCannotParse {
             get {
@@ -810,7 +810,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter number.
+        ///   Looks up a localized string similar to Введите число.
         /// </summary>
         public static string NumberEnter {
             get {
@@ -819,7 +819,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &apos;{{answer}}&apos; is incorrect because question is used as size of roster and specified answer is negative.
+        ///   Looks up a localized string similar to Ответ &apos;{{answer}}&apos; неверный, поскольку нельзя задать отрицательное количество элементов в списке.
         /// </summary>
         public static string NumberRosterError {
             get {
@@ -828,7 +828,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove {{amountOfRostersToRemove}} row(s) from each related roster?.
+        ///   Looks up a localized string similar to Вы уверены, что хотите удалить {{amountOfRostersToRemove}} строк(у) у зависимых списков?.
         /// </summary>
         public static string NumberRosterRemoveConfirm {
             get {
@@ -837,7 +837,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &apos;{{answer}}&apos; is incorrect because answer is greater than Roster upper bound {{answerMaxValue}}..
+        ///   Looks up a localized string similar to Ответ &apos;{{answer}}&apos; неверный, поскольку он больше значения максимального количества элементов в списке: &apos;{{answerMaxValue}}&apos;..
         /// </summary>
         public static string NumberRosterUpperBound {
             get {
@@ -846,7 +846,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories will be available after answering referenced question.
+        ///   Looks up a localized string similar to Опции будут доступны после ответа на соответствующий вопрос.
         /// </summary>
         public static string OptionsAvailableAfterAnswer {
             get {
@@ -855,7 +855,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only image files are allowed to upload.
+        ///   Looks up a localized string similar to Загружать можно только изображения.
         /// </summary>
         public static string PhotoIsNotImage {
             get {
@@ -864,7 +864,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Image is too big to upload. Please, choose an image less than 30 Mb.
+        ///   Looks up a localized string similar to Изображение слишком велико для загрузки. Пожалуйста выберите изображение размеров меньше чем 30Мб.
         /// </summary>
         public static string PhotoTooBig {
             get {
@@ -873,7 +873,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload a photo.
+        ///   Looks up a localized string similar to Загрузить фото.
         /// </summary>
         public static string PhotoUpload {
             get {
@@ -882,7 +882,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick from map.
+        ///   Looks up a localized string similar to Указать на карте.
         /// </summary>
         public static string PickLocation {
             get {
@@ -891,7 +891,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{progress}}% Complete.
+        ///   Looks up a localized string similar to {{progress}}% Завершено.
         /// </summary>
         public static string ProgressText {
             get {
@@ -900,7 +900,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unsupported question type.
+        ///   Looks up a localized string similar to Неподдерживаемый тип вопроса.
         /// </summary>
         public static string QuestionUnsupported {
             get {
@@ -909,7 +909,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record current time.
+        ///   Looks up a localized string similar to Записать текущее время.
         /// </summary>
         public static string RecordCurrentTime {
             get {
@@ -918,7 +918,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reload.
+        ///   Looks up a localized string similar to Перегрузить.
         /// </summary>
         public static string Reload {
             get {
@@ -927,7 +927,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reload questionnaire.
+        ///   Looks up a localized string similar to Загрузить новый опросник.
         /// </summary>
         public static string ReloadQuestionnaire {
             get {
@@ -936,7 +936,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resolve.
+        ///   Looks up a localized string similar to Вопрос решен.
         /// </summary>
         public static string Resolve {
             get {
@@ -945,7 +945,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resolved commentaries are hidden by default, but can be reviewed by all the interview participants.
+        ///   Looks up a localized string similar to Комметарии будут скрыты по умолчанию, но все участники интервью смогут их просмотреть.
         /// </summary>
         public static string ResolveHint {
             get {
@@ -954,7 +954,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save scenario.
+        ///   Looks up a localized string similar to Сохранить сценарий.
         /// </summary>
         public static string SaveScenario {
             get {
@@ -963,7 +963,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Session on Designer application has expired. Sign in on Designer application to be able to save..
+        ///   Looks up a localized string similar to Сессия в приложение Designer завершилась. Войдите, чтобы сохранить сценарий..
         /// </summary>
         public static string SaveScenarioDesignerLogin {
             get {
@@ -972,7 +972,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Designer.
+        ///   Looks up a localized string similar to Открыть Designer.
         /// </summary>
         public static string SaveScenarioGoToDesigner {
             get {
@@ -981,7 +981,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Название.
         /// </summary>
         public static string SaveScenarioName {
             get {
@@ -990,7 +990,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select scenario to replace.
+        ///   Looks up a localized string similar to Выберите существующий сценарий для обновления.
         /// </summary>
         public static string SaveScenarioOptions {
             get {
@@ -999,7 +999,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace existing.
+        ///   Looks up a localized string similar to Заменить существующий.
         /// </summary>
         public static string SaveScenarioOptions_ReplaceExisting {
             get {
@@ -1008,7 +1008,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save new.
+        ///   Looks up a localized string similar to Сохранить новый.
         /// </summary>
         public static string SaveScenarioOptions_SaveNew {
             get {
@@ -1017,7 +1017,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search.
+        ///   Looks up a localized string similar to Поиск.
         /// </summary>
         public static string Search {
             get {
@@ -1026,7 +1026,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please reload the page to continue this interview..
+        ///   Looks up a localized string similar to Пожалуйста перегрузите страницу чтобы продолжить интервью..
         /// </summary>
         public static string SessionTimeoutMessage {
             get {
@@ -1035,7 +1035,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your session has timed out because you didn&apos;t do any action for 15 minutes..
+        ///   Looks up a localized string similar to Ваша сессия истекла потому что вы не совершали никаких действий в течении 15 минут..
         /// </summary>
         public static string SessionTimeoutMessageTitle {
             get {
@@ -1044,7 +1044,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your session has timed out.
+        ///   Looks up a localized string similar to Ваша сессия истекла.
         /// </summary>
         public static string SessionTimeoutTitle {
             get {
@@ -1053,7 +1053,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show on map.
+        ///   Looks up a localized string similar to Показать на карте.
         /// </summary>
         public static string ShowOnMap {
             get {
@@ -1062,7 +1062,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show resolved.
+        ///   Looks up a localized string similar to Показать решённые.
         /// </summary>
         public static string ShowResolved {
             get {
@@ -1071,7 +1071,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Network connection is slow.
+        ///   Looks up a localized string similar to Медленное сетевое соединение.
         /// </summary>
         public static string SlowConnection {
             get {
@@ -1080,7 +1080,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switching language. Please wait....
+        ///   Looks up a localized string similar to Переключение языка. Пожалуйста, подождите.
         /// </summary>
         public static string SwitchingLanguage {
             get {
@@ -1089,7 +1089,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter text.
+        ///   Looks up a localized string similar to Введите текст.
         /// </summary>
         public static string TextEnter {
             get {
@@ -1098,7 +1098,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter text {{userFriendlyMask}}.
+        ///   Looks up a localized string similar to Введите текст {{userFriendlyMask}}.
         /// </summary>
         public static string TextEnterMasked {
             get {
@@ -1107,7 +1107,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter new item.
+        ///   Looks up a localized string similar to Введите новый элемент.
         /// </summary>
         public static string TextEnterNewItem {
             get {
@@ -1116,7 +1116,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please, fill in all the required values.
+        ///   Looks up a localized string similar to Заполните ответ на вопрос полностью.
         /// </summary>
         public static string TextRequired {
             get {
@@ -1125,7 +1125,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle navigation.
+        ///   Looks up a localized string similar to Переключить навигацию.
         /// </summary>
         public static string ToggleNavigation {
             get {
@@ -1134,7 +1134,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warnings.
+        ///   Looks up a localized string similar to Предупреждения.
         /// </summary>
         public static string WarningsHeader {
             get {
@@ -1143,7 +1143,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web interview.
+        ///   Looks up a localized string similar to Веб интервью.
         /// </summary>
         public static string WebInterview {
             get {
@@ -1152,7 +1152,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tester session is over.
+        ///   Looks up a localized string similar to Сессия окончена.
         /// </summary>
         public static string WebTesterSessionOver {
             get {
@@ -1161,7 +1161,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please close this page. You may open new one by returning to Designer site.
+        ///   Looks up a localized string similar to Пожалуйста закройте окно тестера..
         /// </summary>
         public static string WebTesterSessionOverMessage {
             get {
@@ -1170,7 +1170,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes.
+        ///   Looks up a localized string similar to Да.
         /// </summary>
         public static string Yes {
             get {
