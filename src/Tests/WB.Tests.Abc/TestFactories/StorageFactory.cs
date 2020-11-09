@@ -122,7 +122,7 @@ namespace WB.Tests.Abc.TestFactories
             return storage;
         }
 
-        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository()
         {
             var optionsRepository = new QuestionnaireQuestionOptionsRepository(
                 );
@@ -151,6 +151,8 @@ namespace WB.Tests.Abc.TestFactories
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaire);
 
+            
+            
             return result.Object;
         }
 
