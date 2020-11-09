@@ -16,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 
@@ -84,6 +85,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     compositeItem.StataExportCaption = abstractQuestion.StataExportCaption;
                 }
 
+                if (composite is IVariable variable)
+                {
+                    compositeItem.QuestionText = variable.Name;
+                    compositeItem.VariableLabel = variable.Label;
+                }
+
                 questionnaireItemsWriter.Store(compositeItem);
                 questionnaireDocument.EntitiesIdMap.Add(compositeItem.EntityId, compositeItem.Id);
             }
@@ -103,8 +110,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     return null;
                 }
 
-                var entities = this.questionnaireItemsReader.Query(_ => _.Where(x => x.QuestionnaireIdentity == questionnaireIdentity.Id)
-                    .Select(x => new { x.Id, x.EntityId }).ToList());
+                var entities = this.questionnaireItemsReader.Query(_ => _
+                    .Where(x => x.QuestionnaireIdentity == questionnaireIdentity.Id)
+                    .Select(x => new { x.Id, x.EntityId })
+                    .ToList());
 
                 var entitiesMap = entities.ToDictionary(q => q.EntityId, q => q.Id);
                 questionnaire.EntitiesIdMap = entitiesMap;

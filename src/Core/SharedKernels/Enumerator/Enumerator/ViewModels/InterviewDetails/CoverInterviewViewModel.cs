@@ -174,11 +174,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     EntityId = entityId,
                     IsStaticText = questionnaire.IsStaticText(entityId),
+                    IsVariable = questionnaire.IsVariable(entityId),
                     QuestionType = questionnaire.IsQuestion(entityId) 
                         ? questionnaire.GetQuestionType(entityId)
                         : (QuestionType?)null,
                 })
                 .Where(entity => entity.IsStaticText || 
+                                 entity.IsVariable ||
                                  (entity.QuestionType.HasValue
                                   && entity.QuestionType.Value != QuestionType.GpsCoordinates))
                 .Select(entity =>
@@ -191,13 +193,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         attachmentViewModel.Init(interviewId, entityIdentity, navigationState);
                     }
 
+
+                    var title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity);
+                    var value = entity.QuestionType.HasValue
+                        ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
+                        : entity.IsVariable
+                            ? interview.GetVariableValueAsString(Identity.Create(entity.EntityId, RosterVector.Empty))
+                            : string.Empty;
+                    
                     return new CoverPrefilledEntity
                     {
                         Identity = entityIdentity,
-                        Title = this.CreatePrefilledTitle(questionnaire, interviewId, entityIdentity),
-                        Answer = entity.QuestionType.HasValue
-                            ? interview.GetAnswerAsString(Identity.Create(entity.EntityId, RosterVector.Empty), CultureInfo.CurrentCulture)
-                            : string.Empty,
+                        Title = title,
+                        Answer = value,
                         Attachment = attachmentViewModel
                     };
                 })
