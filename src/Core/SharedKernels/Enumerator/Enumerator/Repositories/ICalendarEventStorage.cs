@@ -8,13 +8,15 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
 {
     public interface ICalendarEventStorage
     {
-        CalendarEvent? GetEventForInterview(Guid interviewId);
+        CalendarEvent? GetCalendarEventForInterview(Guid interviewId);
 
-        CalendarEvent? GetEventForAssigment(long assignmentId);
+        CalendarEvent? GetCalendarEventForAssigment(long assignmentId);
         void Store(CalendarEvent calendarEvent);
         CalendarEvent GetById(Guid calendarEventId);
         void Remove(Guid calendarEventId);
         IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents();
         IEnumerable<CalendarEvent> GetCalendarEventsForUser(Guid userId);
+        
+        void SetCalendarEventSyncedStatus(Guid calendarEventId, bool isSynced);
     }
 }

@@ -171,9 +171,5 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CalendarEvents" />
-  </ItemGroup>
-
 
 </Project>

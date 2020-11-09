@@ -2,11 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -15,7 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class CalendarEventStorage : SqlitePlainStorage<CalendarEvent, Guid>, ICalendarEventStorage
     {
-        public CalendarEventStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) : base(logger, fileSystemAccessor, settings)
+        public CalendarEventStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor, SqliteSettings settings) 
+            : base(logger, fileSystemAccessor, settings)
         {
         }
 
@@ -23,13 +22,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
         }
 
-        public CalendarEvent? GetEventForInterview(Guid interviewId)
+        public CalendarEvent? GetCalendarEventForInterview(Guid interviewId)
         {
             return this.connection.Find<CalendarEvent>(e => 
                 e.InterviewId == interviewId);
         }
 
-        public CalendarEvent? GetEventForAssigment(long assignmentId)
+        public CalendarEvent? GetCalendarEventForAssigment(long assignmentId)
         {
             return this.connection.Find<CalendarEvent>(e => 
                 e.InterviewId == null && e.AssignmentId == assignmentId);
@@ -57,6 +56,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
                 return calendarEvents;
             });
+        }
+
+        public void SetCalendarEventSyncedStatus(Guid calendarEventId, bool isSynced)
+        {
+            CalendarEvent calendarEvent = this.GetById(calendarEventId);
+            if (calendarEvent == null) return;
+            calendarEvent.IsSynchronized = isSynced;
+            this.Store(calendarEvent);
         }
     }
 }

@@ -20,7 +20,10 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
     public class CalendarEventMetaInfo
     {
-        public DateTimeOffset? LastUpdateDateTime { get; set; }
+        public DateTimeOffset LastUpdateDateTime { get; set; }
         public Guid ResponsibleId { get; set; }
+        
+        public Guid? InterviewId  { get; set; }
+        public int AssignmentId { get; set; }
     }
 }

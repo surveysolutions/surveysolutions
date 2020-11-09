@@ -35,7 +35,11 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 
         public CalendarEvent Update(CalendarEvent state, IPublishedEvent<CalendarEventDeleted> @event)
         {
-            return null;
+            return UpdateCalendarEvent(state, @event.Payload.OriginDate,
+                calendarEvent =>
+                {
+                    calendarEvent.IsDeleted = true;
+                });
         }
 
         public CalendarEvent Update(CalendarEvent state, IPublishedEvent<CalendarEventUpdated> @event)

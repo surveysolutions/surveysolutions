@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Core.Events;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -13,24 +14,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
     {
         private readonly ILogger logger;
         private readonly SyncSettings syncSettings;
+        private readonly ICalendarEventService calendarEventService;
 
-        public CalendarEventPackageService(ILogger logger, SyncSettings syncSettings)
+        public CalendarEventPackageService(ILogger logger, SyncSettings syncSettings, 
+            ICalendarEventService calendarEventService)
         {
-            this.logger = logger;
-            this.syncSettings = syncSettings;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.syncSettings = syncSettings ?? throw new ArgumentNullException(nameof(syncSettings));
+            this.calendarEventService = calendarEventService ?? throw new ArgumentNullException(nameof(calendarEventService));
         }
 
         public void ProcessPackage(CalendarEventPackage calendarEventPackage)
         {
             try
             {
+                if(!calendarEventPackage.InterviewId.HasValue)
+                    throw new InvalidOperationException("Calendar event package has no interview Id");
                 InScopeExecutor.Current.Execute(serviceLocator =>
                 {
+                    var currentIntervirewCalendarEvent =
+                        calendarEventService.GetActiveCalendarEventByInterviewId(calendarEventPackage
+                            .InterviewId.Value);
+
+                    //remove other older CE 
+                    if (currentIntervirewCalendarEvent != null &&
+                        currentIntervirewCalendarEvent.PublicKey != calendarEventPackage.CalendarEventId
+                        && currentIntervirewCalendarEvent.UpdateDate < calendarEventPackage.LastUpdateDate)
+                    {
+                        serviceLocator.GetInstance<ICommandService>().Execute(
+                            new DeleteCalendarEventCommand(currentIntervirewCalendarEvent.PublicKey,
+                                calendarEventPackage.ResponsibleId),
+                            this.syncSettings.Origin);
+                    }
+                    
                     var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
                         .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events.Replace(@"\u0000", ""));
 
                     //validate stream
-                    
+                    //merge if there are changes
+                    //
+
                     serviceLocator.GetInstance<ICommandService>().Execute(
                         new SyncCalendarEventEventsCommand(aggregateRootEvents,
                             calendarEventPackage.CalendarEventId,
