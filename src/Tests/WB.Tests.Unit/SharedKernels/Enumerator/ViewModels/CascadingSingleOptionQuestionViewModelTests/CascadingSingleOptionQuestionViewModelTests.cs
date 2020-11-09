@@ -277,7 +277,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 }
             );
 
-            
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 1,
                 questionOptionsRepository: new QuestionnaireQuestionOptionsRepository());
 
