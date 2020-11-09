@@ -33,7 +33,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
                     Create.Entity.Variable(),
                 });
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire);
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s => 
+                s.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire
+                && s.GetQuestionnaireOrThrow(Moq.It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire);
 
             var statefulInterview = SetUp.StatefulInterview(questionnaire);
             var statefulInterviewRepository = SetUp.StatefulInterviewRepository(statefulInterview);

@@ -13,21 +13,21 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 {
-    public class QuestionItemObjectType : ObjectType<QuestionnaireCompositeItem>
+    public class EntityItemObjectType : ObjectType<QuestionnaireCompositeItem>
     {
         protected override void Configure(IObjectTypeDescriptor<QuestionnaireCompositeItem> descriptor)
         {
             descriptor.BindFieldsExplicitly();
 
-            descriptor.Name("Question");
+            descriptor.Name("Entity");
             
             descriptor.Field(x => x.QuestionText)
                 .Description("Question text. May contain html tags.")
-                .Type<NonNullType<StringType>>();
+                .Type<StringType>();
 
             descriptor.Field(x => x.StataExportCaption)
                 .Name("variable")
-                .Type<NonNullType<StringType>>();
+                .Type<StringType>();
 
             descriptor.Field(x => x.QuestionScope)
                 .Name("scope")

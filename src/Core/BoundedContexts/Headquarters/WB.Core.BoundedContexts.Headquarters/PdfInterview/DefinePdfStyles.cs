@@ -125,6 +125,12 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
             var headerTime = document.Styles.AddStyle(PdfStyles.HeaderLineTime, PdfStyles.Default);
             headerTime.Font.Size = Unit.FromPoint(12);
+
+            document.Styles.AddStyle(PdfStyles.VariableTitle, PdfStyles.QuestionTitle);
+            document.Styles.AddStyle(PdfStyles.IdentifyerVariableValue, PdfStyles.IdentifyerQuestionAnswer);
+            document.Styles.AddStyle(PdfStyles.VariableValue, PdfStyles.QuestionAnswer);
+            document.Styles.AddStyle(PdfStyles.IdentifyerVariableNotCalculated, PdfStyles.IdentifyerQuestionNotAnswered);
+            document.Styles.AddStyle(PdfStyles.VariableNotCalculated, PdfStyles.QuestionNotAnswered);
         }
     }
 }

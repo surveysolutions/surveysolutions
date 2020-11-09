@@ -223,6 +223,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No value.
+        /// </summary>
+        public static string NotCalculated {
+            get {
+                return ResourceManager.GetString("NotCalculated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  of .
         /// </summary>
         public static string PageOf {

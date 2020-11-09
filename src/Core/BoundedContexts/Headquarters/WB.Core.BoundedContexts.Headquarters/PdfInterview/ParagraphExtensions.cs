@@ -43,6 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style, Color? color = null)
         {
+            if(string.IsNullOrEmpty(text))
+                return;
+            
             text = WebUtility.HtmlDecode(text);
             for (int i = 0; i < text.Length; i+=15)
             {

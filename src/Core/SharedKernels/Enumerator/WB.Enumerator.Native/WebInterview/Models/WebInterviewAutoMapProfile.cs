@@ -133,6 +133,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
                 .IncludeBase<InterviewTreeStaticText, InterviewEntity>()
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
 
+            this.CreateMap<InterviewTreeVariable, InterviewEntity>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity));
+
+            this.CreateMap<InterviewTreeVariable, InterviewVariable>()
+                .IncludeBase<InterviewTreeVariable, InterviewEntity>()
+                .ForMember(x => x.Value, opts => opts.MapFrom(x => x.GetValueAsString()));
+
             this.CreateMap<InterviewTreeGroup, InterviewEntity>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
