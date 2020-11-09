@@ -115,12 +115,12 @@ export default {
                     { id: 'answerCode_not', value: this.$t('Common.NotEquals') },
                 ]
                 case 'TEXT': return [
-                    { id: 'answerLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                    { id: 'answerLowerCase', value: this.$t('Common.Equals') },
+                    { id: 'valueLowerCase_starts_with', value: this.$t('Common.StartsWith') },
+                    { id: 'valueLowerCase', value: this.$t('Common.Equals') },
 
                 ]
                 case 'NUMERIC': return [
-                    { id: 'answer', value: this.$t('Common.Equals')},
+                    { id: 'value', value: this.$t('Common.Equals')},
                 ]}
             return null
         },

@@ -122,6 +122,19 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var entityIdentity = new Identity(entityId, RosterVector.Empty);
             var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode());
 
+            if (entityType == InterviewEntityType.Variable)
+            {
+                var variable = interview.GetVariable(entityIdentity);
+
+                return new IdentifyingVariable()
+                {
+                    Type = entityType.ToString(),
+                    Identity = entityIdentity.ToString(),
+                    Title = variable.Title.BrowserReadyText,
+                };
+            }
+
+            
             if (entityType == InterviewEntityType.StaticText)
             {
                 var staticText = interview.GetStaticText(entityIdentity);

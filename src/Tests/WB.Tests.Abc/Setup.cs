@@ -66,6 +66,7 @@ namespace WB.Tests.Abc
         {
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireOrThrow(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())).Returns(questionnaireDocument);
 
@@ -75,7 +76,8 @@ namespace WB.Tests.Abc
         public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)
         {
             return Mock.Of<IStatefulInterviewRepository>(_
-                => _.Get(It.IsAny<string>()) == interview && _.GetOrThrow(It.IsAny<string>()) == interview);
+                => _.Get(It.IsAny<string>()) == interview 
+                   && _.GetOrThrow(It.IsAny<string>()) == interview);
         }
 
         public static Interview InterviewForQuestionnaire(IQuestionnaire questionnaire)

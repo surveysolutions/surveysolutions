@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             [Service] IQuestionnaireStorage storage, 
             [Service] IResolverContext resolverContext)
         {
-            var questionnaire = storage.GetQuestionnaire(new QuestionnaireIdentity(id, version), language);
+            var questionnaire = storage.GetQuestionnaireOrThrow(new QuestionnaireIdentity(id, version), language);
             var featured = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             resolverContext.ScopedContextData = resolverContext.ScopedContextData.SetItem("language", language);
