@@ -16,8 +16,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public bool HasExpandedView => false;
         
         public bool IsExpanded { get; set; }
-        public event EventHandler OnItemUpdated;
-
 
         public void Dispose()
         {
