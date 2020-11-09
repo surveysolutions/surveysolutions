@@ -12,6 +12,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Extensions.cs" />
     <Compile Update="Properties\EnumeratorUIResources.ru.Designer.cs">
