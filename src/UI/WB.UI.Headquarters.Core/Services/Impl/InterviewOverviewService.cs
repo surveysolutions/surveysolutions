@@ -122,6 +122,16 @@ namespace WB.UI.Headquarters.Services.Impl
                 };
             }
 
+            var variable = interview.GetVariable(interviewerEntityIdentity);
+            if (variable != null)
+            {
+                return new OverviewWebVariableNode(variable, interview)
+                {
+                    Id = variable.Identity.ToString(),
+                    Title = questionnaire.GetVariableLabel(variable.Identity.Id),
+                };
+            }
+
             throw new NotSupportedException($@"Display of {interviewerEntityIdentity} entity is not supported");
         }
     }
