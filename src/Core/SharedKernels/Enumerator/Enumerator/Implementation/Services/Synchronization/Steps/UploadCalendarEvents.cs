@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -43,8 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             
             foreach (var calendarEvent in calendarEvents)
             {
-                var eventsToSend =  this.eventStorage.Read(calendarEvent.Id, 0)
-                    .ToReadOnlyCollection();
+                var eventsToSend =  GetCalendarEventStream(calendarEvent.Id);
                 
                 var package = new CalendarEventPackageApiView()
                 {
@@ -53,7 +55,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     MetaInfo = new CalendarEventMetaInfo()
                     {
                         ResponsibleId   = calendarEvent.UserId,
-                        LastUpdateDateTime = eventsToSend.Last().EventTimeStamp
+                        LastUpdateDateTime = eventsToSend.Last().EventTimeStamp,
+                        InterviewId = calendarEvent.InterviewId,
+                        AssignmentId = calendarEvent.AssignmentId
                     }
                 };
 
@@ -62,7 +66,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     package,
                     transferProgress,
                     Context.CancellationToken);
+
+                calendarEventStorage.SetCalendarEventSyncedStatus(calendarEvent.Id, true);
             }
+        }
+
+        private ReadOnlyCollection<CommittedEvent> GetCalendarEventStream(Guid calendarEventId)
+        {
+            return this.eventStorage.Read(calendarEventId, this.eventStorage.GetLastEventKnownToHq(calendarEventId) + 1)
+                .ToReadOnlyCollection();
         }
     }
 }

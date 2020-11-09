@@ -27,14 +27,16 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (string.IsNullOrEmpty(package.Events))
                 return BadRequest("Server cannot accept empty package content.");
             
-            //process package
             this.packageService.ProcessPackage(
                 new CalendarEventPackage()
                 {
                     CalendarEventId = package.CalendarEventId,
                     Events = package.Events,
                     IncomingDate = DateTime.UtcNow,
-                    ResponsibleId = package.MetaInfo.ResponsibleId
+                    ResponsibleId = package.MetaInfo.ResponsibleId,
+                    InterviewId = package.MetaInfo.InterviewId,
+                    AssignmentId = package.MetaInfo.AssignmentId,
+                    LastUpdateDate = package.MetaInfo.LastUpdateDateTime 
                 });
             
             return Ok();

@@ -120,7 +120,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                   
                     var calendarEvent = unitOfWork.Session
                         .Query<CalendarEvent>()
-                        .FirstOrDefault(x => x.InterviewId == interviewId && x.IsCompleted != true);
+                        .FirstOrDefault(x => x.InterviewId == interviewId 
+                                             && x.IsCompleted != true
+                                             && x.IsDeleted != true);
                        return calendarEvent; 
                     
                     return null;
