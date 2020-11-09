@@ -28,5 +28,10 @@
         public const string CommentMessage = "CommentMessage";
         public const string TableOfContent = "TableOfContent";
         public const string YesNoTitle = "YesNoTitle";
+        public const string VariableTitle = "VariableTitle";
+        public const string IdentifyerVariableValue = "IdentifyerVariableValue";
+        public const string VariableValue = "VariableValue";
+        public const string IdentifyerVariableNotCalculated = "IdentifyerVariableNotCalculated";
+        public const string VariableNotCalculated = "VariableNotCalculated";
     }
 }
