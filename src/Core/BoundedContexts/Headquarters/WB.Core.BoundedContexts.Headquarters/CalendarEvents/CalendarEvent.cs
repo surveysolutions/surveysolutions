@@ -39,5 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         
         public virtual Guid UserId { get; set; }
         public virtual string UserName { get; set; }
+        
+        public virtual bool IsDeleted { get; set; }
     }
 }
