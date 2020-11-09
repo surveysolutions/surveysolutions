@@ -647,9 +647,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
 
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire();
 
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion(optionsRepository);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>()
             {
