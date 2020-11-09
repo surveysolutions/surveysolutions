@@ -1,4 +1,5 @@
-﻿using MvvmCross.Binding;
+﻿using System;
+using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -11,7 +12,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(InstantAutoCompleteTextView control, string value)
         {
-            if (!string.Equals(value, control.Text))
+            if (!string.Equals(value ?? String.Empty, control.Text))
             {
                 control.SetText(value);
             }
