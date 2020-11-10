@@ -3,25 +3,12 @@ ARG DOTNET_VERSION=3.1
 ARG GIT_BRANCH=master
 ARG HQ_BUILD=42
 
-FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS js_builder
-
-COPY src/UI/WB.UI.Frontend/package*.json src/UI/WB.UI.Frontend/
-RUN cd src/UI/WB.UI.Frontend && npm ci
-
-COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
-COPY src/UI/WB.UI.Headquarters.Core/Resources src/UI/WB.UI.Headquarters.Core/Resources
-COPY src/UI/WB.UI.Headquarters.Core/Views src/UI/WB.UI.Headquarters.Core/Views
-COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources
-COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
-
-WORKDIR /src/UI/WB.UI.Frontend
-RUN  npm run build -- --modern --package
-
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as export_builder
 ARG HQ_BUILD
 ARG GIT_BRANCH
 
 COPY libs /libs
+
 COPY src/Core/Infrastructure/WB.Infrastructure.AspNetCore src/Core/Infrastructure/WB.Infrastructure.AspNetCore
 COPY src/Services /src/Services
 COPY src/.version /src
@@ -33,15 +20,14 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     --version-suffix $GIT_BRANCH \
     /p:BuildNumber=$HQ_BUILD
 
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 
 ARG HQ_BUILD
 ARG GIT_BRANCH
 
 COPY libs /libs
 COPY src /src
-
-COPY --from=js_builder /src/UI/WB.UI.Frontend/dist/package/hq /src/UI/WB.UI.Headquarters.Core/
+COPY build/jsFiles/frontend/package/hq /src/UI/WB.UI.Headquarters.Core/
 
 RUN dotnet publish /src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq \

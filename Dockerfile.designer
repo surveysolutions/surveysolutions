@@ -3,30 +3,20 @@ ARG DOTNET_VERSION=3.1
 ARG GIT_BRANCH=master
 ARG HQ_BUILD=42
 
+
 FROM --platform=linux/amd64  node:${NODEJS_VERSION} AS questionnaire_modules
 COPY src/UI/WB.UI.Designer/package*.json /src/UI/WB.UI.Designer/
 RUN cd /src/UI/WB.UI.Designer && npm ci
 
-FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS questionnaire_app_modules
-COPY src/UI/WB.UI.Designer/questionnaire-app/package*.json /src/UI/WB.UI.Designer/questionnaire-app/
-RUN cd /src/UI/WB.UI.Designer/questionnaire-app && npm ci
 
 FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS js_builder
-
 COPY src/ src/
 COPY --from=questionnaire_modules /src/UI/WB.UI.Designer/node_modules /src/UI/WB.UI.Designer/node_modules
-COPY --from=questionnaire_app_modules \
-    /src/UI/WB.UI.Designer/questionnaire-app/node_modules \
-    /src/UI/WB.UI.Designer/questionnaire-app/node_modules
-
 WORKDIR /src/UI/WB.UI.Designer
-
 RUN  npm run production
-RUN cd questionnaire-app && \
-    npm run build
+
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
-
 ARG HQ_BUILD
 ARG GIT_BRANCH
 
@@ -35,8 +25,8 @@ COPY src /src
 
 COPY --from=js_builder /src/UI/WB.UI.Designer/Views /src/UI/WB.UI.Designer/Views
 COPY --from=js_builder /src/UI/WB.UI.Designer/Areas /src/UI/WB.UI.Designer/Areas
-COPY --from=js_builder /src/UI/WB.UI.Designer/questionnaire /src/UI/WB.UI.Designer/questionnaire
-COPY --from=js_builder /src/UI/WB.UI.Designer/questionnaire-app/dist /src/UI/WB.UI.Designer/questionnaire-app/dist
+
+COPY build/jsFiles/questionnaire-app /src/UI/WB.UI.Designer/questionnaire-app/dist
 
 RUN dotnet publish /src/UI/WB.UI.Designer \
     -c Release -o /designer \

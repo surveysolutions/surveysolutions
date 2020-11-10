@@ -5,6 +5,10 @@ services:
     build: 
       context: .
       dockerfile: ./Dockerfile.hq
+  headquarters_full:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.hq_full
   export:
     build: 
       context: .

@@ -3,20 +3,6 @@ ARG DOTNET_VERSION=3.1
 ARG GIT_BRANCH=master
 ARG HQ_BUILD=42
 
-FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS js_builder
-
-COPY src/UI/WB.UI.Frontend/package*.json src/UI/WB.UI.Frontend/
-RUN cd src/UI/WB.UI.Frontend && npm ci
-
-COPY src/UI/WB.UI.Frontend src/UI/WB.UI.Frontend
-COPY src/UI/WB.UI.WebTester/Resources src/UI/WB.UI.WebTester/Resources
-COPY src/UI/WB.UI.WebTester/Views src/UI/WB.UI.WebTester/Views
-COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources
-COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
-
-WORKDIR /src/UI/WB.UI.Frontend
-RUN npm run build -- --modern --package
-
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 
 ARG HQ_BUILD
@@ -24,8 +10,7 @@ ARG GIT_BRANCH
 
 COPY libs /libs
 COPY src /src
-
-COPY --from=js_builder /src/UI/WB.UI.Frontend/dist/package/hq /src/UI/WB.UI.WebTester/
+COPY build/jsFiles/frontend/package/webtester /src/UI/WB.UI.WebTester/
 
 RUN dotnet publish /src/UI/WB.UI.WebTester \
     -c Release -o /webtester \

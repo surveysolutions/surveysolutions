@@ -138,3 +138,4 @@ src/UI/WB.UI.Designer/wwwroot
 /src/Services/UI/WB.UI.Headquarters.Core/Export.Service
 /src/UI/WB.UI.Headquarters.Core/Export.Service
 /src/Core/Infrastructure/WB.Infrastructure.AspNetCore/Properties/launchSettings.json
+/build/jsFiles/

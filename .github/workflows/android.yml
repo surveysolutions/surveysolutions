@@ -1,10 +1,11 @@
-name: Docker build
+name: Android build
 
 on:
   push:
   workflow_dispatch:
   
 jobs:
+
   prepare-src:
     runs-on: ubuntu-latest
     steps:
@@ -24,102 +25,97 @@ jobs:
           dotnet gitversion /showvariable AssemblySemFileVer > .version
           dotnet gitversion /showvariable BuildMetaData > .buildNumber
           dotnet gitversion /showvariable EscapedBranchName > .branch 
-      - run: tar -czf sources.tar.gz --exclude=./src/Installation ./src ./libs .version Dockerfile.*
+      - run: tar -czf sources.tar.gz --exclude=./src/Installation ./src ./build ./libs Security .version .buildNumber .branch Dockerfile.*
       - uses: actions/upload-artifact@v2
         with:
           name: sources
           path: ./sources.tar.gz
           retention-days: 1
 
-  build-js-ui:
-    runs-on: ubuntu-latest
+  android_apps:
+    runs-on: windows-latest
     needs: [ prepare-src ]
     strategy:
       matrix:
-        project:        
-          - name: frontend
-            dir: src/UI/WB.UI.Frontend
-          - name: questionnaire-app
-            dir: src/UI/WB.UI.Designer/questionnaire-app
-
+        image:
+          - name: WBCapi.apk
+            args: -noSupervisor -noExtInterviewer
+          - name: WBCapi.Ext.apk
+            args: -noSupervisor -noLiteInterviewer
+          - name: Supervisor.apk
+            args: -noExtInterviewer -noLiteInterviewer         
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
     steps:
+      - run: git config --system core.longpaths true
       - uses: actions/download-artifact@v2
         with:
           name: sources
           path: ./
       - run: tar -xzf sources.tar.gz
 
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('${{ matrix.project.dir }}/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}- 
-      - run: npm ci && npm run build
-        working-directory: ${{ matrix.project.dir }}
-
+      - uses: microsoft/setup-msbuild@v1.0.2
+      - name: build
+        shell: pwsh
+        run: |
+          ./build/build.Android.ps1 `
+            -BuildNumber $(gc .buildNumber) `
+            -BuildConfiguration Release `
+            -branch $(gc .branch) `
+            -KeystorePassword ${{ secrets.ANDROID_KEY }} `
+            ${{ matrix.image.args }}
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.project.name }}
-          path: ${{ matrix.project.dir }}/dist
-          retention-days: 1
+          name: ${{ matrix.image.name }}
+          path: ./Artifacts/${{ matrix.image.name }}
 
-  docker:
+  android_storage:
     runs-on: ubuntu-latest
-    needs: [ build-js-ui ]
-    strategy:
-      matrix:
-        image:
-          - name: headquarters
-            file: Dockerfile.hq
-            js: frontend
-          - name: headquarters_full
-            file: Dockerfile.hq_full
-            js: frontend
-          - name: webtester
-            file: Dockerfile.webtester
-            js: frontend
-          - name: designer
-            file: Dockerfile.designer
-            js: questionnaire-app
-          - name: export
-            file: Dockerfile.export
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-
+    needs: android_apps
+    
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
         with:
-          name: sources
-          path: ./
-      - run: ls
-      - run: tar -xzf sources.tar.gz
+          fetch-depth: 0
 
       - uses: actions/download-artifact@v2
         with:
-          name: ${{ matrix.image.js }}
-          path: ./build/jsFiles/${{ matrix.image.js }}
-  
-      - name: Cache Docker layers
-        uses: actions/cache@v2
+          path: build/androidFiles
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_AUTOMATION }}
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Prepare
-        id: prep
-        # https://github.com/docker/build-push-action#complete-workflow
+            ${{ runner.os }}-nuget-
+ 
+      - name: Prepare version tags
+        id: prep        
         run: |
-          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ matrix.image.name }}
-          VERSION=$(cat .version)
+          curl -sL https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -o yq
+          chmod +x ./yq
+          ./yq w -i ./GitVersion.yml next-version $(cat ./src/.version)
+          dotnet tool install --global GitVersion.Tool
+
+          dotnet gitversion /updateprojectfiles
+          echo "::set-output name=version::$(dotnet gitversion /showvariable AssemblySemFileVer)"
+
+          # https://github.com/docker/build-push-action#complete-workflow
+          DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/android
+          VERSION=$(dotnet gitversion /showvariable AssemblySemFileVer)
 
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           
@@ -137,25 +133,12 @@ jobs:
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.PAT_AUTOMATION }}
-
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./${{ matrix.image.file }}
+          file: ./Dockerfile.androidServer
           platforms: linux/amd64 #, linux/arm64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
