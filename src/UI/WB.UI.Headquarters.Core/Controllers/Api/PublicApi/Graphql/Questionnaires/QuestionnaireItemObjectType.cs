@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field(x => x.QuestionText)
                 .Name("title")
-                .Description("Question text. May contain html tags.")
+                .Description("Question text or Variable label. May contain html tags.")
                 .Type<StringType>();
 
             descriptor.Field(x => x.StataExportCaption)
