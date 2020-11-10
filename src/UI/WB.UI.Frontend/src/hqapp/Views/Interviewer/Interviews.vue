@@ -189,7 +189,7 @@ export default {
                             {
                                 OR: [
                                     { key_starts_with: search.toLowerCase() },
-                                    { identifyingQuestions_some: {
+                                    { identifyingData_some: {
                                         valueLowerCase_starts_with: search.toLowerCase(),
                                     },
                                     }],

@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using HotChocolate.Resolvers;
@@ -13,15 +13,19 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 {
-    public class EntityItemObjectType : ObjectType<QuestionnaireCompositeItem>
+    public class QuestionnaireItemObjectType : ObjectType<QuestionnaireCompositeItem>
     {
         protected override void Configure(IObjectTypeDescriptor<QuestionnaireCompositeItem> descriptor)
         {
             descriptor.BindFieldsExplicitly();
 
-            descriptor.Name("Entity");
+            descriptor.Name("QuestionnaireItem");
             
+            descriptor.Field(x => x.EntityType)
+                .Type<EntityTypeObjectType>();
+
             descriptor.Field(x => x.QuestionText)
+                .Name("title")
                 .Description("Question text. May contain html tags.")
                 .Type<StringType>();
 
@@ -39,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field(x => x.QuestionType)
                 .Name("type")
-                .Type<NonNullType<QuestionTypeObjectType>>();
+                .Type<QuestionTypeObjectType>();
 
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
@@ -53,7 +57,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
                         var questions = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                            .Where(q => keys.Contains(q.Id)).ToListAsync();
+                            .Where(q => Enumerable.Contains(keys, q.Id)).ToListAsync();
 
                         if(!questions.Any()) return new Dictionary<int, List<CategoricalOption>>();
                         
@@ -65,22 +69,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                         }
                         
                         var questionnaires =  questions.Select(q
-                                => (q.Id, q.EntityId,
-                                    questionnaireStorage.GetQuestionnaire(
-                                        QuestionnaireIdentity.Parse(q.QuestionnaireIdentity), language))).ToList();
+                            => (q.Id, q.EntityId,
+                                questionnaireStorage.GetQuestionnaire(
+                                    QuestionnaireIdentity.Parse(q.QuestionnaireIdentity), language))).ToList();
 
-                         return questionnaires.Where(q => q.Item3 != null).ToDictionary(
-                                q => q.Id, 
-                                q =>
+                        return questionnaires.Where(q => q.Item3 != null).ToDictionary(
+                            q => q.Id, 
+                            q =>
+                            {
+                                if (q.Item3!.IsQuestion(q.EntityId))
                                 {
-                                    if (q.Item3!.IsQuestion(q.EntityId))
-                                    {
-                                        var questionType = q.Item3!.GetQuestionType(q.EntityId);
-                                        if (questionType == QuestionType.SingleOption)
-                                            return q.Item3!.GetOptionsForQuestion(q.EntityId, null, null, null).ToList();
-                                    }
-                                    return new List<CategoricalOption>();
-                                });
+                                    var questionType = q.Item3!.GetQuestionType(q.EntityId);
+                                    if (questionType == QuestionType.SingleOption)
+                                        return q.Item3!.GetOptionsForQuestion(q.EntityId, null, null, null).ToList();
+                                }
+                                return new List<CategoricalOption>();
+                            });
                       
                     }).LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
