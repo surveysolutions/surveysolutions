@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             descriptor.Filter(x => x.Featured)
                 .BindFiltersExplicitly()
                 .AllowEquals().Name("identifying")
-                .Description("Find only identifying questions");
+                .Description("Find only identifying entities");
         }
     }
 }
