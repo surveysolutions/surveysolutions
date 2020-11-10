@@ -1,6 +1,9 @@
+#nullable enable
+
 using System;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -26,6 +29,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (typeof(IGroup).IsAssignableFrom(type)) return EntityType.Section;
 
             throw new NotSupportedException(composite.GetType().FullName + " is not supported entity type");
+        }
+
+        public static EntityType GetEntityType(Guid id, IQuestionnaire questionnaire)
+        {
+            if (questionnaire.IsQuestion(id)) return EntityType.Question;
+            if (questionnaire.IsSubSection(id)) return EntityType.Section;
+            if (questionnaire.IsStaticText(id)) return EntityType.StaticText;
+            if (questionnaire.IsVariable(id)) return EntityType.Variable;
+
+            throw new NotSupportedException($"Entity {id} is not supported entity type");
         }
     }
 }
