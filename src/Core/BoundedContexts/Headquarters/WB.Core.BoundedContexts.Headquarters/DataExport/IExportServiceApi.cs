@@ -46,17 +46,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         [Get("/api/v1/job/all")]
         Task<List<long>> GetAllJobsList();
 
-        [Get("/api/v1/job/download")]
-        Task<HttpResponseMessage> DownloadArchive(
-             string questionnaireId,
-             string archiveName,
-             DataExportFormat format,
-             InterviewStatus? status,
-             DateTime? fromDate,
-             DateTime? toDate,
-             Guid? translationId,
-             bool? includeMeta);
-
+        [Get("/api/v1/job/{id}/download")]
+        Task<HttpResponseMessage> DownloadArchive(long id, string archiveName);
+        
         [Get("/api/v1/job/wasExportRecreated")]
         Task<bool> WasExportRecreated(long processId);
 
