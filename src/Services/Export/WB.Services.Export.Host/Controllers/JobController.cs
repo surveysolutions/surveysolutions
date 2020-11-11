@@ -165,6 +165,7 @@ namespace WB.Services.Export.Host.Controllers
         [HttpGet]
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/download")]
+        [Obsolete("Used by HQ prior to 20.12 release")]
         public async Task<ActionResult> DownloadArchive(
             string questionnaireId,
             string archiveName,
