@@ -33,7 +33,7 @@ namespace WB.Services.Export.Services.Processing
 
             var fileName = await this.exportFileNameService.GetFileNameForExportArchiveAsync(exportSettings);
 
-            return Path.Combine(exportDirectory, fileName);
+            return Path.Combine(exportDirectory, exportSettings.JobId?.ToString() ?? string.Empty, fileName);
         }
 
         private void CreateIfNeeded(string path)
