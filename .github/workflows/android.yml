@@ -74,9 +74,11 @@ jobs:
     needs: android_apps
     
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
         with:
-          fetch-depth: 0
+          name: sources
+          path: ./
+      - run: tar -xzf sources.tar.gz
 
       - uses: actions/download-artifact@v2
         with:
@@ -95,27 +97,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_AUTOMATION }}
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
- 
       - name: Prepare version tags
         id: prep        
         run: |
-          curl -sL https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -o yq
-          chmod +x ./yq
-          ./yq w -i ./GitVersion.yml next-version $(cat ./src/.version)
-          dotnet tool install --global GitVersion.Tool
-
-          dotnet gitversion /updateprojectfiles
-          echo "::set-output name=version::$(dotnet gitversion /showvariable AssemblySemFileVer)"
-
           # https://github.com/docker/build-push-action#complete-workflow
           DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/android
-          VERSION=$(dotnet gitversion /showvariable AssemblySemFileVer)
+          VERSION=$(cat ./.version)
 
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           
