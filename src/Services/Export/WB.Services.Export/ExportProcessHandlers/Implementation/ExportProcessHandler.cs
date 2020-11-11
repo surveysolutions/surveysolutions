@@ -51,6 +51,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         public async Task ExportDataAsync(DataExportProcessArgs process, CancellationToken cancellationToken)
         {
             var state = new ExportState(process);
+            state.Settings.JobId = process.ProcessId;
             var handler = exportHandlerFactory.GetHandler(state.ExportFormat, state.StorageType);
             
             HandleProgress(state);
