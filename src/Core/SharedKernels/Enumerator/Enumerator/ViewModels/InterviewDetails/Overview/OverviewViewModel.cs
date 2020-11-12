@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 : OverviewSection.Empty(UIResources.Interview_Cover_Screen_Title);
 
             this.Items = new List<OverviewNode>() { coverSectionItem }
-                .Concat(interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)))
+                .Concat(interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, questionnaire, sections, navigationState)))
                 .ToList();
         }
 
@@ -77,6 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
             IStatefulInterview interview,
+            IQuestionnaire questionnaire,
             ICollection<Identity> sections, 
             NavigationState navigationState)
         {
@@ -128,6 +129,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                 };
                 overviewGroupViewModel.Init(interview, dynamicTextViewModelFactory.CreateDynamicTextViewModel(), interviewerEntityIdentity);
                 return overviewGroupViewModel;
+            }
+            
+            var variable = interview.GetVariable(interviewerEntityIdentity);
+            if (variable != null && questionnaire.IsPrefilled(interviewerEntityIdentity.Id))
+            {
+                return new OverviewVariableViewModel(variable, interview)
+                {
+                    Id = variable.Identity.ToString(),
+                    Title = questionnaire.GetVariableLabel(variable.Identity.Id),
+                };
             }
 
             throw new NotSupportedException($"Display of {interviewerEntityIdentity} entity is not supported");

@@ -21,6 +21,17 @@ type CategoricalOption {
   value: Int!
 }
 
+type Entity {
+  identifying: Boolean
+  label: String
+  options: [CategoricalOption!]!
+  "Question text. May contain html tags."
+  questionText: String
+  scope: QuestionScope
+  type: QuestionType!
+  variable: String
+}
+
 type HeadquartersMutations {
   addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
   deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
@@ -33,7 +44,7 @@ type HeadquartersQuery {
   maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
   questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
-  questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Question] @authorize(apply: BEFORE_RESOLVER)
+  questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
 }
 
@@ -73,6 +84,15 @@ type IPagedConnectionOfQuestionnaire {
   totalCount: Int!
 }
 
+type IdentifyingEntity {
+  "Answer value for categorical questions"
+  answerValue: Int
+  entity: Entity!
+  value: String
+  "Lower cased version of value"
+  valueLowerCase: String
+}
+
 type Interview {
   "List of actions that can be applied to interview"
   actionFlags: [InterviewActionFlags!]!
@@ -86,7 +106,7 @@ type Interview {
   errorsCount: Int!
   id: ID!
   "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer"
-  identifyingQuestions: [QuestionAnswer]
+  identifyingData: [IdentifyingEntity]
   "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer"
   key: String!
   "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release"
@@ -133,26 +153,6 @@ type Map {
   yMinVal: Float!
 }
 
-type Question {
-  identifying: Boolean
-  label: String
-  options: [CategoricalOption!]!
-  "Question text. May contain html tags."
-  questionText: String!
-  scope: QuestionScope
-  type: QuestionType!
-  variable: String!
-}
-
-type QuestionAnswer {
-  answer: String
-  "Lower cased version of answer"
-  answerLowerCase: String
-  "Answer value for categorical questions"
-  answerValue: Int
-  question: Question!
-}
-
 type Questionnaire {
   defaultLanguageName: String
   id: ID
@@ -195,6 +195,32 @@ input AssignmentsFilter {
   webMode: Boolean
 }
 
+input IdentifyEntityValueFilter {
+  AND: [IdentifyEntityValueFilter!]
+  answerCode: Decimal
+  answerCode_in: [Decimal]
+  answerCode_not: Decimal
+  answerCode_not_in: [Decimal]
+  entity: QuestionFilter
+  OR: [IdentifyEntityValueFilter!]
+  "Allows case sensitive equals comparison of answer"
+  value: String
+  "Allows case insensitive equals comparison of answer"
+  valueLowerCase: String
+  "Allows case insensitive not equals comparison of answer"
+  valueLowerCase_not: String
+  "Allows case insensitive not starts with comparison of answer"
+  valueLowerCase_not_starts_with: String
+  "Allows case insensitive starts with comparison of answer"
+  valueLowerCase_starts_with: String
+  "Allows case sensitive not equals comparison of answer"
+  value_not: String
+  "Allows case sensitive not starts with comparison of answer"
+  value_not_starts_with: String
+  "Allows case sensitive starts with comparison of answer"
+  value_starts_with: String
+}
+
 input InterviewFilter {
   AND: [InterviewFilter!]
   assignmentId: Int
@@ -214,7 +240,7 @@ input InterviewFilter {
   createdDate_not_lte: DateTime
   errorsCount: Int
   errorsCount_gt: Int
-  identifyingQuestions_some: QuestionAnswerFilter
+  identifyingData_some: IdentifyEntityValueFilter
   key: String
   key_contains: String
   key_in: [String]
@@ -310,32 +336,6 @@ input MapsSort {
   fileName: SortOperationKind
   importDate: SortOperationKind
   size: SortOperationKind
-}
-
-input QuestionAnswerFilter {
-  AND: [QuestionAnswerFilter!]
-  "Allows case sensitive equals comparison of answer"
-  answer: String
-  answerCode: Decimal
-  answerCode_in: [Decimal]
-  answerCode_not: Decimal
-  answerCode_not_in: [Decimal]
-  "Allows case insensitive equals comparison of answer"
-  answerLowerCase: String
-  "Allows case insensitive not equals comparison of answer"
-  answerLowerCase_not: String
-  "Allows case insensitive not starts with comparison of answer"
-  answerLowerCase_not_starts_with: String
-  "Allows case insensitive starts with comparison of answer"
-  answerLowerCase_starts_with: String
-  "Allows case sensitive not equals comparison of answer"
-  answer_not: String
-  "Allows case sensitive not starts with comparison of answer"
-  answer_not_starts_with: String
-  "Allows case sensitive starts with comparison of answer"
-  answer_starts_with: String
-  OR: [QuestionAnswerFilter!]
-  question: QuestionFilter
 }
 
 input QuestionFilter {

@@ -102,7 +102,7 @@
     "OptionsCloseWindow": " اغلق النافذة؟",
     "OptionsListError": "لقد أدخلت مدخلا غير صالح. كل سطر يجب أن يتبع شكل: \"عنوان ... القيمة\". يجب أن تكون \"القيمة\" عددا صحيحا. يجب أن يكون العنوان سلسلة أبجدية رقمية. لا يسمح بالخطوط الفارغة.",
     "OptionsUploadApply": "تطبيق ",
-    "OptionsUploadLimit": "لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {0} فئات كحد أقصى.",
+    "OptionsUploadLimit": "لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {limit} فئات كحد أقصى.",
     "OptionsUploadParent": "قيمة الأصل",
     "OptionsUploadTitle": "عنوان",
     "OptionsUploadValue": "القيمة",
@@ -450,7 +450,7 @@
     "SideBarCategoriesAddNew": "Add new category",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value\". 'Value' and 'ParentValue' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.",
-    "AddCascading": "Add cascading values",
-    "RemoveCascading": "Remove cascading values"
+    "ShowParentValues": "Show Parent values",
+    "HideParentValues": "Hide Parent values"
   }
 }

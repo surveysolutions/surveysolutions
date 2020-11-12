@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
-           UpdateOptions();
+            UpdateOptions();
         }
 
         public override async Task SaveAnswerAsync(int optionValue)
@@ -139,7 +139,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
-            this.comboboxViewModel.ResetFilterAndOptions();
+            if (Answer == null)
+            {
+                this.comboboxViewModel.ResetFilterAndOptions();
+            }
 
             this.comboboxCollection.Remove(this.comboboxViewModel);
 

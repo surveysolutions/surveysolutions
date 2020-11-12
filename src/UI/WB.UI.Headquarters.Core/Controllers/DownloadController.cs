@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Models;
@@ -17,7 +18,7 @@ namespace WB.UI.Headquarters.Controllers
             this.clientApkProvider = clientApkProvider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var smallApkUrl = Url.Action("GetLatestVersion", "DownloadApi");
             var fullApkUrl = Url.Action("GetLatestExtendedVersion", "DownloadApi");
@@ -29,12 +30,12 @@ namespace WB.UI.Headquarters.Controllers
                 FullApkQRUrl = qRCodeHelper.GetQRCodeAsBase64StringSrc(qRCodeHelper.GetFullUrl(fullApkUrl), 250, 250),
                 SmallApkUrl = smallApkUrl,
                 FullApkUrl = fullApkUrl,
-                SmallApkVersion = clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerFileName),
-                FullApkVersion = clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerExtendedFileName),
+                SmallApkVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerFileName),
+                FullApkVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerExtendedFileName),
             });
         }
 
-        public IActionResult Supervisor()
+        public async Task<IActionResult> Supervisor()
         {
             var apkUrl = Url.Action("GetLatestSupervisor", "DownloadApi");
             return View(new
@@ -42,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers
                 SupportQRCodeGeneration = qRCodeHelper.SupportQRCodeGeneration(),
                 ApkQRUrl = qRCodeHelper.GetQRCodeAsBase64StringSrc(qRCodeHelper.GetFullUrl(apkUrl), 250, 250),
                 ApkUrl = apkUrl,
-                SupervisorVersion = clientApkProvider.GetApplicationVersionString(ClientApkInfo.SupervisorFileName)
+                SupervisorVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.SupervisorFileName)
             });
         }
     }

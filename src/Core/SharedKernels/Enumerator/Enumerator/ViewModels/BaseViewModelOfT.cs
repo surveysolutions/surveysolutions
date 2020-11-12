@@ -9,24 +9,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         protected readonly IPrincipal Principal;
         protected readonly IViewModelNavigationService ViewModelNavigationService;
-        
+        private readonly bool isAuthenticationRequired;
+
         protected BaseViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             bool isAuthenticationRequired = true)
         {
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
             this.ViewModelNavigationService = viewModelNavigationService ?? throw new ArgumentNullException(nameof(viewModelNavigationService));
-            
+            this.isAuthenticationRequired = isAuthenticationRequired;
+        }
+        
+        public override void ViewAppearing()
+        {
+            base.ViewAppearing();
             BaseViewModelSetupMethods.CheckAuthentication(isAuthenticationRequired, this.Principal, this.ViewModelNavigationService);
         }
-
+        
         protected override void ReloadFromBundle(IMvxBundle state)
         {
+            base.ReloadFromBundle(state);
             BaseViewModelSetupMethods.ReloadStateFromBundle(this.Principal, state);
         }
 
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
+            base.SaveStateToBundle(bundle);
             BaseViewModelSetupMethods.SaveStateToBundle(this.Principal, bundle);
         }
     }

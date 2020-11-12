@@ -54,7 +54,7 @@
 </template>
 <script lang="js">
 import { entityDetails } from '../mixins'
-import { isEqual } from 'lodash'
+import { find, isEqual } from 'lodash'
 import { shouldShowAnsweredOptionsOnlyForSingle } from './question_helpers'
 
 export default {
@@ -73,13 +73,18 @@ export default {
                 return this.$me.options
 
             var self = this
-            return [find(this.$me.options, function(o) { return o.value == self.answer })]
+            const result = [find(this.$me.options, o => o.value === self.answer)]
+            return result
         },
         answer() {
             if (this.$me.options == null || this.$me.answer == null)
                 return
             const result = this.$me.options.find((a) => isEqual(a.rosterVector, this.$me.answer))
-            return result
+
+            if(this.$me.renderAsCombobox)
+                return result
+            else
+                return result?.value
         },
         noOptions() {
             return this.$me.options == null || this.$me.options.length == 0

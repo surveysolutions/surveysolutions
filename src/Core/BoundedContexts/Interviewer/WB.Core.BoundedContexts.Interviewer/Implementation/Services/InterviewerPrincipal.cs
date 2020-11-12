@@ -13,14 +13,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerPrincipal : EnumeratorPrincipal, IInterviewerPrincipal
     {
         private readonly IPlainStorage<InterviewerIdentity> usersStorage;
-        private ILogger logger;
-
+        
         public InterviewerPrincipal(IPlainStorage<InterviewerIdentity> usersStorage,
             IPasswordHasher passwordHasher,
-            ILogger logger) : base(passwordHasher)
+            ILogger logger) : base(passwordHasher, logger)
         {
-            this.logger = logger;
-            logger.Trace($"Creating InterviewerPrincipal");
             this.usersStorage = usersStorage;
         }
 

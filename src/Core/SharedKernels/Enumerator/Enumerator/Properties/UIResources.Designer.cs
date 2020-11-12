@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIResources {
@@ -57,6 +57,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjust.
+        /// </summary>
+        public static string Adjust {
+            get {
+                return ResourceManager.GetString("Adjust", resourceCulture);
             }
         }
         
@@ -327,15 +336,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comment.
-        /// </summary>
-        public static string Comment {
-            get {
-                return ResourceManager.GetString("Comment", resourceCulture);
             }
         }
         
@@ -1364,6 +1364,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string InterviewKey {
             get {
                 return ResourceManager.GetString("InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work..
+        /// </summary>
+        public static string InvalidTimeMessage {
+            get {
+                return ResourceManager.GetString("InvalidTimeMessage", resourceCulture);
             }
         }
         

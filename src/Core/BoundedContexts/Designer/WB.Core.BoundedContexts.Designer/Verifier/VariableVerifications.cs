@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName),
             Critical<IVariable>(VariableHasEmptyExpression, "WB0004", VerificationMessages.WB0004_VariableHasEmptyExpression),
             ErrorForTranslation<IVariable>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
+            Error<IVariable>(IdentityVariablesMustHaveLabel, "WB0311", VerificationMessages.WB0311_IdentityVariablesMustHaveLabel),
         };
 
         private bool IsNotSupportSubstitution(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
@@ -47,6 +48,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool VariableHasEmptyVariableName(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(variable.Name);
+        }
+        
+        private bool IdentityVariablesMustHaveLabel(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var parent = variable.GetParent();
+            if (parent != null && questionnaire.Questionnaire.IsCoverPage(parent.PublicKey))
+            {
+                return string.IsNullOrWhiteSpace(variable.Label);
+            }
+
+            return false;
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(

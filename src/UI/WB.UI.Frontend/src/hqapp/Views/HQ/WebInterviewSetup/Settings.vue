@@ -30,28 +30,28 @@
                         <li role="presentation"
                             class="active">
                             <a href="#welcome"
-                                @click="setPageActive('welcomeTextTitle')"
+                                @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
                                 aria-controls="welcome"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a>
                         </li>
                         <li role="presentation">
                             <a href="#resume"
-                                @click="setPageActive('resumeWelcome')"
+                                @click="setPageActive('resumeWelcome', 'resumeInvitation')"
                                 aria-controls="resume"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a>
                         </li>
                         <li role="presentation">
                             <a href="#complete"
-                                @click="setPageActive()"
+                                @click="setPageActive('completeNoteToSupervisor')"
                                 aria-controls="complete"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.CompletePage')}}</a>
                         </li>
                         <li role="presentation">
                             <a href="#finish"
-                                @click="setPageActive('webSurveyHeader')"
+                                @click="setPageActive('webSurveyHeader', 'finishInterview')"
                                 aria-controls="finish"
                                 role="tab"
                                 data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a>
@@ -98,7 +98,9 @@
                                             <div class="h5">
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
-                                            <md-editor v-validate=""
+                                            <md-editor
+                                                ref="welcomeTextDescription"
+                                                v-validate=""
                                                 data-vv-name="invitation"
                                                 v-model="webInterviewPageMessages['invitation'].text">
                                             </md-editor>
@@ -271,6 +273,7 @@
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
                                             <md-editor
+                                                ref="resumeInvitation"
                                                 v-validate=""
                                                 data-vv-name="resumeInvitation"
                                                 v-model="webInterviewPageMessages['resumeInvitation'].text">
@@ -551,6 +554,7 @@
                                                 {{$t('WebInterviewSettings.Description')}}
                                             </div>
                                             <md-editor
+                                                ref="finishInterview"
                                                 v-validate=""
                                                 data-vv-name="finishInterview"
                                                 v-model="webInterviewPageMessages['finishInterview'].text">
@@ -1241,8 +1245,9 @@ export default {
                     const input = self.$refs[titleType]
                     input.resize()
                 }
-                if(messageType)
-                    self.$refs[messageType].resize()
+                if(messageType) {
+                    self.$refs[messageType].refresh()
+                }
             })
         },
         cancelEditEmailTemplate(emailTemplate) {
