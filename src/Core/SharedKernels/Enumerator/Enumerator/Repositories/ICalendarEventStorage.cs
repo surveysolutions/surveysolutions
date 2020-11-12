@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Repositories
@@ -16,7 +17,9 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
         void Remove(Guid calendarEventId);
         IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents();
         IEnumerable<CalendarEvent> GetCalendarEventsForUser(Guid userId);
-        
+
+        IReadOnlyCollection<CalendarEvent> LoadAll();
+
         void SetCalendarEventSyncedStatus(Guid calendarEventId, bool isSynced);
     }
 }
