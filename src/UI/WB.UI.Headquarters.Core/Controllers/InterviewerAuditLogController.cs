@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
             this.authorizedUser = authorizedUser;
         }
 
-        public IActionResult Index(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
+        public async Task<IActionResult> Index(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
@@ -80,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(id);
             if (lastSuccessDeviceInfo != null)
             {
-                int? interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
+                int? interviewerApkVersion = await interviewerVersionReader.InterviewerBuildNumber();
                 var hasUpdateForInterviewerApp = interviewerApkVersion > lastSuccessDeviceInfo.AppBuildVersion;
                 model.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
                 model.DeviceId = lastSuccessDeviceInfo.DeviceId;

@@ -290,4 +290,7 @@
   <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
     <value>Выключить двухфакторную аутентификацию, оставляя учетную запись защищенной только паролем.</value>
   </data>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Не назначенные на интервьюера</value>
+  </data>
 </root>

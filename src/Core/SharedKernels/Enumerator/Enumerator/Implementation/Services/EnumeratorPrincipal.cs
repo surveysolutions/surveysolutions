@@ -1,5 +1,6 @@
 using System;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -7,17 +8,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public abstract class EnumeratorPrincipal : IPrincipal
     {
         protected readonly IPasswordHasher passwordHasher;
+        protected readonly ILogger Logger;
 
-        protected EnumeratorPrincipal(IPasswordHasher passwordHasher)
+        protected EnumeratorPrincipal(IPasswordHasher passwordHasher, ILogger logger)
         {
             this.passwordHasher = passwordHasher;
+            this.Logger = logger;
+            Logger.Trace($"Creating Principal");
         }
         protected abstract IUserIdentity GetUserByName(string userName);
         protected abstract IUserIdentity GetUserById(string userId);
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
 
-        protected IUserIdentity currentUserIdentity;
+        private IUserIdentity identity;
+        protected IUserIdentity currentUserIdentity
+        {
+            private set
+            {
+                Logger.Trace($"Principal is setting. Value is null:{value == null}");
+                identity = value;
+            }
+            get => identity;
+        }
         IUserIdentity IPrincipal.CurrentUserIdentity => this.currentUserIdentity;
 
         private IUserIdentity FindIdentityByUsername(string userName) 

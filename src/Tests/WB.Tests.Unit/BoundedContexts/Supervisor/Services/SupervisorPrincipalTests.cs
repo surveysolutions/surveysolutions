@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             IPasswordHasher passwordHasher = null)
         {
            return new SupervisorPrincipal(usersStorage ?? new InMemoryPlainStorage<SupervisorIdentity>(Mock.Of<ILogger>()),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<ILogger>());
         }
     }
 }

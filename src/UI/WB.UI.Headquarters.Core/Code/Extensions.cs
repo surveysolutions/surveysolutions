@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Microsoft.Security.Application;
 using Newtonsoft.Json;
@@ -30,6 +31,19 @@ namespace WB.UI.Headquarters.Code
             return false;
         }
 
+        public static bool RequestHasMatchingFileHash(this HttpRequest request, StringSegment remoteEtag)
+        {
+            if (request.Headers.ContainsKey(HeaderNames.IfNoneMatch))
+            {
+                var nonMatchHeader = request.Headers[HeaderNames.IfNoneMatch].ToString();
+                var header = EntityTagHeaderValue.Parse(nonMatchHeader);
+
+                return remoteEtag.Equals(header.Tag, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
+        }
+        
         private static Regex buildVersionRegex = new Regex("build (\\d+)", RegexOptions.Compiled);
 
         public static int? GetBuildNumberFromUserAgent(this HttpRequest request) 
