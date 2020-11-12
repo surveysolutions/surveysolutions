@@ -195,6 +195,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Ответ не сохранен</value>
   </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Не посчитано</value>
+  </data>
   <data name="ClickToAnswer" xml:space="preserve">
     <value>Кликните чтобы ответить</value>
   </data>
@@ -412,6 +415,9 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
+  </data>
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>Нет значения</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Дополнительная информация о вопросе</value>

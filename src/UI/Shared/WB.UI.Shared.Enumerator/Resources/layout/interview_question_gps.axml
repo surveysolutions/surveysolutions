@@ -26,7 +26,9 @@
       </TableRow>
       <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
         <TextView style="@style/Interview_Question_RecordedAnswer_Link"
-          local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude); Click NavigateToMapsCommand;" />
+          local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude); 
+                         Click NavigateToMapsCommand;
+                         Tag Format('Answer_{0}', Identity);" />
 
         <LinearLayout 
           android:layout_width="wrap_content"

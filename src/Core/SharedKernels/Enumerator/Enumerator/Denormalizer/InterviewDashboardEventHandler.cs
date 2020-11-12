@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,11 +12,13 @@ using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
@@ -45,6 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<InterviewOnClientCreated>,
                                          IEventHandler<InterviewFromPreloadedDataCreated>,
                                          IEventHandler<AnswerRemoved>,
+                                         
+                                         IEventHandler<VariablesChanged>,
                                          
                                          IEventHandler<TranslationSwitched>,
                                          IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
@@ -190,42 +195,53 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 LastInterviewerOrSupervisorComment = comments
             };
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(questionnaireIdentity, interviewView.Language);
 
-            var prefilledQuestionsList = new List<PrefilledQuestionView>();
-            var featuredQuestions = questionnaireDocumentView.Children
-                                                             .TreeToEnumerableDepthFirst(x => x.Children)
-                                                             .OfType<IQuestion>()
-                                                             .Where(q => q.Featured).ToList();
+            var prefilledEntitiesList = new List<PrefilledQuestionView>();
 
+            var featuredEntities = questionnaire.GetPrefilledEntities()
+                .Select(id => questionnaireDocumentView.Find<IComposite>(id))
+                .Where(entity => entity is IQuestion || entity is IVariable)
+                .ToList();
+            
             InterviewGpsCoordinatesView gpsCoordinates = null;
             Guid? prefilledGpsQuestionId = null;
 
-            int prefilledQuestionSortIndex = 0;
-            foreach (var featuredQuestion in featuredQuestions)
+            int prefilledEntitySortIndex = 0;
+            foreach (var featuredEntity in featuredEntities)
             {
-                var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-
-                if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
+                if (featuredEntity is IQuestion featuredQuestion)
                 {
-                    var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
-                    answerOnPrefilledQuestion.SortIndex = prefilledQuestionSortIndex;
-                    prefilledQuestionSortIndex++;
-                    prefilledQuestionsList.Add(answerOnPrefilledQuestion);
-                }
-                else
-                {
-                    prefilledGpsQuestionId = featuredQuestion.PublicKey;
+                    var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
 
-                    var answerOnPrefilledGeolocationQuestion = GetGeoPositionAnswer(item);
-                    if (answerOnPrefilledGeolocationQuestion != null)
+                    if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
                     {
-                        gpsCoordinates = new InterviewGpsCoordinatesView
-                        {
-                            Latitude = answerOnPrefilledGeolocationQuestion.Latitude,
-                            Longitude = answerOnPrefilledGeolocationQuestion.Longitude
-                        };
+                        var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
+                        answerOnPrefilledQuestion.SortIndex = prefilledEntitySortIndex;
+                        prefilledEntitySortIndex++;
+                        prefilledEntitiesList.Add(answerOnPrefilledQuestion);
                     }
+                    else
+                    {
+                        prefilledGpsQuestionId = featuredQuestion.PublicKey;
+
+                        var answerOnPrefilledGeolocationQuestion = GetGeoPositionAnswer(item);
+                        if (answerOnPrefilledGeolocationQuestion != null)
+                        {
+                            gpsCoordinates = new InterviewGpsCoordinatesView
+                            {
+                                Latitude = answerOnPrefilledGeolocationQuestion.Latitude,
+                                Longitude = answerOnPrefilledGeolocationQuestion.Longitude
+                            };
+                        }
+                    }
+                }
+                else if (featuredEntity is IVariable featuredVariable)
+                {
+                    var prefilledVariable = this.GetPrefilledVariable(featuredVariable.PublicKey, questionnaire, null, interviewId);
+                    prefilledVariable.SortIndex = prefilledEntitySortIndex;
+                    prefilledEntitySortIndex++;
+                    prefilledEntitiesList.Add(prefilledVariable);
                 }
             }
 
@@ -235,7 +251,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             var existingPrefilledForInterview = this.prefilledQuestions.Where(x => x.InterviewId == interviewId).ToList();
             this.prefilledQuestions.Remove(existingPrefilledForInterview);
-            this.prefilledQuestions.Store(prefilledQuestionsList);
+            this.prefilledQuestions.Store(prefilledEntitiesList);
 
             if (gpsCoordinates != null)
             {
@@ -401,6 +417,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                     interviewView.LocationLongitude = gpsCoordinates.Longitude;
                     interviewView.LocationLatitude = gpsCoordinates.Latitude;
                 }
+                
+                this.interviewViewRepository.Store(interviewView);
             }
             else
             {
@@ -415,8 +433,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
                 this.prefilledQuestions.Store(interviewPrefilledQuestion);
             }
-
-            this.interviewViewRepository.Store(interviewView);
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
@@ -580,6 +596,55 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             this.interviewViewRepository.Store(interviewView);
         }
 
+        public void Handle(IPublishedEvent<VariablesChanged> evnt)
+        {
+            var interviewId = evnt.EventSourceId;
+            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            if (interviewView == null) return;
+
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(questionnaireIdentity, interviewView.Language);
+
+            foreach (var changedVariable in evnt.Payload.ChangedVariables)
+            {
+                var variableId = changedVariable.Identity.Id;
+                if (!questionnaire.IsPrefilled(variableId))
+                    return;
+
+                var newPrefilledQuestionToStore = GetPrefilledVariable(variableId, questionnaire, changedVariable.NewValue, interviewId);
+
+                var interviewPrefilledEntity = this.prefilledQuestions.Where(entity => entity.QuestionId == variableId && entity.InterviewId == interviewId).FirstOrDefault()
+                                                 ?? newPrefilledQuestionToStore;
+                interviewPrefilledEntity.Answer = newPrefilledQuestionToStore.Answer;
+
+                this.prefilledQuestions.Store(interviewPrefilledEntity);
+            }
+        }
+
+        private string VariableToString(object value, Guid variableId, IQuestionnaire questionnaire)
+        {
+            if(!questionnaire.IsPrefilled(variableId)) 
+                throw new NotSupportedException("Only identifying variables can be converted to string");
+
+            return value == null 
+                ? null 
+                : AnswerUtils.AnswerToString(value, null);
+        }
+        
+        private PrefilledQuestionView GetPrefilledVariable(Guid variableId, IQuestionnaire questionnaire, object value, Guid interviewId)
+        {
+            var stringValue = VariableToString(value, variableId, questionnaire);
+            var prefilledView = new PrefilledQuestionView
+            {
+                Id = $"{interviewId:N}${variableId:N}",
+                InterviewId = interviewId,
+                QuestionId = variableId,
+                QuestionText = questionnaire.GetVariableLabel(variableId),
+                Answer = stringValue,
+            };
+            return prefilledView;
+        }
+        
         public void Handle(IPublishedEvent<CalendarEventCreated> @event)
         {
             if (@event.Payload.InterviewId.HasValue)
@@ -670,5 +735,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 return;
             }
         }
+
     }
 }

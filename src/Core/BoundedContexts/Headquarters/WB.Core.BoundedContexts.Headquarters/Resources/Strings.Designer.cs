@@ -79,6 +79,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Assigned to Interviewer.
+        /// </summary>
+        public static string AllInterviewersExceptAssignedToInterviewer {
+            get {
+                return ResourceManager.GetString("AllInterviewersExceptAssignedToInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All periods.
         /// </summary>
         public static string AllPeriods {

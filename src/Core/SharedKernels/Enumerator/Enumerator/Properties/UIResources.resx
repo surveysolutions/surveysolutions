@@ -201,6 +201,12 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Adjust" xml:space="preserve">
+    <value>Adjust</value>
+  </data>
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work.</value>
+  </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
     <value>Answer is invalid</value>
   </data>

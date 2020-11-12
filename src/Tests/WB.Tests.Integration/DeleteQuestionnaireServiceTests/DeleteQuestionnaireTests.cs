@@ -396,7 +396,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 {
                     typeof(InterviewSummaryMap),
                     typeof(QuestionnaireCompositeItemMap),
-                    typeof(QuestionAnswerMap),
+                    typeof(IdentifyEntityValueMap),
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(InterviewGpsMap),

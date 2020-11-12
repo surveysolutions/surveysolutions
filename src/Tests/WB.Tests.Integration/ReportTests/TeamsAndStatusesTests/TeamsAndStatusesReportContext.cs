@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             {
                 typeof(InterviewSummaryMap),
                 typeof(TimeSpanBetweenStatusesMap),
-                typeof(QuestionAnswerMap),
+                typeof(IdentifyEntityValueMap),
                 typeof(InterviewStatisticsReportRowMap),
                 typeof(InterviewCommentedStatusMap),
                 typeof(InterviewCommentMap),

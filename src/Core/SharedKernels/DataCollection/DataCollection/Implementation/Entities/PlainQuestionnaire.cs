@@ -547,6 +547,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
         {
+            if (IsCoverPageSupported)
+            {
+                this.QuestionnaireDocument.Children
+                    .First(c => c.PublicKey == CoverPageSectionId)
+                    .Children
+                    .Where(e => e is IQuestion)
+                    .Select(e => e.PublicKey)
+                    .ToReadOnlyCollection();
+            }
+            
             return this
                 .QuestionnaireDocument
                 .Find<IQuestion>(question => question.Featured)
@@ -1013,6 +1023,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPrefilled(Guid questionId)
         {
+            var entity = GetEntityOrThrow(questionId);
+            if (IsCoverPageSupported)
+            {
+                var parent = entity.GetParent();
+                return parent?.PublicKey == CoverPageSectionId;
+            }
+            
             var question = this.GetQuestionOrThrow(questionId);
             return question.Featured;
         }
@@ -1772,7 +1789,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
-        private IVariable GetVariable(Guid questionId) => GetVariable(this.VariablesCache, questionId);
+        private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
 
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 

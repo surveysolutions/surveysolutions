@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         protected readonly IPrincipal Principal;
         protected readonly IViewModelNavigationService ViewModelNavigationService;
+        private readonly bool isAuthenticationRequired;
 
         protected BaseViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService, 
@@ -17,7 +18,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.Principal = principal;
             this.ViewModelNavigationService = viewModelNavigationService;
-            
+            this.isAuthenticationRequired = isAuthenticationRequired;
+        }
+        
+        public override void ViewAppearing()
+        {
+            base.ViewAppearing();
             BaseViewModelSetupMethods.CheckAuthentication(isAuthenticationRequired, this.Principal, this.ViewModelNavigationService);
         }
         

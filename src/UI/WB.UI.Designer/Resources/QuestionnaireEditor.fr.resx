@@ -442,7 +442,7 @@
     <value>Appliquer</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {0} catégories.</value>
+    <value>Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {limit} catégories.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Valeur parente</value>
@@ -640,7 +640,7 @@
     <value>Public</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>Nom du questionnaire</value>
+      <value>Titre du questionnaire</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Créer ce questionnaire</value>

@@ -53,9 +53,12 @@ namespace WB.Tests.Integration
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
-                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
+                && x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
 
-            var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview);
+            var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => 
+                x.Get(It.IsAny<string>()) == interview
+                && x.GetOrThrow(It.IsAny<string>()) == interview);
 
             var sideBarSectionViewModelsFactory = new SideBarSectionViewModelFactory(ServiceLocator.Current);
 

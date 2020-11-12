@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
             
             var viewModel = new InterviewSummary(plainQuestionnaire);
             
-            Assert.That(viewModel, Has.Property(nameof(viewModel.AnswersToFeaturedQuestions)).Count.EqualTo(1));
+            Assert.That(viewModel, Has.Property(nameof(viewModel.IdentifyEntitiesValues)).Count.EqualTo(1));
         }
     }
 }

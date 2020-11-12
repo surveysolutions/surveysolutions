@@ -196,11 +196,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Секция &quot;Обложка&quot; может содержать только вопросы и статические тексты.
+        ///   Looks up a localized string similar to Секция &quot;Обложка&quot; может содержать только вопросы, статические тексты и переменные.
         /// </summary>
-        public static string CoverPageCanContainsOnlyQuestionsAndStaticTexts {
+        public static string CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables {
             get {
-                return ResourceManager.GetString("CoverPageCanContainsOnlyQuestionsAndStaticTexts", resourceCulture);
+                return ResourceManager.GetString("CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables", resourceCulture);
             }
         }
         

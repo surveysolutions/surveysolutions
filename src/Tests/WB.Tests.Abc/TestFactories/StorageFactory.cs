@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Amazon.S3;
 using Amazon.S3.Transfer;
@@ -122,7 +123,7 @@ namespace WB.Tests.Abc.TestFactories
             return storage;
         }
 
-        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository()
         {
             var optionsRepository = new QuestionnaireQuestionOptionsRepository(
                 );
@@ -150,7 +151,11 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaire);
+            result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()))
+                .Returns(questionnaire);
 
+            
+            
             return result.Object;
         }
 

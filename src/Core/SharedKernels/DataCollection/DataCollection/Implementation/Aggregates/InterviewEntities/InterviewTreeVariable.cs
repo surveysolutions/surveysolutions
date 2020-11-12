@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -45,6 +46,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             updater.UpdateEnablement(this);
             updater.UpdateVariable(this); 
+        }
+
+        public string GetValueAsString()
+        {
+            if (!HasValue)
+                return null;
+
+            return AnswerUtils.AnswerToString(Value, isTimestamp: false);
         }
     }
 }
