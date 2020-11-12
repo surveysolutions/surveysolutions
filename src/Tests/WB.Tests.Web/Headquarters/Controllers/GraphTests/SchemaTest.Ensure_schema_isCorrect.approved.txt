@@ -413,6 +413,7 @@ enum EntityType {
   QUESTION
   STATICTEXT
   VARIABLE
+  ROSTER
 }
 
 enum InterviewActionFlags {
