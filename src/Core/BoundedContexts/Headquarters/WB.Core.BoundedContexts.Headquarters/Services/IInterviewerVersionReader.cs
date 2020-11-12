@@ -1,10 +1,10 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Services
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IInterviewerVersionReader
     {
-        int? InterviewerBuildNumber { get; }
-        int? SupervisorBuildNumber { get; }
-        string InterviewerVersionString { get; }
-        string SupervisorVersionString { get; }
+        Task<int?> InterviewerBuildNumber();
+        Task<int?> SupervisorBuildNumber();
     }
 }

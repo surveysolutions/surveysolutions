@@ -179,9 +179,7 @@ export default {
             this.audioAudit = false
         },
         getDefaultTranslationName(){
-            if (this.model.defaultLanguageName === null || this.model.defaultLanguageName === undefined || this.model.defaultLanguageName === '')
-                this.$t('WebInterview.Original_Language')
-            return this.model.defaultLanguageName
+            return this.model.defaultLanguageName === null ? this.$t('WebInterview.Original_Language') : this.model.defaultLanguageName
         },
     },
 }

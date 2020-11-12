@@ -76,7 +76,15 @@ COPY build/headquarters/*.apk /app/Client/
 COPY --from=builder hq /app
 COPY --from=builder export /app/Export.Service
 
-COPY build/headquarters/appsettings.ini /app/appsettings.cloud.ini
+ENV HQ_Headquarters__BaseUrl=http://localhost
+ENV HQ_Headquarters__TenantName=survey
+ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
+ENV HQ_Geospatial__GdalHome=/usr/bin
+ENV HQ_Apks__ClientApkPath=./Client
+ENV HQ_Logging__LogsLocation=/app/AppData/logs
+ENV Export_ExportSettings__DirectoryPath=/app/AppData/Export
+ENV HQ_Scheduler__InstanceId=AUTO
+ENV HQ_Scheduler__IsClustered=true
 
 WORKDIR /app
 EXPOSE 80

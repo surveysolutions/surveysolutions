@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
@@ -61,19 +64,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             return cascadingSingleOptionQuestionViewModel;
         }
 
-        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithCascadingQuestion(IOptionsRepository optionsRepository = null)
+        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithCascadingQuestion()
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.GetRosterLevelForEntity(parentIdentity.Id) == 1
+                => 
+                _.GetRosterLevelForEntity(parentIdentity.Id) == 1
                 && _.GetCascadingQuestionParentId(questionIdentity.Id) == parentIdentity.Id
                 && _.GetOptionsForQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), It.IsAny<int[]>()) ==  Options
             );
 
             return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
-            && x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+                    && x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
-        protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, QuestionnaireIdentity questionnaireIdentity = null)
+        protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire()
         {
             var optionsRepository = new Mock<IOptionsRepository>();
             return optionsRepository.Object;
