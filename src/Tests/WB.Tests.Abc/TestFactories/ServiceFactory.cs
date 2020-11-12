@@ -195,6 +195,10 @@ namespace WB.Tests.Abc.TestFactories
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>(),
                 Mock.Of<IAssignmentDocumentsStorage>());
 
+        CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null) =>
+            new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>());
+        
+        
         public DomainRepository DomainRepository(
             IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -294,7 +298,9 @@ namespace WB.Tests.Abc.TestFactories
             => new ViewModelEventRegistry();
 
         public EnumeratorDenormalizerRegistry DenormalizerRegistry() =>
-            new EnumeratorDenormalizerRegistry(Create.Service.ServiceLocatorService(DashboardDenormalizer()), Mock.Of<ILogger>());
+            new EnumeratorDenormalizerRegistry(
+                Create.Service.ServiceLocatorService(DashboardDenormalizer(),
+                CalendarEventDenormalizer()), Mock.Of<ILogger>());
 
         public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
             => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry(new EventBusSettings());
