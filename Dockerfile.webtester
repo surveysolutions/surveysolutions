@@ -1,29 +1,25 @@
 ARG NODEJS_VERSION=14
 ARG DOTNET_VERSION=3.1
 ARG GIT_BRANCH=master
-ARG HQ_BUILD=42
+ARG BUILD_NUMBER=42
+ARG WEBTESTER_JS_PATH=build/jsFiles/frontend/package/webtester
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 
-ARG HQ_BUILD
+ARG BUILD_NUMBER
 ARG GIT_BRANCH
+ARG WEBTESTER_JS_PATH
 
 COPY libs /libs
 COPY src /src
-COPY build/jsFiles/frontend/package/webtester /src/UI/WB.UI.WebTester/
+COPY $WEBTESTER_JS_PATH /src/UI/WB.UI.WebTester/
 
 RUN dotnet publish /src/UI/WB.UI.WebTester \
     -c Release -o /webtester \
     --version-suffix $GIT_BRANCH \
-    /p:BuildNumber=$HQ_BUILD
+    /p:BuildNumber=$BUILD_NUMBER
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
-
-# should be empty
-ARG BUILD_DATE
-ARG VCS_REF
-ARG BUILD_VERSION
-ARG GIT_BRANCH
 
 # Labels.
 LABEL org.opencontainers.image.title="WebTester"

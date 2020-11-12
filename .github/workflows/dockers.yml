@@ -39,9 +39,9 @@ jobs:
         project:        
           - name: frontend
             dir: src/UI/WB.UI.Frontend
+            
           - name: questionnaire-app
             dir: src/UI/WB.UI.Designer/questionnaire-app
-
     steps:
       - uses: actions/download-artifact@v2
         with:
@@ -69,6 +69,8 @@ jobs:
           name: ${{ matrix.project.name }}
           path: ${{ matrix.project.dir }}/dist
           retention-days: 1
+
+
 
   docker:
     runs-on: ubuntu-latest
@@ -135,6 +137,7 @@ jobs:
 
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=buildNumber::$(cat .buildNumber)
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
       - name: Set up QEMU
@@ -161,6 +164,8 @@ jobs:
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args: |
+            BUILD_NUMBER=${{ steps.prep.outputs.buildNumber }}
           labels: |
             org.opencontainers.image.url=${{ github.event.repository.html_url }}
             org.opencontainers.image.source=${{ github.event.repository.url }}

@@ -2,7 +2,7 @@ ARG NODEJS_VERSION=14
 ARG DOTNET_VERSION=3.1
 ARG GIT_BRANCH=master
 ARG HQ_BUILD=42
-ARG FRONTEND_PATH=build/jsFiles/frontend/package/hq
+ARG HQ_JS_PATH=build/jsFiles/frontend/package/hq
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as export_builder
 ARG HQ_BUILD
@@ -22,14 +22,14 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     /p:BuildNumber=$HQ_BUILD
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
-ARG FRONTEND_PATH
+ARG HQ_JS_PATH
 
 ARG HQ_BUILD
 ARG GIT_BRANCH
 
 COPY libs /libs
 COPY src /src
-COPY ${FRONTEND_PATH} /src/UI/WB.UI.Headquarters.Core/
+COPY ${HQ_JS_PATH} /src/UI/WB.UI.Headquarters.Core/
 
 RUN dotnet publish /src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq \

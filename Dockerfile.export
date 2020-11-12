@@ -1,10 +1,11 @@
 ARG DOTNET_VERSION=3.1
 ARG GIT_BRANCH=master
-ARG BUILD_VERSION
+ARG READYTORUN=true
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
 ARG EXPORT_BUILD
 ARG GIT_BRANCH
+ARG READYTORUN
 
 COPY libs /libs
 COPY src/Core/Infrastructure/WB.Infrastructure.AspNetCore src/Core/Infrastructure/WB.Infrastructure.AspNetCore
@@ -16,7 +17,8 @@ COPY src/Directory.Build.targets /src
 RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release -o /export \
     --version-suffix $GIT_BRANCH \
-    /p:BuildNumber=$EXPORT_BUILD
+    /p:BuildNumber=$EXPORT_BUILD \
+    /p:ReadyToRun=$READYTORUN
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
 
