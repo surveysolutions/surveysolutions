@@ -90,7 +90,7 @@ namespace WB.UI.Headquarters.Controllers
             if (authorizedUser.IsSupervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
+            var interviewerApkVersion = await interviewerVersionReader.InterviewerBuildNumber();
 
             var pageIndex = request.PageIndex;
             var pageSize = request.PageSize;
@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsSupervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewerApkVersion = interviewerVersionReader.InterviewerBuildNumber;
+            var interviewerApkVersion = await interviewerVersionReader.InterviewerBuildNumber();
 
             var filteredInterviewerIdsToExport = this.usersFactory.GetInterviewersIds(request.Search?.Value,
                 request.Archived,
@@ -152,7 +152,7 @@ namespace WB.UI.Headquarters.Controllers
                 supervisorId,
                 request.Facet);
 
-            var interviewersReport = this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
+            var interviewersReport = await this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
 
             return this.CreateReportResponse(type, interviewersReport, Reports.Interviewers);
         }

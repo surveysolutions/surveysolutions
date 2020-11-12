@@ -424,7 +424,7 @@
     <value>تطبيق </value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {0} فئات كحد أقصى.</value>
+    <value>لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {limit} فئات كحد أقصى.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>قيمة الأصل</value>
@@ -634,7 +634,7 @@
     <value>عام</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>اسم الاستبيان:</value>
+      <value>عنوان الاستبيان</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>قم بإجراء هذا الاستبيان</value>

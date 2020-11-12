@@ -56,24 +56,24 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
         [Route("v1/extended")]
-        public virtual IActionResult GetSupervisor() =>
+        public virtual Task<IActionResult> GetSupervisor() =>
             this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.SupervisorFileName, ClientApkInfo.SupervisorFileName);
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
         [Route("v1/apk/interviewer")]
-        public virtual IActionResult GetInterviewer() =>
+        public virtual Task<IActionResult> GetInterviewer() =>
             this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerFileName);
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
         [Route("v1/apk/interviewer-with-maps")]
-        public virtual IActionResult GetInterviewerWithMaps() =>
+        public virtual Task<IActionResult> GetInterviewerWithMaps() =>
             this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerFileName);
         
         [HttpGet]
         [Route("v1/extended/latestversion")]
-        public virtual int? GetLatestVersion()
+        public virtual Task<int?> GetLatestVersion()
         {
             return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
         }
@@ -82,7 +82,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
         [Route("compatibility/{deviceid}/{deviceSyncProtocolVersion}")]
-        public virtual IActionResult CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId = null)
+        public virtual async Task<IActionResult> CheckCompatibility(string deviceId, int deviceSyncProtocolVersion,
+            string tenantId = null)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
@@ -103,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 }
             }
 
-            var serverApkBuildNumber = interviewerVersionReader.SupervisorBuildNumber;
+            var serverApkBuildNumber = await interviewerVersionReader.SupervisorBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
             
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
@@ -138,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApkPatch)]
         [Route("v1/extended/patch/{deviceVersion}")]
-        public virtual IActionResult Patch(int deviceVersion)
+        public virtual Task<IActionResult> Patch(int deviceVersion)
         {
             return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"Supervisor.{deviceVersion}.delta");
         }

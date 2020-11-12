@@ -11,14 +11,14 @@
         }}</v-snackbar>
         <v-row align="start" justify="center">
             <v-col lg="10">
-                <v-card class="mx-4 elevation-12">
+                <v-card class="mx-4 elevation-12" min-width="680">
                     <v-toolbar dense dark color="primary">
                         <v-toolbar-title v-if="options">{{
                             formTitle
                         }}</v-toolbar-title>
                     </v-toolbar>
-                    <v-tabs v-model="tab" grow @change="tabChange">
-                        <v-tab key="table">{{
+                    <v-tabs v-model="tab" grow>
+                        <v-tab key="table" :disabled="!stringsIsValid">{{
                             $t('QuestionnaireEditor.TableView')
                         }}</v-tab>
                         <v-tab key="strings">{{
@@ -37,9 +37,10 @@
                             </v-alert>
                         </v-card-text>
                     </div>
-                    <v-tabs-items v-model="currentTab">
+                    <v-tabs-items v-model="tab">
                         <v-tab-item key="table">
                             <category-table
+                                ref="table"
                                 :categories="categories"
                                 :parent-categories="parentCategories"
                                 :loading="loading"
@@ -55,6 +56,7 @@
                                 :loading="loading"
                                 :show-parent-value="isCascading"
                                 :categories="categories"
+                                @valid="v => (stringsIsValid = v)"
                                 @change="v => (categories = v)"
                                 @editing="v => (inEditMode = v)"
                                 @inprogress="v => (convert = v)"
@@ -64,10 +66,11 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-footer fixed>
+        <v-footer fixed min-width="680">
             <v-btn
                 class="ma-2"
                 color="success"
+                :disabled="!canApplyChanges"
                 :loading="submitting"
                 @click="apply"
                 >{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn
@@ -116,13 +119,10 @@ export default {
 
     data() {
         return {
-            tab: 'table',
-            currentTab: 0,
+            tab: 0,
             categories: [],
             parentCategories: null,
             categoriesAsText: '',
-
-            search: null,
             submitting: false,
             errors: [],
 
@@ -135,6 +135,7 @@ export default {
             file: null,
 
             isCascadingCategory: false,
+            stringsIsValid: true,
 
             snacks: {
                 fileUploaded: false,
@@ -187,6 +188,10 @@ export default {
                 this.isCategory,
                 this.isCascading
             );
+        },
+
+        canApplyChanges() {
+            return this.tab == 1 ? this.stringsIsValid : true;
         }
     },
 
@@ -265,20 +270,9 @@ export default {
         resetChanges() {
             this.reloadCategories(() => {
                 this.snacks.formReverted = true;
+                this.isCascadingCategory = this.cascading;
                 this.errors = [];
             });
-        },
-
-        tabChange(tab) {
-            if (
-                this.loading ||
-                (tab == 0 && this.currentTab == 1 && !this.$refs.strings.valid)
-            ) {
-                this.$nextTick(() => (this.tab = this.currentTab));
-                return;
-            }
-
-            this.currentTab = this.tab;
         },
 
         uploadFile(files) {
@@ -301,6 +295,10 @@ export default {
                 this.categories = r.data.options;
                 this.file = null;
                 this.snacks.fileUploaded = true;
+
+                if (this.$refs.table != null) {
+                    this.$refs.table.reset();
+                }
             });
         },
 
@@ -310,6 +308,8 @@ export default {
 
         apply() {
             if (this.ajax) return;
+
+            if (!this.canApplyChanges) return;
 
             if (this.inEditMode || this.convert) {
                 setTimeout(() => this.apply(), 100);

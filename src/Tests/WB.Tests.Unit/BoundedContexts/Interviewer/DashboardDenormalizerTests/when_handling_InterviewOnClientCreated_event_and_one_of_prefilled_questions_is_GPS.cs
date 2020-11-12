@@ -31,9 +31,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                         Create.Entity.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
             IQuestionnaireStorage questionnaireStorage =
-                Mock.Of<IQuestionnaireStorage>(storage
-                    => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire);
+                Mock.Of<IQuestionnaireStorage>(storage => 
+                    storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire
+                    && storage.GetQuestionnaireOrThrow(QuestionnaireIdentity.Parse(questionnaireId), It.IsAny<string>()) == plainQuestionnaire);
 
             var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
             writer.GetById(it.IsAny<string>()) == dashboardItem);

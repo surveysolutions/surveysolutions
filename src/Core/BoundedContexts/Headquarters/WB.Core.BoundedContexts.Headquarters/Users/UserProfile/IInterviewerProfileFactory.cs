@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
     {
         Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid interviewerId);
 
-        ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
+        Task<ReportView> GetInterviewersReport(Guid[] interviewersIdsToExport);
 
         InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId);
 

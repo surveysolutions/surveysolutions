@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 throw new ArgumentException(@"Invalid order by column passed", nameof(order));
             }
 
-            var targetInterviewerVersion = interviewerVersionReader.InterviewerBuildNumber;
+            var targetInterviewerVersion = await interviewerVersionReader.InterviewerBuildNumber();
 
             var sql = GetSqlTexts(input.SupervisorId.HasValue ? ReportByInterviewers : ReportBySupervisors);
             var fullQuery = string.Format(sql, order.ToSqlOrderBy());

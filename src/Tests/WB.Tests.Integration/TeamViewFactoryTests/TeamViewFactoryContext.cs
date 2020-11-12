@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                     typeof(InterviewSummaryMap),
                     typeof(InterviewGpsMap),
                     typeof(QuestionnaireCompositeItemMap),
-                    typeof(QuestionAnswerMap),
+                    typeof(IdentifyEntityValueMap),
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(CumulativeReportStatusChangeMap),

@@ -34,8 +34,8 @@ namespace WB.Services.Export.Storage
                     var s3Settings = service.GetService<IOptions<AmazonS3Settings>>().Value;
                     
                     return s3Settings.AccessKey != null && s3Settings.SecretKey != null
-                        ? new AmazonS3Client(s3Settings.AccessKey, s3Settings.SecretKey, RegionEndpoint.USEast1)
-                        : new AmazonS3Client();
+                        ? new AmazonS3Client(s3Settings.AccessKey, s3Settings.SecretKey, options.Region)
+                        : new AmazonS3Client(options.Region);
                 });
 
                 services.AddTransient<ITransferUtility>(c => new TransferUtility(c.GetService<IAmazonS3>()));

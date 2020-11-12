@@ -189,6 +189,12 @@
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="Adjust" xml:space="preserve">
+    <value>Установить</value>
+  </data>
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>Важно, время на устройстве установлено не верно. Текущее время значительно отличается от времени сервера. Установите часы в правильное состояние прежде чем продолжать работу.</value>
+  </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
     <value>Ответ недействителен</value>
   </data>
