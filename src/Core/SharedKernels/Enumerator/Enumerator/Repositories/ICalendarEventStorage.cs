@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Repositories
