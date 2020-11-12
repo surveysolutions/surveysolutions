@@ -1356,7 +1356,7 @@
     <value>Información de la encuesta</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Descripción del cuestionario</value>
+      <value>título del cuestionario</value>
   </data>
   <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
     <value>Unidad de Análisis:</value>
