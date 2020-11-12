@@ -15,6 +15,15 @@ type Assignment {
   webMode: Boolean!
 }
 
+type CalendarEvent {
+  "Comment of calendar Event"
+  comment: String
+  "Id of Calendar Event"
+  publicKey: Uuid!
+  "Start of calendar Event"
+  start: DateTime!
+}
+
 type CategoricalOption {
   parentValue: Int
   title: String!
@@ -98,6 +107,8 @@ type Interview {
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
   assignmentId: Int
+  "Active Calendar Event associated with interview"
+  calendarEvent: CalendarEvent
   "Key that was generated on interviewer tablet when interview was created for the first time"
   clientKey: String!
   "Date when interview was created"
