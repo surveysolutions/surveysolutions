@@ -966,8 +966,8 @@
     <comment>Метаинформация</comment>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Описание опросника</value>
-    <comment>Метаинформация</comment>
+      <value>Имя опросника</value>
+      <comment>Метаинформация</comment>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
     <value>Подзаголовок:</value>

@@ -1048,7 +1048,7 @@
     <value>Informacion mbi anketën </value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Përshkrimi i pyetësorit</value>
+      <value>Emërtimi i pyetësorit</value>
   </data>
   <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
     <value>Njësia e analizës:</value>
