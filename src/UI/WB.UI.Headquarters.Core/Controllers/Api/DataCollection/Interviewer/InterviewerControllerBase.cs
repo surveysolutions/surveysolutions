@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [HttpGet]
         [Route("")]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
-        public virtual IActionResult Get()
+        public virtual Task<IActionResult> Get()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [HttpGet]
         [Route("extended")]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
-        public virtual IActionResult GetExtended()
+        public virtual Task<IActionResult> GetExtended()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [HttpGet]
         [Route("patch/{deviceVersion:int}")]
         [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
-        public virtual IActionResult Patch(int deviceVersion)
+        public virtual Task<IActionResult> Patch(int deviceVersion)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
@@ -109,7 +109,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [HttpGet]
         [Route("extended/patch/{deviceVersion:int}")]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
-        public virtual IActionResult PatchExtended(int deviceVersion)
+        public virtual Task<IActionResult> PatchExtended(int deviceVersion)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
@@ -120,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("latestversion")]
-        public virtual ActionResult<int?> GetLatestVersion()
+        public virtual Task<int?> GetLatestVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
@@ -131,7 +131,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("extended/latestversion")]
-        public virtual ActionResult<int?> GetLatestExtendedVersion()
+        public virtual Task<int?> GetLatestExtendedVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
@@ -151,7 +151,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [HttpGet]
         [Route("compatibility/{deviceid}/{deviceSyncProtocolVersion}")]
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
-        public virtual IActionResult CheckCompatibility(string deviceId, int deviceSyncProtocolVersion, string tenantId = null)
+        public virtual async Task<IActionResult> CheckCompatibility(string deviceId, int deviceSyncProtocolVersion,
+            string tenantId = null)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
             int lastNonUpdatableSyncProtocolVersion = this.syncVersionProvider.GetLastNonUpdatableVersion();
@@ -164,7 +165,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
                 return StatusCode(StatusCodes.Status409Conflict);
             }
             
-            var serverApkBuildNumber = interviewerVersionReader.InterviewerBuildNumber;
+            var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
             
             if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)

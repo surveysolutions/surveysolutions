@@ -640,7 +640,7 @@
     <value>Public</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>Nom du questionnaire</value>
+      <value>Titre du questionnaire</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Créer ce questionnaire</value>
