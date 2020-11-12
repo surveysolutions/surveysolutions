@@ -65,5 +65,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             calendarEvent.IsSynchronized = isSynced;
             this.Store(calendarEvent);
         }
+
+        public void RemoveCalendarEvent(Guid id)
+        {
+            this.aggregateRootRepositoryWithCache.CleanCache();
+
+            this.interviewViewRepository.Remove(interviewId.FormatGuid());
+            this.interviewSequenceViewRepository.Remove(interviewId);
+
+            this.RemoveInterviewImages(interviewId);
+            this.eventStorage.RemoveEventSourceById(interviewId);
+            this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
+        }
     }
 }

@@ -29,29 +29,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.properties.Start = @event.Start;
             this.properties.Comment = @event.Comment;
-
-            properties.InterviewId = @event.InterviewId;
-            properties.AssignmentId = @event.AssignmentId;
+            this.properties.InterviewId = @event.InterviewId;
+            this.properties.AssignmentId = @event.AssignmentId;
             this.properties.CreatedAt = @event.OriginDate;
             this.properties.UpdatedAt = @event.OriginDate;
         }
         
         protected void Apply(CalendarEventUpdated @event)
         {
+            //ignore event if it occured before last change
+            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            
             this.properties.Start = @event.Start;
             this.properties.Comment = @event.Comment;
-            
             this.properties.UpdatedAt = @event.OriginDate;
         }
         
         protected void Apply(CalendarEventCompleted @event)
         {
+            //ignore event if it occured before last change
+            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            
             this.properties.IsCompleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
         }
         
         protected void Apply(CalendarEventDeleted @event)
         {
+            //ignore event if it occured before last change
+            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            
             this.properties.IsDeleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
         }

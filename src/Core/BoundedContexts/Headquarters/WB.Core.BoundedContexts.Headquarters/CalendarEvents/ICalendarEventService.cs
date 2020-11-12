@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 {
@@ -7,5 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
     {
         CalendarEvent? GetCalendarEventById(Guid id);
         CalendarEvent? GetActiveCalendarEventByInterviewId(Guid id);
+
+        List<CalendarEvent> GetAllCalendarEventsForUser(Guid userId);
     }
 }

@@ -9,30 +9,25 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps
 {
     public class UploadCalendarEvents : SynchronizationStep
     {
         private readonly IEnumeratorEventStorage eventStorage;
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IPrincipal principal;
 
         public UploadCalendarEvents(int sortOrder, ISynchronizationService synchronizationService, 
             ILogger logger, IEnumeratorEventStorage eventStorage, 
-            IPlainStorage<InterviewView> interviewViewRepository, 
             IJsonAllTypesSerializer synchronizationSerializer,
             ICalendarEventStorage calendarEventStorage,
             IPrincipal principal) 
             : base(sortOrder, synchronizationService, logger)
         {
             this.eventStorage = eventStorage;
-            this.interviewViewRepository = interviewViewRepository;
             this.synchronizationSerializer = synchronizationSerializer;
             this.calendarEventStorage = calendarEventStorage;
             this.principal = principal;
@@ -73,7 +68,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private ReadOnlyCollection<CommittedEvent> GetCalendarEventStream(Guid calendarEventId)
         {
-            return this.eventStorage.Read(calendarEventId, this.eventStorage.GetLastEventKnownToHq(calendarEventId) + 1)
+            return this.eventStorage.Read(calendarEventId, 
+                    this.eventStorage.GetLastEventKnownToHq(calendarEventId) + 1)
                 .ToReadOnlyCollection();
         }
     }

@@ -32,17 +32,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     throw new InvalidOperationException("Calendar event package has no interview Id");
                 InScopeExecutor.Current.Execute(serviceLocator =>
                 {
-                    var currentIntervirewCalendarEvent =
+                    var activeCalendarEventByInterviewId =
                         calendarEventService.GetActiveCalendarEventByInterviewId(calendarEventPackage
                             .InterviewId.Value);
 
                     //remove other older CE 
-                    if (currentIntervirewCalendarEvent != null &&
-                        currentIntervirewCalendarEvent.PublicKey != calendarEventPackage.CalendarEventId
-                        && currentIntervirewCalendarEvent.UpdateDate < calendarEventPackage.LastUpdateDate)
+                    if (activeCalendarEventByInterviewId != null &&
+                        activeCalendarEventByInterviewId.PublicKey != calendarEventPackage.CalendarEventId
+                        && activeCalendarEventByInterviewId.UpdateDate < calendarEventPackage.LastUpdateDate)
                     {
                         serviceLocator.GetInstance<ICommandService>().Execute(
-                            new DeleteCalendarEventCommand(currentIntervirewCalendarEvent.PublicKey,
+                            new DeleteCalendarEventCommand(activeCalendarEventByInterviewId.PublicKey,
                                 calendarEventPackage.ResponsibleId),
                             this.syncSettings.Origin);
                     }
@@ -51,8 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events.Replace(@"\u0000", ""));
 
                     //validate stream
-                    //merge if there are changes
-                    //
+                    //merge if there are changes on server?
 
                     serviceLocator.GetInstance<ICommandService>().Execute(
                         new SyncCalendarEventEventsCommand(aggregateRootEvents,

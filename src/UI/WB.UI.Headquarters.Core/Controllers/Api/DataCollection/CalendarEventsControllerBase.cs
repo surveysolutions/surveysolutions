@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -14,12 +16,17 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
     {
         private readonly IHeadquartersEventStore eventStore;
         private readonly ICalendarEventPackageService packageService;
+        private readonly ICalendarEventService calendarEventService;
+        protected readonly IAuthorizedUser authorizedUser;
 
         protected CalendarEventsControllerBase(IHeadquartersEventStore eventStore,
-            ICalendarEventPackageService packageService)
+            ICalendarEventPackageService packageService, 
+            ICalendarEventService calendarEventService, IAuthorizedUser authorizedUser)
         {
             this.eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
             this.packageService = packageService;
+            this.calendarEventService = calendarEventService;
+            this.authorizedUser = authorizedUser;
         }
 
         protected IActionResult PostPackage(CalendarEventPackageApiView package)
@@ -46,18 +53,23 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         {
             var allEvents = eventStore.Read(id, 0).ToList();
             
-            return new JsonResult(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
+            return new JsonResult(allEvents, 
+                EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
         public virtual ActionResult<List<CalendarEventApiView>> Get()
         {
-            List<CalendarEventApiView> interviewApiViews = new List<CalendarEventApiView>(); 
-                /*GetAllCalendarEventsForResponsible(this.authorizedUser.Id)
-                .Select(interview => new CalendarEventApiView
-                {
-                }).ToList();*/
+            var interviewApiViews = 
+                calendarEventService.GetAllCalendarEventsForUser(this.authorizedUser.Id); 
+                
 
-            return interviewApiViews;
+            return interviewApiViews.Select(x => new CalendarEventApiView()
+            {
+                CalendarEventId = x.PublicKey,
+                ResponsibleId = x.UserId,
+                Sequence = eventStore.GetLastEventSequence(x.PublicKey),
+                LastEventId = eventStore.GetLastEventId(x.PublicKey)
+            }).ToList();
         }
     }
 }
