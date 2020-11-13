@@ -72,17 +72,5 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         public override void RefreshRemovedEntities(Guid interviewId, params Identity[] entities) =>
             AddToQueue(interviewId, s => s.RefreshRemovedEntities(interviewId, entities));
-
-        public override void RefreshEntitiesWithFilteredOptions(Guid interviewId) =>
-            AddToQueue(interviewId, s => s.RefreshEntitiesWithFilteredOptions(interviewId));
-
-        public override void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities) =>
-            AddToQueue(interviewId, s => s.RefreshLinkedToListQuestions(interviewId, identities));
-
-        public override void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities) =>
-            AddToQueue(interviewId, s => s.RefreshLinkedToRosterQuestions(interviewId, rosterIdentities));
-
-        public override void RefreshCascadingOptions(Guid interviewId, Identity identity) =>
-            AddToQueue(interviewId, s => s.RefreshCascadingOptions(interviewId, identity));
     }
 }

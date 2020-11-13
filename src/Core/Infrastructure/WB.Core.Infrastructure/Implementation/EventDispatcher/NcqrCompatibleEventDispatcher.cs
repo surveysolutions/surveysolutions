@@ -57,7 +57,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             var errorsDuringHandling = new List<Exception>();
 
-            if (!this.prototypeService.IsPrototype(firstEventSourceId))
+            if (this.prototypeService.GetPrototypeType(firstEventSourceId) != PrototypeType.Temporary)
             {
                 foreach (var functionalEventHandler in denormalizerRegistry.FunctionalDenormalizers)
                 {
