@@ -4,6 +4,7 @@ ARG GIT_BRANCH=master
 ARG BUILD_NUMBER=42
 ARG READYTORUN=true
 ARG DESIGNER_JS_PATH=build/jsFiles/questionnaire-app
+ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
 
 FROM --platform=linux/amd64 node:${NODEJS_VERSION} AS js_builder
 COPY src/UI/WB.UI.Designer/package*.json /src/UI/WB.UI.Designer/
@@ -31,6 +32,15 @@ RUN dotnet publish /src/UI/WB.UI.Designer \
     /p:BuildNumber=$BUILD_NUMBER /p:SpaSkipBuild=True \
     /p:ReadyToRun=$READYTORUN
 
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
+RUN apt-get update && apt-get install unzip -y --no-install-recommends
+
+ARG FONTS
+ENV FONTS_LIST=$FONTS
+RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
+    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
+    && cd /raw_fonts && unzip -o $FONT ; done"]
+
 FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
 
 # should be empty
@@ -39,9 +49,13 @@ ARG VCS_REF
 ARG BUILD_VERSION
 ARG GIT_BRANCH
 
-RUN apt-get update && apt-get install -y --no-install-recommends libc6-dev xvfb wkhtmltopdf \
+RUN apt-get update && apt-get install -y --no-install-recommends libc6-dev xvfb wkhtmltopdf fontconfig\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY --from=fonts /raw_fonts /usr/share/fonts
+
+RUN fc-cache -f -v
 
 # Labels.
 LABEL org.opencontainers.image.title="Designer"
