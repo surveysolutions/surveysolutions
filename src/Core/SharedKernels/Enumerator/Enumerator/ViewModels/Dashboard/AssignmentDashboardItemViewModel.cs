@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     .FormatString(Assignment.Quantity.GetValueOrDefault());
             }
             
-            if (Assignment.CalendarEvent.HasValue && Assignment.Quantity == 1)
+            if (Assignment.CalendarEvent.HasValue)
             {
                 var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, Assignment.CalendarEvent.Value.UtcDateTime);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;

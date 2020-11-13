@@ -49,7 +49,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<PostCalendarEventsRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetCalendarEventsRequest, GetCalendarEventsResponse>(GetCalendarEvents);
             requestHandler.RegisterHandler<GetCalendarEventDetailsRequest, GetCalendarEventDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadCalendarEventRequest, OkResponse>(UploadCalendarEvent);
@@ -64,14 +63,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             {
                 Events = events
             });
-        }
-
-        private Task<OkResponse> Handle(PostCalendarEventsRequest arg)
-        {
-            eventBus.PublishCommittedEvents(arg.Events);
-            eventStore.StoreEvents(new CommittedEventStream(arg.CalendarEventId, arg.Events));
-
-            return Task.FromResult(new OkResponse());
         }
 
         private Task<GetCalendarEventsResponse> GetCalendarEvents(GetCalendarEventsRequest arg)
