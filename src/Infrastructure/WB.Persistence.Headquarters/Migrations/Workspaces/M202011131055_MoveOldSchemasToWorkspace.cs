@@ -1,3 +1,4 @@
+using Dapper;
 using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspaces
@@ -11,40 +12,36 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
         {
             Alter.Table("events").InSchema("events").ToSchema(primarySchemaName);
 
-            string[] plainStoreTables =
+            string sqlFormat =
+                @"DO
+                $$DECLARE
+            p_table regclass;
+            BEGIN
+                SET LOCAL search_path='{0}';
+            FOR p_table IN
+                SELECT oid FROM pg_class
+            WHERE relnamespace = '{0}'::regnamespace
+            AND relkind = 'r' AND relname NOT IN('VersionInfo', 'hibernate_unique_key') 
+            LOOP
+                EXECUTE format('ALTER TABLE %s SET SCHEMA ws_primary', p_table);
+            END LOOP;
+            END;$$;";
+
+            Execute.Sql(string.Format(sqlFormat, "plainstore"));
+            Execute.Sql(string.Format(sqlFormat, "readside"));
+
+            Create.Table("hibernate_unique_key")
+                .WithColumn("next_hi").AsInt32().NotNullable();
+            
+            Execute.WithConnection((c, t) =>
             {
-                "appsettings", "assemblyinfos", "assignmentsimportprocess",
-                "assignmenttoimport",
-                "attachmentcontents", "audioauditfiles", "audiofiles", "auditlogrecords",
-                "brokeninterviewpackages", "completedemailrecords", "deviceinfos",
-                "devicesyncinfo", "devicesyncstatistics", "featuredquestions",
-                "hibernate_unique_key", "interviewpackages", "invitations",
-                "mapbrowseitems", "productversionhistory", "profilesettings",
-                "questionnairebackups", "questionnairebrowseitems", "questionnairedocuments",
-                "questionnairelookuptables", "questionnairepdfs", "receivedpackagelogentries",
-                "reusablecategoricaloptions", "synchronizationlog", "systemlog", "tablet_logs",
-                "translationinstances", "usermaps", "usersimportprocess",
-                "usertoimport", "webinterviewconfigs"
-            };
+                var maxValue =
+                    c.ExecuteScalar(
+                        "SELECT MAX(next_hi) FROM readside.hibernate_unique_key UNION SELECT MAX(next_hi) FROM plainstore.hibernate_unique_key;");
 
-            MoveToPrimarySchema(plainStoreTables, "plainstore");
-
-            string[] readSideTables =
-            {
-                "assignments", "assignmentsidentifyinganswers", "commentaries", "cumulativereportstatuschanges",
-                "identifyingentityvalue", "interview_geo_answers", "interviewcommentedstatuses", "interviewflags",
-                "interviewsummaries", "questionnaire_entities", "report_statistics", "timespanbetweenstatuses"
-            };
-
-            MoveToPrimarySchema(readSideTables, "readside");
-        }
-
-        private void MoveToPrimarySchema(string[] plainStoreTables, string schemaName)
-        {
-            foreach (var table in plainStoreTables)
-            {
-                Alter.Table(table).InSchema(schemaName).ToSchema(primarySchemaName);
-            }
+                c.ExecuteScalar("INSERT INTO ws_primary.hibernate_unique_key VALUES (:val)", new {val = maxValue});
+            });
+            
         }
 
         public override void Down()
