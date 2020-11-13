@@ -166,7 +166,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
             // arrange
-            verificationMessages.ShouldContainError("WB0312");
+            verificationMessages.ShouldContainCritical("WB0312");
             var verificationMessage = verificationMessages.Single(e => e.Code == "WB0312");
             verificationMessage.MessageLevel.Should().Be(VerificationMessageLevel.Critical);
             verificationMessage.References.Count().Should().Be(1);
