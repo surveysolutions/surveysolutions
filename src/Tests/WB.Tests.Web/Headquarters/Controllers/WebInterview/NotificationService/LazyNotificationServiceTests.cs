@@ -81,46 +81,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview.NotificationService
         }
 
         [Test]
-        public void RefreshEntitiesWithFilteredOptionsShouldBeCalledEventually()
-        {
-            var interviewId = Guid.NewGuid();
-            aggregateRootCache.SetConnectedCount(interviewId, 1);
-            Subj.RefreshEntitiesWithFilteredOptions(interviewId);
-
-            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
-        }
-
-        [Test]
-        public void RefreshCascadingOptionsShouldBeCalledEventually()
-        {
-            var interviewId = Guid.NewGuid();
-            aggregateRootCache.SetConnectedCount(interviewId, 1);
-            Subj.RefreshCascadingOptions(interviewId, Identity.Create(Guid.Empty, RosterVector.Empty));
-
-            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
-        }
-
-        [Test]
-        public void RefreshLinkedToListQuestionsShouldBeCalledEventually()
-        {
-            var interviewId = Guid.NewGuid();
-            aggregateRootCache.SetConnectedCount(interviewId, 1);
-            Subj.RefreshLinkedToListQuestions(interviewId, Array.Empty<Identity>());
-
-            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
-        }
-
-        [Test]
-        public void RefreshLinkedToRosterQuestionsShouldBeCalledEventually()
-        {
-            var interviewId = Guid.NewGuid();
-            aggregateRootCache.SetConnectedCount(interviewId, 1);
-            Subj.RefreshLinkedToRosterQuestions(interviewId, Array.Empty<Identity>());
-
-            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
-        }
-
-        [Test]
         public void NoRefreshEntiesCallsIfNoOneConnected()
         {
             var interviewId = Guid.NewGuid();
