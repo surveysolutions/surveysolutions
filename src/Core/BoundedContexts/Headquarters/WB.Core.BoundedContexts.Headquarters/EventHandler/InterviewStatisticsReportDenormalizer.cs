@@ -201,16 +201,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             List<Identity> questions = questionIds
                 .Where(q => IsEligibleQuestion(questionnaire, q.Id))
                 .ToList();
-            
+
+            var reportsHash = summary.StatisticsReport.ToDictionary(s => (s.EntityId, s.RosterVector));
+
             foreach (var identity in questions)
             {
-                var entity = summary.StatisticsReport.SingleOrDefault(x =>
-                    x.RosterVector == identity.RosterVector.AsString()
-                    && x.EntityId == questionnaire.GetEntityIdMapValue(identity.Id));
-
-                if(entity == null) continue;
-                
-                entity.IsEnabled = enabled;
+                if(reportsHash.TryGetValue(
+                    (questionnaire.GetEntityIdMapValue(identity.Id), identity.RosterVector.ToString()), 
+                    out var entity))
+                {
+                    entity.IsEnabled = enabled;
+                }
             }
         }
 
