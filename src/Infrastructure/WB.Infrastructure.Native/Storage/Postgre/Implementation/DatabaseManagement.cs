@@ -68,11 +68,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public static bool MigratedToWorkspaces(string workspaceSchemaName, string connectionString)
         {
             using var connection = new NpgsqlConnection(connectionString);
-            var result = connection.ExecuteScalar<bool>(
+            var versionInfoExists = connection.ExecuteScalar<bool>(
                 "select exists (select 1 FROM information_schema.tables WHERE table_schema = :schemaName AND table_name = 'VersionInfo')",
                 new {schemaName = workspaceSchemaName});
 
-            return result;
+            if (versionInfoExists)
+            {
+                int migrationsCount = connection.ExecuteScalar<int>($"SELECT COUNT(\"Version\") FROM {workspaceSchemaName}.\"VersionInfo\"");
+                return migrationsCount > 2;
+            }
+            
+            return false;
         }
     }
 }
