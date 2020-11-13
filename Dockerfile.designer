@@ -49,6 +49,9 @@ LABEL org.opencontainers.image.description="Survey Solutions Designer"
 
 COPY --from=builder designer /app
 
+ENV DESIGNER_Pdf__WKHtmlToPdfExecutablePath="/usr/bin/wkhtmltopdf"
+ENV DESIGNER_Pdf__WkHtmlToPdfExeName="wkhtmltopdf"
+
 WORKDIR /app
 EXPOSE 80
 HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
