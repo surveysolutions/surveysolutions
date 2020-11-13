@@ -151,6 +151,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsRosterGroup(Guid groupId);
 
+        ReadOnlyCollection<Guid> GetAllEntities();
+        
         ReadOnlyCollection<Guid> GetAllQuestions();
 
         ReadOnlyCollection<Guid> GetAllVariables();

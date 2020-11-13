@@ -87,8 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
                 if (composite is IVariable variable)
                 {
-                    compositeItem.QuestionText = variable.Name;
-                    compositeItem.VariableLabel = variable.Label;
+                    compositeItem.QuestionText = variable.Label;
+                    compositeItem.StataExportCaption = variable.Name;
                 }
 
                 questionnaireItemsWriter.Store(compositeItem);
