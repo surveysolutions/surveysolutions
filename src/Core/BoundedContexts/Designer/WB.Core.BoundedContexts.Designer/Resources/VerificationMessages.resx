@@ -825,4 +825,7 @@
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Link to hidden question is not allowed</value>
   </data>
+  <data name="WB0312" xml:space="preserve">
+      <value>Categories must have two options minimum</value>
+  </data>
 </root>
