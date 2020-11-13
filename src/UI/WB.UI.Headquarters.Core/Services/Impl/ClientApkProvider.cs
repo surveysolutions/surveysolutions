@@ -78,27 +78,26 @@ namespace WB.UI.Headquarters.Services.Impl
             apkClient.BaseAddress = uri;
 
             var requestUri = $"/{fileName}";
-            var headResponse = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, requestUri));
-            if (headResponse.StatusCode != HttpStatusCode.OK)
+            
+            HttpResponseMessage body = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, requestUri));
+            if (body.StatusCode != HttpStatusCode.OK)
             {
-                return new StatusCodeResult((int) headResponse.StatusCode);
+                return new StatusCodeResult((int) body.StatusCode);
             }
-
-            var remoteEtag = headResponse.Headers.ETag.Tag;
-
-            if (request.RequestHasMatchingFileHash(remoteEtag))
+            
+            var responseStream = await body.Content.ReadAsStreamAsync();
+            var hash = this.fileSystemAccessor.ReadHash(responseStream);
+            
+            if (request.RequestHasMatchingFileHash(hash))
             {
                 return new StatusCodeResult(StatusCodes.Status304NotModified);
             }
-
-            HttpResponseMessage body = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, requestUri));
-            var responseStream = await body.Content.ReadAsStreamAsync();
 
             return new FileStreamResult(responseStream, "application/vnd.android.package-archive")
             {
                 FileDownloadName = responseFileName,
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue(body.Headers.ETag.Tag)
+                EntityTag = new EntityTagHeaderValue($"\"{Convert.ToBase64String(hash)}\"")
             };
         }
 
@@ -168,6 +167,7 @@ namespace WB.UI.Headquarters.Services.Impl
             var responseStream = await body.Content.ReadAsStreamAsync();
             AndroidPackageInfo packageInfo = this.androidPackageReader.Read(responseStream);
 
+            
             this.appVersionCache.Set(cacheKey, packageInfo, TimeSpan.FromMinutes(5));
             return packageInfo;
         }

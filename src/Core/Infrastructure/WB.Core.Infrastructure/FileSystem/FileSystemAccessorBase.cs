@@ -39,6 +39,13 @@ namespace WB.Core.Infrastructure.FileSystem
             }
         }
 
+        public byte[] ReadHash(Stream stream)
+        {
+            using var crypto = new MD5CryptoServiceProvider();
+            var hash = crypto.ComputeHash(stream);
+            return hash;
+        }
+        
         public byte[] ReadHash(string pathToFile)
         {
             if (!File.Exists(pathToFile))
@@ -61,7 +68,7 @@ namespace WB.Core.Infrastructure.FileSystem
                     }
                 }
 
-                FileHash fileHash = null;
+                FileHash fileHash;
 
                 if (!File.Exists(hashFile))
                 {
@@ -69,21 +76,19 @@ namespace WB.Core.Infrastructure.FileSystem
                     {
                         if (!File.Exists(hashFile))
                         {
-                            using (var crypto = new MD5CryptoServiceProvider())
+                            using var crypto = new MD5CryptoServiceProvider();
+                            var hash = crypto.ComputeHash(File.ReadAllBytes(pathToFile));
+
+                            fileHash = new FileHash
                             {
-                                var hash = crypto.ComputeHash(File.ReadAllBytes(pathToFile));
+                                MD5 = hash,
+                                LastWriteTime = lastWrite
+                            };
 
-                                fileHash = new FileHash
-                                {
-                                    MD5 = hash,
-                                    LastWriteTime = lastWrite
-                                };
+                            var json = JsonConvert.SerializeObject(fileHash);
+                            File.WriteAllText(hashFile, json);
 
-                                var json = JsonConvert.SerializeObject(fileHash);
-                                File.WriteAllText(hashFile, json);
-
-                                return hash;
-                            }
+                            return hash;
                         }
                     }
                 }
