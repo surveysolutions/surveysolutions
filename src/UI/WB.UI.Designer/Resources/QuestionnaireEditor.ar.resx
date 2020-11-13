@@ -927,4 +927,7 @@
       <value>أصلي</value>
       <comment>أصلي</comment>
   </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+      <value>عنوان الاستبيان</value>
+  </data>
 </root>
