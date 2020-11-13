@@ -1,4 +1,5 @@
 ﻿using System;
+using Dapper;
 using FluentMigrator;
 using FluentMigrator.Builders.Create.ForeignKey;
 using FluentMigrator.Builders.Create.Table;
@@ -62,6 +63,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return !self.Schema.Table(tableName).Constraint(constraintName).Exists()
                 ? constructTableFunction(self.Create.ForeignKey(constraintName).FromTable(tableName))
                 : null;
+        }
+
+        public static bool MigratedToWorkspaces(string workspaceSchemaName, string connectionString)
+        {
+            using var connection = new NpgsqlConnection(connectionString);
+            var result = connection.ExecuteScalar<bool>(
+                "select exists (select 1 FROM information_schema.tables WHERE table_schema = :schemaName AND table_name = 'VersionInfo')",
+                new {schemaName = workspaceSchemaName});
+
+            return result;
         }
     }
 }

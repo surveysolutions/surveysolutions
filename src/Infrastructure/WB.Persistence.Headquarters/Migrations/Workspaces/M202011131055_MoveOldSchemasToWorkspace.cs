@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Office.CustomUI;
 using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspaces
@@ -6,7 +5,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
     [Migration(2020_11_13_10_55)]
     public class M202011131055_MoveOldSchemasToWorkspace : Migration
     {
-        const string primarySchemaName = "primary";
+        internal const string primarySchemaName = "ws_primary";
 
         public override void Up()
         {
@@ -37,9 +36,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 "interviewsummaries", "questionnaire_entities", "report_statistics", "timespanbetweenstatuses"
             };
 
-
-            var schemaName = "readside";
-            MoveToPrimarySchema(readSideTables, schemaName);
+            MoveToPrimarySchema(readSideTables, "readside");
         }
 
         private void MoveToPrimarySchema(string[] plainStoreTables, string schemaName)

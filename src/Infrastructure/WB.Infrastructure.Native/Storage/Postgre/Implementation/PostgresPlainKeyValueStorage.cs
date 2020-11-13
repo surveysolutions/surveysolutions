@@ -14,10 +14,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public PostgresPlainKeyValueStorage(IUnitOfWork sessionProvider,
             UnitOfWorkConnectionSettings connectionSettings,
+            IWorkspaceNameProvider workspaceNameProvider,
             ILogger logger,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(connectionSettings.ConnectionString, connectionSettings.PlainStorageSchemaName, logger, memoryCache, serializer)
+            : base(connectionSettings.ConnectionString, workspaceNameProvider.CurrentWorkspace(), logger, memoryCache, serializer)
         {
             this.sessionProvider = sessionProvider;
         }

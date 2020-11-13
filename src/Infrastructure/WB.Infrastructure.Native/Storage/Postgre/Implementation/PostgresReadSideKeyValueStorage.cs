@@ -20,8 +20,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IUnitOfWork sessionProvider;
 
         public PostgresReadSideKeyValueStorage(IUnitOfWork unitOfWork, 
-            UnitOfWorkConnectionSettings connectionSettings, ILogger logger, IMemoryCache memoryCache, IEntitySerializer<TEntity> entitySerializer) 
-            : base(connectionSettings.ConnectionString, connectionSettings.ReadSideSchemaName, logger, memoryCache, entitySerializer)
+            UnitOfWorkConnectionSettings connectionSettings, IWorkspaceNameProvider workspaceNameProvider, ILogger logger, IMemoryCache memoryCache, IEntitySerializer<TEntity> entitySerializer) 
+            : base(connectionSettings.ConnectionString, workspaceNameProvider.CurrentWorkspace(), logger, memoryCache, entitySerializer)
         {
             this.sessionProvider = unitOfWork;
 
