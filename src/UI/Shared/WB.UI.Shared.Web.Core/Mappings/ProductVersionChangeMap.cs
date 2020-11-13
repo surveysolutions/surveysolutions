@@ -5,7 +5,6 @@ using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Shared.Web.Mappings
 {
-    [PlainStorage]
     public class ProductVersionChangeMap : ClassMapping<ProductVersionChange>
     {
         public ProductVersionChangeMap()

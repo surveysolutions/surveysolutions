@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
-    [PlainStorage]
     public class InvitationMap : ClassMapping<Invitation>
     {
         public InvitationMap()

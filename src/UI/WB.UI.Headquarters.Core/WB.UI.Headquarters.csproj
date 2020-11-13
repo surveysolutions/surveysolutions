@@ -59,7 +59,7 @@
     <PackageReference Include="SkiaSharp" Version="2.80.1" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug'">
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
   </ItemGroup>
 

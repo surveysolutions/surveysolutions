@@ -33,6 +33,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Storage;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
@@ -321,6 +323,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
+            registry.Bind<IWorkspaceNameProvider, PrimaryWorkspaceNameProvider>();
 
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 

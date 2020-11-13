@@ -60,7 +60,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 });
                 set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
-                set.Schema(new UnitOfWorkConnectionSettings().ReadSideSchemaName);
             }, relation => relation.OneToMany());
 
             List(x => x.IdentifyingData, mapper =>
@@ -110,19 +109,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 mto.Insert(false);
             });
 
-        }
-    }
-
-    [PlainStorage]
-    public class QuestionnaireLiteViewItemMap : ClassMapping<QuestionnaireLiteViewItem>
-    {
-        public QuestionnaireLiteViewItemMap()
-        {
-            this.Table("questionnairebrowseitems");
-
-            Id(x => x.Id);
-            Property(x => x.Title);
-            Property(x => x.IsAudioRecordingEnabled);
         }
     }
 }
