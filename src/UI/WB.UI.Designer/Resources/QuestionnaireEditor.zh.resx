@@ -961,7 +961,7 @@
     <value>调查信息</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>问卷模板描述</value>
+      <value>文件名字</value>
   </data>
   <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
     <value>分析单位：</value>
