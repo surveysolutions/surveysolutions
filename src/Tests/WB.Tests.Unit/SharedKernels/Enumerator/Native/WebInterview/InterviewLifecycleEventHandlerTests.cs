@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
             var @event = Create.PublishedEvent.TranslationSwitched(origin: "prototype");
             
             sut.Update(state, @event);
-            Assert.That(state.Store[@event.EventSourceId].ReloadInterview, Is.False);
+
+            Assert.That(state.Store.ContainsKey(@event.EventSourceId), Is.False);
         }
         
         [Test]
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
             var @event = Create.PublishedEvent.TranslationSwitched();
 
             sut.Update(state, @event);
-            Assert.That(state.Store[@event.EventSourceId].ReloadInterview, Is.False);
+            Assert.That(state.Store[@event.EventSourceId].ReloadInterview, Is.True);
         }
     }
 }
