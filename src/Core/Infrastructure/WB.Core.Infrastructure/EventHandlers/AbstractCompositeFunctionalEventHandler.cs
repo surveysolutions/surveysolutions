@@ -53,9 +53,10 @@ namespace WB.Core.Infrastructure.EventHandlers
         static readonly ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo> updateMethodsCache 
             = new ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo>();
 
-        protected override TEntity ApplyEventOnEntity(IPublishableEvent evt, Type eventType, TEntity currentState)
+        protected override TEntity ApplyEventOnEntity(IPublishableEvent evt, TEntity currentState)
         {
             TEntity newState = currentState;
+            var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
             foreach (var functionalEventHandler in Handlers)
             {
