@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -14,10 +15,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly IUnitOfWork sessionProvider;
+        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
-        public InterviewFactory(IUnitOfWork sessionProvider)
+        public InterviewFactory(IUnitOfWork sessionProvider,
+            IWorkspaceNameProvider workspaceNameProvider)
         {
             this.sessionProvider = sessionProvider;
+            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
@@ -60,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public void RemoveInterview(Guid interviewId)
         {
             var conn = sessionProvider.Session.Connection;
-            conn.Execute($@"DELETE FROM readside.report_statistics i
+            conn.Execute($@"DELETE FROM {this.workspaceNameProvider.CurrentWorkspace()}.report_statistics i
                      WHERE i.interview_id = s.id AND s.interview_id = @InterviewId",
             new { InterviewId = interviewId });
         }
