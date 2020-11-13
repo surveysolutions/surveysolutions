@@ -8,7 +8,6 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Mapping
 {
-    [PlainStorage]
     public class AssignmentToImportMap : ClassMapping<AssignmentToImport>
     {
         public AssignmentToImportMap()

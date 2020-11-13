@@ -17,7 +17,6 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -43,54 +42,69 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             try
             {
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
-                
                 status.Message = Modules.InitializingDb;
-                DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
-                    this.connectionSettings.PlainStorageSchemaName);
-
-                status.Message = Modules.MigrateDb;
-
+                
                 await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
 
-                void MigrateReadside()
-                {
-                    if (this.connectionSettings.ReadSideUpgradeSettings != null)
-                    {
-                        status.Message = Modules.InitializingDb;
-                        DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
-                            this.connectionSettings.ReadSideSchemaName);
+                DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                    this.connectionSettings.WorkspaceSchemaName);
 
-                        status.Message = Modules.MigrateDb;
+                status.Message = Modules.MigrateDb;
+                
+                if (!DatabaseManagement.MigratedToWorkspaces(this.connectionSettings.WorkspaceSchemaName, this.connectionSettings.ConnectionString))
+                {
+                    void MigrateReadside()
+                    {
+                        if (this.connectionSettings.ReadSideUpgradeSettings != null)
+                        {
+                            status.Message = Modules.InitializingDb;
+                            DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                                this.connectionSettings.ReadSideSchemaName);
+
+                            status.Message = Modules.MigrateDb;
+                            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                                this.connectionSettings.ReadSideSchemaName,
+                                this.connectionSettings.ReadSideUpgradeSettings,
+                                loggerProvider);
+
+                            status.ClearMessage();
+                        }
+                    }
+
+                    void MigratePlainstore()
+                    {
                         DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                            this.connectionSettings.ReadSideSchemaName,
-                            this.connectionSettings.ReadSideUpgradeSettings,
+                            this.connectionSettings.PlainStorageSchemaName,
+                            this.connectionSettings.PlainStoreUpgradeSettings,
                             loggerProvider);
 
                         status.ClearMessage();
                     }
-                }
 
-                void MigratePlainstore()
-                {
+                    try
+                    {
+                        MigratePlainstore();
+                    }
+                    catch
+                    {
+                        MigrateReadside();
+                        MigratePlainstore();
+                    }
+
+                    MigrateReadside();
+                    
+                    status.Message = Modules.InitializingDb;
+                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.EventsSchemaName);
+
+                    status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
-                        this.connectionSettings.PlainStorageSchemaName,
-                        this.connectionSettings.PlainStoreUpgradeSettings,
+                        this.connectionSettings.EventsSchemaName,
+                        this.connectionSettings.EventStoreUpgradeSettings,
                         loggerProvider);
 
                     status.ClearMessage();
                 }
-
-                try
-                {
-                    MigratePlainstore();
-                }
-                catch
-                {
-                    MigrateReadside();
-                    MigratePlainstore();
-                }
-
-                MigrateReadside();
 
                 if (this.connectionSettings.LogsUpgradeSettings != null)
                 {
@@ -117,6 +131,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                         this.connectionSettings.UsersSchemaName,
                         this.connectionSettings.UsersUpgradeSettings,
+                        loggerProvider);
+
+                    status.ClearMessage();
+                }
+
+                if (this.connectionSettings.WorkspaceUpgradeSettings != null)
+                {
+                    status.Message = Modules.InitializingDb;
+ 
+                    status.Message = Modules.MigrateDb;
+                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.WorkspaceSchemaName,
+                        this.connectionSettings.WorkspaceUpgradeSettings,
                         loggerProvider);
 
                     status.ClearMessage();
@@ -167,15 +194,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
 
-            var maps = this.GetReadSideMappings();
-            var plainMaps = this.GetPlainMappings();
+            var maps = this.GetWorkspaceMappings();
             var usersMaps = this.GetUsersMappings();
 
-            cfg.AddDeserializedMapping(maps, "read");
-            cfg.AddDeserializedMapping(plainMaps, "plain");
+            cfg.AddDeserializedMapping(maps, "maps");
             cfg.AddDeserializedMapping(usersMaps, "users");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
-
+            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, this.connectionSettings.WorkspaceSchemaName);
+            
             // File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
 
             cfg.SessionFactory().GenerateStatistics();
@@ -226,37 +252,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
         }
 
-        private HbmMapping GetReadSideMappings()
+        private HbmMapping GetWorkspaceMappings()
         {
             var mapper = new ModelMapper();
             var readSideMappingTypes = this.connectionSettings.ReadSideMappingAssemblies
                 .SelectMany(x => x.GetExportedTypes())
-                .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() == null &&
-                            x.GetCustomAttribute<UsersAttribute>() == null &&
+                .Where(x => x.GetCustomAttribute<UsersAttribute>() == null &&
                             x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
             mapper.AddMappings(readSideMappingTypes);
-            var schemaName = this.connectionSettings.ReadSideSchemaName;
-
-            CustomizeMappings(mapper, schemaName);
+            CustomizeMappings(mapper);
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
 
-        private HbmMapping GetPlainMappings()
-        {
-            var mapper = new ModelMapper();
-            var plainStoreMappingTypes = this.connectionSettings.PlainMappingAssemblies
-                .SelectMany(x => x.GetExportedTypes())
-                .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() != null &&
-                            x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
-            mapper.AddMappings(plainStoreMappingTypes);
-            CustomizeMappings(mapper, this.connectionSettings.PlainStorageSchemaName);
-
-            return mapper.CompileMappingForAllExplicitlyAddedEntities();
-        }
-
-        private static void CustomizeMappings(ModelMapper mapper, string schemaName)
+        private static void CustomizeMappings(ModelMapper mapper)
         {
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
@@ -279,27 +289,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 var tableName = type.Name.Pluralize();
                 customizer.Table(tableName);
-                customizer.Schema(schemaName);
             };
-
-            mapper.BeforeMapSet += (inspector, member, customizer) => customizer.Schema(schemaName);
-            mapper.BeforeMapBag += (inspector, member, customizer) => customizer.Schema(schemaName);
-            mapper.BeforeMapList += (inspector, member, customizer) => customizer.Schema(schemaName);
         }
     }
 
     public class UnitOfWorkConnectionSettings
     {
-        public UnitOfWorkConnectionSettings()
-        {
-            this.ReadSideSchemaName = "readside";
-            this.PlainStorageSchemaName = "plainstore";
-        }
-
         public string ConnectionString { get; set; }
 
-        public string PlainStorageSchemaName { get; set; }
-        public string ReadSideSchemaName { get; set; }
+        public string PlainStorageSchemaName => "plainstore";
+        public string ReadSideSchemaName => "readside";
 
         public IList<Assembly> PlainMappingAssemblies { get; set; }
         public IList<Assembly> ReadSideMappingAssemblies { get; set; }
@@ -308,6 +307,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public DbUpgradeSettings LogsUpgradeSettings { get; set; }
         public string LogsSchemaName => "logs";
         public DbUpgradeSettings UsersUpgradeSettings { get; set; }
+        
+        public DbUpgradeSettings WorkspaceUpgradeSettings { get; set; }
+        public string WorkspaceSchemaName => "ws_primary";
+        
         public string UsersSchemaName => "users";
+        public DbUpgradeSettings EventStoreUpgradeSettings { get; set; }
+        public string EventsSchemaName => "events";
     }
 }

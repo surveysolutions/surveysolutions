@@ -50,12 +50,12 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.Quartz;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
+using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Configs;
@@ -72,6 +72,7 @@ using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
+using WB.UI.Shared.Web.Mappings;
 using WB.UI.Shared.Web.UnderConstruction;
 using WB.UI.Shared.Web.Versions;
 
@@ -105,19 +106,11 @@ namespace WB.UI.Headquarters
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
                 .AsImplementedInterfaces();
 
-            var eventStoreSettings = new PostgreConnectionSettings
-            {
-                ConnectionString = connectionString,
-                SchemaName = "events"
-            };
-
-            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
-                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             autofacKernel.Load(
                 new NcqrsModule(),
                 new SerilogLoggerModule(),
-                eventStoreModule,
+                new PostgresEventStoreModule(),
                 new InfrastructureModule(),
                 new DataCollectionSharedKernelModule(),
                 new WebInterviewModule(Configuration),
@@ -136,13 +129,16 @@ namespace WB.UI.Headquarters
 
         public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString)
         {
-            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
+            var mappingAssemblies = new List<Assembly>
+            {
+                typeof(HeadquartersBoundedContextModule).Assembly,
+                typeof(ProductVersionChangeMap).Assembly
+            };
 
             var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
             {
                 ConnectionString = connectionString,
                 ReadSideMappingAssemblies = mappingAssemblies,
-                PlainStorageSchemaName = "plainstore",
                 PlainMappingAssemblies = new List<Assembly>
                 {
                     typeof(HeadquartersBoundedContextModule).Assembly,
@@ -152,8 +148,13 @@ namespace WB.UI.Headquarters
                 ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace),
                 LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly,
                     typeof(M201905171139_AddErrorsTable).Namespace),
-                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()
+                UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>(),
+                WorkspaceUpgradeSettings = new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly,
+                    typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace),
+                EventStoreUpgradeSettings = new DbUpgradeSettings(typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Assembly,
+                    typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Namespace)
             };
+            
             return unitOfWorkConnectionSettings;
         }
 
