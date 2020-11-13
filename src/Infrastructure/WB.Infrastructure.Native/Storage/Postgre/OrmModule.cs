@@ -44,10 +44,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
                 status.Message = Modules.InitializingDb;
                 
-                await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
-
                 DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
                     this.connectionSettings.WorkspaceSchemaName);
+                
+                await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
 
                 status.Message = Modules.MigrateDb;
                 
@@ -73,6 +73,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                     void MigratePlainstore()
                     {
+                        DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                            this.connectionSettings.PlainStorageSchemaName);
                         DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                             this.connectionSettings.PlainStorageSchemaName,
                             this.connectionSettings.PlainStoreUpgradeSettings,
