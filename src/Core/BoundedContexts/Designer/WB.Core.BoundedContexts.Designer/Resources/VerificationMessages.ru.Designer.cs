@@ -22,14 +22,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class VerificationMessages {
+    public class VerificationMessages_ru {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal VerificationMessages() {
+        internal VerificationMessages_ru() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.VerificationMessages", typeof(VerificationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.VerificationMessages.ru", typeof(VerificationMessages_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire must contain at least one question..
+        ///   Looks up a localized string similar to Опросник должен содержать хотя бы один вопрос.
         /// </summary>
         public static string WB0001_NoQuestions {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition has a syntax error..
+        ///   Looks up a localized string similar to Ошибка в проверочном выражении.
         /// </summary>
         public static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has a syntax error..
+        ///   Looks up a localized string similar to Ошибка во включающем выражении.
         /// </summary>
         public static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable cannot have empty expression..
+        ///   Looks up a localized string similar to Переменная не может содержать пустое выражение.
         /// </summary>
         public static string WB0004_VariableHasEmptyExpression {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable expression has length more than {0} characters..
+        ///   Looks up a localized string similar to Выражение переменной не может содержать более {0} символа..
         /// </summary>
         public static string WB0005_VariableExpressionHasLengthMoreThan10000Characters {
             get {
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only one GPS question could be marked as identifying.
+        ///   Looks up a localized string similar to Только один GPS вопрос может быть помечен как идентифицирующий.
         /// </summary>
         public static string WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select yes/no question can&apos;t be linked.
+        ///   Looks up a localized string similar to Да/нет вопрос с множественным выбором не может быть связанным..
         /// </summary>
         public static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is not allowed to use substitutions in variable label.
+        ///   Looks up a localized string similar to Нельзя использовать подстановки в теге переменной..
         /// </summary>
         public static string WB0008_SubstitutionsInVariableLableAreProhibited {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size question is missing..
+        ///   Looks up a localized string similar to Вопрос, определяющий количество строк в ростере, отсутствует.
         /// </summary>
         public static string WB0009_RosterSizeQuestionIsMissing {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro has invalid name..
+        ///   Looks up a localized string similar to Неверное имя макроса.
         /// </summary>
         public static string WB0010_MacroHasInvalidName {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references a nonexistent question..
+        ///   Looks up a localized string similar to Связанный вопрос ссылается на несуществующий вопрос..
         /// </summary>
         public static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references a question type that is not supported..
+        ///   Looks up a localized string similar to Связанный вопрос ссылается на неподдерживаемый тип вопсроса..
         /// </summary>
         public static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
             get {
@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references a question not in a roster..
+        ///   Looks up a localized string similar to Связанный вопрос ссылается на вопрос вне ростера.
         /// </summary>
         public static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro cannot have empty name..
+        ///   Looks up a localized string similar to Имя макроса не может быть пустым.
         /// </summary>
         public static string WB0014_MacroHasEmptyName {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title or instruction substitution cannot be marked as identifying..
+        ///   Looks up a localized string similar to Вопрос с подстановкой в тексте или инструкциях не может быть помечен как идентифицирующий.
         /// </summary>
         public static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Substitution references a nonexistent question or variable..
+        ///   Looks up a localized string similar to Подстановка ссылается на несуществующий вопрос либо переменную.
         /// </summary>
         public static string WB0017_SubstitutionReferencesNotExistingQuestionOrVariable {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Substitution references an item that is not supported in substitutions..
+        ///   Looks up a localized string similar to Подстановка ссылается на вопрос, который не может быть использован в подстановках.
         /// </summary>
         public static string WB0018_SubstitutionReferencesUnsupportedEntity {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Substitution cannot reference items from a deeper roster level..
+        ///   Looks up a localized string similar to В подстановках не могут быть использованы переменные с более глубоким уровнем вложенности..
         /// </summary>
         public static string WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another Macro with the same name already exists..
+        ///   Looks up a localized string similar to Макрос с таким же именем уже существует..
         /// </summary>
         public static string WB0020_NameForMacrosIsNotUnique {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers is greater than number of answer options..
+        ///   Looks up a localized string similar to Максимальное количество ответов превышает количество категорий..
         /// </summary>
         public static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question of this type cannot be identifying..
+        ///   Looks up a localized string similar to Вопрос данного типа не может быть отмечен как идентифицирующий..
         /// </summary>
         public static string WB0022_PrefilledQuestionsOfIllegalType {
             get {
@@ -251,7 +251,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used..
+        ///   Looks up a localized string similar to Неверно выбран вопрос, определяющий количество строк в ростере. Допустимо использование только: числового, одновариантного, многовариантного или вопроса-списка..
         /// </summary>
         public static string WB0023_RosterSizeSourceQuestionTypeIsIncorrect {
             get {
@@ -260,7 +260,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has invalid name..
+        ///   Looks up a localized string similar to Неверное имя справочной таблицы..
         /// </summary>
         public static string WB0024_LookupHasInvalidName {
             get {
@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table cannot have empty name..
+        ///   Looks up a localized string similar to Имя справочной таблицы не может быть пустым..
         /// </summary>
         public static string WB0025_LookupHasEmptyName {
             get {
@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Items with the same name found..
+        ///   Looks up a localized string similar to Найдены элементы с одинаковыми именами..
         /// </summary>
         public static string WB0026_ItemsWithTheSameNamesFound {
             get {
@@ -287,7 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expression has a syntax error..
+        ///   Looks up a localized string similar to В выражении содержится синтаксическая ошибка..
         /// </summary>
         public static string WB0027_VariableExpresssionHasIncorrectSyntax {
             get {
@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The filter expression is more than {0} characters long..
+        ///   Looks up a localized string similar to Выражение для фильтрации опций содержит более {0} символов..
         /// </summary>
         public static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with answer option filter cannot be identifying..
+        ///   Looks up a localized string similar to Вопрос с фильтром категорий не может быть помечен как идентифицирующий..
         /// </summary>
         public static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
@@ -314,7 +314,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying questions cannot be inside a roster..
+        ///   Looks up a localized string similar to Идентифицирующий вопрос не может быть внутри ростера..
         /// </summary>
         public static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has invalid column headers..
+        ///   Looks up a localized string similar to Неверные названия колонок в справочной таблице..
         /// </summary>
         public static string WB0031_LookupTableHasInvalidHeaders {
             get {
@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster with a source question cannot have fixed set of items..
+        ///   Looks up a localized string similar to Ростер, в котором источником ростера является управляющий вопрос, не может быть фиксированным ростером..
         /// </summary>
         public static string WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles {
             get {
@@ -341,7 +341,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster source question..
+        ///   Looks up a localized string similar to Фиксированный ростер не может иметь вопрос о размере ростера..
         /// </summary>
         public static string WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion {
             get {
@@ -350,7 +350,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have roster title question..
+        ///   Looks up a localized string similar to Фиксированный ростер не может содержать вопрос о заголовке ростера..
         /// </summary>
         public static string WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion {
             get {
@@ -359,7 +359,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster with a question roster source has invalid source question for names of rows..
+        ///   Looks up a localized string similar to Вопрос, определяющий имена строк в числовом ростере, указан неверно.
         /// </summary>
         public static string WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion {
             get {
@@ -368,7 +368,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster cannot have a roster title question when the roster source question is a categorical multi-select or list question..
+        ///   Looks up a localized string similar to Ростер, в котором управляющий вопрос многовариантный или вопрос-список, не может содержать определяющий имя ростера вопрос..
         /// </summary>
         public static string WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion {
             get {
@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have empty titles or less than two items..
+        ///   Looks up a localized string similar to Фиксированный ростер не может иметь пустые заголовки или меньше двух элементов..
         /// </summary>
         public static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
             get {
@@ -386,7 +386,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have more than {0} rows..
+        ///   Looks up a localized string similar to Фиксированный ростер не может содержать более {0} строк..
         /// </summary>
         public static string WB0038_RosterFixedTitlesHaveMoreThan200Items {
             get {
@@ -395,7 +395,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List question cannot be identifying..
+        ///   Looks up a localized string similar to Вопрос-список не может быть идентифицирующим..
         /// </summary>
         public static string WB0039_TextListQuestionCannotBePrefilled {
             get {
@@ -404,7 +404,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List question cannot be filled by supervisor..
+        ///   Looks up a localized string similar to Вопрос-список не может быть заполнен супервизором..
         /// </summary>
         public static string WB0040_TextListQuestionCannotBeFilledBySupervisor {
             get {
@@ -413,7 +413,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster values must be unique..
+        ///   Looks up a localized string similar to Элементы фиксированного ростера должны быть уникальными..
         /// </summary>
         public static string WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues {
             get {
@@ -422,7 +422,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum number of list elements must be in range [{1}, {0}]..
+        ///   Looks up a localized string similar to Максимальное количество элементов списка должно находиться в диапазоне [{1}, {0}]..
         /// </summary>
         public static string WB0042_TextListQuestionMaxAnswerInRange1And200 {
             get {
@@ -431,7 +431,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has too many columns.
+        ///   Looks up a localized string similar to В справочной таблице слишком много столбцов.
         /// </summary>
         public static string WB0043_LookupTableMoreThan11Columns {
             get {
@@ -440,7 +440,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has too many rows.
+        ///   Looks up a localized string similar to В справочной таблице слишком много строк.
         /// </summary>
         public static string WB0044_LookupTableMoreThan15000Rows {
             get {
@@ -449,7 +449,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has categories with empty values..
+        ///   Looks up a localized string similar to Вопрос содержит опцию (и) с пустым (и) значением (ями).
         /// </summary>
         public static string WB0045_QuestionHasOptionsWithEmptyValue {
             get {
@@ -458,7 +458,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition cannot refer to a question from a deeper roster level..
+        ///   Looks up a localized string similar to Включающее выражение не может ссылаться на вопрос из более глубокого уровня ростера..
         /// </summary>
         public static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
@@ -467,7 +467,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table has not unique rowcode values.
+        ///   Looks up a localized string similar to Справочная таблица содержит не уникальные значения в колонке rowcode..
         /// </summary>
         public static string WB0047_LookupTableNotUniqueRowcodeValues {
             get {
@@ -476,7 +476,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table cannot be empty.
+        ///   Looks up a localized string similar to Справочная таблица не может быть пустой.
         /// </summary>
         public static string WB0048_LookupHasEmptyContent {
             get {
@@ -485,7 +485,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Barcode question cannot be filled by supervisor..
+        ///   Looks up a localized string similar to Вопрос со штрих-кодом не может быть заполнен супервизором..
         /// </summary>
         public static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
             get {
@@ -494,7 +494,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Barcode question cannot be identifying..
+        ///   Looks up a localized string similar to Вопрос со штрих-кодом не может быть идентифицирующим..
         /// </summary>
         public static string WB0050_QRBarcodeQuestionIsPreFilledQuestion {
             get {
@@ -503,7 +503,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sub-sections cannot have enabling condition referencing child question..
+        ///   Looks up a localized string similar to В подсекциях включающее выражение не можеть ссылаться на дочерний вопрос..
         /// </summary>
         public static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
@@ -512,7 +512,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table name cannot be a reserved word..
+        ///   Looks up a localized string similar to Имя справочной таблицы не может быть зарезервированным словом..
         /// </summary>
         public static string WB0052_LookupNameIsKeyword {
             get {
@@ -521,7 +521,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster which is the source of the link should exist..
+        ///   Looks up a localized string similar to Связанный вопрос ссылается на несуществующий ростер.
         /// </summary>
         public static string WB0053_LinkedQuestionReferencesNotExistingRoster {
             get {
@@ -530,7 +530,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster should have deeper or the same roster level as it&apos;s roster size question..
+        ///   Looks up a localized string similar to Ростер должен иметь более глубокий или такой же уровень вложенности как и вопрос являющийся источником ростера..
         /// </summary>
         public static string WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster {
             get {
@@ -539,7 +539,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster can have no more than {0} parent rosters..
+        ///   Looks up a localized string similar to У ростера может быть не более {0} родительских ростеров..
         /// </summary>
         public static string WB0055_RosterHasRosterLevelMoreThan4 {
             get {
@@ -548,7 +548,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Circular references are not allowed..
+        ///   Looks up a localized string similar to Циклические ссылки не разрешены..
         /// </summary>
         public static string WB0056_EntityShouldNotHaveCircularReferences {
             get {
@@ -557,7 +557,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Links are prohibited on navigation elements: sections, sub-sections, rosters.
+        ///   Looks up a localized string similar to Ссылки запрещены на элементах навигации: секциях, подсекциях, ростерах..
         /// </summary>
         public static string WB0057_LinksAreProhibitedOnNavigationElements {
             get {
@@ -566,7 +566,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
+        ///   Looks up a localized string similar to Имя переменной или ID ростера не может быть зарезервированным словом..
         /// </summary>
         public static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
             get {
@@ -575,7 +575,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If item uses %rostertitle% substitution it needs to be placed inside roster..
+        ///   Looks up a localized string similar to Если элемент использует подстановку %rostertitle%, его необходимо размещать внутри ростера..
         /// </summary>
         public static string WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster {
             get {
@@ -584,7 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has less than {0} categories..
+        ///   Looks up a localized string similar to Вопрос имеет меньше {0} опций..
         /// </summary>
         public static string WB0060_CategoricalQuestionHasLessThan2Options {
             get {
@@ -593,7 +593,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has max allowed answers less than {0}..
+        ///   Looks up a localized string similar to Вопрос имеет максимально допустимые ответы менее {0}..
         /// </summary>
         public static string WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2 {
             get {
@@ -602,7 +602,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option filter expression has a syntax error..
+        ///   Looks up a localized string similar to Условие фильтрации опций содержит синтаксическую ошибку..
         /// </summary>
         public static string WB0062_OptionFilterExpresssionHasIncorrectSyntax {
             get {
@@ -611,7 +611,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition #{0}..
+        ///   Looks up a localized string similar to Категориальный связанный вопрос не может использоваться в проверочном выражении # {0}..
         /// </summary>
         public static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
             get {
@@ -620,7 +620,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in enabling condition..
+        ///   Looks up a localized string similar to Категориальные связанные вопросы не могут быть использованы в условии включения..
         /// </summary>
         public static string WB0064_CategoricalLinkedQuestionUsedInEnablementCondition {
             get {
@@ -629,7 +629,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another attachment with the same name already exists..
+        ///   Looks up a localized string similar to Другое вложение с тем же именем уже существует..
         /// </summary>
         public static string WB0065_NameForAttachmentIsNotUnique {
             get {
@@ -638,7 +638,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question of this type is not supported..
+        ///   Looks up a localized string similar to Вопрос данного типа не поддерживается..
         /// </summary>
         public static string WB0066_QuestionTypeIsNotAllowed {
             get {
@@ -647,7 +647,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Valid variable or roster ID name should not be empty..
+        ///   Looks up a localized string similar to Имя переменной или ID ростера не должны быть пустыми.
         /// </summary>
         public static string WB0067_VariableNameIsEmpty {
             get {
@@ -656,7 +656,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster cannot have more than {0} child elements.
+        ///   Looks up a localized string similar to Ростер не может содержать более {0} дочерних элементов.
         /// </summary>
         public static string WB0068_RosterHasMoreThanAllowedChildElements {
             get {
@@ -665,7 +665,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has roster ID equal to questionnaire title..
+        ///   Looks up a localized string similar to ID ростера совпадает с именем опросника..
         /// </summary>
         public static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
             get {
@@ -674,7 +674,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Static text cannot be empty..
+        ///   Looks up a localized string similar to Статический текст не может быть пустым..
         /// </summary>
         public static string WB0071_StaticTextIsEmpty {
             get {
@@ -683,7 +683,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories titles must be unique..
+        ///   Looks up a localized string similar to Названия заголовков опций должны быть уникальными..
         /// </summary>
         public static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
             get {
@@ -692,7 +692,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories values must be unique..
+        ///   Looks up a localized string similar to Значения опций должны быть уникальными..
         /// </summary>
         public static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
             get {
@@ -701,7 +701,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question cannot have categories and be linked to another question..
+        ///   Looks up a localized string similar to Категориальный вопрос не может иметь опции и быть связанным с другим вопросом..
         /// </summary>
         public static string WB0074_CategoricalQuestionHasOptionsAndIsLinked {
             get {
@@ -710,7 +710,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than {0} categories..
+        ///   Looks up a localized string similar to Содержит более {0} опций..
         /// </summary>
         public static string WB0075_FilteredComboboxContainsMoreThan5000Options {
             get {
@@ -719,7 +719,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than {0} categories..
+        ///   Looks up a localized string similar to Содержит более {0} опций..
         /// </summary>
         public static string WB0076_CategoricalOptionsCountMoreThan200 {
             get {
@@ -728,7 +728,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has invalid variable name..
+        ///   Looks up a localized string similar to Неверное имя переменной..
         /// </summary>
         public static string WB0077_QuestionHasInvalidVariableName {
             get {
@@ -737,7 +737,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture question can be interviewers only..
+        ///   Looks up a localized string similar to Фото-вопрос может быть отвечен только интервьюерами..
         /// </summary>
         public static string WB0078_MultimediaQuestionIsInterviewersOnly {
             get {
@@ -746,7 +746,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture question cannot have a validation condition..
+        ///   Looks up a localized string similar to Фото-вопрос не может имет проверочных выражений..
         /// </summary>
         public static string WB0079_MultimediaShouldNotHaveValidationExpression {
             get {
@@ -755,7 +755,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster with more than {0} rows cannot have nested rosters.
+        ///   Looks up a localized string similar to Ростер с более чем {0} строк не может содержать вложенные ростеры..
         /// </summary>
         public static string WB0080_LongRosterCannotHaveNestedRosters {
             get {
@@ -764,7 +764,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster with more than {0} rows cannot be nested.
+        ///   Looks up a localized string similar to Ростер с более чем {0} строк не может быть вложенным.
         /// </summary>
         public static string WB0081_LongRosterCannotBeNested {
             get {
@@ -773,7 +773,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi-select roster source question should have a maximum number of answers set..
+        ///   Looks up a localized string similar to Многовариантный вопрос являющийся управляющим для ростера должен иметь предел..
         /// </summary>
         public static string WB0082_RosterSizeMultiOptionQuestionShouldBeLimited {
             get {
@@ -782,7 +782,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with current type cannot be used as roster title..
+        ///   Looks up a localized string similar to Вопрос данного типа не может быть использован как определяющий имя ростера.
         /// </summary>
         public static string WB0083_QuestionCannotBeUsedAsRosterTitle {
             get {
@@ -791,7 +791,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories in child cascading combo box question should reference only existing option in parent question..
+        ///   Looks up a localized string similar to Опции дочернего каскадного вопроса должны ссылаться только на существующие опции родительского вопроса..
         /// </summary>
         public static string WB0084_CascadingOptionsShouldHaveParent {
             get {
@@ -800,7 +800,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question should have deeper or the same level as it&apos;s parent question..
+        ///   Looks up a localized string similar to Вопрос должен иметь более глубокий или тот же уровень вложенности как и его родительский вопрос..
         /// </summary>
         public static string WB0085_CascadingQuestionWrongParentLevel {
             get {
@@ -809,7 +809,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question references missing or unsupported question type..
+        ///   Looks up a localized string similar to Каскадный вопрос ссылается на отсутствующий или неподдерживаемый тип вопроса..
         /// </summary>
         public static string WB0086_ParentCascadingQuestionShouldExist {
             get {
@@ -818,7 +818,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Circular references in cascading combo box questions not allowed..
+        ///   Looks up a localized string similar to Циклические ссылки в каскадных списках вопросов не разрешены..
         /// </summary>
         public static string WB0087_CascadingQuestionHasCicularReference {
             get {
@@ -827,7 +827,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have less than {0} categories..
+        ///   Looks up a localized string similar to Каскадный вопрос должен иметь меньше, чем {0} опций..
         /// </summary>
         public static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -836,7 +836,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have unique value and parent value list of categories..
+        ///   Looks up a localized string similar to Каскадный вопрос должен содержать только уникальные пары значений и родительского значения..
         /// </summary>
         public static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
             get {
@@ -845,7 +845,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question can be interviewers only..
+        ///   Looks up a localized string similar to Связанный вопрос может быть заполнен только интервьюерами..
         /// </summary>
         public static string WB0090_LinkedQuestionIsInterviewersOnly {
             get {
@@ -854,7 +854,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading combo box question should not contain enabling condition. .
+        ///   Looks up a localized string similar to Дочерний каскадный вопрос не должен содержать включающее выражение..
         /// </summary>
         public static string WB0091_CascadingChildQuestionShouldNotContainCondition {
             get {
@@ -863,7 +863,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Child cascading combo box question should not contain validation condition..
+        ///   Looks up a localized string similar to Дочерний каскадный вопрос не должен содержать проверочное выражение..
         /// </summary>
         public static string WB0092_CascadingChildQuesionShouldNotContainValidation {
             get {
@@ -872,7 +872,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster source list question should have a maximum number of elements set..
+        ///   Looks up a localized string similar to Управляющий вопрос-список для ростера должем иметь предел..
         /// </summary>
         public static string WB0093_RosterSizeListOptionQuestionShouldBeLimit {
             get {
@@ -881,7 +881,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has length more than {0} characters..
+        ///   Looks up a localized string similar to Включающее выражение имеет длину более {0} символов..
         /// </summary>
         public static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -890,7 +890,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Static text refers absent attachment.
+        ///   Looks up a localized string similar to Статический текст относится к отсутствующему вложению.
         /// </summary>
         public static string WB0095_StaticTextRefersAbsentAttachment {
             get {
@@ -899,7 +899,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occurred during questionnaire compilation..
+        ///   Looks up a localized string similar to Ошибка при компиляции опросника..
         /// </summary>
         public static string WB0096_GeneralCompilationError {
             get {
@@ -908,7 +908,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space..
+        ///   Looks up a localized string similar to Имя опросника может содержать только следующие символы:  A..Z a..z 0..9 ( ) \ / _ - и пробел..
         /// </summary>
         public static string WB0097_QuestionnaireTitleHasInvalidCharacters {
             get {
@@ -917,7 +917,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than {1}MB..
+        ///   Looks up a localized string similar to Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ..
         /// </summary>
         public static string WB0098_QuestionnaireHasSizeMoreThan5MB {
             get {
@@ -926,7 +926,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than {0}..
+        ///   Looks up a localized string similar to Максимальное количество ответов для вопроса о размере ростера не может быть больше, чем {0}..
         /// </summary>
         public static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
             get {
@@ -935,7 +935,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sub-section can have no more than {0} parent sub-sections..
+        ///   Looks up a localized string similar to Подсекция может содержать не более {0} родительских подсекций..
         /// </summary>
         public static string WB0101_GroupHasLevelDepthMoreThan10 {
             get {
@@ -944,7 +944,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them..
+        ///   Looks up a localized string similar to Следующие элементы вопросника (вопрос / группа / статический текст / и т.д.) Используют один и тот же внутренний идентификатор. Пожалуйста, удалите один из них..
         /// </summary>
         public static string WB0102_QuestionnaireEntitiesShareSameInternalId {
             get {
@@ -953,7 +953,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster which is the source of the link is a roster, not a subsection..
+        ///   Looks up a localized string similar to Ростер являющимся источником для связанного вопроса, является ростером, а не подсекцией.
         /// </summary>
         public static string WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster {
             get {
@@ -962,7 +962,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition #{0} is too long. It should be no longer than {1} characters..
+        ///   Looks up a localized string similar to Проверочное выражение  # {0} слишком большое. Оно должно быть не более {1} символов..
         /// </summary>
         public static string WB0104_ValidationConditionIsTooLong {
             get {
@@ -971,7 +971,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than {1} characters..
+        ///   Looks up a localized string similar to Сообщение об ошибке  # {0} слишком длинное. Оно должно быть не более {1} символов..
         /// </summary>
         public static string WB0105_ValidationMessageIsTooLong {
             get {
@@ -980,7 +980,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition #{0} is empty..
+        ///   Looks up a localized string similar to Проверочное выражение № {0} пусто..
         /// </summary>
         public static string WB0106_ValidationConditionIsEmpty {
             get {
@@ -989,7 +989,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation error message #{0} is empty..
+        ///   Looks up a localized string similar to Сообщение об ошибке  # {0} пусто..
         /// </summary>
         public static string WB0107_ValidationMessageIsEmpty {
             get {
@@ -998,7 +998,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question filter expression is longer than {0} characters..
+        ///   Looks up a localized string similar to Фильтрующее выражение связанного вопроса имеет длину больше чем {0} символов..
         /// </summary>
         public static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -1007,7 +1007,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The question cannot be used in its own filter expression..
+        ///   Looks up a localized string similar to Вопрос не может быть использован в качестве собственного фильтра..
         /// </summary>
         public static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
             get {
@@ -1016,7 +1016,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter expression has a syntax error..
+        ///   Looks up a localized string similar to Выражение фильтра содержит синтаксическую ошибку..
         /// </summary>
         public static string WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
             get {
@@ -1025,7 +1025,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attachment cannot be empty.
+        ///   Looks up a localized string similar to Вложение не может быть пустым.
         /// </summary>
         public static string WB0111_AttachmentHasEmptyContent {
             get {
@@ -1034,7 +1034,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable has invalid name..
+        ///   Looks up a localized string similar to Некорректное имя переменной..
         /// </summary>
         public static string WB0112_VariableHasInvalidName {
             get {
@@ -1043,7 +1043,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable cannot have empty name..
+        ///   Looks up a localized string similar to У переменной не может быть пустого имени..
         /// </summary>
         public static string WB0113_VariableHasEmptyVariableName {
             get {
@@ -1052,7 +1052,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question supports only integer values in range from {0} to {1}.
+        ///   Looks up a localized string similar to Категориальный вопрос поддерживает только целочисленные значения опций в диапазоне от {0} до {1}.
         /// </summary>
         public static string WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -1061,7 +1061,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed rosters only support integer values..
+        ///   Looks up a localized string similar to Фиксированный ростер поддерживает только целые значения.
         /// </summary>
         public static string WB0115_FixRosterSupportsOnlyIntegerTitleValues {
             get {
@@ -1070,7 +1070,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references a list question from wrong level..
+        ///   Looks up a localized string similar to Связанный вопрос ссылается на вопрос ростера с неправильного уровня..
         /// </summary>
         public static string WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope {
             get {
@@ -1079,7 +1079,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked to list question doesn&apos;t support categories filter.
+        ///   Looks up a localized string similar to Связанный со списком вопрос не поддерживает фильтрацию опций..
         /// </summary>
         public static string WB0117_LinkedToTextListQuestionDoesNotSupportFilters {
             get {
@@ -1088,7 +1088,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expression referencing forbidden DateTime properties: {0}, {1}, {2}. Consider using current time question instead..
+        ///   Looks up a localized string similar to Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность добавления вопроса Текущее время..
         /// </summary>
         public static string WB0118_ExpressionReferencingForbiddenDateTimeProperies {
             get {
@@ -1097,7 +1097,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire&apos;s title can&apos;t have more than {0} symbols..
+        ///   Looks up a localized string similar to Имя опросника не может содержать более {0} символов..
         /// </summary>
         public static string WB0119_QuestionnaireTitleTooLong {
             get {
@@ -1106,7 +1106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The titles of sections and sub-sections cannot be empty or contain whitespace only..
+        ///   Looks up a localized string similar to Названия секций и подсекций не могут быть пустыми или содержать только пробелы..
         /// </summary>
         public static string WB0120_GroupTitleIsEmpty {
             get {
@@ -1115,7 +1115,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This element&apos;s name or ID shouldn&apos;t be longer than {0} characters..
+        ///   Looks up a localized string similar to Имя переменной или ID не должно быть длиннее чем {0} символа..
         /// </summary>
         public static string WB0121_VariableNameTooLong {
             get {
@@ -1124,7 +1124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Valid variable or roster ID name should contain only letters, digits and underscore character.
+        ///   Looks up a localized string similar to Действительная переменная или ростер ID должны содержать только буквы, цифры и символ подчеркивания.
         /// </summary>
         public static string WB0122_VariableNameHasSpecialCharacters {
             get {
@@ -1133,7 +1133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name or roster ID shouldn&apos;t start with digit or underscore.
+        ///   Looks up a localized string similar to Имя переменной или ID ростера не должны начинаться с цифры или символа подчеркивания.
         /// </summary>
         public static string WB0123_VariableNameStartWithDigitOrUnderscore {
             get {
@@ -1142,7 +1142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name or roster ID shouldn&apos;t end with underscore.
+        ///   Looks up a localized string similar to Имя переменной или ID ростера не должны заканчиваться символом подчеркивания.
         /// </summary>
         public static string WB0124_VariableNameEndWithUnderscore {
             get {
@@ -1151,7 +1151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name or roster ID shouldn&apos;t have two and more consecutive underscore characters..
+        ///   Looks up a localized string similar to Имя переменной или ID ростера не должны содержать двух и более последовательных символов подчеркивания..
         /// </summary>
         public static string WB0125_VariableNameHasConsecutiveUnderscores {
             get {
@@ -1160,7 +1160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name or roster ID should be unique in questionnaire&apos;s scope..
+        ///   Looks up a localized string similar to Имя переменной или ID ростера должны быть уникальными в рамках опросника..
         /// </summary>
         public static string WB0126_VarialbeNameNotUnique {
             get {
@@ -1169,7 +1169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is at least one duplicate of &quot;Title&quot; and &quot;Parent Value&quot; pairs. The list should not contain any duplicates..
+        ///   Looks up a localized string similar to Существует по крайней мере один дубликат пар Title + Parent Value. Список не должен содержать дубликатов..
         /// </summary>
         public static string WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {
@@ -1178,7 +1178,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of decimal places is not in range from {0} to {1}..
+        ///   Looks up a localized string similar to Количество десятичных знаков после запятой не находится в диапазоне от {0} до {1}..
         /// </summary>
         public static string WB0128_CountOfDecimalPlacesIsNotInRange {
             get {
@@ -1187,7 +1187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Category title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
+        ///   Looks up a localized string similar to Название опции пустое или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов..
         /// </summary>
         public static string WB0129_AnswerTitleIsTooLong {
             get {
@@ -1196,7 +1196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot use child entities in enablement condition for sections, subsection and rosters..
+        ///   Looks up a localized string similar to Нельзя ссылаться на дочерние элементы во включающих условиях секций, подсекций и ростеров..
         /// </summary>
         public static string WB0130_SubsectionOrRosterReferenceChildrendInCondition {
             get {
@@ -1205,7 +1205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special values support only integer values in range from {0} to {1}..
+        ///   Looks up a localized string similar to Специальные значения могут быть только целыми числами в диапазоне от {0} до {1}..
         /// </summary>
         public static string WB0131_SpecialValuesHasNonIntegerOptionsValues {
             get {
@@ -1214,7 +1214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special value title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
+        ///   Looks up a localized string similar to Заголовки специальных значений пустые или слишком длинные. Длина заголовка должна быть от {0} до {1} символов..
         /// </summary>
         public static string WB0132_SpecialValuesHasOptionsWithLongTexts {
             get {
@@ -1223,7 +1223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special values must be unique..
+        ///   Looks up a localized string similar to Специальные значения должны быть уникальными..
         /// </summary>
         public static string WB0133_SpecialValuesMustBeUniqueForNumericlQuestion {
             get {
@@ -1232,7 +1232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than {0} special values..
+        ///   Looks up a localized string similar to Содержит более {0} специальных значений..
         /// </summary>
         public static string WB0134_SpecialValuesCountMoreThanMaxOptionCount {
             get {
@@ -1241,7 +1241,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question contains a special value, which is too large and can&apos;t be used in this question since it determines the size of a roster..
+        ///   Looks up a localized string similar to Вопрос содержит специальное значение, которое слишком велико и не может быть использовано, поскольку вопрос определяет количество строк ростера..
         /// </summary>
         public static string WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit {
             get {
@@ -1250,7 +1250,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has special value(s) with empty value..
+        ///   Looks up a localized string similar to Вопрос содержит специальное значение с пустым значением..
         /// </summary>
         public static string WB0136_SpecialValuesHaveOptionsWithEmptyValue {
             get {
@@ -1259,7 +1259,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special values titles must be unique..
+        ///   Looks up a localized string similar to Заголовки специальных значений должны быть уникальны..
         /// </summary>
         public static string WB0137_SpecialValuesTitlesMustBeUnique {
             get {
@@ -1268,7 +1268,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
+        ///   Looks up a localized string similar to Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {
             get {
@@ -1277,7 +1277,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section or Roster contains more than {0} questions, consider splitting into sub-sections..
+        ///   Looks up a localized string similar to Секция или ростер содержит более {0} вопросов, рассмотрите разделение на подсекции..
         /// </summary>
         public static string WB0201_LargeNumberOfQuestionsInGroup {
             get {
@@ -1286,7 +1286,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section contains no questions. Consider removing the empty section..
+        ///   Looks up a localized string similar to Секция не содержит вопросов. Рассмотрите удаление пустых секций..
         /// </summary>
         public static string WB0202_GroupWithoutQuestions {
             get {
@@ -1295,7 +1295,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions..
+        ///   Looks up a localized string similar to Ростер содержит только один вопрос. Рассмотрите возможность группировки его с другими ростерами.  Для фиксированного ростера рассмотрите представление как набор независимых вопросов..
         /// </summary>
         public static string WB0203_RosterHasSingleQuestion {
             get {
@@ -1304,7 +1304,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster is empty. Remove it if it is not needed..
+        ///   Looks up a localized string similar to Ростер пустой. Удалите его, если он не нужен..
         /// </summary>
         public static string WB0204_EmptyRoster {
             get {
@@ -1313,7 +1313,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire has more than {0} questions. It might be difficult to administer it..
+        ///   Looks up a localized string similar to Опросник содержит более {0} вопросов. Возможно, это будет сложно администрировать..
         /// </summary>
         public static string WB0205_TooManyQuestions {
             get {
@@ -1322,7 +1322,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains more than {0} questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
+        ///   Looks up a localized string similar to Опросник содержит более {0} вопросов, но всего несколько секций. Сгруппируйте вопросы по секциям, чтобы упростить навигацию и повысить производительность..
         /// </summary>
         public static string WB0206_FewSectionsManyQuestions {
             get {
@@ -1331,7 +1331,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed roster contains {0} or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
+        ///   Looks up a localized string similar to Фиксированный ростер содержит {0} или меньше элементов. Рассмотрите возможность использования подсекций и ряда вопросов. Ростеры осложняют структуру экспортируемых данных..
         /// </summary>
         public static string WB0207_FixedRosterContains3OrLessItems {
             get {
@@ -1340,7 +1340,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than {0}% of questions contain no validation conditions. Add validation conditions to improve data quality..
+        ///   Looks up a localized string similar to Более {0}% вопросов не содержит условий проверки. Добавьте условия проверки, чтобы улучшить качество данных..
         /// </summary>
         public static string WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions {
             get {
@@ -1349,7 +1349,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        ///   Looks up a localized string similar to Включающее выражение слишком длинное. Вероятно, возможно использовать более короткие, более читаемые условия, использующие встроенные функции (такие как InList ())..
         /// </summary>
         public static string WB0209_LongEnablementCondition {
             get {
@@ -1358,7 +1358,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single-choice question has too many categories, consider changing to combo box..
+        ///   Looks up a localized string similar to Катигориальный вопрос содержит слишком много опций, рассмотрите использование поля с каскадным списком.
         /// </summary>
         public static string WB0210_CategoricalQuestionHasManyOptions {
             get {
@@ -1367,7 +1367,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains no GPS questions. Consider adding a GPS question..
+        ///   Looks up a localized string similar to Опросник не содержит GPS вопросов. Рассмотрите вариант добавления GPS вопроса..
         /// </summary>
         public static string WB0211_QuestionnaireHasNoGpsQuestion {
             get {
@@ -1376,7 +1376,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        ///   Looks up a localized string similar to Проверочное выражение # {0} длинное. Возможно использовать более короткие, более читаемые условия со встроенными функциями (напр. InList ()).
         /// </summary>
         public static string WB0212_LongValidationCondition {
             get {
@@ -1385,7 +1385,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attachment size is more than {0}Mb.
+        ///   Looks up a localized string similar to Размер вложения больше {0} Мб.
         /// </summary>
         public static string WB0213_AttachmentSizeIsMoreThan5Mb {
             get {
@@ -1394,7 +1394,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total size of attachments is more than {0}Mb.
+        ///   Looks up a localized string similar to Общий размер вложений больше {0} Мб.
         /// </summary>
         public static string WB0214_TotalAttachmentsSizeIsMoreThan50Mb {
             get {
@@ -1403,7 +1403,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains unused attachments.
+        ///   Looks up a localized string similar to Опросник содержит неиспользуемые вложения.
         /// </summary>
         public static string WB0215_UnusedAttachments {
             get {
@@ -1412,7 +1412,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No identifying questions are defined. Define at least one identifying question..
+        ///   Looks up a localized string similar to Идентифицирующие вопросы не созданы. Определите хотя бы один идентифицирующий вопрос..
         /// </summary>
         public static string WB0216_NoPrefilledQuestions {
             get {
@@ -1421,7 +1421,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable label is too long (more than {0} chars) and will be truncated in SPSS file export..
+        ///   Looks up a localized string similar to Тег переменной слишком длинный (больше символов {0}) и будет усечен в экспорте файла SPSS..
         /// </summary>
         public static string WB0217_VariableLableMoreThan120Characters {
             get {
@@ -1430,7 +1430,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section..
+        ///   Looks up a localized string similar to Последовательные вопросы содержат идентичные условия включения. Подумайте о размещении в подсекции с включающим выражением..
         /// </summary>
         public static string WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions {
             get {
@@ -1439,7 +1439,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple consecutive unconditional single-select question with {0} categories. Consider one multiple choice question..
+        ///   Looks up a localized string similar to Несколько последовательных безусловных вопросов с единственным выбора и {0} опциями. Рассмотрите вариант использования одного вопроса с множественным выбором..
         /// </summary>
         public static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
             get {
@@ -1448,7 +1448,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using @{0} with a multi-choice roster may be unstable. Consider using @{1} instead..
+        ///   Looks up a localized string similar to Использование @ {0} многовариантного вопроса в качестве вопроса, определяющего количество и имена строк в ростере, может быть неустойчивым. Вместо этого используйте @ {1}..
         /// </summary>
         public static string WB0220_RowIndexInMultiOptionBasedRoster {
             get {
@@ -1457,7 +1457,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No current time question was found. Consider recording the date of interview in your questionnaire..
+        ///   Looks up a localized string similar to Вопрос Текущее время не найден. Рассмотрите вариант создания вопроса о дате собеседования..
         /// </summary>
         public static string WB0221_NoCurrentTimeQuestions {
             get {
@@ -1466,7 +1466,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single-select question is marked as identifying. Consider using a text question..
+        ///   Looks up a localized string similar to Катигориальный вопрос помечен как идентифицирующий. Рассмотрите возможность использования текстового вопроса..
         /// </summary>
         public static string WB0222_SingleOptionPrefilled {
             get {
@@ -1475,7 +1475,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section contains less than five questions. Consider joining with other sections..
+        ///   Looks up a localized string similar to Секция содержит менее пяти вопросов. Рассмотрите возможность объединения с другими секциями..
         /// </summary>
         public static string WB0223_SectionWithLessThan5Questions {
             get {
@@ -1484,7 +1484,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many sub-sections at one level. Consider hierarchical layout..
+        ///   Looks up a localized string similar to Слишком много подсекций на одном уровне. Пересмотрите иерархическую структуру..
         /// </summary>
         public static string WB0224_TooManySubsectionsAtOneLevel {
             get {
@@ -1493,7 +1493,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation..
+        ///   Looks up a localized string similar to Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. .
         /// </summary>
         public static string WB0225_ComboBoxWithLessThan10Elements {
             get {
@@ -1502,7 +1502,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box questions have the same parent question..
+        ///   Looks up a localized string similar to Каскадные вопросы имеют один и тот же родительский вопрос..
         /// </summary>
         public static string WB0226_SameCascadingParentQuestion {
             get {
@@ -1511,7 +1511,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback..
+        ///   Looks up a localized string similar to Опросник не был рецензирован. Подумайте о том, чтобы поделиться им с другим пользователем для возможных правок..
         /// </summary>
         public static string WB0227_NotShared {
             get {
@@ -1520,7 +1520,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question has nonconsecutive categories codes. Check for omitted categories..
+        ///   Looks up a localized string similar to Категориальный вопрос имеет непоследовательные коды опций. Проверьте отсутствующие значения..
         /// </summary>
         public static string WB0228_OmittedOptions {
             get {
@@ -1529,7 +1529,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond..
+        ///   Looks up a localized string similar to В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. .
         /// </summary>
         public static string WB0229_SupervisorQuestionInValidation {
             get {
@@ -1538,7 +1538,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nonconsecutive cascade questions. Consider laying the cascading questions one after another..
+        ///   Looks up a localized string similar to Непоследовательные каскадные вопросы. Расположите каскадные вопросы один за другим..
         /// </summary>
         public static string WB0230_NonconsecutiveCascadings {
             get {
@@ -1547,7 +1547,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
+        ///   Looks up a localized string similar to Категориальный вопрос (с опцией выбора нескольких вариантов) содержит слишком много (&gt; {0}) категорий. На планшетe будет сложно ориентироваться. По возможности рассмотрите разделение на два вопроса с несколькими вариантами..
         /// </summary>
         public static string WB0231_MultiOptionWithMoreThan20Options {
             get {
@@ -1556,7 +1556,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency..
+        ///   Looks up a localized string similar to Пять или более вопросов имеют одно и то же включающее выражение. Поместите вопросы в группу и примените единое условие для группы, чтобы повысить эффективность опросника..
         /// </summary>
         public static string WB0232_FiveOrMoreQuestionsWithSameEnabling {
             get {
@@ -1565,7 +1565,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection..
+        ///   Looks up a localized string similar to Вложенный ростер с тремя или более степенями вложенности. Попытайтесь избежать таких сложных структур, которые могут привести к проблемам при сборе данных..
         /// </summary>
         public static string WB0233_NestedRosterDegree3OrMore {
             get {
@@ -1574,7 +1574,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subordinate levels in a nested roster are based on the same parent question. Try revising, such rosters might lead to problems in data collection..
+        ///   Looks up a localized string similar to Подчиненные уровни во вложенном ростере основаны на одном и том же родительском вопросе. Попробуйте пересмотреть, такие ростеры могут привести к проблемам при сборе данных..
         /// </summary>
         public static string WB0234_RosterInRosterWithSameSourceQuestion {
             get {
@@ -1583,7 +1583,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The same long enablement condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
+        ///   Looks up a localized string similar to Включающее выражение одинакового размера используется в нескольких вопросах. Возможно, вы захотите создать логическую переменную, чтобы упростить управление кодом..
         /// </summary>
         public static string WB0235_FewQuestionsWithSameLongEnablement {
             get {
@@ -1592,7 +1592,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
+        ///   Looks up a localized string similar to Проверочное выражение одинакового размера используется в нескольких вопросах.. Возможно, вы захотите создать логическую переменную, чтобы упростить управление кодом..
         /// </summary>
         public static string WB0236_FewQuestionsWithSameLongValidation {
             get {
@@ -1601,7 +1601,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;..
+        ///   Looks up a localized string similar to &amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp;. В большинстве случаев используйте &amp;&amp;..
         /// </summary>
         public static string WB0237_BitwiseAnd {
             get {
@@ -1610,7 +1610,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to | is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||..
+        ///   Looks up a localized string similar to | используется в выражении. Убедитесь, что вы понимаете разницу между операторами | и ||. В большинстве случаев используйте ||..
         /// </summary>
         public static string WB0238_BitwiseOr {
             get {
@@ -1619,7 +1619,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
+        ///   Looks up a localized string similar to Проверочное выражение # {0} относится к будущему вопросу. Рассмотрите исользование обратного порядка..
         /// </summary>
         public static string WB0250_ValidationConditionRefersToAFutureQuestion {
             get {
@@ -1628,7 +1628,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enablement condition refers to a future question. Consider reversing the order..
+        ///   Looks up a localized string similar to Включающее выражение ссылается на будущий вопрос. Рассмотрите возможность изменения порядка следования элементов..
         /// </summary>
         public static string WB0251_EnablementConditionRefersToAFutureQuestion {
             get {
@@ -1637,7 +1637,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format..
+        ///   Looks up a localized string similar to Определено слишком мало тегов переменных. Добавьте теги переменных, чтобы улучшить удобство использования экспортированных данных и обеспечить ввод в метаданные для формата Data Documentation Initiative (DDI)..
         /// </summary>
         public static string WB0253_TooFewVariableLabelsAreDefined {
             get {
@@ -1646,7 +1646,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use function IsValidEmail() to validate email address..
+        ///   Looks up a localized string similar to Используйте функцию IsValidEmail () для проверки адреса электронной почты..
         /// </summary>
         public static string WB0254_UseFunctionIsValidEmailToValidateEmailAddress {
             get {
@@ -1655,7 +1655,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question is too short. This might be an incomplete question..
+        ///   Looks up a localized string similar to Слишком короткий вопрос. Дополните описание. .
         /// </summary>
         public static string WB0255_QuestionIsTooShort {
             get {
@@ -1664,7 +1664,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translation name is invalid.
+        ///   Looks up a localized string similar to Имя перевода не верно.
         /// </summary>
         public static string WB0256_TranslationNameIsInvalid {
             get {
@@ -1673,7 +1673,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translation has empty content.
+        ///   Looks up a localized string similar to Файл с переводом не может быть пустым. .
         /// </summary>
         public static string WB0257_TranslationHasEmptyContent {
             get {
@@ -1682,7 +1682,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translations have duplicate names.
+        ///   Looks up a localized string similar to Имена переводов совпадают.
         /// </summary>
         public static string WB0258_TranslationsHaveDuplicatedNames {
             get {
@@ -1691,7 +1691,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question title is too long. It should be no longer than {0} characters..
+        ///   Looks up a localized string similar to Текст вопроса слишком длинный. Он должен быть не более {0} символов..
         /// </summary>
         public static string WB0259_QuestionTitleIsTooLong {
             get {
@@ -1700,7 +1700,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title is too long. It should be no longer than {0} characters..
+        ///   Looks up a localized string similar to Название секции слишком длинное. Оно не должно содержать более {0} символов. .
         /// </summary>
         public static string WB0260_GroupTitleIsTooLong {
             get {
@@ -1709,7 +1709,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains rosters with total number of roster instances {0} exceeding the system limits {1}.
+        ///   Looks up a localized string similar to Опросник содержит слишком большое количество экземпляров ростера {0}, что привышает разрешенный лимит {1}.
         /// </summary>
         public static string WB0261_RosterStructureTooExplosive {
             get {
@@ -1718,7 +1718,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has reached size limit. Reduce roster size or decrease nesting..
+        ///   Looks up a localized string similar to Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности..
         /// </summary>
         public static string WB0262_RosterHasTooBigPropagation {
             get {
@@ -1727,7 +1727,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First section cannot have enabling condition..
+        ///   Looks up a localized string similar to Первая секция не может иметь условия включения..
         /// </summary>
         public static string WB0263_FirstChapterHasEnablingCondition {
             get {
@@ -1736,7 +1736,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have a GPS question. Tablets must support geolocation to be used with this questionnaire..
+        ///   Looks up a localized string similar to Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. .
         /// </summary>
         public static string WB0264_GpsQuestion {
             get {
@@ -1745,7 +1745,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than {0}% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead..
+        ///   Looks up a localized string similar to Более {0}% вопросов - текстовые вопросы. Текстовые вопросы трудно заполнять на планшетах. Вместо этого рассмотрите возможность использования вопросов с одним или несколькими вариантами выбора..
         /// </summary>
         public static string WB0265_MoreThan30PercentQuestionsAreText {
             get {
@@ -1754,7 +1754,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate questions. (Questions have the same title.).
+        ///   Looks up a localized string similar to Одинаковые вопросы. (У вопросов одинаковый текст.).
         /// </summary>
         public static string WB0266_SameTitle {
             get {
@@ -1763,7 +1763,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have a barcode question. Tablets must support autofocus to be used with this questionnaire..
+        ///   Looks up a localized string similar to У вас есть вопрос со штрих-кодом. Планшеты, которые будут использоваться с этим опросником,  должны поддерживать автофокус..
         /// </summary>
         public static string WB0267_QRBarcodeQuestion {
             get {
@@ -1772,7 +1772,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You try to use substitution for unsupported entity..
+        ///   Looks up a localized string similar to Вы пытаетесь использовать подстановки для неподдерживаемых сущностей..
         /// </summary>
         public static string WB0268_DoesNotSupportSubstitution {
             get {
@@ -1781,7 +1781,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty title..
+        ///   Looks up a localized string similar to У вопроса не может быть пустой текст..
         /// </summary>
         public static string WB0269_QuestionTitleIsEmpty {
             get {
@@ -1790,7 +1790,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section should not contain more than {0} questions..
+        ///   Looks up a localized string similar to Секция не может содержать более {0} вопросов..
         /// </summary>
         public static string WB0270_SectionContainsTooManyQuestions {
             get {
@@ -1799,7 +1799,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro cannot be empty..
+        ///   Looks up a localized string similar to Макрос не может быть пустым..
         /// </summary>
         public static string WB0271_MacroHasEmptyContent {
             get {
@@ -1808,7 +1808,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition is using forbidden type..
+        ///   Looks up a localized string similar to Условие включения использует запрещённый тип..
         /// </summary>
         public static string WB0272_ConditionUsingForbiddenClasses {
             get {
@@ -1817,7 +1817,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition is using forbidden type..
+        ///   Looks up a localized string similar to Проверочное условие использует запрещённый тип..
         /// </summary>
         public static string WB0273_ValidationConditionUsingForbiddenClasses {
             get {
@@ -1826,7 +1826,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable is using forbidden type..
+        ///   Looks up a localized string similar to Переменная использует запрещённый тип..
         /// </summary>
         public static string WB0274_VariableUsingForbiddenClasses {
             get {
@@ -1835,7 +1835,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter expression is using forbidden type..
+        ///   Looks up a localized string similar to Фильтр использует запрещённый тип..
         /// </summary>
         public static string WB0275_FilterExpressionIsUsingForbiddenClasses {
             get {
@@ -1844,7 +1844,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @rowname variable is not supported anymore..
+        ///   Looks up a localized string similar to @rowname переменная не поддерживается больше..
         /// </summary>
         public static string WB0276_RownameIsNotSupported {
             get {
@@ -1853,7 +1853,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire title shouldn&apos;t have two and more consecutive underscore characters..
+        ///   Looks up a localized string similar to Имя опросника не должно содержать двух и более последовательных символов подчеркивания..
         /// </summary>
         public static string WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore {
             get {
@@ -1862,7 +1862,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode allowed only for rosters with no more than {0} elements..
+        ///   Looks up a localized string similar to Плоский режим разрешен для ростеров с не больше чем {0} элементами..
         /// </summary>
         public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -1871,7 +1871,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode doesn&apos;t allow the use of nested rosters..
+        ///   Looks up a localized string similar to Плоский режим запрещает использовать внутри ростеры..
         /// </summary>
         public static string WB0279_PlainModeGroupContainsNestedGroup {
             get {
@@ -1880,7 +1880,8 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text contains a link to an unknown question, subsection, roster or pdf attachment..
+        ///   Looks up a localized string similar to Текст содержит ссылку на неизвестный вопрос, подсекцию, ростер или pdf вложение.
+        ///.
         /// </summary>
         public static string WB0280_TextContainsLinkToUnknownQuestionOrGroup {
             get {
@@ -1889,7 +1890,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total number of elements ({0}) exceeded system limit ({1}). Consider reducing the number of questions, static texts, variables, or items in fixed rosters..
+        ///   Looks up a localized string similar to Общее количество элементов ({0}) превышает системные лимиты ({1}). Рассмотрите возможность уменьшения количества вопросов, статических текстов, переменных или элементов фиксированных ростеров..
         /// </summary>
         public static string WB0281_QuestionnaireExceededEntitiesLimit {
             get {
@@ -1898,7 +1899,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying question cannot be placed inside section with enabling condition..
+        ///   Looks up a localized string similar to Идентифицирующий вопрос не может быть расположен внутри секции с условием..
         /// </summary>
         public static string WB0282_IdentifyingQuestionInSectionWithCondition {
             get {
@@ -1907,7 +1908,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table roster mode doesn&apos;t allow to use nested groups and rosters..
+        ///   Looks up a localized string similar to Табличное представлние не может содержать вложенные группы и ростеры..
         /// </summary>
         public static string WB0282_TableRosterContainsNestedGroup {
             get {
@@ -1916,7 +1917,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table mode allowed only for rosters with no more than {0} questions..
+        ///   Looks up a localized string similar to Табличное представление может содержать не больше чем {0} вопросов..
         /// </summary>
         public static string WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -1925,7 +1926,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table roster doesn&apos;t allow to use supervisor questions..
+        ///   Looks up a localized string similar to Табличный ростер не может содержать супервизоровские вопросы..
         /// </summary>
         public static string WB0284_TableRosterCantContainsSupervisorQuestions {
             get {
@@ -1934,7 +1935,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table roster allows to use only text and numeric questions..
+        ///   Looks up a localized string similar to Табличный ростер может содержать только тестовые и числовые вопросы..
         /// </summary>
         public static string WB0285_TableRosterContainsOnlyAllowedQuestionTypes {
             get {
@@ -1943,7 +1944,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table or Matrix roster mode works only in web survey, on tablets it will be &apos;sub section&apos; mode..
+        ///   Looks up a localized string similar to Табличное представление доступно только в web режиме, на плпншетах это будет обычный режим..
         /// </summary>
         public static string WB0286_TableAndMatixRosterWorksOnlyInWebMode {
             get {
@@ -1952,7 +1953,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions in a table roster may not contain any substitutions in text..
+        ///   Looks up a localized string similar to Вопросы внутри табличного ростера не могут ссылаться на другие вопросы в своих заголовках..
         /// </summary>
         public static string WB0287_TableRosterDoesntContainsQuestionWithSubstitutions {
             get {
@@ -1961,7 +1962,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Label {1} for code {0} is a number different from the value being labeled..
+        ///   Looks up a localized string similar to Заголовок {1} и код {0} числовые и отличается значениями.
         /// </summary>
         public static string WB0288_ValueAndTitleNumbersIsNotEquals {
             get {
@@ -1970,7 +1971,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories shouldn&apos;t be longer than {0} characters..
+        ///   Looks up a localized string similar to Название категорий не может быть больше чем {0} символов..
         /// </summary>
         public static string WB0289 {
             get {
@@ -1979,7 +1980,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories shouldn&apos;t end with underscore.
+        ///   Looks up a localized string similar to Название категорий не может заканчиваться на символ подчёркивания.
         /// </summary>
         public static string WB0290 {
             get {
@@ -1988,7 +1989,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories shouldn&apos;t have two and more consecutive underscore characters..
+        ///   Looks up a localized string similar to Название категорий не должно иметь двух и более последовательных символов подчёркивания.
         /// </summary>
         public static string WB0291 {
             get {
@@ -1997,7 +1998,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories should not be empty..
+        ///   Looks up a localized string similar to Название категорий не может быть пустым.
         /// </summary>
         public static string WB0292 {
             get {
@@ -2006,7 +2007,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories cannot be a reserved word..
+        ///   Looks up a localized string similar to Название категорий совпадает с зарезервированным словом.
         /// </summary>
         public static string WB0293 {
             get {
@@ -2015,7 +2016,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories should contain only letters, digits and underscore character.
+        ///   Looks up a localized string similar to Название категорий должно содержать только латинские буквы, цифры и символ подчёркивания.
         /// </summary>
         public static string WB0294 {
             get {
@@ -2024,7 +2025,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of categories shouldn&apos;t start with digit or underscore.
+        ///   Looks up a localized string similar to Название категорий не может начинаться с цифры или символа подчёркивания.
         /// </summary>
         public static string WB0295 {
             get {
@@ -2033,7 +2034,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions have the same categories. Use reusable categories instead.
+        ///   Looks up a localized string similar to У вопросов одинаковые категории.Вместо предопределенных пользователем категорий используйте повторно используемые категории..
         /// </summary>
         public static string WB0296 {
             get {
@@ -2042,7 +2043,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed..
+        ///   Looks up a localized string similar to Матричное представление может содержать только категориальные не каскадные и не списковые вопросы..
         /// </summary>
         public static string WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes {
             get {
@@ -2051,7 +2052,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix mode allowed only for rosters with no more than {0} question(s)..
+        ///   Looks up a localized string similar to Матричное представление может содержать не больше чем {0} вопросов..
         /// </summary>
         public static string WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements {
             get {
@@ -2060,7 +2061,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix roster has to contain no supervisor or identifying questions..
+        ///   Looks up a localized string similar to Матричное представление ростера не может содержать идентифицирующие вопросы и вопросы для супервизора..
         /// </summary>
         public static string WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions {
             get {
@@ -2069,7 +2070,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question in Matrix roster must not contain %rostertitle% substitution..
+        ///   Looks up a localized string similar to Матричное представление ростера не может содержать вопрос с подстановкой %rostertitle%..
         /// </summary>
         public static string WB0300 {
             get {
@@ -2078,7 +2079,8 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix roster has to contain no linked questions..
+        ///   Looks up a localized string similar to Матричное представление ростера не может содержать связанные вопросы.
+        ///.
         /// </summary>
         public static string WB0301_MatrixRosterHasToContainNoLinkedQuestions {
             get {
@@ -2087,7 +2089,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Substitution cannot reference items from same roster level..
+        ///   Looks up a localized string similar to В подстановках не могут быть использованы переменные с таким же уровнем вложенности..
         /// </summary>
         public static string WB0302 {
             get {
@@ -2096,7 +2098,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matrix roster cannot have custom roster title.
+        ///   Looks up a localized string similar to Матричный ростер не может переопределять имя.
         /// </summary>
         public static string WB0303_MatrixRosterCannotHaveCustomTitle {
             get {
@@ -2105,7 +2107,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table roster cannot have custom roster title.
+        ///   Looks up a localized string similar to Табличный ростер не может переопределять имя.
         /// </summary>
         public static string WB0304_TableRosterCannotHaveCustomTitle {
             get {
@@ -2114,7 +2116,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reusable category cannot have row with same Id and ParentId values.
+        ///   Looks up a localized string similar to Категории должны содержать уникальную пару Id, ParentId.
         /// </summary>
         public static string WB0305_DuplicatedCategoryIdParentIdPair {
             get {
@@ -2123,7 +2125,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reusable category cannot have row with same ParentId and Text values.
+        ///   Looks up a localized string similar to Категории должны содержать уникальную пару ParentId, Text.
         /// </summary>
         public static string WB0306_DuplicatedCategoryParentIdText {
             get {
@@ -2132,7 +2134,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question references non-existent reusable category..
+        ///   Looks up a localized string similar to Вопрос ссылается на не существующую категорию..
         /// </summary>
         public static string WB0307_QuestionReferancedToIncorrectCategories {
             get {
@@ -2141,7 +2143,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption).
+        ///   Looks up a localized string similar to Идентификационные вопросы могут иметь только разрешенные типы (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного)..
         /// </summary>
         public static string WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes {
             get {
@@ -2150,7 +2152,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questions in Сover section must have variable label..
+        ///   Looks up a localized string similar to Вопросы в секции &quot;Обложка&quot; должны иметь тег переменной.
         /// </summary>
         public static string WB0309_IdentityQuestionsMustHaveVariableLabel {
             get {
@@ -2159,7 +2161,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories must have two options minimum.
+        ///   Looks up a localized string similar to Категория должна иметь минимум 2 опции.
         /// </summary>
         public static string WB0312 {
             get {
@@ -2168,7 +2170,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only string variable type can be used as source of the attachment name.
+        ///   Looks up a localized string similar to Только строковая переменная может быть использована как источник имени вложения.
         /// </summary>
         public static string WB0390_OnlyStringVariableAllowedAsAttachmentName {
             get {
@@ -2177,7 +2179,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Static text can not reference variable that has deeper roster scope then itself.
+        ///   Looks up a localized string similar to Статический текст не может ссылаться на переменную находящуюся глубже нежели он сам.
         /// </summary>
         public static string WB0391 {
             get {
@@ -2186,7 +2188,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Link to hidden question is not allowed.
+        ///   Looks up a localized string similar to Ссылка на скрытую переменную запрещена.
         /// </summary>
         public static string WB3010_LinkToHiddenQuestionNotAllowed {
             get {
