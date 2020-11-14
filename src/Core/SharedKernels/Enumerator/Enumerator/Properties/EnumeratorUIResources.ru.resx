@@ -301,6 +301,9 @@
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Создать резервную копию</value>
   </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Обновление событий календаря</value>
+  </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Ваша учетная запись перепривязана к другому устройству</value>
   </data>
@@ -331,7 +334,10 @@
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
     <value>законченные интервью</value>
   </data>
-  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>календарные события</value>
+  </data>
+    <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} законченных интервью отправлено</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
@@ -342,6 +348,9 @@
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>Были обновлены все назначения</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Передача событий календаря</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>вопросники</value>

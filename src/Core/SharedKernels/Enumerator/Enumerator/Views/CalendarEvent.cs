@@ -1,10 +1,12 @@
 ﻿using System;
+using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class CalendarEvent : IPlainStorageEntity<Guid>
     {
+        [PrimaryKey]
         public Guid Id { get; set; }
         public DateTimeOffset Start { get; set; } 
         public string Comment   { get; set; }

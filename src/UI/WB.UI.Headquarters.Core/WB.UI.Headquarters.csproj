@@ -105,6 +105,11 @@
       <DependentUpon>Common.ru.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Update="Resources\SyncLogMessages.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SyncLogMessages.ru.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
     
   </ItemGroup>
 

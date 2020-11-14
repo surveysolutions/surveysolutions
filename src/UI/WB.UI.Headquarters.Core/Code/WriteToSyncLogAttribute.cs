@@ -227,6 +227,21 @@ namespace WB.UI.Headquarters.Code
                         logItem.Log = SyncLogMessages.GetInterviewPatch.FormatString(idAsGuid.HasValue ? GetInterviewLink(idAsGuid.Value, context) : "Null interview id");
                         logItem.InterviewId = idAsGuid;
                         break;
+                    
+                    case SynchronizationLogType.PostCalendarEvent:
+                        Guid? ceId = context.GetActionArgumentOrDefault<CalendarEventPackageApiView>("package", null)?.CalendarEventId;
+                        logItem.Log = SyncLogMessages.PostCalendarEventPackage.FormatString(ceId.HasValue ? ceId.ToString() : UnknownStringArgumentValue);
+                        logItem.InterviewId = ceId;
+                        break;
+                    case SynchronizationLogType.GetCalendarEvent:
+                        logItem.Log = SyncLogMessages.GetCalendarEventPackage.FormatString(idAsGuid.HasValue ? idAsGuid.ToString() : "Null calendar event id");
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.GetCalendarEvents:
+                        logItem.Log = GetCalendarEventsListLogMessage(actionExecutedContext);
+                        
+                        break;
+                    
                     default:
                         throw new ArgumentException(nameof(logAction));
                 }
@@ -334,6 +349,14 @@ namespace WB.UI.Headquarters.Code
                 string.Join("", assignmentsApiView.Select(av => $"<li>{GetAssignmentLogMessage(av, questionnaireStorage)}</li>")));
         }
 
+        private string GetCalendarEventsListLogMessage(ActionExecutedContext context)
+        {
+            var calendarEventsApiView = this.GetResponseObject<List<CalendarEventApiView>>(context);
+
+            return SyncLogMessages.CalendarEventsListFormat.FormatString(calendarEventsApiView.Count,
+                string.Join("", calendarEventsApiView.Select(av => $"<li>{av.CalendarEventId}</li>")));
+        }
+        
         private string GetAssignmentLogMessage(AssignmentApiView view, IQuestionnaireStorage questionnaireStorage)
         {
             QuestionnaireIdentity assignmentQuestionnaireId = view.QuestionnaireId;

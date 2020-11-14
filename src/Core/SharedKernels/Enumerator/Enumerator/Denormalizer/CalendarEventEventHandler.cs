@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             calendarEvent.Comment = evnt.Payload.Comment;
             calendarEvent.UserId = evnt.Payload.UserId;
             calendarEvent.LastEventId = evnt.EventIdentifier;
+            calendarEvent.IsSynchronized = false;
             calendarEventStorage.Store(calendarEvent);
         }
 
@@ -52,6 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             CalendarEvent calendarEvent = calendarEventStorage.GetById(evnt.EventSourceId);
             calendarEvent.IsCompleted = true;
             calendarEvent.LastEventId = evnt.EventIdentifier;
+            calendarEvent.IsSynchronized = false;
             calendarEventStorage.Store(calendarEvent);
         }
 
@@ -60,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             CalendarEvent calendarEvent = calendarEventStorage.GetById(evnt.EventSourceId);
             calendarEvent.IsDeleted = true;
             calendarEvent.LastEventId = evnt.EventIdentifier;
+            calendarEvent.IsSynchronized = false;
             calendarEventStorage.Store(calendarEvent);
         }
     }

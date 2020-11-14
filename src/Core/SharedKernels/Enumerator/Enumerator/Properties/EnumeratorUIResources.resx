@@ -295,6 +295,9 @@ for further instructions</value>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Updating assignments</value>
   </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Updating calendar events</value>
+  </data>  
   <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
     <value>Updating local interviews with changes from server</value>
   </data>
@@ -337,6 +340,9 @@ for further instructions</value>
   <data name="TransferringAssignments" xml:space="preserve">
     <value>Transferring assignments</value>
   </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Transferring calendar events</value>
+  </data>  
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>All assignments were updated</value>
   </data>
@@ -367,6 +373,9 @@ for further instructions</value>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
     <value>completed assignments</value>
   </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>calendar events</value>
+  </data>  
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
   </data>
