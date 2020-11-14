@@ -30,5 +30,7 @@
         FailedUnauthorized,
         UpdatingInterviews,
         UpdatingInterviewsChanges,
+        UploadingCalendarEvents,
+        DownloadingCalendarEvents
     }
 }

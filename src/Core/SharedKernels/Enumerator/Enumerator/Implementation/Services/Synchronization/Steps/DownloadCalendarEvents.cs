@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 remoteCalendarEvents.ToDictionary(x => x.CalendarEventId, 
                     x => x.Sequence);
             
-            // all local created are known on server
+            // all local created should be knows on server at this point
             // 1. delete all not from list
             // 2. if server last event sequence is bigger than local
             //    drop local and recreate
@@ -49,34 +50,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var localCalendarEvents = calendarEventStorage.LoadAll();
             var localCalendarEventIds = localCalendarEvents.Select(ce => ce.Id).ToHashSet();
 
-            var localCalendarEventsToRemove = localCalendarEventIds.Where(
+            var localCalendarEventsToRemoveIds = localCalendarEventIds.Where(
                 ce => !remoteCalendarEventsWithSequence.ContainsKey(ce)).ToList(); 
             
             //all calendar events should be pushed at this point
-            var localCalendarEventsToRecreate = localCalendarEventIds.Where(
+            var localCalendarEventsToRecreateIds = localCalendarEventIds.Where(
                 ce => remoteCalendarEventsWithSequence.ContainsKey(ce) &&
                       EventStore.GetLastEventSequence(ce) != remoteCalendarEventsWithSequence[ce]).ToList();
 
-            var remoteCalendarEventsToDownload = remoteCalendarEventsWithSequence.Keys.Where(
-                ce => !localCalendarEventIds.Contains(ce));
+            var remoteCalendarEventsToDownloadIds = remoteCalendarEventsWithSequence.Keys.Where(
+                ce => !localCalendarEventIds.Contains(ce)).ToList();
             
             IProgress<TransferProgress> transferProgress = this.Context.Progress.AsTransferReport();
             
-            foreach (var localCalendarEvent in localCalendarEventsToRemove)
+            foreach (var localCalendarEventId in localCalendarEventsToRemoveIds)
             {
-                this.RemoveCalendarEvent(localCalendarEvent);
+                this.RemoveCalendarEvent(localCalendarEventId);
             }
-            
-            foreach (var localCalendarEvent in localCalendarEventsToRecreate)
-            {
-                this.RemoveCalendarEvent(localCalendarEvent);
-                await this.DownloadAndCreateCalendarEvent(localCalendarEvent, transferProgress);
-            }
-            
-            foreach (var localCalendarEvent in remoteCalendarEventsToDownload)
-            {
-                await this.DownloadAndCreateCalendarEvent(localCalendarEvent, transferProgress);
-            }
+            var calendarEventsToProcess =
+                localCalendarEventsToRecreateIds
+                    .Union(remoteCalendarEventsToDownloadIds)
+                    .Distinct().ToList();
+            await DownloadAndCreateCalendarEvent(calendarEventsToProcess);
         }
 
         private void RemoveCalendarEvent(Guid id)
@@ -85,25 +80,56 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             EventStore.RemoveEventSourceById(id);
         }
 
-        private async Task DownloadAndCreateCalendarEvent(Guid id, IProgress<TransferProgress> transferProgress)
+        private async Task DownloadAndCreateCalendarEvent(List<Guid> calendarEventsIds)
         {
-            try
-            {
-                var calendarEventStream = await this.synchronizationService.GetCalendarEventStreamAsync(
-                    id,
-                    0,
-                    transferProgress, 
-                    Context.CancellationToken);
+            var statistics = this.Context.Statistics;
+            var progress = this.Context.Progress;
+            var transferProgress = progress.AsTransferReport();
                 
-                this.log.Debug($"Creating calendar event {id}");
-                
-                EventStore.StoreEvents(new CommittedEventStream(id, calendarEventStream));
-                eventBus.PublishCommittedEvents(calendarEventStream);
-            }
-            catch (OperationCanceledException)
+            foreach (var id in calendarEventsIds)
             {
+                try
+                {
+                    this.Context.CancellationToken.ThrowIfCancellationRequested();
+                    
+                    this.RemoveCalendarEvent(id);
+                    
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title = EnumeratorUIResources.Synchronization_Download_CalendarEvents_Title,
+                        Description = string.Format(EnumeratorUIResources.Synchronization_Download_Description_Format,
+                            Context.Statistics.SuccessfullyDownloadedCalendarEventsCount, 
+                            calendarEventsIds.Count,
+                            EnumeratorUIResources.Synchronization_Upload_CalendarEvents_Text),
+                        Stage = SyncStage.DownloadingCalendarEvents,
+                        StageExtraInfo = new Dictionary<string, string>()
+                        {
+                            { "processedCount", Context.Statistics.SuccessfullyDownloadedCalendarEventsCount.ToString() },
+                            { "totalCount", calendarEventsIds.Count.ToString()}
+                        }
+                    });
 
+                    var calendarEventStream = await this.synchronizationService.GetCalendarEventStreamAsync(
+                        id,
+                        0,
+                        transferProgress, 
+                        Context.CancellationToken);
+                
+                    this.log.Debug($"Creating calendar event {id}");
+                
+                    EventStore.StoreEvents(new CommittedEventStream(id, calendarEventStream));
+                    eventBus.PublishCommittedEvents(calendarEventStream);
+                
+                    calendarEventStorage.SetCalendarEventSyncedStatus(id, true);
+                    Context.Statistics.SuccessfullyDownloadedCalendarEventsCount++;
+                }
+                catch (OperationCanceledException)
+                {
+
+                }
             }
+            
+            
         }
     }
 }

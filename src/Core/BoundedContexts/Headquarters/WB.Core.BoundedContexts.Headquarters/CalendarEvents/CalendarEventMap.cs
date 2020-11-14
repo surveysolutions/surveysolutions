@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             Property(x => x.UserId);
             Property(x => x.UpdateDate);
             Property(x => x.UserName);
+            Property(x => x.IsDeleted);
         }
     }
 }
