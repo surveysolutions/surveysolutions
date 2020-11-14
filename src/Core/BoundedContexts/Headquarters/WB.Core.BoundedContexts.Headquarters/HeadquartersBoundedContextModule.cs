@@ -293,6 +293,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
             registry.Bind<ICompletedEmailsQueue , CompletedEmailsQueue >();
 
+            registry.Bind<ICalendarEventService, CalendarEventService>();
+            
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
             registry.Bind<IAuditLogService, AuditLogService>();
             registry.BindToConstant<IAuditLogTypeResolver>(() => new AuditLogTypeResolver(typeof(IAuditLogEntity).Assembly));
