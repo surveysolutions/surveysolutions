@@ -120,7 +120,7 @@ namespace WB.UI.Headquarters
                 eventStoreModule,
                 new InfrastructureModule(),
                 new DataCollectionSharedKernelModule(),
-                new WebInterviewModule(),
+                new WebInterviewModule(Configuration),
                 new DataCollectionSharedKernelModule(),
                 new OrmModule(unitOfWorkConnectionSettings),
                 new OwinSecurityModule(),

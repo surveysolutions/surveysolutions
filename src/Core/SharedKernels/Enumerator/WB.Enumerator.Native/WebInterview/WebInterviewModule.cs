@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
@@ -10,9 +11,24 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public class WebInterviewModule : IModule, IInitModule
     {
+        private readonly IConfiguration configuration;
+
+        public WebInterviewModule(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
+            if (configuration.IsLazyInterviewNotificationEnabled())
+            {
+                registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
+            }
+            else
+            {
+                registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            }
+
             registry.Bind<InterviewLifecycleEventHandler>();
             registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
             registry.Bind<IPipelineModule, WebInterviewConnectionsCounter>();
