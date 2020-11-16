@@ -14,9 +14,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
     [RequestSizeLimit(1 * 10 * 1024 * 1024)]
     public abstract class CalendarEventsControllerBase: ControllerBase
     {
-        private readonly IHeadquartersEventStore eventStore;
-        private readonly ICalendarEventPackageService packageService;
-        private readonly ICalendarEventService calendarEventService;
+        protected readonly IHeadquartersEventStore eventStore;
+        protected readonly ICalendarEventPackageService packageService;
+        protected readonly ICalendarEventService calendarEventService;
         protected readonly IAuthorizedUser authorizedUser;
 
         protected CalendarEventsControllerBase(IHeadquartersEventStore eventStore,
@@ -57,19 +57,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
-        public virtual ActionResult<List<CalendarEventApiView>> Get()
-        {
-            var interviewApiViews = 
-                calendarEventService.GetAllCalendarEventsForUser(this.authorizedUser.Id); 
-                
-
-            return interviewApiViews.Select(x => new CalendarEventApiView()
-            {
-                CalendarEventId = x.PublicKey,
-                ResponsibleId = x.UserId,
-                Sequence = eventStore.GetLastEventSequence(x.PublicKey),
-                LastEventId = eventStore.GetLastEventId(x.PublicKey)
-            }).ToList();
-        }
+        public abstract ActionResult<List<CalendarEventApiView>> Get();
     }
 }

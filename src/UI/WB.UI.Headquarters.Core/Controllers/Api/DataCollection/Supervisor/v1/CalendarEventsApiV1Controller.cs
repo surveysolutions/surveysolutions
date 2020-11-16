@@ -10,14 +10,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
+namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
-    
-    [Authorize(Roles = "Interviewer")]
-    [Route("api/interviewer/v3/calendarevents")]
-    public class CalendarEventsApiV3Controller : CalendarEventsControllerBase
+    [Authorize(Roles = "Supervisor")]
+    [Route("api/supervisor/v1/calendarevents")]
+    public class CalendarEventsApiV1Controller: CalendarEventsControllerBase
     {
-        public CalendarEventsApiV3Controller(IHeadquartersEventStore eventStore, 
+        public CalendarEventsApiV1Controller(IHeadquartersEventStore eventStore, 
             ICalendarEventPackageService packageService, ICalendarEventService calendarEventService, IAuthorizedUser authorizedUser) 
             : base(eventStore, packageService, calendarEventService, authorizedUser)
         {
@@ -39,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         public override ActionResult<List<CalendarEventApiView>> Get()
         {
             var interviewApiViews = 
-                calendarEventService.GetAllCalendarEventsForUser(this.authorizedUser.Id); 
+                calendarEventService.GetAllCalendarEventsUnderSupervisor(this.authorizedUser.Id); 
 
             return interviewApiViews.Select(x => new CalendarEventApiView()
             {
