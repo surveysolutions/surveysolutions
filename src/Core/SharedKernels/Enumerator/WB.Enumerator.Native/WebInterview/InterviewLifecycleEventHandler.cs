@@ -110,13 +110,15 @@ namespace WB.Enumerator.Native.WebInterview
                 {
                     notificationBuilder.RefreshEntitiesWithFilteredOptions(state, aggId);
                 }
-
-                webInterviewNotificationService.RefreshEntities(aggId, actionStore.RefreshEntities.ToArray());
-
-                if (actionStore.RefreshEntities.Any())
+                
+                if (actionStore.RefreshRemovedEntities.Any())
                 {
                     webInterviewNotificationService.RefreshRemovedEntities(aggId,
                         actionStore.RefreshRemovedEntities.ToArray());
+                }
+                else
+                {
+                    webInterviewNotificationService.RefreshEntities(aggId, actionStore.RefreshEntities.ToArray());
                 }
             }
         }
