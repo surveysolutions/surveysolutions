@@ -39,7 +39,14 @@ namespace WB.Enumerator.Native.WebInterview.LifeCycle
 
             foreach (var entityId in entityIds)
             {
-                var identities = interview.GetAllIdentitiesForEntityId(entityId).ToArray();
+                var identities = interview.FindEntity(entityId).ToArray();
+
+                if (cycle.HasAlreadyTooMuchRefreshEntities(interviewId))
+                {
+                    // there is no more reasons to add new refresh entities. Whole section will be reloaded
+                    break;
+                }
+                
                 cycle.RefreshEntities(interviewId, identities);
             }
         }

@@ -186,6 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<IInterviewTreeNode> GetAllInterviewNodes();
 
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
+        IEnumerable<Identity> FindEntity(Guid id);
 
         bool AcceptsInterviewerAnswers();
 
