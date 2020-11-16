@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -64,6 +65,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();
             registry.BindAsSingleton<IDeviceSynchronizationProgress, DeviceSynchronizationProgress>();
+            registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
             
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
