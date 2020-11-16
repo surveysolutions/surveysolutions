@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Enumerator.Native.WebInterview.LifeCycle;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -35,7 +36,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return;
             }
 
-            if (questions.Length > 100)
+            if (questions.Length > InterviewLifecycle.RefreshEntitiesLimit)
             {
                 this.webInterviewInvoker.RefreshSection(interviewId);
                 return;
@@ -141,6 +142,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (clientGroupIdentity != null)
                 this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId.ToString(), errorMessage);
         }
+
         public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, Exception exception)
         {
             var errorMessage = WebInterview.GetUiMessageFromException(exception);

@@ -7,6 +7,8 @@ namespace WB.Enumerator.Native.WebInterview.LifeCycle
 {
     public class InterviewLifecycle
     {
+        public const int RefreshEntitiesLimit = 100;
+
         public class LifecycleAction
         {
             public HashSet<Identity> RefreshEntities { get; } = new HashSet<Identity>();
@@ -65,6 +67,12 @@ namespace WB.Enumerator.Native.WebInterview.LifeCycle
             var entities = Store.GetOrAdd(aggId, a => new LifecycleAction());
             entities.FinishInterview = true;
             return this;
+        }
+
+        public bool HasAlreadyTooMuchRefreshEntities(Guid id)
+        {
+            var store = Store.GetOrAdd(id, a => new LifecycleAction());
+            return store.RefreshEntities.Count > RefreshEntitiesLimit;
         }
     }
 }
