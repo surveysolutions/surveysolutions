@@ -42,6 +42,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
         protected IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository;
         protected IUnitOfWork UnitOfWork;
         protected ISessionFactory sessionFactory;
+        private IWorkspaceNameProvider workspace;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -50,6 +51,8 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
 
             this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.PlainStore, DbType.ReadSide);
 
+            workspace = Create.Service.WorkspaceNameProvider();
+            
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
@@ -62,7 +65,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap)
-                }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+                }, true, workspace.CurrentWorkspace());
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());
@@ -107,7 +110,8 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
             return new TeamViewFactory(
                 interviewSummaryReader: interviewSummaryRepository,
                 sessionProvider: this.UnitOfWork,
-                userRepository: userRepository);
+                userRepository: userRepository,
+                workspaceNameProvider: workspace);
         }
 
         protected IUserRepository SetupUserRepositoryWithSupervisor(Guid supervisorId)

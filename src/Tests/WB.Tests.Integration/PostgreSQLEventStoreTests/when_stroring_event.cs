@@ -79,7 +79,8 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventStore = new PostgresEventStore(
                 eventTypeResolver,
                 sessionProvider.Object,
-                Mock.Of<ILogger<PostgresEventStore>>());
+                Mock.Of<ILogger<PostgresEventStore>>(),
+                Create.Service.WorkspaceNameProvider(schemaName));
 
             BecauseOf();
         }

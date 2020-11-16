@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 foreach (QuestionnaireBrowseItem questionnaire in questionnaires)
                 {
-                    var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+                    var questionnaireIdentity = questionnaire.Identity();
                     WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
                     
                     await SendNoResponseReminder(questionnaireIdentity, 
