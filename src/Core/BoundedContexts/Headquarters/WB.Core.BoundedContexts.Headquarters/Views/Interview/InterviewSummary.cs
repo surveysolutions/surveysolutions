@@ -129,11 +129,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
         public virtual ISet<InterviewGps> GpsAnswers { get; protected set; }
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
-        public virtual IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow> StatisticsReportCache
+
+        private IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow> statisticsReportCache;
+
+        public virtual IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow>
+            StatisticsReportCache
         {
-            get;
-            set;
-        } = new Dictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow>();
+            get => statisticsReportCache ??= StatisticsReport.ToDictionary(s => (s.EntityId, s.RosterVector));
+            set => statisticsReportCache = value;
+        }
 
         public virtual void RefreshStatisticsReportCache()
         {
