@@ -185,6 +185,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.rosterVariableNamesCache
                ?? (this.rosterVariableNamesCache = this.GetRosterNamesCache());
 
+        private IEnumerable<IComposite> AllEntities => this.EntityCache.Values;
+
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
@@ -793,6 +795,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsVariable(Guid id)
             => this.AllVariables.Any(x => x.PublicKey == id);
+
+        public ReadOnlyCollection<Guid> GetAllEntities()
+            => this.AllEntities.Select(entity => entity.PublicKey).ToReadOnlyCollection();
 
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();

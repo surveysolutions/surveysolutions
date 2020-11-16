@@ -51,6 +51,7 @@ type HeadquartersQuery {
   assignments(skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
   interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
   maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
+  questionnaireItems("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
   questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
   questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
@@ -172,6 +173,18 @@ type Questionnaire {
   translations: [Translation!]!
   variable: String!
   version: Long!
+}
+
+type QuestionnaireItem {
+  entityType: EntityType
+  identifying: Boolean
+  label: String
+  options: [CategoricalOption!]!
+  scope: QuestionScope
+  "Question text or Variable label. May contain html tags."
+  title: String
+  type: QuestionType
+  variable: String
 }
 
 type Translation {
@@ -378,6 +391,16 @@ input QuestionnaireIdentity {
   version_not_lte: Long
 }
 
+input QuestionnaireItemsFilter {
+  AND: [QuestionnaireItemsFilter!]
+  "Find only identifying entities"
+  identifying: Boolean
+  OR: [QuestionnaireItemsFilter!]
+  scope: QuestionScope
+  title: String
+  variable: String
+}
+
 input UserMapFilter {
   AND: [UserMapFilter!]
   OR: [UserMapFilter!]
@@ -394,6 +417,14 @@ input UserMapFilter {
 enum ApplyPolicy {
   BEFORE_RESOLVER
   AFTER_RESOLVER
+}
+
+enum EntityType {
+  SECTION
+  QUESTION
+  STATICTEXT
+  VARIABLE
+  ROSTER
 }
 
 enum InterviewActionFlags {
