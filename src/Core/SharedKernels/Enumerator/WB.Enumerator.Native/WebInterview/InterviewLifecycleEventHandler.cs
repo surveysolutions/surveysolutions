@@ -120,8 +120,7 @@ namespace WB.Enumerator.Native.WebInterview
                 }
             }
         }
-        
-       
+
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<AnswersDeclaredInvalid> evnt)
         {
             return cycle.RefreshEntities(evnt.EventSourceId, evnt.Payload.FailedValidationConditions.Keys);
