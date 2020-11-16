@@ -71,7 +71,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.StatisticsReport.Remove(item);
             }
 
-            state.RefreshStatisticsReportCache();
+            if (delete.Any())
+            {
+                state.RefreshStatisticsReportCache();
+            }
+
             return state;
         }
 
