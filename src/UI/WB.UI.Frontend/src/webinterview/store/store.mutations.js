@@ -11,6 +11,9 @@ export default {
                 Vue.set(state.entityDetails, entity.id, entity)
             }
         })
+
+        // reseting all pending entity details, as we gto whole section
+        Vue.set(state.fetch, 'state', {})
     },
     SET_ANSWER(state, { identity, answer }) {
         const e = state.entityDetails[identity]
