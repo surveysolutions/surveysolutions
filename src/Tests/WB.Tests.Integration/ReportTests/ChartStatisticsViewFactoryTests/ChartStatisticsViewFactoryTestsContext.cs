@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
+            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide, DbType.PlainStore);
 
             sessionFactory = IntegrationCreate.SessionFactory(
                 this.connectionString, 
@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(QuestionnaireCompositeItemMap),
                 }, 
-                true, schemaName: new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+                true, Create.Service.WorkspaceNameProvider().CurrentWorkspace());
 
             UnitOfWork = NewUnitOfWork();
             cumulativeReportStatusChangeStorage =
@@ -80,7 +80,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         {
             return new ChartStatisticsViewFactory(UnitOfWork, questionnaires.Object, 
                 cumulativeReportStatusChangeStorage, 
-                questionnaireRepository);
+                questionnaireRepository, Create.Service.WorkspaceNameProvider());
         }
 
         protected void CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(QuestionnaireIdentity questionnaireId, DateTime date, int count)

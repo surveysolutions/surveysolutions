@@ -358,6 +358,7 @@ namespace WB.Tests.Integration
             return new PostgresReadSideKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
                 postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
+                Create.Service.WorkspaceNameProvider(),
                 Mock.Of<ILogger>(),
                 Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
@@ -376,19 +377,20 @@ namespace WB.Tests.Integration
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes), "Plain");
+            cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes, schemaName), "Plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
-            if (executeSchemaUpdate)
-            {
-                var update = new SchemaUpdate(cfg);
-                update.Execute(false, true);
-            }
             if (schemaName != null)
             {
                 cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             }
             
+            if (executeSchemaUpdate)
+            {
+                var update = new SchemaUpdate(cfg);
+                update.Execute(false, true);
+            }
+           
             return cfg.BuildSessionFactory();
         }
 
@@ -397,8 +399,6 @@ namespace WB.Tests.Integration
             IEnumerable<Type> usersEntityMapTypes,
             string readSideSchemaName,
             IEnumerable<Type> readStorageEntityMapTypes,
-            string plainStoreSchemaName,
-            IEnumerable<Type> plainStorageEntityMapTypes,
             bool executeSchemaUpdate)
         {
             var cfg = new Configuration();
@@ -412,7 +412,6 @@ namespace WB.Tests.Integration
 
             cfg.AddDeserializedMapping(GetMappingsFor(usersEntityMapTypes, usersSchemaName), "user");
             cfg.AddDeserializedMapping(GetMappingsFor(readStorageEntityMapTypes, readSideSchemaName), "read");
-            cfg.AddDeserializedMapping(GetMappingsFor(plainStorageEntityMapTypes, plainStoreSchemaName), "plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
             if (executeSchemaUpdate)

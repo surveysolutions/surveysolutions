@@ -1,12 +1,15 @@
 ﻿using System;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
+using WB.Persistence.Headquarters.Migrations.Workspaces;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -33,13 +36,18 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 connection.Close();
             }
 
-            InitializeDb(connectionStringBuilder.ConnectionString, dbType);
+            InitializeDb(connectionStringBuilder.ConnectionString, Create.Service.WorkspaceNameProvider(), dbType);
 
             return connectionStringBuilder.ConnectionString;
         }
 
-        public static void InitializeDb(string connectionString, params DbType[] dbType)
+        public static void InitializeDb(string connectionString, IWorkspaceNameProvider workspaceNameProvider, params DbType[] dbType)
         {
+            DatabaseManagement.InitDatabase(connectionString, "users");
+            DatabaseManagement.InitDatabase(connectionString, "events");
+            DbMigrationsRunner.MigrateToLatest(connectionString, "events",
+                new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
+           
             foreach (var db in dbType)
             {
                 string schemaName = null;
@@ -54,11 +62,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 }
 
                 DatabaseManagement.InitDatabase(connectionString, schemaName);
-                DatabaseManagement.InitDatabase(connectionString, "users");
-                DatabaseManagement.InitDatabase(connectionString, "events");
-                DbMigrationsRunner.MigrateToLatest(connectionString, "events",
-                    new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
-
+              
                 switch (db)
                 {
                     case DbType.PlainStore:
@@ -71,6 +75,12 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                         break;
                 }
             }
+
+            var currentWorkspace = workspaceNameProvider.CurrentWorkspace();
+            DatabaseManagement.InitDatabase(connectionString, currentWorkspace);
+            DbMigrationsRunner.MigrateToLatest(connectionString, currentWorkspace,
+                new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly, typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace));
+
         }
 
         public static void DropDb(string connectionString)

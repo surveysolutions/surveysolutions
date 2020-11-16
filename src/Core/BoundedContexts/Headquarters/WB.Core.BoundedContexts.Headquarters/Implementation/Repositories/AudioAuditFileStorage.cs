@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
@@ -24,7 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         public AudioAuditFileStorage(
             IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor,
-            IUnitOfWork unitOfWork) : base(unitOfWork)
+            IWorkspaceNameProvider workspaceNameProvider,
+            IUnitOfWork unitOfWork) : base(unitOfWork, workspaceNameProvider)
         {
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }

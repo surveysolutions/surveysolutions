@@ -22,16 +22,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
         private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
+        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
         public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, 
             IAllUsersAndQuestionnairesFactory questionnairesFactory, 
             INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository,
+            IWorkspaceNameProvider workspaceNameProvider)
         {
             this.unitOfWork = unitOfWork;
             this.questionnairesFactory = questionnairesFactory;
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
             this.questionnaireRepository = questionnaireRepository;
+            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         private static readonly int[] AllowedStatuses =
@@ -62,8 +65,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             // ReSharper disable StringLiteralTypo
             var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
-                @"with dates as (
-                    select date from readside.cumulativereportstatuschanges
+                $@"with dates as (
+                    select date from {this.workspaceNameProvider.CurrentWorkspace()}.cumulativereportstatuschanges
                     where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)
                   ) select min(date), max(date) from dates", 
                  new { questionnairesList, AllowedStatuses });
@@ -91,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // report CTE will produce report over all data
             // do not move date filtering inside report CTE as it will affect partition query
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
-                @"with 
+                $@"with 
                         dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
                         report as 
@@ -99,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                             select span.date, span.status, 
                                     sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
                             from timespan as span  
-                            left join readside.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
+                            left join {workspaceNameProvider.CurrentWorkspace()}.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
                                 and cum.questionnaireidentity = any(@questionnairesList)
                             group by 1,2 order by 1
                         )
