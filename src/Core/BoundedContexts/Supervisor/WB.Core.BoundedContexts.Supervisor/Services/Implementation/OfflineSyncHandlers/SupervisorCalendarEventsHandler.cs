@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Events;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -50,11 +52,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public void Register(IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<GetCalendarEventsRequest, GetCalendarEventsResponse>(GetCalendarEvents);
-            requestHandler.RegisterHandler<GetCalendarEventDetailsRequest, GetCalendarEventDetailsResponse>(Handle);
+            requestHandler.RegisterHandler<GetCalendarEventDetailsRequest, GetCalendarEventDetailsResponse>(GetCalendarEventDetails);
             requestHandler.RegisterHandler<UploadCalendarEventRequest, OkResponse>(UploadCalendarEvent);
         }
 
-        private Task<GetCalendarEventDetailsResponse> Handle(GetCalendarEventDetailsRequest arg)
+        private Task<GetCalendarEventDetailsResponse> GetCalendarEventDetails(GetCalendarEventDetailsRequest arg)
         {
             var sequence = arg.Sequence + 1 ?? 0;
             var events = this.eventStore.Read(arg.CalendarEventId, sequence).ToList();
@@ -103,10 +105,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 this.logger.Debug($"Calendar events by {calendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                var committedEventStream = new CommittedEventStream(calendarEvent.CalendarEventId, calendarEventStream);
-                eventStore.StoreEvents(committedEventStream);
-                eventBus.PublishCommittedEvents(calendarEventStream);
-  
+                RemoveDifferentCalendarEventIfExists(request);
+
+                var aggregateRootEvents = calendarEventStream.Select(c => new AggregateRootEvent(c)).ToArray();
+                commandService.Execute(new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                        request.CalendarEvent.CalendarEventId,
+                        request.CalendarEvent.MetaInfo.ResponsibleId));
+
                 RecordProcessedPackageInfo(calendarEventStream);
             }
             catch (Exception exception)
@@ -120,7 +125,41 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             return Task.FromResult(new OkResponse());
         }
-        
+
+        private void RemoveDifferentCalendarEventIfExists(UploadCalendarEventRequest request)
+        {
+            if (request.CalendarEvent.MetaInfo.InterviewId.HasValue)
+            {
+                var activeCalendarEventByInterviewId = calendarEventStorage.GetCalendarEventForInterview(
+                    request.CalendarEvent.MetaInfo.InterviewId.Value);
+
+                //remove other older CE 
+                if (activeCalendarEventByInterviewId != null &&
+                    activeCalendarEventByInterviewId.Id != request.CalendarEvent.CalendarEventId
+                    && activeCalendarEventByInterviewId.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                {
+                    var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEventByInterviewId.Id,
+                        request.CalendarEvent.MetaInfo.ResponsibleId);
+                    commandService.Execute(deleteCommand);
+                }
+            }
+            else
+            {
+                var activeCalendarEventByAssignmentId = calendarEventStorage.GetCalendarEventForAssigment(
+                    request.CalendarEvent.MetaInfo.AssignmentId);
+
+                //remove other older CE 
+                if (activeCalendarEventByAssignmentId != null &&
+                    activeCalendarEventByAssignmentId.Id != request.CalendarEvent.CalendarEventId
+                    && activeCalendarEventByAssignmentId.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                {
+                    var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEventByAssignmentId.Id,
+                        request.CalendarEvent.MetaInfo.ResponsibleId);
+                    commandService.Execute(deleteCommand);
+                }
+            }
+        }
+
         private bool IsPackageDuplicated(CommittedEvent[] events)
         {
             if (events.Length > 0)
