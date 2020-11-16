@@ -16,9 +16,10 @@ namespace WB.Tests.Integration.PostgreSQLTests
     [TestOf(typeof(PostgresReadSideKeyValueStorage<TestPersistedClass>))]
     public class when_storing_entity_into_key_value_storage : with_postgres_db
     {
-        [NUnit.Framework.OneTimeSetUp]
-        public void context()
+        [Test]
+        public void should_read_item_that_was_stored()
         {
+            DatabaseManagement.InitDatabase(ConnectionStringBuilder.ConnectionString, workspace.CurrentWorkspace());
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new List<Type>()
                 {
@@ -32,18 +33,15 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 sessionProvider: UnitOfWork, 
                 postgreConnectionSettings: new UnitOfWorkConnectionSettings
                 {
-                    ConnectionString = ConnectionStringBuilder.ConnectionString,
-                    ReadSideSchemaName = null
+                    ConnectionString = ConnectionStringBuilder.ConnectionString
                 });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
 
-            BecauseOf();
+            storage.Store(new TestPersistedClass { Date = storedDate }, usedId);
+            
+            storage.GetById(usedId).Date.Should().Be(storedDate);
         }
-
-        public void BecauseOf() => storage.Store(new TestPersistedClass { Date = storedDate }, usedId); 
-
-        [NUnit.Framework.Test] public void should_read_item_that_was_stored() => storage.GetById(usedId).Date.Should().Be(storedDate);
 
         [OneTimeTearDown]
         public void TearDown()

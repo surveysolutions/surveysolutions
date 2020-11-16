@@ -1789,9 +1789,12 @@ namespace WB.Tests.Abc.TestFactories
             result.QuestionnaireId = questionnaireIdentity ?? Create.Entity.QuestionnaireIdentity();
             result.Archived = isArchived;
 
-            var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
-            var readonlyProfile = new ReadonlyProfile();
-            
+            var readonlyUser = new ReadonlyUser
+            {
+            };
+            readonlyUser.RoleIds.Add(UserRoles.Interviewer.ToUserId());
+
+            var readonlyProfile = new HqUserProfile();
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
             result.AsDynamic().Responsible = readonlyUser;
 
@@ -1807,11 +1810,8 @@ namespace WB.Tests.Abc.TestFactories
 
             if (!string.IsNullOrWhiteSpace(questionnaireTitle))
             {
-                result.AsDynamic().Questionnaire = new QuestionnaireLiteViewItem
-                {
-                    Id = questionnaireIdentity?.Id,
-                    Title = questionnaireTitle
-                };
+                result.AsDynamic().Questionnaire = Create.Entity.QuestionnaireBrowseItem(questionnaireId: questionnaireIdentity?.QuestionnaireId, 
+                    version: questionnaireIdentity?.Version, title: questionnaireTitle);
             }
 
             if (updatedAt.HasValue)

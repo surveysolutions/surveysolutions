@@ -24,20 +24,23 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IEventTypeResolver eventTypeResolver;
 
-        private const string tableNameWithSchema = "events.events";
-        private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
+        private string tableNameWithSchema => $"{this.workspaceNameProvider.CurrentWorkspace()}.events";
+        private readonly string[] obsoleteEvents = { "tabletregistered" };
 
         private readonly IUnitOfWork sessionProvider;
         private readonly ILogger<PostgresEventStore> logger;
+        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
         public PostgresEventStore(
             IEventTypeResolver eventTypeResolver,
             IUnitOfWork sessionProvider,
-            ILogger<PostgresEventStore> logger)
+            ILogger<PostgresEventStore> logger,
+            IWorkspaceNameProvider workspaceNameProvider)
         {
             this.eventTypeResolver = eventTypeResolver;
             this.sessionProvider = sessionProvider;
             this.logger = logger;
+            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)

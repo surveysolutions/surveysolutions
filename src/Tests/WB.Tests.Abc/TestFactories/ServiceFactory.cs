@@ -41,6 +41,7 @@ using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
@@ -342,7 +343,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public TeamViewFactory TeamViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null)
-            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>(), Mock.Of<IUnitOfWork>());
+            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>(), Mock.Of<IUnitOfWork>(), Create.Service.WorkspaceNameProvider());
 
         public ITopologicalSorter<T> TopologicalSorter<T>()
             => new TopologicalSorter<T>();
@@ -1022,14 +1023,6 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>());
         }
 
-        public InterviewFactory InterviewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
-            IUnitOfWork sessionProvider = null,
-            IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage = null)
-        {
-            return new InterviewFactory(sessionProvider ?? Mock.Of<IUnitOfWork>());
-        }
-
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor = null,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null,
@@ -1254,6 +1247,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
+
+        public IWorkspaceNameProvider WorkspaceNameProvider(string worksapceName = null)
+        {
+            return !string.IsNullOrEmpty(worksapceName) ? Mock.Of<IWorkspaceNameProvider>(x => x.CurrentWorkspace() == worksapceName) : new PrimaryWorkspaceNameProvider();
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
