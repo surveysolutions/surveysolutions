@@ -144,12 +144,12 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
           comment
           start
       }
-      identifyingQuestions {
-        question {
+      identifyingData {
+        entity {
           questionText
           label
         }
-        answer
+        value
       }
     }
   }
@@ -247,7 +247,7 @@ export default {
                             {
                                 OR: [
                                     { key_starts_with: search.toLowerCase() },
-                                    { identifyingQuestions_some: {
+                                    { identifyingData_some: {
                                         valueLowerCase_starts_with: search.toLowerCase(),
                                     },
                                     }],
@@ -460,7 +460,7 @@ export default {
                     width: '50px',
                 },
                 {
-                    data: 'identifyingQuestions',
+                    data: 'identifyingData',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
@@ -468,11 +468,11 @@ export default {
                     render(data) {
                         const delimiter = self.mode == 'dense'
 
-                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
-                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
+                        var entitiesWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
                         })
 
-                        const dom = join(questionsWithTitles, ', ')
+                        const dom = join(entitiesWithTitles, ', ')
                         return dom
                     },
                     responsivePriority: 4,
