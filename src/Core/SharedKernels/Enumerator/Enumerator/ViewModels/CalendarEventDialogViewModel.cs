@@ -6,7 +6,9 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -14,9 +16,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         public Guid? InterviewId { get; set; }
         public int AssignmentId { get; set; }
-        public Guid? CalendarEventId { get; set; }
-        public DateTimeOffset? Start { get; set; }
-        public string? Comment { get; set; }
         public Action? OkCallback { get; set; }
     }
 
@@ -25,20 +24,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IMvxNavigationService navigationService;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
+        private readonly ICalendarEventStorage calendarEventStorage;
 
         private CalendarEventViewModelArgs? initValues;
         private TimeSpan timeEvent;
         private DateTime dateEvent;
         private string? comment;
-
+        private CalendarEvent? calendarEvent;
 
         public CalendarEventDialogViewModel(IMvxNavigationService navigationService,
             ICommandService commandService,
-            IPrincipal principal)
+            IPrincipal principal,
+            ICalendarEventStorage calendarEventStorage)
         {
             this.navigationService = navigationService;
             this.commandService = commandService;
             this.principal = principal;
+            this.calendarEventStorage = calendarEventStorage;
         }
 
         public override void Prepare(CalendarEventViewModelArgs param)
@@ -47,9 +49,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             initValues = param;
 
-            DateEvent = param.Start?.LocalDateTime ?? DateTime.Today.AddDays(1);
-            TimeEvent = param.Start?.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
-            Comment = param.Comment;
+            calendarEvent = param.InterviewId.HasValue
+                ? calendarEventStorage.GetCalendarEventForInterview(param.InterviewId.Value)
+                : calendarEventStorage.GetCalendarEventForAssigment(param.AssignmentId);
+
+            DateEvent = calendarEvent?.Start.LocalDateTime ?? DateTime.Today.AddDays(1);
+            TimeEvent = calendarEvent?.Start.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
+            Comment = calendarEvent?.Comment;
         }
 
         public TimeSpan TimeEvent
@@ -87,12 +93,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var dateTime = new DateTime(DateEvent.Year, DateEvent.Month, DateEvent.Day, TimeEvent.Hours,
                 TimeEvent.Minutes, TimeEvent.Seconds, DateTimeKind.Local);
 
-            if (dateTime != initValues.Start?.LocalDateTime || initValues.Comment != Comment)
+            if (dateTime != calendarEvent?.Start.LocalDateTime || calendarEvent?.Comment != Comment)
             {
                 var userId = principal.CurrentUserIdentity.UserId;
-                ICommand command = !initValues.CalendarEventId.HasValue
+                ICommand command = calendarEvent == null
                     ? (ICommand)new CreateCalendarEventCommand(Guid.NewGuid(), userId, dateTime, initValues.InterviewId, initValues.AssignmentId, Comment)
-                    : new UpdateCalendarEventCommand(initValues.CalendarEventId.Value, userId, dateTime, Comment);
+                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, dateTime, Comment);
 
                 commandService.Execute(command);
                 
