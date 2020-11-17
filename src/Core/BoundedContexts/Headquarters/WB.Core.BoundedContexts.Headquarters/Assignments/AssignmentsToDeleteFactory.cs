@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -13,15 +12,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     class AssignmentsToDeleteFactory : IAssignmentsToDeleteFactory
     {
         private readonly IUnitOfWork sessionFactory;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
         private readonly ILogger<AssignmentsToDeleteFactory> logger;
 
         public AssignmentsToDeleteFactory(IUnitOfWork sessionFactory,
-            IWorkspaceNameProvider workspaceNameProvider,
             ILogger<AssignmentsToDeleteFactory> logger)
         {
             this.sessionFactory = sessionFactory;
-            this.workspaceNameProvider = workspaceNameProvider;
             this.logger = logger;
         }
 
@@ -45,8 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .DeleteAsync();*/
 
             
-            var queryText = $"DELETE FROM {this.workspaceNameProvider.CurrentWorkspace()}.events as e " +
-                            $"USING {this.workspaceNameProvider.CurrentWorkspace()}.assignments as a " +
+            var queryText = $"DELETE FROM events as e " +
+                            $"USING assignments as a " +
                             $"WHERE e.eventsourceid = a.publickey " +
                             $"  AND a.questionnaireid = :questionnaireId " +
                             $"  AND a.questionnaireversion = :questionnaireVersion ";

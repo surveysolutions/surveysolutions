@@ -61,7 +61,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             var questionnaireStorageLocal = PrepareQuestionnaire(questionnaire, 1);
 
             this.denormalizer = new InterviewStatisticsReportDenormalizer(questionnaireStorageLocal);
-            this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork, Create.Service.WorkspaceNameProvider()));
+            this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
         }
 
         [Test]

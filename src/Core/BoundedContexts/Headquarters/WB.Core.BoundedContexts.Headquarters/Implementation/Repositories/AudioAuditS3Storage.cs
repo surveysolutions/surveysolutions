@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             IExternalFileStorage externalFileStorage,
             IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor,
             IWorkspaceNameProvider workspaceNameProvider,
-            IUnitOfWork unitOfWork) : base(unitOfWork, workspaceNameProvider)
+            IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this.externalFileStorage = externalFileStorage ?? throw new ArgumentNullException(nameof(externalFileStorage));
             this.filePlainStorageAccessor = filePlainStorageAccessor ?? throw new ArgumentNullException(nameof(filePlainStorageAccessor));

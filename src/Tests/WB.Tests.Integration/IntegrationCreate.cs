@@ -6,25 +6,21 @@ using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using Ncqrs;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
-using NHibernate.Properties;
 using NHibernate.Tool.hbm2ddl;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -36,7 +32,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -358,8 +353,6 @@ namespace WB.Tests.Integration
             return new PostgresReadSideKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
                 postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
-                Create.Service.WorkspaceNameProvider(),
-                Mock.Of<ILogger>(),
                 Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
         }
@@ -425,7 +418,7 @@ namespace WB.Tests.Integration
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
-            return new UnitOfWork(factory, Mock.Of<ILogger>());
+            return new UnitOfWork(factory, Mock.Of<ILogger<UnitOfWork>>(), new UnitOfWorkConnectionSettings(), Create.Service.WorkspaceNameProvider());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)

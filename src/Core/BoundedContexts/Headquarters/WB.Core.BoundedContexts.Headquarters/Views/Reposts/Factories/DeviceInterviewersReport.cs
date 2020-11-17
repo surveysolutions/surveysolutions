@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
@@ -22,17 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IUnitOfWork unitOfWork;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserViewFactory userViewFactory;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
         public DeviceInterviewersReport(IUnitOfWork unitOfWork,
             IInterviewerVersionReader interviewerVersionReader,
-            IUserViewFactory userViewFactory,
-            IWorkspaceNameProvider workspaceNameProvider)
+            IUserViewFactory userViewFactory)
         {
             this.unitOfWork = unitOfWork;
             this.interviewerVersionReader = interviewerVersionReader;
             this.userViewFactory = userViewFactory;
-            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         public async Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input)
@@ -50,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var targetInterviewerVersion = await interviewerVersionReader.InterviewerBuildNumber();
 
             var sql = GetSqlTexts(input.SupervisorId.HasValue ? ReportByInterviewers : ReportBySupervisors);
-            var fullQuery = string.Format(sql, order.ToSqlOrderBy(), workspaceNameProvider.CurrentWorkspace());
+            var fullQuery = string.Format(sql, order.ToSqlOrderBy());
 
             var connection = unitOfWork.Session.Connection;
             var rows = await connection.QueryAsync<DeviceInterviewersReportLine>(fullQuery, new

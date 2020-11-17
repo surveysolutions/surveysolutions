@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
-using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -13,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
         private readonly ILogger logger;
-        private readonly ISessionFactory sessionFactory;
+        private readonly IInScopeExecutor inScopeExecutor;
         private readonly SyncSettings syncSettings;
         
         public InterviewPackagesService(
@@ -43,14 +44,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
             ILogger logger,
-            ISessionFactory sessionFactory,
+            IInScopeExecutor inScopeExecutor,
             SyncSettings syncSettings)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.packagesTracker = packagesTracker;
             this.logger = logger;
-            this.sessionFactory = sessionFactory;
+            this.inScopeExecutor = inScopeExecutor;
             this.syncSettings = syncSettings;
         }
 
@@ -283,9 +284,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
-                using (var brokenPackageUow = new UnitOfWork(this.sessionFactory, logger))
+                this.inScopeExecutor.Execute(locator =>
                 {
-                    brokenPackageUow.Session.Save(new BrokenInterviewPackage
+                    var unitOfWork = locator.GetInstance<IUnitOfWork>();
+                    unitOfWork.Session.Save(new BrokenInterviewPackage
                     {
                         InterviewId = interview.InterviewId,
                         InterviewKey = existingInterviewKey,
@@ -304,8 +306,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
                         ReprocessAttemptsCount = interview.ProcessAttemptsCount,
                     });
-                    brokenPackageUow.AcceptChanges();
-                }
+                    unitOfWork.AcceptChanges();
+                });
 
                 this.logger.Debug(
                     $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
