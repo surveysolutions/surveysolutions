@@ -804,8 +804,11 @@ your next synchronization</value>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Discard</value>
   </data>
-  <data name="Dashboard_SetCalendarEvent" xml:space="preserve">
-    <value>Set calendar event</value>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Add calendar event</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Edit calendar event</value>
   </data>
   <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
     <value>Delete calendar event</value>

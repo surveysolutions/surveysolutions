@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             initValues = param;
 
-            DateEvent = param.Start?.LocalDateTime ?? DateTime.Today;
+            DateEvent = param.Start?.LocalDateTime ?? DateTime.Today.AddDays(1);
             TimeEvent = param.Start?.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
             Comment = param.Comment;
         }
