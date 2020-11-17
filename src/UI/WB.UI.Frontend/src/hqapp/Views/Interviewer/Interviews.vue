@@ -497,11 +497,9 @@ export default {
                     render(data) {
                         if(data != null && data.start != null)
                             return '<span data-toggle="tooltip" title="'
-                                + data.comment == null ? '<no comment>' : data.comment
+                                + (data.comment == null ? '(no comment)' : data.comment)
                                 + '">'
-                                + moment
-                                    .utc(data.start)
-                                    .local()
+                                + moment(data.start)
                                     .format(DateFormats.dateTimeInList)
                                 + '</span>'
                     },
