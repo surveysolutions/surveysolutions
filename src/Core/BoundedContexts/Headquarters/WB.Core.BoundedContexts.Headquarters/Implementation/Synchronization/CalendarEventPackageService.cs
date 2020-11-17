@@ -26,38 +26,39 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void ProcessPackage(CalendarEventPackage calendarEventPackage)
         {
+            //check responsible
+            //ignore calendar event event if responsible is another person
             try
             {
-                if(!calendarEventPackage.InterviewId.HasValue)
-                    throw new InvalidOperationException("Calendar event package has no interview Id");
                 InScopeExecutor.Current.Execute(serviceLocator =>
                 {
-                    var activeCalendarEventByInterviewId =
-                        calendarEventService.GetActiveCalendarEventByInterviewId(calendarEventPackage
-                            .InterviewId.Value);
-
+                    var activeCalendarEventByInterviewId = calendarEventPackage.InterviewId.HasValue
+                        ? calendarEventService.GetActiveCalendarEventForInterviewId(calendarEventPackage.InterviewId.Value)
+                        : calendarEventService.GetActiveCalendarEventForAssignmentId(calendarEventPackage.AssignmentId);
+                    
                     //remove other older CE 
                     if (activeCalendarEventByInterviewId != null &&
-                        activeCalendarEventByInterviewId.PublicKey != calendarEventPackage.CalendarEventId
-                        && activeCalendarEventByInterviewId.UpdateDate < calendarEventPackage.LastUpdateDate)
+                            activeCalendarEventByInterviewId.PublicKey != calendarEventPackage.CalendarEventId
+                            && activeCalendarEventByInterviewId.UpdateDate < calendarEventPackage.LastUpdateDate)
                     {
-                        serviceLocator.GetInstance<ICommandService>().Execute(
-                            new DeleteCalendarEventCommand(activeCalendarEventByInterviewId.PublicKey,
-                                calendarEventPackage.ResponsibleId),
-                            this.syncSettings.Origin);
+                            serviceLocator.GetInstance<ICommandService>().Execute(
+                                new DeleteCalendarEventCommand(activeCalendarEventByInterviewId.PublicKey,
+                                    calendarEventPackage.ResponsibleId),
+                                this.syncSettings.Origin);
                     }
-                    
-                    var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
-                        .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events.Replace(@"\u0000", ""));
 
-                    //validate stream
-                    //merge if there are changes on server?
+                    var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
+                            .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events.Replace(@"\u0000", ""));
+
+                        //validate stream
+                        //merge if there are changes on server?
 
                     serviceLocator.GetInstance<ICommandService>().Execute(
-                        new SyncCalendarEventEventsCommand(aggregateRootEvents,
-                            calendarEventPackage.CalendarEventId,
-                            calendarEventPackage.ResponsibleId),
+                            new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                                calendarEventPackage.CalendarEventId,
+                                calendarEventPackage.ResponsibleId),
                             this.syncSettings.Origin);
+                    
                 });
 
             }
