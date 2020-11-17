@@ -496,10 +496,14 @@ export default {
                     searchable: false,
                     render(data) {
                         if(data != null && data.start != null)
-                            return '<span data-toggle="tooltip" title="' + data.comment + '">' + moment
-                                .utc(data.start)
-                                .local()
-                                .format(DateFormats.dateTimeInList) + '</span>'
+                            return '<span data-toggle="tooltip" title="'
+                                + data.comment == null ? '<no comment>' : data.comment
+                                + '">'
+                                + moment
+                                    .utc(data.start)
+                                    .local()
+                                    .format(DateFormats.dateTimeInList)
+                                + '</span>'
                     },
                     width: '180px',
                 },
