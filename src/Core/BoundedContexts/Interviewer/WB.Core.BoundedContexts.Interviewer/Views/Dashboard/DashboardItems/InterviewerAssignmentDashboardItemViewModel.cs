@@ -45,7 +45,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.SetCalendarEventAsync),
-                Label = EnumeratorUIResources.Dashboard_SetCalendarEvent
+                Label = Assignment.CalendarEvent.HasValue 
+                    ? EnumeratorUIResources.Dashboard_EditCalendarEvent
+                    : EnumeratorUIResources.Dashboard_AddCalendarEvent
             });
 
             Actions.Add(new ActionDefinition

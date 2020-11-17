@@ -106,6 +106,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Добавить время посещения.
+        /// </summary>
+        public static string Dashboard_AddCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_AddCalendarEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Назначить.
         /// </summary>
         public static string Dashboard_Assign {
@@ -193,6 +202,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Dashboard_Discard {
             get {
                 return ResourceManager.GetString("Dashboard_Discard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Редактировать время посещения.
+        /// </summary>
+        public static string Dashboard_EditCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_EditCalendarEvent", resourceCulture);
             }
         }
         
@@ -394,15 +412,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Dashboard_SearchWatermark {
             get {
                 return ResourceManager.GetString("Dashboard_SearchWatermark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Установить время посещения.
-        /// </summary>
-        public static string Dashboard_SetCalendarEvent {
-            get {
-                return ResourceManager.GetString("Dashboard_SetCalendarEvent", resourceCulture);
             }
         }
         

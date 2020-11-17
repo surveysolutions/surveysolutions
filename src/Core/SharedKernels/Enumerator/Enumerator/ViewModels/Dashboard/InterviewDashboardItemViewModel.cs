@@ -84,7 +84,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.SetCalendarEventAsync, () => this.isInterviewReadyToLoad),
-                Label = EnumeratorUIResources.Dashboard_SetCalendarEvent
+                Label = interview.CalendarEvent.HasValue 
+                    ? EnumeratorUIResources.Dashboard_EditCalendarEvent
+                    : EnumeratorUIResources.Dashboard_AddCalendarEvent
             });
 
             Actions.Add(new ActionDefinition
