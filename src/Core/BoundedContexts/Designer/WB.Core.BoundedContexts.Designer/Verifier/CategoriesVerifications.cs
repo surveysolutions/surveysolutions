@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical("WB0292", VariableNameIsEmpty, string.Format(VerificationMessages.WB0292)),
             Critical("WB0293", VariableNameIsKeywords, VerificationMessages.WB0293),
             Critical("WB0294", VariableNameHasSpecialCharacters, VerificationMessages.WB0294),
-            Critical("WB0295", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0295)
+            Critical("WB0295", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0295),
+            Critical("WB0312", MustHaveTwoOptionsMinimum, VerificationMessages.WB0312)
         };
 
         private bool HasDuplicatedPair_Id_ParentId(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
@@ -59,6 +60,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (duplicated.Any()) return true;
 
             return false;
+        } 
+        
+        private bool MustHaveTwoOptionsMinimum(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var items = this.categoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id);
+            return items.Count() < 2;
         }
 
         private static bool VariableNameIsEmpty(Categories entity) =>
@@ -93,6 +100,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical(string code, Func<Categories, bool> hasError, string message) =>
             questionnaire => 
                 questionnaire.Categories.Where(entity => hasError(entity)).Select(entity =>
+                QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireEntityReference.CreateForCategories(entity.Id)));
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> 
+            Critical(string code, Func<Categories, MultiLanguageQuestionnaireDocument, bool> hasError, string message) =>
+            questionnaire => questionnaire.Categories.Where(entity => hasError(entity, questionnaire)).Select(entity =>
                 QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireEntityReference.CreateForCategories(entity.Id)));
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error(string code, Func<Categories, bool> hasError, string message) =>
