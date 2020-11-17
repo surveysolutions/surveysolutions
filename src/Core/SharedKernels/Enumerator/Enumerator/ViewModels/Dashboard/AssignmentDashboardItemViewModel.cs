@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -132,21 +133,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 InterviewId = null,
                 AssignmentId = Assignment.Id,
-                CalendarEventId = Assignment.CalendarEventId,
-                Start = Assignment.CalendarEvent,
-                Comment = Assignment.CalendarEventComment,
                 OkCallback = () => RaiseOnItemUpdated()
             });
         }
 
         protected void RemoveCalendarEvent()
         {
-            if (Assignment.CalendarEventId == null)
+            var calendarEventStorage = serviceLocator.GetInstance<ICalendarEventStorage>();
+            var calendarEvent = calendarEventStorage.GetCalendarEventForAssigment(Assignment.Id);
+
+            if (calendarEvent == null)
                 throw new ArgumentException("Cant delete calendar event, because it didn't setup early");
 
             var commandService = serviceLocator.GetInstance<ICommandService>();
             var principal = serviceLocator.GetInstance<IPrincipal>();
-            var command = new DeleteCalendarEventCommand(Assignment.CalendarEventId.Value,
+            var command = new DeleteCalendarEventCommand(calendarEvent.Id,
                 principal.CurrentUserIdentity.UserId);
             commandService.Execute(command);
             

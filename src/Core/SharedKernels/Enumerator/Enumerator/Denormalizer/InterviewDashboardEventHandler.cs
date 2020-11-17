@@ -55,12 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
                                          IEventHandler<SingleOptionLinkedQuestionAnswered>,
                                          IEventHandler<AreaQuestionAnswered>,
-                                         IEventHandler<InterviewKeyAssigned>,
-                                         
-                                         IEventHandler<CalendarEventCreated>,
-                                         IEventHandler<CalendarEventUpdated>,
-                                         IEventHandler<CalendarEventCompleted>,
-                                         IEventHandler<CalendarEventDeleted>
+                                         IEventHandler<InterviewKeyAssigned>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -195,7 +190,9 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 LastInterviewerOrSupervisorComment = comments
             };
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(questionnaireIdentity, interviewView.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
+            if (questionnaire == null)
+                return;
 
             var prefilledEntitiesList = new List<PrefilledQuestionView>();
 
@@ -644,97 +641,5 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             };
             return prefilledView;
         }
-        
-        public void Handle(IPublishedEvent<CalendarEventCreated> @event)
-        {
-            if (@event.Payload.InterviewId.HasValue)
-            {
-                InterviewView interviewView = this.interviewViewRepository.GetById(@event.Payload.InterviewId.Value.FormatGuid());
-                if (interviewView == null)
-                    return;
-
-                interviewView.CalendarEventId = @event.EventSourceId;
-                interviewView.CalendarEvent = @event.Payload.Start;
-                interviewView.CalendarEventComment = @event.Payload.Comment;
-                this.interviewViewRepository.Store(interviewView);
-            }
-            else
-            {
-                var assignment = assignmentStorage.GetById(@event.Payload.AssignmentId);
-                if (assignment == null)
-                    return;
-
-                assignment.CalendarEventId = @event.EventSourceId;
-                assignment.CalendarEvent = @event.Payload.Start;
-                assignment.CalendarEventComment = @event.Payload.Comment;
-                this.assignmentStorage.Store(assignment);
-            }
-        }
-
-        public void Handle(IPublishedEvent<CalendarEventCompleted> @event)
-        {
-            InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
-            if (interviewView != null)
-            {
-                interviewView.CalendarEvent = null;
-                interviewView.CalendarEventComment = null;
-                this.interviewViewRepository.Store(interviewView);
-                return;
-            }
-
-            var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
-            if (assignment != null)
-            {
-                assignment.CalendarEvent = null;
-                assignment.CalendarEventComment = null;
-                this.assignmentStorage.Store(assignment);
-                return;
-            }
-        }
-
-        public void Handle(IPublishedEvent<CalendarEventDeleted> @event)
-        {
-            InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
-            if (interviewView != null)
-            {
-                interviewView.CalendarEventId = null;
-                interviewView.CalendarEvent = null;
-                interviewView.CalendarEventComment = null;
-                this.interviewViewRepository.Store(interviewView);
-                return;
-            }
-
-            var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
-            if (assignment != null)
-            {
-                assignment.CalendarEventId = null;
-                assignment.CalendarEvent = null;
-                assignment.CalendarEventComment = null;
-                this.assignmentStorage.Store(assignment);
-                return;
-            }
-        }
-
-        public void Handle(IPublishedEvent<CalendarEventUpdated> @event)
-        {
-            InterviewView interviewView = this.interviewViewRepository.FirstOrDefault(i => i.CalendarEventId == @event.EventSourceId);
-            if (interviewView != null)
-            {
-                interviewView.CalendarEvent = @event.Payload.Start;
-                interviewView.CalendarEventComment = @event.Payload.Comment;
-                this.interviewViewRepository.Store(interviewView);
-                return;
-            }
-
-            var assignment = this.assignmentStorage.Query(a => a.CalendarEventId == @event.EventSourceId).FirstOrDefault();
-            if (assignment != null)
-            {
-                assignment.CalendarEvent = @event.Payload.Start;
-                assignment.CalendarEventComment = @event.Payload.Comment;
-                this.assignmentStorage.Store(assignment);
-                return;
-            }
-        }
-
     }
 }
