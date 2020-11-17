@@ -190,9 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 LastInterviewerOrSupervisorComment = comments
             };
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
-            if (questionnaire == null)
-                return;
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(questionnaireIdentity, interviewView.Language);
 
             var prefilledEntitiesList = new List<PrefilledQuestionView>();
 
