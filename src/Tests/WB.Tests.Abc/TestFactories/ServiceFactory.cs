@@ -196,7 +196,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>());
 
         CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null) =>
-            new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>());
+            new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>(),
+                Mock.Of<IPlainStorage<InterviewView>>(),
+                Mock.Of<IAssignmentDocumentsStorage>());
         
         
         public DomainRepository DomainRepository(

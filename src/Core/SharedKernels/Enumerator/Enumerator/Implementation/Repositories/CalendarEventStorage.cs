@@ -25,13 +25,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public CalendarEvent? GetCalendarEventForInterview(Guid interviewId)
         {
             return this.connection.Find<CalendarEvent>(e => 
-                e.InterviewId == interviewId);
+                e.InterviewId == interviewId
+                && e.IsDeleted == false
+                && e.IsCompleted == false);
         }
 
-        public CalendarEvent? GetCalendarEventForAssigment(long assignmentId)
+        public CalendarEvent? GetCalendarEventForAssigment(int assignmentId)
         {
             return this.connection.Find<CalendarEvent>(e => 
-                e.InterviewId == null && e.AssignmentId == assignmentId);
+                e.InterviewId == null 
+                && e.AssignmentId == assignmentId
+                && e.IsDeleted == false
+                && e.IsCompleted == false);
         }
 
         public IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents()
@@ -40,6 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             {
                 var calendarEvents = documents.Connection.Table<CalendarEvent>()
                     .Where(a => a.IsSynchronized == false)
+                    .OrderBy(e => e.Order)
                     .ToList();
 
                 return calendarEvents;
@@ -51,7 +57,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return RunInTransaction(documents =>
             {
                 var calendarEvents = documents.Connection.Table<CalendarEvent>()
-                    .Where(a => a.UserId == userId)
+                    .Where(calendarEvent => calendarEvent.UserId == userId
+                                        && calendarEvent.IsDeleted != true
+                                        && calendarEvent.IsCompleted != true)
+                    .OrderBy(calendarEvent => calendarEvent.Order)
                     .ToList();
 
                 return calendarEvents;

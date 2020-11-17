@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly IAuditLogService auditLogService;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUserInteractionService userInteractionService;
+        private readonly ICalendarEventStorage calendarEventStorage;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -48,7 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IAuditLogService auditLogService, 
             IInterviewAnswerSerializer answerSerializer, 
             IUserInteractionService userInteractionService,
-            IJsonAllTypesSerializer serializer) 
+            IJsonAllTypesSerializer serializer,
+            ICalendarEventStorage calendarEventStorage) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
                 userInteractionService, interviewsRepository, serializer)
         {
@@ -61,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.auditLogService = auditLogService;
             this.answerSerializer = answerSerializer;
             this.userInteractionService = userInteractionService;
+            this.calendarEventStorage = calendarEventStorage;
         }
 
         protected int AssignmentId { get; set; }
@@ -140,14 +144,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 assignment.CreatedInterviewsCount = (assignment.CreatedInterviewsCount ?? 0) + 1;
                 assignmentsRepository.Store(assignment);
 
-                if (assignment.CalendarEventId.HasValue && assignment.CalendarEvent.HasValue)
+                var calendarEvent = calendarEventStorage.GetCalendarEventForAssigment(assignment.Id);
+                if (calendarEvent != null)
                 {
                     var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
                         interviewerIdentity.UserId,
-                        assignment.CalendarEvent.Value.UtcDateTime,
+                        calendarEvent.Start,
                         interviewId,
                         assignment.Id,
-                        assignment.CalendarEventComment);
+                        calendarEvent.Comment);
                     commandService.Execute(createCalendarEvent);
                 }
                 

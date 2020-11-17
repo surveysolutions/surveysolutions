@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
     {
         CalendarEvent? GetCalendarEventForInterview(Guid interviewId);
 
-        CalendarEvent? GetCalendarEventForAssigment(long assignmentId);
+        CalendarEvent? GetCalendarEventForAssigment(int assignmentId);
         void Store(CalendarEvent calendarEvent);
         CalendarEvent GetById(Guid calendarEventId);
         void Remove(Guid calendarEventId);
