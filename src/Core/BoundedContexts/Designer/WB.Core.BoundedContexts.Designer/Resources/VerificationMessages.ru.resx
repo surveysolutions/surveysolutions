@@ -843,4 +843,7 @@
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
       <value>Ссылка на скрытую переменную запрещена</value>
   </data>
+  <data name="WB0312" xml:space="preserve">
+      <value>Категория должна иметь минимум 2 опции</value>
+  </data>
 </root>
