@@ -6,7 +6,6 @@ using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
 using Polly.Bulkhead;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -20,8 +19,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IUnitOfWork sessionProvider;
 
         public PostgresReadSideKeyValueStorage(IUnitOfWork unitOfWork, 
-            UnitOfWorkConnectionSettings connectionSettings, IWorkspaceNameProvider workspaceNameProvider, ILogger logger, IMemoryCache memoryCache, IEntitySerializer<TEntity> entitySerializer) 
-            : base(connectionSettings.ConnectionString, workspaceNameProvider.CurrentWorkspace(), logger, memoryCache, entitySerializer)
+            UnitOfWorkConnectionSettings connectionSettings, IMemoryCache memoryCache, IEntitySerializer<TEntity> entitySerializer) 
+            : base(connectionSettings.ConnectionString, null, memoryCache, entitySerializer)
         {
             this.sessionProvider = unitOfWork;
 

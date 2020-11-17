@@ -1,21 +1,27 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Impl;
-using WB.Core.GenericSubdomains.Portable.Services;
+using Npgsql;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
     [DebuggerDisplay("Id#{Id}; SessionId: {SessionId}")]
     public sealed class UnitOfWork : IUnitOfWork
     {
+        private static ConcurrentDictionary<string, string> connectionStringCache = new ConcurrentDictionary<string, string>();
+        
         private readonly ISessionFactory sessionFactory;
-        private readonly ILogger logger;
-        private ISession session;
-        private ITransaction transaction;
+        private readonly ILogger<UnitOfWork> logger;
+        private readonly UnitOfWorkConnectionSettings connectionSettings;
+        private readonly IWorkspaceNameProvider workspaceNameProvider;
+        private ISession? session;
+        private ITransaction? transaction;
         private bool isDisposed = false;
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
@@ -23,12 +29,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private static long counter = 0;
         public long Id { get; }
         
-        public UnitOfWork(ISessionFactory sessionFactory, ILogger logger)
+        public UnitOfWork(ISessionFactory sessionFactory, 
+            ILogger<UnitOfWork> logger,
+            UnitOfWorkConnectionSettings connectionSettings,
+            IWorkspaceNameProvider workspaceNameProvider)
         {
             if (session != null) throw new InvalidOperationException("Unit of work already started");
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.sessionFactory = sessionFactory;
             this.logger = logger;
+            this.connectionSettings = connectionSettings;
+            this.workspaceNameProvider = workspaceNameProvider;
             Id = Interlocked.Increment(ref counter);
         }
 
@@ -50,13 +61,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 if (isDisposed)
                 {
-                    logger.Info($"Error getting session. Old sessionId:{SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                    logger.LogInformation("Error getting session. Old SessionId:{SessionId} Thread:{ManagedThreadId}", SessionId, Thread.CurrentThread.ManagedThreadId);
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
-
+                
                 if (this.session == null)
                 {
-                    session = sessionFactory.OpenSession();
+                    string connectionString = connectionStringCache.GetOrAdd(
+                        this.workspaceNameProvider.CurrentWorkspace(),
+                        key =>
+                        {
+                            NpgsqlConnectionStringBuilder connectionStringBuilder =
+                                new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
+                                {
+                                    SearchPath = key
+                                };
+
+                            return connectionStringBuilder.ToString();
+                        });
+                    
+                    var connection = new NpgsqlConnection(connectionString);
+                    connection.Open();
+                    session = sessionFactory.WithOptions()
+                        .Connection(connection)
+                        .OpenSession();
                     transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
                     SessionId = (session as SessionImpl)?.SessionId;
                 }
@@ -82,7 +110,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
 
             transaction?.Dispose();
-            session?.Dispose();
+            session?.Close().Close();
 
             isDisposed = true;
         }

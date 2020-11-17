@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Fetching;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 
@@ -17,17 +16,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IUserRepository userRepository;
         private readonly IUnitOfWork sessionProvider;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
         public TeamViewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, 
             IUserRepository userRepository,
-            IUnitOfWork sessionProvider,
-            IWorkspaceNameProvider workspaceNameProvider)
+            IUnitOfWork sessionProvider)
         {
             this.interviewSummaryReader = interviewSummaryReader;
             this.userRepository = userRepository;
             this.sessionProvider = sessionProvider;
-            this.workspaceNameProvider = workspaceNameProvider;
         }
          
         public UsersView GetAssigneeSupervisors(int pageSize, string searchBy)
@@ -135,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 SELECT u.username, u.userid 
                 FROM (
                     SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username, coalesce(i1.teamleadid, i2.responsibleid) userid
-                      FROM {this.workspaceNameProvider.CurrentWorkspace()}.interviewsummaries i1
+                      FROM interviewsummaries i1
                         FULL JOIN readside.interviewsummaries AS i2 ON 1 = 2
                 ) AS u
                 WHERE @searchText is NULL OR LOWER(u.username) like @searchTextForLike
@@ -158,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 FROM (
                     SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username
                       FROM readside.interviewsummaries i1
-                        FULL JOIN {this.workspaceNameProvider.CurrentWorkspace()}.interviewsummaries AS i2 ON 1 = 2
+                        FULL JOIN interviewsummaries AS i2 ON 1 = 2
                 ) AS u
                 WHERE @searchText is NULL OR LOWER(u.username) like @searchTextForLike",
                     new

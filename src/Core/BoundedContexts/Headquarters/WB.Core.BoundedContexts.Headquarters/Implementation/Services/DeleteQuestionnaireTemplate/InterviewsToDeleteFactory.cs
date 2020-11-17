@@ -14,7 +14,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
@@ -26,22 +25,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ILogger<InterviewsToDeleteFactory> logger;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
         private const int BatchSize = 100;
 
         public InterviewsToDeleteFactory(IUnitOfWork sessionFactory, IImageFileStorage imageFileStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader,
             IQuestionnaireStorage questionnaireStorage,
-            ILogger<InterviewsToDeleteFactory> logger,
-            IWorkspaceNameProvider workspaceNameProvider)
+            ILogger<InterviewsToDeleteFactory> logger)
         {
             this.sessionFactory = sessionFactory;
             this.imageFileStorage = imageFileStorage;
             this.interviewsReader = interviewsReader;
             this.questionnaireStorage = questionnaireStorage;
             this.logger = logger;
-            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         private async Task RemoveAllInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
@@ -63,10 +59,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                             && s.QuestionnaireVersion == questionnaireIdentity.Version))
                 .DeleteAsync();*/
 
-            var currentWorkspace = this.workspaceNameProvider.CurrentWorkspace();
-            this.logger.LogWarning("Removing all events for {questionnaireId} from {workspace}", questionnaireIdentity, currentWorkspace);
-            var queryText = $"DELETE FROM {currentWorkspace}.events as e " +
-                            $"USING {currentWorkspace}.interviewsummaries as i " +
+            this.logger.LogWarning("Removing all events for {questionnaireId}", questionnaireIdentity);
+            var queryText = $"DELETE FROM events as e " +
+                            $"USING interviewsummaries as i " +
                             $"WHERE e.eventsourceid = i.interviewid " +
                             $"  AND i.questionnaireid = :questionnaireId " +
                             $"  AND i.questionnaireversion = :questionnaireVersion ";

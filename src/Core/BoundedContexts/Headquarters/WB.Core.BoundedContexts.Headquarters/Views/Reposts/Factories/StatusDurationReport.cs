@@ -6,33 +6,28 @@ using System.Threading.Tasks;
 using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
-
-namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
+namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     public class StatusDurationReport : IStatusDurationReport
     {
         private readonly UnitOfWorkConnectionSettings plainStorageSettings;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
         private const string InterviewsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportInterviews.sql";
         private const string AssignmentsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportAssignments.sql";
 
-        public StatusDurationReport(UnitOfWorkConnectionSettings plainStorageSettings,
-            IWorkspaceNameProvider workspaceNameProvider)
+        public StatusDurationReport(UnitOfWorkConnectionSettings plainStorageSettings)
         {
             this.plainStorageSettings = plainStorageSettings;
-            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         class InterviewsCounterObject
@@ -208,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
             using (StreamReader reader = new StreamReader(stream))
             {
                 string query = reader.ReadToEnd();
-                return string.Format(query, workspaceNameProvider.CurrentWorkspace());
+                return query;
             }
         }
 
