@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public AudioAuditFileStorage(
             IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor,
             IWorkspaceNameProvider workspaceNameProvider,
-            IUnitOfWork unitOfWork) : base(unitOfWork, workspaceNameProvider)
+            IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }

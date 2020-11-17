@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
@@ -12,13 +11,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
     public abstract class AudioAuditStorageBase : IAudioAuditFileStorage
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
 
-        public AudioAuditStorageBase(IUnitOfWork unitOfWork,
-            IWorkspaceNameProvider workspaceNameProvider)
+        public AudioAuditStorageBase(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            this.workspaceNameProvider = workspaceNameProvider;
         }
 
         public abstract Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId);
@@ -30,10 +26,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public Task<bool> HasAnyAudioAuditFilesStoredAsync(QuestionnaireIdentity questionnaire)
         {
             return this.unitOfWork.Session
-                .CreateSQLQuery(@$"select exists (
+                .CreateSQLQuery(@"select exists (
 	                select 1
-	                from {this.workspaceNameProvider.CurrentWorkspace()}.audioauditfiles a
-	                join {this.workspaceNameProvider.CurrentWorkspace()}.interviewsummaries s on s.interviewid = a.interviewid
+	                from audioauditfiles a
+	                join .interviewsummaries s on s.interviewid = a.interviewid
 	                where s.questionnaireidentity = :questionnaireId
                 )")
                 .SetParameter("questionnaireId", questionnaire.Id)

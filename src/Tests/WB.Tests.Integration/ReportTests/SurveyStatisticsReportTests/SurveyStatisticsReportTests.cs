@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             Because();
             
-            this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork, Create.Service.WorkspaceNameProvider()));
+            this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
         }
 
         private void Because()

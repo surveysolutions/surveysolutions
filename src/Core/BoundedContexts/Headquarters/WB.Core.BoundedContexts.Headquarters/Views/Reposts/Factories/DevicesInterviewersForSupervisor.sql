@@ -16,23 +16,23 @@ from users.users u
 	LEFT JOIN 
 	(
 		SELECT dsi1."DeviceDate", dsi1."SyncDate", dsi1."AndroidSdkVersion", dsi1."InterviewerId", dsi1."StorageFreeInBytes"
-		FROM {1}.devicesyncinfo dsi1
+		FROM devicesyncinfo dsi1
 		INNER JOIN (SELECT dsi."InterviewerId", MAX(dsi."Id") AS maxid
-			    FROM {1}.devicesyncinfo dsi GROUP BY dsi."InterviewerId") AS p2
+			    FROM devicesyncinfo dsi GROUP BY dsi."InterviewerId") AS p2
 		  ON (dsi1."Id" = p2.maxid)
-		  LEFT JOIN  {1}.devicesyncstatistics dss on dsi1."StatisticsId" = dss."Id"
+		  LEFT JOIN  devicesyncstatistics dss on dsi1."StatisticsId" = dss."Id"
 		) AS lastSync ON lastSync."InterviewerId" = u."Id" 
 -- find if there was a sync with > 0 uploaded interviews
-LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM {1}.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM {1}.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "UploadedInterviewsCount" > 0)) 
+LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "UploadedInterviewsCount" > 0)) 
 	AS anySync ON anySync."InterviewerId" = u."Id"
 
 -- find how many interviewers have more than 1 tablet
-LEFT JOIN (SELECT "InterviewerId" FROM {1}.devicesyncinfo dsi 
+LEFT JOIN (SELECT "InterviewerId" FROM devicesyncinfo dsi 
 GROUP BY "InterviewerId"
 HAVING COUNT(DISTINCT "DeviceId") > 1) AS wasReassign ON wasReassign."InterviewerId" = u."Id"
 
 -- find if there was any questionnaire received
-LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM {1}.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM {1}.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 
+LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 
 	AS anySyncWithQuestionnaire ON anySyncWithQuestionnaire."InterviewerId" = u."Id"
 
 

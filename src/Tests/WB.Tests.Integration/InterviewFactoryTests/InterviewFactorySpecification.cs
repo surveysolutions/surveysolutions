@@ -128,7 +128,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected InterviewFactory CreateInterviewFactory()
         {
-            return new InterviewFactory(sessionProvider: this.UnitOfWork, Create.Service.WorkspaceNameProvider());
+            return new InterviewFactory(sessionProvider: this.UnitOfWork);
         }
 
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum

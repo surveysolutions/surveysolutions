@@ -52,7 +52,6 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 {
@@ -123,7 +122,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             var eventStore = new PostgresEventStore(new EventTypeResolver(
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly), 
-                unitOfWork, Mock.Of<ILogger<PostgresEventStore>>(), workspace);
+                unitOfWork, Mock.Of<ILogger<PostgresEventStore>>());
             var interviewEvents = eventStore.Read(interviewId, 0);
             Assert.That(interviewEvents.Count(), Is.EqualTo(0));
 
@@ -139,7 +138,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly),
                 unitOfWork,
-                Mock.Of<ILogger<PostgresEventStore>>(), workspace);
+                Mock.Of<ILogger<PostgresEventStore>>());
 
             eventStore.Store(new UncommittedEventStream(null, new UncommittedEvent[]
             {
@@ -202,8 +201,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         private HqQuestionnaireStorage CreateQuestionnaireStorage(IUnitOfWork unitOfWork)
         {
             return new HqQuestionnaireStorage(
-                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(unitOfWork, unitOfWorkConnectionSettings, 
-                    workspace, Mock.Of<ILogger>(), memoryCache, new EntitySerializer<QuestionnaireDocument>()),
+                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(unitOfWork, unitOfWorkConnectionSettings, memoryCache, new EntitySerializer<QuestionnaireDocument>()),
                 new TranslationStorage(new PostgresPlainStorageRepository<TranslationInstance>(unitOfWork)),
                 new QuestionnaireTranslator(), 
                 new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(unitOfWork, memoryCache),
@@ -272,8 +270,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 Mock.Of<IImageFileStorage>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<ILogger<InterviewsToDeleteFactory>>(), 
-                workspace);
+                Mock.Of<ILogger<InterviewsToDeleteFactory>>());
 
             IPlainStorageAccessor<TranslationInstance> translations =
                 new PostgresPlainStorageRepository<TranslationInstance>(unitOfWork);
@@ -284,15 +281,11 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
             var lookupTablesStorage = new PostgresPlainKeyValueStorage<QuestionnaireLookupTable>(unitOfWork,
                 unitOfWorkConnectionSettings,
-                this.workspace,
-                Mock.Of<ILogger>(),
                 memoryCache,
                 new EntitySerializer<QuestionnaireLookupTable>());
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
             var questionnaireBackupStorage = new PostgresPlainKeyValueStorage<QuestionnaireBackup>(unitOfWork,
                 unitOfWorkConnectionSettings,
-                this.workspace,
-                Mock.Of<ILogger>(),
                 memoryCache,
                 new EntitySerializer<QuestionnaireBackup>());
             var commandService = new Mock<ICommandService>();
@@ -317,9 +310,9 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 lookupTablesStorage,
                 hqQuestionnaireStorage,
                 null,
-                new InvitationsDeletionService(unitOfWork, this.workspace),
+                new InvitationsDeletionService(unitOfWork),
                 Mock.Of<IAggregateRootCache>(),
-                new AssignmentsToDeleteFactory(unitOfWork, this.workspace, Mock.Of<ILogger<AssignmentsToDeleteFactory>>()),
+                new AssignmentsToDeleteFactory(unitOfWork, Mock.Of<ILogger<AssignmentsToDeleteFactory>>()),
                 new ReusableCategoriesStorage(new PostgresPlainStorageRepository<ReusableCategoricalOptions>(unitOfWork)),
                 questionnaireBackupStorage
             );

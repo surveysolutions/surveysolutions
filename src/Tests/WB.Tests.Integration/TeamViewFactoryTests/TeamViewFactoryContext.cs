@@ -110,8 +110,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
             return new TeamViewFactory(
                 interviewSummaryReader: interviewSummaryRepository,
                 sessionProvider: this.UnitOfWork,
-                userRepository: userRepository,
-                workspaceNameProvider: workspace);
+                userRepository: userRepository);
         }
 
         protected IUserRepository SetupUserRepositoryWithSupervisor(Guid supervisorId)

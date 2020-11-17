@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -17,7 +16,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public PostgresKeyValueStorageWithCache(string connectionString,
             string schemaName,
-            ILogger logger,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
             : base(connectionString, schemaName, serializer)

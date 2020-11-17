@@ -80,7 +80,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         {
             return new ChartStatisticsViewFactory(UnitOfWork, questionnaires.Object, 
                 cumulativeReportStatusChangeStorage, 
-                questionnaireRepository, Create.Service.WorkspaceNameProvider());
+                questionnaireRepository);
         }
 
         protected void CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(QuestionnaireIdentity questionnaireId, DateTime date, int count)

@@ -49,7 +49,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
@@ -323,10 +322,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
+
             registry.Bind<IWorkspaceNameProvider, PrimaryWorkspaceNameProvider>();
-
-            registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
-
+            registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
+            registry.BindToMethod(ctx =>
+            {
+                var cacheSource = ctx.Resolve<IMemoryCacheSource>();
+                var workspaceNameProvider = ctx.Resolve<IWorkspaceNameProvider>();
+                return cacheSource.GetCache(workspaceNameProvider.CurrentWorkspace());
+            }); // .BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
+            
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
