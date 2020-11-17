@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
+    public abstract class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItemWithEvents, IDisposable
     {
         private readonly IServiceLocator serviceLocator;
         private string idLabel;

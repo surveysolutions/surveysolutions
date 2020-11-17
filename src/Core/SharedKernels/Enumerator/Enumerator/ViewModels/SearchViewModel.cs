@@ -153,9 +153,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         : EnumeratorUIResources.Dashboard_NotFoundSearchResult;
                 }
 
-                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
+                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i =>
+                {
+                    i.OnItemRemoved -= InterviewItemRemoved;
+                    if (i is IDashboardItemWithEvents withEvents)
+                        withEvents.OnItemUpdated -= OnItemUpdated;
+                });
                 this.InvokeOnMainThread(()=>this.UiItems.ReplaceWith(items));
-                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
+                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i =>
+                {
+                    i.OnItemRemoved += InterviewItemRemoved;
+                    if (i is IDashboardItemWithEvents withEvents)
+                        withEvents.OnItemUpdated += OnItemUpdated;
+                });
             }
             catch (OperationCanceledException)
             {
@@ -165,6 +175,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.IsInProgressItemsLoadingCount--;
             }
         }
+
+        protected virtual void OnItemUpdated(object sender, EventArgs args)
+        {
+            if (sender is AssignmentDashboardItemViewModel assignmentModel)
+            {
+                var assignment = this.assignmentsRepository.GetById(assignmentModel.AssignmentId);
+                assignmentModel.Init(assignment);
+            }
+
+            if (sender is InterviewDashboardItemViewModel interviewModel)
+            {
+                var interviewId = interviewModel.InterviewId;
+                var updatedView = interviewViewRepository.GetById(interviewId.FormatGuid());
+                var details = this.identifyingQuestionsRepo
+                    .Where(p => p.InterviewId == interviewId)
+                    .OrderBy(x => x.SortIndex)
+                    .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
+                    .ToList();
+
+                interviewModel.Init(updatedView, details);
+            }
+        }
+
 
         private Task<List<IDashboardItem>> GetViewModelsAsync(string searchText, CancellationToken cancellationToken) =>
             Task.Run(() =>
@@ -213,7 +246,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 bool isMatched = Contains(assignmentItem.Title, searchText)
                                  || Contains(assignmentItem.Id.ToString(), searchText)
-                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searchText)) ?? false);
+                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searchText)) ?? false)
+                                 || Contains(assignmentItem.CalendarEventComment, searchText);
 
                 if (isMatched)
                 {
@@ -234,7 +268,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                                  || Contains(interviewView.QuestionnaireTitle, searchText)
                                  || Contains(interviewView.Assignment?.ToString(), searchText)
                                  || Contains(interviewView.LastInterviewerOrSupervisorComment, searchText)
-                                 || details.Any(pi => Contains(pi.Answer, searchText));
+                                 || details.Any(pi => Contains(pi.Answer, searchText))
+                                 || Contains(interviewView.CalendarEventComment, searchText);
 
                 if (isMatched)
                 {
