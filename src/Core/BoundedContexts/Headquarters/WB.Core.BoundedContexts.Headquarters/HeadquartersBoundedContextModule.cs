@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IWorkspaceNameProvider, PrimaryWorkspaceNameProvider>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
-            registry.BindToMethod(ctx =>
+            registry.BindToMethodInSingletonScope(ctx =>
             {
                 var cacheSource = ctx.Resolve<IMemoryCacheSource>();
                 var workspaceNameProvider = ctx.Resolve<IWorkspaceNameProvider>();
