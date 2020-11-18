@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             {
                 var calendarEvents = documents.Connection.Table<CalendarEvent>()
                     .Where(a => a.IsSynchronized == false)
-                    .OrderBy(e => e.Order)
+                    //.OrderBy(e => e.LastUpdateDate)
                     .ToList();
 
                 return calendarEvents;
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     .Where(calendarEvent => calendarEvent.UserId == userId
                                         && calendarEvent.IsDeleted != true
                                         && calendarEvent.IsCompleted != true)
-                    .OrderBy(calendarEvent => calendarEvent.Order)
+                    //.OrderBy(calendarEvent => "rowid")
                     .ToList();
 
                 return calendarEvents;
