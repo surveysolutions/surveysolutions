@@ -451,9 +451,10 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
                 .InitializesWith<CreateCalendarEventCommand>( aggregate => aggregate.CreateCalendarEvent)
                 .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
-                .StatelessHandles<DeleteCalendarEventCommand>( aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<DeleteCalendarEventCommand>( aggregate => aggregate.DeleteCalendarEvent)
                 .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
-                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent);
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
+                .Handles<RestoreCalendarEventCommand>( aggregate => aggregate.RestoreCalendarEvent);
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration
                 .PreProcessBy<InterviewCacheWarmupPreProcessor>()
