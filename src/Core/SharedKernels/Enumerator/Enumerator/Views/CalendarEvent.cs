@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
     {
         [PrimaryKey]
         public Guid Id { get; set; }
-        //[AutoIncrement]
-        public int? Order { get; set; }
+        //[AutoIncrement, Unique, NotNull]
+        //public int? Order { get; set; }
         public DateTimeOffset Start { get; set; } 
         public string Comment { get; set; }
         public Guid UserId { get; set; }
