@@ -74,16 +74,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                     var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
 
-                    if (calendarEvent != null)
-                    {
-                        //if CE was deleted on server before last change on tablet - restore it
-                        //if it was deleted after - leave it deleted
-                        //could be deleted again later
-                        if(calendarEvent.IsDeleted && calendarEvent.UpdateDate < calendarEventPackage.LastUpdateDate)
+                    //if CE was deleted on server before last change on tablet - restore it
+                    //if it was deleted after - leave it deleted
+                    //could be deleted again later
+                    if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.UpdateDate < calendarEventPackage.LastUpdateDate)
                             serviceLocator.GetInstance<ICommandService>().Execute(
                                 new RestoreCalendarEventCommand(calendarEventPackage.CalendarEventId,
                                     calendarEventPackage.ResponsibleId));
-                    }
 
                     serviceLocator.GetInstance<ICommandService>().Execute(
                             new SyncCalendarEventEventsCommand(aggregateRootEvents,

@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 && e.IsCompleted == false);
         }
 
-        public IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents()
+        public IEnumerable<CalendarEvent> GetNotSynchedCalendarEventsInOrder()
         {
             return RunInTransaction(documents =>
             {

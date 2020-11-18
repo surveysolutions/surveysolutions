@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
-            var calendarEvents = calendarEventStorage.GetNotSynchedCalendarEvents().ToList();
+            var calendarEvents = calendarEventStorage.GetNotSynchedCalendarEventsInOrder().ToList();
 
             var transferProgress = Context.Progress.AsTransferReport();
             
