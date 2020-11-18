@@ -1,9 +1,12 @@
 ﻿#nullable enable
 
 using System;
+using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using MvvmCross;
+using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Platforms.Android.Views.Fragments;
@@ -33,17 +36,27 @@ namespace WB.UI.Shared.Enumerator.Activities
             return view;
         }
 
+        public override void OnDismiss(IDialogInterface dialog)
+        {
+            HideKeyboard();
 
-        // protected override void OnCreate(Bundle? savedInstanceState)
-        // {
-        //     base.OnCreate(savedInstanceState);
-        //     //this.RequestWindowFeature(Window.FEATURE_NO_TITLE);
-        //
-        //     SetContentView(Resource.Layout.calendar_event_dialog);
-        // }
+            base.OnDismiss(dialog);
+        }
+        
+        public override void OnStop()
+        {
+            HideKeyboard();
 
-        // public IMvxCommand CancelClick => new MvxCommand(() => Dismiss()); 
-        //
-        // public IMvxCommand OkClick => new MvxCommand(() => (this.Context as Activity)?.Finish());
+            base.OnStop();
+        }
+
+        private void HideKeyboard()
+        {
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
+            var activity = topActivity.Activity;
+
+            activity.RemoveFocusFromEditText();
+            activity.HideKeyboard(View.WindowToken);
+        }
     }
 }
