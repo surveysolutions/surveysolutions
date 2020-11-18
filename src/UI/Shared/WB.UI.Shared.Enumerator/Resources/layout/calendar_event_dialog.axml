@@ -10,7 +10,7 @@
       android:textSize="20dp"
       android:datePickerMode="spinner"
       android:calendarViewShown="false"
-      local:MvxBind="Value DateEvent" />
+      local:MvxBind="Value DateEvent; MinDate MinDate" />
   <MvxTimePicker
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
