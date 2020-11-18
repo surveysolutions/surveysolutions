@@ -135,5 +135,44 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.Single(e => e.Code == "WB0306").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Categories);
             verificationMessages.Single(e => e.Code == "WB0306").References.First().Id.Should().Be(categoriesId);
         }
+        
+        [Test]
+        public void when_verifying_questionnaire_with_reusable_categories_and_category_doesnt_have_options()
+        {
+            // assert
+            var questionId = Guid.Parse("10000000000000000000000000000000");
+            var categoriesId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaire = CreateQuestionnaireDocument(
+                Create.SingleOptionQuestion
+                (
+                    questionId,
+                    variable: "question",
+                    categoriesId: categoriesId
+                ));
+
+            questionnaire.Categories.Add(new Categories
+            {
+                Id = categoriesId,
+                Name = "name"
+            });
+
+            var categoriesService = Mock.Of<ICategoriesService>(x =>
+                x.GetCategoriesById(It.IsAny<Guid>(), categoriesId) == new List<CategoriesItem>().AsQueryable());
+
+            var verifier = CreateQuestionnaireVerifier(categoriesService: categoriesService);
+
+            // act
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            // arrange
+            verificationMessages.ShouldContainCritical("WB0312");
+            var verificationMessage = verificationMessages.Single(e => e.Code == "WB0312");
+            verificationMessage.MessageLevel.Should().Be(VerificationMessageLevel.Critical);
+            verificationMessage.References.Count().Should().Be(1);
+            verificationMessage.References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Categories);
+            verificationMessage.References.First().Id.Should().Be(categoriesId);
+        }
+
     }
 }
