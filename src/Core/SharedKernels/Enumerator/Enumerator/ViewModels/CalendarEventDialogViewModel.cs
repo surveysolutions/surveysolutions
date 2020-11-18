@@ -53,6 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 ? calendarEventStorage.GetCalendarEventForInterview(param.InterviewId.Value)
                 : calendarEventStorage.GetCalendarEventForAssigment(param.AssignmentId);
 
+            MinDate = Convert.ToInt64(DateTime.Today.ToUniversalTime().Subtract(
+                    new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                ).TotalMilliseconds);
             DateEvent = calendarEvent?.Start.LocalDateTime ?? DateTime.Today.AddDays(1);
             TimeEvent = calendarEvent?.Start.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
             Comment = calendarEvent?.Comment;
@@ -64,6 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref timeEvent, value);
         }
 
+        public long MinDate { get; set; }
+        
         public DateTime DateEvent
         {
             get => dateEvent;
