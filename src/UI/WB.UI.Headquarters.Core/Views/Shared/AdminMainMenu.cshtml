@@ -54,6 +54,7 @@
         </ul>
     </li>
     @Html.MainMenuItem("New", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
+    @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.DataExport)
     @if (ViewContext.RouteData.Values["controller"].ToString() == "ControlPanel")
     {
         <li class="dropdown  @(new[] {MenuItem.Administration_AppUpdates, MenuItem.Administration_Config, MenuItem.Administration_InterviewPackages, MenuItem.Administration_Exceptions, MenuItem.Administration_ChangePassword, MenuItem.Administration_ReevaluateInterview}.Contains((MenuItem) page) ? "active" : "")">
