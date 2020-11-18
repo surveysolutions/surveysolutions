@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -18,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
@@ -30,6 +32,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ILiteEventBus eventBus;
         private readonly IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAssignmentDocumentsStorage assignmentStorage;
 
 
         public SupervisorCalendarEventsHandler(ICalendarEventStorage calendarEventStorage,
@@ -38,7 +42,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ILogger logger,
             IJsonAllTypesSerializer serializer,
             ILiteEventBus eventBus,
-            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog)
+            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IAssignmentDocumentsStorage assignmentStorage)
         {
             this.calendarEventStorage = calendarEventStorage;
             this.eventStore = eventStore;
@@ -47,6 +53,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.serializer = serializer;
             this.eventBus = eventBus;
             this.receivedPackagesLog = receivedPackagesLog;
+            this.interviewViewRepository = interviewViewRepository;
+            this.assignmentStorage = assignmentStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -88,35 +96,76 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         
         private Task<OkResponse> UploadCalendarEvent(UploadCalendarEventRequest request)
         {
-            var calendarEvent = request.CalendarEvent;
-
-            this.logger.Info($"Uploading of calendar event {calendarEvent.CalendarEventId} started.");
+            this.logger.Info($"Uploading of calendar event {request.CalendarEvent.CalendarEventId} started.");
 
             var innerwatch = Stopwatch.StartNew();
 
             try
             {
-                var calendarEventStream = this.serializer.Deserialize<CommittedEvent[]>(calendarEvent.Events);
+                var calendarEventStream = this.serializer.Deserialize<CommittedEvent[]>(request.CalendarEvent.Events);
 
                 var isPackageDuplicated = IsPackageDuplicated(calendarEventStream);
                 if (isPackageDuplicated)
                     return Task.FromResult(new OkResponse()); // ignore
 
-                this.logger.Debug($"Calendar events by {calendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Calendar events by {request.CalendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                RemoveDifferentCalendarEventIfExists(request);
+                var deleteCalendarEventAfterApplying = false;
+                var activeCalendarEvent = request.CalendarEvent.MetaInfo.InterviewId.HasValue
+                            ? calendarEventStorage.GetCalendarEventForInterview(request.CalendarEvent.MetaInfo.InterviewId.Value)
+                            : calendarEventStorage.GetCalendarEventForAssigment(request.CalendarEvent.MetaInfo.AssignmentId);
+
+                if (request.CalendarEvent.MetaInfo.InterviewId.HasValue)
+                {
+                    var existingInterview = interviewViewRepository.GetById(request.CalendarEvent.MetaInfo.InterviewId.Value.FormatGuid());
+                    if (existingInterview != null 
+                        && existingInterview.ResponsibleId != request.CalendarEvent.MetaInfo.ResponsibleId)
+                        deleteCalendarEventAfterApplying = true;
+                }
+                else
+                {
+                    var assignment = assignmentStorage.GetById(request.CalendarEvent.MetaInfo.AssignmentId);
+                    if (assignment != null 
+                        && assignment.ResponsibleId != request.CalendarEvent.MetaInfo.ResponsibleId)
+                        deleteCalendarEventAfterApplying = true;
+                }
+
+                //remove other older CE 
+                if (activeCalendarEvent != null &&
+                        activeCalendarEvent.Id != request.CalendarEvent.CalendarEventId
+                        && activeCalendarEvent.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime
+                        && !deleteCalendarEventAfterApplying)
+                {
+                    var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEvent.Id,
+                        request.CalendarEvent.MetaInfo.ResponsibleId);
+                    commandService.Execute(deleteCommand);
+                }
+                
+                var calendarEvent = calendarEventStorage.GetById(request.CalendarEvent.CalendarEventId);
+
+                //if CE was deleted on server before last change on tablet - restore it
+                //if it was deleted after - leave it deleted
+                //could be deleted again later
+                if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                    commandService.Execute(new RestoreCalendarEventCommand(
+                        request.CalendarEvent.CalendarEventId, request.CalendarEvent.MetaInfo.ResponsibleId));
 
                 var aggregateRootEvents = calendarEventStream.Select(c => new AggregateRootEvent(c)).ToArray();
-                commandService.Execute(new SyncCalendarEventEventsCommand(aggregateRootEvents,
-                        request.CalendarEvent.CalendarEventId,
-                        request.CalendarEvent.MetaInfo.ResponsibleId));
 
+                commandService.Execute(new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                            request.CalendarEvent.CalendarEventId,
+                            request.CalendarEvent.MetaInfo.ResponsibleId));
+
+                if (deleteCalendarEventAfterApplying)
+                    commandService.Execute(new DeleteCalendarEventCommand(
+                        request.CalendarEvent.CalendarEventId, request.CalendarEvent.MetaInfo.ResponsibleId));
+     
                 RecordProcessedPackageInfo(calendarEventStream);
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Calendar event by {calendarEvent.CalendarEventId} processing failed. Reason: '{exception.Message}'", exception);
+                this.logger.Error($"Calendar event by {request.CalendarEvent.CalendarEventId} processing failed. Reason: '{exception.Message}'", exception);
                 innerwatch.Restart();
                 throw;
             }
@@ -124,40 +173,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             innerwatch.Stop();
 
             return Task.FromResult(new OkResponse());
-        }
-
-        private void RemoveDifferentCalendarEventIfExists(UploadCalendarEventRequest request)
-        {
-            if (request.CalendarEvent.MetaInfo.InterviewId.HasValue)
-            {
-                var activeCalendarEventByInterviewId = calendarEventStorage.GetCalendarEventForInterview(
-                    request.CalendarEvent.MetaInfo.InterviewId.Value);
-
-                //remove other older CE 
-                if (activeCalendarEventByInterviewId != null &&
-                    activeCalendarEventByInterviewId.Id != request.CalendarEvent.CalendarEventId
-                    && activeCalendarEventByInterviewId.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
-                {
-                    var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEventByInterviewId.Id,
-                        request.CalendarEvent.MetaInfo.ResponsibleId);
-                    commandService.Execute(deleteCommand);
-                }
-            }
-            else
-            {
-                var activeCalendarEventByAssignmentId = calendarEventStorage.GetCalendarEventForAssigment(
-                    request.CalendarEvent.MetaInfo.AssignmentId);
-
-                //remove other older CE 
-                if (activeCalendarEventByAssignmentId != null &&
-                    activeCalendarEventByAssignmentId.Id != request.CalendarEvent.CalendarEventId
-                    && activeCalendarEventByAssignmentId.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
-                {
-                    var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEventByAssignmentId.Id,
-                        request.CalendarEvent.MetaInfo.ResponsibleId);
-                    commandService.Execute(deleteCommand);
-                }
-            }
         }
 
         private bool IsPackageDuplicated(CommittedEvent[] events)

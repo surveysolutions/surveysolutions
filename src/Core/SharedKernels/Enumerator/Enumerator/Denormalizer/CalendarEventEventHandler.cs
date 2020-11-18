@@ -82,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         private void UpdateCalendarEvent(IPublishableEvent evnt, Action<CalendarEvent> updater)
         {
             CalendarEvent calendarEvent = calendarEventStorage.GetById(evnt.EventSourceId);
+            if (calendarEvent == null) return;
 
             updater.Invoke(calendarEvent);
             
