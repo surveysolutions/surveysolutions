@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
         void Store(CalendarEvent calendarEvent);
         CalendarEvent GetById(Guid calendarEventId);
         void Remove(Guid calendarEventId);
-        IEnumerable<CalendarEvent> GetNotSynchedCalendarEvents();
+        IEnumerable<CalendarEvent> GetNotSynchedCalendarEventsInOrder();
         IEnumerable<CalendarEvent> GetCalendarEventsForUser(Guid userId);
 
         IReadOnlyCollection<CalendarEvent> LoadAll();
