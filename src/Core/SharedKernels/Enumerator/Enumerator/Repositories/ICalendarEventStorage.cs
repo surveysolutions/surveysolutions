@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
 
         CalendarEvent? GetCalendarEventForAssigment(int assignmentId);
         void Store(CalendarEvent calendarEvent);
-        CalendarEvent GetById(Guid calendarEventId);
+        CalendarEvent? GetById(Guid calendarEventId);
         void Remove(Guid calendarEventId);
         IEnumerable<CalendarEvent> GetNotSynchedCalendarEventsInOrder();
         IEnumerable<CalendarEvent> GetCalendarEventsForUser(Guid userId);
