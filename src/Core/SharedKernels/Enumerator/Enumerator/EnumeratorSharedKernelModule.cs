@@ -218,9 +218,10 @@ namespace WB.Core.SharedKernels.Enumerator
                 .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
                 .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent)
                 .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
-                .StatelessHandles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
                 .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
-                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent);
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
+                .Handles<RestoreCalendarEventCommand>(aggregate => aggregate.RestoreCalendarEvent);
 
             return Task.CompletedTask;
         }

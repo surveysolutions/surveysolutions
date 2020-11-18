@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Events;
 using Ncqrs.Domain;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.CalendarEventInfrastructure;
@@ -106,6 +107,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var @event = synchronizedEvent.Payload;
                 this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
             }
+        }
+
+        public void RestoreCalendarEvent(RestoreCalendarEventCommand command)
+        {
+            ApplyEvent(new CalendarEventRestored(
+                userId: command.UserId,
+                originDate: command.OriginDate));
         }
     }
 }
