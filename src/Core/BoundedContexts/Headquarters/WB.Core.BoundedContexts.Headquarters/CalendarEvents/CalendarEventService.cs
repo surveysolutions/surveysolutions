@@ -9,10 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 {
     class CalendarEventService : ICalendarEventService
     {
-        private readonly IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor;
+        private readonly IQueryableReadSideRepositoryReader<CalendarEvent, Guid> calendarEventsAccessor;
         private readonly IUserRepository userRepository;
 
-        public CalendarEventService(IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor,
+        public CalendarEventService(IQueryableReadSideRepositoryReader<CalendarEvent, Guid> calendarEventsAccessor,
             IUserRepository userRepository)
         {
             this.calendarEventsAccessor = calendarEventsAccessor ?? throw new ArgumentNullException(nameof(calendarEventsAccessor));
