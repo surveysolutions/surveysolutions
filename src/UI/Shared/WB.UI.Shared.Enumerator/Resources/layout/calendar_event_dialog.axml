@@ -29,6 +29,7 @@
       android:textSize="20dp"
       android:layout_marginLeft="20dp"
       android:layout_marginRight="20dp"
+      android:maxLength="500"
       local:MvxBind="Text Comment" />
   <LinearLayout  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
@@ -45,12 +46,12 @@
           android:layout_height="wrap_content"
           android:layout_gravity="right"
           style="@style/Widget.App.Button"
-          local:MvxBind="Text Localization('Ok'); Click OkCommand" />
+          local:MvxBind="Text Localization('Ok'); Click OkCommand;HideKeyboardOnClick .;" />
       <Button
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="right"
           style="@style/Widget.App.NegativeButton"
-          local:MvxBind="Text Localization('Cancel'); Click CloseCommand" />
+          local:MvxBind="Text Localization('Cancel'); Click CloseCommand;HideKeyboardOnClick .;" />
   </LinearLayout>
 </LinearLayout>
