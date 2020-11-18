@@ -284,5 +284,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("TypeQuestionnaireName", resourceCulture);
             }
         }
+        
+        public static string Workspaces {
+            get {
+                return ResourceManager.GetString("Workspaces", resourceCulture);
+            }
+        }
     }
 }
