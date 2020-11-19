@@ -61,14 +61,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     //remove other older CE 
                     if (activeCalendarEventByInterviewOrAssignmentId != null &&
                             activeCalendarEventByInterviewOrAssignmentId.PublicKey != calendarEventPackage.CalendarEventId
-                            && activeCalendarEventByInterviewOrAssignmentId.UpdateDate < calendarEventPackage.LastUpdateDate
+                            && activeCalendarEventByInterviewOrAssignmentId.UpdateDateUtc < calendarEventPackage.LastUpdateDate
                             && !deleteCalendarEventAfterApplying)
                     {
                             serviceLocator.GetInstance<ICommandService>().Execute(
                                 new DeleteCalendarEventCommand(
                                     activeCalendarEventByInterviewOrAssignmentId.PublicKey,
-                                    calendarEventPackage.ResponsibleId),
-                                this.syncSettings.Origin);
+                                    calendarEventPackage.ResponsibleId));
                     }
                     
                     var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
@@ -79,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     //if CE was deleted on server before last change on tablet - restore it
                     //if it was deleted after - leave it deleted
                     //could be deleted again later
-                    if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.UpdateDate < calendarEventPackage.LastUpdateDate)
+                    if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDate)
                             serviceLocator.GetInstance<ICommandService>().Execute(
                                 new RestoreCalendarEventCommand(calendarEventPackage.CalendarEventId,
                                     calendarEventPackage.ResponsibleId));
@@ -87,8 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     serviceLocator.GetInstance<ICommandService>().Execute(
                             new SyncCalendarEventEventsCommand(aggregateRootEvents,
                                 calendarEventPackage.CalendarEventId,
-                                calendarEventPackage.ResponsibleId),
-                            this.syncSettings.Origin);
+                                calendarEventPackage.ResponsibleId));
 
                     if (deleteCalendarEventAfterApplying)
                         serviceLocator.GetInstance<ICommandService>().Execute(

@@ -769,7 +769,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
                     interviewer.PublicKey,
-                    calendarEvent.Start,
+                    calendarEvent.StartUtc,
                     calendarEvent.StartTimezone,
                     interviewId,
                     interviewKey.ToString(),

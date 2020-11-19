@@ -21,7 +21,9 @@ type CalendarEvent {
   "Id of Calendar Event"
   publicKey: Uuid!
   "Start of calendar Event"
-  start: DateTime!
+  startUtc: DateTime!
+  "Timezone of Start Event"
+  startTimezone: String
 }
 
 type CategoricalOption {

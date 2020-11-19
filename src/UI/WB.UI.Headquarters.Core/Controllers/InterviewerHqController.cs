@@ -122,7 +122,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
                     interviewer.PublicKey,
-                    calendarEvent.Start,
+                    calendarEvent.StartUtc,
                     calendarEvent.StartTimezone,
                     interviewId,
                     interviewKey.ToString(),
@@ -250,16 +250,5 @@ namespace WB.UI.Headquarters.Controllers
 
         private string GenerateUrl(string action, string interviewId, string sectionId = null) =>
             $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
-    }
-
-    public class UpdateInterviewCalendarEventRequest
-    {
-        public Guid? Id { get; set; }
-        public string InterviewId { get; set; }
-
-        public int AssignmentId { get; set; }
-        public DateTime? NewDate { get; set; }
-        public string Comment { get; set; }
-        public string Timezone { get; set; }
     }
 }

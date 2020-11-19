@@ -142,7 +142,8 @@ const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int
       calendarEvent {
           publicKey
           comment
-          start
+          startUtc
+          startTimezone
       }
       identifyingData {
         entity {
@@ -496,11 +497,11 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        if(data != null && data.start != null)
+                        if(data != null && data.startUtc != null)
                             return '<span data-toggle="tooltip" title="'
                                 + (data.comment == null ? '(no comment)' : data.comment)
                                 + '">'
-                                + moment(data.start)
+                                + moment(data.startUtc)
                                     .format(DateFormats.dateTimeInList)
                                 + '</span>'
                     },
