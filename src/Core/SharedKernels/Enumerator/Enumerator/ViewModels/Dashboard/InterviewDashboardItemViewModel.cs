@@ -184,8 +184,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             if (interview.CalendarEvent.HasValue)
             {
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent,
-                    interview.CalendarEvent.Value.UtcDateTime);
+                var dateTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
+                    interview.CalendarEvent.Value.LocalDateTime, 
+                    interview.CalendarEventTimezoneId, 
+                    TimeZoneInfo.Local.Id);
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, dateTime);
                 string separatorVisit =
                     !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{interview.CalendarEventComment}";
@@ -225,14 +228,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        private string FormatDateTimeString(string formatString, DateTime? utcDateTimeWithOutKind)
+        private string FormatDateTimeString(string formatString, DateTime? dateTime)
         {
-            if (!utcDateTimeWithOutKind.HasValue)
+            if (!dateTime.HasValue)
                 return string.Empty;
             
-            var utcDateTime = DateTime.SpecifyKind(utcDateTimeWithOutKind.Value, DateTimeKind.Utc);
             var culture = CultureInfo.CurrentUICulture;
-            return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
+            return string.Format(formatString, dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
 
         private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
