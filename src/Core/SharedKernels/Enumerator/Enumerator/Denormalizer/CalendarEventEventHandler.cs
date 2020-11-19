@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 IsCompleted = false,
                 IsDeleted = false,
                 IsSynchronized = false,
-                LastUpdateDate = evnt.EventTimeStamp,
+                LastUpdateDateUtc = evnt.Payload.OriginDate.UtcDateTime,
                 UserId = evnt.Payload.UserId,
                 LastEventId = evnt.EventIdentifier,
             };
@@ -56,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         public void Handle(IPublishedEvent<CalendarEventUpdated> evnt)
         {
             UpdateCalendarEvent(evnt,
+                evnt.Payload.OriginDate.UtcDateTime,
                 calendarEvent =>
                 {
                     calendarEvent.Start = evnt.Payload.Start;
@@ -68,6 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         public void Handle(IPublishedEvent<CalendarEventCompleted> evnt)
         {
             UpdateCalendarEvent(evnt,
+                evnt.Payload.OriginDate.UtcDateTime,
                 calendarEvent =>
                 {
                     calendarEvent.IsCompleted = true;
@@ -77,13 +79,14 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         public void Handle(IPublishedEvent<CalendarEventDeleted> evnt)
         {
             UpdateCalendarEvent(evnt,
+                evnt.Payload.OriginDate.UtcDateTime,
                 calendarEvent =>
                 {
                     calendarEvent.IsDeleted = true;
                 });
         }
         
-        private void UpdateCalendarEvent(IPublishableEvent evnt, Action<CalendarEvent> updater)
+        private void UpdateCalendarEvent(IPublishableEvent evnt, DateTime updateDateTimeUtc, Action<CalendarEvent> updater)
         {
             CalendarEvent? calendarEvent = calendarEventStorage.GetById(evnt.EventSourceId);
             if (calendarEvent == null) return;
@@ -92,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             
             calendarEvent.LastEventId = evnt.EventIdentifier;
             calendarEvent.IsSynchronized = false;
-            calendarEvent.LastUpdateDate = evnt.EventTimeStamp;
+            calendarEvent.LastUpdateDateUtc = updateDateTimeUtc;
             calendarEventStorage.Store(calendarEvent);
 
             UpdateDashboardItemIfNeed(calendarEvent);
@@ -105,13 +108,13 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             if (calendarEvent.InterviewId.HasValue)
             {
                 InterviewView interviewView = this.interviewViewRepository.GetById(calendarEvent.InterviewId.Value.FormatGuid());
-                if (interviewView == null || interviewView.CalendarEventLastUpdate > calendarEvent.LastUpdateDate)
+                if (interviewView == null || interviewView.CalendarEventLastUpdate > calendarEvent.LastUpdateDateUtc)
                     return;
 
                 interviewView.CalendarEvent = shouldDisplayData ? calendarEvent.Start : (DateTimeOffset?)null;
                 interviewView.CalendarEventTimezoneId = shouldDisplayData ? calendarEvent.StartTimezone : null;
                 interviewView.CalendarEventComment = shouldDisplayData ? calendarEvent.Comment : null;
-                interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDate;
+                interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDateUtc;
                 this.interviewViewRepository.Store(interviewView);
             }
             else
@@ -123,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 assignment.CalendarEvent = shouldDisplayData ? calendarEvent.Start : (DateTimeOffset?)null;
                 assignment.CalendarEventTimezoneId = shouldDisplayData ? calendarEvent.StartTimezone : null;
                 assignment.CalendarEventComment = shouldDisplayData ? calendarEvent.Comment : null;
-                assignment.CalendarEventLastUpdate = calendarEvent.LastUpdateDate;
+                assignment.CalendarEventLastUpdate = calendarEvent.LastUpdateDateUtc;
                 this.assignmentStorage.Store(assignment);
             }
         }

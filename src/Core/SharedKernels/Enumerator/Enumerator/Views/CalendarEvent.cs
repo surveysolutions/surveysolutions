@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public Guid UserId { get; set; }
         public Guid? InterviewId  { get; set; }
         public int AssignmentId { get; set; }
-        public DateTime LastUpdateDate { get; set; }
+        public DateTime LastUpdateDateUtc { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsSynchronized { get; set; }

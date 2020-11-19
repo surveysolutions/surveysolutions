@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 });
                 
                 
-                var eventsToSend =  GetCalendarEventStream(calendarEvent.Id);
+                var eventsToSend = GetCalendarEventStream(calendarEvent.Id);
                 
                 var package = new CalendarEventPackageApiView()
                 {
@@ -75,8 +75,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Events = this.synchronizationSerializer.Serialize(eventsToSend),
                     MetaInfo = new CalendarEventMetaInfo()
                     {
-                        ResponsibleId   = calendarEvent.UserId,
-                        LastUpdateDateTime = eventsToSend.Last().EventTimeStamp,
+                        ResponsibleId = calendarEvent.UserId,
+                        LastUpdateDateTime = calendarEvent.LastUpdateDateUtc,
                         InterviewId = calendarEvent.InterviewId,
                         AssignmentId = calendarEvent.AssignmentId
                     }
