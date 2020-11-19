@@ -30,8 +30,8 @@ namespace WB.Services.Export.Host
 
                 if (WindowsServiceHelpers.IsWindowsService())
                 {
-                    var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                    var pathToContentRoot = Path.GetDirectoryName(pathToExe);
+                    var pathToExe = Process.GetCurrentProcess().MainModule!.FileName;
+                    var pathToContentRoot = Path.GetDirectoryName(pathToExe)!;
 
                     Directory.SetCurrentDirectory(pathToContentRoot);
                     host = host.UseContentRoot(pathToContentRoot);

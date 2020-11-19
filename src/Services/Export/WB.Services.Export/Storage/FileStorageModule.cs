@@ -31,7 +31,7 @@ namespace WB.Services.Export.Storage
                 services.AddAWSService<IAmazonS3>();
                 services.AddTransient<IAmazonS3>(service =>
                 {
-                    var s3Settings = service.GetService<IOptions<AmazonS3Settings>>().Value;
+                    var s3Settings = service.GetRequiredService<IOptions<AmazonS3Settings>>().Value;
                     
                     return s3Settings.AccessKey != null && s3Settings.SecretKey != null
                         ? new AmazonS3Client(s3Settings.AccessKey, s3Settings.SecretKey, options.Region)
