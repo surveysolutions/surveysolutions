@@ -4,6 +4,7 @@ using System;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using NodaTime;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -109,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (dateTime != calendarEvent?.Start.LocalDateTime || calendarEvent?.Comment != Comment)
             {
-                TimeZoneInfo zoneInfo = TimeZoneInfo.Local;
+                var zoneInfo = DateTimeZoneProviders.Tzdb.GetSystemDefault();
                 var timezone = zoneInfo.Id;
                 
                 var userId = principal.CurrentUserIdentity.UserId;
