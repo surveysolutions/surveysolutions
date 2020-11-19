@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using Main.Core.Events;
 using Ncqrs.Domain;
 using WB.Core.Infrastructure.EventBus;

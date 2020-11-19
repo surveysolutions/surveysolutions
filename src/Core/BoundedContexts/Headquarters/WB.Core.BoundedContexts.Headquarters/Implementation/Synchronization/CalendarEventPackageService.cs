@@ -1,5 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using Main.Core.Events;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -15,10 +17,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
     public class CalendarEventPackageService : ICalendarEventPackageService
     {
-        private readonly ILogger logger;
+        private readonly ILogger<CalendarEventPackageService> logger;
         private readonly SyncSettings syncSettings;
 
-        public CalendarEventPackageService(ILogger logger, SyncSettings syncSettings)
+        public CalendarEventPackageService(ILogger<CalendarEventPackageService> logger, SyncSettings syncSettings)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.syncSettings = syncSettings ?? throw new ArgumentNullException(nameof(syncSettings));
@@ -97,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
             catch (Exception exception)
             {
-                this.logger.Error(
+                this.logger.LogError(
                     $"Calendar event events by {calendarEventPackage.CalendarEventId} processing failed. Reason: '{exception.Message}'",
                     exception);
 
