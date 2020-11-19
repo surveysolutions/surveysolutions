@@ -46,6 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public ScreenType? LastVisitedScreenType { get; set; }
         public DateTime? CalendarEventLastUpdate { get; set; }
         public DateTimeOffset? CalendarEvent { get; set; }
+        public string CalendarEventTimezoneId { get; set; }
         public string CalendarEventComment { get; set; }
     }
 }

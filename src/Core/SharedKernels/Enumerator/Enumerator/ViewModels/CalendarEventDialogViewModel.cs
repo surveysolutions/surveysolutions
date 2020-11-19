@@ -106,10 +106,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var dateTime = new DateTime(DateEvent.Year, DateEvent.Month, DateEvent.Day, TimeEvent.Hours,
                 TimeEvent.Minutes, TimeEvent.Seconds, DateTimeKind.Local);
-            var timezone = TimeZoneInfo.Local.Id;
 
             if (dateTime != calendarEvent?.Start.LocalDateTime || calendarEvent?.Comment != Comment)
             {
+                TimeZoneInfo zoneInfo = TimeZoneInfo.Local;
+                var timezone = zoneInfo.Id;
+                
                 var userId = principal.CurrentUserIdentity.UserId;
                 ICommand command = calendarEvent == null
                     ? (ICommand)new CreateCalendarEventCommand(Guid.NewGuid(), userId, dateTime,
