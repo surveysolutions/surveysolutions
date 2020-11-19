@@ -102,16 +102,19 @@ jobs:
         run: |
           # https://github.com/docker/build-push-action#complete-workflow
           DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/android
-          VERSION=$(cat ./.version)
-
-          TAGS="${DOCKER_IMAGE}:${VERSION}"
+          VERSION=$(cat ./.version)                   
+          BRANCH=$(cat ./.branch)
           
+          TAGS="${DOCKER_IMAGE}:$BRANCH"
           if [[ $VERSION =~ ^([0-9]{1,4})\.([0-9]{1,4})\.([0-9]{1,4})(\.[0-9]{1,10})?$  ]]; then
             MINOR=${VERSION%.*}
             MAJOR=${MINOR%.*}
-            TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR},${DOCKER_IMAGE}:latest"
-          elif [ "${{ github.event_name }}" = "push" ]; then
-            TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::8}"
+            TAGS="$TAGS,${DOCKER_IMAGE}:$BRANCH"
+            if [ "$BRANCH" = 'release' ]; then
+              TAGS="$TAGS,${DOCKER_IMAGE}:${VERSION}"
+              TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR}"
+              TAGS="$TAGS,${DOCKER_IMAGE}:latest"
+            fi
           fi
           echo "TAGS: $TAGS"
           echo "TAGS: $VERSION"
