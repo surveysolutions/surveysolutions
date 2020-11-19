@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using NodaTime;
+using NodaTime.Extensions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
@@ -86,13 +88,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             if (Assignment.CalendarEvent.HasValue)
             {
-                var dateTime = Assignment.CalendarEventTimezoneId == null || Assignment.CalendarEventTimezoneId == TimeZoneInfo.Local.Id
-                    ? Assignment.CalendarEvent.Value.LocalDateTime
-                    : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
-                        Assignment.CalendarEvent.Value.LocalDateTime, 
-                        Assignment.CalendarEventTimezoneId, 
-                        TimeZoneInfo.Local.Id);
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, dateTime);
+                DateTimeZone? timeZone = null;
+                if (Assignment.CalendarEventTimezoneId != null)
+                    timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(Assignment.CalendarEventTimezoneId);
+                if (timeZone == null)
+                    timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+                var instant = Assignment.CalendarEvent.Value.UtcDateTime.ToInstant();
+                var zonedDateTime = new ZonedDateTime(instant, timeZone);
+
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, zonedDateTime);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
             }
@@ -161,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             RaiseOnItemUpdated();
         }
 
-        private string FormatDateTimeString(string formatString, DateTime? dateTime)
+        private string FormatDateTimeString(string formatString, ZonedDateTime? dateTime)
         {
             if (!dateTime.HasValue)
                 return string.Empty;
