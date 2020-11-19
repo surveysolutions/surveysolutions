@@ -7,26 +7,19 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
     {
         public Guid PublicKey { get; }
 
-        private Guid userId;
         public Guid UserId
         {
-            get
-            {
-                if (this.userId == Guid.Empty)
-                    throw new ArgumentException("User ID cannot be empty.");
-
-                return this.userId;
-            }
-
-            private set => this.userId = value;
+            get;
         }
 
         protected CalendarEventCommand(Guid publicKey, Guid userId)
             : base(publicKey)
         {
-            this.PublicKey = publicKey;
+            if (userId == Guid.Empty)
+                throw new ArgumentException("User ID cannot be empty.");
             this.UserId = userId;
-
+            
+            this.PublicKey = publicKey;
             this.OriginDate = DateTimeOffset.Now;
         }
 

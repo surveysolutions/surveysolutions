@@ -22,6 +22,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumeratorUIResources.ru.resx</DependentUpon>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="Properties\UIResources.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UIResources.ru.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>    
   </ItemGroup>
   <ItemGroup>
