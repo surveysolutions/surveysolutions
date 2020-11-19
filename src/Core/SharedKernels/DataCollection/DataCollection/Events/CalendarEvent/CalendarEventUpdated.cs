@@ -6,11 +6,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.CalendarEvent
     {
         public string Comment { get; set; }
         public DateTimeOffset Start { get; set; }
-        public CalendarEventUpdated(Guid userId, DateTimeOffset originDate, string comment, DateTimeOffset start) 
+        public string StartTimezone { get; set; }
+        public CalendarEventUpdated(Guid userId, DateTimeOffset originDate, string comment, DateTimeOffset start,
+            string startTimezone) 
             : base(userId, originDate)
         {
             this.Comment = comment;
             this.Start = start;
+            this.StartTimezone = startTimezone;
         }
     }
 }

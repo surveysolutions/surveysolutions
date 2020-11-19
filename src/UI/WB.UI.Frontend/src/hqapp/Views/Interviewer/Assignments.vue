@@ -56,7 +56,7 @@
 
 <script>
 import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import {map, join} from 'lodash'
 
 export default {
@@ -262,6 +262,7 @@ export default {
                 id : self.calendarEventId,
                 newDate : self.newCalendarDate,
                 comment : self.editCalendarComment,
+                timezone: moment.tz.guess(),
 
                 callback: self.reload,
             })

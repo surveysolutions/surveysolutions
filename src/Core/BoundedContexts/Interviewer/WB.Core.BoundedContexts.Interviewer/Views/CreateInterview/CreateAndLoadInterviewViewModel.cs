@@ -150,7 +150,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
                         interviewerIdentity.UserId,
                         calendarEvent.Start,
+                        calendarEvent.StartTimezone,
                         interviewId,
+                        interviewKey.ToString(),
                         assignment.Id,
                         calendarEvent.Comment);
                     commandService.Execute(createCalendarEvent);

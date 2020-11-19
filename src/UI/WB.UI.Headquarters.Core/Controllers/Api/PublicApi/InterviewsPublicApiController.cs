@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
@@ -16,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -45,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
         private readonly IPdfInterviewGenerator pdfInterviewGenerator;
+        private readonly ICalendarEventService calendarEventService;
 
         public InterviewsPublicApiController(
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -58,7 +61,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ILogger<InterviewsPublicApiController> logger,
             IStatefullInterviewSearcher statefullInterviewSearcher,
             IInterviewDiagnosticsFactory diagnosticsFactory,
-            IPdfInterviewGenerator pdfInterviewGenerator)
+            IPdfInterviewGenerator pdfInterviewGenerator,
+            ICalendarEventService calendarEventService)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -72,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
             this.pdfInterviewGenerator = pdfInterviewGenerator;
+            this.calendarEventService = calendarEventService;
         }
 
 
@@ -322,9 +327,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
             
-            return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
+            var result = this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
+            if (result is OkObjectResult)
+            {
+                CompleteCalendarEventIfExists(id);
+            }
+
+            return result;
         }
 
+        private void CompleteCalendarEventIfExists(Guid interviewId)
+        {
+            var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
+            if (calendarEvent != null)
+                this.commandService.Execute(new CompleteCalendarEventCommand(interviewId, this.authorizedUser.Id));
+        }
+        
         /// <summary>
         /// Rejects interview as supervisor
         /// </summary>
@@ -344,8 +362,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (q == null) return NotFound();
 
             if (!responsibleId.HasValue)
-                return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
-            
+            {
+                var result = this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
+                if (result is OkResult)
+                {
+                    CompleteCalendarEventIfExists(id);
+                }
+
+                return result;
+            }
+
             var userInfo = this.userViewFactory.GetUser(responsibleId.Value);
 
             if(userInfo == null)
@@ -354,7 +380,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return StatusCode(StatusCodes.Status406NotAcceptable, "User is not an interviewer.");
 
-            return this.TryExecuteCommand(new RejectInterviewToInterviewerCommand(this.authorizedUser.Id, id, userInfo.PublicKey, comment));
+            var resultToInter = this.TryExecuteCommand(new RejectInterviewToInterviewerCommand(this.authorizedUser.Id, 
+                id, userInfo.PublicKey, comment));
+            if (resultToInter is OkResult)
+            {
+                CompleteCalendarEventIfExists(id);
+            }
+            
+            return resultToInter;
         }
 
         /// <summary>

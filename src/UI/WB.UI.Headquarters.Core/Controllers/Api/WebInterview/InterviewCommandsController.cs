@@ -2,12 +2,14 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -29,16 +31,18 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewFactory interviewFactory;
         private readonly IUserViewFactory userViewFactory;
+        private readonly ICalendarEventService calendarEventService;
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
             IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IInterviewFactory interviewFactory,
-            IUserViewFactory userViewFactory) 
+            IUserViewFactory userViewFactory, ICalendarEventService calendarEventService) 
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
             this.userViewFactory = userViewFactory;
+            this.calendarEventService = calendarEventService;
         }
 
         protected bool IsReviewMode() =>
@@ -137,13 +141,23 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 var command = new ApproveInterviewCommand(interviewId, this.GetCommandResponsibleId(interviewId), approveInterviewRequest.Comment);
 
                 this.commandService.Execute(command);
+
+                CompleteCalendarEventIfExists(interviewId);
             }
             else if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
                 var command = new HqApproveInterviewCommand(interviewId, this.GetCommandResponsibleId(interviewId), approveInterviewRequest.Comment);
                 this.commandService.Execute(command);
+                CompleteCalendarEventIfExists(interviewId);
             }
             return Ok();
+        }
+
+        private void CompleteCalendarEventIfExists(Guid interviewId)
+        {
+            var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
+            if (calendarEvent != null)
+                this.commandService.Execute(new CompleteCalendarEventCommand(interviewId, this.GetCommandResponsibleId(interviewId)));
         }
 
         public class RejectInterviewRequest
@@ -195,8 +209,10 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             }
 
             if (command != null)
+            {
                 this.commandService.Execute(command);
-
+                CompleteCalendarEventIfExists(interviewId);
+            }
             return Ok();
         }
 
