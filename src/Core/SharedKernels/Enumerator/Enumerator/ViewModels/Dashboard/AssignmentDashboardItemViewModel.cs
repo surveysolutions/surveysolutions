@@ -86,10 +86,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             if (Assignment.CalendarEvent.HasValue)
             {
-                var dateTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
-                    Assignment.CalendarEvent.Value.LocalDateTime, 
-                    Assignment.CalendarEventTimezoneId, 
-                    TimeZoneInfo.Local.Id);
+                var dateTime = Assignment.CalendarEventTimezoneId == null || Assignment.CalendarEventTimezoneId == TimeZoneInfo.Local.Id
+                    ? Assignment.CalendarEvent.Value.LocalDateTime
+                    : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
+                        Assignment.CalendarEvent.Value.LocalDateTime, 
+                        Assignment.CalendarEventTimezoneId, 
+                        TimeZoneInfo.Local.Id);
                 var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, dateTime);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
