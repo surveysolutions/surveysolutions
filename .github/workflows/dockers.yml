@@ -24,7 +24,7 @@ jobs:
           dotnet gitversion /showvariable AssemblySemFileVer > .version
           dotnet gitversion /showvariable BuildMetaData > .buildNumber
           dotnet gitversion /showvariable EscapedBranchName > .branch 
-      - run: tar -czf sources.tar.gz --exclude=./src/Installation ./src ./libs .version Dockerfile.*
+      - run: tar -czf sources.tar.gz --exclude=./src/Installation ./src ./libs .version .branch Dockerfile.*
       - uses: actions/upload-artifact@v2
         with:
           name: sources
