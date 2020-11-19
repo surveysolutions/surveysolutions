@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class CalendarEventView
     {
-        public DateTime? Start { get; set; }
+        public DateTime? StartUtc { get; set; }
         
         public string StartTimezone { get; set; }
         public string Comment { get; set; }

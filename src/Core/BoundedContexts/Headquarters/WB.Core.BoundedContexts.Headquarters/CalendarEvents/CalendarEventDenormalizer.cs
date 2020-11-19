@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             return UpdateCalendarEvent(state, @event.Payload.OriginDate,
                 calendarEvent =>
                 {
-                    calendarEvent.Start = @event.Payload.Start.UtcDateTime;
+                    calendarEvent.StartUtc = @event.Payload.Start.UtcDateTime;
                     calendarEvent.Comment = @event.Payload.Comment;
                 });
         }
@@ -65,10 +65,10 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         }
         private CalendarEvent UpdateCalendarEvent(CalendarEvent calendarEvent, DateTimeOffset dateTimeOffset, Action<CalendarEvent> updater)
         {
-            if (calendarEvent.UpdateDate > dateTimeOffset.UtcDateTime) return calendarEvent;
+            if (calendarEvent.UpdateDateUtc > dateTimeOffset.UtcDateTime) return calendarEvent;
             
             updater.Invoke(calendarEvent);
-            calendarEvent.UpdateDate = dateTimeOffset.UtcDateTime;
+            calendarEvent.UpdateDateUtc = dateTimeOffset.UtcDateTime;
 
             return calendarEvent;
         }

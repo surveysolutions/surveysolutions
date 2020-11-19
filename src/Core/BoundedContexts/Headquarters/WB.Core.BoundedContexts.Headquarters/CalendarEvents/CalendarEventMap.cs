@@ -9,12 +9,12 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             Id(x => x.PublicKey, mapper => mapper.Column("EventId"));
             
             Property(x => x.Comment);
-            Property(x => x.Start);
+            Property(x => x.StartUtc);
             Property(x => x.AssignmentId);
             Property(x => x.InterviewId);
             Property(x => x.IsCompleted);
             Property(x => x.UserId);
-            Property(x => x.UpdateDate);
+            Property(x => x.UpdateDateUtc);
             Property(x => x.UserName);
             Property(x => x.IsDeleted);
         }

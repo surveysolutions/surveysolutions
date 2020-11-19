@@ -21,19 +21,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     public class UploadCalendarEvents : SynchronizationStep
     {
         private readonly IEnumeratorEventStorage eventStorage;
-        private readonly IJsonAllTypesSerializer synchronizationSerializer;
+        private readonly ISerializer serializer;
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IPrincipal principal;
 
         public UploadCalendarEvents(int sortOrder, ISynchronizationService synchronizationService, 
             ILogger logger, IEnumeratorEventStorage eventStorage, 
-            IJsonAllTypesSerializer synchronizationSerializer,
+            ISerializer serializer,
             ICalendarEventStorage calendarEventStorage,
             IPrincipal principal) 
             : base(sortOrder, synchronizationService, logger)
         {
             this.eventStorage = eventStorage;
-            this.synchronizationSerializer = synchronizationSerializer;
+            this.serializer = serializer;
             this.calendarEventStorage = calendarEventStorage;
             this.principal = principal;
         }
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var package = new CalendarEventPackageApiView()
                 {
                     CalendarEventId = calendarEvent.Id,
-                    Events = this.synchronizationSerializer.Serialize(eventsToSend),
+                    Events = this.serializer.Serialize(eventsToSend),
                     MetaInfo = new CalendarEventMetaInfo()
                     {
                         ResponsibleId = calendarEvent.UserId,

@@ -221,11 +221,11 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        if(data != null && data.start != null)
+                        if(data != null && data.startUtc != null)
                             return '<span data-toggle="tooltip" title="'
                                 + (data.comment == null ? '(no comment)' : data.comment)
                                 + '">'
-                                + moment(data.start)
+                                + moment(data.startUtc)
                                     .format(DateFormats.dateTimeInList)
                                 + '</span>'
                     },
