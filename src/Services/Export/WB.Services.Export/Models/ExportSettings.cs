@@ -8,12 +8,19 @@ namespace WB.Services.Export.Models
 {
     public class ExportSettings
     {
-        public ExportSettings(DataExportFormat exportFormat, 
-            QuestionnaireId questionnaireId, TenantInfo tenant,
-            InterviewStatus? status = null, DateTime? fromDate = null, 
-            DateTime? toDate = null, Guid? translation = null, 
-            bool? includeMeta = null)
+        public ExportSettings(
+            
+            DataExportFormat exportFormat, 
+            QuestionnaireId questionnaireId, 
+            TenantInfo tenant,
+            InterviewStatus? status = null,
+            DateTime? fromDate = null, 
+            DateTime? toDate = null, 
+            Guid? translation = null, 
+            bool? includeMeta = null,
+            long? jobId = null)
         {
+            JobId = jobId;
             ExportFormat = exportFormat;
             QuestionnaireId = questionnaireId;
             Status = status;
@@ -24,6 +31,7 @@ namespace WB.Services.Export.Models
             IncludeMeta = includeMeta;
         }
 
+        public long? JobId { get; set; }
         public DataExportFormat ExportFormat { get; set; }
         public QuestionnaireId QuestionnaireId { get; set; }
         public InterviewStatus? Status { get; set; }

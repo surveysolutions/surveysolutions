@@ -152,41 +152,18 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound();
             }
 
-            return await this.AllData(
-                processView.QuestionnaireIdentity.QuestionnaireId,
-                processView.QuestionnaireIdentity.Version,
-                processView.Format,
-                processView.InterviewStatus,
-                processView.FromDate,
-                processView.ToDate,
-                processView.TranslationId,
-                processView.IncludeMeta);
-        }
-
-        [HttpGet]
-        [ObservingNotAllowed]
-        
-        public async Task<ActionResult> AllData(Guid id, long version, DataExportFormat format,
-            InterviewStatus? status = null,
-            DateTime? from = null,
-            DateTime? to = null,
-            Guid? translationId = null,
-            bool? includeMeta = null)
-        {
-            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(
-                new QuestionnaireIdentity(id, version), format, status, from, to, translationId, includeMeta);
+            DataExportArchive result = await this.dataExportStatusReader.GetDataArchive(id);
             if (result == null)
             {
                 return NotFound();
             }
-            else if (result.Redirect != null)
+
+            if (result.Redirect != null)
             {
                 return Redirect(result.Redirect);
             }
-            else
-            {
-                return File(result.Data, @"applications/octet-stream", WebUtility.UrlDecode(result.FileName));
-            }
+            
+            return File(result.Data, @"applications/octet-stream", WebUtility.UrlDecode(result.FileName));
         }
 
         [HttpGet]
