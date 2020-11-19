@@ -86,7 +86,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             if (Assignment.CalendarEvent.HasValue)
             {
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, Assignment.CalendarEvent.Value.UtcDateTime);
+                var dateTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
+                    Assignment.CalendarEvent.Value.LocalDateTime, 
+                    Assignment.CalendarEventTimezoneId, 
+                    TimeZoneInfo.Local.Id);
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, dateTime);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
             }
@@ -155,14 +159,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             RaiseOnItemUpdated();
         }
 
-        private string FormatDateTimeString(string formatString, DateTime? utcDateTimeWithOutKind)
+        private string FormatDateTimeString(string formatString, DateTime? dateTime)
         {
-            if (!utcDateTimeWithOutKind.HasValue)
+            if (!dateTime.HasValue)
                 return string.Empty;
 
-            var utcDateTime = DateTime.SpecifyKind(utcDateTimeWithOutKind.Value, DateTimeKind.Utc);
             var culture = CultureInfo.CurrentUICulture;
-            return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
+            return string.Format(formatString, dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
         
         protected override void Dispose(bool disposing)
