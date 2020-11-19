@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -62,18 +63,21 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
         private readonly IAssignmentDocumentsStorage assignmentStorage;
+        private readonly ICalendarEventStorage calendarEventStorage;
 
         public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
             IAnswerToStringConverter answerToStringConverter,
-            IAssignmentDocumentsStorage assignmentStorage)
+            IAssignmentDocumentsStorage assignmentStorage,
+            ICalendarEventStorage calendarEventStorage)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.prefilledQuestions = prefilledQuestions;
             this.questionnaireRepository = questionnaireRepository;
             this.answerToStringConverter = answerToStringConverter;
             this.assignmentStorage = assignmentStorage;
+            this.calendarEventStorage = calendarEventStorage;
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
@@ -94,6 +98,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 rejectedDateTime: payload.RejectedDateTime,
                 assignmentId: null,
                 interviewKey: null);
+            
+            TryFindCalendarEventFroNewInterview(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
@@ -113,6 +119,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 rejectedDateTime: null,
                 assignmentId: payload.AssignmentId,
                 interviewKey: null);
+
+            TryFindCalendarEventFroNewInterview(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
@@ -131,6 +139,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 rejectedDateTime: null, 
                 assignmentId: evnt.Payload.AssignmentId,
                 interviewKey: null);
+            
+            TryFindCalendarEventFroNewInterview(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
@@ -149,6 +159,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 rejectedDateTime: null,
                 assignmentId: evnt.Payload.AssignmentId,
                 interviewKey: null);
+            
+            TryFindCalendarEventFroNewInterview(evnt.EventSourceId);
         }
         
         private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, 
@@ -253,6 +265,25 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.LocationLatitude = gpsCoordinates.Latitude;
                 interviewView.LocationLongitude = gpsCoordinates.Longitude;
             }
+
+            this.interviewViewRepository.Store(interviewView);
+        }
+
+        private void TryFindCalendarEventFroNewInterview(Guid interviewId)
+        {
+            InterviewView interviewView = interviewViewRepository.GetById(interviewId.FormatGuid());
+                
+            if (interviewView == null || interviewView.CalendarEvent.HasValue)
+                return;
+            
+            var calendarEvent = calendarEventStorage.GetCalendarEventForInterview(interviewView.InterviewId);
+            if (calendarEvent == null)
+                return;
+
+            interviewView.CalendarEvent = calendarEvent.Start;
+            interviewView.CalendarEventTimezoneId = calendarEvent.StartTimezone;
+            interviewView.CalendarEventComment = calendarEvent.Comment;
+            interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDate;
 
             this.interviewViewRepository.Store(interviewView);
         }
