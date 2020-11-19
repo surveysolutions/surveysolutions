@@ -283,7 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             interviewView.CalendarEvent = calendarEvent.Start;
             interviewView.CalendarEventTimezoneId = calendarEvent.StartTimezone;
             interviewView.CalendarEventComment = calendarEvent.Comment;
-            interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDate;
+            interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDateUtc;
 
             this.interviewViewRepository.Store(interviewView);
         }

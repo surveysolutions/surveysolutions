@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 //remove other older CE 
                 if (activeCalendarEvent != null &&
                         activeCalendarEvent.Id != request.CalendarEvent.CalendarEventId
-                        && activeCalendarEvent.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime
+                        && activeCalendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime
                         && !deleteCalendarEventAfterApplying)
                 {
                     var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEvent.Id,
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 //if CE was deleted on server before last change on tablet - restore it
                 //if it was deleted after - leave it deleted
                 //could be deleted again later
-                if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.LastUpdateDate < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
                     commandService.Execute(new RestoreCalendarEventCommand(
                         request.CalendarEvent.CalendarEventId, request.CalendarEvent.MetaInfo.ResponsibleId));
 
