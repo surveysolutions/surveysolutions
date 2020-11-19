@@ -38,6 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 
         public List<CalendarEvent> GetAllCalendarEventsForUser(Guid userId)
         {
+            //probably we should remove userId and join with interviews and assignments
+            
             var calendarEvents = calendarEventsAccessor.Query(_ => 
                 _.Where(x =>
                     x.IsDeleted != true 

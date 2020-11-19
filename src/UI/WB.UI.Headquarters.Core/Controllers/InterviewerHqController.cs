@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -34,7 +35,9 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAssignmentsService assignments;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
+        private readonly ICalendarEventService calendarEventService;
 
+        
         public InterviewerHqController(
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
@@ -42,7 +45,8 @@ namespace WB.UI.Headquarters.Controllers
             IPlainStorageAccessor<InterviewSummary> interviewSummaryReader,
             IAssignmentsService assignments,
             IInterviewUniqueKeyGenerator keyGenerator,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            ICalendarEventService calendarEventService)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
@@ -51,6 +55,7 @@ namespace WB.UI.Headquarters.Controllers
             this.assignments = assignments;
             this.keyGenerator = keyGenerator;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.calendarEventService = calendarEventService;
         }
 
         [ActivePage(MenuItem.CreateNew)]
@@ -96,6 +101,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
             var interviewId = Guid.NewGuid();
+            var interviewKey = this.keyGenerator.Get();
 
             var createInterviewCommand = new CreateInterview(
                 interviewId,
@@ -105,11 +111,26 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.ProtectedVariables,
                 interviewer.Supervisor.Id,
                 interviewer.PublicKey,
-                this.keyGenerator.Get(),
+                interviewKey,
                 assignment.Id,
                 assignment.AudioRecording);
 
             this.commandService.Execute(createInterviewCommand);
+            
+            var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
+            if (calendarEvent != null)
+            {
+                var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
+                    interviewer.PublicKey,
+                    calendarEvent.Start,
+                    calendarEvent.StartTimezone,
+                    interviewId,
+                    interviewKey.ToString(),
+                    assignment.Id,
+                    calendarEvent.Comment);
+                commandService.Execute(createCalendarEvent);
+            }
+            
             return interviewId.FormatGuid();
         }
 
@@ -163,6 +184,18 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (request.NewDate == null)
                 request.NewDate = DateTime.Now;
+
+            var interviewId = Guid.TryParse(request.InterviewId, out Guid pasedInterviewId)
+                ? pasedInterviewId
+                : (Guid?) null;
+
+            //there are two main timezones notations
+            //windows and IANA
+            //we should transform to one standard one
+            
+            //var tz = TimeZoneInfo.GetSystemTimeZones().Select(x=>x.Id).ToHashSet();
+            //if (!tz.Contains(request.Timezone))
+            //    request.Timezone = string.Empty;
             
             if (request.Id == null)
             {
@@ -170,7 +203,9 @@ namespace WB.UI.Headquarters.Controllers
                     Guid.NewGuid(), 
                     this.authorizedUser.Id, 
                     request.NewDate.Value,
-                    Guid.TryParse(request.InterviewId, out Guid pasedInterviewId)? pasedInterviewId: (Guid?)null,
+                    request.Timezone,
+                    interviewId,
+                    "",
                     request.AssignmentId,
                     request.Comment));
             }
@@ -180,6 +215,7 @@ namespace WB.UI.Headquarters.Controllers
                     request.Id.Value, 
                     this.authorizedUser.Id, 
                     request.NewDate.Value,
+                    request.Timezone,
                     request.Comment));
             }
             return this.Content("ok");
@@ -224,5 +260,6 @@ namespace WB.UI.Headquarters.Controllers
         public int AssignmentId { get; set; }
         public DateTime? NewDate { get; set; }
         public string Comment { get; set; }
+        public string Timezone { get; set; }
     }
 }

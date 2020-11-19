@@ -40,6 +40,8 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
 using Microsoft.Extensions.Caching.Memory;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.UI.Headquarters.Code.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
@@ -74,6 +76,8 @@ namespace WB.UI.Headquarters.Controllers
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
         public static readonly string AskForEmail = "askForEmail";
 
+        private readonly ICalendarEventService calendarEventService;
+        
         private readonly IMemoryCache memoryCache;
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
@@ -122,7 +126,8 @@ namespace WB.UI.Headquarters.Controllers
             IAggregateRootPrototypeService prototypeService, 
             IQuestionnaireStorage questionnaireStorage, 
             IAggregateRootPrototypePromoterService promoterService,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            ICalendarEventService calendarEventService)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -143,6 +148,8 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaireStorage = questionnaireStorage;
             this.promoterService = promoterService;
             this.memoryCache = memoryCache;
+            this.calendarEventService = calendarEventService;
+
         }
 
         [Route("Error")]
@@ -740,7 +747,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
 
             var interviewId = Guid.NewGuid();
-
+            var interviewKey = this.keyGenerator.Get();
             this.prototypeService.MarkAsPrototype(interviewId, PrototypeType.Temporary);
 
             var createInterviewCommand = new CreateInterview(
@@ -751,11 +758,26 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.ProtectedVariables,
                 interviewer.Supervisor?.Id ?? interviewer.PublicKey,
                 interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?)null,
-                this.keyGenerator.Get(),
+                interviewKey,
                 assignment.Id,
                 assignment.AudioRecording);
 
             this.commandService.Execute(createInterviewCommand);
+            
+            var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
+            if (calendarEvent != null)
+            {
+                var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
+                    interviewer.PublicKey,
+                    calendarEvent.Start,
+                    calendarEvent.StartTimezone,
+                    interviewId,
+                    interviewKey.ToString(),
+                    assignment.Id,
+                    calendarEvent.Comment);
+                commandService.Execute(createCalendarEvent);
+            }
+            
             return interviewId.FormatGuid();
         }
 

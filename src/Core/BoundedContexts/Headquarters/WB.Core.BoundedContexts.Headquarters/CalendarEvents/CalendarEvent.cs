@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
@@ -9,27 +10,33 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         {
         }
 
-        public CalendarEvent(Guid publicKey, DateTime start, string comment, 
-            Guid? interviewId, int assignmentId, bool isCompleted, DateTimeOffset updateDate,
-            Guid userId, string userName)
+        public CalendarEvent(Guid publicKey, DateTime start, string startTimezone, string comment, 
+            Guid? interviewId, string interviewKey, int assignmentId, bool isCompleted, 
+            DateTimeOffset updateDate, Guid userId, string userName)
         {
             PublicKey = publicKey;
             Start = start;
+            StartTimezone = startTimezone;
             Comment = comment;
             InterviewId = interviewId;
+            InterviewKey = interviewKey;
             AssignmentId = assignmentId;
             IsCompleted = isCompleted;
             UserId = userId;
             UserName = userName;
+            UpdateDate = updateDate.UtcDateTime;
         }
 
         public virtual Guid PublicKey { get; set; }
 
         public virtual DateTime Start { set; get; }
+        
+        public virtual string StartTimezone { set; get; }
 
         public virtual string Comment { get; set; }
         
         public virtual Guid? InterviewId { get; set; }
+        public virtual string InterviewKey { get; set; }
         
         public virtual int AssignmentId { get; set; }
         
