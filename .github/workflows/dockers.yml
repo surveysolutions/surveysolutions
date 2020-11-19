@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set Version
-        id: setVersion        
+        id: setVersion
         run: |
           curl -sL https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -o yq
           chmod +x ./yq
@@ -36,7 +36,7 @@ jobs:
     needs: [ prepare-src ]
     strategy:
       matrix:
-        project:        
+        project:
           - name: frontend
             dir: src/UI/WB.UI.Frontend
             
@@ -69,7 +69,6 @@ jobs:
           name: ${{ matrix.project.name }}
           path: ${{ matrix.project.dir }}/dist
           retention-days: 1
-
 
 
   docker:
@@ -123,15 +122,20 @@ jobs:
           DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ matrix.image.name }}
           VERSION=$(cat .version)
 
-          TAGS="${DOCKER_IMAGE}:${VERSION}"
-          
+          TAGS="${DOCKER_IMAGE}:$BRANCH"
+
           if [[ $VERSION =~ ^([0-9]{1,4})\.([0-9]{1,4})\.([0-9]{1,4})(\.[0-9]{1,10})?$  ]]; then
             MINOR=${VERSION%.*}
             MAJOR=${MINOR%.*}
-            TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR},${DOCKER_IMAGE}:latest"
-          elif [ "${{ github.event_name }}" = "push" ]; then
-            TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::8}"
+            TAGS="$TAGS,${DOCKER_IMAGE}:$BRANCH"
+
+            if [ "$BRANCH" = 'release' ]; then
+              TAGS="$TAGS,${DOCKER_IMAGE}:${VERSION}"
+              TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR}"
+              TAGS="$TAGS,${DOCKER_IMAGE}:latest"
+            fi
           fi
+
           echo "TAGS: $TAGS"
           echo "TAGS: $VERSION"
 
