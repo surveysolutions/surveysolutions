@@ -184,10 +184,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             if (interview.CalendarEvent.HasValue)
             {
-                var dateTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
-                    interview.CalendarEvent.Value.LocalDateTime, 
-                    interview.CalendarEventTimezoneId, 
-                    TimeZoneInfo.Local.Id);
+                var dateTime = interview.CalendarEventTimezoneId == null || interview.CalendarEventTimezoneId == TimeZoneInfo.Local.Id
+                    ? interview.CalendarEvent.Value.LocalDateTime
+                    : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
+                        interview.CalendarEvent.Value.LocalDateTime, 
+                        interview.CalendarEventTimezoneId, 
+                        TimeZoneInfo.Local.Id);
                 var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, dateTime);
                 string separatorVisit =
                     !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
