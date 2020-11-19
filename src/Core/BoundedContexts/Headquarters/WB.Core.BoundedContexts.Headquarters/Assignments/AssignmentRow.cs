@@ -33,13 +33,4 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public CalendarEventView CalendarEvent { get; set; }
     }
-
-    public class CalendarEventView
-    {
-        public DateTime? Start { get; set; }
-        
-        public string Comment { get; set; }
-        
-        public Guid PublicKey { get; set; }
-    }
 }

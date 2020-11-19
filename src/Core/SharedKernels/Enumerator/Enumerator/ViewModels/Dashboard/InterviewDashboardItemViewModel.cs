@@ -331,12 +331,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             if (interview.Assignment.HasValue)
             {
-                await ViewModelNavigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(new CalendarEventViewModelArgs()
-                {
-                    InterviewId = interview.InterviewId,
-                    AssignmentId = interview.Assignment.Value,
-                    OkCallback = RaiseOnItemUpdated
-                });
+                await ViewModelNavigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(
+                    new CalendarEventViewModelArgs(
+                        interview.InterviewId,
+                        interview.InterviewKey,
+                        interview.Assignment.Value,
+                        RaiseOnItemUpdated)
+                );
             }
         }
 

@@ -129,12 +129,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         protected async Task SetCalendarEventAsync()
         {
             var navigationService = serviceLocator.GetInstance<IViewModelNavigationService>();
-            await navigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(new CalendarEventViewModelArgs()
-            {
-                InterviewId = null,
-                AssignmentId = Assignment.Id,
-                OkCallback = () => RaiseOnItemUpdated()
-            });
+            await navigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(
+                new CalendarEventViewModelArgs(
+                    null,
+                null,
+                Assignment.Id,
+                RaiseOnItemUpdated
+            ));
         }
 
         protected void RemoveCalendarEvent()

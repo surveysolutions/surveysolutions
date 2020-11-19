@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -110,7 +111,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IAggregateRootPrototypeService>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IAggregateRootPrototypePromoterService>(),
-                memoryCache.Object);
+                memoryCache.Object,
+                calendarEventService: Mock.Of<ICalendarEventService>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())

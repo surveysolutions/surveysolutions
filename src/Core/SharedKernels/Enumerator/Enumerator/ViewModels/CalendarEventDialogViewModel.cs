@@ -14,7 +14,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class CalendarEventViewModelArgs
     {
+        public CalendarEventViewModelArgs(Guid? interviewId, string? interviewKey, int assignmentId, Action? okCallback)
+        {
+            InterviewId = interviewId;
+            InterviewKey = interviewKey;
+            AssignmentId = assignmentId;
+            OkCallback = okCallback;
+        }
+
         public Guid? InterviewId { get; set; }
+        public string? InterviewKey { get; set; }
         public int AssignmentId { get; set; }
         public Action? OkCallback { get; set; }
     }
@@ -97,13 +106,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var dateTime = new DateTime(DateEvent.Year, DateEvent.Month, DateEvent.Day, TimeEvent.Hours,
                 TimeEvent.Minutes, TimeEvent.Seconds, DateTimeKind.Local);
+            var timezone = TimeZoneInfo.Local.Id;
 
             if (dateTime != calendarEvent?.Start.LocalDateTime || calendarEvent?.Comment != Comment)
             {
                 var userId = principal.CurrentUserIdentity.UserId;
                 ICommand command = calendarEvent == null
-                    ? (ICommand)new CreateCalendarEventCommand(Guid.NewGuid(), userId, dateTime, initValues.InterviewId, initValues.AssignmentId, Comment)
-                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, dateTime, Comment);
+                    ? (ICommand)new CreateCalendarEventCommand(Guid.NewGuid(), userId, dateTime,
+                        timezone, 
+                        initValues.InterviewId, 
+                        initValues.InterviewKey,
+                        initValues.AssignmentId, Comment)
+                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, dateTime, timezone,Comment);
 
                 commandService.Execute(command);
                 
