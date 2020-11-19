@@ -59,8 +59,8 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
             if (GetItem() is IDashboardViewItem dashboardItem)
             {
                 var popup = new PopupMenu(this.DashboardItem.Context, this.MenuHandle, GravityFlags.Left);
-
-                foreach (var action in dashboardItem.ContextMenu.Where(a => a.Command.CanExecute()))
+                var actions = dashboardItem.ContextMenu.Where(a => a.Command.CanExecute());
+                foreach (var action in actions)
                 {
                     var menu = popup.Menu.Add(action.Label);
                     action.Tag = menu.GetHashCode();

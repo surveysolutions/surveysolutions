@@ -7,35 +7,35 @@
   <MvxDatePicker
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textSize="20dp"
+      android:textSize="@dimen/calendar_event_text_size"
       android:datePickerMode="spinner"
       android:calendarViewShown="false"
       local:MvxBind="Value DateEvent; MinDate MinDate" />
   <MvxTimePicker
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textSize="20dp"
+      android:textSize="@dimen/calendar_event_text_size"
       android:timePickerMode="spinner"
       local:MvxBind="Value TimeEvent" />
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
+      android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+      android:layout_marginRight="@dimen/calendar_event_dialog_padding"
       local:MvxBind="Text Localization('Comment');" />
-  <EditText
+  <com.google.android.material.textfield.TextInputEditText
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textSize="20dp"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
+      android:textSize="@dimen/calendar_event_text_size"
+      android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+      android:layout_marginRight="@dimen/calendar_event_dialog_padding"
       android:maxLength="500"
       local:MvxBind="Text Comment" />
   <LinearLayout  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
                  android:orientation="horizontal"
-                 android:layout_marginLeft="20dp"
-                 android:layout_marginRight="20dp">
+                 android:paddingLeft="@dimen/calendar_event_dialog_padding"
+                 android:paddingRight="@dimen/calendar_event_dialog_padding">
       <View
           android:layout_width="20dp"
           android:layout_height="0dp"

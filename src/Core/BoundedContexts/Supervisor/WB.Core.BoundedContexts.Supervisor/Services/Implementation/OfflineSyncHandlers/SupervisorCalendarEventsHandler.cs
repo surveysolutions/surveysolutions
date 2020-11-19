@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -164,8 +166,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Calendar event by {request.CalendarEvent.CalendarEventId} processing failed. Reason: '{exception.Message}'", exception);
-                innerwatch.Restart();
+                this.logger.Error($"Calendar event by {request.CalendarEvent.CalendarEventId} processing failed. Reason: '{exception.Message}'. Took {innerwatch.Elapsed:g}.", exception);
+                innerwatch.Stop();
                 throw;
             }
 

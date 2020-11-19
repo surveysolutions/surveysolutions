@@ -164,6 +164,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var command = new CompleteCalendarEventCommand(calendarEvent.Id, this.principal.CurrentUserIdentity.UserId);
             this.commandService.Execute(command);
+
+            logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({interviewId})");
         }
 
         public IMvxAsyncCommand Assign => new MvxAsyncCommand(SelectInterviewer, () => 
