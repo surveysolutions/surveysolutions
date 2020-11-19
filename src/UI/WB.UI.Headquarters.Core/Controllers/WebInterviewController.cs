@@ -916,7 +916,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool IsAuthorizedUser(Guid responsibleId)
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity?.IsAuthenticated == true)
             {
                 var isInterviewer = this.User.IsInRole(UserRoles.Interviewer.ToString());
 

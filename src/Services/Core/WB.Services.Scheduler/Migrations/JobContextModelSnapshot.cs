@@ -17,7 +17,7 @@ namespace WB.Services.Scheduler.Migrations
             modelBuilder
                 .HasDefaultSchema("scheduler")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "5.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("WB.Services.Scheduler.Model.JobArchive", b =>
