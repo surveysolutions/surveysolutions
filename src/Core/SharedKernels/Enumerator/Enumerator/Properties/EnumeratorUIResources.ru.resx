@@ -353,7 +353,7 @@
     <value>Передача событий календаря</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
-    <value>вопросники</value>
+    <value>опросники</value>
   </data>
   <data name="UpdatingQuestionnaires" xml:space="preserve">
     <value>Обновление вопросников</value>

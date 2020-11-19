@@ -1954,7 +1954,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to вопросники.
+        ///   Looks up a localized string similar to опросники.
         /// </summary>
         public static string Synchronization_Questionnaires {
             get {

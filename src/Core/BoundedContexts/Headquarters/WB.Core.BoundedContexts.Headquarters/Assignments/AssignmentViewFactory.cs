@@ -158,7 +158,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return calendarEvent == null ? null : new CalendarEventView()
             {
                 Comment = calendarEvent.Comment,
-                Start = calendarEvent.Start,
+                StartUtc = calendarEvent.StartUtc,
+                StartTimezone = calendarEvent.StartTimezone,
                 PublicKey = calendarEvent.PublicKey
             };
         }
