@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
@@ -41,15 +43,18 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IInterviewFactory interviewFactory;
         private ICommandTransformator commandTransformator;
+        private readonly ICalendarEventService calendarEventService;
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer,
-            IInterviewFactory interviewFactory, ICommandTransformator commandTransformator)
+            IInterviewFactory interviewFactory, ICommandTransformator commandTransformator, 
+            ICalendarEventService calendarEventService)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.interviewFactory = interviewFactory;
             this.commandTransformator = commandTransformator;
+            this.calendarEventService = calendarEventService;
         }
 
         [HttpPost]
@@ -96,6 +101,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                             this.commandService.Execute(transformedCommand);
                             this.interviewFactory.RemoveInterview(deleteInterview.InterviewId);
                             break;
+                        case RejectInterviewCommand rejectInterview:
+                            this.commandService.Execute(transformedCommand);
+                            CompleteCalendarEventIfExists(rejectInterview.InterviewId, rejectInterview.UserId);
+                            break;
                         default:
                             this.commandService.Execute(transformedCommand);
                             break;
@@ -121,6 +130,13 @@ namespace WB.UI.Headquarters.Controllers.Api
             return response;
         }
 
+        private void CompleteCalendarEventIfExists(Guid interviewId, Guid userId)
+        {
+            var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
+            if (calendarEvent != null)
+                this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey,userId));
+        }
+        
         public class JsonCommandBaseRequest
         {
             public string Type { get; set; }
