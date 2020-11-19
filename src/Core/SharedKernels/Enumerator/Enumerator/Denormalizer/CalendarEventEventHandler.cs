@@ -59,6 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 calendarEvent =>
                 {
                     calendarEvent.Start = evnt.Payload.Start;
+                    calendarEvent.StartTimezone = evnt.Payload.StartTimezone;
                     calendarEvent.Comment = evnt.Payload.Comment;
                     calendarEvent.UserId = evnt.Payload.UserId;
                 });
@@ -108,6 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                     return;
 
                 interviewView.CalendarEvent = shouldDisplayData ? calendarEvent.Start : (DateTimeOffset?)null;
+                interviewView.CalendarEventTimezoneId = shouldDisplayData ? calendarEvent.StartTimezone : null;
                 interviewView.CalendarEventComment = shouldDisplayData ? calendarEvent.Comment : null;
                 interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDate;
                 this.interviewViewRepository.Store(interviewView);
@@ -119,6 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                     return;
 
                 assignment.CalendarEvent = shouldDisplayData ? calendarEvent.Start : (DateTimeOffset?)null;
+                assignment.CalendarEventTimezoneId = shouldDisplayData ? calendarEvent.StartTimezone : null;
                 assignment.CalendarEventComment = shouldDisplayData ? calendarEvent.Comment : null;
                 assignment.CalendarEventLastUpdate = calendarEvent.LastUpdateDate;
                 this.assignmentStorage.Store(assignment);
