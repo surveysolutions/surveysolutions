@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

@@ -85,7 +85,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 Sequence = eventStore.GetLastEventSequence(x.Id),
                 ResponsibleId = x.UserId,
                 LastEventId = x.LastEventId,
-                //IsMarkedAsReceivedByInterviewer = x.ReceivedByInterviewerAtUtc != null,
             }).ToList();
 
             return Task.FromResult(new GetCalendarEventsResponse()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
@@ -83,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         
         private void UpdateCalendarEvent(IPublishableEvent evnt, Action<CalendarEvent> updater)
         {
-            CalendarEvent calendarEvent = calendarEventStorage.GetById(evnt.EventSourceId);
+            CalendarEvent? calendarEvent = calendarEventStorage.GetById(evnt.EventSourceId);
             if (calendarEvent == null) return;
 
             updater.Invoke(calendarEvent);
