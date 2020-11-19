@@ -40,7 +40,7 @@ const store = {
                 success: callback,
             })
         },
-        async saveCalendarEvent(context, { id, interviewId, assignmentId, newDate, comment, callback }) {
+        async saveCalendarEvent(context, { id, interviewId, assignmentId, newDate, comment, timezone, callback }) {
             context.dispatch('showProgress', true)
 
             const response = await Vue.$http.post(Vue.$config.model.interviewerHqEndpoint + '/UpdateInterviewCalendarEvent', {
@@ -49,6 +49,7 @@ const store = {
                 id: id,
                 newDate: newDate,
                 assignmentId: assignmentId,
+                timezone: timezone,
             }).catch(error => { context.dispatch('hideProgress') })
 
             context.dispatch('hideProgress')

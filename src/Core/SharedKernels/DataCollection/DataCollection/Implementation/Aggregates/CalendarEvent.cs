@@ -27,13 +27,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected void Apply(CalendarEventCreated @event)
         {
             this.properties.PublicKey = this.EventSourceId;
-
             this.properties.Start = @event.Start;
+            this.properties.StartTimezone = @event.StartTimezone;
             this.properties.Comment = @event.Comment;
             this.properties.InterviewId = @event.InterviewId;
             this.properties.AssignmentId = @event.AssignmentId;
             this.properties.CreatedAt = @event.OriginDate;
             this.properties.UpdatedAt = @event.OriginDate;
+            this.properties.InterviewKey = @event.InterviewKey;
         }
         
         protected void Apply(CalendarEventUpdated @event)
@@ -41,9 +42,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //ignore event if it occured before last change
             if (this.properties.UpdatedAt > @event.OriginDate) return;
             
-            this.properties.Start = @event.Start;
-            this.properties.Comment = @event.Comment;
-            this.properties.UpdatedAt = @event.OriginDate;
+            properties.Start = @event.Start;
+            properties.StartTimezone = @event.StartTimezone;
+            properties.Comment = @event.Comment;
+            properties.UpdatedAt = @event.OriginDate;
         }
         
         protected void Apply(CalendarEventCompleted @event)
@@ -73,7 +75,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 originDate: command.OriginDate,
                 comment: command.Comment,
                 start: command.Start,
+                startTimezone: command.StartTimezone,
                 interviewId: command.InterviewId,
+                interviewKey:command.InterviewKey,
                 assignmentId: command.AssignmentId));
         }
         
@@ -83,7 +87,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 userId: command.UserId,
                 originDate: command.OriginDate,
                 comment: command.Comment,
-                start: command.Start));
+                start: command.Start,
+                startTimezone: command.StartTimezone));
         }
 
         public void CompleteCalendarEvent(CompleteCalendarEventCommand command)

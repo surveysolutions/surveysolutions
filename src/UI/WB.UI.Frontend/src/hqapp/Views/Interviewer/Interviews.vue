@@ -120,7 +120,7 @@
 
 <script>
 import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import {map, join, toNumber, filter} from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
@@ -344,6 +344,7 @@ export default {
                 id : self.calendarEventId,
                 newDate : self.newCalendarDate,
                 comment : self.editCalendarComment,
+                timezone: moment.tz.guess(),
 
                 callback: self.reload,
             })

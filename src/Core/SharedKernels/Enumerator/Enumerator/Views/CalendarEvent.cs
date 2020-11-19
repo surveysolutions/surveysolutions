@@ -10,7 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public Guid Id { get; set; }
         //[AutoIncrement, Unique, NotNull]
         //public int? Order { get; set; }
-        public DateTimeOffset Start { get; set; } 
+        public DateTimeOffset Start { get; set; }
+        public string StartTimezone { get; set; }
         public string Comment { get; set; }
         public Guid UserId { get; set; }
         public Guid? InterviewId  { get; set; }
@@ -20,5 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool IsDeleted { get; set; }
         public bool IsSynchronized { get; set; }
         public Guid LastEventId { get; set; }
+        public string InterviewKey { get; set; }
     }
 }

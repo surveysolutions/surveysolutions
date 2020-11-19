@@ -21,8 +21,10 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             state = new CalendarEvent(
                 @event.EventSourceId,
                 @event.Payload.Start.UtcDateTime,
+                @event.Payload.StartTimezone,
                 @event.Payload.Comment,
                 @event.Payload.InterviewId,
+                @event.Payload.InterviewKey,
                 @event.Payload.AssignmentId,
                 false,
                 @event.Payload.OriginDate,
