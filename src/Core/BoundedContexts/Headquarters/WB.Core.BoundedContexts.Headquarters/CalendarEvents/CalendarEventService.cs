@@ -12,18 +12,20 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
     class CalendarEventService : ICalendarEventService
     {
         private readonly IQueryableReadSideRepositoryReader<CalendarEvent, Guid> calendarEventsAccessor;
-        private readonly IUserRepository userRepository;
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor;
-        private readonly InterviewerInterviewsFactory interviewerInterviewsFactory;
+        private readonly IInterviewInformationFactory interviewerInterviewsFactory;
         
 
         public CalendarEventService(IQueryableReadSideRepositoryReader<CalendarEvent, Guid> calendarEventsAccessor,
-            IUserRepository userRepository, IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor, InterviewerInterviewsFactory interviewerInterviewsFactory)
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor, 
+            IInterviewInformationFactory interviewerInterviewsFactory)
         {
-            this.calendarEventsAccessor = calendarEventsAccessor ?? throw new ArgumentNullException(nameof(calendarEventsAccessor));
-            this.userRepository = userRepository;
-            this.assignmentsAccessor = assignmentsAccessor;
-            this.interviewerInterviewsFactory = interviewerInterviewsFactory;
+            this.calendarEventsAccessor = 
+                calendarEventsAccessor ?? throw new ArgumentNullException(nameof(calendarEventsAccessor));
+            this.assignmentsAccessor = 
+                assignmentsAccessor ?? throw new ArgumentNullException(nameof(assignmentsAccessor));
+            this.interviewerInterviewsFactory = 
+                interviewerInterviewsFactory ?? throw new ArgumentNullException(nameof(interviewerInterviewsFactory));
         }
 
         public CalendarEvent? GetCalendarEventById(Guid id)
