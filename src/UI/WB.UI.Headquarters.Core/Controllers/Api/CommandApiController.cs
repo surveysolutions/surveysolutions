@@ -105,6 +105,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                             this.commandService.Execute(transformedCommand);
                             CompleteCalendarEventIfExists(rejectInterview.InterviewId, rejectInterview.UserId);
                             break;
+                        case ApproveInterviewCommand approveInterview:
+                            this.commandService.Execute(transformedCommand);
+                            CompleteCalendarEventIfExists(approveInterview.InterviewId, approveInterview.UserId);
+                            break;
                         default:
                             this.commandService.Execute(transformedCommand);
                             break;
@@ -133,7 +137,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private void CompleteCalendarEventIfExists(Guid interviewId, Guid userId)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
-            if (calendarEvent != null)
+            if (calendarEvent != null && !calendarEvent.IsCompleted)
                 this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey,userId));
         }
         

@@ -339,7 +339,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private void CompleteCalendarEventIfExists(Guid interviewId)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
-            if (calendarEvent != null)
+            if (calendarEvent != null && !calendarEvent.IsCompleted)
                 this.commandService.Execute(new CompleteCalendarEventCommand(interviewId, this.authorizedUser.Id));
         }
         
