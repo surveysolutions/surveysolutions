@@ -57,6 +57,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.Tests.Abc;
 using WB.UI.Designer.Code;
+using WB.UI.Headquarters;
 using Configuration = NHibernate.Cfg.Configuration;
 using Environment = System.Environment;
 
@@ -392,6 +393,11 @@ namespace WB.Tests.Integration
             return cfg.BuildSessionFactory();
         }
 
+        public static ISessionFactory SessionFactoryProd(string connectionString)
+        {
+            return new HqSessionFactoryFactory(Startup.BuildUnitOfWorkSettings(connectionString)).BuildSessionFactory();
+        }
+
         public static ISessionFactory SessionFactory(string connectionString, 
             string usersSchemaName,
             IEnumerable<Type> usersEntityMapTypes,
@@ -408,6 +414,7 @@ namespace WB.Tests.Integration
                 db.ConnectionString = connectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                
             });
 
             cfg.AddDeserializedMapping(GetMappingsFor(usersEntityMapTypes, usersSchemaName), "user");
@@ -433,6 +440,13 @@ namespace WB.Tests.Integration
         {
             var mapper = new ModelMapper();
             mapper.AddMappings(painStorageEntityMapTypes);
+            mapper.AfterMapProperty += (inspector, member, customizer) =>
+            {
+                var propertyInfo = (PropertyInfo)member.LocalMember;
+
+                customizer.Column('"' + propertyInfo.Name + '"');
+            };
+
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
                 var propertyInfo = (PropertyInfo)member.LocalMember;

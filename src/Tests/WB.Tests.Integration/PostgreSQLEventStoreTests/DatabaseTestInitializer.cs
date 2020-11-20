@@ -7,6 +7,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
+using WB.Persistence.Headquarters.Migrations.Users;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -42,16 +43,13 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         {
             foreach (var db in dbType)
             {
-                string schemaName = null;
-                switch (db)
+                string schemaName = db switch
                 {
-                    case DbType.PlainStore:
-                        schemaName = "plainstore";
-                        break;
-                    case DbType.ReadSide:
-                        schemaName = "readside";
-                        break;
-                }
+                    DbType.PlainStore => "plainstore",
+                    DbType.ReadSide => "readside",
+                    DbType.Users => "users",
+                    _ => null
+                };
 
                 DatabaseManagement.InitDatabase(connectionString, schemaName);
                 DatabaseManagement.InitDatabase(connectionString, "users");
@@ -69,6 +67,12 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                         DbMigrationsRunner.MigrateToLatest(connectionString, schemaName,
                             new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace));
                         break;
+                    case DbType.Users:
+                        DbMigrationsRunner.MigrateToLatest(connectionString, schemaName,
+                            new DbUpgradeSettings(typeof(M001_AddUsersHqIdentityModel).Assembly, typeof(M001_AddUsersHqIdentityModel).Namespace));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

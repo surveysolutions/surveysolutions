@@ -13,7 +13,6 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -22,14 +21,12 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.Providers;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Aggregates;
@@ -41,15 +38,11 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Questionnaire;
@@ -377,43 +370,8 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
         private ISessionFactory CreateSessionFactory()
         {
-            InitializeDb(DbType.PlainStore, DbType.ReadSide);
-            
-            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
-                "users",
-                new List<Type>()
-                {
-                    typeof(HqUserMap),
-                    typeof(HqUserClaimMap),
-                    typeof(DeviceSyncInfoMap),
-                    typeof(HqUserProfileMap),
-                    typeof(HqRoleMap),
-                    typeof(SyncStatisticsMap),
-                },
-                unitOfWorkConnectionSettings.ReadSideSchemaName,
-                new List<Type>
-                {
-                    typeof(InterviewSummaryMap),
-                    typeof(QuestionnaireCompositeItemMap),
-                    typeof(IdentifyEntityValueMap),
-                    typeof(InterviewStatisticsReportRowMap),
-                    typeof(TimeSpanBetweenStatusesMap),
-                    typeof(InterviewGpsMap),
-                    typeof(CumulativeReportStatusChangeMap),
-                    typeof(InterviewCommentedStatusMap),
-                    typeof(InterviewCommentMap),
-                    typeof(AssignmentMap),
-                },
-                unitOfWorkConnectionSettings.PlainStorageSchemaName,
-                new List<Type>
-                {
-                    typeof(AudioAuditFileMap),
-                    typeof(AudioFileMap),
-                    typeof(QuestionnaireBrowseItemMap),
-                    typeof(QuestionnaireLiteViewItemMap),
-                    typeof(ReadonlyUserMap),
-                    typeof(ProfileMap),
-                }, true);
+            InitializeDb(DbType.PlainStore, DbType.ReadSide, DbType.Users);
+            var sessionFactory = IntegrationCreate.SessionFactoryProd(ConnectionStringBuilder.ConnectionString);
             return sessionFactory;
         }
     }
