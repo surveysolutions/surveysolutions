@@ -164,7 +164,8 @@ export default {
             questionnaireVersion: null,
             assignmentId: null,
             editCalendarComment: null,
-            newCalendarDate : null,
+            newCalendarStart : null,
+            newCalendarStarTimezone : null,
             calendarEventId : null,
             calendarInterviewId : null,
             calendarAssinmentId : null,
@@ -290,7 +291,7 @@ export default {
             }
         },
         selectedDate(){
-            return this.newCalendarDate
+            return this.newCalendarStart
         },
         datePickerConfig() {
             var self = this
@@ -303,8 +304,8 @@ export default {
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
 
-                    if(start != null && start != self.newCalendarDate){
-                        self.newCalendarDate = start
+                    if(start != null && start != self.newCalendarStart){
+                        self.newCalendarStart = start
                     }
                 },
             }
@@ -330,7 +331,8 @@ export default {
             this.calendarAssinmentId = assignmentId
             this.calendarEventId = calendarEvent?.publicKey
             this.editCalendarComment = calendarEvent?.comment
-            this.newCalendarDate = calendarEvent?.start
+            this.newCalendarStart = calendarEvent?.startUtc
+            this.newCalendarStarTimezone = calendarEvent?.startTimezone
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
 
@@ -343,7 +345,7 @@ export default {
                 interviewId : self.calendarInterviewId,
                 assignmentId : self.calendarAssinmentId,
                 id : self.calendarEventId,
-                newDate : self.newCalendarDate,
+                newDate : self.newCalendarStart,
                 comment : self.editCalendarComment,
                 timezone: moment.tz.guess(),
 
@@ -444,6 +446,7 @@ export default {
         },
 
         getTableColumns() {
+            const self = this
             const columns = [
                 {
                     data: 'key',
