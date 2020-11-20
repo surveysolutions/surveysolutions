@@ -44,7 +44,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             return interviewApiViews.Select(x => new CalendarEventApiView()
             {
                 CalendarEventId = x.PublicKey,
-                ResponsibleId = x.UserId,
                 Sequence = eventStore.GetLastEventSequence(x.PublicKey),
                 LastEventId = eventStore.GetLastEventId(x.PublicKey)
             }).ToList();

@@ -223,7 +223,7 @@ export default {
                     render(data) {
                         if(data != null && data.startUtc != null)
                             return '<span data-toggle="tooltip" title="'
-                                + (data.comment == null ? '(no comment)' : data.comment)
+                                + ((data.comment == null || data.comment == '') ? self.$t('Assignments.NoComment') : data.comment)
                                 + '">'
                                 + moment(data.startUtc)
                                     .format(DateFormats.dateTimeInList)
@@ -247,9 +247,9 @@ export default {
 
         editCalendarEvent(assignmentId, calendarEvent) {
             this.calendarAssinmentId = assignmentId
-            this.calendarEventId = (calendarEvent != null && calendarEvent != undefined) ? calendarEvent.publicKey : null
-            this.editCalendarComment = (calendarEvent != null && calendarEvent != undefined) ? calendarEvent.comment : null
-            this.newCalendarDate = (calendarEvent != null && calendarEvent != undefined) ? calendarEvent.start : null
+            this.calendarEventId = calendarEvent?.publicKey
+            this.editCalendarComment = calendarEvent?.comment
+            this.newCalendarDate = calendarEvent?.start
             this.$refs.editCalendarModal.modal({keyboard: false})
         },
         updateCalendarEvent() {

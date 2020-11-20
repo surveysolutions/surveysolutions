@@ -98,9 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             catch (Exception exception)
             {
                 this.logger.LogError(
-                    $"Calendar event events by {calendarEventPackage.CalendarEventId} processing failed. Reason: '{exception.Message}'",
-                    exception);
-
+                    exception,
+                    $"Calendar event events by {calendarEventPackage.CalendarEventId} processing failed. Reason: '{exception.Message}'");
                 throw;
             }
         }

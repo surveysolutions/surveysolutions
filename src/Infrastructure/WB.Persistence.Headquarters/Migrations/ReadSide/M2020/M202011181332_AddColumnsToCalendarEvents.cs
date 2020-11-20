@@ -8,9 +8,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            if (!Schema.Table("calendarevents").Column("timezone").Exists())
+            if (!Schema.Table("calendarevents").Column("starttimezone").Exists())
             {
-                Create.Column("timezone").OnTable("calendarevents")
+                Create.Column("starttimezone").OnTable("calendarevents")
                     .AsString().Nullable();
             }
             
@@ -23,7 +23,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
         public override void Down()
         {
-            Delete.Column("timezone").FromTable("calendarevents");   
+            Delete.Column("starttimezone").FromTable("calendarevents");   
             Delete.Column("interviewkey").FromTable("calendarevents");   
         }
     }

@@ -483,4 +483,7 @@
   <data name="WebModeEnabledWarning" xml:space="preserve">
       <value>Задание не может быть завершено. Оно создано в веб режиме, но веб режим отключен на опроснике</value>
   </data>
+  <data name="NoComment" xml:space="preserve">
+      <value>(нет комментария)</value>
+  </data>
 </root>

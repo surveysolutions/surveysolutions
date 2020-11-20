@@ -85,7 +85,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             {
                 CalendarEventId = x.Id,
                 Sequence = eventStore.GetLastEventSequence(x.Id),
-                ResponsibleId = x.UserId,
                 LastEventId = x.LastEventId,
             }).ToList();
 
