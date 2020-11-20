@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
+using WB.Persistence.Headquarters.Migrations.Workspace;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
@@ -20,12 +23,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     {
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IMapper mapper;
+        private readonly IWorkspacesService workspacesService;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
-            IMapper mapper)
+            IMapper mapper,
+            IWorkspacesService workspacesService)
         {
             this.workspaces = workspaces;
             this.mapper = mapper;
+            this.workspacesService = workspacesService;
         }
 
         /// <summary>
@@ -86,6 +92,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 var workspace = new Workspace(request.Name!, request.DisplayName!);
                 
                 this.workspaces.Store(workspace, null);
+                this.workspacesService.Generate(workspace.Name, DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
+                
                 return CreatedAtAction("Details", routeValues: new {id = workspace.Name}, value: this.mapper.Map<WorkspaceApiView>(workspace));
             }
 

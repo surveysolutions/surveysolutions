@@ -58,6 +58,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -324,6 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IUserImportService, UserImportService>();
 
             registry.Bind<IWorkspaceNameProvider, PrimaryWorkspaceNameProvider>();
+            registry.Bind<IWorkspacesService, WorkspacesService>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
             registry.BindToMethodInSingletonScope(ctx =>
             {
