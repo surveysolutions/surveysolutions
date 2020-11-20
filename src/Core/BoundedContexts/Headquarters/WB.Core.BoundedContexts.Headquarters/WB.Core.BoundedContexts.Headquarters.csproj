@@ -49,7 +49,6 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.5.1.39" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="AWSSDK.S3" Version="3.5.4.3" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.5.0.39" />
@@ -73,7 +72,7 @@
     <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="0.1.1" />
     <PackageReference Include="MigraDocCore.Rendering" Version="0.1.0" />
     <PackageReference Include="PdfSharpCore" Version="1.2.8" />
-    <PackageReference Include="ZXing.Net" Version="0.16.5" />
+    <PackageReference Include="ZXing.Net" Version="0.16.6" />
   </ItemGroup>
 
   <ItemGroup>
