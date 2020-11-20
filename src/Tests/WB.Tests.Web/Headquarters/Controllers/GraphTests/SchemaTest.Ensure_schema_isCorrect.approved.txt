@@ -16,14 +16,20 @@ type Assignment {
 }
 
 type CalendarEvent {
+  assignmentId: Int!
   "Comment of calendar Event"
   comment: String
+  creatorUserId: Uuid!
+  interviewId: Uuid
+  interviewKey: String!
+  isCompleted: Boolean!
   "Id of Calendar Event"
   publicKey: Uuid!
+  "Start Timezone of Event"
+  startTimezone: String!
   "Start of calendar Event"
   startUtc: DateTime!
-  "Timezone of Start Event"
-  startTimezone: String
+  updateDateUtc: DateTime!
 }
 
 type CategoricalOption {
