@@ -60,7 +60,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         }
-        
-        protected virtual void ListViewModel_OnItemUpdated(object sender, EventArgs args) { }
+
+        protected void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        {
+            if (sender is IDashboardItemWithEvents dashboardItem)
+            {
+                var newDashboardItem = GetUpdatedDashboardItem(dashboardItem);
+                
+                var indexOf = UiItems.IndexOf(dashboardItem);
+                UiItems[indexOf] = newDashboardItem;
+
+                dashboardItem.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                newDashboardItem.OnItemUpdated += ListViewModel_OnItemUpdated;
+            }
+        }
+
+        protected virtual IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
+        {
+            throw new ArgumentException("Need implement this method to refresh dashboard item");
+        }
     }
 }

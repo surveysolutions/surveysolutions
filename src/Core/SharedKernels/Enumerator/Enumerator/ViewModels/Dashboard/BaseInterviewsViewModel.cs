@@ -100,11 +100,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
         
-        protected override void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItemWithEvents)
         {
-            base.ListViewModel_OnItemUpdated(sender, args);
-
-            var dashboardItem = (InterviewDashboardItemViewModel) sender;
+            var dashboardItem = (InterviewDashboardItemViewModel) dashboardItemWithEvents;
 
             var interviewId = dashboardItem.InterviewId;
             var updatedView = GetDbItem(interviewId);
@@ -114,7 +112,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
                 .ToList();
 
-            dashboardItem.Init(updatedView, details);
+            var newDashboardItemViewModel = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
+            newDashboardItemViewModel.Init(updatedView, details);
+            return newDashboardItemViewModel;
         }
     }
 }
