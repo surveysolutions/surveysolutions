@@ -6,9 +6,9 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Persistence.Headquarters.Migrations.Events;
+using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
-using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests

@@ -16,6 +16,7 @@ using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Code.WebInterview.Pipeline;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Services;
@@ -69,6 +70,7 @@ namespace WB.UI.Headquarters
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
                 cfg.AddProfile(new AssignmentProfile());
                 cfg.AddProfile(new AssignmentsPublicApiMapProfile());
+                cfg.AddProfile(new WorkspacePublicApiMapProfile());
                 cfg.ConstructServicesUsing(_.Get);
             }).CreateMapper());
             

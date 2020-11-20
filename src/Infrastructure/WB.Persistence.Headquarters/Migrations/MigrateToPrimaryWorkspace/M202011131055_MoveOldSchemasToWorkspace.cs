@@ -1,7 +1,7 @@
 using Dapper;
 using FluentMigrator;
 
-namespace WB.Persistence.Headquarters.Migrations.Workspaces
+namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
 {
     [Migration(2020_11_13_10_55)]
     public class M202011131055_MoveOldSchemasToWorkspace : Migration
