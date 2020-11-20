@@ -186,14 +186,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             if (interview.CalendarEvent.HasValue)
             {
-                DateTimeZone? timeZone = null;
+                DateTimeZone timeZone = null;
                 if (interview.CalendarEventTimezoneId != null)
                     timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(interview.CalendarEventTimezoneId);
                 if (timeZone == null)
                     timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
                 var instant = interview.CalendarEvent.Value.UtcDateTime.ToInstant();
                 var zonedDateTime = new ZonedDateTime(instant, timeZone);
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, zonedDateTime);
+                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, zonedDateTime.ToDateTimeUnspecified());
                 string separatorVisit =
                     !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{interview.CalendarEventComment}";
@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        private string FormatDateTimeString(string formatString, ZonedDateTime? dateTime)
+        private string FormatDateTimeString(string formatString, DateTime? dateTime)
         {
             if (!dateTime.HasValue)
                 return string.Empty;
