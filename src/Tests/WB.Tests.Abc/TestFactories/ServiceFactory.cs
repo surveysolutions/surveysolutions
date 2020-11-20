@@ -193,7 +193,8 @@ namespace WB.Tests.Abc.TestFactories
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(Mock.Of<ILogger>()),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>(),
-                Mock.Of<IAssignmentDocumentsStorage>());
+                Mock.Of<IAssignmentDocumentsStorage>(),
+                Mock.Of<ICalendarEventStorage>());
 
         CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null) =>
             new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>(),
