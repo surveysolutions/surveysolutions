@@ -70,8 +70,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                                     calendarEventPackage.ResponsibleId));
                     }
                     
-                    var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
-                            .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events.Replace(@"\u0000", ""));
+                    var aggregateRootEvents = serviceLocator.GetInstance<ISerializer>()
+                            .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events);
 
                     var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
 
