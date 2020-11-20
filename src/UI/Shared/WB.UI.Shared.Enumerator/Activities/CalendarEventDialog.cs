@@ -32,7 +32,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var ignore = base.OnCreateView(inflater, container, savedInstanceState);
 
             var view = this.BindingInflate(Resource.Layout.calendar_event_dialog, null);
-
+            Activity.Window?.SetSoftInputMode(SoftInput.AdjustPan);
             return view;
         }
 

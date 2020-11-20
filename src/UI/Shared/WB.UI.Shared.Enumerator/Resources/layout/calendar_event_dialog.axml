@@ -3,7 +3,8 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              local:MvxBind="HideKeyboardOnClick .">
   <MvxDatePicker
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -52,6 +53,6 @@
           android:layout_height="wrap_content"
           android:layout_gravity="right"
           style="@style/Widget.App.NegativeButton"
-          local:MvxBind="Text Localization('Cancel'); Click CloseCommand;HideKeyboardOnClick .;" />
+          local:MvxBind="Text Localization('Cancel'); Click CloseCommand; HideKeyboardOnClick .;" />
   </LinearLayout>
 </LinearLayout>
