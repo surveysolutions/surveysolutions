@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace WB.Persistence.Headquarters.Migrations.Workspaces
+namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
 {
     [Migration(2020_11_13_13_52)]
     public class M202011131352_DeleteOldSchemas : Migration

@@ -51,6 +51,7 @@ using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Logs;
+using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.Quartz;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
@@ -149,10 +150,11 @@ namespace WB.UI.Headquarters
                 LogsUpgradeSettings = new DbUpgradeSettings(typeof(M201905171139_AddErrorsTable).Assembly,
                     typeof(M201905171139_AddErrorsTable).Namespace),
                 UsersUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>(),
-                WorkspaceUpgradeSettings = new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly,
+                MigrateToPrimaryWorkspace = new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly,
                     typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace),
                 EventStoreUpgradeSettings = new DbUpgradeSettings(typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Assembly,
-                    typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Namespace)
+                    typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Namespace),
+                WorkspacesMigrationSettings = DbUpgradeSettings.FromFirstMigration<M202011191114_InitWorkspaces>()
             };
             
             return unitOfWorkConnectionSettings;
