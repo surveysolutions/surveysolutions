@@ -10,10 +10,11 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             
             Property(x => x.Comment);
             Property(x => x.StartUtc);
+            Property(x => x.StartTimezone);
             Property(x => x.AssignmentId);
             Property(x => x.InterviewId);
             Property(x => x.IsCompleted);
-            Property(x => x.UserId);
+            Property(x => x.CreatorUserId);
             Property(x => x.UpdateDateUtc);
             Property(x => x.UserName);
             Property(x => x.IsDeleted);

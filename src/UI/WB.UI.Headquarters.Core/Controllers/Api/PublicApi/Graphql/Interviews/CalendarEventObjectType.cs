@@ -11,6 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Name("CalendarEvent");
         
             descriptor.Field(x => x.PublicKey)
+                .Type<NonNullType<UuidType>>()
                 .Description("Id of Calendar Event");
             
             descriptor.Field(x => x.Comment)
@@ -18,10 +19,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Type<StringType>();
             
             descriptor.Field(x => x.StartUtc)
+                .Type<NonNullType<DateTimeType>>()
                 .Description("Start of calendar Event");
             
             descriptor.Field(x => x.StartTimezone)
-                .Description("Timezone of Start Event");
+                .Description("Start Timezone of Event");
+
+            descriptor.Field(x => x.InterviewId);
+            descriptor.Field(x => x.AssignmentId);
+            descriptor.Field(x => x.InterviewKey);
+            descriptor.Field(x => x.CreatorUserId);
+            descriptor.Field(x => x.UpdateDateUtc)
+                .Type<NonNullType<DateTimeType>>();
+
+            descriptor.Field(x => x.IsCompleted);
         }   
     }
 }
