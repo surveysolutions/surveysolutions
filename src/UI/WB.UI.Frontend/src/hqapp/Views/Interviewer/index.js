@@ -57,11 +57,9 @@ const store = {
 
         },
         deleteCalendarEvent(context, { id, callback }) {
-            $.ajax({
-                url: Vue.$config.model.interviewerHqEndpoint + '/DeleteInterviewCalendarEvent/' + id,
-                type: 'DELETE',
-                success: callback,
-            })
+            Vue.$http.delete(Vue.$config.model.interviewerHqEndpoint + '/DeleteInterviewCalendarEvent/' + id)
+                .then(() => { callback() })
+
         },
     },
 }

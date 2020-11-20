@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             InterviewKey = interviewKey;
             AssignmentId = assignmentId;
             IsCompleted = isCompleted;
-            UserId = userId;
+            CreatorUserId = userId;
             UserName = userName;
             UpdateDateUtc = updateDate.UtcDateTime;
         }
@@ -33,12 +33,12 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 
         public virtual DateTime StartUtc { set; get; }
         
-        public virtual string StartTimezone { set; get; }= String.Empty;
+        public virtual string StartTimezone { set; get; } = String.Empty;
 
-        public virtual string Comment { get; set; }= String.Empty;
+        public virtual string Comment { get; set; } = String.Empty;
         
         public virtual Guid? InterviewId { get; set; }
-        public virtual string InterviewKey { get; set; }= String.Empty;
+        public virtual string InterviewKey { get; set; } = String.Empty;
         
         public virtual int AssignmentId { get; set; }
         
@@ -46,8 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         
         public virtual DateTime UpdateDateUtc { set; get; }
         
-        public virtual Guid UserId { get; set; }
-        public virtual string UserName { get; set; }= String.Empty;
+        public virtual Guid CreatorUserId { get; set; }
+        public virtual string UserName { get; set; } = String.Empty;
         
         public virtual bool IsDeleted { get; set; }
     }
