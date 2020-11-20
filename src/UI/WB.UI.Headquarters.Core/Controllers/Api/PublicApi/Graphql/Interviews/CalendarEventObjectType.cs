@@ -23,6 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Start of calendar Event");
             
             descriptor.Field(x => x.StartTimezone)
+                .Type<StringType>()
                 .Description("Start Timezone of Event");
 
             descriptor.Field(x => x.InterviewId);
