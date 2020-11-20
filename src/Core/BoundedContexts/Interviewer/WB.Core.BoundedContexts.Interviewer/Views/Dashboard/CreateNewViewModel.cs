@@ -104,15 +104,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        protected override void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
         {
-            base.ListViewModel_OnItemUpdated(sender, args);
-
-            if (sender is AssignmentDashboardItemViewModel viewModel)
-            {
-                var assignment = this.assignmentsRepository.GetById(viewModel.AssignmentId);
-                viewModel.Init(assignment);
-            }
+            var assignmentModel = (AssignmentDashboardItemViewModel) dashboardItem;
+            var newAssignmentModel = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
+            var assignment = this.assignmentsRepository.GetById(assignmentModel.AssignmentId);
+            newAssignmentModel.Init(assignment);
+            return newAssignmentModel;
         }
 
         public void UpdateAssignment(int? assignmentId)

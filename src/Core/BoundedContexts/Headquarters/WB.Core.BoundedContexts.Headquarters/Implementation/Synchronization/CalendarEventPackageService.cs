@@ -1,7 +1,9 @@
 ﻿#nullable enable
 using System;
+using System.Linq;
 using Main.Core.Events;
 using Microsoft.Extensions.Logging;
+using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -17,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
     public class CalendarEventPackageService : ICalendarEventPackageService
     {
-        private readonly ILogger<CalendarEventPackageService> logger;
+        private readonly ILogger<CalendarEventPackageService> logger;  
         private readonly SyncSettings syncSettings;
 
         public CalendarEventPackageService(ILogger<CalendarEventPackageService> logger, SyncSettings syncSettings)
@@ -70,8 +72,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                                     calendarEventPackage.ResponsibleId));
                     }
                     
-                    var aggregateRootEvents = serviceLocator.GetInstance<ISerializer>()
-                            .Deserialize<AggregateRootEvent[]>(calendarEventPackage.Events);
+                    var calendarEventStream = serviceLocator.GetInstance<ISerializer>()
+                            .Deserialize<CommittedEvent[]>(calendarEventPackage.Events);
+                    var aggregateRootEvents = calendarEventStream
+                        .Select(c => new AggregateRootEvent(c)).ToArray();
 
                     var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
 
