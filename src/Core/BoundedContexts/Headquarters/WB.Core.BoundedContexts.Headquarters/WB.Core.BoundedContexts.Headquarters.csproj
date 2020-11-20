@@ -47,12 +47,12 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.5.1.38" />
+    <PackageReference Include="AWSSDK.Core" Version="3.5.1.39" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
-    <PackageReference Include="AWSSDK.S3" Version="3.5.4.2" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.5.0.38" />
+    <PackageReference Include="AWSSDK.S3" Version="3.5.4.3" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.5.0.39" />
     <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
