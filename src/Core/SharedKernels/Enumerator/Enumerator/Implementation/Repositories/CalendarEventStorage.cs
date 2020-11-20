@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -24,19 +25,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public CalendarEvent? GetCalendarEventForInterview(Guid interviewId)
         {
-            return this.connection.Find<CalendarEvent>(e => 
-                e.InterviewId == interviewId
-                && e.IsDeleted == false
-                && e.IsCompleted == false);
+            return this.connection.Table<CalendarEvent>()
+                .SingleOrDefault(e =>  
+                    e.InterviewId == interviewId
+                    && e.IsDeleted == false
+                    && e.IsCompleted == false);
         }
 
         public CalendarEvent? GetCalendarEventForAssigment(int assignmentId)
         {
-            return this.connection.Find<CalendarEvent>(e => 
-                e.InterviewId == null 
-                && e.AssignmentId == assignmentId
-                && e.IsDeleted == false
-                && e.IsCompleted == false);
+            return this.connection.Table<CalendarEvent>()
+                .SingleOrDefault(e => 
+                    e.InterviewId == null 
+                    && e.AssignmentId == assignmentId
+                    && e.IsDeleted == false
+                    && e.IsCompleted == false);
         }
 
         public IEnumerable<CalendarEvent> GetNotSynchedCalendarEventsInOrder()
