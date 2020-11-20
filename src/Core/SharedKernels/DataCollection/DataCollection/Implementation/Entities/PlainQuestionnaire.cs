@@ -1034,6 +1034,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 var parent = entity.GetParent();
                 return parent?.PublicKey == CoverPageSectionId;
             }
+            else if (entity is IVariable)
+            {
+                return false;
+            }
             
             var question = this.GetQuestionOrThrow(questionId);
             return question.Featured;
