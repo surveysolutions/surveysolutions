@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace WB.Persistence.Headquarters.Migrations.Workspaces
+namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
 {
     [Migration(2020_11_13_13_16)]
     public class M202011131316_MigrateLeftovers : Migration
