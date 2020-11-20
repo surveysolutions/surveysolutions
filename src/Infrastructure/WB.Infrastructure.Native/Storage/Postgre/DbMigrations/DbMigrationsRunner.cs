@@ -15,6 +15,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         {
             var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             npgConnBuilder.CommandTimeout = 0;
+            npgConnBuilder.SearchPath = schemaName;
             
             var serviceCollection = new ServiceCollection();
             if (loggerProvider != null)
