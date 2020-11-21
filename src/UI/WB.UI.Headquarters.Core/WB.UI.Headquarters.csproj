@@ -20,6 +20,8 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="ClosedXML" Version="0.95.3" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.3" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.0-preview.133" />
     <PackageReference Include="HotChocolate.Types.Filters" Version="11.0.0-preview.133" />
     <PackageReference Include="HotChocolate.Types.Selections" Version="11.0.0-preview.133" />
