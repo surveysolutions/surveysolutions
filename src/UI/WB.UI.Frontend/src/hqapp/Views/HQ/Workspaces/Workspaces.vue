@@ -1,6 +1,7 @@
 <template>
     <HqLayout :hasFilter="false"
-        :title="$t('Dashboard.Workspaces')">
+        :title="$t('Dashboard.Workspaces')"
+        :subtitle="$t('Workspaces.WorkspacesSubtitle')">
         <div slot="subtitle">
             <button type="button"
                 class="btn btn-success"
@@ -12,6 +13,7 @@
             ref="table"
             :tableOptions="tableOptions"
             noSelect
+            noSearch
             :noPaging="false"
             @cell-clicked="cellClicked">
         </DataTables>

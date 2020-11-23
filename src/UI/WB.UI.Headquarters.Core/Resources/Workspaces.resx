@@ -39,4 +39,10 @@
     <data name="EditWorkspace" xml:space="preserve">
         <value>Edit workspace {{name}}</value>
     </data>
+    <data name="WorkspacesSubtitle" xml:space="preserve">
+        <value>Each workspace has isolated list of questionnaires, interviews and assignmets</value>
+    </data>
+    <data name="AddNew" xml:space="preserve">
+        <value>Create new</value>
+    </data>
 </root>

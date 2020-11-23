@@ -86,5 +86,17 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("EditWorkspace", resourceCulture);
             }
         }
+        
+        public static string WorkspacesSubtitle {
+            get {
+                return ResourceManager.GetString("WorkspacesSubtitle", resourceCulture);
+            }
+        }
+        
+        public static string AddNew {
+            get {
+                return ResourceManager.GetString("AddNew", resourceCulture);
+            }
+        }
     }
 }
