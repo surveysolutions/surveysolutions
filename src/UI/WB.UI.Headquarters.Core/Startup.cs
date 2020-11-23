@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -349,6 +350,8 @@ namespace WB.UI.Headquarters
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
             services.AddMetrics();
+            services.Configure<RouteOptions>(o =>
+                o.ConstraintMap.Add("workspaceConstraint", typeof(WorkspaceRouteConstraint)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -440,6 +443,7 @@ namespace WB.UI.Headquarters
                     Predicate = c => c.Tags.Contains("ready")
                 });
 
+                endpoints.MapControllerRoute("default", "{workspace:workspaceConstraint}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapHub<WebInterview>("interview");
