@@ -9,6 +9,7 @@ using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -65,8 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         { "totalCount", calendarEvents.Count.ToString()}
                     }
                 });
-                
-                
+
                 var eventsToSend = GetCalendarEventStream(calendarEvent.Id);
                 
                 var package = new CalendarEventPackageApiView()
@@ -82,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
                 };
 
+                logger.Debug($"Uploading Calendar event {calendarEvent.Id}");
                 await this.synchronizationService.UploadCalendarEventAsync(
                     calendarEvent.Id,
                     package,

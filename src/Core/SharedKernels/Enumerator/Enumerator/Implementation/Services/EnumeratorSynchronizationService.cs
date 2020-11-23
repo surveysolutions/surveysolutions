@@ -28,34 +28,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
-
         protected string EnumeratorApiVersion => "v1";
         protected string EnumeratorApiUrl => "api/enumerator/";
         protected string EnumeratorApplicationUrl => string.Concat(EnumeratorApiUrl, EnumeratorApiVersion);
-
-
         protected string ApplicationUrl => string.Concat(ApiUrl, ApiVersion);
-        
         protected string AuditLogController => string.Concat(ApplicationUrl, "/auditlog");
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
         protected virtual string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
-        
         protected virtual string CalendarEventsController => string.Concat(ApplicationUrl, "/calendarevents");
-
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
         protected string TranslationsController => string.Concat(ApplicationUrl, "/translations");
         protected string AttachmentContentController => string.Concat(ApplicationUrl, "/attachments");
         protected string ReusableCategoriesController => string.Concat(EnumeratorApplicationUrl, "/categories");
-        
         protected string LogoUrl => string.Concat(ApplicationUrl, "/companyLogo");
         protected string TenantIdUrl => string.Concat(ApplicationUrl, "/tenantId");
         protected string AutoUpdateUrl => string.Concat(ApplicationUrl, "/autoupdate");
         protected string NotificationsUrl => string.Concat(ApplicationUrl, "/notifications");
         protected string PublicKeyForEncryptionUrl => string.Concat(ApplicationUrl, "/encryption-key");
         protected string RemoteTabletSettingsUrl => string.Concat(ApplicationUrl, "/tabletsettings");
-
         protected string MapsController => string.Concat(ApplicationUrl, "/maps"); 
 
         private readonly IPrincipal principal;
@@ -595,10 +587,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (SynchronizationException exception)
             {
-                var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
-                if (httpStatusCode == HttpStatusCode.NotFound)
-                    return Task.FromResult<List<CommittedEvent>>(null);
-
                 this.logger.Error("Exception on download interview. ID:" + CalendarEventsController, exception);
                 throw;
             }

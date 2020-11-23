@@ -104,7 +104,6 @@ export default {
             var self = this
             return {
                 mode: 'single',
-                minDate: 'today',
                 enableTime: true,
                 wrap: true,
                 static: true,
