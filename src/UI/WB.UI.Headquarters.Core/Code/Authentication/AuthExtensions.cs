@@ -22,6 +22,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                .AddUserStore<HqUserStore>()
                .AddRoleStore<HqRoleStore>()
                .AddDefaultTokenProviders()
+               .AddClaimsPrincipalFactory<HqUserClaimsPrincipalFactory>()
                .AddSignInManager<HqSignInManager>();
 
             services.AddAuthorization();
