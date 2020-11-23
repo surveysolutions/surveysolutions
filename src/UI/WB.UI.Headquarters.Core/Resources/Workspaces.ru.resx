@@ -32,4 +32,10 @@
     <data name="EditWorkspace" xml:space="preserve">
         <value>Редактирование рабочего пространства {{name}}</value>
     </data>
+    <data name="WorkspacesSubtitle" xml:space="preserve">
+        <value>Каждая рабочая область содержит собственные опросники, интервью и задания</value>
+    </data>
+    <data name="AddNew" xml:space="preserve">
+        <value>Создать новый</value>
+    </data>
 </root>
