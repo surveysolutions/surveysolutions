@@ -26,10 +26,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public Task Generate(string name, DbUpgradeSettings upgradeSettings)
         {
+            string schemaName = "ws_" + name;
             DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
-                name);
+                schemaName);
             return Task.Run(() => DbMigrationsRunner.MigrateToLatest(connectionSettings.ConnectionString,
-                name,
+                schemaName,
                 upgradeSettings, loggerProvider));
         }
     }
