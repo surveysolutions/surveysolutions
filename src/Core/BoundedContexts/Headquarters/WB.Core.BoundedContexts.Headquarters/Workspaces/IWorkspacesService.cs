@@ -1,7 +1,10 @@
 #nullable enable
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -13,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     {
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
         bool IsWorkspaceDefined(string? workspace);
+        IEnumerable<string> GetWorkspacesForUser(Guid userId);
     }
     
     class WorkspacesService : IWorkspacesService
@@ -43,6 +47,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         public bool IsWorkspaceDefined(string? workspace)
         {
             return workspaces.Query(_ => _.Any(x => x.Name == workspace));
+        }
+
+        public IEnumerable<string> GetWorkspacesForUser(Guid userId)
+        {
+            return new[] {WorkspaceConstants.DefaultWorkspacename};
         }
     }
 }
