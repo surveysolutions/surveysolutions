@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             List<CalendarEventApiView> remoteCalendarEvents = 
                 await this.synchronizationService.GetCalendarEventsAsync(this.Context.CancellationToken);
+            
+            log.Debug($"Server has {remoteCalendarEvents.Count} calendar events");
 
             var remoteCalendarEventsWithSequence = 
                 remoteCalendarEvents.ToDictionary(x => x.CalendarEventId, 
@@ -77,6 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private void RemoveCalendarEvent(Guid id)
         {
+            log.Debug($"Removing Calendar Event {id}");
             calendarEventStorage.Remove(id);
             EventStore.RemoveEventSourceById(id);
         }
