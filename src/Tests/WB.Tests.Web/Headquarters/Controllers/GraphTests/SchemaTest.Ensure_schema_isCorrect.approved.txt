@@ -26,7 +26,7 @@ type CalendarEvent {
   "Id of Calendar Event"
   publicKey: Uuid!
   "Start Timezone of Event"
-  startTimezone: String!
+  startTimezone: String
   "Start of calendar Event"
   startUtc: DateTime!
   updateDateUtc: DateTime!
