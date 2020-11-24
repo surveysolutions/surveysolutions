@@ -11,14 +11,16 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             Create.Table("calendarevents")
                 .WithColumn("eventid").AsGuid().PrimaryKey()
                 .WithColumn("startutc").AsDateTime().NotNullable()
+                .WithColumn("starttimezone").AsString().Nullable()
                 .WithColumn("comment").AsString().Nullable()
                 .WithColumn("updatedateutc").AsDateTime().NotNullable()
                 .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("interviewkey").AsString().Nullable()
                 .WithColumn("assignmentid").AsInt32().NotNullable()
                 .WithColumn("username").AsString().Nullable()
                 .WithColumn("creatoruserid").AsGuid().NotNullable()
-                .WithColumn("iscompleted").AsBoolean().Nullable()
-                .WithColumn("isdeleted").AsBoolean().Nullable();
+                .WithColumn("completedatutc").AsDateTime().Nullable()
+                .WithColumn("deletedatutc").AsDateTime().Nullable();
 
             Create.Index().OnTable("calendarevents").OnColumn("interviewid");
             Create.Index().OnTable("calendarevents").OnColumn("assignmentid");

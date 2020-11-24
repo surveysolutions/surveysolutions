@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.UpdateDateUtc)
                 .Type<NonNullType<DateTimeType>>();
 
-            descriptor.Field(x => x.IsCompleted);
+            descriptor.Field(x => x.IsCompleted());
         }   
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -55,6 +56,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ILogger<AssignmentsController> logger;
         private readonly IArchiveUtils archiver;
         private readonly IInvitationService invitationService;
+        private readonly ICalendarEventService calendarEventService;
 
         public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
@@ -70,7 +72,7 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataVerifier dataVerifier,
             ILogger<AssignmentsController> logger,
             IArchiveUtils archiver,
-            IInvitationService invitationService)
+            IInvitationService invitationService, ICalendarEventService calendarEventService)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -87,6 +89,7 @@ namespace WB.UI.Headquarters.Controllers
             this.logger = logger;
             this.archiver = archiver;
             this.invitationService = invitationService;
+            this.calendarEventService = calendarEventService;
         }
         
         [ActivePage(MenuItem.Assignments)]
@@ -128,6 +131,8 @@ namespace WB.UI.Headquarters.Controllers
             if (assignment == null) 
                 return NotFound();
 
+            var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
+            
             return View("Details", new
             {
                 Archived = assignment.Archived,
@@ -167,7 +172,15 @@ namespace WB.UI.Headquarters.Controllers
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
                 Comments = assignment.Comments,
                 IsArchived = assignment.Archived,
-                InvitationToken = this.invitationService.GetInvitationByAssignmentId(assignment.Id)?.Token
+                InvitationToken = this.invitationService.GetInvitationByAssignmentId(assignment.Id)?.Token,
+                CalendarEvent = calendarEvent != null
+                    ? new
+                    {
+                        StartUtc = calendarEvent.StartUtc,
+                        StartTimezone = calendarEvent.StartTimezone,
+                        Comment = calendarEvent.Comment
+                    } 
+                    : null
             });
         }
 

@@ -137,7 +137,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private void CompleteCalendarEventIfExists(Guid interviewId, Guid userId)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
-            if (calendarEvent != null && !calendarEvent.IsCompleted)
+            if (calendarEvent != null && !calendarEvent.IsCompleted())
                 this.commandService.Execute(new CompleteCalendarEventCommand(calendarEvent.PublicKey,userId));
         }
         
