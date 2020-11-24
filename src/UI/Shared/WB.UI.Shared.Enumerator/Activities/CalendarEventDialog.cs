@@ -30,8 +30,10 @@ namespace WB.UI.Shared.Enumerator.Activities
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var ignore = base.OnCreateView(inflater, container, savedInstanceState);
-
+            
             var view = this.BindingInflate(Resource.Layout.calendar_event_dialog, null);
+            this.Dialog.SetCancelable(false);
+            this.Dialog.SetCanceledOnTouchOutside(false);
             Activity.Window?.SetSoftInputMode(SoftInput.AdjustPan);
             return view;
         }
