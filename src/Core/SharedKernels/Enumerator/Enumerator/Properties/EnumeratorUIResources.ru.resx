@@ -972,6 +972,6 @@
     <value>Редактировать время посещения</value>
   </data>
   <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
-    <value>Запланирован визит на {0}</value>
+    <value>Следуюший контакт: {0}</value>
   </data>
 </root>
