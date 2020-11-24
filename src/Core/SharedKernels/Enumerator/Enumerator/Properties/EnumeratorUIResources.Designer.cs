@@ -416,7 +416,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plan to visit {0}.
+        ///   Looks up a localized string similar to Next contact: {0}.
         /// </summary>
         public static string Dashboard_ShowCalendarEvent {
             get {
