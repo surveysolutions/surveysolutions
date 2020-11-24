@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Commands;
 using NodaTime;
 using NodaTime.Extensions;
@@ -239,7 +240,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 return string.Empty;
             
             var culture = CultureInfo.CurrentUICulture;
-            return string.Format(formatString, dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase());
+            return string.Format(formatString, dateTime.Value.Humanize(utcDate: false, culture: culture).ToPascalCase());
+            //return string.Format(formatString, dateTime.Value.ToString("MMM dd, HH:mm", culture).Humanize(utcDate: false, culture: culture).ToPascalCase());
         }
 
         private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
