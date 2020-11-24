@@ -225,7 +225,9 @@ export default {
                             return '<span data-toggle="tooltip" title="'
                                 + ((data.comment == null || data.comment == '') ? self.$t('Assignments.NoComment') : data.comment)
                                 + '">'
-                                + moment(data.startUtc)
+                                + moment.utc(data.startUtc)
+                                    .tz(data.startTimezone)
+                                    .local()
                                     .format(DateFormats.dateTimeInList)
                                 + '</span>'
                     },

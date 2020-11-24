@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NodaTime;
+using NodaTime.Extensions;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -189,14 +191,9 @@ namespace WB.UI.Headquarters.Controllers
                 ? pasedInterviewId
                 : (Guid?) null;
 
-            //there are two main timezones notations
-            //windows and IANA
-            //we should transform to one standard one
-            
-            //var tz = TimeZoneInfo.GetSystemTimeZones().Select(x=>x.Id).ToHashSet();
-            //if (!tz.Contains(request.Timezone))
-            //    request.Timezone = string.Empty;
-            
+            if(DateTimeZoneProviders.Tzdb.GetZoneOrNull(request.Timezone) == null)
+                request.Timezone = string.Empty;
+
             if (request.Id == null)
             {
                 this.commandService.Execute(new CreateCalendarEventCommand(
@@ -205,7 +202,7 @@ namespace WB.UI.Headquarters.Controllers
                     request.NewDate.Value,
                     request.Timezone,
                     interviewId,
-                    "",
+                    request.InterviewKey,
                     request.AssignmentId,
                     request.Comment));
             }
