@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             {
                 CalendarEventId = x.PublicKey,
                 Sequence = eventStore.GetLastEventSequence(x.PublicKey),
-                LastEventId = eventStore.GetLastEventId(x.PublicKey)
+                //LastEventId = eventStore.GetLastEventId(x.PublicKey)
             }).ToList();
         }
     }

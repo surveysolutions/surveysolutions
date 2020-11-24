@@ -115,6 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.CalendarEventTimezoneId = shouldDisplayData ? calendarEvent.StartTimezone : null;
                 interviewView.CalendarEventComment = shouldDisplayData ? calendarEvent.Comment : null;
                 interviewView.CalendarEventLastUpdate = calendarEvent.LastUpdateDateUtc;
+                interviewView.CalendarEventId = shouldDisplayData ? calendarEvent.Id : (Guid?)null;
                 this.interviewViewRepository.Store(interviewView);
             }
             else
@@ -127,6 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 assignment.CalendarEventTimezoneId = shouldDisplayData ? calendarEvent.StartTimezone : null;
                 assignment.CalendarEventComment = shouldDisplayData ? calendarEvent.Comment : null;
                 assignment.CalendarEventLastUpdate = calendarEvent.LastUpdateDateUtc;
+                assignment.CalendarEventId = shouldDisplayData ? calendarEvent.Id : (Guid?)null;
                 this.assignmentStorage.Store(assignment);
             }
         }
