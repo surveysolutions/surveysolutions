@@ -4,38 +4,64 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:minWidth="800dp"
               local:MvxBind="HideKeyboardOnClick .">
-    <LinearLayout  android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="horizontal">
-      <MvxDatePicker
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:datePickerMode="spinner"
-          android:calendarViewShown="false"
-          local:MvxBind="Value DateEvent; MinDate MinDate" />
-      <MvxTimePicker
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:timePickerMode="spinner"
-          local:MvxBind="Value TimeEvent" />
-  </LinearLayout>
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="@dimen/calendar_event_dialog_padding"
-      android:paddingRight="@dimen/calendar_event_dialog_padding"
-      android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
-      android:layout_marginRight="@dimen/calendar_event_dialog_padding"
-      local:MvxBind="Text Localization('Comment');" />
-  <com.google.android.material.textfield.TextInputEditText
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/calendar_event_text_size"
-      android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
-      android:layout_marginRight="@dimen/calendar_event_dialog_padding"
-      android:maxLength="500"
-      local:MvxBind="Text Comment" />
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            local:hintEnabled="true"
+            local:endIconMode="custom"
+            local:startIconDrawable="@android:drawable/ic_menu_my_calendar"
+            local:MvxBind="Hint Localization('Date');">
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:clickable="false"
+                android:focusable="false"
+                android:textSize="@dimen/calendar_event_text_size"
+                android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+                android:layout_marginRight="@dimen/calendar_event_dialog_padding"
+                local:MvxBind="Text DateString; Click EditDate;" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            local:hintEnabled="true"
+            local:startIconDrawable="@android:drawable/ic_menu_recent_history"
+            local:MvxBind="Hint Localization('Time');">
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:clickable="true"
+                android:focusable="false"
+                android:textSize="@dimen/calendar_event_text_size"
+                android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+                android:layout_marginRight="@dimen/calendar_event_dialog_padding"
+                local:MvxBind="Text TimeString; Click EditTime;" />
+    </com.google.android.material.textfield.TextInputLayout>
+    
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            local:hintEnabled="true"
+            local:endIconMode="clear_text"
+            local:MvxBind="Hint Localization('Comment');">
+          <com.google.android.material.textfield.TextInputEditText
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textSize="@dimen/calendar_event_text_size"
+              android:lines="8"
+              android:gravity="top|left"
+              android:scrollHorizontally="false"
+              android:inputType="textMultiLine"
+              android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+              android:layout_marginRight="@dimen/calendar_event_dialog_padding"
+              android:maxLength="500"
+              local:MvxBind="Text Comment" />
+    </com.google.android.material.textfield.TextInputLayout>
   <LinearLayout  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
                  android:orientation="horizontal"
