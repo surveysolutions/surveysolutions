@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using NodaTime;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -7,7 +8,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         public Guid? Id { get; set; }
         public string InterviewId { get; set; } = String.Empty;
-
+        public string InterviewKey { get; set; } = String.Empty;
         public int AssignmentId { get; set; }
         public DateTime? NewDate { get; set; }
         public string Comment { get; set; } = String.Empty;

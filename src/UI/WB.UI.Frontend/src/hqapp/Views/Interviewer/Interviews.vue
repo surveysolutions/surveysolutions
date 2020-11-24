@@ -168,6 +168,7 @@ export default {
             newCalendarStarTimezone : null,
             calendarEventId : null,
             calendarInterviewId : null,
+            calendarInterviewKey : null,
             calendarAssinmentId : null,
             draw: 0,
         }
@@ -303,6 +304,9 @@ export default {
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
 
+                    console.log(selectedDates.length > 0 ? selectedDates[0] : '')
+                    console.log(selectedDates.length > 0 ? moment(selectedDates[0]).format() : '')
+
                     if(start != null && start != self.newCalendarStart){
                         self.newCalendarStart = start
                     }
@@ -325,8 +329,9 @@ export default {
             this.$refs.table.reload()
         },
 
-        editCalendarEvent(interviewId, assignmentId, calendarEvent) {
+        editCalendarEvent(interviewId, interviewKey, assignmentId, calendarEvent) {
             this.calendarInterviewId = interviewId
+            this.calendarInterviewKey = interviewKey
             this.calendarAssinmentId = assignmentId
             this.calendarEventId = calendarEvent?.publicKey
             this.editCalendarComment = calendarEvent?.comment
@@ -342,6 +347,7 @@ export default {
 
             self.$store.dispatch('saveCalendarEvent', {
                 interviewId : self.calendarInterviewId,
+                interviewKey: self.calendarInterviewKey,
                 assignmentId : self.calendarAssinmentId,
                 id : self.calendarEventId,
                 newDate : self.newCalendarStart,
@@ -394,7 +400,7 @@ export default {
             menu.push({
                 name: self.$t('Common.EditCalendarEvent'),
                 className: canCalendarBeEdited ? 'primary-text' : '',
-                callback: () => self.editCalendarEvent(rowData.id, rowData.assignmentId, rowData.calendarEvent),
+                callback: () => self.editCalendarEvent(rowData.id, rowData.key, rowData.assignmentId, rowData.calendarEvent),
                 disabled: !canCalendarBeEdited,
             })
 
@@ -503,7 +509,9 @@ export default {
                             return '<span data-toggle="tooltip" title="'
                                 + ((data.comment == null || data.comment == '') ? self.$t('Assignments.NoComment') : data.comment)
                                 + '">'
-                                + moment(data.startUtc)
+                                + moment.utc(data.startUtc)
+                                    .tz(data.startTimezone)
+                                    .local()
                                     .format(DateFormats.dateTimeInList)
                                 + '</span>'
                     },
