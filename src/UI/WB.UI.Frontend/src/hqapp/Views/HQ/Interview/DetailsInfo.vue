@@ -46,8 +46,16 @@
                                 @click="showOverview">{{$t("Details.Overview")}}</button>
                         </li>
                         <li>
-                            <span class="data-label"></span>
-                            <span class="data"></span>
+                            <span class="data-label">{{$t("Common.CalendarEvent")}}:</span>
+                            <span class="data"
+                                data-toggle="tooltip"
+                                v-if="calendarEvent != null"
+                                :title="((calendarEvent.comment == null || calendarEvent.comment == '') ? self.$t('Assignments.NoComment') : calendarEvent.comment)">
+                                {{calendarEventTime}}
+                            </span>
+
+                            <span class="data"
+                                v-if="calendarEvent == null"></span>
                             <a id="btn_Print"
                                 class="btn btn-link gray-action-unit"
                                 v-bind:href="this.$config.model.pdfUrl"
@@ -188,7 +196,8 @@ import SwitchLanguage from './SwitchLanguage'
 import StatusesHistory from './StatusesHistory'
 import OverviewModal from './OverviewModal'
 import Vue from 'vue'
-import moment from 'moment'
+import {DateFormats} from '~/shared/helpers'
+import moment from 'moment-timezone'
 
 export default {
     data() {
@@ -285,6 +294,18 @@ export default {
         },
         isInterviewerResponsible() {
             return this.$config.model.responsibleRole == 'Interviewer'
+        },
+        calendarEvent(){
+            return this.$config.model.calendarEvent
+        },
+
+        calendarEventTime() {
+            return this.calendarEvent != null
+                ? moment.utc(this.calendarEvent.startUtc)
+                    .tz(this.calendarEvent.startTimezone)
+                    .local()
+                    .format(DateFormats.dateTimeInList)
+                : ''
         },
     },
 

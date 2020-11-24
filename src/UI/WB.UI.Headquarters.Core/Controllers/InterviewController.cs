@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -30,18 +31,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IAllInterviewsFactory interviewSummaryViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly ICalendarEventService calendarEventService;
+        
 
         public InterviewController(IAuthorizedUser authorizedUser,
             IAllInterviewsFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository, 
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository, 
+            ICalendarEventService calendarEventService)
         {
             this.authorizedUser = authorizedUser;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.questionnaireRepository = questionnaireRepository;
+            this.calendarEventService = calendarEventService;
         }
 
         private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
@@ -129,7 +134,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                             "javascript:void(0);",
                 InterviewsUrl = Url.Action("Index", "Interviews"),
                 PdfUrl = Url.Action("Pdf", "InterviewsPublicApi", new{ id = id }),
+                CalendarEvent = GetCalendarEventOrNull(id) 
             });
+        }
+
+        private CalendarEventView GetCalendarEventOrNull(Guid id)
+        {
+            var ce = calendarEventService.GetActiveCalendarEventForInterviewId(id);
+            return ce == null
+                ? null
+                : new CalendarEventView()
+                {
+                    StartUtc = ce.StartUtc,
+                    StartTimezone = ce.StartTimezone,
+                    Comment = ce.Comment
+                };
+
         }
 
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
@@ -234,5 +254,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public long QuestionnaireVersion { get; set; }
         public string InterviewDuration { get; set; }
         public string PdfUrl { get; set; }
+
+        public CalendarEventView CalendarEvent { get; set; }
+    }
+
+    public class CalendarEventView
+    {
+        public  DateTime StartUtc { set; get; }
+        public string StartTimezone { set; get; } = String.Empty;
+        public string Comment { get; set; } = String.Empty;
     }
 }
