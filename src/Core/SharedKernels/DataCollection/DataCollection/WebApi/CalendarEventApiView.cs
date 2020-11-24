@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     {
         public Guid CalendarEventId { get; set; }
         public int? Sequence { get; set; }
-        public Guid? LastEventId { get; set; }
-        public bool IsMarkedAsReceivedByInterviewer { get; set; }
+        //public Guid? LastEventId { get; set; }
+        //public bool IsMarkedAsReceivedByInterviewer { get; set; }
     }
     public class CalendarEventPackageApiView
     {
