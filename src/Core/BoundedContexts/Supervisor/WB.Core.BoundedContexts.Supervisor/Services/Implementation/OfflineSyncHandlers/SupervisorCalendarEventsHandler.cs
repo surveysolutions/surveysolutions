@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -79,13 +80,29 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         private Task<GetCalendarEventsResponse> GetCalendarEvents(GetCalendarEventsRequest arg)
         {
-            var calendarEvents = calendarEventStorage.GetCalendarEventsForUser(arg.UserId);
+            var interviewsOnUser = this.interviewViewRepository.Where(x =>
+                (x.Status == InterviewStatus.RejectedBySupervisor ||
+                 x.Status == InterviewStatus.InterviewerAssigned ||
+                 x.Status == InterviewStatus.Restarted)
+                && x.ResponsibleId == arg.UserId);
+            var calendarEventsFormInterviews = interviewsOnUser.Where(x =>
+                x.CalendarEventId.HasValue)
+                .Select(i => i.CalendarEventId!.Value);
+            var calendarEventsFormAssignments = this.assignmentStorage
+                .LoadAll(arg.UserId)
+                .Where(x => x.CalendarEventId.HasValue)
+                .Select(x => x.CalendarEventId!.Value);
 
-            List<CalendarEventApiView> response = calendarEvents.Select(x => new CalendarEventApiView
+            var calendarEventIds = calendarEventsFormInterviews.Concat(calendarEventsFormAssignments);
+            
+            //var calendarEvents = calendarEventStorage.GetCalendarEventsForUser(arg.UserId);
+
+            List<CalendarEventApiView> response = calendarEventIds
+                .Select(id => new CalendarEventApiView
             {
-                CalendarEventId = x.Id,
-                Sequence = eventStore.GetLastEventSequence(x.Id),
-                LastEventId = x.LastEventId,
+                CalendarEventId = id,
+                Sequence = eventStore.GetLastEventSequence(id),
+                //LastEventId = x.LastEventId,
             }).ToList();
 
             return Task.FromResult(new GetCalendarEventsResponse()
