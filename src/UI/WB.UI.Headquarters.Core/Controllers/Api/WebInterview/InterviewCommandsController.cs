@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private void CompleteCalendarEventIfExists(Guid interviewId)
         {
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
-            if (calendarEvent != null && !calendarEvent.IsCompleted)
+            if (calendarEvent != null && !calendarEvent.IsCompleted())
                 this.commandService.Execute(new CompleteCalendarEventCommand(interviewId, this.GetCommandResponsibleId(interviewId)));
         }
 

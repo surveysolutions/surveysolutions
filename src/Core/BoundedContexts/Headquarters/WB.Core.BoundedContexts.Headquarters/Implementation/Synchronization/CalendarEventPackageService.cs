@@ -82,7 +82,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     //if CE was deleted on server before last change on tablet - restore it
                     //if it was deleted after - leave it deleted
                     //could be deleted again later
-                    if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDate)
+                    if(calendarEvent != null 
+                       && calendarEvent.DeletedAtUtc == null 
+                       && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDate)
                             serviceLocator.GetInstance<ICommandService>().Execute(
                                 new RestoreCalendarEventCommand(calendarEventPackage.CalendarEventId,
                                     calendarEventPackage.ResponsibleId));

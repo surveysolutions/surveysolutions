@@ -58,8 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             
             var calendarEventsByAssignments = calendarEventsAccessor.Query(_ => 
                 _.Where(x =>
-                    x.IsDeleted != true 
-                    && x.IsCompleted != true
+                    x.DeletedAtUtc == null 
+                    && x.CompletedAtUtc == null
                     && x.InterviewId == null
                     && userAssignmentsIds.Contains(x.AssignmentId) )
                     .Select(x => x).ToList());
@@ -70,8 +70,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             
             var calendarEventsByInterviews = calendarEventsAccessor.Query(_ => 
                 _.Where(x =>
-                        x.IsDeleted != true 
-                        && x.IsCompleted != true
+                        x.DeletedAtUtc == null 
+                        && x.CompletedAtUtc == null
                         && x.InterviewId != null
                         && userInterviewIds.Contains(x.InterviewId) )
                     .Select(x => x).ToList());
@@ -92,8 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             
             var calendarEventsByAssignments = calendarEventsAccessor.Query(_ => 
                 _.Where(x =>
-                        x.IsDeleted != true 
-                        && x.IsCompleted != true
+                        x.DeletedAtUtc == null 
+                        && x.CompletedAtUtc == null
                         && x.InterviewId == null
                         && assignmentdForSupervisorIds.Contains(x.AssignmentId) )
                     .Select(x => x).ToList());
@@ -104,8 +104,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             
             var calendarEventsByInterviews = calendarEventsAccessor.Query(_ => 
                 _.Where(x =>
-                        x.IsDeleted != true 
-                        && x.IsCompleted != true
+                        x.DeletedAtUtc == null 
+                        && x.CompletedAtUtc == null
                         && x.InterviewId != null
                         && teamInterviewIds.Contains(x.InterviewId) )
                     .Select(x => x).ToList());

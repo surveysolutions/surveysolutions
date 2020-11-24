@@ -152,8 +152,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 x => x.FirstOrDefault(
                     y => y.InterviewId == null
                          && y.AssignmentId == id
-                         && y.IsDeleted != true
-                         && y.IsCompleted != true));
+                         && y.DeletedAtUtc == null
+                         && y.CompletedAtUtc == null));
 
             return calendarEvent == null ? null : new CalendarEventView()
             {
