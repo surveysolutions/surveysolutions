@@ -154,15 +154,17 @@
                                 </td>
                                 <td>{{model.comments}}</td>
                             </tr>
-                            <tr v-if="model.calendarEvent != null">
+                            <tr>
                                 <td class="text-nowrap">
                                     {{$t("Common.CalendarEvent")}}
                                 </td>
                                 <td>
                                     <span data-toggle="tooltip"
+                                        v-if="model.calendarEvent != null"
                                         :title="((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? self.$t('Assignments.NoComment') : model.calendarEvent.comment)">
                                         {{calendarEventTime}}
-                                    </span></td>
+                                    </span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
