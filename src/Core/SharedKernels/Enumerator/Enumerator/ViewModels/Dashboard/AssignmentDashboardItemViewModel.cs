@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Commands;
 using NodaTime;
 using NodaTime.Extensions;
@@ -171,7 +172,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 return string.Empty;
 
             var culture = CultureInfo.CurrentUICulture;
-            return string.Format(formatString, dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase());
+            var local = dateTime.Value.ToDateTimeUnspecified();
+            return string.Format(formatString, local.Humanize(utcDate: false, culture: culture).ToPascalCase());
         }
         
         protected override void Dispose(bool disposing)
