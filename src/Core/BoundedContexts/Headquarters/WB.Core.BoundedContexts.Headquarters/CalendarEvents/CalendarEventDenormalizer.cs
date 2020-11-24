@@ -27,10 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
                 @event.Payload.InterviewId,
                 @event.Payload.InterviewKey,
                 @event.Payload.AssignmentId,
-                false,
                 @event.Payload.OriginDate,
-                @event.Payload.UserId,
-                "");
+                @event.Payload.UserId);
 
             return state;
 
@@ -41,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             return UpdateCalendarEvent(state, @event.Payload.OriginDate,
                 calendarEvent =>
                 {
-                    calendarEvent.IsDeleted = true;
+                    calendarEvent.DeletedAtUtc = @event.Payload.OriginDate.UtcDateTime;
                 });
         }
 
@@ -60,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             return UpdateCalendarEvent(state, @event.Payload.OriginDate,
                 calendarEvent =>
                 {
-                    calendarEvent.IsCompleted = true;
+                    calendarEvent.CompletedAtUtc = @event.Payload.OriginDate.UtcDateTime;
                 });
         }
         private CalendarEvent UpdateCalendarEvent(CalendarEvent calendarEvent, DateTimeOffset dateTimeOffset, Action<CalendarEvent> updater)

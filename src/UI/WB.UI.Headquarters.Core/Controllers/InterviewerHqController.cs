@@ -185,7 +185,7 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult UpdateInterviewCalendarEvent([FromBody] UpdateInterviewCalendarEventRequest request)
         {
             if (request.NewDate == null)
-                request.NewDate = DateTime.Now;
+                request.NewDate = DateTimeOffset.Now;
 
             var interviewId = Guid.TryParse(request.InterviewId, out Guid pasedInterviewId)
                 ? pasedInterviewId

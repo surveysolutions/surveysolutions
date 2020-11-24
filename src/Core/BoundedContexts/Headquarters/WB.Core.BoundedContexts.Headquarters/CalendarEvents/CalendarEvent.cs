@@ -13,8 +13,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         }
 
         public CalendarEvent(Guid publicKey, DateTime start, string startTimezone, string comment, 
-            Guid? interviewId, string interviewKey, int assignmentId, bool isCompleted, 
-            DateTimeOffset updateDate, Guid userId, string userName)
+            Guid? interviewId, string interviewKey, int assignmentId, 
+            DateTimeOffset updateDate, Guid userId)
         {
             PublicKey = publicKey;
             StartUtc = start;
@@ -23,9 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             InterviewId = interviewId;
             InterviewKey = interviewKey;
             AssignmentId = assignmentId;
-            IsCompleted = isCompleted;
             CreatorUserId = userId;
-            UserName = userName;
             UpdateDateUtc = updateDate.UtcDateTime;
         }
 
@@ -42,13 +40,15 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         
         public virtual int AssignmentId { get; set; }
         
-        public virtual bool IsCompleted { get; set; }
+        public virtual DateTime? CompletedAtUtc { get; set; }
+
+        public virtual bool IsCompleted() => CompletedAtUtc != null;
         
         public virtual DateTime UpdateDateUtc { set; get; }
         
         public virtual Guid CreatorUserId { get; set; }
-        public virtual string UserName { get; set; } = String.Empty;
+        public virtual DateTime?  DeletedAtUtc { get; set; }
         
-        public virtual bool IsDeleted { get; set; }
+        public virtual bool IsDeleted() => DeletedAtUtc != null;
     }
 }

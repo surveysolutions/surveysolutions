@@ -154,6 +154,16 @@
                                 </td>
                                 <td>{{model.comments}}</td>
                             </tr>
+                            <tr v-if="model.calendarEvent != null">
+                                <td class="text-nowrap">
+                                    {{$t("Common.CalendarEvent")}}
+                                </td>
+                                <td>
+                                    <span data-toggle="tooltip"
+                                        :title="((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? self.$t('Assignments.NoComment') : model.calendarEvent.comment)">
+                                        {{calendarEventTime}}
+                                    </span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -166,7 +176,7 @@
 <script>
 import Vue from 'vue'
 import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 export default {
     computed: {
@@ -213,6 +223,14 @@ export default {
         },
         quantity() {
             return this.model.quantity == null ? this.$t('Assignments.Unlimited') : this.model.quantity
+        },
+        calendarEventTime() {
+            return this.model.calendarEvent != null
+                ? moment.utc(this.model.calendarEvent.startUtc)
+                    .tz(this.model.calendarEvent.startTimezone)
+                    .local()
+                    .format(DateFormats.dateTimeInList)
+                : ''
         },
 
         tableOptions() {
