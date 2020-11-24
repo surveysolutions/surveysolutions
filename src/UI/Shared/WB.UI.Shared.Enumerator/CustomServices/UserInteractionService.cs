@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content;
 using Android.Text;
 using Android.Widget;
+using Google.Android.Material.DatePicker;
 using Google.Android.Material.Dialog;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -20,6 +23,21 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private static readonly HashSet<Guid> UserInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
         private static TaskCompletionSource<object> userInteractionsAwaiter;
+        
+        private class DialogInterfaceOnCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
+        {
+            private readonly Action action;
+
+            public DialogInterfaceOnCancelListener(Action action)
+            {
+                this.action = action;
+            }
+
+            public void OnCancel(IDialogInterface dialog)
+            {
+                action();
+            }
+        }
 
         public UserInteractionService(IMvxAndroidCurrentTopActivity mvxCurrentTopActivity)
         {
@@ -76,6 +94,57 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 tcs.TrySetResult(null);
             });
             builder.Show();
+
+            return tcs.Task;
+        }
+
+        public Task AskDateAsync(EventHandler<DateTime> okCallback, DateTime date, DateTime? minDate = null)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            var datePicker = new DatePickerDialog(this.mvxCurrentTopActivity.Activity,
+                (sender, arg) =>
+                {
+                    okCallback(sender, new DateTime(arg.Year, arg.Month + 1, arg.DayOfMonth));
+                    tcs.TrySetResult(null);
+                },
+                date.Year,
+                date.Month - 1,
+                date.Day);
+
+            if (minDate.HasValue)
+            {
+                datePicker.DatePicker.MinDate = Convert.ToInt64(minDate.Value.ToUniversalTime().Subtract(
+                    new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                ).TotalMilliseconds);
+            }
+            datePicker.SetOnCancelListener(new DialogInterfaceOnCancelListener(() => tcs.TrySetResult(null)));
+            datePicker.SetCancelable(false);
+            datePicker.SetCanceledOnTouchOutside(false);
+            datePicker.Show();
+
+            return tcs.Task;
+        }
+
+        public Task AskTimeAsync(EventHandler<TimeSpan> okCallback, TimeSpan time)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            var is24HourView = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern.Contains('H');
+            var timePickerDialog = new TimePickerDialog(this.mvxCurrentTopActivity.Activity,
+                (sender, arg) =>
+                {
+                    okCallback(sender, new TimeSpan(arg.HourOfDay, arg.Minute, 0));
+                    tcs.TrySetResult(null);
+                },
+                time.Hours,
+                time.Minutes,
+                is24HourView);
+
+            timePickerDialog.SetOnCancelListener(new DialogInterfaceOnCancelListener(() => tcs.TrySetResult(null)));
+            timePickerDialog.SetCancelable(false);
+            timePickerDialog.SetCanceledOnTouchOutside(false);
+            timePickerDialog.Show();
 
             return tcs.Task;
         }

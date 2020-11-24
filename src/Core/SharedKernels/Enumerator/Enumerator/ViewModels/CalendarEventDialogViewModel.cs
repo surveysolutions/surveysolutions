@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Globalization;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -8,6 +9,7 @@ using NodaTime;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -35,22 +37,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly ICalendarEventStorage calendarEventStorage;
+        private readonly IUserInteractionService userInteractionService;
 
         private CalendarEventViewModelArgs? initValues;
-        private TimeSpan timeEvent;
-        private DateTime dateEvent;
+        private DateTime dateTimeEvent;
         private string? comment;
         private CalendarEvent? calendarEvent;
 
         public CalendarEventDialogViewModel(IMvxNavigationService navigationService,
             ICommandService commandService,
             IPrincipal principal,
-            ICalendarEventStorage calendarEventStorage)
+            ICalendarEventStorage calendarEventStorage,
+            IUserInteractionService userInteractionService)
         {
             this.navigationService = navigationService;
             this.commandService = commandService;
             this.principal = principal;
             this.calendarEventStorage = calendarEventStorage;
+            this.userInteractionService = userInteractionService;
         }
 
         public override void Prepare(CalendarEventViewModelArgs param)
@@ -63,27 +67,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 ? calendarEventStorage.GetCalendarEventForInterview(param.InterviewId.Value)
                 : calendarEventStorage.GetCalendarEventForAssigment(param.AssignmentId);
 
-            MinDate = Convert.ToInt64(DateTime.Today.ToUniversalTime().Subtract(
-                    new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                ).TotalMilliseconds);
-            DateEvent = calendarEvent?.Start.LocalDateTime ?? DateTime.Today.AddDays(1);
-            TimeEvent = calendarEvent?.Start.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
+            var dateEvent = calendarEvent?.Start.LocalDateTime ?? DateTime.Today.AddDays(1);
+            var timeEvent = calendarEvent?.Start.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
+            DateTimeValue = new DateTime(dateEvent.Year, dateEvent.Month, dateEvent.Day, 
+                timeEvent.Hours, timeEvent.Minutes, timeEvent.Seconds, 
+                DateTimeKind.Local);
             Comment = calendarEvent?.Comment;
         }
 
-        public TimeSpan TimeEvent
+        public string TimeString => 
+            DateTimeValue.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern);
+
+        public DateTime DateTimeValue
         {
-            get => timeEvent;
-            set => SetProperty(ref timeEvent, value);
+            get => dateTimeEvent;
+            set
+            {
+                dateTimeEvent = value;
+                RaisePropertyChanged(nameof(DateString));
+                RaisePropertyChanged(nameof(TimeString));
+            }
         }
 
-        public long MinDate { get; set; }
-        
-        public DateTime DateEvent
-        {
-            get => dateEvent;
-            set => SetProperty(ref dateEvent, value);
-        }
+        public string DateString => 
+            DateTimeValue.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern);
 
         public string? Comment
         {
@@ -100,27 +107,51 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 await this.navigationService.Close(this);
             });
 
+        public IMvxAsyncCommand EditDate => new MvxAsyncCommand(async () =>
+        {
+            await userInteractionService.AskDateAsync(
+                (sender, args) =>
+                {
+                    DateTimeValue = new DateTime(
+                        args.Year, args.Month, args.Day, 
+                        DateTimeValue.Hour, DateTimeValue.Minute, DateTimeValue.Second,
+                        DateTimeKind.Local);
+                },
+                DateTimeValue,
+                DateTime.Today);
+        });
+
+        public IMvxAsyncCommand EditTime => new MvxAsyncCommand(async () =>
+        {
+            await userInteractionService.AskTimeAsync(
+                (sender, args) =>
+                {
+                    DateTimeValue = new DateTime(
+                        DateTimeValue.Year, DateTimeValue.Month, DateTimeValue.Day, 
+                        args.Hours, args.Minutes, args.Seconds,
+                        DateTimeKind.Local);
+               },
+               DateTimeValue.TimeOfDay);
+        });
+
         private void SaveCalendarEvent()
         {
             if (initValues == null)
                 throw  new ArgumentException("Need init calendar info data");
 
-            var dateTime = new DateTime(DateEvent.Year, DateEvent.Month, DateEvent.Day, TimeEvent.Hours,
-                TimeEvent.Minutes, TimeEvent.Seconds, DateTimeKind.Local);
-
-            if (dateTime != calendarEvent?.Start.LocalDateTime || calendarEvent?.Comment != Comment)
+            if (DateTimeValue != calendarEvent?.Start.LocalDateTime || calendarEvent?.Comment != Comment)
             {
                 var zoneInfo = DateTimeZoneProviders.Tzdb.GetSystemDefault();
                 var timezone = zoneInfo.Id;
                 
                 var userId = principal.CurrentUserIdentity.UserId;
                 ICommand command = calendarEvent == null
-                    ? (ICommand)new CreateCalendarEventCommand(Guid.NewGuid(), userId, dateTime,
+                    ? (ICommand)new CreateCalendarEventCommand(Guid.NewGuid(), userId, DateTimeValue,
                         timezone, 
                         initValues.InterviewId, 
                         initValues.InterviewKey,
                         initValues.AssignmentId, Comment)
-                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, dateTime, timezone,Comment);
+                    : new UpdateCalendarEventCommand(calendarEvent.Id, userId, DateTimeValue, timezone,Comment);
 
                 commandService.Execute(command);
                 
