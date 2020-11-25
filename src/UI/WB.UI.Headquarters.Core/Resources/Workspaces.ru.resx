@@ -38,4 +38,7 @@
     <data name="AddNew" xml:space="preserve">
         <value>Создать новый</value>
     </data>
+    <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+        <value>Предоставленное имя недопустимо</value>
+    </data>
 </root>
