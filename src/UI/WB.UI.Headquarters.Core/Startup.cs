@@ -60,6 +60,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.Workspace;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
@@ -350,15 +351,14 @@ namespace WB.UI.Headquarters
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
             services.AddMetrics();
-            services.Configure<RouteOptions>(o =>
-                o.ConstraintMap.Add("workspaceConstraint", typeof(WorkspaceRouteConstraint)));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseForwardedHeaders();
-
+            
             app.UseExceptional();
             
             if (!env.IsDevelopment())
@@ -384,6 +384,8 @@ namespace WB.UI.Headquarters
                 }
             });
 
+            app.UseWorkspaces();
+
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
 
@@ -391,7 +393,7 @@ namespace WB.UI.Headquarters
             app.UseUnderConstruction();
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -401,7 +403,7 @@ namespace WB.UI.Headquarters
             app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
-            
+
             app.UseGraphQLApi();
 
             app.UseRequestLocalization(opt =>
@@ -443,8 +445,10 @@ namespace WB.UI.Headquarters
                     Predicate = c => c.Tags.Contains("ready")
                 });
 
-                endpoints.MapControllerRoute("default", "{workspace:workspaceConstraint}/{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapSwagger();
 
                 endpoints.MapHub<WebInterview>("interview");
                 endpoints.MapHub<SignalrDiagnosticHub>("signalrdiag",

@@ -17,17 +17,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         public void Set(string name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            if (currentWorkspace != null)
-            {
-                throw new InvalidOperationException("Workspace has already being set")
-                {
-                    Data =
-                    {
-                        { "currentWorkspace", currentWorkspace },
-                        { "incomingWorkspace", name }
-                    }
-                };
-            }
+           
+            //if (currentWorkspace != null)
+            //{
+            //    throw new InvalidOperationException("Workspace has already being set")
+            //    {
+            //        Data =
+            //        {
+            //            { "currentWorkspace", currentWorkspace },
+            //            { "incomingWorkspace", name }
+            //        }
+            //    };
+            //}
             
             this.currentWorkspace = name;
         }
