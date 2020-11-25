@@ -20,8 +20,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static IObjectFieldDescriptor HasWorkspace(this IObjectFieldDescriptor descriptor)
         {
             return descriptor.Argument("workspace",
-                    a => a.Description("Workspace name").Type<NonNullType<StringType>>().DefaultValue(WorkspaceConstants.DefaultWorkspacename))
-                .Use<WorkspaceMiddleware>();
+                a => a.Description("Workspace name").Type<NonNullType<StringType>>()
+                    .DefaultValue(WorkspaceConstants.DefaultWorkspacename));
         }
     }
     
