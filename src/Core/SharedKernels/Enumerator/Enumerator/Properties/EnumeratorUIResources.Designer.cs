@@ -489,7 +489,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved by Supervisor at {0}.
+        ///   Looks up a localized string similar to Approved by Supervisor: {0}.
         /// </summary>
         public static string DashboardItem_ApprovedBySupervisor {
             get {
@@ -498,7 +498,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned on {0}.
+        ///   Looks up a localized string similar to Assigned: {0}.
         /// </summary>
         public static string DashboardItem_AssignedOn {
             get {
@@ -534,7 +534,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed on {0}.
+        ///   Looks up a localized string similar to Completed: {0}.
         /// </summary>
         public static string DashboardItem_CompletedOn {
             get {
@@ -543,7 +543,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created on {0}.
+        ///   Looks up a localized string similar to Created: {0}.
         /// </summary>
         public static string DashboardItem_CreatedOn {
             get {
@@ -561,7 +561,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected by Headquarters on {0}.
+        ///   Looks up a localized string similar to Rejected by Headquarters : {0}.
         /// </summary>
         public static string DashboardItem_RejectedByHqOn {
             get {
@@ -570,7 +570,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected on {0}.
+        ///   Looks up a localized string similar to Rejected: {0}.
         /// </summary>
         public static string DashboardItem_RejectedOn {
             get {
@@ -588,7 +588,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Started on {0}.
+        ///   Looks up a localized string similar to Started: {0}.
         /// </summary>
         public static string DashboardItem_StartedOn {
             get {

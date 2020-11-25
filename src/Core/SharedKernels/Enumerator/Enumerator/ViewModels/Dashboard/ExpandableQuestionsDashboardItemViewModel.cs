@@ -1,8 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using NodaTime;
+using NodaTime.Extensions;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -117,6 +123,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         }
 
         public virtual string Comments { get; }
+        
+        protected string FormatDateTimeString(string formatString, DateTimeOffset dateTimeOffset, string timeZoneId)
+        {
+            DateTimeZone timeZone = null;
+            if (timeZoneId != null)
+                timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZoneId);
+            if (timeZone == null)
+                timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+            var instant = dateTimeOffset.UtcDateTime.ToInstant();
+            var zonedDateTime = new ZonedDateTime(instant, timeZone);
+
+            return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUnspecified());
+        }
+        
+        protected string FormatDateTimeString(string formatString, DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+                return string.Empty;
+            
+            var culture = CultureInfo.CurrentUICulture;
+            var now = DateTime.Now;
+
+            string dateTimeString = dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase();
+            if (dateTime.Value > now.AddDays(-1) && dateTime.Value < now.AddDays(2))
+            {
+                dateTimeString = dateTime.Value.Humanize(utcDate: false, culture: culture) + " (" + dateTimeString + ")";
+            }
+            
+            return string.Format(formatString, dateTimeString);
+        }
 
         protected void BindLocationAction(Guid? questionId, double? latitude, double? longtitude)
         {
