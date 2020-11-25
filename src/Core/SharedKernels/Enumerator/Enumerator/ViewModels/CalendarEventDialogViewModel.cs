@@ -8,6 +8,7 @@ using MvvmCross.ViewModels;
 using NodaTime;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -67,6 +68,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 ? calendarEventStorage.GetCalendarEventForInterview(param.InterviewId.Value)
                 : calendarEventStorage.GetCalendarEventForAssigment(param.AssignmentId);
 
+            Title = calendarEvent == null
+                ? EnumeratorUIResources.Dashboard_AddCalendarEvent
+                : EnumeratorUIResources.Dashboard_EditCalendarEvent;
+
             var dateEvent = calendarEvent?.Start.LocalDateTime ?? DateTime.Today.AddDays(1);
             var timeEvent = calendarEvent?.Start.LocalDateTime.TimeOfDay ?? new TimeSpan(10, 00, 00);
             DateTimeValue = new DateTime(dateEvent.Year, dateEvent.Month, dateEvent.Day, 
@@ -75,6 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             Comment = calendarEvent?.Comment;
         }
 
+        public string? Title { get; set; }
         public string TimeString => 
             DateTimeValue.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern);
 

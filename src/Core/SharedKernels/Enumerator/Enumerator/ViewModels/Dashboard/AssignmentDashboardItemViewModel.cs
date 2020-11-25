@@ -89,15 +89,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             if (Assignment.CalendarEvent.HasValue)
             {
-                DateTimeZone? timeZone = null;
-                if (Assignment.CalendarEventTimezoneId != null)
-                    timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(Assignment.CalendarEventTimezoneId);
-                if (timeZone == null)
-                    timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-                var instant = Assignment.CalendarEvent.Value.UtcDateTime.ToInstant();
-                var zonedDateTime = new ZonedDateTime(instant, timeZone);
-
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, zonedDateTime);
+                var calendarString = FormatDateTimeString(
+                    EnumeratorUIResources.Dashboard_ShowCalendarEvent, 
+                    Assignment.CalendarEvent.Value,
+                    Assignment.CalendarEventTimezoneId);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
             }
@@ -166,16 +161,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             RaiseOnItemUpdated();
         }
 
-        private string FormatDateTimeString(string formatString, ZonedDateTime? dateTime)
-        {
-            if (!dateTime.HasValue)
-                return string.Empty;
-
-            var culture = CultureInfo.CurrentUICulture;
-            var local = dateTime.Value.ToDateTimeUnspecified();
-            return string.Format(formatString, local.Humanize(utcDate: false, culture: culture).ToPascalCase());
-        }
-        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -130,16 +130,16 @@
     <value>Census mode, Interviews created: {0}</value>
   </data>
   <data name="DashboardItem_CompletedOn" xml:space="preserve">
-    <value>Completed on {0}</value>
+    <value>Completed: {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Created on {0}</value>
+    <value>Created: {0}</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Not started</value>
   </data>
   <data name="DashboardItem_StartedOn" xml:space="preserve">
-    <value>Started on {0}</value>
+    <value>Started: {0}</value>
   </data>
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
@@ -431,7 +431,7 @@ for further instructions</value>
     <value>Your account was relinked to another tablet</value>
   </data>
   <data name="DashboardItem_RejectedOn" xml:space="preserve">
-    <value>Rejected on {0}</value>
+    <value>Rejected: {0}</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} of {1} interviews deleted</value>
@@ -543,7 +543,7 @@ You need internet connection to proceed with setting up the user and domain.</va
     <value>Warning</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Assigned on {0}</value>
+    <value>Assigned: {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
     <value>Save all relevant information to the file on this device.</value>
@@ -888,10 +888,10 @@ Downloaded {3}%</value>
     <value>Responsible: {0}</value>
   </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
-    <value>Rejected by Headquarters on {0}</value>
+    <value>Rejected by Headquarters : {0}</value>
   </data>
   <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approved by Supervisor at {0}</value>
+    <value>Approved by Supervisor: {0}</value>
   </data>
   <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
     <value>An error occurred while scanning</value>
