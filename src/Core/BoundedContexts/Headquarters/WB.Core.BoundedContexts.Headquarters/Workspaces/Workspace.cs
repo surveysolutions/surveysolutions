@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         
         public virtual string DisplayName { get; set; }
         
+        public static Workspace Default { get; set; } = new Workspace("primary", "Default Space");
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
         
         protected bool Equals(Workspace other)
