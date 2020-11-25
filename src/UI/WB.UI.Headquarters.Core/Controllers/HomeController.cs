@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
@@ -38,19 +39,19 @@ namespace WB.UI.Headquarters.Controllers
             switch (roleForCurrentUser)
             {
                 case UserRoles.Headquarter:
-                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
+                    return this.RedirectToAction("SurveysAndStatuses", "Reports", new {workspace=WorkspaceConstants.DefaultWorkspacename});
 
                 case UserRoles.Supervisor:
-                    return this.RedirectToAction("SurveysAndStatusesForSv", "Reports");
+                    return this.RedirectToAction("SurveysAndStatusesForSv", "Reports", new {workspace=WorkspaceConstants.DefaultWorkspacename});
 
                 case UserRoles.Administrator:
-                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
+                    return this.RedirectToAction("SurveysAndStatuses", "Reports", new {workspace=WorkspaceConstants.DefaultWorkspacename});
 
                 case UserRoles.Observer:
-                    return this.RedirectToAction("Headquarters", "Users");
+                    return this.RedirectToAction("Headquarters", "Users", new {workspace=WorkspaceConstants.DefaultWorkspacename});
 
                 case UserRoles.Interviewer:
-                    return this.RedirectToAction("CreateNew", "InterviewerHq");
+                    return this.RedirectToAction("CreateNew", "InterviewerHq", new {workspace=WorkspaceConstants.DefaultWorkspacename});
 
                 default:
                     return NotFound();

@@ -43,24 +43,25 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .Argument("version", a => a.Description("Questionnaire version").Type<LongType>());
 
             descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
+                .HasWorkspace()
                 .Authorize()
                 .UseSimplePaging<Interview, InterviewSummary>()
                 .UseFiltering<InterviewsFilterInputType>()
                 .UseSorting<InterviewsSortInputType>();
 
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default, default))
+                .HasWorkspace()
                 .Authorize()
                 .Type<ListType<EntityItemObjectType>>()
-                .HasWorkspace()
                 .Argument("id", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<NonNullType<LongType>>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
                 .UseFiltering<QuestionsFilterType>();
 
             descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default, default, default))
+                .HasWorkspace()
                 .Authorize()
                 .Type<ListType<QuestionnaireItemObjectType>>()
-                .HasWorkspace()
                 .Argument("id", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<NonNullType<LongType>>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
