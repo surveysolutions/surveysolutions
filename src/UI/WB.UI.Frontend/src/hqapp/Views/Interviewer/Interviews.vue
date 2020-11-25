@@ -79,8 +79,8 @@ import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
-  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query interviews($workspace: String!, $order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(workspace: $workspace, order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     nodes {
@@ -176,6 +176,7 @@ export default {
                         order: order,
                         skip: data.start,
                         take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
