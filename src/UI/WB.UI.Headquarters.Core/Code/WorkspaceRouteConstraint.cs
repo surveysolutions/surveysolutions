@@ -20,6 +20,12 @@ namespace WB.UI.Headquarters.Code
             if (!values.ContainsKey("workspace")) return false;
             
             var workspace = values["workspace"].ToString();
+            if (string.Equals(workspace, "graphql",
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                return false;
+            }
+
             if (string.Equals(workspace, WorkspaceConstants.DefaultWorkspacename, StringComparison.InvariantCultureIgnoreCase))
             {
                 return true;
