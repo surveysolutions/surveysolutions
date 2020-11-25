@@ -324,7 +324,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
 
-            registry.Bind<IWorkspaceNameProvider, PrimaryWorkspaceNameProvider>();
+            registry.BindInPerLifetimeScope<IWorkspaceNameProvider, IWorkspaceNameStorage, WorkspaceNameStorage>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
             registry.BindToMethodInSingletonScope(ctx =>
