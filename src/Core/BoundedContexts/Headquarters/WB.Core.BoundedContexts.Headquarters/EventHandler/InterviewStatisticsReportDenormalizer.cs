@@ -15,7 +15,8 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public interface IInterviewStatisticsReportDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary,
-        IReadSideRepositoryWriter<InterviewSummary>>  { }
+        IReadSideRepositoryWriter<InterviewSummary>>
+    { }
 
     internal class InterviewStatisticsReportDenormalizer :
         IInterviewStatisticsReportDenormalizer,
@@ -58,14 +59,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             foreach (var identity in questions)
             {
-                delete.AddRange(state.StatisticsReport.Where(row => 
-                    row.RosterVector == identity.RosterVector.AsString() 
-                    && row.EntityId == questionnaire.GetEntityIdMapValue(identity.Id)));
+                if (state.StatisticsReportCache.TryGetValue(
+                    (questionnaire.GetEntityIdMapValue(identity.Id), identity.RosterVector.AsString()), out var item))
+                {
+                    delete.Add(item);
+                }
             }
 
             foreach (var item in delete)
             {
                 state.StatisticsReport.Remove(item);
+            }
+
+            if (delete.Any())
+            {
+                state.RefreshStatisticsReportCache();
             }
 
             return state;
@@ -106,6 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
             }
 
+            state.RefreshStatisticsReportCache();
             return state;
         }
 
@@ -166,15 +175,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
 
             if (!IsEligibleQuestion(questionnaire, questionId)) return;
+
+            (int entityId, string rosterVector) key = (questionnaire.GetEntityIdMapValue(questionId), rv.AsString());
             
-            (int interviewId, string rosterVector, int entityId) key =
-                (state.Id, rv.AsString(), questionnaire.GetEntityIdMapValue(questionId));
-
-            var entity = state.StatisticsReport.SingleOrDefault(x =>
-                                      x.RosterVector == key.rosterVector
-                                      && x.EntityId == key.entityId);
-
-            if (entity == null)
+            if (!state.StatisticsReportCache.TryGetValue(key, out var entity))
             {
                 entity = new InterviewStatisticsReportRow
                 {
@@ -187,6 +191,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 };
 
                 state.StatisticsReport.Add(entity);
+                if (state.StatisticsReportCache == null) 
+                    state.RefreshStatisticsReportCache();
+                else
+                    state.StatisticsReportCache[key] = entity;
             }
             else
             {
@@ -201,16 +209,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             List<Identity> questions = questionIds
                 .Where(q => IsEligibleQuestion(questionnaire, q.Id))
                 .ToList();
-            
+
+            if (summary.StatisticsReportCache == null)
+            {
+                summary.StatisticsReportCache = summary.StatisticsReport.ToDictionary(s => (s.EntityId, s.RosterVector));
+            }
+
             foreach (var identity in questions)
             {
-                var entity = summary.StatisticsReport.SingleOrDefault(x =>
-                    x.RosterVector == identity.RosterVector.AsString()
-                    && x.EntityId == questionnaire.GetEntityIdMapValue(identity.Id));
-
-                if(entity == null) continue;
-                
-                entity.IsEnabled = enabled;
+                if (summary.StatisticsReportCache.TryGetValue(
+                    (questionnaire.GetEntityIdMapValue(identity.Id), identity.RosterVector.ToString()),
+                    out var entity))
+                {
+                    entity.IsEnabled = enabled;
+                }
             }
         }
 

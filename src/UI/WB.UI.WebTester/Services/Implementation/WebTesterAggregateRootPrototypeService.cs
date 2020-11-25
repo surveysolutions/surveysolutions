@@ -7,7 +7,7 @@ namespace WB.UI.WebTester.Services.Implementation
     {
         public PrototypeType? GetPrototypeType(Guid id)
         {
-            return PrototypeType.Permanent;
+            return null;
         }
 
         public void MarkAsPrototype(Guid id, PrototypeType type)
