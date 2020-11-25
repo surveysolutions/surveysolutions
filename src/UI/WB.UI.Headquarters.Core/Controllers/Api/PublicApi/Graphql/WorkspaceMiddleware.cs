@@ -18,7 +18,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public async Task InvokeAsync(IMiddlewareContext context, IWorkspaceNameStorage workspaceNameStorage)
         {
             var workspace = context.Argument<string>("workspace");
-            workspaceNameStorage.Set(workspace);
+            if (workspace != null)
+            {
+                workspaceNameStorage.Set(workspace);
+            }
+
             await next(context);
         }
     }

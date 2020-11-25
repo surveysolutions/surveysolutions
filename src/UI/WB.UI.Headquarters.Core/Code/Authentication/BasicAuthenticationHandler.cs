@@ -12,23 +12,24 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Domain;
 using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
-        private readonly UserManager<HqUser> userManager;
+        private readonly IInScopeExecutor executor;
         private bool isUserLocked;
 
         public BasicAuthenticationHandler(
-            IOptionsMonitor<BasicAuthenticationSchemeOptions> options, 
-            ILoggerFactory logger, 
-            UrlEncoder encoder, 
+            IOptionsMonitor<BasicAuthenticationSchemeOptions> options,
+            ILoggerFactory logger,
+            UrlEncoder encoder,
             ISystemClock clock,
-            UserManager<HqUser> userManager) : base(options, logger, encoder, clock)
+            IInScopeExecutor executor) : base(options, logger, encoder, clock)
         {
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.executor = executor;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -46,32 +47,36 @@ namespace WB.UI.Headquarters.Code.Authentication
                 return AuthenticateResult.Fail(e.Message);
             }
 
-            var user = await this.userManager.FindByNameAsync(creds.Username);
-            if(user == null) return AuthenticateResult.Fail("No user found");
-
-            if (user.IsArchivedOrLocked)
+            return await executor.ExecuteAsync(async (sl) =>
             {
-                this.isUserLocked = true;
-                return AuthenticateResult.Fail("User is locked");
-            }
+                var userManager = sl.GetInstance<UserManager<HqUser>>();;
+                var user = await userManager.FindByNameAsync(creds.Username);
+                if (user == null) return AuthenticateResult.Fail("No user found");
 
-            var passwordIsValid = await this.userManager.CheckPasswordAsync(user, creds.Password);
-            if(!passwordIsValid) return AuthenticateResult.Fail("Invalid password");
+                if (user.IsArchivedOrLocked)
+                {
+                    this.isUserLocked = true;
+                    return AuthenticateResult.Fail("User is locked");
+                }
 
-            var claims = new List<Claim> {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.FormatGuid()),
-                new Claim(ClaimTypes.Name, user.UserName),
-            };
-            foreach (var userRole in user.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, userRole.Name));
-            }
-            
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
+                var passwordIsValid = await userManager.CheckPasswordAsync(user, creds.Password);
+                if (!passwordIsValid) return AuthenticateResult.Fail("Invalid password");
 
-            return AuthenticateResult.Success(ticket);
+                var claims = new List<Claim> {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.FormatGuid()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                };
+                foreach (var userRole in user.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, userRole.Name));
+                }
+
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
+                var principal = new ClaimsPrincipal(identity);
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+                return AuthenticateResult.Success(ticket);
+            });
         }
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
@@ -82,7 +87,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             if (this.isUserLocked)
             {
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
-                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "User is locked"}));
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new { Message = "User is locked" }));
             }
         }
 
