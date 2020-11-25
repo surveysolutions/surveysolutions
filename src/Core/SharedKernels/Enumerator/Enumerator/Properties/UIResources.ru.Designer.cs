@@ -1602,6 +1602,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Комментарий не указан.
+        /// </summary>
+        public static string NoComment {
+            get {
+                return ResourceManager.GetString("NoComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} уведомлений.
         /// </summary>
         public static string Notifications_SummaryTitle {

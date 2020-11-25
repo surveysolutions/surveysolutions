@@ -762,4 +762,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Comment" xml:space="preserve">
     <value>Comment</value>
   </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>No comment specified</value>
+  </data>
 </root>

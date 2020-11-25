@@ -60,7 +60,7 @@
               android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
               android:layout_marginRight="@dimen/calendar_event_dialog_padding"
               android:maxLength="500"
-              local:MvxBind="Text Comment" />
+              local:MvxBind="Text Comment; Watermark Localization('NoComment')" />
     </com.google.android.material.textfield.TextInputLayout>
   <LinearLayout  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
