@@ -352,7 +352,6 @@ namespace WB.Tests.Integration
         {
             return new PostgresReadSideKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
                 Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
         }

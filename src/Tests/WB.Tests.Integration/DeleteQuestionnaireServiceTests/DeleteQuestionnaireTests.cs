@@ -201,7 +201,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         private HqQuestionnaireStorage CreateQuestionnaireStorage(IUnitOfWork unitOfWork)
         {
             return new HqQuestionnaireStorage(
-                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(unitOfWork, unitOfWorkConnectionSettings, memoryCache, new EntitySerializer<QuestionnaireDocument>()),
+                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(unitOfWork, memoryCache, new EntitySerializer<QuestionnaireDocument>()),
                 new TranslationStorage(new PostgresPlainStorageRepository<TranslationInstance>(unitOfWork)),
                 new QuestionnaireTranslator(), 
                 new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(unitOfWork, memoryCache),
@@ -280,12 +280,10 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             var questionnaireBrowseItem = new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(unitOfWork);
 
             var lookupTablesStorage = new PostgresPlainKeyValueStorage<QuestionnaireLookupTable>(unitOfWork,
-                unitOfWorkConnectionSettings,
                 memoryCache,
                 new EntitySerializer<QuestionnaireLookupTable>());
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
             var questionnaireBackupStorage = new PostgresPlainKeyValueStorage<QuestionnaireBackup>(unitOfWork,
-                unitOfWorkConnectionSettings,
                 memoryCache,
                 new EntitySerializer<QuestionnaireBackup>());
             var commandService = new Mock<ICommandService>();

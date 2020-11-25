@@ -1,6 +1,7 @@
 #nullable enable
 using System.Threading.Tasks;
 using HotChocolate.Resolvers;
+using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
