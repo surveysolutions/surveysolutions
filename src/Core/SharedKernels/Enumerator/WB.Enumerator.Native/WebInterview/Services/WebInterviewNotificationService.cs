@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Enumerator.Native.WebInterview.LifeCycle;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -35,9 +36,19 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return;
             }
 
+            if (questions.Length > InterviewLifecycle.RefreshEntitiesLimit)
+            {
+                this.webInterviewInvoker.RefreshSection(interviewId);
+                return;
+            }
+
             bool doesNeedRefreshSectionList = false;
 
             var entitiesToRefresh = new List<(string section, Identity id)>();
+
+            var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+            if (questionnaire == null) return;
 
             foreach (var identity in questions)
             {
@@ -45,8 +56,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
-
-                var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
                 if (questionnaire.IsQuestion(identity.Id) && (
                         questionnaire.IsRosterSizeQuestion(identity.Id)
@@ -67,6 +76,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     if (questionnaire.ShouldBeHiddenIfDisabled(currentEntity.Id))
                     {
                         doesNeedRefreshSectionList = true;
+                        break;
                     }
 
                     var parent = this.GetParentIdentity(currentEntity, interview);
@@ -107,19 +117,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
             }
 
-            foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
-            {
-                if (questionsGroupedByParent.Key == null)
-                    continue;
-
-                var ids = questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray();
-                this.webInterviewInvoker.RefreshEntities(questionsGroupedByParent.Key, ids);
-            }
-
             if (doesNeedRefreshSectionList)
-                this.webInterviewInvoker.RefreshSection(interviewId); 
+                this.webInterviewInvoker.RefreshSection(interviewId);
             else
-                this.webInterviewInvoker.RefreshSectionState(interviewId); 
+            {
+                foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
+                {
+                    if (questionsGroupedByParent.Key == null)
+                        continue;
+
+                    var ids = questionsGroupedByParent.Select(p => p.id?.ToString() ?? string.Empty).Distinct().ToArray();
+                    this.webInterviewInvoker.RefreshEntities(questionsGroupedByParent.Key, ids);
+                }
+                this.webInterviewInvoker.RefreshSectionState(interviewId);
+            }
         }
 
         public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
@@ -139,6 +150,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (clientGroupIdentity != null)
                 this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId.ToString(), errorMessage);
         }
+
         public void MarkAnswerAsNotSaved(Guid interviewId, Identity questionId, Exception exception)
         {
             var errorMessage = WebInterview.GetUiMessageFromException(exception);
@@ -230,95 +242,5 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private bool IsSupportFilterOptionCondition(IComposite documentEntity)
             => !string.IsNullOrWhiteSpace((documentEntity as IQuestion)?.Properties.OptionsFilterExpression);
-
-        public virtual void RefreshEntitiesWithFilteredOptions(Guid interviewId)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-
-            if (interview == null)
-            {
-                return;
-            }
-
-            var document = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-
-            var entityIds = document.Find<IComposite>(this.IsSupportFilterOptionCondition)
-                .Select(e => e.PublicKey).ToHashSet();
-
-            foreach (var entityId in entityIds)
-            {
-                var identities = interview.GetAllIdentitiesForEntityId(entityId).ToArray();
-                this.RefreshEntities(interviewId, identities);
-            }
-        }
-
-        public virtual void RefreshCascadingOptions(Guid interviewId, Identity identity)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-            if (interview == null) return;
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-
-            var dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(identity.Id);
-            var dependentQuestionIdentities = dependentQuestionIds.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)).ToArray();
-
-            this.RefreshEntities(interviewId, dependentQuestionIdentities);
-        }
-
-        public virtual void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-
-            if (interview == null)
-            {
-                return;
-            }
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity,
-                interview.Language);
-
-            foreach (var questionIdentity in identities)
-            {
-                if (interview.GetQuestion(questionIdentity) == null) continue;
-
-                if (interview.GetTextListQuestion(questionIdentity) == null) continue;
-
-                var listQuestionIds = questionnaire.GetLinkedToSourceEntity(questionIdentity.Id).ToArray();
-                if (!listQuestionIds.Any())
-                    return;
-
-                foreach (var listQuestionId in listQuestionIds)
-                {
-                    var questionsToRefresh = interview.FindQuestionsFromSameOrDeeperLevel(listQuestionId,
-                        questionIdentity);
-                    this.RefreshEntities(interviewId, questionsToRefresh.ToArray());
-                }
-            }
-        }
-
-        public virtual void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-
-            if (interview == null)
-            {
-                return;
-            }
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity,
-                interview.Language);
-
-            var rosterIds = rosterIdentities.Select(x => x.Id).Distinct();
-
-            var linkedToRosterQuestionIds = rosterIds.SelectMany(x => questionnaire.GetLinkedToSourceEntity(x));
-
-            foreach (var linkedToRosterQuestionId in linkedToRosterQuestionIds)
-            {
-                var identitiesToRefresh = interview.GetAllIdentitiesForEntityId(linkedToRosterQuestionId).ToArray();
-                this.RefreshEntities(interviewId, identitiesToRefresh);
-            }
-        }
-
-        public void ShutDownInterview(Guid interviewId) => this.webInterviewInvoker.ShutDown(interviewId);
     }
 }

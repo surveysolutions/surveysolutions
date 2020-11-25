@@ -98,7 +98,7 @@ namespace WB.UI.WebTester
                 new InfrastructureModuleMobile(),
                 new DataCollectionSharedKernelModule(),
                 //new CaptchaModule("recaptcha"),
-                new WebInterviewModule(), // init registers denormalizer
+                new WebInterviewModule(Configuration), // init registers denormalizer
                 new WebTesterModule(),
                 new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false)); // stores app version in database but does not do it for web tester
         }
