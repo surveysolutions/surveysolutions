@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps;
@@ -19,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static IObjectFieldDescriptor HasWorkspace(this IObjectFieldDescriptor descriptor)
         {
             return descriptor.Argument("workspace",
-                    a => a.Description("Workspace name").Type<NonNullType<StringType>>())
+                    a => a.Description("Workspace name").Type<NonNullType<StringType>>().DefaultValue(WorkspaceConstants.DefaultWorkspacename))
                 .Use<WorkspaceMiddleware>();
         }
     }
