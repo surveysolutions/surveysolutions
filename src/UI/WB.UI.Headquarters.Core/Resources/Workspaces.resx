@@ -45,4 +45,7 @@
     <data name="AddNew" xml:space="preserve">
         <value>Create new</value>
     </data>
+    <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+        <value>Provided workspace name is not allowed</value>
+    </data>
 </root>
