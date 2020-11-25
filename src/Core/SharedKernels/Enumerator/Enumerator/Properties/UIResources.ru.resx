@@ -766,4 +766,7 @@
   <data name="Comment" xml:space="preserve">
     <value>Комментарий</value>
   </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>Комментарий не указан</value>
+  </data>
 </root>
