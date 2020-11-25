@@ -187,16 +187,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             if (interview.CalendarEvent.HasValue)
             {
-                DateTimeZone timeZone = null;
-                if (interview.CalendarEventTimezoneId != null)
-                    timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(interview.CalendarEventTimezoneId);
-                if (timeZone == null)
-                    timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-                var instant = interview.CalendarEvent.Value.UtcDateTime.ToInstant();
-                var zonedDateTime = new ZonedDateTime(instant, timeZone);
-                var calendarString = FormatDateTimeString(EnumeratorUIResources.Dashboard_ShowCalendarEvent, zonedDateTime.ToDateTimeUnspecified());
-                string separatorVisit =
-                    !string.IsNullOrEmpty(interview.CalendarEventComment) ? Environment.NewLine : string.Empty;
+                var calendarString = FormatDateTimeString(
+                    EnumeratorUIResources.Dashboard_ShowCalendarEvent, 
+                    interview.CalendarEvent.Value,
+                    interview.CalendarEventTimezoneId);
+                string separatorVisit = !string.IsNullOrEmpty(interview.CalendarEventComment) 
+                    ? Environment.NewLine : string.Empty;
                 subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{interview.CalendarEventComment}";
             }
 
@@ -232,16 +228,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 default:
                     return string.Empty;
             }
-        }
-
-        private string FormatDateTimeString(string formatString, DateTime? dateTime)
-        {
-            if (!dateTime.HasValue)
-                return string.Empty;
-            
-            var culture = CultureInfo.CurrentUICulture;
-            return string.Format(formatString, dateTime.Value.Humanize(utcDate: false, culture: culture).ToPascalCase());
-            //return string.Format(formatString, dateTime.Value.ToString("MMM dd, HH:mm", culture).Humanize(utcDate: false, culture: culture).ToPascalCase());
         }
 
         private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)

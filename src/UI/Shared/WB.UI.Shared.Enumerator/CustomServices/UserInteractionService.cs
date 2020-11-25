@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Text;
+using Android.Text.Format;
 using Android.Widget;
 using Google.Android.Material.DatePicker;
 using Google.Android.Material.Dialog;
@@ -130,8 +131,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var is24HourView = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern.Contains('H');
-            var timePickerDialog = new TimePickerDialog(this.mvxCurrentTopActivity.Activity,
+            var activity = this.mvxCurrentTopActivity.Activity;
+            var is24HourView = DateFormat.Is24HourFormat(activity);
+            var timePickerDialog = new TimePickerDialog(activity,
                 (sender, arg) =>
                 {
                     okCallback(sender, new TimeSpan(arg.HourOfDay, arg.Minute, 0));
