@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public PostgresPlainKeyValueStorage(IUnitOfWork sessionProvider,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(sessionProvider.Session.Connection.ConnectionString, null, memoryCache, serializer)
+            : base(sessionProvider, memoryCache, serializer)
         {
             this.sessionProvider = sessionProvider;
         }
