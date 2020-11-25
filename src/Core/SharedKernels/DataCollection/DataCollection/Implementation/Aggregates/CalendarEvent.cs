@@ -65,6 +65,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
             this.properties.IsDeleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
+        }  
+        
+        protected void Apply(CalendarEventRestored @event)
+        {
+            //ignore event if it occured before last change
+            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            
+            this.properties.IsDeleted = false;
+            this.properties.UpdatedAt = @event.OriginDate;
         }
         
         #endregion
