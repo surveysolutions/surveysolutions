@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -44,15 +43,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
-        public async Task<DataExportArchive?> GetDataArchive(QuestionnaireIdentity questionnaireIdentity,
-            DataExportFormat format,
-            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null, Guid? translationId = null,
-            bool? includeMeta = null)
+        public async Task<DataExportArchive?> GetDataArchive(long jobId)
         {
-            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
-            var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName,
-                format, status, from, to, translationId, includeMeta);
-
+            var jobInfo = await exportServiceApi.GetJobsStatus(jobId);
+            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(jobInfo.QuestionnaireIdentity);
+            
+            var result = await exportServiceApi.DownloadArchive(jobId, archiveFileName);
+            
             if (result.StatusCode == HttpStatusCode.NotFound) return null;
 
             result.EnsureSuccessStatusCode();

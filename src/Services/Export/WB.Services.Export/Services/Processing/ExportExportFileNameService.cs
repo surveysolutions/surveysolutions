@@ -86,7 +86,7 @@ namespace WB.Services.Export.Services.Processing
             }
 
             string metaSuffix = exportSettings.IncludeMeta != false ? "" : "_no-meta";
-
+            
             var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
                               $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
 
