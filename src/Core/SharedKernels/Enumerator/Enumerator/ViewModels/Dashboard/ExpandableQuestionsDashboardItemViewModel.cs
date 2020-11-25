@@ -7,7 +7,6 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using NodaTime;
 using NodaTime.Extensions;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
