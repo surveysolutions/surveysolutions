@@ -202,6 +202,7 @@ export default {
                 required: true,
                 max: 12,
                 regex: /^[0-9,a-z]+$/,
+                excluded: ['api', 'graphql'],
             }
         },
         tableOptions() {
