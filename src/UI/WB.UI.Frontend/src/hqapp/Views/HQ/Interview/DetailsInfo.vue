@@ -50,7 +50,7 @@
                             <span class="data"
                                 data-toggle="tooltip"
                                 v-if="calendarEvent != null"
-                                :title="((calendarEvent.comment == null || calendarEvent.comment == '') ? self.$t('Assignments.NoComment') : calendarEvent.comment)">
+                                :title="((calendarEvent.comment == null || calendarEvent.comment == '') ? this.$t('Assignments.NoComment') : calendarEvent.comment)">
                                 {{calendarEventTime}}
                             </span>
 
