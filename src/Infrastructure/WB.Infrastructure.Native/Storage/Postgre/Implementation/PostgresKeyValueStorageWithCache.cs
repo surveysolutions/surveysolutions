@@ -14,11 +14,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         
         private static readonly string CachePrefix = $"pkvs::{typeof(TEntity).Name}::";
 
-        public PostgresKeyValueStorageWithCache(string connectionString,
-            string schemaName,
+        public PostgresKeyValueStorageWithCache(IUnitOfWork connectionString,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(connectionString, schemaName, serializer)
+            : base(connectionString, serializer)
         {
             this.memoryCache = memoryCache;
         }
