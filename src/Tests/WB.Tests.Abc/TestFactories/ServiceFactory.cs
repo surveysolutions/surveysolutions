@@ -1251,7 +1251,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IWorkspaceNameProvider WorkspaceNameProvider(string worksapceName = null)
         {
-            return !string.IsNullOrEmpty(worksapceName) ? Mock.Of<IWorkspaceNameProvider>(x => x.CurrentWorkspace() == worksapceName) : new PrimaryWorkspaceNameProvider();
+            return !string.IsNullOrEmpty(worksapceName) ? Mock.Of<IWorkspaceNameProvider>(x => x.CurrentWorkspace() == worksapceName) : new WorkspaceNameStorage();
         }
     }
 

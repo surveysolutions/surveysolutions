@@ -1,7 +1,6 @@
 #nullable enable
 using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
@@ -15,17 +14,30 @@ using Assignment = WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignme
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
+    public static class SchemaExtensions
+    {
+        public static IObjectFieldDescriptor HasWorkspace(this IObjectFieldDescriptor descriptor)
+        {
+            return descriptor.Argument("workspace",
+                    a => a.Description("Workspace name").Type<NonNullType<StringType>>())
+                .Use<WorkspaceMiddleware>();
+        }
+    }
+    
     public class HeadquartersQuery : ObjectType
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            descriptor.Field<QuestionnairesResolver>(x => x.Questionnaires(default, default, default))
+            descriptor
+                .Field<QuestionnairesResolver>(x => x.Questionnaires(default, default, default))
+                .HasWorkspace()
                 .Authorize(nameof(UserRoles.Administrator),
                     nameof(UserRoles.Headquarter),
                     nameof(UserRoles.ApiUser))
                 .Name("questionnaires")
                 .Description("Gets questionnaire details")
                 .UseSimplePaging<Questionnaire, QuestionnaireBrowseItem>()
+
                 .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<LongType>());
 
@@ -38,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default, default))
                 .Authorize()
                 .Type<ListType<EntityItemObjectType>>()
+                .HasWorkspace()
                 .Argument("id", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<NonNullType<LongType>>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
@@ -46,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default, default, default))
                 .Authorize()
                 .Type<ListType<QuestionnaireItemObjectType>>()
+                .HasWorkspace()
                 .Argument("id", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<NonNullType<LongType>>())
                 .Argument("language", a => a.Description("Questionnaire language").Type<StringType?>())
@@ -59,12 +73,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .Authorize()
                 .UseSimplePaging<Map, MapBrowseItem>()
                 .UseFiltering<MapsFilterInputType>()
-                .UseSorting<MapsSortInputType>();
+                .UseSorting<MapsSortInputType>()
+                .HasWorkspace();
 
             descriptor.Field<AssignmentsResolver>(x => x.Assignments(default, default))
                 .Authorize()
                 .UseSimplePaging<Assignment, Core.BoundedContexts.Headquarters.Assignments.Assignment>()
-                .UseFiltering<AssignmentsFilter>();
+                .UseFiltering<AssignmentsFilter>()
+                .HasWorkspace();
         }
     }
 }

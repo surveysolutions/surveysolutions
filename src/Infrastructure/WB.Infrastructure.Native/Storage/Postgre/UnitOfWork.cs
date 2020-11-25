@@ -74,7 +74,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                             NpgsqlConnectionStringBuilder connectionStringBuilder =
                                 new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
                                 {
-                                    SearchPath = key
+                                    SearchPath = "ws_" + key
                                 };
 
                             return connectionStringBuilder.ToString();
