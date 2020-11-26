@@ -327,13 +327,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindInPerLifetimeScope<IWorkspaceNameProvider, IWorkspaceNameStorage, WorkspaceNameStorage>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
-
-            registry.BindToMethod<IMemoryCache>(ctx =>
+            registry.BindToMethod(ctx =>
             {
                 var cacheSource = ctx.Resolve<IMemoryCacheSource>();
                 var workspaceNameProvider = ctx.Resolve<IWorkspaceNameProvider>();
                 return cacheSource.GetCache(workspaceNameProvider.CurrentWorkspace());
-            }); // .BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
+            }, externallyOwned: true);
             
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
 

@@ -417,7 +417,7 @@ namespace WB.Tests.Integration
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
-            return new UnitOfWork(factory, Mock.Of<ILogger<UnitOfWork>>(), new UnitOfWorkConnectionSettings(), Create.Service.WorkspaceNameProvider());
+            return new UnitOfWork(factory, Mock.Of<ILogger<UnitOfWork>>(), Create.Service.WorkspaceNameProvider());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
