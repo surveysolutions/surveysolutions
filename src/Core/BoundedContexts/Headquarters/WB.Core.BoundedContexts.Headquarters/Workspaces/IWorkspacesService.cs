@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
@@ -27,18 +29,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         private readonly ILoggerProvider loggerProvider;
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
+        private readonly IMemoryCache memoryCache;
         private readonly ILogger<WorkspacesService> logger;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
             ILoggerProvider loggerProvider, 
             IPlainStorageAccessor<Workspace> workspaces,
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
+            IMemoryCache memoryCache,
             ILogger<WorkspacesService> logger)
         {
             this.connectionSettings = connectionSettings;
             this.loggerProvider = loggerProvider;
             this.workspaces = workspaces;
             this.workspaceUsers = workspaceUsers;
+            this.memoryCache = memoryCache;
             this.logger = logger;
         }
 
@@ -60,21 +65,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public IEnumerable<WorkspaceContext> GetWorkspaces()
         {
-            foreach (var workspace in workspaces.Query(_ => _
-                .Select(workspace => WorkspaceContext.From(workspace))
-                .ToList()))
+            return memoryCache.GetOrCreate("workspaces", entry =>
             {
-                yield return workspace;
-            }
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+
+                return workspaces.Query(_ => _
+                    .Select(workspace => workspace.AsContext())
+                    .ToList());
+            });
         }
 
         public IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId)
         {
             var userWorkspaces = workspaces.Query(_ =>
                 _.Where(x => x.Users.Any(u => u.UserId == userId))
-                .Select(workspace => WorkspaceContext.From(workspace))
+                .Select(workspace => workspace.AsContext())
                 .ToList()
             );
+
             return userWorkspaces;
         }
 

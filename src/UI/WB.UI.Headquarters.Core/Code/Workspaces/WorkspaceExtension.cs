@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {

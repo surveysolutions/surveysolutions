@@ -3,6 +3,7 @@ using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
@@ -31,7 +32,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             }
         }
 
-        protected IWorkspaceNameProvider workspace;
+        protected IWorkspaceContextAccessor workspace;
 
         [OneTimeTearDown]
         protected void Cleanup()

@@ -7,13 +7,14 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.Domain;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
     public class WorkspaceMiddleware
     {
         private readonly RequestDelegate next;
-        
+
         /// <summary>
         /// Creates a new instance of <see cref="WorkspaceMiddleware"/>.
         /// </summary>
@@ -65,7 +66,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (!NotAWorkspace.Any(w => context.Request.Path.StartsWithSegments(w)))
             {
-                context.SetWorkspace(WorkspaceContext.From(Workspace.Default));
+                context.SetWorkspace(Workspace.Default.AsContext());
                 context.SetWorkspaceMatchPath(false);
             }
 
@@ -76,16 +77,10 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         IEnumerable<WorkspaceContext> GetWorkspaces(HttpContext context)
         {
-            var cache = context.RequestServices.GetRequiredService<IMemoryCache>();
+            var workspaces = context.RequestServices.GetService<IInScopeExecutor>().Execute(scope =>
+                scope.GetInstance<IWorkspacesService>().GetWorkspaces().ToList());
 
-            return cache.GetOrCreate("workspaces", entry =>
-            {
-                var workspaces = context.RequestServices.GetService<IInScopeExecutor>().Execute(scope => 
-                    scope.GetInstance<IWorkspacesService>().GetWorkspaces().ToList());
-
-                entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1);
-                return workspaces;
-            });
+            return workspaces;
         }
 
         private static readonly string[] NotAWorkspace = {

@@ -57,6 +57,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -125,6 +126,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
 using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -1249,9 +1251,10 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
 
-        public IWorkspaceNameProvider WorkspaceNameProvider(string worksapceName = null)
+        public IWorkspaceContextAccessor WorkspaceNameProvider(string workspaceName = null)
         {
-            return !string.IsNullOrEmpty(worksapceName) ? Mock.Of<IWorkspaceNameProvider>(x => x.CurrentWorkspace() == worksapceName) : new WorkspaceNameStorage();
+            return !string.IsNullOrEmpty(workspaceName) ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace().Name == workspaceName) 
+                : new WorkspaceContextAccessor(new WorkspaceContextHolder());
         }
     }
 

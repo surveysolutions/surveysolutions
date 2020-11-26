@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
@@ -30,7 +31,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 {
                     using var scope = requestServices.CreateScope();
                     context.RequestServices = scope.ServiceProvider;
-                    scope.ServiceProvider.GetRequiredService<IWorkspaceNameStorage>().Set(workspace.Name);
+                    scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace.Name);
                     await next(context);
                 }
                 finally

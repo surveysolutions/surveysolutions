@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
@@ -25,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         public AudioAuditFileStorage(
             IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor,
-            IWorkspaceNameProvider workspaceNameProvider,
+            IWorkspaceContextAccessor workspaceContextAccessor,
             IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this.filePlainStorageAccessor = filePlainStorageAccessor;
