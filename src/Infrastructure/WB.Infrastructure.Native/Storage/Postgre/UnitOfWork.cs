@@ -6,39 +6,28 @@ using System.Diagnostics;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using NHibernate;
-using NHibernate.Impl;
-using Npgsql;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
     [DebuggerDisplay("Id#{Id}; SessionId: {SessionId}")]
     public sealed class UnitOfWork : IUnitOfWork
     {
-        private static ConcurrentDictionary<string, string> connectionStringCache = new ConcurrentDictionary<string, string>();
-        
         private readonly ISessionFactory sessionFactory;
         private readonly ILogger<UnitOfWork> logger;
-        private readonly UnitOfWorkConnectionSettings connectionSettings;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
-        private ISession? session;
-        private ITransaction? transaction;
         private bool isDisposed = false;
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
         public Guid? SessionId;
         private static long counter = 0;
         public long Id { get; }
-        
-        public UnitOfWork(ISessionFactory sessionFactory, 
-            ILogger<UnitOfWork> logger,
-            UnitOfWorkConnectionSettings connectionSettings,
-            IWorkspaceNameProvider workspaceNameProvider)
+        private readonly IWorkspaceNameProvider workspaceNameProvider;
+
+        public UnitOfWork(ISessionFactory sessionFactory,
+            ILogger<UnitOfWork> logger, IWorkspaceNameProvider workspaceNameProvider)
         {
-            if (session != null) throw new InvalidOperationException("Unit of work already started");
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.sessionFactory = sessionFactory;
             this.logger = logger;
-            this.connectionSettings = connectionSettings;
             this.workspaceNameProvider = workspaceNameProvider;
             Id = Interlocked.Increment(ref counter);
         }
@@ -55,6 +44,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             shouldDiscardChanges = true;
         }
 
+        readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> openSessions 
+            = new ConcurrentDictionary<string, (ISession, ITransaction)>();
+
         public ISession Session
         {
             get
@@ -64,32 +56,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     logger.LogInformation("Error getting session. Old SessionId:{SessionId} Thread:{ManagedThreadId}", SessionId, Thread.CurrentThread.ManagedThreadId);
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
-                
-                if (this.session == null)
+
+                var ws = this.workspaceNameProvider.CurrentWorkspace();
+
+                var work = openSessions.GetOrAdd(ws, workspace =>
                 {
-                    string connectionString = connectionStringCache.GetOrAdd(
-                        this.workspaceNameProvider.CurrentWorkspace(),
-                        key =>
-                        {
-                            NpgsqlConnectionStringBuilder connectionStringBuilder =
-                                new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
-                                {
-                                    SearchPath = "ws_" + key
-                                };
+                    var session = sessionFactory.OpenSession();
+                    var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
+                    return (session, transaction);
+                });
 
-                            return connectionStringBuilder.ToString();
-                        });
-                    
-                    var connection = new NpgsqlConnection(connectionString);
-                    connection.Open();
-                    session = sessionFactory.WithOptions()
-                        .Connection(connection)
-                        .OpenSession();
-                    transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
-                    SessionId = (session as SessionImpl)?.SessionId;
-                }
-
-                return session;
+                return work.session;
             }
         }
 
@@ -97,20 +74,23 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) return;
 
-            if (transaction?.IsActive == true)
+            foreach (var (session, transaction) in openSessions.Values)
             {
-                if (shouldAcceptChanges && !shouldDiscardChanges)
+                if (transaction.IsActive == true)
                 {
-                    transaction.Commit();
+                    if (shouldAcceptChanges && !shouldDiscardChanges)
+                    {
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                    }
                 }
-                else
-                {
-                    transaction.Rollback();
-                }
-            }
 
-            transaction?.Dispose();
-            session?.Close().Close();
+                transaction.Dispose();
+                session.Dispose();
+            }
 
             isDisposed = true;
         }
