@@ -4,8 +4,8 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using NHibernate;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly ISessionFactory sessionFactory;
-        private readonly ILogger<UnitOfWork> logger;
+        private readonly ILogger logger;
         private bool isDisposed = false;
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
@@ -24,7 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public UnitOfWork(ISessionFactory sessionFactory,
-            ILogger<UnitOfWork> logger, IWorkspaceContextAccessor workspaceContextAccessor)
+            ILogger logger, IWorkspaceContextAccessor workspaceContextAccessor)
         {
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.sessionFactory = sessionFactory;
@@ -54,7 +54,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 if (isDisposed)
                 {
-                    logger.LogInformation("Error getting session. Old SessionId:{SessionId} Thread:{ManagedThreadId}", SessionId, Thread.CurrentThread.ManagedThreadId);
+                    logger.Info($"Error getting session. Old sessionId:{SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
 

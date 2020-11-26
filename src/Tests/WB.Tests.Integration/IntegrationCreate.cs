@@ -6,7 +6,6 @@ using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs.Eventing;
@@ -16,6 +15,7 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
+using Npgsql;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -365,6 +365,13 @@ namespace WB.Tests.Integration
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = connectionString;
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString)
+                {
+                    SearchPath = schemaName
+                };
+
+                var workspaceConnectionString = connectionStringBuilder.ToString();
+                db.ConnectionString = workspaceConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
@@ -398,6 +405,13 @@ namespace WB.Tests.Integration
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = connectionString;
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString)
+                {
+                    SearchPath = readSideSchemaName
+                };
+
+                var workspaceConnectionString = connectionStringBuilder.ToString();
+                db.ConnectionString = workspaceConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
@@ -417,7 +431,7 @@ namespace WB.Tests.Integration
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
-            return new UnitOfWork(factory, Mock.Of<ILogger<UnitOfWork>>(), Create.Service.WorkspaceNameProvider());
+            return new UnitOfWork(factory, Mock.Of<ILogger>(), Create.Service.WorkspaceNameProvider());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)

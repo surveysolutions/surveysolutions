@@ -63,7 +63,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewFlagMap),
                     typeof(InterviewGpsMap),
                     typeof(InterviewCommentMap)
-                }, true, workspace.CurrentWorkspace().Name);
+                }, true, workspace.CurrentWorkspace().SchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<InterviewTextListAnswer[]>>(new EntitySerializer<InterviewTextListAnswer[]>());

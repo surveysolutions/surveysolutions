@@ -693,7 +693,8 @@ namespace WB.Tests.Abc.TestFactories
             SyncSettings syncSettings = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null,
             IUserRepository userRepository = null,
-            ISessionFactory sessionFactory = null)
+            ISessionFactory sessionFactory = null,
+            IInScopeExecutor inScopeExecutor = null)
         {
             InterviewKey generatedInterviewKey = new InterviewKey(5533);
 
@@ -713,7 +714,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
-                inScopeExecutor: Create.Service.InScopeExecutor(Create.Service.ServiceLocatorService()));
+                inScopeExecutor: inScopeExecutor ?? Create.Service.InScopeExecutor(Create.Service.ServiceLocatorService()));
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
@@ -1253,7 +1254,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public IWorkspaceContextAccessor WorkspaceNameProvider(string workspaceName = null)
         {
-            return !string.IsNullOrEmpty(workspaceName) ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace().Name == workspaceName) 
+            return !string.IsNullOrEmpty(workspaceName) 
+                ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == new WorkspaceContext(workspaceName, String.Empty)) 
                 : new WorkspaceContextAccessor(new WorkspaceContextHolder());
         }
     }
