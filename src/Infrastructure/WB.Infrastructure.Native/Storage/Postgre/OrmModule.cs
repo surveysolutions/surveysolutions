@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,6 +15,7 @@ using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
+using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
@@ -174,7 +176,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void Load(IIocRegistry registry)
         {
             registry.BindToConstant(() => this.connectionSettings);
-            registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory());
+            registry.BindToMethod<ISessionFactory>(SessionFactoryBinder);
             registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
@@ -197,12 +199,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindAsSingleton(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
         }
 
-        private ISessionFactory BuildSessionFactory()
+        private ISessionFactory SessionFactoryBinder(IModuleContext context)
+        {
+            var workspace = context.Resolve<IWorkspaceNameProvider>().CurrentWorkspace();
+
+            return sessionFactories.GetOrAdd(workspace, 
+                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace))).Value;
+        }
+
+        private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories 
+            = new ConcurrentDictionary<string, Lazy<ISessionFactory>>();
+
+        private ISessionFactory BuildSessionFactory(string workspace)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
-                db.ConnectionString = this.connectionSettings.ConnectionString;
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
+                {
+                    SearchPath = "ws_" + workspace
+                };
+
+                var workspaceConnectionString = connectionStringBuilder.ToString();
+
+                db.ConnectionString = workspaceConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
