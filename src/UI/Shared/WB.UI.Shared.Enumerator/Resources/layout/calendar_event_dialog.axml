@@ -4,13 +4,21 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:paddingRight="@dimen/calendar_event_dialog_padding"
+              android:paddingLeft="@dimen/calendar_event_dialog_padding"
+              android:paddingTop="@dimen/calendar_event_dialog_padding"
+              android:paddingBottom="@dimen/calendar_event_dialog_padding"
               android:minWidth="800dp"
               local:MvxBind="HideKeyboardOnClick .">
+       
     <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+            android:layout_marginRight="@dimen/calendar_event_dialog_padding"
+            android:layout_marginTop="@dimen/calendar_event_dialog_padding"
+            android:layout_marginBottom="@dimen/calendar_event_dialog_padding"
             local:hintEnabled="true"
-            local:endIconMode="custom"
             local:startIconDrawable="@android:drawable/ic_menu_my_calendar"
             local:MvxBind="Hint Localization('Date');">
         <com.google.android.material.textfield.TextInputEditText
@@ -28,6 +36,10 @@
     <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+            android:layout_marginRight="@dimen/calendar_event_dialog_padding"
+            android:layout_marginTop="@dimen/calendar_event_dialog_padding"
+            android:layout_marginBottom="@dimen/calendar_event_dialog_padding"
             local:hintEnabled="true"
             local:startIconDrawable="@android:drawable/ic_menu_recent_history"
             local:MvxBind="Hint Localization('Time');">
@@ -46,6 +58,10 @@
     <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
+            android:layout_marginRight="@dimen/calendar_event_dialog_padding"
+            android:layout_marginTop="@dimen/calendar_event_dialog_padding"
+            android:layout_marginBottom="@dimen/calendar_event_dialog_padding"
             local:hintEnabled="true"
             local:endIconMode="clear_text"
             local:MvxBind="Hint Localization('Comment');">
@@ -65,6 +81,8 @@
   <LinearLayout  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
                  android:orientation="horizontal"
+                 android:layout_marginTop="@dimen/calendar_event_dialog_padding"
+                 android:layout_marginBottom="@dimen/calendar_event_dialog_padding"
                  android:layout_marginLeft="@dimen/calendar_event_dialog_padding"
                  android:layout_marginRight="@dimen/calendar_event_dialog_padding">
       <View
