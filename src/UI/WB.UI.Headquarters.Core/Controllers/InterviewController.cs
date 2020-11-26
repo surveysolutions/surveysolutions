@@ -145,8 +145,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ? null
                 : new CalendarEventView()
                 {
-                    StartUtc = ce.StartUtc,
-                    StartTimezone = ce.StartTimezone,
+                    StartUtc = ce.Start.ToDateTimeUtc(),
+                    StartTimezone = ce.Start.Zone.Id,
                     Comment = ce.Comment
                 };
 

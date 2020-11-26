@@ -7,7 +7,8 @@
     @Html.RenderHqConfig(new
     {
         AssignmentsEndpoint = Url.Action("Get", "AssignmentsApi"),
-        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
+        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
+        CalendarEventsEndpoint = Url.Content(@"~/calendarEvents")
     })
 }
 

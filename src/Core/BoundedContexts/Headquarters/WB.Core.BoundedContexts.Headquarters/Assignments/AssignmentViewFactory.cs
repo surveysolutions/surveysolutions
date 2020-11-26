@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
+using NodaTime;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -158,9 +159,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return calendarEvent == null ? null : new CalendarEventView()
             {
                 Comment = calendarEvent.Comment,
-                StartUtc = calendarEvent.StartUtc,
-                StartTimezone = calendarEvent.StartTimezone,
-                PublicKey = calendarEvent.PublicKey
+                PublicKey = calendarEvent.PublicKey,
+                StartUtc = calendarEvent.Start.ToDateTimeUtc(),
+                StartTimezone = calendarEvent.Start.Zone.Id,
+                Start = calendarEvent.Start
             };
         }
 

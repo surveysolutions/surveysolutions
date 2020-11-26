@@ -18,11 +18,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Comment of calendar Event")
                 .Type<StringType>();
             
-            descriptor.Field(x => x.StartUtc)
+            descriptor.Field(x => x.StartUtc())
                 .Type<NonNullType<DateTimeType>>()
                 .Description("Start of calendar Event");
             
-            descriptor.Field(x => x.StartTimezone)
+            descriptor.Field(x => x.StartTimezone())
                 .Type<StringType>()
                 .Description("Start Timezone of Event");
 

@@ -9,6 +9,7 @@ namespace WB.UI.Headquarters.Models
     {
         public string AllInterviews { get; set; }
         public string InterviewerHqEndpoint { get; set; }
+        public string CalendarEventsEndpoint { get; set; }
         public string[] Statuses { get; set; }
         public string Title { get; set; }
         public List<QuestionnaireVersionsComboboxViewItem> Questionnaires { get; set; }
