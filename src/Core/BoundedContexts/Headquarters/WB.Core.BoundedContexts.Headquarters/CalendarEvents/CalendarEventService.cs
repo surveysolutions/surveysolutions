@@ -36,13 +36,20 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         public CalendarEvent? GetActiveCalendarEventForInterviewId(Guid id)
         {
             return this.calendarEventsAccessor.Query<CalendarEvent>(
-                x => x.FirstOrDefault(y => y.InterviewId == id));
+                x => x.FirstOrDefault(y => 
+                    y.InterviewId == id
+                    && y.DeletedAtUtc == null
+                    && y.CompletedAtUtc == null));
         }
         
         public CalendarEvent? GetActiveCalendarEventForAssignmentId(int id)
         {
             return this.calendarEventsAccessor.Query<CalendarEvent>(
-                x => x.FirstOrDefault(y => y.InterviewId == null && y.AssignmentId == id));
+                x => x.FirstOrDefault(y => 
+                    y.InterviewId == null 
+                    && y.AssignmentId == id
+                    && y.DeletedAtUtc == null
+                    && y.CompletedAtUtc == null));
         }
 
         public List<CalendarEvent> GetAllCalendarEventsForUser(Guid responsibleId)
