@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         public WorkspaceContext? Current { get; set; }
     }
 
-    public interface IWorkspaceContextHolder
+     interface IWorkspaceContextHolder
     {
         WorkspaceContext? Current { get; set; }
     }
@@ -26,6 +26,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             this.holder = holder;
         }
 
+        public void Set(WorkspaceContext workspace)
+        {
+            holder.Current = workspace;
+        }
+
         public void Set(string name)
         {
             var workspace = workspacesService.GetWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -33,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         }
     }
 
-    public class WorkspaceContextAccessor : IWorkspaceContextAccessor
+    class WorkspaceContextAccessor : IWorkspaceContextAccessor
     {
         private readonly IWorkspaceContextHolder holder;
 

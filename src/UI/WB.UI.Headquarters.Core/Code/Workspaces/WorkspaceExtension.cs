@@ -23,15 +23,5 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             return (WorkspaceContext?) (httpContext.Items.TryGetValue("workspace", out var workspace) ? workspace : null);
         }
-
-        public static void SetWorkspaceMatchPath(this HttpContext httpContext, bool matchPath)
-        {
-            httpContext.Items["workspace_match_path"] = matchPath;
-        }
-
-        public static bool GetWorkspaceMatchPath(this HttpContext httpContext)
-        {
-            return (bool)(httpContext.Items.TryGetValue("workspace_match_path", out var workspace) ? workspace : false);
-        }
     }
 }
