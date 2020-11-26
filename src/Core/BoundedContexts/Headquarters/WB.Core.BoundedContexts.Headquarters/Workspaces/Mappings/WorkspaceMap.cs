@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
             Set(x => x.Users, set =>
             {
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                set.Key(k => k.Column("workspace_name"));
+                set.Key(k => k.Column("workspace"));
             }, s => s.OneToMany());   
         }
     }
