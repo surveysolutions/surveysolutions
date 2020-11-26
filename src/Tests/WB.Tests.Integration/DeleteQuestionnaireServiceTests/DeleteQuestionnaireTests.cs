@@ -209,7 +209,8 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 new QuestionnaireQuestionOptionsRepository(), 
                 new SubstitutionService(), 
                 Mock.Of<IInterviewExpressionStatePrototypeProvider>(), 
-                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>()
+                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>(),
+                Create.Storage.NewMemoryCache()
             );
         }
 
