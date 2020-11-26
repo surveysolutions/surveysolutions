@@ -15,7 +15,7 @@
                     googleApiKey = googleMapsConfig.Value.ApiKey,
                     googleMapsApiBaseUrl = googleMapsConfig.Value.ApiBaseUrl,
                     googleMapsBaseUrl = googleMapsConfig.Value.BaseUrl,
-                    basePath = "/" + workspaceName.CurrentWorkspace() ?? "/",
+                    basePath = "/" + workspaceName.CurrentWorkspace() + "/" ?? "/",
                     workspace = workspaceName.CurrentWorkspace(),
                     imageGetBase = Url.Content("~/api/WebInterviewResources"),
                     audioGet = Url.Content("~/Resource/AudioRecord"),

@@ -1,29 +1,26 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
+using WB.Core.Infrastructure.Domain;
 
-namespace WB.UI.Headquarters.Code.Workspace
+namespace WB.UI.Headquarters.Code.Workspaces
 {
     public class WorkspaceMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly IWorkspacesService workspacesService;
-        private readonly IWorkspaceNameStorage workspaceNameStorage;
-
+        private readonly RequestDelegate next;
+        
         /// <summary>
         /// Creates a new instance of <see cref="WorkspaceMiddleware"/>.
         /// </summary>
         /// <param name="next">The delegate representing the next middleware in the request pipeline.</param>
-        /// <param name="pathBase">The path base to extract.</param>
-        public WorkspaceMiddleware(RequestDelegate next, IWorkspacesService workspacesService, IWorkspaceNameStorage workspaceNameStorage)
+        public WorkspaceMiddleware(RequestDelegate next)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next));
-            this.workspacesService = workspacesService;
-            this.workspaceNameStorage = workspaceNameStorage;
+            this.next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
         /// <summary>
@@ -38,7 +35,7 @@ namespace WB.UI.Headquarters.Code.Workspace
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var workspaces = this.workspacesService.GetWorkspaces();
+            var workspaces = GetWorkspaces(context);
 
             foreach (var workSpace in workspaces)
             {
@@ -52,8 +49,10 @@ namespace WB.UI.Headquarters.Code.Workspace
 
                 try
                 {
-                    workspaceNameStorage.Set(workSpace.Name);
-                    await _next(context);
+                    context.SetWorkspace(workSpace);
+                    context.SetWorkspaceMatchPath(true);
+
+                    await next(context);
                 }
                 finally
                 {
@@ -66,11 +65,27 @@ namespace WB.UI.Headquarters.Code.Workspace
 
             if (!NotAWorkspace.Any(w => context.Request.Path.StartsWithSegments(w)))
             {
-                workspaceNameStorage.Set(WorkspaceConstants.DefaultWorkspacename);
+                context.SetWorkspace(WorkspaceContext.From(Workspace.Default));
+                context.SetWorkspaceMatchPath(false);
             }
 
             // handling of default workspace
-            await _next(context);
+            await next(context);
+        }
+
+
+        IEnumerable<WorkspaceContext> GetWorkspaces(HttpContext context)
+        {
+            var cache = context.RequestServices.GetRequiredService<IMemoryCache>();
+
+            return cache.GetOrCreate("workspaces", entry =>
+            {
+                var workspaces = context.RequestServices.GetService<IInScopeExecutor>().Execute(scope => 
+                    scope.GetInstance<IWorkspacesService>().GetWorkspaces().ToList());
+
+                entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1);
+                return workspaces;
+            });
         }
 
         private static readonly string[] NotAWorkspace = {
