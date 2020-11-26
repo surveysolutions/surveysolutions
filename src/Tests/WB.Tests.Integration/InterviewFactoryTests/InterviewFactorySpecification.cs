@@ -27,6 +27,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
@@ -39,7 +40,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected IUnitOfWork UnitOfWork;
         protected ISessionFactory sessionFactory;
-        protected IWorkspaceNameProvider workspace;
+        protected IWorkspaceContextAccessor workspace;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -62,7 +63,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewFlagMap),
                     typeof(InterviewGpsMap),
                     typeof(InterviewCommentMap)
-                }, true, workspace.CurrentWorkspace());
+                }, true, workspace.CurrentWorkspace().Name);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<InterviewTextListAnswer[]>>(new EntitySerializer<InterviewTextListAnswer[]>());

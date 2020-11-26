@@ -21,6 +21,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
@@ -37,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private readonly IWorkspacesService workspacesService;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
@@ -50,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
             IOptions<HeadquartersConfig> options,
-            IWorkspaceNameProvider workspaceNameProvider,
+            IWorkspaceContextAccessor workspaceContextAccessor,
             IWorkspacesService workspacesService)
         {
             this.authorizedUser = authorizedUser;
@@ -58,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
-            this.workspaceNameProvider = workspaceNameProvider;
+            this.workspaceContextAccessor = workspaceContextAccessor;
             this.workspacesService = workspacesService;
         }
         
@@ -473,7 +474,7 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     await this.userManager.AddToRoleAsync(user, model.Role);
-                    this.workspacesService.AddUserToWorkspace(user.Id, this.workspaceNameProvider.CurrentWorkspace());
+                    this.workspacesService.AddUserToWorkspace(user.Id, this.workspaceContextAccessor.CurrentWorkspace().Name);
                 }
             }
             

@@ -26,6 +26,7 @@ using WB.Core.Infrastructure.Services;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -201,10 +202,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         private ISessionFactory SessionFactoryBinder(IModuleContext context)
         {
-            var workspace = context.Resolve<IWorkspaceNameProvider>().CurrentWorkspace();
+            var workspace = context.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
 
-            return sessionFactories.GetOrAdd(workspace, 
-                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace))).Value;
+            return sessionFactories.GetOrAdd(workspace.Name, 
+                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace.Name))).Value;
         }
 
         private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories 

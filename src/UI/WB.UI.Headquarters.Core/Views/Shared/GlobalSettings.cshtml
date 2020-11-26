@@ -2,11 +2,12 @@
 @using WB.Core.BoundedContexts.Headquarters.Configs
 @using WB.Core.Infrastructure.Versions
 @using WB.Infrastructure.Native.Storage
+@using WB.Infrastructure.Native.Workspaces
 @using WB.UI.Headquarters.Services
 
 @inject IOptions<GoogleMapsConfig> googleMapsConfig
 @inject IProductVersion productVersion
-@inject IWorkspaceNameProvider workspaceName
+@inject IWorkspaceContextAccessor workspaceName
 
 <script type="text/javascript">
     document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";

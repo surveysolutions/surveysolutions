@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace WB.Infrastructure.Native.Storage
+namespace WB.Infrastructure.Native.Workspaces
 {
     // singleton
     public class WorkspaceAwareMemoryCache : IMemoryCacheSource
@@ -13,10 +13,5 @@ namespace WB.Infrastructure.Native.Storage
         {
             return caches.GetOrAdd(workspace, _ => new MemoryCache(Options.Create(new MemoryCacheOptions())));
         }
-    }
-
-    public interface IMemoryCacheSource
-    {
-        IMemoryCache GetCache(string workspace);
     }
 }

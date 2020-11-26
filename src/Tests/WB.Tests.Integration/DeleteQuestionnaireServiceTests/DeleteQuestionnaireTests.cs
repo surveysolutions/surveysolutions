@@ -366,7 +366,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         {
             InitializeDb(DbType.PlainStore, DbType.ReadSide);
 
-            var readSideSchemaName = workspace.CurrentWorkspace();
+            var readSideSchemaName = workspace.CurrentWorkspace().Name;
             
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 unitOfWorkConnectionSettings.UsersSchemaName,

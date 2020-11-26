@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using WB.Infrastructure.Native.Workspaces;
 
 #nullable enable
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
@@ -42,5 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             return Name.GetHashCode();
         }
+        
+        public virtual WorkspaceContext AsContext() => new WorkspaceContext(Name, DisplayName);
     }
 }

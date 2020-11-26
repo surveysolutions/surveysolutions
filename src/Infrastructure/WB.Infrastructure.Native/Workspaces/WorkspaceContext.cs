@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Headquarters.Workspaces
+namespace WB.Infrastructure.Native.Workspaces
 {
     public class WorkspaceContext
     {
@@ -10,7 +10,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public string Name { get; }
         public string DisplayName { get; }
-
-        public static WorkspaceContext From(Workspace workspace) => new WorkspaceContext(workspace.Name, workspace.DisplayName);
     }
 }

@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.InterviewFactoryTests;
 
@@ -184,7 +185,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             return report.Data[0].Skip(2).ToArray();
         }
 
-        private void CreateInterview(int version, Dwelling dwelling, IWorkspaceNameProvider workspaceNameProvider, params (Relation rel, Sex sex)[] members)
+        private void CreateInterview(int version, Dwelling dwelling, IWorkspaceContextAccessor workspaceContextAccessor, params (Relation rel, Sex sex)[] members)
         {
             var interviewId = Guid.NewGuid();
             var questionnaire = Questionnaires[version];
@@ -217,7 +218,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             void SetIntAnswer(Guid questionId, int answer, params int[] rosterVector)
             {
                 this.UnitOfWork.Session.Connection.Execute(
-                    $"INSERT INTO {workspaceNameProvider.CurrentWorkspace()}.report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
+                    $"INSERT INTO {workspaceContextAccessor.CurrentWorkspace()}.report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
                     "is_enabled) VALUES(@interviewId, @entityId, @rosterVector, @answer, 0, @enabled); ", new
                     {
                         interviewId = summary.Id,

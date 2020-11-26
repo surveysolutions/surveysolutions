@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public AudioAuditFileS3Storage(
             IExternalFileStorage externalFileStorage,
             IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor,
-            IWorkspaceNameProvider workspaceNameProvider,
+            IWorkspaceContextAccessor workspaceContextAccessor,
             IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this.externalFileStorage = externalFileStorage ?? throw new ArgumentNullException(nameof(externalFileStorage));
