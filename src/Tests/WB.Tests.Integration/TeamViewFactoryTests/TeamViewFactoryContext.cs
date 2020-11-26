@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap)
-                }, true, workspace.CurrentWorkspace().Name);
+                }, true, workspace.CurrentWorkspace().SchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());

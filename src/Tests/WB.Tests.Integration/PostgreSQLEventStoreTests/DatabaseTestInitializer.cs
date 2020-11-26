@@ -77,10 +77,11 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 }
             }
 
-            var currentWorkspace = workspaceContextAccessor.CurrentWorkspace().Name;
-            DatabaseManagement.InitDatabase(connectionString, currentWorkspace);
-            DbMigrationsRunner.MigrateToLatest(connectionString, currentWorkspace,
-                new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly, typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace));
+            var schema = workspaceContextAccessor.CurrentWorkspace().SchemaName;
+            DatabaseManagement.InitDatabase(connectionString, schema);
+            DbMigrationsRunner.MigrateToLatest(connectionString, schema,
+                new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly, 
+                    typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace));
 
         }
 

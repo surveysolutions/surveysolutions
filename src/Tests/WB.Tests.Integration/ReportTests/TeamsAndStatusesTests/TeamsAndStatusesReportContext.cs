@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(InterviewGpsMap),
                 typeof(QuestionnaireCompositeItemMap)
                 
-            }, true, workspaceNameProvider.CurrentWorkspace().Name);
+            }, true, workspaceNameProvider.CurrentWorkspace().SchemaName);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
             return IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);

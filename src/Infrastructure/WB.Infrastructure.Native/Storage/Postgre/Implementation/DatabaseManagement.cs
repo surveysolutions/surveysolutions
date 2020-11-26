@@ -40,14 +40,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private static void CreateSchema(string connectionString, string schemaName)
         {
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
+            using var connection = new NpgsqlConnection(connectionString);
+            connection.Open();
 
-                var checkSchemaExistsCommand = connection.CreateCommand();
-                checkSchemaExistsCommand.CommandText = $"CREATE SCHEMA IF NOT EXISTS {schemaName}";
-                checkSchemaExistsCommand.ExecuteNonQuery();
-            }
+            var checkSchemaExistsCommand = connection.CreateCommand();
+            checkSchemaExistsCommand.CommandText = $"CREATE SCHEMA IF NOT EXISTS \"{schemaName}\"";
+            checkSchemaExistsCommand.ExecuteNonQuery();
         }
 
         public static IFluentSyntax CreateTableIfNotExists(this MigrationBase self, string tableName,

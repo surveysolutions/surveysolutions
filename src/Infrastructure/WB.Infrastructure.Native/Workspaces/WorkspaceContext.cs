@@ -10,5 +10,7 @@ namespace WB.Infrastructure.Native.Workspaces
 
         public string Name { get; }
         public string DisplayName { get; }
+
+        public string SchemaName => $"ws_{Name}";
     }
 }

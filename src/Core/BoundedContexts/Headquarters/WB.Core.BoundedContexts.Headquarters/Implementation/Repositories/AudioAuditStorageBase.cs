@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 .CreateSQLQuery(@"select exists (
 	                select 1
 	                from audioauditfiles a
-	                join .interviewsummaries s on s.interviewid = a.interviewid
+	                join interviewsummaries s on s.interviewid = a.interviewid
 	                where s.questionnaireidentity = :questionnaireId
                 )")
                 .SetParameter("questionnaireId", questionnaire.Id)
