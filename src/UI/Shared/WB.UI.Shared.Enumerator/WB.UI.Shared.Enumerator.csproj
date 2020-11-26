@@ -261,6 +261,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\calendar_today.xml" />
     <AndroidResource Include="Resources\drawable\interview_approved_by_sv.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -269,6 +270,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\schedule.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml" />

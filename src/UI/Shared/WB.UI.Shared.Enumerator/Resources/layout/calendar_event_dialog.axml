@@ -19,7 +19,7 @@
             android:layout_marginTop="@dimen/calendar_event_dialog_padding"
             android:layout_marginBottom="@dimen/calendar_event_dialog_padding"
             local:hintEnabled="true"
-            local:startIconDrawable="@android:drawable/ic_menu_my_calendar"
+            local:startIconDrawable="@drawable/calendar_today"
             local:MvxBind="Hint Localization('Date');">
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:layout_marginTop="@dimen/calendar_event_dialog_padding"
             android:layout_marginBottom="@dimen/calendar_event_dialog_padding"
             local:hintEnabled="true"
-            local:startIconDrawable="@android:drawable/ic_menu_recent_history"
+            local:startIconDrawable="@drawable/schedule"
             local:MvxBind="Hint Localization('Time');">
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
