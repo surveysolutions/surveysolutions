@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 {
                     using var scope = requestServices.CreateScope();
                     context.RequestServices = scope.ServiceProvider;
-                    scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace.Name);
+                    scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace);
                     await next(context);
                 }
                 finally
