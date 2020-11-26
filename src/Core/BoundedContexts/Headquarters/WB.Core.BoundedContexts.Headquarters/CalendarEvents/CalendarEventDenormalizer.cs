@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
                 calendarEvent =>
                 {
                     calendarEvent.StartUtc = @event.Payload.Start.UtcDateTime;
+                    calendarEvent.StartTimezone = @event.Payload.StartTimezone;
                     calendarEvent.Comment = @event.Payload.Comment;
                 });
         }

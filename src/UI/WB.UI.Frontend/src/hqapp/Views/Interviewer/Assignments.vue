@@ -259,11 +259,12 @@ export default {
             const self = this
 
             this.$refs.editCalendarModal.hide()
+            const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
             self.$store.dispatch('saveCalendarEvent', {
                 assignmentId : self.calendarAssinmentId,
                 id : self.calendarEventId,
-                newDate : self.newCalendarStart,
+                newDate : startDate,
                 comment : self.editCalendarComment,
                 timezone: moment.tz.guess(),
 
