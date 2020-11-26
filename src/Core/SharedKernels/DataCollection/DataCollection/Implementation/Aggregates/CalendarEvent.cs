@@ -5,6 +5,7 @@ using Ncqrs.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.CalendarEventInfrastructure;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -93,6 +94,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         public void UpdateCalendarEvent(UpdateCalendarEventCommand command)
         {
+            ThrowIsDeleted();
+            
             ApplyEvent(new CalendarEventUpdated(
                 userId: command.UserId,
                 originDate: command.OriginDate,
@@ -101,8 +104,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 startTimezone: command.StartTimezone));
         }
 
+
         public void CompleteCalendarEvent(CompleteCalendarEventCommand command)
         {
+            ThrowIsDeleted();
+            
             ApplyEvent(new CalendarEventCompleted(
                 userId: command.UserId,
                 originDate: command.OriginDate));
@@ -110,6 +116,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         public void DeleteCalendarEvent(DeleteCalendarEventCommand command)
         {
+            ThrowIsDeleted();
+            
             ApplyEvent(new CalendarEventDeleted(
                 userId: command.UserId,
                 originDate: command.OriginDate));
@@ -126,9 +134,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RestoreCalendarEvent(RestoreCalendarEventCommand command)
         {
+            ThrowIsNotDeleted();
+            
             ApplyEvent(new CalendarEventRestored(
                 userId: command.UserId,
                 originDate: command.OriginDate));
+        }
+
+        private void ThrowIsDeleted()
+        {
+            if (properties.IsDeleted)
+                throw new CalendarEventException("Calendar event is deleted",
+                    CalendarEventDomainExceptionType.CalendarEventIsDeleted);
+        }
+
+        private void ThrowIsNotDeleted()
+        {
+            if (!properties.IsDeleted)
+                throw new CalendarEventException("Calendar event must be deleted",
+                    CalendarEventDomainExceptionType.Undefined);
         }
     }
 }

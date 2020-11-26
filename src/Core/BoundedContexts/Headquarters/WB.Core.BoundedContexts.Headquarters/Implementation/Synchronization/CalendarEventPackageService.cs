@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,87 +20,90 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
     public class CalendarEventPackageService : ICalendarEventPackageService
     {
-        private readonly ILogger<CalendarEventPackageService> logger;  
-        private readonly SyncSettings syncSettings;
+        private readonly ILogger<CalendarEventPackageService> logger;
+        private readonly ICalendarEventService calendarEventService;
+        private readonly ICommandService commandService;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsLocal;
+        private readonly IAssignmentsService assignmentsLocal;
+        private readonly ISerializer serializer;
 
-        public CalendarEventPackageService(ILogger<CalendarEventPackageService> logger, SyncSettings syncSettings)
+        public CalendarEventPackageService(ILogger<CalendarEventPackageService> logger,
+            ICalendarEventService calendarEventService,
+            ICommandService commandService,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsLocal,
+            IAssignmentsService assignmentsLocal,
+            ISerializer serializer
+            )
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.syncSettings = syncSettings ?? throw new ArgumentNullException(nameof(syncSettings));
+            this.calendarEventService = calendarEventService;
+            this.commandService = commandService;
+            this.interviewsLocal = interviewsLocal;
+            this.assignmentsLocal = assignmentsLocal;
+            this.serializer = serializer;
         }
 
         public void ProcessPackage(CalendarEventPackage calendarEventPackage)
         {
-            //check responsible
-            //ignore calendar event event if responsible is another person
             try
             {
                 var deleteCalendarEventAfterApplying = false;
-                InScopeExecutor.Current.Execute(serviceLocator =>
+
+                var responsibleId = calendarEventPackage.ResponsibleId;
+
+                var activeCalendarEventByInterviewOrAssignmentId = calendarEventPackage.InterviewId.HasValue
+                    ? calendarEventService.GetActiveCalendarEventForInterviewId(calendarEventPackage.InterviewId.Value)
+                    : calendarEventService.GetActiveCalendarEventForAssignmentId(calendarEventPackage.AssignmentId);
+
+                //check responsible
+                //ignore calendar event event if responsible is another person
+                var currentResponsibleId = GetResponsibleForCalendarEventEntity(calendarEventPackage);
+                if (currentResponsibleId != null && currentResponsibleId.Value != responsibleId)
+                    deleteCalendarEventAfterApplying = true;
+
+                //remove other older CE 
+                if (activeCalendarEventByInterviewOrAssignmentId != null &&
+                    activeCalendarEventByInterviewOrAssignmentId.PublicKey != calendarEventPackage.CalendarEventId
+                    && activeCalendarEventByInterviewOrAssignmentId.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc
+                    && !deleteCalendarEventAfterApplying)
                 {
-                    var calendarEventService = serviceLocator.GetInstance<ICalendarEventService>();
+                    commandService.Execute(new DeleteCalendarEventCommand(
+                            activeCalendarEventByInterviewOrAssignmentId.PublicKey,
+                            responsibleId));
+                }
+                
+                var calendarEventStream = serializer.Deserialize<CommittedEvent[]>(calendarEventPackage.Events);
+                var aggregateRootEvents = calendarEventStream
+                    .Select(c => new AggregateRootEvent(c)).ToArray();
 
-                    var activeCalendarEventByInterviewOrAssignmentId = calendarEventPackage.InterviewId.HasValue
-                        ? calendarEventService.GetActiveCalendarEventForInterviewId(calendarEventPackage.InterviewId.Value)
-                        : calendarEventService.GetActiveCalendarEventForAssignmentId(calendarEventPackage.AssignmentId);
+                var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
 
-                    if (calendarEventPackage.InterviewId.HasValue)
-                    {
-                        var interviewsLocal = serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
-                        var existingInterview = interviewsLocal.GetById(calendarEventPackage.InterviewId.Value);
-                        if (existingInterview != null 
-                            && existingInterview.ResponsibleId != calendarEventPackage.ResponsibleId)
-                            deleteCalendarEventAfterApplying = true;
-                    }
-                    else
-                    {
-                        var assignmentsLocal = serviceLocator.GetInstance<IAssignmentsService>();
-                        var assignment = assignmentsLocal.GetAssignment(calendarEventPackage.AssignmentId);
-                        if (assignment != null 
-                            && assignment.ResponsibleId != calendarEventPackage.ResponsibleId)
-                            deleteCalendarEventAfterApplying = true;
-                    }
+                //if CE was deleted on server before last change on tablet - restore it
+                //if it was deleted after - leave it deleted
+                //could be deleted again later
+                if(calendarEvent != null 
+                   && !calendarEventPackage.IsDeleted 
+                   && calendarEvent.DeletedAtUtc.HasValue 
+                   && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc)
+                        commandService.Execute(new RestoreCalendarEventCommand(
+                            calendarEventPackage.CalendarEventId, responsibleId));
+                
+                commandService.Execute(
+                        new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                            calendarEventPackage.CalendarEventId,
+                            responsibleId));
 
-                    //remove other older CE 
-                    if (activeCalendarEventByInterviewOrAssignmentId != null &&
-                            activeCalendarEventByInterviewOrAssignmentId.PublicKey != calendarEventPackage.CalendarEventId
-                            && activeCalendarEventByInterviewOrAssignmentId.UpdateDateUtc < calendarEventPackage.LastUpdateDate
-                            && !deleteCalendarEventAfterApplying)
-                    {
-                            serviceLocator.GetInstance<ICommandService>().Execute(
-                                new DeleteCalendarEventCommand(
-                                    activeCalendarEventByInterviewOrAssignmentId.PublicKey,
-                                    calendarEventPackage.ResponsibleId));
-                    }
-                    
-                    var calendarEventStream = serviceLocator.GetInstance<ISerializer>()
-                            .Deserialize<CommittedEvent[]>(calendarEventPackage.Events);
-                    var aggregateRootEvents = calendarEventStream
-                        .Select(c => new AggregateRootEvent(c)).ToArray();
+                if(calendarEvent != null 
+                   && calendarEventPackage.IsDeleted 
+                   && calendarEvent.DeletedAtUtc == null 
+                   && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
+                    commandService.Execute(new RestoreCalendarEventCommand(
+                        calendarEventPackage.CalendarEventId, responsibleId));
 
-                    var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
-
-                    //if CE was deleted on server before last change on tablet - restore it
-                    //if it was deleted after - leave it deleted
-                    //could be deleted again later
-                    if(calendarEvent != null 
-                       && calendarEvent.DeletedAtUtc == null 
-                       && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDate)
-                            serviceLocator.GetInstance<ICommandService>().Execute(
-                                new RestoreCalendarEventCommand(calendarEventPackage.CalendarEventId,
-                                    calendarEventPackage.ResponsibleId));
-
-                    serviceLocator.GetInstance<ICommandService>().Execute(
-                            new SyncCalendarEventEventsCommand(aggregateRootEvents,
-                                calendarEventPackage.CalendarEventId,
-                                calendarEventPackage.ResponsibleId));
-
-                    if (deleteCalendarEventAfterApplying)
-                        serviceLocator.GetInstance<ICommandService>().Execute(
-                            new DeleteCalendarEventCommand(calendarEventPackage.CalendarEventId,
-                                calendarEventPackage.ResponsibleId));
-
-                });
+                if (deleteCalendarEventAfterApplying)
+                    commandService.Execute(
+                        new DeleteCalendarEventCommand(calendarEventPackage.CalendarEventId,
+                            responsibleId));
             }
             catch (Exception exception)
             {
@@ -107,6 +111,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     exception,
                     $"Calendar event events by {calendarEventPackage.CalendarEventId} processing failed. Reason: '{exception.Message}'");
                 throw;
+            }
+        }
+
+        private Guid? GetResponsibleForCalendarEventEntity(CalendarEventPackage calendarEventPackage)
+        {
+            if (calendarEventPackage.InterviewId.HasValue)
+            {
+                var existingInterview = interviewsLocal.GetById(calendarEventPackage.InterviewId.Value);
+                return existingInterview?.ResponsibleId;
+            }
+            else
+            {
+                var assignment = assignmentsLocal.GetAssignment(calendarEventPackage.AssignmentId);
+                return assignment?.ResponsibleId;
             }
         }
     }
