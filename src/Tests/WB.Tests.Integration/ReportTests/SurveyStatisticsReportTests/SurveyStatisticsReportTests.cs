@@ -226,7 +226,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             void SetIntAnswer(Guid questionId, int answer, params int[] rosterVector)
             {
                 this.UnitOfWork.Session.Connection.Execute(
-                    $"INSERT INTO {workspaceContextAccessor.CurrentWorkspace()}.report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
+                    $"INSERT INTO report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
                     "is_enabled) VALUES(@interviewId, @entityId, @rosterVector, @answer, 0, @enabled); ", new
                     {
                         interviewId = summary.Id,

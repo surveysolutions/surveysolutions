@@ -35,7 +35,8 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {
-                Database = databaseName
+                Database = databaseName,
+                SearchPath = "events"
             };
 
             using (var connection = new NpgsqlConnection(TestConnectionString))
@@ -60,21 +61,19 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            using (var connection = new NpgsqlConnection(TestConnectionString))
+            using var connection = new NpgsqlConnection(TestConnectionString);
+            connection.Open();
+            var command =
+                string.Format(
+                    @"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};",
+                    databaseName);
+            using (var sqlCommand = connection.CreateCommand())
             {
-                connection.Open();
-                var command =
-                    string.Format(
-                        @"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};",
-                        databaseName);
-                using (var sqlCommand = connection.CreateCommand())
-                {
-                    sqlCommand.CommandText = command;
-                    sqlCommand.ExecuteNonQuery();
-                }
-
-                connection.Close();
+                sqlCommand.CommandText = command;
+                sqlCommand.ExecuteNonQuery();
             }
+
+            connection.Close();
         }
 
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;

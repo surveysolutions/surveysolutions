@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(QuestionnaireCompositeItemMap),
                 }, 
-                true, Create.Service.WorkspaceNameProvider().CurrentWorkspace().Name);
+                true, Create.Service.WorkspaceNameProvider().CurrentWorkspace().SchemaName);
 
             UnitOfWork = NewUnitOfWork();
             cumulativeReportStatusChangeStorage =
