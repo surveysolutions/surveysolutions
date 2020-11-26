@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         IEnumerable<string> GetWorkspacesForUser(Guid userId);
         void AddUserToWorkspace(Guid user, string workspace);
         bool UserHasWorkspace(Guid user, string workspace);
+        IEnumerable<string> GetWorkspaces();
     }
     
     class WorkspacesService : IWorkspacesService
@@ -86,6 +87,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             var hasWorkspace = this.workspaceUsers.Query(_ => _.Any(x => x.Workspace.Name == workspace && x.UserId == user));
             return hasWorkspace;
+        }
+
+        public IEnumerable<string> GetWorkspaces()
+        {
+            return this.workspaces.Query(_ => _.OrderBy(x => x.Name).Select(x => x.Name).ToList());
         }
     }
 }

@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -28,16 +30,26 @@ namespace WB.UI.Headquarters.Code.Authentication
             this.inScopeExecutor.Execute(sl =>
             {
                 var workspacesService = sl.GetInstance<IWorkspacesService>();
-                var userWorkspaces = workspacesService.GetWorkspacesForUser(user.Id);
+                IEnumerable<string> userWorkspaces;
+                if (user.IsInRole(UserRoles.Administrator))
+                {
+                    userWorkspaces = workspacesService.GetWorkspaces();
+                }
+                else
+                {
+                    userWorkspaces = workspacesService.GetWorkspacesForUser(user.Id);
+                }
+
+                var principalIdentity = (ClaimsIdentity) principal.Identity;
                 foreach (var workspace in userWorkspaces)
                 {
-                    ((ClaimsIdentity) principal.Identity).AddClaims(new[]
+                    principalIdentity.AddClaims(new[]
                     {
                         new Claim("Workspace", workspace)
                     });
                 }
             });
-            
+
             return principal;
         }
     }
