@@ -10,14 +10,13 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         {
             Create.Table("calendarevents")
                 .WithColumn("eventid").AsGuid().PrimaryKey()
-                .WithColumn("startutc").AsDateTime().NotNullable()
+                .WithColumn("startticks").AsInt64().NotNullable()
                 .WithColumn("starttimezone").AsString().Nullable()
                 .WithColumn("comment").AsString().Nullable()
                 .WithColumn("updatedateutc").AsDateTime().NotNullable()
                 .WithColumn("interviewid").AsGuid().Nullable()
                 .WithColumn("interviewkey").AsString().Nullable()
                 .WithColumn("assignmentid").AsInt32().NotNullable()
-                .WithColumn("username").AsString().Nullable()
                 .WithColumn("creatoruserid").AsGuid().NotNullable()
                 .WithColumn("completedatutc").AsDateTime().Nullable()
                 .WithColumn("deletedatutc").AsDateTime().Nullable();

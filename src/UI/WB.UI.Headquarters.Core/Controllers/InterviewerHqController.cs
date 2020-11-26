@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NodaTime;
-using NodaTime.Extensions;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -91,6 +89,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Title = title.ToUiString(),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
+                CalendarEventsEndpoint = Url.Content(@"~/CalendarEvents"),
                 Statuses = statuses.Select(s => s.ToString().ToUpper()).ToArray(),
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
@@ -124,8 +123,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
                     interviewer.PublicKey,
-                    calendarEvent.StartUtc,
-                    calendarEvent.StartTimezone,
+                    calendarEvent.Start.ToDateTimeUtc(),
+                    calendarEvent.Start.Zone.Id,
                     interviewId,
                     interviewKey.ToString(),
                     assignment.Id,
@@ -171,53 +170,6 @@ namespace WB.UI.Headquarters.Controllers
             return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
 
-        [HttpDelete]
-        public IActionResult DeleteInterviewCalendarEvent(Guid id)
-        {
-            this.commandService.Execute(new DeleteCalendarEventCommand(
-                id, 
-                this.authorizedUser.Id));
-            
-            return this.Content("ok");
-        }
-
-        [HttpPost]
-        public IActionResult UpdateInterviewCalendarEvent([FromBody] UpdateInterviewCalendarEventRequest request)
-        {
-            if (request.NewDate == null)
-                request.NewDate = DateTimeOffset.Now;
-
-            var interviewId = Guid.TryParse(request.InterviewId, out Guid pasedInterviewId)
-                ? pasedInterviewId
-                : (Guid?) null;
-
-            if(DateTimeZoneProviders.Tzdb.GetZoneOrNull(request.Timezone) == null)
-                request.Timezone = string.Empty;
-
-            if (request.Id == null)
-            {
-                this.commandService.Execute(new CreateCalendarEventCommand(
-                    Guid.NewGuid(), 
-                    this.authorizedUser.Id, 
-                    request.NewDate.Value,
-                    request.Timezone,
-                    interviewId,
-                    request.InterviewKey,
-                    request.AssignmentId,
-                    request.Comment));
-            }
-            else
-            {
-                this.commandService.Execute(new UpdateCalendarEventCommand(
-                    request.Id.Value, 
-                    this.authorizedUser.Id, 
-                    request.NewDate.Value,
-                    request.Timezone,
-                    request.Comment));
-            }
-            return this.Content("ok");
-        }
-        
         private List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaires(InterviewStatus[] interviewStatuses)
         {
             var queryResult = this.interviewSummaryReader.Query(_ =>

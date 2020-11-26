@@ -769,8 +769,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
                     interviewer.PublicKey,
-                    calendarEvent.StartUtc,
-                    calendarEvent.StartTimezone,
+                    calendarEvent.Start.ToDateTimeUtc(),
+                    calendarEvent.Start.Zone.Id,
                     interviewId,
                     interviewKey.ToString(),
                     assignment.Id,

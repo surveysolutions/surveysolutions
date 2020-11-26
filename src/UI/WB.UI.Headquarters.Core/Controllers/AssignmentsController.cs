@@ -176,9 +176,12 @@ namespace WB.UI.Headquarters.Controllers
                 CalendarEvent = calendarEvent != null
                     ? new
                     {
-                        StartUtc = calendarEvent.StartUtc,
-                        StartTimezone = calendarEvent.StartTimezone,
-                        Comment = calendarEvent.Comment
+                        StartUtc = calendarEvent.Start.ToDateTimeUtc(),
+                        StartTimezone = calendarEvent.Start.Zone.Id,
+                        Comment = calendarEvent.Comment,
+                        Start = calendarEvent.Start,
+                        StartUtc1 = calendarEvent.Start.ToDateTimeUtc(),
+                        StartTimezone1 = calendarEvent.Start.Zone.Id
                     } 
                     : null
             });
