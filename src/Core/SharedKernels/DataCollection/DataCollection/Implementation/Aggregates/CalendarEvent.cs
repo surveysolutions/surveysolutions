@@ -125,11 +125,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SyncCalendarEventEvents(SyncCalendarEventEventsCommand command)
         {
+            if (command.RestoreCalendarEventBefore)
+                ApplyEvent(new CalendarEventRestored(command.UserId, command.OriginDate));
+            
             foreach (AggregateRootEvent synchronizedEvent in command.SynchronizedEvents)
             {
                 var @event = synchronizedEvent.Payload;
                 this.ApplyEvent(synchronizedEvent.EventIdentifier, synchronizedEvent.EventTimeStamp, @event);
             }
+
+            if (command.DeleteCalendarEventAfter)
+                ApplyEvent(new CalendarEventDeleted(command.UserId, command.OriginDate));
+            if (command.RestoreCalendarEventAfter)
+                ApplyEvent(new CalendarEventRestored(command.UserId, command.OriginDate));
         }
 
         public void RestoreCalendarEvent(RestoreCalendarEventCommand command)

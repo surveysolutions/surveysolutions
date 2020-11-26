@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             
             var commandService = ProcessPackage(package, local);
             
-            Verify(commandService, package, shouldRestoreCalendar: true);
+            Verify(commandService, package, restoreCalendarEventAfter: true);
         }
         
         
@@ -144,7 +144,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             
             var commandService = ProcessPackage(package, local);
             
-            Verify(commandService, package, true);
+            Verify(commandService, package, restoreCalendarEventBefore: true);
         }
         
         [Test]
@@ -168,7 +168,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             
             var commandService = ProcessPackage(package, local);
             
-            Verify(commandService, package, shouldRestoreCalendar: false);
+            Verify(commandService, package, restoreCalendarEventBefore: false);
         }
     }
 }

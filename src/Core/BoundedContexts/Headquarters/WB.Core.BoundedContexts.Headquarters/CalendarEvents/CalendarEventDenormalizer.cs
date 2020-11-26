@@ -4,6 +4,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 {
@@ -11,7 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         IUpdateHandler<CalendarEvent, CalendarEventCreated>,
         IUpdateHandler<CalendarEvent, CalendarEventDeleted>,
         IUpdateHandler<CalendarEvent, CalendarEventUpdated>,
-        IUpdateHandler<CalendarEvent, CalendarEventCompleted>
+        IUpdateHandler<CalendarEvent, CalendarEventCompleted>,
+        IUpdateHandler<CalendarEvent, CalendarEventRestored>
     {
         public CalendarEventDenormalizer(IReadSideRepositoryWriter<CalendarEvent, Guid> readSideStorage) : base(readSideStorage)
         {
@@ -40,6 +42,15 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
                 calendarEvent =>
                 {
                     calendarEvent.DeletedAtUtc = @event.Payload.OriginDate.UtcDateTime;
+                });
+        }
+        
+        public CalendarEvent Update(CalendarEvent state, IPublishedEvent<CalendarEventRestored> @event)
+        {
+            return UpdateCalendarEvent(state, @event.Payload.OriginDate,
+                calendarEvent =>
+                {
+                    calendarEvent.DeletedAtUtc = null;
                 });
         }
 
