@@ -5,14 +5,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
 {
     public class CalendarEventPackage
     {
-        public virtual int Id { get; set; }
-        public virtual Guid CalendarEventId { get; set; }
-        public virtual Guid ResponsibleId { get; set; }
-        public virtual DateTime IncomingDate { get; set; }
-        public virtual string Events { get; set; } = String.Empty;
+        public int Id { get; set; }
+        public Guid CalendarEventId { get; set; }
+        public Guid ResponsibleId { get; set; }
+        public DateTime IncomingDate { get; set; }
+        public string Events { get; set; } = String.Empty;
         
-        public virtual DateTimeOffset LastUpdateDate { get; set; }
-        public virtual Guid? InterviewId  { get; set; }
-        public virtual int AssignmentId { get; set; }
+        public DateTime LastUpdateDateUtc { get; set; }
+        public Guid? InterviewId  { get; set; }
+        public int AssignmentId { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

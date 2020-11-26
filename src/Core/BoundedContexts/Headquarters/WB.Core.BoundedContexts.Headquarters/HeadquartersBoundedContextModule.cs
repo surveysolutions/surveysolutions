@@ -254,6 +254,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
             registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
+            registry.Bind<ICalendarEventInScopePackageService, CalendarEventInScopePackageService>();
             
             registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<ISubstitutionService, SubstitutionService>();

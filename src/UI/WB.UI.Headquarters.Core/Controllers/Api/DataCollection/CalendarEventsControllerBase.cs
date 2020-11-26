@@ -43,7 +43,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     ResponsibleId = package.MetaInfo.ResponsibleId,
                     InterviewId = package.MetaInfo.InterviewId,
                     AssignmentId = package.MetaInfo.AssignmentId,
-                    LastUpdateDate = package.MetaInfo.LastUpdateDateTime 
+                    LastUpdateDateUtc = package.MetaInfo.LastUpdateDateTime.UtcDateTime,
+                    IsDeleted = package.MetaInfo.IsDeleted,
                 });
             
             return Ok();

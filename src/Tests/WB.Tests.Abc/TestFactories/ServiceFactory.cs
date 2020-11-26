@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -1264,6 +1265,22 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
+        
+        public ICalendarEventPackageService CalendarEventPackageService(
+            ICalendarEventService calendarEventService,
+            ICommandService commandService,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
+            IAssignmentsService assignments,
+            ISerializer serializer)
+        {
+            return new CalendarEventPackageService(
+                Mock.Of<ILogger<CalendarEventPackageService>>(),
+                calendarEventService ?? Mock.Of<ICalendarEventService>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                assignments ?? Mock.Of<IAssignmentsService>(),
+                serializer ?? Mock.Of<ISerializer>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
