@@ -8,13 +8,14 @@ using WB.Core.BoundedContexts.Headquarters.Workspaces;
 namespace WB.UI.Headquarters.Code.Authentication
 {
     // https://stackoverflow.com/a/48654385/72174
-    public class HqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<HqUser>
+    public class HqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<HqUser, HqRole>
     {
         private readonly IWorkspacesService workspacesService;
 
         public HqUserClaimsPrincipalFactory(UserManager<HqUser> userManager,
+            RoleManager<HqRole> roleManager,
             IOptions<IdentityOptions> optionsAccessor,
-            IWorkspacesService workspacesService) : base(userManager, optionsAccessor)
+            IWorkspacesService workspacesService) : base(userManager, roleManager, optionsAccessor)
         {
             this.workspacesService = workspacesService;
         }
