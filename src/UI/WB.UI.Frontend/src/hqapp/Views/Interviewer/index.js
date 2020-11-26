@@ -43,7 +43,7 @@ const store = {
         async saveCalendarEvent(context, { id, interviewId, assignmentId, newDate, comment, timezone, callback }) {
             context.dispatch('showProgress', true)
 
-            const response = await Vue.$http.post(Vue.$config.model.interviewerHqEndpoint + '/UpdateInterviewCalendarEvent', {
+            const response = await Vue.$http.post(Vue.$config.model.calendarEventsEndpoint + '/UpdateCalendarEvent', {
                 interviewId: interviewId,
                 comment: comment,
                 id: id,
@@ -57,7 +57,7 @@ const store = {
 
         },
         deleteCalendarEvent(context, { id, callback }) {
-            Vue.$http.delete(Vue.$config.model.interviewerHqEndpoint + '/DeleteInterviewCalendarEvent/' + id)
+            Vue.$http.delete(Vue.$config.model.calendarEventsEndpoint + '/DeleteCalendarEvent/' + id)
                 .then(() => { callback() })
 
         },

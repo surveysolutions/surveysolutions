@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NodaTime;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
@@ -23,8 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         {
             state = new CalendarEvent(
                 @event.EventSourceId,
-                @event.Payload.Start.UtcDateTime,
-                @event.Payload.StartTimezone,
+                new ZonedDateTime(Instant.FromDateTimeOffset(@event.Payload.Start), DateTimeZoneProviders.Tzdb[@event.Payload.StartTimezone]),
                 @event.Payload.Comment,
                 @event.Payload.InterviewId,
                 @event.Payload.InterviewKey,
@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
                 @event.Payload.UserId);
 
             return state;
-
         }
 
         public CalendarEvent Update(CalendarEvent state, IPublishedEvent<CalendarEventDeleted> @event)
@@ -59,8 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             return UpdateCalendarEvent(state, @event.Payload.OriginDate,
                 calendarEvent =>
                 {
-                    calendarEvent.StartUtc = @event.Payload.Start.UtcDateTime;
-                    calendarEvent.StartTimezone = @event.Payload.StartTimezone;
+                    calendarEvent.Start = new ZonedDateTime(Instant.FromDateTimeOffset(@event.Payload.Start),
+                        DateTimeZoneProviders.Tzdb[@event.Payload.StartTimezone]);
                     calendarEvent.Comment = @event.Payload.Comment;
                 });
         }
