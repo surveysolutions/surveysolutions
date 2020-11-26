@@ -4,10 +4,12 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using CalendarEvent = WB.Core.SharedKernels.Enumerator.Views.CalendarEvent;
 
 namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
@@ -15,7 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          IEventHandler<CalendarEventCreated>,
                                          IEventHandler<CalendarEventUpdated>,
                                          IEventHandler<CalendarEventCompleted>,
-                                         IEventHandler<CalendarEventDeleted>
+                                         IEventHandler<CalendarEventDeleted>,
+                                         IEventHandler<CalendarEventRestored>
     {
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -83,6 +86,16 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 calendarEvent =>
                 {
                     calendarEvent.IsDeleted = true;
+                });
+        }
+        
+        public void Handle(IPublishedEvent<CalendarEventRestored> evnt)
+        {
+            UpdateCalendarEvent(evnt,
+                evnt.Payload.OriginDate.UtcDateTime,
+                calendarEvent =>
+                {
+                    calendarEvent.IsDeleted = false;
                 });
         }
         

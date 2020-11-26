@@ -48,6 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             try
             {
                 var deleteCalendarEventAfterApplying = false;
+                var restoreCalendarEventBefore = false;
+                var restoreCalendarEventAfter = false;
+                
 
                 var responsibleId = calendarEventPackage.ResponsibleId;
 
@@ -85,25 +88,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                    && !calendarEventPackage.IsDeleted 
                    && calendarEvent.DeletedAtUtc.HasValue 
                    && calendarEvent.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc)
-                        commandService.Execute(new RestoreCalendarEventCommand(
-                            calendarEventPackage.CalendarEventId, responsibleId));
-                
-                commandService.Execute(
-                        new SyncCalendarEventEventsCommand(aggregateRootEvents,
-                            calendarEventPackage.CalendarEventId,
-                            responsibleId));
+                        restoreCalendarEventBefore = true;
 
                 if(calendarEvent != null 
                    && calendarEventPackage.IsDeleted 
                    && calendarEvent.DeletedAtUtc == null 
                    && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
-                    commandService.Execute(new RestoreCalendarEventCommand(
-                        calendarEventPackage.CalendarEventId, responsibleId));
+                        restoreCalendarEventAfter = true;
 
-                if (deleteCalendarEventAfterApplying)
-                    commandService.Execute(
-                        new DeleteCalendarEventCommand(calendarEventPackage.CalendarEventId,
-                            responsibleId));
+                commandService.Execute(
+                        new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                            calendarEventPackage.CalendarEventId, responsibleId,
+                            restoreCalendarEventBefore: restoreCalendarEventBefore,
+                            restoreCalendarEventAfter: restoreCalendarEventAfter, 
+                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying));
             }
             catch (Exception exception)
             {
