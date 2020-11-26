@@ -54,24 +54,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             return commandService;
         }
 
-        protected static void Verify(Mock<ICommandService> commandService, CalendarEventPackage package, bool shouldRestoreCalendar = false)
+        protected static void Verify(Mock<ICommandService> commandService, CalendarEventPackage package, 
+            bool restoreCalendarEventBefore = false, 
+            bool restoreCalendarEventAfter = false, 
+            bool deleteCalendarEventAfter = false)
         {
             commandService.Verify(c => c.Execute(
                 It.Is<SyncCalendarEventEventsCommand>(c =>
                     c.PublicKey == package.CalendarEventId
-                    && c.UserId == package.ResponsibleId),
+                    && c.UserId == package.ResponsibleId
+                    && c.RestoreCalendarEventBefore == restoreCalendarEventBefore
+                    && c.RestoreCalendarEventAfter == restoreCalendarEventAfter
+                    && c.DeleteCalendarEventAfter == deleteCalendarEventAfter
+                    ),
                 null), Times.Once);
-            Times times = shouldRestoreCalendar ? Times.Once() : Times.Never();
-            commandService.Verify(c => c.Execute(
-                It.Is<RestoreCalendarEventCommand>(c =>
-                    c.PublicKey == package.CalendarEventId
-                    && c.UserId == package.ResponsibleId),
-                null), times);
-            commandService.Verify(c => c.Execute(
-                It.Is<DeleteCalendarEventCommand>(c =>
-                    c.PublicKey == package.CalendarEventId
-                    && c.UserId == package.ResponsibleId),
-                null), Times.Never);
         }
     }
 }
