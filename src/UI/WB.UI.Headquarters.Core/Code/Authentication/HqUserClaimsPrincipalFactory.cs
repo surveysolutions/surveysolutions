@@ -4,33 +4,39 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
     // https://stackoverflow.com/a/48654385/72174
     public class HqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<HqUser, HqRole>
     {
-        private readonly IWorkspacesService workspacesService;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public HqUserClaimsPrincipalFactory(UserManager<HqUser> userManager,
             RoleManager<HqRole> roleManager,
             IOptions<IdentityOptions> optionsAccessor,
-            IWorkspacesService workspacesService) : base(userManager, roleManager, optionsAccessor)
+            IInScopeExecutor inScopeExecutor) : base(userManager, roleManager, optionsAccessor)
         {
-            this.workspacesService = workspacesService;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public override async Task<ClaimsPrincipal> CreateAsync(HqUser user)
         {
             var principal = await base.CreateAsync(user);
-            var userWorkspaces = workspacesService.GetWorkspacesForUser(user.Id);
-            foreach (var workspace in userWorkspaces)
+
+            this.inScopeExecutor.Execute(sl =>
             {
-                ((ClaimsIdentity) principal.Identity).AddClaims(new[]
+                var workspacesService = sl.GetInstance<IWorkspacesService>();
+                var userWorkspaces = workspacesService.GetWorkspacesForUser(user.Id);
+                foreach (var workspace in userWorkspaces)
                 {
-                    new Claim("Workspace", workspace)
-                });
-            }
+                    ((ClaimsIdentity) principal.Identity).AddClaims(new[]
+                    {
+                        new Claim("Workspace", workspace)
+                    });
+                }
+            });
             
             return principal;
         }
