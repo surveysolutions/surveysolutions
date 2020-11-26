@@ -7,7 +7,7 @@ namespace WB.Infrastructure.Native.Storage
     // singleton
     public class WorkspaceAwareMemoryCache : IMemoryCacheSource
     {
-        ConcurrentDictionary<string, IMemoryCache> caches = new ConcurrentDictionary<string, IMemoryCache>(); 
+        readonly ConcurrentDictionary<string, IMemoryCache> caches = new ConcurrentDictionary<string, IMemoryCache>(); 
         
         public IMemoryCache GetCache(string workspace)
         {

@@ -4,7 +4,7 @@ import axios from 'axios'
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
-        this.base = window.CONFIG.basePath + '/api/v1/questionnaires/'
+        this.base = '/api/v1/questionnaires/'
         this.details = this.base + `${questionnaireId}/${version}`
         this.questionnaireId = questionnaireId
         this.version = version
