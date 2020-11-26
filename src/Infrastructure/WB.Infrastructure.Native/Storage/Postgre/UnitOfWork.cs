@@ -44,7 +44,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             shouldDiscardChanges = true;
         }
 
-        readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> openSessions 
+        readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> unitOfWorks 
             = new ConcurrentDictionary<string, (ISession, ITransaction)>();
 
         public ISession Session
@@ -59,14 +59,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                 var ws = this.workspaceNameProvider.CurrentWorkspace();
 
-                var work = openSessions.GetOrAdd(ws, workspace =>
+                var unitOfWork = unitOfWorks.GetOrAdd(ws, workspace =>
                 {
                     var session = sessionFactory.OpenSession();
                     var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
                     return (session, transaction);
                 });
 
-                return work.session;
+                return unitOfWork.session;
             }
         }
 
@@ -74,7 +74,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) return;
 
-            foreach (var (session, transaction) in openSessions.Values)
+            foreach (var (session, transaction) in unitOfWorks.Values)
             {
                 if (transaction.IsActive == true)
                 {

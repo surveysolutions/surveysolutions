@@ -176,7 +176,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public void Load(IIocRegistry registry)
         {
             registry.BindToConstant(() => this.connectionSettings);
-            registry.BindToMethod<ISessionFactory>(SessionFactoryBinder);
+            registry.BindToMethod<ISessionFactory>(SessionFactoryBinder, externallyOwned: true);
             registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
