@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             this.inScopeExecutor.Execute(sl =>
             {
                 var workspacesService = sl.GetInstance<IWorkspacesService>();
-                IEnumerable<string> userWorkspaces;
+                IEnumerable<WorkspaceContext> userWorkspaces;
                 if (user.IsInRole(UserRoles.Administrator))
                 {
                     userWorkspaces = workspacesService.GetWorkspaces();
@@ -40,12 +40,12 @@ namespace WB.UI.Headquarters.Code.Authentication
                     userWorkspaces = workspacesService.GetWorkspacesForUser(user.Id);
                 }
 
-                var principalIdentity = (ClaimsIdentity) principal.Identity;
+                var principalIdentity = (ClaimsIdentity)principal.Identity;
                 foreach (var workspace in userWorkspaces)
                 {
                     principalIdentity.AddClaims(new[]
                     {
-                        new Claim("Workspace", workspace)
+                        new Claim("Workspace", workspace.Name)
                     });
                 }
             });

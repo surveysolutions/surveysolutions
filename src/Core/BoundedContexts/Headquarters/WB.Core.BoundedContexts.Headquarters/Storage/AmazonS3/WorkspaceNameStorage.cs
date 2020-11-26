@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public string CurrentWorkspace()
         {
-            return currentWorkspace ?? WorkspaceConstants.DefaultWorkspacename;
+            return currentWorkspace ?? WorkspaceConstants.DefaultWorkspaceName;
         }
 
         public void Set(string name)

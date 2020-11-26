@@ -60,7 +60,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
-using WB.UI.Headquarters.Code.Workspace;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Controllers.Api.PublicApi;
@@ -108,8 +108,7 @@ namespace WB.UI.Headquarters
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
                 .AsImplementedInterfaces();
-
-
+            
             autofacKernel.Load(
                 new NcqrsModule(),
                 new SerilogLoggerModule(),

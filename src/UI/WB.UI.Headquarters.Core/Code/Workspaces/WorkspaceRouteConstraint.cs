@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 
-namespace WB.UI.Headquarters.Code.Workspace
+namespace WB.UI.Headquarters.Code.Workspaces
 {
     public class WorkspaceRouteConstraint : IRouteConstraint
     {
@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Code.Workspace
                 return false;
             }
 
-            if (string.Equals(workspace, WorkspaceConstants.DefaultWorkspacename, StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(workspace, WorkspaceConstants.DefaultWorkspaceName, StringComparison.InvariantCultureIgnoreCase))
             {
                 return true;
             }

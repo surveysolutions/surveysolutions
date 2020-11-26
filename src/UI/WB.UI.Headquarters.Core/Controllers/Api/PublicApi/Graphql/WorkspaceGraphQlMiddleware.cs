@@ -6,11 +6,11 @@ using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
-    public class WorkspaceMiddleware
+    public class WorkspaceGraphQlMiddleware
     {
         private readonly FieldDelegate next;
 
-        public WorkspaceMiddleware(FieldDelegate next)
+        public WorkspaceGraphQlMiddleware(FieldDelegate next)
         {
             this.next = next;
         }

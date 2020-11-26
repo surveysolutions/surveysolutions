@@ -15,11 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     {
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
         bool IsWorkspaceDefined(string? workspace);
-        IEnumerable<string> GetWorkspacesForUser(Guid userId);
+        IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId);
         void AddUserToWorkspace(Guid user, string workspace);
-        IEnumerable<Workspace> GetWorkspaces();
+        IEnumerable<WorkspaceContext> GetWorkspaces();
         bool UserHasWorkspace(Guid user, string workspace);
-        IEnumerable<string> GetWorkspaces();
     }
     
     class WorkspacesService : IWorkspacesService
@@ -59,21 +58,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             return workspaces.Query(_ => _.Any(x => x.Name == workspace));
         }
 
-        public IEnumerable<Workspace> GetWorkspaces()
+        public IEnumerable<WorkspaceContext> GetWorkspaces()
         {
-            yield return Workspace.Default;
-
-            foreach (var workspace in workspaces.Query(_ => _.ToList()))
+            foreach (var workspace in workspaces.Query(_ => _
+                .Select(workspace => WorkspaceContext.From(workspace))
+                .ToList()))
             {
                 yield return workspace;
             }
         }
 
-        public IEnumerable<string> GetWorkspacesForUser(Guid userId)
+        public IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId)
         {
             var userWorkspaces = workspaces.Query(_ =>
                 _.Where(x => x.Users.Any(u => u.UserId == userId))
-                .Select(x => x.Name)
+                .Select(workspace => WorkspaceContext.From(workspace))
                 .ToList()
             );
             return userWorkspaces;
@@ -98,11 +97,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             var hasWorkspace = this.workspaceUsers.Query(_ => _.Any(x => x.Workspace.Name == workspace && x.UserId == user));
             return hasWorkspace;
-        }
-
-        public IEnumerable<string> GetWorkspaces()
-        {
-            return this.workspaces.Query(_ => _.OrderBy(x => x.Name).Select(x => x.Name).ToList());
         }
     }
 }
