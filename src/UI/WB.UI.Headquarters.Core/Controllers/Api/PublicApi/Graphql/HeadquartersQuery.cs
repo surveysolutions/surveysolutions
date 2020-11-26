@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             return descriptor.Argument("workspace",
                 a => a.Description("Workspace name").Type<NonNullType<StringType>>()
-                    .DefaultValue(WorkspaceConstants.DefaultWorkspacename));
+                    .DefaultValue(WorkspaceConstants.DefaultWorkspaceName));
         }
     }
     

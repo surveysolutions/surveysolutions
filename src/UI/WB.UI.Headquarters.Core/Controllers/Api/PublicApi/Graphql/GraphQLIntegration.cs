@@ -12,12 +12,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         public static void AddGraphQL(this IServiceCollection services)
         {
             services.AddDataLoaderRegistry()
-                .AddGraphQL(x => HeadquartersSchema)
+                .AddGraphQL(_ => HeadquartersSchema)
                 .AddErrorFilter<GraphQLErrorFilter>();
         }
 
         public static ISchema HeadquartersSchema => SchemaBuilder.New()
-            .Use<WorkspaceMiddleware>()
+            .Use<WorkspaceGraphQlMiddleware>()
             .AddAuthorizeDirectiveType()
             .AddType(new PaginationAmountType(200))
             .AddQueryType<HeadquartersQuery>()
