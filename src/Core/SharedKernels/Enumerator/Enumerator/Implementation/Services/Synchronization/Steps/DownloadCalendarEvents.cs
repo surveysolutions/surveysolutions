@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             //all calendar events should be pushed at this point
             var localCalendarEventsToRecreateIds = localCalendarEventIds.Where(
                 ce => remoteCalendarEventsWithSequence.ContainsKey(ce) &&
-                      EventStore.GetLastEventSequence(ce) != remoteCalendarEventsWithSequence[ce]).ToList();
+                      EventStore.GetLastEventKnownToHq(ce) != remoteCalendarEventsWithSequence[ce]).ToList();
 
             var remoteCalendarEventsToDownloadIds = remoteCalendarEventsWithSequence.Keys.Where(
                 ce => !localCalendarEventIds.Contains(ce)).ToList();
@@ -73,7 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var calendarEventsToProcess =
                 localCalendarEventsToRecreateIds
                     .Union(remoteCalendarEventsToDownloadIds)
-                    .Distinct().ToList();
+                    .Distinct()
+                    .ToList();
             await DownloadAndCreateCalendarEvent(calendarEventsToProcess);
         }
 
@@ -95,8 +96,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 try
                 {
                     this.Context.CancellationToken.ThrowIfCancellationRequested();
-                    
-                    this.RemoveCalendarEvent(id);
                     
                     progress.Report(new SyncProgressInfo
                     {
@@ -121,6 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 
                     this.log.Debug($"Creating calendar event {id}");
                 
+                    this.RemoveCalendarEvent(id);
                     EventStore.StoreEvents(new CommittedEventStream(id, calendarEventStream));
                     eventBus.PublishCommittedEvents(calendarEventStream);
                 
