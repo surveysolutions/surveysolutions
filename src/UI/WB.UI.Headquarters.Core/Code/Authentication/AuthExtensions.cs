@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,13 @@ namespace WB.UI.Headquarters.Code.Authentication
                .AddClaimsPrincipalFactory<HqUserClaimsPrincipalFactory>()
                .AddSignInManager<HqSignInManager>();
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .AddRequirements(new WorkspaceRequirement())
+                    .Build();
+            });
 
             services.ConfigureApplicationCookie(opt =>
             {
