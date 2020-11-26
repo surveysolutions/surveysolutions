@@ -6,10 +6,12 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.Authentication;
 
@@ -18,6 +20,7 @@ namespace WB.UI.Headquarters.Code.Authentication
     public class AuthTokenAuthenticationHandler : AuthenticationHandler<AuthTokenAuthenticationSchemeOptions>
     {
         private readonly IUserRepository userRepository;
+        private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IApiTokenProvider authTokenProvider;
         private bool isUserLocked;
 
@@ -26,9 +29,11 @@ namespace WB.UI.Headquarters.Code.Authentication
             UrlEncoder encoder, 
             ISystemClock clock,
             IUserRepository userRepository,
+            IUserClaimsPrincipalFactory<HqUser> claimFactory,
             IApiTokenProvider authTokenProvider) : base(options, logger, encoder, clock)
         {
             this.userRepository = userRepository;
+            this.claimFactory = claimFactory;
             this.authTokenProvider = authTokenProvider;
         }
 
@@ -60,18 +65,8 @@ namespace WB.UI.Headquarters.Code.Authentication
             var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
             if (verificationResult)
             {
-                var claims = new ClaimsIdentity(new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.FormatGuid())
-                });
-
-                foreach (var userRole in user.Roles)
-                {
-                    claims.AddClaim(new Claim(ClaimTypes.Role, userRole.Name));
-                }
-
-                return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claims), Scheme.Name));
+                var claimsPrincipal = await this.claimFactory.CreateAsync(user);
+                return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name));
             }
 
             return AuthenticateResult.Fail("Invalid auth token");

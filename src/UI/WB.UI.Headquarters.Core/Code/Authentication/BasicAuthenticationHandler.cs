@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -11,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Domain;
 using WB.UI.Shared.Web.Authentication;
 
@@ -19,6 +16,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<BasicAuthenticationSchemeOptions>
     {
+        private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IInScopeExecutor executor;
         private bool isUserLocked;
 
@@ -27,8 +25,10 @@ namespace WB.UI.Headquarters.Code.Authentication
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
+            IUserClaimsPrincipalFactory<HqUser> claimFactory,
             IInScopeExecutor executor) : base(options, logger, encoder, clock)
         {
+            this.claimFactory = claimFactory;
             this.executor = executor;
         }
 
@@ -62,17 +62,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 var passwordIsValid = await userManager.CheckPasswordAsync(user, creds.Password);
                 if (!passwordIsValid) return AuthenticateResult.Fail("Invalid password");
 
-                var claims = new List<Claim> {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.FormatGuid()),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                };
-                foreach (var userRole in user.Roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, userRole.Name));
-                }
-
-                var identity = new ClaimsIdentity(claims, Scheme.Name);
-                var principal = new ClaimsPrincipal(identity);
+                var principal = await this.claimFactory.CreateAsync(user);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
                 return AuthenticateResult.Success(ticket);
