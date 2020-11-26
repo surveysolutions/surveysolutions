@@ -48,4 +48,7 @@
     <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
         <value>Provided workspace name is not allowed</value>
     </data>
+    <data name="CurrentWorkspace" xml:space="preserve">
+        <value>Current workspace</value>
+    </data>
 </root>

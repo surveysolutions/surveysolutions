@@ -104,5 +104,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("NameShouldNotBeOneOfForbidden", resourceCulture);
             }
         }
+        
+        public static string CurrentWorkspace {
+            get {
+                return ResourceManager.GetString("CurrentWorkspace", resourceCulture);
+            }
+        }
     }
 }
