@@ -41,4 +41,7 @@
     <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
         <value>Предоставленное имя недопустимо</value>
     </data>
+    <data name="CurrentWorkspace" xml:space="preserve">
+        <value>Текущее рабочее пространство</value>
+    </data>
 </root>
