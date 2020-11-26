@@ -5,6 +5,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
@@ -41,7 +42,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             return connectionStringBuilder.ConnectionString;
         }
 
-        public static void InitializeDb(string connectionString, IWorkspaceNameProvider workspaceNameProvider, params DbType[] dbType)
+        public static void InitializeDb(string connectionString, IWorkspaceContextAccessor workspaceContextAccessor, params DbType[] dbType)
         {
             DatabaseManagement.InitDatabase(connectionString, "users");
             DatabaseManagement.InitDatabase(connectionString, "events");
@@ -76,7 +77,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 }
             }
 
-            var currentWorkspace = workspaceNameProvider.CurrentWorkspace();
+            var currentWorkspace = workspaceContextAccessor.CurrentWorkspace().Name;
             DatabaseManagement.InitDatabase(connectionString, currentWorkspace);
             DbMigrationsRunner.MigrateToLatest(connectionString, currentWorkspace,
                 new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly, typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace));

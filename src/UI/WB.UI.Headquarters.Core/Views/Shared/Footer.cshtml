@@ -1,9 +1,10 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Infrastructure.Native.Storage
+@using WB.Infrastructure.Native.Workspaces
 @using WB.UI.Headquarters.Services
 @inject IProductVersion productVersion
-@inject IWorkspaceNameProvider workspaceName
+@inject IWorkspaceContextAccessor workspaceName
 
 <footer class="footer">
     <div class="container-fluid">

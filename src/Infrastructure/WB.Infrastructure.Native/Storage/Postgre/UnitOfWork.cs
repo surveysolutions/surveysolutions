@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using NHibernate;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -20,15 +21,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public Guid? SessionId;
         private static long counter = 0;
         public long Id { get; }
-        private readonly IWorkspaceNameProvider workspaceNameProvider;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public UnitOfWork(ISessionFactory sessionFactory,
-            ILogger<UnitOfWork> logger, IWorkspaceNameProvider workspaceNameProvider)
+            ILogger<UnitOfWork> logger, IWorkspaceContextAccessor workspaceContextAccessor)
         {
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.sessionFactory = sessionFactory;
             this.logger = logger;
-            this.workspaceNameProvider = workspaceNameProvider;
+            this.workspaceContextAccessor = workspaceContextAccessor;
             Id = Interlocked.Increment(ref counter);
         }
 
@@ -57,9 +58,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
 
-                var ws = this.workspaceNameProvider.CurrentWorkspace();
+                var ws = this.workspaceContextAccessor.CurrentWorkspace();
 
-                var unitOfWork = unitOfWorks.GetOrAdd(ws, workspace =>
+                var unitOfWork = unitOfWorks.GetOrAdd(ws.Name, workspace =>
                 {
                     var session = sessionFactory.OpenSession();
                     var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);

@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [Test]
         public void should_read_item_that_was_stored()
         {
-            DatabaseManagement.InitDatabase(ConnectionStringBuilder.ConnectionString, workspace.CurrentWorkspace());
+            DatabaseManagement.InitDatabase(ConnectionStringBuilder.ConnectionString, workspace.CurrentWorkspace().Name);
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new List<Type>()
                 {

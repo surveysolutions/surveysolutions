@@ -97,6 +97,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -324,14 +325,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
 
-            registry.BindInPerLifetimeScope<IWorkspaceNameProvider, IWorkspaceNameStorage, WorkspaceNameStorage>();
+            registry.BindInPerLifetimeScope<IWorkspaceContextHolder, WorkspaceContextHolder>();
+            registry.Bind<IWorkspaceContextAccessor, WorkspaceContextAccessor>();
+            registry.Bind<IWorkspaceContextSetter, WorkspaceContextSetter>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
             registry.BindToMethod(ctx =>
             {
                 var cacheSource = ctx.Resolve<IMemoryCacheSource>();
-                var workspaceNameProvider = ctx.Resolve<IWorkspaceNameProvider>();
-                return cacheSource.GetCache(workspaceNameProvider.CurrentWorkspace());
+                var contextAccessor = ctx.Resolve<IWorkspaceContextAccessor>();
+                return cacheSource.GetCache(contextAccessor.CurrentWorkspace().Name);
             }, externallyOwned: true);
             
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();

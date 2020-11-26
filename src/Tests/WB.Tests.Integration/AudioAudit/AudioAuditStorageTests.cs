@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.AudioAudit
     internal class AudioAuditStorageTests : with_postgres_db
     {
         private ISessionFactory readFactory;
-        private string workspaceName = Create.Service.WorkspaceNameProvider().CurrentWorkspace();
+        private string workspaceName = Create.Service.WorkspaceNameProvider().CurrentWorkspace().Name;
         
         [OneTimeSetUp]
         public void OneTimeSetup()
