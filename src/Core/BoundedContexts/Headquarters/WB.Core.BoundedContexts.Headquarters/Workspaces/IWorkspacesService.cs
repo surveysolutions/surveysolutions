@@ -51,7 +51,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public IEnumerable<string> GetWorkspacesForUser(Guid userId)
         {
-            return new[] {WorkspaceConstants.DefaultWorkspacename};
+            var userWorkspaces = workspaces.Query(_ =>
+                _.Where(x => x.Users.Any(u => u.UserId == userId))
+                .Select(x => x.Name)
+                .ToList()
+            );
+            return userWorkspaces;
         }
     }
 }
