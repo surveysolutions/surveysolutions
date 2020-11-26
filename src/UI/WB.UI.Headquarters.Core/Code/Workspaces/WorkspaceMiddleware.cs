@@ -14,14 +14,16 @@ namespace WB.UI.Headquarters.Code.Workspaces
     public class WorkspaceMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly IWorkspacesService workspacesService;
 
         /// <summary>
         /// Creates a new instance of <see cref="WorkspaceMiddleware"/>.
         /// </summary>
         /// <param name="next">The delegate representing the next middleware in the request pipeline.</param>
-        public WorkspaceMiddleware(RequestDelegate next)
+        public WorkspaceMiddleware(RequestDelegate next, IWorkspacesService workspacesService)
         {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
+            this.workspacesService = workspacesService;
         }
 
         /// <summary>
@@ -47,11 +49,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 var originalPathBase = context.Request.PathBase;
                 context.Request.Path = remainingPath;
                 context.Request.PathBase = originalPathBase.Add(matchedPath);
-
+                
                 try
                 {
+                    workSpace.PathBase = originalPathBase;
+                    workSpace.UsingFallbackToDefaultWorkspace = false;
                     context.SetWorkspace(workSpace);
-                    context.SetWorkspaceMatchPath(true);
 
                     await next(context);
                 }
@@ -66,8 +69,10 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (!NotAWorkspace.Any(w => context.Request.Path.StartsWithSegments(w)))
             {
-                context.SetWorkspace(Workspace.Default.AsContext());
-                context.SetWorkspaceMatchPath(false);
+                var workSpace = workspacesService.GetWorkspaces().First(w => w.Name == Workspace.Default.Name);
+                workSpace.UsingFallbackToDefaultWorkspace = true;
+                workSpace.PathBase = context.Request.PathBase;
+                context.SetWorkspace(workSpace);
             }
 
             // handling of default workspace
