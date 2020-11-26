@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IPrincipal principal;
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IStringFormat stringFormat;
 
         private CalendarEventViewModelArgs? initValues;
         private DateTime dateTimeEvent;
@@ -49,13 +50,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ICommandService commandService,
             IPrincipal principal,
             ICalendarEventStorage calendarEventStorage,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            IStringFormat stringFormat)
         {
             this.navigationService = navigationService;
             this.commandService = commandService;
             this.principal = principal;
             this.calendarEventStorage = calendarEventStorage;
             this.userInteractionService = userInteractionService;
+            this.stringFormat = stringFormat;
         }
 
         public override void Prepare(CalendarEventViewModelArgs param)
@@ -81,8 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         public string? Title { get; set; }
-        public string TimeString => 
-            DateTimeValue.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern);
+        public string TimeString => stringFormat.ShortTime(DateTimeValue);
 
         public DateTime DateTimeValue
         {

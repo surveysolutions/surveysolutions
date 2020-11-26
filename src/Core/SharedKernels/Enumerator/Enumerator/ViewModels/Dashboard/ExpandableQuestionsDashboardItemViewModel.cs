@@ -43,7 +43,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         }
 
         private IExternalAppLauncher ExternalAppLauncher =>
-            serviceLocator.GetInstance<IExternalAppLauncher>();
+            serviceLocator.GetInstance<IExternalAppLauncher>();   
+        
+        private IStringFormat StringFormat =>
+            serviceLocator.GetInstance<IStringFormat>();
 
         public bool HasExpandedView { get; protected set; }
 
@@ -133,21 +136,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var instant = dateTimeOffset.UtcDateTime.ToInstant();
             var zonedDateTime = new ZonedDateTime(instant, timeZone);
 
-            return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUnspecified());
+            return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUtc());
         }
         
-        protected string FormatDateTimeString(string formatString, DateTime? dateTime)
+        protected string FormatDateTimeString(string formatString, DateTime? utcDateTime)
         {
-            if (!dateTime.HasValue)
+            if (!utcDateTime.HasValue)
                 return string.Empty;
             
             var culture = CultureInfo.CurrentUICulture;
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
+            var dateTime = DateTime.SpecifyKind(utcDateTime.Value, DateTimeKind.Utc);
 
-            string dateTimeString = dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase();
-            if (dateTime.Value > now.AddDays(-1) && dateTime.Value < now.AddDays(2))
+            //string dateTimeString = dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase();
+            string dateTimeString = StringFormat.ShortDateTime(dateTime.ToLocalTime()).ToPascalCase();
+            if (dateTime > now.AddDays(-1) && dateTime < now.AddDays(2))
             {
-                dateTimeString = dateTime.Value.Humanize(utcDate: false, culture: culture) + " (" + dateTimeString + ")";
+                dateTimeString = dateTime.Humanize(utcDate: true, culture: culture) + " (" + dateTimeString + ")";
             }
             
             return string.Format(formatString, dateTimeString);

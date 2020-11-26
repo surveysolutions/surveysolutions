@@ -56,6 +56,7 @@ namespace WB.UI.Shared.Enumerator
         {
             registry.Bind<IPathUtils, AndroidPathUtils>();
             registry.Bind<IUserInteractionService, UserInteractionService>();
+            registry.Bind<IStringFormat, StringFormat>();
             registry.Bind<IGoogleApiService, GoogleApiService>();
             registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
