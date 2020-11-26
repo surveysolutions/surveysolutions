@@ -1,3 +1,4 @@
+using System.Data;
 using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspaces
@@ -13,10 +14,10 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 .WithColumn("user_id").AsGuid();
 
             Create.ForeignKey().FromTable("workspace_users").ForeignColumn("workspace")
-                .ToTable("workspaces").PrimaryColumn("name");
+                .ToTable("workspaces").PrimaryColumn("name").OnDelete(Rule.Cascade);
                 
             Create.ForeignKey().FromTable("workspace_users").ForeignColumn("user_id")
-                .ToTable("users").InSchema("users").PrimaryColumn("Id");
+                .ToTable("users").InSchema("users").PrimaryColumn("Id").OnDelete(Rule.Cascade);
 
             Insert.IntoTable("workspaces").Row(new {name = "primary", display_name = "Default"});
             Execute.Sql(@"insert into workspaces.workspace_users (workspace, user_id)

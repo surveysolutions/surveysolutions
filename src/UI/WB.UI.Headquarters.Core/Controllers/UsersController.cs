@@ -15,10 +15,12 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
@@ -35,6 +37,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
+        private readonly IWorkspaceNameProvider workspaceNameProvider;
+        private readonly IWorkspacesService workspacesService;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -45,13 +49,17 @@ namespace WB.UI.Headquarters.Controllers
             UserManager<HqUser> userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options)
+            IOptions<HeadquartersConfig> options,
+            IWorkspaceNameProvider workspaceNameProvider,
+            IWorkspacesService workspacesService)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
+            this.workspaceNameProvider = workspaceNameProvider;
+            this.workspacesService = workspacesService;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -408,7 +416,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
@@ -465,6 +473,7 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     await this.userManager.AddToRoleAsync(user, model.Role);
+                    this.workspacesService.AddUserToWorkspace(user.Id, this.workspaceNameProvider.CurrentWorkspace());
                 }
             }
             
