@@ -118,7 +118,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
                 Create.Service.ExpressionStatePrototypeProvider(),
-                reusableCategoriesFillerIntoQuestionnaire.Object);
+                reusableCategoriesFillerIntoQuestionnaire.Object,
+                Create.Storage.NewMemoryCache());
 
             document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
