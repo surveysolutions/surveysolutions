@@ -41,7 +41,7 @@ namespace WB.Services.Export.Host.Infra
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
-                var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
+                var urlOverrideKey = $"TenantUrlOverride:{tenant.ShortName}";
 
                 if (configuration[urlOverrideKey] != null)
                 {
