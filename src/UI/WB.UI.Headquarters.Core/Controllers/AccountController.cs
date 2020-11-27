@@ -118,14 +118,7 @@ namespace WB.UI.Headquarters.Controllers
                     return Redirect(returnUrl);
                 }
                 
-                
-                if (Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
-                {
-                    return Redirect(Url.Content($"~/{Request.Cookies[WorkspaceInfoFilter.CookieName]}"));
-                }
-                
-                var firstWorkspace = User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
-                return Redirect(Url.Content($"~/{firstWorkspace.Value}"));
+                return Redirect(Url.Content("~/"));
             }
             if (signInResult.RequiresTwoFactor)
             {

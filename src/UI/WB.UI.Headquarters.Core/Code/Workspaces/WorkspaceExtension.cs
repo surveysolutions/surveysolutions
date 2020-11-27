@@ -14,6 +14,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
             app.UseMiddleware<WorkspaceScopeMiddleware>();
         }
 
+        public static void UseRedirectIntoWorkspace(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<WorkspaceRedirectMiddleware>();
+        }
+
         public static void SetWorkspace(this HttpContext httpContext, WorkspaceContext workspace)
         {
             httpContext.Items["workspace"] = workspace;

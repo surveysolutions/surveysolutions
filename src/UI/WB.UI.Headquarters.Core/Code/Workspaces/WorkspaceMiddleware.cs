@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
@@ -42,14 +41,15 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             foreach (var workspace in workspaces)
             {
-                if (!context.Request.Path.StartsWithSegments("/" + workspace.Name, out var matchedPath, out var remainingPath))
+                if (!context.Request.Path.StartsWithSegments("/" + workspace.Name, out var matchedPath,
+                    out var remainingPath))
                     continue;
 
                 var originalPath = context.Request.Path;
                 var originalPathBase = context.Request.PathBase;
                 context.Request.Path = remainingPath;
                 context.Request.PathBase = originalPathBase.Add(matchedPath);
-                
+
                 try
                 {
                     workspace.PathBase = originalPathBase;
@@ -68,47 +68,32 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 return;
             }
 
-            if (NotScopedToWorkspacePaths.Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
+            if (NotScopedToWorkspacePaths.Any(w =>
+                context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
             {
                 var workSpace = workspaces.First(w => w.Name == Workspace.Default.Name);
                 workSpace.UsingFallbackToDefaultWorkspace = true;
                 workSpace.PathBase = context.Request.PathBase;
 
-                var referer = new Uri(context.Request.Headers["referer"]);
-
-                if (workspaces.Any(w => referer.AbsolutePath.StartsWith("/" + w.Name)))
+                if (context.Request.Headers.ContainsKey("referer"))
                 {
-                    throw new ArgumentException("Cannot call primary");
+                    var requestHeader = context.Request.Headers["referer"];
+                    var referer = new Uri(requestHeader);
+
+                    if (workspaces.Any(w => referer.AbsolutePath.StartsWith("/" + w.Name)))
+                    {
+                        throw new ArgumentException("Cannot call primary");
+                    }
                 }
 
                 context.SetWorkspace(workSpace);
             }
-            else
-            {
-                // Redirect into default workspace for old urls
-                string? targetWorkspace = null;
-                if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
-                {
-                    targetWorkspace = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
-                }
-                else if(context.User.HasClaim(x => x.Type == WorkspaceConstants.ClaimType))
-                {
-                    var userFirstWorkspace = context.User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
-                    targetWorkspace = userFirstWorkspace.Value;
-                }
 
-                if (targetWorkspace != null)
-                {
-                    context.Response.Redirect( 
-                        $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value.TrimStart('/')}");
-                }
-            }
-            
             await next(context);
         }
 
-
-        private static readonly string[] NotScopedToWorkspacePaths = {
+        public static readonly string[] NotScopedToWorkspacePaths =
+        {
             "/graphql", "/Account", "/api"
         };
     }
