@@ -532,6 +532,7 @@ CREATE TABLE hibernate_unique_key (
     next_hi integer NOT NULL
 );
 
+INSERT INTO hibernate_unique_key (next_hi) VALUES(0);
 
 --
 -- Name: identifyingentityvalue; Type: TABLE; Schema: ws_primary; Owner: -

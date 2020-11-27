@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -24,6 +25,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         void AddUserToWorkspace(Guid user, string workspace);
         IEnumerable<WorkspaceContext> GetWorkspaces();
     }
+
+    public interface IWorkspacesCache
+    {
+        IEnumerable<WorkspaceContext> GetWorkspaces();
+    }
+
+    class WorkspacesCache : IWorkspacesCache
+    {
+        private readonly IMemoryCache memoryCache;
+        private readonly IServiceLocator serviceLocator;
+
+        public WorkspacesCache(IMemoryCache memoryCache, IServiceLocator serviceLocator)
+        {
+            this.memoryCache = memoryCache;
+            this.serviceLocator = serviceLocator;
+        }
+
+        public IEnumerable<WorkspaceContext> GetWorkspaces()
+        {
+            return memoryCache.GetOrCreate("workspaces", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+
+                var workspaces = serviceLocator.GetInstance<IWorkspacesService>().GetWorkspaces().ToList();
+                return workspaces;
+            });
+        }
+    }
     
     class WorkspacesService : IWorkspacesService
     {
@@ -32,7 +61,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
         private readonly IUserRepository users;
-        private readonly IMemoryCache memoryCache;
         private readonly ILogger<WorkspacesService> logger;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
@@ -40,7 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             IPlainStorageAccessor<Workspace> workspaces,
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
             IUserRepository users,
-            IMemoryCache memoryCache,
             ILogger<WorkspacesService> logger)
         {
             this.connectionSettings = connectionSettings;
@@ -48,7 +75,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             this.workspaces = workspaces;
             this.workspaceUsers = workspaceUsers;
             this.users = users;
-            this.memoryCache = memoryCache;
             this.logger = logger;
         }
 
@@ -70,14 +96,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public IEnumerable<WorkspaceContext> GetWorkspaces()
         {
-            return memoryCache.GetOrCreate("workspaces", entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-
                 return workspaces.Query(_ => _
                     .Select(workspace => workspace.AsContext())
                     .ToList());
-            });
         }
 
         public IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId)

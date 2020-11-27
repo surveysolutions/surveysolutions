@@ -7,9 +7,9 @@ namespace WB.UI.Headquarters.Filters
 {
     public class WorkspaceInfoFilter : IResultFilter
     {
-        private readonly IWorkspacesService workspacesService;
+        private readonly IWorkspacesCache workspacesService;
 
-        public WorkspaceInfoFilter(IWorkspacesService workspacesService)
+        public WorkspaceInfoFilter(IWorkspacesCache workspacesService,
         {
             this.workspacesService = workspacesService;
         }

@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
@@ -17,13 +18,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
     class WorkspaceContextSetter : IWorkspaceContextSetter
     {
-        private readonly IWorkspacesService workspacesService;
         private readonly IWorkspaceContextHolder holder;
+        private readonly IServiceLocator serviceLocator;
 
-        public WorkspaceContextSetter(IWorkspacesService workspacesService, IWorkspaceContextHolder holder)
+        public WorkspaceContextSetter(IWorkspaceContextHolder holder, IServiceLocator serviceLocator)
         {
-            this.workspacesService = workspacesService;
             this.holder = holder;
+            this.serviceLocator = serviceLocator;
         }
 
         public void Set(WorkspaceContext workspace)
@@ -33,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public void Set(string name)
         {
+            var workspacesService = serviceLocator.GetInstance<IWorkspacesService>();
             var workspace = workspacesService.GetWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             holder.Current = workspace ?? throw new ArgumentNullException(nameof(name));
         }
