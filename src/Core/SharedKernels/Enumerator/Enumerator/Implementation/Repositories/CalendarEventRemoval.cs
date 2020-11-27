@@ -1,6 +1,7 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -14,18 +15,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         private readonly IEnumeratorEventStorage eventStorage;
         private readonly IAssignmentDocumentsStorage assignmentDocumentsStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ILogger logger;
 
         public CalendarEventRemoval(ICalendarEventStorage calendarEventStorage,
             IEnumeratorEventStorage eventStorage,
             IAssignmentDocumentsStorage assignmentDocumentsStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
+            IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ILogger logger)
         {
             this.calendarEventStorage = calendarEventStorage;
             this.eventStorage = eventStorage;
             this.assignmentDocumentsStorage = assignmentDocumentsStorage;
             this.interviewViewRepository = interviewViewRepository;
+            this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
             this.logger = logger;
         }
 
@@ -59,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 }
             }
 
+            aggregateRootRepositoryWithCache.CleanCache();
             calendarEventStorage.Remove(id);
             eventStorage.RemoveEventSourceById(id);
         }
