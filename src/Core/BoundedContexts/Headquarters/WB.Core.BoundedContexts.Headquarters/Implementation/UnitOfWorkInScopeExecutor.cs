@@ -21,10 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         public ILifetimeScope CreateChildContainer()
         {
             if (lifetimeScope == null) throw new Exception($"Class was not initialized");
-
-            var workspace = lifetimeScope.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
+            
             var scope = lifetimeScope.BeginLifetimeScope();
-            scope.Resolve<IWorkspaceContextSetter>().Set(workspace);
+            var workspace = lifetimeScope.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
+
+            if (workspace != null)
+            {
+                scope.Resolve<IWorkspaceContextSetter>().Set(workspace);
+            }
 
             return scope;
         }

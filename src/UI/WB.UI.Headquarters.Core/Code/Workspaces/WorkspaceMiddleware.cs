@@ -10,6 +10,10 @@ using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
+    /// <summary>
+    /// Workspace Middleware extract workspace information from route and create DI scope for execution
+    /// Pass flow forward if no workspace detected
+    /// </summary>
     public class WorkspaceMiddleware
     {
         private readonly RequestDelegate next;
@@ -41,8 +45,18 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             foreach (var workspace in workspaces)
             {
-                if (!context.Request.Path.StartsWithSegments("/" + workspace.Name, out var matchedPath,
-                    out var remainingPath))
+                var workspaceMatched = context.Request.Path.StartsWithSegments("/" + workspace.Name,
+                    out var matchedPath,
+                    out var remainingPath);
+
+                if (workspace.Name == Workspace.Default.Name)
+                {
+                    workspaceMatched = context.Request.Path.StartsWithSegments("/api",
+                        out matchedPath,
+                        out remainingPath);
+                }
+
+                if (!workspaceMatched)
                     continue;
 
                 var originalPath = context.Request.Path;
@@ -53,10 +67,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 try
                 {
                     workspace.PathBase = originalPathBase;
-                    workspace.UsingFallbackToDefaultWorkspace = false;
-
-                    context.SetWorkspace(workspace);
-
+                    using var scope = context.RequestServices.CreateScope();
+                    context.RequestServices = scope.ServiceProvider;
+                    scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace);
                     await next(context);
                 }
                 finally
@@ -68,33 +81,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 return;
             }
 
-            if (NotScopedToWorkspacePaths.Any(w =>
-                context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                var workSpace = workspaces.First(w => w.Name == Workspace.Default.Name);
-                workSpace.UsingFallbackToDefaultWorkspace = true;
-                workSpace.PathBase = context.Request.PathBase;
-
-                if (context.Request.Headers.ContainsKey("referer"))
-                {
-                    var requestHeader = context.Request.Headers["referer"];
-                    var referer = new Uri(requestHeader);
-
-                    if (workspaces.Any(w => referer.AbsolutePath.StartsWith("/" + w.Name)))
-                    {
-                        throw new ArgumentException("Cannot call primary");
-                    }
-                }
-
-                context.SetWorkspace(workSpace);
-            }
-
             await next(context);
         }
-
-        public static readonly string[] NotScopedToWorkspacePaths =
-        {
-            "/graphql", "/Account", "/api"
-        };
     }
 }

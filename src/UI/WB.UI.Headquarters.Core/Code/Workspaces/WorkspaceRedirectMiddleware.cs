@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
@@ -22,8 +21,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
 
-            if (contextAccessor.CurrentWorkspace().UsingFallbackToDefaultWorkspace
-                && !WorkspaceMiddleware.NotScopedToWorkspacePaths.Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
+            var currentWorkspace = contextAccessor.CurrentWorkspace();
+
+            if (currentWorkspace == null
+                && !NotScopedToWorkspacePaths
+                    .Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
             {
                 // Redirect into default workspace for old urls
                 string? targetWorkspace = null;
@@ -41,10 +43,16 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 {
                     context.Response.Redirect(
                         $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value.TrimStart('/')}");
+                    return;
                 }
             }
 
             await next(context);
         }
+
+        public static readonly string[] NotScopedToWorkspacePaths =
+        {
+            "/graphql", "/Account", "/api"
+        };
     }
 }

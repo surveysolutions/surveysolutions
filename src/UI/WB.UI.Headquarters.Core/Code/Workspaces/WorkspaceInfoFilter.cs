@@ -31,19 +31,23 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             if (context.HttpContext.User.Identity.IsAuthenticated && context.Result is ViewResult view)
             {
-                var claims = context.HttpContext.User.Claims.Where(c => c.Type == WorkspaceConstants.ClaimType).Select(c => c.Value).ToHashSet();
+                var claims = context.HttpContext.User.GetWorkspaceClaims().ToHashSet();
                 var workspaces = this.workspacesService.GetWorkspaces();
                 var userWorkspaces = workspaces.Where(w => claims.Contains(w.Name));
                 view.ViewData["UserWorkspacesList"] = userWorkspaces;
 
-                context.HttpContext.Response.Cookies.Append(CookieName,
-                    workspaceContextAccessor.CurrentWorkspace().Name,
-                    new CookieOptions
-                    {
-                        Expires = DateTimeOffset.Now.AddDays(7)
-                    });
-            }
+                var currentWorkspace = workspaceContextAccessor.CurrentWorkspace();
 
+                if (currentWorkspace != null)
+                {
+                    context.HttpContext.Response.Cookies.Append(CookieName,
+                        currentWorkspace.Name,
+                        new CookieOptions
+                        {
+                            Expires = DateTimeOffset.Now.AddDays(7)
+                        });
+                }
+            }
         }
     }
 }

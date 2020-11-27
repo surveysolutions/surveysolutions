@@ -17,6 +17,5 @@ namespace WB.Infrastructure.Native.Workspaces
         public string? PathBase { get; set; }
 
         public string SchemaName => $"ws_{Name}";
-        public bool UsingFallbackToDefaultWorkspace { get; set; }
     }
 }

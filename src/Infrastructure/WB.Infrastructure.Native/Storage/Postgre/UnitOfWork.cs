@@ -76,7 +76,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                 var ws = this.workspaceContextAccessor.CurrentWorkspace();
 
-                var unitOfWork = unitOfWorks.GetOrAdd(ws.Name, workspace =>
+                var unitOfWork = unitOfWorks.GetOrAdd(ws?.Name ?? WorkspaceConstants.SchemaName, workspace =>
                 {
                     var session = sessionFactory.OpenSession();
                     var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
