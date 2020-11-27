@@ -1,6 +1,9 @@
+using System.Diagnostics;
+
 #nullable enable
 namespace WB.Infrastructure.Native.Workspaces
 {
+    [DebuggerDisplay("{Name} - {DisplayName}")]
     public class WorkspaceContext
     {
         public WorkspaceContext(string name, string displayName)

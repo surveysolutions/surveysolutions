@@ -231,20 +231,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             var workspace = context.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
 
             return sessionFactories.GetOrAdd(workspace.Name, 
-                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace.Name))).Value;
+                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace.SchemaName))).Value;
         }
 
         private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories 
             = new ConcurrentDictionary<string, Lazy<ISessionFactory>>();
 
-        private ISessionFactory BuildSessionFactory(string workspace)
+        private ISessionFactory BuildSessionFactory(string workspaceSchema)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
                 var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
                 {
-                    SearchPath = "ws_" + workspace
+                    SearchPath = workspaceSchema
                 };
 
                 var workspaceConnectionString = connectionStringBuilder.ToString();
@@ -260,7 +260,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             cfg.AddDeserializedMapping(maps, "maps");
             cfg.AddDeserializedMapping(usersMaps, "users");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
-            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, this.connectionSettings.PrimaryWorkspaceSchemaName);
             
             // File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
 

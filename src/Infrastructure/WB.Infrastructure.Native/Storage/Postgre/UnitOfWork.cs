@@ -4,6 +4,8 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
 using System.Threading;
+using Autofac;
+using Autofac.Core.Lifetime;
 using NHibernate;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Workspaces;
@@ -23,10 +25,24 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public long Id { get; }
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
-        public UnitOfWork(ISessionFactory sessionFactory,
-            ILogger logger, IWorkspaceContextAccessor workspaceContextAccessor)
+        public UnitOfWork(
+            ISessionFactory sessionFactory,
+            ILogger logger, 
+            IWorkspaceContextAccessor workspaceContextAccessor,
+            ILifetimeScope scope)
         {
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
+
+            if (scope.Tag == LifetimeScope.RootTag)
+            {
+                logger.Error("UnitOfWork should not be created in root scope.");
+                isDisposed = true;
+                // throw new ArgumentException("Unit of work cannot be resoled in root scope");
+                // it's not helpful to throw exception here, as there will be no clue on which code 
+                // caused an error
+                // Will throw later with ObjectDisposedException
+            }
+
             this.sessionFactory = sessionFactory;
             this.logger = logger;
             this.workspaceContextAccessor = workspaceContextAccessor;
