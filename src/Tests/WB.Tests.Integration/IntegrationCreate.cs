@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -431,7 +432,7 @@ namespace WB.Tests.Integration
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
-            return new UnitOfWork(factory, Mock.Of<ILogger>(), Create.Service.WorkspaceNameProvider());
+            return new UnitOfWork(factory, Mock.Of<ILogger>(), Create.Service.WorkspaceNameProvider(), Mock.Of<ILifetimeScope>());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
