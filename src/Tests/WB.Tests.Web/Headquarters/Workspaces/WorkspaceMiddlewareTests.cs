@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Workspaces;
@@ -59,9 +60,11 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
             result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
 
+            var workspaceContext = Workspace.Default.AsContext();
+            workspaceContext.UsingFallbackToDefaultWorkspace = true;
             WorkspaceContext defaultWorkspace = currentWorkspace != null
                 ? new WorkspaceContext(currentWorkspace, "")
-                : null;
+                : workspaceContext;
             var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == defaultWorkspace);
 
             result.RequestServices = Mock.Of<IServiceProvider>(
