@@ -24,22 +24,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IEnumeratorEventStorage eventStorage;
         private readonly ISerializer serializer;
         private readonly ICalendarEventStorage calendarEventStorage;
-        private readonly IPrincipal principal;
-        private readonly IEnumeratorEventStorage eventStore;
+        private readonly ICalendarEventRemoval calendarEventRemoval;
 
         public UploadCalendarEvents(int sortOrder, ISynchronizationService synchronizationService, 
             ILogger logger, IEnumeratorEventStorage eventStorage, 
             ISerializer serializer,
             ICalendarEventStorage calendarEventStorage,
-            IPrincipal principal,
-            IEnumeratorEventStorage eventStore) 
+            ICalendarEventRemoval calendarEventRemoval) 
             : base(sortOrder, synchronizationService, logger)
         {
             this.eventStorage = eventStorage;
             this.serializer = serializer;
             this.calendarEventStorage = calendarEventStorage;
-            this.principal = principal;
-            this.eventStore = eventStore;
+            this.calendarEventRemoval = calendarEventRemoval;
         }
 
         public override async Task ExecuteAsync()
@@ -79,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     MetaInfo = new CalendarEventMetaInfo()
                     {
                         ResponsibleId = calendarEvent.UserId,
-                        LastUpdateDateTime = calendarEvent.LastUpdateDateUtc,
+                        LastUpdateDateTime = DateTime.SpecifyKind(calendarEvent.LastUpdateDateUtc, DateTimeKind.Utc),
                         InterviewId = calendarEvent.InterviewId,
                         AssignmentId = calendarEvent.AssignmentId,
                         IsDeleted = calendarEvent.IsDeleted,
@@ -108,8 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private void RemoveCalendarEvent(Guid id)
         {
             logger.Debug($"Removing Calendar Event {id}");
-            calendarEventStorage.Remove(id);
-            eventStore.RemoveEventSourceById(id);
+            calendarEventRemoval.Remove(id);
         }
 
 
