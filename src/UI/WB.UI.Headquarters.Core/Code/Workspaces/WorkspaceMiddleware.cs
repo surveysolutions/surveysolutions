@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
@@ -13,10 +15,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
     {
         private readonly RequestDelegate next;
 
-        /// <summary>
-        /// Creates a new instance of <see cref="WorkspaceMiddleware"/>.
-        /// </summary>
-        /// <param name="next">The delegate representing the next middleware in the request pipeline.</param>
         public WorkspaceMiddleware(RequestDelegate next)
         {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
@@ -70,7 +68,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 return;
             }
 
-            if (!NotAWorkspace.Any(w => context.Request.Path.StartsWithSegments(w)))
+            if (NotScopedToWorkspacePaths.Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
             {
                 var workSpace = workspaces.First(w => w.Name == Workspace.Default.Name);
                 workSpace.UsingFallbackToDefaultWorkspace = true;
@@ -85,14 +83,33 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 context.SetWorkspace(workSpace);
             }
+            else
+            {
+                // Redirect into default workspace for old urls
+                string? targetWorkspace = null;
+                if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
+                {
+                    targetWorkspace = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
+                }
+                else if(context.User.HasClaim(x => x.Type == WorkspaceConstants.ClaimType))
+                {
+                    var userFirstWorkspace = context.User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
+                    targetWorkspace = userFirstWorkspace.Value;
+                }
 
-            // handling of default workspace
+                if (targetWorkspace != null)
+                {
+                    context.Response.Redirect( 
+                        $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value.TrimStart('/')}");
+                }
+            }
+            
             await next(context);
         }
 
 
-        private static readonly string[] NotAWorkspace = {
-            "/graphql", "/Account"
+        private static readonly string[] NotScopedToWorkspacePaths = {
+            "/graphql", "/Account", "/api"
         };
     }
 }
