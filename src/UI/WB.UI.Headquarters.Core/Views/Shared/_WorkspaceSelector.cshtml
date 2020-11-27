@@ -1,33 +1,38 @@
 @using WB.Infrastructure.Native.Workspaces
+@using WB.Core.BoundedContexts.Headquarters.Workspaces
 @inject IWorkspaceContextAccessor workspaceContext
 
 @{
     var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
     var hasAnotherWorkspace = workspaces.Count() > 1;
+    var workspace = workspaceContext.CurrentWorkspace();
 }
-<ul class="nav navbar-nav">
-    @if (hasAnotherWorkspace)
-    {
-        <li class="dropdown">
-            <a href="javascript:void(0);"
-               class="dropdown-toggle" data-toggle="dropdown"
-               title="@Workspaces.CurrentWorkspace">@workspaceContext.CurrentWorkspace().DisplayName <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                @foreach (var w in workspaces)
-                {
-                    <li class="@(workspaceContext.CurrentWorkspace().Name == w.Name ? "active" : "")">
-                        <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
-                    </li>
-                }
-            </ul>
-        </li>
-    }
-    else
-    {
-        <li>
-            <a href="javascript:void(0);"
-               role="button"
-               title="@Workspaces.CurrentWorkspace">@workspaceContext.CurrentWorkspace().DisplayName</a>
-        </li>
-    }
-</ul>
+@if (workspace != null)
+{
+    <ul class="nav navbar-nav">
+        @if (hasAnotherWorkspace)
+        {
+            <li class="dropdown">
+                <a href="javascript:void(0);"
+                   class="dropdown-toggle" data-toggle="dropdown"
+                   title="@Workspaces.CurrentWorkspace">@workspace.DisplayName <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    @foreach (var w in workspaces)
+                    {
+                        <li class="@(workspace.Name == w.Name ? "active" : "")">
+                            <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="javascript:void(0);"
+                   role="button"
+                   title="@Workspaces.CurrentWorkspace">@workspace.DisplayName</a>
+            </li>
+        }
+    </ul>
+}

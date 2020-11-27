@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
+namespace WB.Infrastructure.Native.Workspaces
 {
     public static class WorkspaceConstants
     {

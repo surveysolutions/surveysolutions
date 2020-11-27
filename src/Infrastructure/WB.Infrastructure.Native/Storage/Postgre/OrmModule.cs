@@ -230,8 +230,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             var workspace = context.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
 
-            return sessionFactories.GetOrAdd(workspace.Name, 
-                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace.SchemaName))).Value;
+            return sessionFactories.GetOrAdd(workspace?.Name ?? WorkspaceConstants.SchemaName, 
+                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace?.SchemaName ?? WorkspaceConstants.SchemaName))).Value;
         }
 
         private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories 

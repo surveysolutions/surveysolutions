@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Authentication
@@ -17,8 +16,19 @@ namespace WB.UI.Headquarters.Code.Authentication
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, WorkspaceRequirement requirement)
         {
-            var hasClaim = context.User.HasClaim("Workspace", workspaceContextAccessor.CurrentWorkspace().Name);
-            if (hasClaim || context.User.IsInRole(UserRoles.Administrator.ToString()))
+            var workspace = workspaceContextAccessor.CurrentWorkspace();
+            
+            if (context.User.IsInRole(UserRoles.Administrator.ToString()))
+            {
+                context.Succeed(requirement);
+            }
+
+            if (workspace == null)
+            {
+                return Task.CompletedTask;
+            }
+            
+            if (context.User.HasClaim("Workspace", workspace.Name))
             {
                 context.Succeed(requirement);
             }

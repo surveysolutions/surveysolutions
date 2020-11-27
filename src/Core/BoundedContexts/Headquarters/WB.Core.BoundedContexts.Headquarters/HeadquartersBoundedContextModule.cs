@@ -59,6 +59,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -336,7 +337,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             {
                 var cacheSource = ctx.Resolve<IMemoryCacheSource>();
                 var contextAccessor = ctx.Resolve<IWorkspaceContextAccessor>();
-                return cacheSource.GetCache(contextAccessor.CurrentWorkspace().Name);
+                return cacheSource.GetCache(contextAccessor.CurrentWorkspace()?.Name ?? WorkspaceConstants.SchemaName);
             }, externallyOwned: true);
             
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();

@@ -474,7 +474,9 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     await this.userManager.AddToRoleAsync(user, model.Role);
-                    this.workspacesService.AddUserToWorkspace(user.Id, this.workspaceContextAccessor.CurrentWorkspace().Name);
+                    var currentWorkspace = this.workspaceContextAccessor.CurrentWorkspace() 
+                                           ?? throw new Exception("Cannot add user to non existing workspace");
+                    this.workspacesService.AddUserToWorkspace(user.Id, currentWorkspace.Name);
                 }
             }
             

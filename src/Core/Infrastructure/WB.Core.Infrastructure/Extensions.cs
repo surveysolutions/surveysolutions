@@ -11,10 +11,12 @@ namespace WB.Core.Infrastructure
     {
         public static void ExecuteInScope<T>(this IServiceLocator sl, Action<T> action)
         {
-            sl.GetInstance<IInScopeExecutor>().Execute(scope =>
-            {
-                action(scope.GetInstance<T>());
-            });
+            sl.GetInstance<IInScopeExecutor>().Execute(scope => action(scope.GetInstance<T>()));
+        }        
+        
+        public static TR ExecuteInScope<T, TR>(this IServiceLocator sl, Func<T, TR> action)
+        {
+            return sl.GetInstance<IInScopeExecutor>().Execute(scope => action(scope.GetInstance<T>()));
         }
 
         /// <summary>

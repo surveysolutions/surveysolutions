@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps;
