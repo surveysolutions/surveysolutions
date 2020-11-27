@@ -20,7 +20,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         protected readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
-
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider;
@@ -32,8 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
             IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
-            IMemoryCache memoryCache
-            )
+            IMemoryCache memoryCache)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
@@ -57,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         private static string PlainQuestionnaireCacheKey(QuestionnaireIdentity identity, string language)
         {
-            return language != null ? $"{identity}${language}" : $"{identity}";
+            return language != null ? $"qs:{identity}${language}" : $"qs:{identity}";
         }
 
         public IQuestionnaire GetQuestionnaireOrThrow(QuestionnaireIdentity identity, string language)
@@ -107,10 +105,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
+            var identity = new QuestionnaireIdentity(id, version);
+            string repositoryId = GetRepositoryId(identity);
             this.repository.Store(questionnaireDocument, repositoryId);
 
-            this.memoryCache.Set(repositoryId, questionnaireDocument.Clone(),
+            this.memoryCache.Set(GetCacheKey(identity), questionnaireDocument.Clone(),
                 new MemoryCacheEntryOptions
                 {
                     SlidingExpiration = TimeSpan.FromMinutes(20)
@@ -119,9 +118,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public virtual QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
-            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
+            var identity = new QuestionnaireIdentity(id, version);
+            string repositoryId = GetRepositoryId(identity);
 
-            return this.memoryCache.GetOrCreate(repositoryId, (entry) =>
+            return this.memoryCache.GetOrCreate(GetCacheKey(identity), (entry) =>
             {
                 entry.SlidingExpiration = TimeSpan.FromMinutes(20);
                 return this.repository.GetById(repositoryId);
@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
 
-            this.memoryCache.Remove(repositoryId);
+            this.memoryCache.Remove(GetCacheKey(questionnaireIdentity));
             foreach (var translation in document.Translations)
             {
                 this.memoryCache.Remove(PlainQuestionnaireCacheKey(questionnaireIdentity, translation.Name));
@@ -154,6 +154,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             
             this.memoryCache.Remove(PlainQuestionnaireCacheKey(questionnaireIdentity, null));
         }
+
+        protected static string GetCacheKey(QuestionnaireIdentity questionnaireIdentity)
+            => "qdoc::" + questionnaireIdentity.ToString();
 
         protected static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)
             => questionnaireIdentity.ToString(); //$"{id.FormatGuid()}${version}";

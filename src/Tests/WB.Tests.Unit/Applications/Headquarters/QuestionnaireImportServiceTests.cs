@@ -430,7 +430,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 .Returns(designerApi);
 
             var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
-            InScopeExecutor.Init(executor);
 
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
@@ -439,7 +438,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 new QuestionnaireImportStatuses(),
                 Mock.Of<IAssignmentsUpgradeService>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
-                Mock.Of<IDesignerUserCredentials>());
+                Mock.Of<IDesignerUserCredentials>(),
+                inScopeExecutor: executor);
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>())
