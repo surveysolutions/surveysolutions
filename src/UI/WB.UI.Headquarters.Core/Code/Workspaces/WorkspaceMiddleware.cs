@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
@@ -14,16 +12,14 @@ namespace WB.UI.Headquarters.Code.Workspaces
     public class WorkspaceMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly IWorkspacesService workspacesService;
 
         /// <summary>
         /// Creates a new instance of <see cref="WorkspaceMiddleware"/>.
         /// </summary>
         /// <param name="next">The delegate representing the next middleware in the request pipeline.</param>
-        public WorkspaceMiddleware(RequestDelegate next, IWorkspacesService workspacesService)
+        public WorkspaceMiddleware(RequestDelegate next)
         {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
-            this.workspacesService = workspacesService;
         }
 
         /// <summary>
@@ -38,11 +34,17 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var workspaces = GetWorkspaces(context);
+            List<WorkspaceContext> workspaces;
 
-            foreach (var workSpace in workspaces)
+            using (var scope = context.RequestServices.CreateScope())
             {
-                if (!context.Request.Path.StartsWithSegments("/" + workSpace.Name, out var matchedPath, out var remainingPath))
+                var workspacesService = scope.ServiceProvider.GetRequiredService<IWorkspacesCache>();
+                workspaces = workspacesService.GetWorkspaces().ToList();
+            }
+
+            foreach (var workspace in workspaces)
+            {
+                if (!context.Request.Path.StartsWithSegments("/" + workspace.Name, out var matchedPath, out var remainingPath))
                     continue;
 
                 var originalPath = context.Request.Path;
@@ -52,9 +54,10 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 
                 try
                 {
-                    workSpace.PathBase = originalPathBase;
-                    workSpace.UsingFallbackToDefaultWorkspace = false;
-                    context.SetWorkspace(workSpace);
+                    workspace.PathBase = originalPathBase;
+                    workspace.UsingFallbackToDefaultWorkspace = false;
+
+                    context.SetWorkspace(workspace);
 
                     await next(context);
                 }
@@ -69,9 +72,22 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (!NotAWorkspace.Any(w => context.Request.Path.StartsWithSegments(w)))
             {
-                var workSpace = workspacesService.GetWorkspaces().First(w => w.Name == Workspace.Default.Name);
+                var workSpace = workspaces.First(w => w.Name == Workspace.Default.Name);
                 workSpace.UsingFallbackToDefaultWorkspace = true;
                 workSpace.PathBase = context.Request.PathBase;
+
+                var referer = new Uri(context.Request.Headers["referer"]);
+
+                if (workspaces.Any(w => referer.AbsolutePath.StartsWith("/" + w.Name)))
+                {
+                    throw new ArgumentException("Cannot call primary");
+                }
+                //if (!context.Request.Headers["referer"].Contains(workspace.Name))
+                //{
+                //    throw new ArgumentException("Pay attentions. Request to ");
+                //}
+
+
                 context.SetWorkspace(workSpace);
             }
 
@@ -79,14 +95,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context);
         }
 
-
-        IEnumerable<WorkspaceContext> GetWorkspaces(HttpContext context)
-        {
-            var workspaces = context.RequestServices.GetService<IInScopeExecutor>().Execute(scope =>
-                scope.GetInstance<IWorkspacesService>().GetWorkspaces().ToList());
-
-            return workspaces;
-        }
 
         private static readonly string[] NotAWorkspace = {
             "/graphql", "/Account"

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -12,10 +11,10 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionnaire
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.PlainStorage;
@@ -35,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IArchiveUtils archiveUtils;
         private readonly IDesignerUserCredentials designerUserCredentials;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
             IArchiveUtils archiveUtils,
-            IDesignerUserCredentials designerUserCredentials)
+            IDesignerUserCredentials designerUserCredentials,
+            IInScopeExecutor inScopeExecutor)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
@@ -52,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.archiveUtils = archiveUtils;
             this.designerUserCredentials = designerUserCredentials;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -65,7 +67,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return ImportAndMigrateAssignments(questionnaireId, name, isCensusMode, comment, requestUrl, includePdf,
                 false, null);
         }
-
 
         public async Task<QuestionnaireImportResult> ImportAndMigrateAssignments(Guid questionnaireId, 
             string name,
@@ -101,12 +102,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var bgTask = Task.Run(async () =>
             {
-                return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
+                return await inScopeExecutor.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
                     var designerServiceCredentials = serviceLocatorLocal.GetInstance<IDesignerUserCredentials>();
 
                     try
                     {
+                        
                         designerServiceCredentials.SetTaskCredentials(designerCredentials);
 
                         var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
