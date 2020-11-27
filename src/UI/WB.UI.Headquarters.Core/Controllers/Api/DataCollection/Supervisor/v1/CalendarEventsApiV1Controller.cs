@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -17,8 +18,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     public class CalendarEventsApiV1Controller: CalendarEventsControllerBase
     {
         public CalendarEventsApiV1Controller(IHeadquartersEventStore eventStore, 
-            ICalendarEventPackageService packageService, ICalendarEventService calendarEventService, IAuthorizedUser authorizedUser) 
-            : base(eventStore, packageService, calendarEventService, authorizedUser)
+            ICalendarEventService calendarEventService, 
+            IAuthorizedUser authorizedUser,
+            ILogger<CalendarEventsApiV1Controller> logger) 
+            : base(eventStore, calendarEventService, authorizedUser, logger)
         {
         }
         

@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 if (calendarEvent.IsCompleted || calendarEvent.IsDeleted)
                 {
-                    RemoveCalendarEvent(calendarEvent.Id);
+                    //RemoveCalendarEvent(calendarEvent.Id);
                 }
                 
                 this.Context.Statistics.SuccessfullyUploadedCalendarEventsCount++;
