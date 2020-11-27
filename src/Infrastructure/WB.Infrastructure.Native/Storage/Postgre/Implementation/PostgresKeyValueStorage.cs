@@ -16,7 +16,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IUnitOfWork unitOfWork;
         protected readonly IEntitySerializer<TEntity> serializer;
 
-        static ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
+        private static readonly ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
 
         public PostgresKeyValueStorage(IUnitOfWork unitOfWork, IEntitySerializer<TEntity> serializer)
         {
