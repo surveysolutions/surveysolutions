@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -29,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         private readonly ILoggerProvider loggerProvider;
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
+        private readonly IUserRepository users;
         private readonly IMemoryCache memoryCache;
         private readonly ILogger<WorkspacesService> logger;
 
@@ -36,6 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             ILoggerProvider loggerProvider, 
             IPlainStorageAccessor<Workspace> workspaces,
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
+            IUserRepository users,
             IMemoryCache memoryCache,
             ILogger<WorkspacesService> logger)
         {
@@ -43,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             this.loggerProvider = loggerProvider;
             this.workspaces = workspaces;
             this.workspaceUsers = workspaceUsers;
+            this.users = users;
             this.memoryCache = memoryCache;
             this.logger = logger;
         }
@@ -77,6 +83,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId)
         {
+            var user = this.users.FindById(userId);
+
+            if (user.IsInRole(UserRoles.Administrator))
+            {
+                return this.GetWorkspaces();
+            }
+            
             var userWorkspaces = workspaces.Query(_ =>
                 _.Where(x => x.Users.Any(u => u.UserId == userId))
                 .Select(workspace => workspace.AsContext())
