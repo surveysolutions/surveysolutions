@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             //all calendar events should be pushed at this point
             var localCalendarEventsToRecreateIds = localCalendarEventIds.Where(
                 ce => remoteCalendarEventsWithSequence.ContainsKey(ce) &&
-                      EventStore.GetLastEventKnownToHq(ce) != remoteCalendarEventsWithSequence[ce]).ToList();
+                      EventStore.GetLastEventSequence(ce) != remoteCalendarEventsWithSequence[ce]).ToList();
 
             var remoteCalendarEventsToDownloadIds = remoteCalendarEventsWithSequence.Keys.Where(
                 ce => !localCalendarEventIds.Contains(ce)).ToList();

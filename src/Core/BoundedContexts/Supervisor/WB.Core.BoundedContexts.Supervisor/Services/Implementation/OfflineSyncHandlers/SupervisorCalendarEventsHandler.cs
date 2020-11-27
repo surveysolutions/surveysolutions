@@ -127,36 +127,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
                 this.logger.Debug($"Calendar events by {request.CalendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
+                
+                bool deleteCalendarEventAfterApplying = false, restoreCalendarEventBefore = false, restoreCalendarEventAfter = false;
 
-                var deleteCalendarEventAfterApplying = false;
+                var responsibleId = request.CalendarEvent.MetaInfo.ResponsibleId;
+
                 var activeCalendarEvent = request.CalendarEvent.MetaInfo.InterviewId.HasValue
-                            ? calendarEventStorage.GetCalendarEventForInterview(request.CalendarEvent.MetaInfo.InterviewId.Value)
-                            : calendarEventStorage.GetCalendarEventForAssigment(request.CalendarEvent.MetaInfo.AssignmentId);
+                    ? calendarEventStorage.GetCalendarEventForInterview(request.CalendarEvent.MetaInfo.InterviewId.Value)
+                    : calendarEventStorage.GetCalendarEventForAssigment(request.CalendarEvent.MetaInfo.AssignmentId);
 
-                if (request.CalendarEvent.MetaInfo.InterviewId.HasValue)
-                {
-                    var existingInterview = interviewViewRepository.GetById(request.CalendarEvent.MetaInfo.InterviewId.Value.FormatGuid());
-                    if (existingInterview != null 
-                        && existingInterview.ResponsibleId != request.CalendarEvent.MetaInfo.ResponsibleId)
-                        deleteCalendarEventAfterApplying = true;
-                }
-                else
-                {
-                    var assignment = assignmentStorage.GetById(request.CalendarEvent.MetaInfo.AssignmentId);
-                    if (assignment != null 
-                        && assignment.ResponsibleId != request.CalendarEvent.MetaInfo.ResponsibleId)
-                        deleteCalendarEventAfterApplying = true;
-                }
-
+                //check responsible
+                //ignore calendar event event if responsible is another person
+                var currentResponsibleId = GetResponsibleForCalendarEventEntity(request);
+                if (currentResponsibleId != null && currentResponsibleId.Value != responsibleId)
+                    deleteCalendarEventAfterApplying = true;
+                
                 //remove other older CE 
                 if (activeCalendarEvent != null &&
-                        activeCalendarEvent.Id != request.CalendarEvent.CalendarEventId
-                        && activeCalendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime
-                        && !deleteCalendarEventAfterApplying)
+                    activeCalendarEvent.Id != request.CalendarEvent.CalendarEventId
+                    && activeCalendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime
+                    && !deleteCalendarEventAfterApplying)
                 {
-                    var deleteCommand = new DeleteCalendarEventCommand(activeCalendarEvent.Id,
-                        request.CalendarEvent.MetaInfo.ResponsibleId);
-                    commandService.Execute(deleteCommand);
+                    commandService.Execute(new DeleteCalendarEventCommand(activeCalendarEvent.Id, responsibleId));
                 }
                 
                 var calendarEvent = calendarEventStorage.GetById(request.CalendarEvent.CalendarEventId);
@@ -164,20 +156,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 //if CE was deleted on server before last change on tablet - restore it
                 //if it was deleted after - leave it deleted
                 //could be deleted again later
-                if(calendarEvent != null && calendarEvent.IsDeleted && calendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
-                    commandService.Execute(new RestoreCalendarEventCommand(
-                        request.CalendarEvent.CalendarEventId, request.CalendarEvent.MetaInfo.ResponsibleId));
+                if(calendarEvent != null 
+                   && !request.CalendarEvent.MetaInfo.IsDeleted 
+                   && calendarEvent.IsDeleted 
+                   && calendarEvent.LastUpdateDateUtc < request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                        restoreCalendarEventBefore = true;
+
+                if(calendarEvent != null 
+                   && request.CalendarEvent.MetaInfo.IsDeleted 
+                   && !calendarEvent.IsDeleted 
+                   && calendarEvent.LastUpdateDateUtc > request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                        restoreCalendarEventAfter = true;
 
                 var aggregateRootEvents = calendarEventStream.Select(c => new AggregateRootEvent(c)).ToArray();
-
-                commandService.Execute(new SyncCalendarEventEventsCommand(aggregateRootEvents,
-                            request.CalendarEvent.CalendarEventId,
-                            request.CalendarEvent.MetaInfo.ResponsibleId));
-
-                if (deleteCalendarEventAfterApplying)
-                    commandService.Execute(new DeleteCalendarEventCommand(
-                        request.CalendarEvent.CalendarEventId, request.CalendarEvent.MetaInfo.ResponsibleId));
-     
+                commandService.Execute(
+                        new SyncCalendarEventEventsCommand(aggregateRootEvents,
+                            request.CalendarEvent.CalendarEventId, responsibleId,
+                            restoreCalendarEventBefore: restoreCalendarEventBefore,
+                            restoreCalendarEventAfter: restoreCalendarEventAfter, 
+                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying));
+            
                 RecordProcessedPackageInfo(calendarEventStream);
             }
             catch (Exception exception)
@@ -190,6 +188,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             innerwatch.Stop();
 
             return Task.FromResult(new OkResponse());
+        }
+        
+        private Guid? GetResponsibleForCalendarEventEntity(UploadCalendarEventRequest request)
+        {
+            if (request.CalendarEvent.MetaInfo.InterviewId.HasValue)
+            {
+                var existingInterview = interviewViewRepository.GetById(request.CalendarEvent.MetaInfo.InterviewId.Value.FormatGuid());
+                return existingInterview?.ResponsibleId;
+            }
+            else
+            {
+                var assignment = assignmentStorage.GetById(request.CalendarEvent.MetaInfo.AssignmentId);
+                return assignment?.ResponsibleId;
+            }
         }
 
         private bool IsPackageDuplicated(CommittedEvent[] events)
