@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -46,7 +47,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 {
                     principalIdentity.AddClaims(new[]
                     {
-                        new Claim("Workspace", workspace.Name)
+                        new Claim(WorkspaceConstants.ClaimType, workspace.Name)
                     });
                 }
             });

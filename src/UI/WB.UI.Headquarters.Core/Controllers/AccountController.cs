@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Drawing;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,8 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
@@ -108,7 +111,21 @@ namespace WB.UI.Headquarters.Controllers
             if (signInResult.Succeeded)
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+
+
+                if (returnUrl != null && returnUrl != "/")
+                {
+                    return Redirect(returnUrl);
+                }
+                
+                
+                if (Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
+                {
+                    return Redirect(Url.Content($"~/{Request.Cookies[WorkspaceInfoFilter.CookieName]}"));
+                }
+                
+                var firstWorkspace = User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
+                return Redirect(Url.Content($"~/{firstWorkspace.Value}"));
             }
             if (signInResult.RequiresTwoFactor)
             {
