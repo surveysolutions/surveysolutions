@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
             string repositoryId = GetRepositoryId(questionnaireIdentity);
 
-            return memoryCache.GetOrCreate(repositoryId, key =>
+            return memoryCache.GetOrCreate("qdoc::" + repositoryId, key =>
             {
                 var questionnaire = this.repository.GetById(questionnaireIdentity.ToString());
 

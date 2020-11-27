@@ -156,6 +156,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         }
 
         protected static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)
-            => $"questionnaireDocument-{questionnaireIdentity}";
+            => questionnaireIdentity.ToString(); //$"{id.FormatGuid()}${version}";
     }
 }
