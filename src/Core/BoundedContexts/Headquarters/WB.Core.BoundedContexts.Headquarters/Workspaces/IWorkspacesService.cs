@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     public interface IWorkspacesCache
     {
         IEnumerable<WorkspaceContext> GetWorkspaces();
+        void InvalidateCache();
     }
 
     class WorkspacesCache : IWorkspacesCache
@@ -51,6 +52,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
                 return serviceLocator.ExecuteInScope<IWorkspacesService, List<WorkspaceContext>>(ws =>
                     ws.GetWorkspaces().ToList());
             });
+        }
+
+        public void InvalidateCache()
+        {
+            memoryCache.Remove("workspaces");
         }
     }
     
