@@ -1,7 +1,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.UI.Headquarters.Filters
@@ -9,13 +8,10 @@ namespace WB.UI.Headquarters.Filters
     public class WorkspaceInfoFilter : IResultFilter
     {
         private readonly IWorkspacesService workspacesService;
-        private readonly IAuthorizedUser authorizedUser;
 
-        public WorkspaceInfoFilter(IWorkspacesService workspacesService,
-            IAuthorizedUser authorizedUser)
+        public WorkspaceInfoFilter(IWorkspacesService workspacesService)
         {
             this.workspacesService = workspacesService;
-            this.authorizedUser = authorizedUser;
         }
 
         public void OnResultExecuted(ResultExecutedContext context)
