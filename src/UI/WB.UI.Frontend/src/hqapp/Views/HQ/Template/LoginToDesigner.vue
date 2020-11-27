@@ -14,7 +14,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 left-column">
                 <div class="centered-box-table">
                     <div class="centered-box-table-cell">
-                        <img :src="this.$config.model.designerLogo"
+                        <img src="/img/designer-logo.png"
                             alt="Survey Solutions Designer" />
                         <p>
                             {{this.$t('LoginToDesigner.DesignerAppDescription')}}
@@ -104,7 +104,7 @@ export default {
             if(validationResult) {
                 this.$http({
                     method: 'post',
-                    url: this.$config.model.loginAction,
+                    url: '/Template/LoginToDesigner',
                     data: {
                         userName: this.userName,
                         password: this.password,
