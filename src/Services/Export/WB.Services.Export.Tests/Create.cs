@@ -482,7 +482,7 @@ namespace WB.Services.Export.Tests
                     "",
                     TenantId.None,
                     tenantName ?? "none",
-                    "primary"
+                    TenantInfo.DefaultWorkspace
                 )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()),
                 options);
@@ -497,7 +497,7 @@ namespace WB.Services.Export.Tests
             var dbContext = new TenantDbContext(
                 Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo(
                     "", TenantId.None,
-                    tenantName ?? "none", "primary"
+                    tenantName ?? "none", TenantInfo.DefaultWorkspace
                 )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()
                 {
