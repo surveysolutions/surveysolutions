@@ -8,14 +8,18 @@ export default {
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$http', {
             get() {
-                return axios
+                return axios.create({
+                    baseURL: vue.$config.basePath,
+                })
             },
         })
 
         /*  expose a local API method  */
         Object.defineProperty(vue.prototype, '$http', {
             get() {
-                return axios
+                return axios.create({
+                    baseURL: vue.$config.basePath,
+                })
             },
         })
     },
