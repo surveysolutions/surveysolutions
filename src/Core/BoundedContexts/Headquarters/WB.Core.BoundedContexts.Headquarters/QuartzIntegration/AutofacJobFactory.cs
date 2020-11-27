@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// <summary>
         /// Called by the scheduler at the time of the trigger firing, in order to
         /// produce a <see cref="IJob" /> instance on which to call Execute.
-        /// Instance creation is delegated to the Ninject Kernel.
         /// </summary>
         /// <remarks>
         /// It should be extremely rare for this method to throw an exception -
