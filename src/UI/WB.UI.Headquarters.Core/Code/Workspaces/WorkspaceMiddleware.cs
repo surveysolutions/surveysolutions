@@ -35,13 +35,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 throw new ArgumentNullException(nameof(context));
             }
 
-            List<WorkspaceContext> workspaces;
-
-            using (var scope = context.RequestServices.CreateScope())
-            {
-                var workspacesService = scope.ServiceProvider.GetRequiredService<IWorkspacesCache>();
-                workspaces = workspacesService.GetWorkspaces().ToList();
-            }
+            var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
+            List<WorkspaceContext> workspaces = workspacesService.GetWorkspaces().ToList();
 
             foreach (var workspace in workspaces)
             {
@@ -49,7 +44,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     out var matchedPath,
                     out var remainingPath);
 
-                if (workspace.Name == Workspace.Default.Name)
+                if (!workspaceMatched && workspace.Name == Workspace.Default.Name)
                 {
                     workspaceMatched = context.Request.Path.StartsWithSegments("/api",
                         out matchedPath,
