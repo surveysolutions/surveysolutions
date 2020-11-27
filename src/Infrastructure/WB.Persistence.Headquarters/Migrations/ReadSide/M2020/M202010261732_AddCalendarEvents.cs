@@ -4,7 +4,7 @@ using FluentMigrator;
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(202010261732)]
-    public class M202010261732_AddCalendarEvents : Migration
+    public class M202010261732_AddCalendarEvents : AutoReversingMigration
     {
         public override void Up()
         {
@@ -23,11 +23,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
             Create.Index().OnTable("calendarevents").OnColumn("interviewid");
             Create.Index().OnTable("calendarevents").OnColumn("assignmentid");
-        }
-
-        public override void Down()
-        {
-            
         }
     }
 }
