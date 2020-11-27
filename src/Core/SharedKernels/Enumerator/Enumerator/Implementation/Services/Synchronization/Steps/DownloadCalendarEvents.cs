@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected readonly IEnumeratorEventStorage EventStore;
         private readonly ILiteEventBus eventBus;
         private readonly ICalendarEventStorage calendarEventStorage;
+        private readonly ICalendarEventRemoval calendarEventRemoval;
         private readonly ILogger log;
         
         public DownloadCalendarEvents(int sortOrder, ISynchronizationService synchronizationService, 
             ILogger logger, IEnumeratorEventStorage eventStore,
-            ICalendarEventStorage calendarEventStorage, ILiteEventBus eventBus, ILogger log) 
+            ICalendarEventStorage calendarEventStorage,
+            ICalendarEventRemoval calendarEventRemoval,
+            ILiteEventBus eventBus, ILogger log) 
             : base(sortOrder, synchronizationService, logger)
         {
             EventStore = eventStore;
             this.eventBus = eventBus;
             this.log = log;
             this.calendarEventStorage = calendarEventStorage;
+            this.calendarEventRemoval = calendarEventRemoval;
         }
 
         public override async Task ExecuteAsync()
@@ -81,8 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private void RemoveCalendarEvent(Guid id)
         {
             log.Debug($"Removing Calendar Event {id}");
-            calendarEventStorage.Remove(id);
-            EventStore.RemoveEventSourceById(id);
+            calendarEventRemoval.Remove(id);
         }
 
         private async Task DownloadAndCreateCalendarEvent(List<Guid> calendarEventsIds)
@@ -132,8 +136,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 }
             }
-            
-            
         }
     }
 }
