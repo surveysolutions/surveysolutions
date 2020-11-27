@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
@@ -19,14 +21,31 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public async Task Execute(IJobExecutionContext context)
         {
-            using var scope = this.serviceProvider.CreateScope();
-            using var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-            var job = scope.ServiceProvider.GetService(jobType) as IJob;
-            if (job == null)
-                throw new ArgumentNullException(nameof(job));
+            using var jobScope = this.serviceProvider.CreateScope();
+            var workspacesService = jobScope.ServiceProvider.GetRequiredService<IWorkspacesCache>();
+            var workspaces = workspacesService.GetWorkspaces();
 
-            await job.Execute(context);
-            uow.AcceptChanges();
+            foreach (var workspace in workspaces)
+            {
+                using var scope = jobScope.ServiceProvider.CreateScope();
+                scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace);
+
+                try
+                {
+                    using var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                    var job = scope.ServiceProvider.GetService(jobType) as IJob;
+                    if (job == null)
+                        throw new ArgumentNullException(nameof(job));
+
+                    await job.Execute(context);
+                    uow.AcceptChanges();
+                }
+                catch(Exception e)
+                {
+                    var logger = jobScope.ServiceProvider.GetRequiredService<ILogger<AsyncScopedJobDecorator>>();
+                    logger.LogError(e, $"Exception during job {jobType.Name} run in workspace {workspace}");
+                }
+            }
         }
     }
 }
