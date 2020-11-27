@@ -28,5 +28,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public DbUpgradeSettings WorkspacesMigrationSettings { get; set; }
 
         public string WorkspacesSchemaName => "workspaces";
+        
+        public DbUpgradeSettings SingleWorkspaceUpgradeSettings { get; set; }
     }
 }

@@ -155,7 +155,8 @@ namespace WB.UI.Headquarters
                     typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace),
                 EventStoreUpgradeSettings = new DbUpgradeSettings(typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Assembly,
                     typeof(WB.Persistence.Headquarters.Migrations.Events.M000_Init).Namespace),
-                WorkspacesMigrationSettings = DbUpgradeSettings.FromFirstMigration<M202011191114_InitWorkspaces>()
+                WorkspacesMigrationSettings = DbUpgradeSettings.FromFirstMigration<M202011191114_InitWorkspaces>(),
+                SingleWorkspaceUpgradeSettings = DbUpgradeSettings.FromFirstMigration<WB.Persistence.Headquarters.Migrations.Workspace.M202011201421_InitSingleWorkspace>()
             };
             
             return unitOfWorkConnectionSettings;

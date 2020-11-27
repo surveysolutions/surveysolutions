@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Dapper;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using NHibernate;
@@ -164,6 +166,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                     status.ClearMessage();
                 }
+
+                await MigrateWorkspacesAsync(status, loggerProvider);
             }
             catch (Exception exc)
             {
@@ -171,6 +175,28 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                 LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
                 throw exc.AsInitializationException(connectionSettings.ConnectionString);
+            }
+        }
+
+        private async Task MigrateWorkspacesAsync(UnderConstructionInfo status, ILoggerProvider loggerProvider)
+        {
+            await using var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString);
+            IEnumerable<string> workspaces = 
+                await connection.QueryAsync<string>($"select name from {this.connectionSettings.WorkspacesSchemaName}.workspaces");
+
+            foreach (var workspace in workspaces)
+            {
+                status.Message = Modules.InitializingDb;
+                var targetSchema = "ws_" + workspace; 
+                
+                DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString, targetSchema);
+
+                DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    targetSchema,
+                    this.connectionSettings.SingleWorkspaceUpgradeSettings,
+                    loggerProvider);
+
+                status.ClearMessage();
             }
         }
 
