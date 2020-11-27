@@ -66,6 +66,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();
             registry.BindAsSingleton<IDeviceSynchronizationProgress, DeviceSynchronizationProgress>();
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
+            registry.BindAsSingleton<ICalendarEventRemoval, CalendarEventRemoval>();
             
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();

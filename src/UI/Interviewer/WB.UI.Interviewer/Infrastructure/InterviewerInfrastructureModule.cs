@@ -81,6 +81,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
             
             registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
+            registry.BindAsSingleton<ICalendarEventRemoval, CalendarEventRemoval>();
         }
     }
 }
