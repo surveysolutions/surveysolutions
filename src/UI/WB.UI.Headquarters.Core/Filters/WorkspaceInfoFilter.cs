@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Filters
     {
         private readonly IWorkspacesCache workspacesService;
 
-        public WorkspaceInfoFilter(IWorkspacesCache workspacesService,
+        public WorkspaceInfoFilter(IWorkspacesCache workspacesService)
         {
             this.workspacesService = workspacesService;
         }
@@ -22,7 +22,6 @@ namespace WB.UI.Headquarters.Filters
         {
             if (context.HttpContext.User.Identity.IsAuthenticated && context.Result is ViewResult view)
             {
-              //  var userId = authorizedUser.Id;
                 var claims = context.HttpContext.User.Claims.Where(c => c.Type == "Workspace").Select(c => c.Value).ToHashSet();
                 var workspaces = this.workspacesService.GetWorkspaces();
                 var userWorkspaces = workspaces.Where(w => claims.Contains(w.Name));

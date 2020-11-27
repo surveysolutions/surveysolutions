@@ -82,11 +82,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 {
                     throw new ArgumentException("Cannot call primary");
                 }
-                //if (!context.Request.Headers["referer"].Contains(workspace.Name))
-                //{
-                //    throw new ArgumentException("Pay attentions. Request to ");
-                //}
-
 
                 context.SetWorkspace(workSpace);
             }
