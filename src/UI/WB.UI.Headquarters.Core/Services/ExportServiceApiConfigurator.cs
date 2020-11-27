@@ -67,13 +67,6 @@ namespace WB.UI.Headquarters.Services
                 if (workspace != null)
                 {
                     hc.DefaultRequestHeaders.Add(@"x-tenant-space", workspace.Name);
-
-                    if (baseUrl != null)
-                    {
-                        var uriBuilder = new UriBuilder(baseUrl);
-                        uriBuilder.Path += workspace.Name;
-                        baseUrl = uriBuilder.Uri;
-                    }
                 }
 
                 IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings = s.GetInstance<IPlainKeyValueStorage<ExportServiceSettings>>();
