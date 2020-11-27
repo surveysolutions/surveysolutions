@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using AutoMapper;
+using FFImageLoading.Mock;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -21,6 +24,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services.Impl;
@@ -127,6 +131,11 @@ namespace WB.Tests.Web.TestFactories
                 new LocalizedIdentityErrorDescriber(), 
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<ILogger<UserManager<HqUser>>>());
+        }
+
+        public IWorkspacesCache WorkspacesCache()
+        {
+            return Mock.Of<IWorkspacesCache>(x => x.GetWorkspaces() == new List<WorkspaceContext>{new WorkspaceContext(WorkspaceConstants.DefaultWorkspaceName, "")});
         }
     }
 }
