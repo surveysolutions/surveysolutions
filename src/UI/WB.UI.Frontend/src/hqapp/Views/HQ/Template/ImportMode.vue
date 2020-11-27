@@ -197,7 +197,7 @@ export default {
             this.errorMessage = ''
 
             var formData = new FormData(this.$refs.importingForm)
-            var currentStatus = await this.$http.post(this.$route.fullPath, formData)
+            var currentStatus = await this.$http.post(window.location, formData)
 
             await this.timeout(1000)
 
@@ -221,7 +221,7 @@ export default {
                 if (this.dotsCount > 3)
                     this.dotsCount = 1
 
-                currentStatus = await this.$http.get('/Template/ImportStatus/' + currentStatus.data.status.processId)
+                currentStatus = await this.$http.get(this.$config.model.checkImportingStatus + '/' + currentStatus.data.status.processId)
             }
 
             if (currentStatus.data.status.status == 'Error') {

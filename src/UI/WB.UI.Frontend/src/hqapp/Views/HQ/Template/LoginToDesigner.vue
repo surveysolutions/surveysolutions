@@ -104,7 +104,7 @@ export default {
             if(validationResult) {
                 this.$http({
                     method: 'post',
-                    url: '/Template/LoginToDesigner',
+                    url: this.$config.model.loginAction,
                     data: {
                         userName: this.userName,
                         password: this.password,
