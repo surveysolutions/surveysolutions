@@ -64,13 +64,18 @@ namespace WB.UI.Headquarters.Services
             {
                 var workspace = s.GetInstance<IWorkspaceContextAccessor>().CurrentWorkspace();
 
-                if (workspace != null && baseUrl != null)
+                if (workspace != null)
                 {
-                    var uriBuilder = new UriBuilder(baseUrl);
-                    uriBuilder.Path += workspace.Name;
-                    baseUrl = uriBuilder.Uri;
+                    hc.DefaultRequestHeaders.Add(@"x-tenant-space", workspace.Name);
+
+                    if (baseUrl != null)
+                    {
+                        var uriBuilder = new UriBuilder(baseUrl);
+                        uriBuilder.Path += workspace.Name;
+                        baseUrl = uriBuilder.Uri;
+                    }
                 }
-                
+
                 IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings = s.GetInstance<IPlainKeyValueStorage<ExportServiceSettings>>();
                 return exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
             });
