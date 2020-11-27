@@ -170,7 +170,6 @@ namespace WB.UI.Headquarters.Controllers
                 SurveySetupUrl = Url.Action("Index", "SurveySetup"), 
                 ListOfMyQuestionnaires = Url.Action("Import"),
                 NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id),
-                CheckImportingStatus = Url.Action("ImportStatus"),
             };
             model.QuestionnairesToUpgradeFrom =
                 this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber)
@@ -218,8 +217,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(new
             {
                 BackLink = Url.Action("Index", "SurveySetup"),
-                LoginAction = Url.Action("LoginToDesigner", "Template"),
-                DesignerLogo = Url.Content("~/img/designer-logo.png"),
                 ListUrl = Url.Action("Import")
             });
         }
