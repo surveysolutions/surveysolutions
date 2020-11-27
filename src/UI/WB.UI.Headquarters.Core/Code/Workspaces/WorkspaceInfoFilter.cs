@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public const string CookieName = "currentWorkspace";
         
-        public WorkspaceInfoFilter(IWorkspacesService workspacesService,
+        public WorkspaceInfoFilter(IWorkspacesCache workspacesService,
             IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.workspacesService = workspacesService;

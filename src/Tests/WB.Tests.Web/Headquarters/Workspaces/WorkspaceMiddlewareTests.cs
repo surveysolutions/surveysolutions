@@ -19,7 +19,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
         private WorkspaceMiddleware CreateMiddleware(
             RequestDelegate next = null,
-            IWorkspacesService workspacesService = null)
+            IWorkspacesCache workspacesService = null)
         {
             RequestDelegate testNext = next;
             if (testNext == null)
@@ -27,8 +27,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                 testNext = innerHttpContext => Task.CompletedTask;
             }
             var middleware = new WorkspaceMiddleware(
-                testNext,
-                workspacesService ?? Mock.Of<IWorkspacesService>()
+                testNext
                 );
             
             return middleware;
