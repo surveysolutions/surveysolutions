@@ -397,6 +397,7 @@ namespace WB.UI.Headquarters
             
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseRedirectIntoWorkspace();
 
             app.UseSwagger();
             app.UseSession();

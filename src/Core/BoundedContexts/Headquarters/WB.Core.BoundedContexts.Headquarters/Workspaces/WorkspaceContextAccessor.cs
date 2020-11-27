@@ -49,6 +49,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             this.holder = holder;
         }
 
-        public WorkspaceContext CurrentWorkspace() => holder.Current ?? Workspace.Default.AsContext();
+        public WorkspaceContext CurrentWorkspace()
+        {
+            var current = holder.Current;
+            if (current != null)
+            {
+                return current;
+            }
+
+            var result = Workspace.Default.AsContext();
+            result.UsingFallbackToDefaultWorkspace = true;
+            return result;
+        }
     }
 }
