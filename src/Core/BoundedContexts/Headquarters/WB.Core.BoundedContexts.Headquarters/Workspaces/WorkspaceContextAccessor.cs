@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 
         public void Set(string name)
         {
-            var workspacesService = serviceLocator.GetInstance<IWorkspacesService>();
+            var workspacesService = serviceLocator.GetInstance<IWorkspacesCache>();
             var workspace = workspacesService.GetWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             holder.Current = workspace ?? throw new ArgumentNullException(nameof(name));
         }
@@ -49,17 +49,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             this.holder = holder;
         }
 
-        public WorkspaceContext CurrentWorkspace()
+        public WorkspaceContext? CurrentWorkspace()
         {
-            var current = holder.Current;
-            if (current != null)
-            {
-                return current;
-            }
-
-            var result = Workspace.Default.AsContext();
-            result.UsingFallbackToDefaultWorkspace = true;
-            return result;
+            return holder.Current;
         }
     }
 }

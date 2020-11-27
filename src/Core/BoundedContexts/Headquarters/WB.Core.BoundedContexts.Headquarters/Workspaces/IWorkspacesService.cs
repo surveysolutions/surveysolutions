@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -47,9 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             return memoryCache.GetOrCreate("workspaces", entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-
-                var workspaces = serviceLocator.GetInstance<IWorkspacesService>().GetWorkspaces().ToList();
-                return workspaces;
+                return serviceLocator.ExecuteInScope<IWorkspacesService, List<WorkspaceContext>>(ws =>
+                    ws.GetWorkspaces().ToList());
             });
         }
     }
