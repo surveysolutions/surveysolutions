@@ -1252,7 +1252,7 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
 
-        public IWorkspaceContextAccessor WorkspaceNameProvider(string workspaceName = null)
+        public IWorkspaceContextAccessor WorkspaceNameProvider(string workspaceName = "primary")
         {
             return !string.IsNullOrEmpty(workspaceName) 
                 ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == new WorkspaceContext(workspaceName, String.Empty)) 
