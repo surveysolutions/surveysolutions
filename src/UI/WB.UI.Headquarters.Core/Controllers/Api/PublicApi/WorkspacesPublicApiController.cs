@@ -23,14 +23,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
+        private readonly IWorkspacesCache workspacesCache;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
             IMapper mapper,
-            IWorkspacesService workspacesService)
+            IWorkspacesService workspacesService,
+            IWorkspacesCache workspacesCache)
         {
             this.workspaces = workspaces;
             this.mapper = mapper;
             this.workspacesService = workspacesService;
+            this.workspacesCache = workspacesCache;
         }
 
         /// <summary>
@@ -92,7 +95,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 
                 this.workspaces.Store(workspace, null);
                 this.workspacesService.Generate(workspace.Name, DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
-                
+                this.workspacesCache.InvalidateCache();
+
                 return CreatedAtAction("Details", routeValues: new {id = workspace.Name}, value: this.mapper.Map<WorkspaceApiView>(workspace));
             }
 
@@ -112,10 +116,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         {
             if (ModelState.IsValid)
             {
-
                 var existing = this.workspaces.GetById(id);
                 
                 existing.DisplayName = request.DisplayName!;
+                this.workspacesCache.InvalidateCache();
                 return NoContent();
             }
 
