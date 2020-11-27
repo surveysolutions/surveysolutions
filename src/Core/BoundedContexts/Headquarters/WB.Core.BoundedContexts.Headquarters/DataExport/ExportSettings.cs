@@ -65,8 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         public string ExportServiceBaseUrl => exportOptions.Value.ExportServiceUrl;
 
-        public string ApiKey =>
-            this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
+        public string ApiKey => this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 
         private string GeneratePassword()
         {

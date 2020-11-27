@@ -33,6 +33,11 @@ namespace WB.UI.Headquarters.Code.Authentication
                 context.Succeed(requirement);
             }
 
+            if (context.User.Identity.AuthenticationType == "TenantToken")
+            {
+                context.Succeed(requirement);
+            }
+
             return Task.CompletedTask;
         }
     }
