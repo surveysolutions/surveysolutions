@@ -60,12 +60,8 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
             result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
 
-            var workspaceContext = Workspace.Default.AsContext();
-            workspaceContext.UsingFallbackToDefaultWorkspace = true;
-            WorkspaceContext defaultWorkspace = currentWorkspace != null
-                ? new WorkspaceContext(currentWorkspace, "")
-                : workspaceContext;
-            var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == defaultWorkspace);
+            var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == 
+                                                                             (currentWorkspace == null ? null : new WorkspaceContext(currentWorkspace, String.Empty)));
 
             result.RequestServices = Mock.Of<IServiceProvider>(
                 x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor
