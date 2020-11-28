@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters
         // Don't build the container; that gets done for you by the factory.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            autofacKernel = new AutofacKernel(builder, c => InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(c)));
+            autofacKernel = new AutofacKernel(builder);
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
