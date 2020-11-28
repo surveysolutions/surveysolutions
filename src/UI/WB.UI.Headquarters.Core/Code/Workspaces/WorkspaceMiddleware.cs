@@ -38,18 +38,28 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
             List<WorkspaceContext> workspaces = workspacesService.GetWorkspaces().ToList();
 
+            async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
+            {
+                using var scope = context.RequestServices.CreateScope();
+                context.RequestServices = scope.ServiceProvider;
+                scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspaceContext);
+                await next(context);
+            }
+
+            foreach (var path in InfrastructureEndpoints)
+            {
+                if (context.Request.Path.StartsWithSegments(path))
+                {
+                    await InvokeNextWithScope(workspaces.First(w => w.Name == Workspace.Default.Name));
+                    return;
+                }
+            }
+
             foreach (var workspace in workspaces)
             {
                 var workspaceMatched = context.Request.Path.StartsWithSegments("/" + workspace.Name,
                     out var matchedPath,
                     out var remainingPath);
-
-                if (!workspaceMatched && workspace.Name == Workspace.Default.Name)
-                {
-                    workspaceMatched = context.Request.Path.StartsWithSegments("/api",
-                        out matchedPath,
-                        out remainingPath);
-                }
 
                 if (!workspaceMatched)
                     continue;
@@ -62,10 +72,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 try
                 {
                     workspace.PathBase = originalPathBase;
-                    using var scope = context.RequestServices.CreateScope();
-                    context.RequestServices = scope.ServiceProvider;
-                    scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace);
-                    await next(context);
+                    await InvokeNextWithScope(workspace);
                 }
                 finally
                 {
@@ -78,5 +85,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             await next(context);
         }
+
+        static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version" };
     }
 }
