@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -76,15 +75,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
-
-            InScopeExecutor.Init(executor.Object);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
             InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned(existingInterviewKey);
 
-            var service = Create.Service.InterviewPackagesService(interviews: interviews, commandService: commandService.Object);
+            var service = Create.Service.InterviewPackagesService(interviews: interviews,
+                commandService: commandService.Object, inScopeExecutor: executor);
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent));

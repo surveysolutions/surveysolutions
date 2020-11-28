@@ -53,15 +53,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IAuthorizationHandler, WorkspaceRequirementHandler>();
 
-            if (configuration.IsLazyInterviewNotificationEnabled())
-            {
-                registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
-                registry.Bind<WebInterviewNotificationService>();
-            }
-            else
-            {
-                registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
-            }
+            registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
 
             registry.Bind<IPipelineModule, PauseResumePipelineModule>();
             registry.Bind<UpdateRequiredFilter>();
@@ -76,11 +68,11 @@ namespace WB.UI.Headquarters
                 cfg.AddProfile(new WorkspacePublicApiMapProfile());
                 cfg.ConstructServicesUsing(_.Get);
             }).CreateMapper());
-            
+
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
             ConfigureEventBus(registry);
-            
+
             var config = captchaSection.Get<CaptchaConfig>() ?? new CaptchaConfig();
             var provider = config.CaptchaType;
 
@@ -104,7 +96,7 @@ namespace WB.UI.Headquarters
         {
             EventHandlersConfig eventBusConfig = configuration.GetSection("EventHandlers").Get<EventHandlersConfig>();
 
-            var eventBusSettings =  new EventBusSettings
+            var eventBusSettings = new EventBusSettings
             {
                 DisabledEventHandlerTypes =
                     eventBusConfig.Disabled
