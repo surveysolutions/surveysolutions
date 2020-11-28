@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
         private readonly ILogger logger;
         private readonly ISessionFactory sessionFactory;
+        private readonly IInScopeExecutor inScopeExecutor;
         private readonly SyncSettings syncSettings;
         
         public InterviewPackagesService(
@@ -44,6 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
             ILogger logger,
             ISessionFactory sessionFactory,
+            IInScopeExecutor inScopeExecutor,
             SyncSettings syncSettings)
         {
             this.interviewPackageStorage = interviewPackageStorage;
@@ -51,6 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.packagesTracker = packagesTracker;
             this.logger = logger;
             this.sessionFactory = sessionFactory;
+            this.inScopeExecutor = inScopeExecutor;
             this.syncSettings = syncSettings;
         }
 
@@ -197,7 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //Uow would contain partial data
                 //so a new scope created
 
-                InScopeExecutor.Current.Execute(serviceLocator =>
+                inScopeExecutor.Execute(serviceLocator =>
                 {
                     var interviewsLocal =
                         serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
