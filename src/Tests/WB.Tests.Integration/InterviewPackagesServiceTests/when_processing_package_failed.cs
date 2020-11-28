@@ -26,7 +26,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -83,8 +82,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(UnitOfWork);
-
-            InScopeExecutor.Init(new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object));
 
             var interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin),
