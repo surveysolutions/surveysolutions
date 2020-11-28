@@ -26,26 +26,26 @@ namespace WB.UI.Shared.Web.Versions
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            //if (shouldStoreVersionToDb)
-            //{
-            //    var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
-            //    serviceLocator.GetInstance<IProductVersionHistory>()
-            //                  .RegisterCurrentVersion();
-            //    unitOfWork.AcceptChanges();
-            //}
+            if (shouldStoreVersionToDb)
+            {
+                var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
+                serviceLocator.GetInstance<IProductVersionHistory>()
+                              .RegisterCurrentVersion();
+                unitOfWork.AcceptChanges();
+            }
 
             return Task.CompletedTask;
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            //if (shouldStoreVersionToDb)
-            //{
-            //    var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
-            //    serviceLocator.GetInstance<IProductVersionHistory>()
-            //        .RegisterCurrentVersion();
-            //    unitOfWork.AcceptChanges();
-            //}
+            if (shouldStoreVersionToDb)
+            {
+                var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
+                serviceLocator.GetInstance<IProductVersionHistory>()
+                    .RegisterCurrentVersion();
+                unitOfWork.AcceptChanges();
+            }
 
             return Task.CompletedTask;
         }
