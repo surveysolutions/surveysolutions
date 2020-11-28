@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -149,7 +150,7 @@ namespace WB.Tests.Web.TestFactories
                 supportedVersionProvider ?? Abc.Create.Service.SupportedVersionProvider(),
                 identityManager ?? Create.Service.SignInManager(),
                 userManager ?? Create.Service.UserManager(),
-                userRepository);
+                userRepository, Mock.Of<IWorkspacesService>());
             return result;
         }
 
