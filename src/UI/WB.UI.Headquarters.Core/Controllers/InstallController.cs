@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -17,14 +19,17 @@ namespace WB.UI.Headquarters.Controllers
         private readonly SignInManager<HqUser> signInManager;
         private readonly UserManager<HqUser> userManager;
         private readonly IUserRepository userRepository;
+        private readonly IWorkspacesService workspacesService;
 
         public InstallController(ISupportedVersionProvider supportedVersionProvider,
                                  SignInManager<HqUser> identityManager,
                                  UserManager<HqUser> userManager,
-                                 IUserRepository userRepository)
+                                 IUserRepository userRepository,
+                                 IWorkspacesService workspacesService)
         {
             this.userManager = userManager;
             this.userRepository = userRepository;
+            this.workspacesService = workspacesService;
             this.supportedVersionProvider = supportedVersionProvider;
             this.signInManager = identityManager;
         }
@@ -60,9 +65,8 @@ namespace WB.UI.Headquarters.Controllers
                 if (creationResult.Succeeded)
                 {
                     await this.userManager.AddToRoleAsync(hqUser, UserRoles.Administrator.ToString());
-
+                    this.workspacesService.AddUserToWorkspace(hqUser.Id, WorkspaceConstants.DefaultWorkspaceName);
                     await this.signInManager.SignInAsync(hqUser, false);
-
                     this.supportedVersionProvider.RememberMinSupportedVersion();
 
                     return this.Redirect("~/");
