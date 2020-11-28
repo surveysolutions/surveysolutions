@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 
@@ -21,16 +22,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
         private readonly IAssignmentsImportService assignmentsImportService;
         private readonly AssignmentsImportTask assignmentsImportTask;
         private readonly SampleImportSettings sampleImportSettings;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public AssignmentsVerificationJob(ILogger logger,
             IAssignmentsImportService assignmentsImportService,
             AssignmentsImportTask assignmentsImportTask,
-            SampleImportSettings sampleImportSettings)
+            SampleImportSettings sampleImportSettings,
+            IInScopeExecutor inScopeExecutor)
         {
             this.logger = logger;
             this.assignmentsImportService = assignmentsImportService;
             this.assignmentsImportTask = assignmentsImportTask;
             this.sampleImportSettings = sampleImportSettings;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -54,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                     new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                        inScopeExecutor.Execute((serviceLocatorLocal) =>
                         {
                             var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
                             IQuestionnaireStorage threadQuestionnaireStorage = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>();
@@ -81,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                         });
                     });
 
-                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                inScopeExecutor.Execute((serviceLocatorLocal) =>
                     serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
                         .SetImportProcessStatus(AssignmentsImportProcessStatus.Import));
 

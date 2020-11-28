@@ -22,7 +22,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -77,16 +76,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     return serviceLocatorNestedMock.Object;
                 });
 
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
-            InScopeExecutor.Init(executor.Object);
-            
             interviewPackagesService = Create.Service.InterviewPackagesService(
                     serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
                     interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
-                    syncSettings: syncSettings);
+                    syncSettings: syncSettings, inScopeExecutor: executor);
 
             interviewPackagesService.ProcessPackage(new InterviewPackage
                 {
