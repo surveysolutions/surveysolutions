@@ -34,12 +34,10 @@ namespace WB.UI.Headquarters.Code
         private const string UnknownStringArgumentValue = "unknown";
         private readonly SynchronizationLogType logAction;
         private readonly Counter messagesTotal = new Counter(@"wb_hq_sync_log_total_count", @"Count of sync log actions", "action");
-        private readonly IInScopeExecutor inScopeExecutor;
 
         public WriteToSyncLogAttribute(SynchronizationLogType logAction)
         {
             this.logAction = logAction;
-            this.inScopeExecutor = InScopeExecutor.Current;
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -233,7 +231,7 @@ namespace WB.UI.Headquarters.Code
 
                 messagesTotal.Labels(this.logAction.ToString()).Inc();
 
-                this.inScopeExecutor.Execute(locator =>
+                context.HttpContext.RequestServices.GetService<IInScopeExecutor>().Execute(locator =>
                 {
                     var s = locator.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
                     s.Store(logItem, Guid.NewGuid());
