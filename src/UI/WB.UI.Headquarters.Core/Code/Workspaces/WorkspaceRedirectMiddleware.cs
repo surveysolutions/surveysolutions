@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public static readonly string[] NotScopedToWorkspacePaths =
         {
-            "/graphql", "/Account", "/api"
+            "/graphql", "/Account", "/api", "/.hc", "/metrics"
         };
     }
 }
