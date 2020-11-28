@@ -19,7 +19,9 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
             Create.ForeignKey().FromTable("workspace_users").ForeignColumn("user_id")
                 .ToTable("users").InSchema("users").PrimaryColumn("Id").OnDelete(Rule.Cascade);
 
-            Insert.IntoTable("workspaces").Row(new {name = "primary", display_name = "primary"});
+            Insert.IntoTable("workspaces")
+                .Row(new {name = "primary", display_name = "primary"});
+
             Execute.Sql(@"insert into workspaces.workspace_users (workspace, user_id)
                         select 'primary' as workspace, u.""Id"" as user_id 
                         from users.users u 

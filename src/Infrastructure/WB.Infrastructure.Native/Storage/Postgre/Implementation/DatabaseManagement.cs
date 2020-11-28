@@ -73,7 +73,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (versionInfoExists)
             {
                 int migrationsCount = connection.ExecuteScalar<int>($"SELECT COUNT(\"Version\") FROM {workspaceSchemaName}.\"VersionInfo\"");
-                return migrationsCount > 2;
+                return migrationsCount >= 2;
             }
             
             return false;
