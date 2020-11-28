@@ -21,7 +21,7 @@ namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
             FOR p_table IN
                 SELECT oid FROM pg_class
             WHERE relnamespace = '{0}'::regnamespace
-            AND relkind = 'r' AND relname NOT IN('VersionInfo', 'hibernate_unique_key') 
+            AND relkind = 'r' AND relname NOT IN('VersionInfo', 'hibernate_unique_key', 'productversionhistory') 
             LOOP
                 EXECUTE format('ALTER TABLE %s SET SCHEMA ws_primary', p_table);
             END LOOP;
@@ -29,7 +29,8 @@ namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
 
             Execute.Sql(string.Format(sqlFormat, "plainstore"));
             Execute.Sql(string.Format(sqlFormat, "readside"));
-
+            Execute.Sql("CREATE SCHEMA IF NOT EXISTS workspaces");
+            Execute.Sql("ALTER TABLE plainstore.productversionhistory SET SCHEMA workspaces");
             Create.Table("hibernate_unique_key")
                 .WithColumn("next_hi").AsInt32().NotNullable();
             

@@ -742,17 +742,6 @@ CREATE TABLE mapbrowseitems (
                                            minscale double precision
 );
 
-
---
--- Name: productversionhistory; Type: TABLE; Schema: ws_primary; Owner: -
---
-
-CREATE TABLE productversionhistory (
-                                                  updatetimeutc timestamp without time zone NOT NULL,
-                                                  productversion text
-);
-
-
 --
 -- Name: questionnaire_entities; Type: TABLE; Schema: ws_primary; Owner: -
 --
