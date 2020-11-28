@@ -47,15 +47,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
                 status.Message = Modules.InitializingDb;
-                
+
                 DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
                     this.connectionSettings.PrimaryWorkspaceSchemaName);
-                
+
                 await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
 
                 status.Message = Modules.MigrateDb;
-                
-                if (!DatabaseManagement.MigratedToWorkspaces(this.connectionSettings.PrimaryWorkspaceSchemaName, this.connectionSettings.ConnectionString))
+
+                var hasPlainstoreMigrations = DatabaseManagement.MigratedToWorkspaces(
+                    this.connectionSettings.PlainStorageSchemaName, this.connectionSettings.ConnectionString);
+
+                var hasWorkspacesMigrations = DatabaseManagement.MigratedToWorkspaces(
+                    this.connectionSettings.PrimaryWorkspaceSchemaName, this.connectionSettings.ConnectionString);
+
+                if (hasPlainstoreMigrations && !hasWorkspacesMigrations)
                 {
                     void MigrateReadside()
                     {
@@ -98,7 +104,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     }
 
                     MigrateReadside();
-                    
+
                     status.Message = Modules.InitializingDb;
                     DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
                         this.connectionSettings.EventsSchemaName);
@@ -142,7 +148,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     status.ClearMessage();
                 }
 
-                if (this.connectionSettings.MigrateToPrimaryWorkspace != null)
+                if (hasPlainstoreMigrations && !hasWorkspacesMigrations && this.connectionSettings.MigrateToPrimaryWorkspace != null)
                 {
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
@@ -152,7 +158,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                     status.ClearMessage();
                 }
-                
+
                 if (this.connectionSettings.WorkspacesMigrationSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
@@ -181,14 +187,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private async Task MigrateWorkspacesAsync(UnderConstructionInfo status, ILoggerProvider loggerProvider)
         {
             await using var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString);
-            IEnumerable<string> workspaces = 
+            IEnumerable<string> workspaces =
                 await connection.QueryAsync<string>($"select name from {this.connectionSettings.WorkspacesSchemaName}.workspaces");
 
             foreach (var workspace in workspaces)
             {
                 status.Message = Modules.InitializingDb;
-                var targetSchema = "ws_" + workspace; 
-                
+                var targetSchema = "ws_" + workspace;
+
                 DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString, targetSchema);
 
                 DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
@@ -230,11 +236,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             var workspace = context.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
 
-            return sessionFactories.GetOrAdd(workspace?.Name ?? WorkspaceConstants.SchemaName, 
+            return sessionFactories.GetOrAdd(workspace?.Name ?? WorkspaceConstants.SchemaName,
                 space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace?.SchemaName ?? WorkspaceConstants.SchemaName))).Value;
         }
 
-        private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories 
+        private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories
             = new ConcurrentDictionary<string, Lazy<ISessionFactory>>();
 
         private ISessionFactory BuildSessionFactory(string workspaceSchema)
@@ -260,7 +266,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             cfg.AddDeserializedMapping(maps, "maps");
             cfg.AddDeserializedMapping(usersMaps, "users");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
-            
+
             // File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
 
             cfg.SessionFactory().GenerateStatistics();
@@ -280,7 +286,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             mapper.AfterMapProperty += (inspector, member, customizer) =>
             {
-                var propertyInfo = (PropertyInfo) member.LocalMember;
+                var propertyInfo = (PropertyInfo)member.LocalMember;
 
                 customizer.Column('"' + propertyInfo.Name + '"');
             };
@@ -295,7 +301,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         /// </summary>
         protected static string Serialize(HbmMapping hbmElement)
         {
-            var setting = new XmlWriterSettings {Indent = true};
+            var setting = new XmlWriterSettings { Indent = true };
             var serializer = new XmlSerializer(typeof(HbmMapping));
             using (var memStream = new MemoryStream())
             {
@@ -329,7 +335,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
-                var propertyInfo = (PropertyInfo) member.LocalMember;
+                var propertyInfo = (PropertyInfo)member.LocalMember;
                 if (propertyInfo.PropertyType == typeof(string))
                 {
                     customizer.Type(NHibernateUtil.StringClob);

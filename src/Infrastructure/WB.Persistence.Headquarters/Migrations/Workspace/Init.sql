@@ -1488,15 +1488,6 @@ ALTER TABLE ONLY invitations
 ALTER TABLE ONLY mapbrowseitems
     ADD CONSTRAINT "PK_mapbrowseitems" PRIMARY KEY (id);
 
-
---
--- Name: productversionhistory PK_productversionhistory; Type: CONSTRAINT; Schema: ws_primary; Owner: -
---
-
-ALTER TABLE ONLY productversionhistory
-    ADD CONSTRAINT "PK_productversionhistory" PRIMARY KEY (updatetimeutc);
-
-
 --
 -- Name: questionnairebrowseitems PK_questionnairebrowseitems; Type: CONSTRAINT; Schema: ws_primary; Owner: -
 --
