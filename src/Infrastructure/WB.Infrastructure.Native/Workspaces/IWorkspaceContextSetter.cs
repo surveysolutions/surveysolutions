@@ -1,7 +1,4 @@
-using WB.Infrastructure.Native.Workspaces;
-
-#nullable enable
-namespace WB.Core.BoundedContexts.Headquarters.Workspaces
+namespace WB.Infrastructure.Native.Workspaces
 {
     public interface IWorkspaceContextSetter
     {

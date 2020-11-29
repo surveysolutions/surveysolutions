@@ -40,9 +40,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
             {
-                using var scope = context.RequestServices.CreateScope();
+                using var scope = context.RequestServices.CreateWorkspaceScope(workspaceContext);
                 context.RequestServices = scope.ServiceProvider;
-                scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspaceContext);
                 await next(context);
             }
 
