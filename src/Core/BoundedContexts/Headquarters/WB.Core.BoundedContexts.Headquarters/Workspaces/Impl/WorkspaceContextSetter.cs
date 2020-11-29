@@ -1,21 +1,10 @@
-#nullable enable
 using System;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Workspaces;
 
-namespace WB.Core.BoundedContexts.Headquarters.Workspaces
+namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 {
-    public class WorkspaceContextHolder : IWorkspaceContextHolder
-    {
-        public WorkspaceContext? Current { get; set; }
-    }
-
-     interface IWorkspaceContextHolder
-    {
-        WorkspaceContext? Current { get; set; }
-    }
-
     class WorkspaceContextSetter : IWorkspaceContextSetter
     {
         private readonly IWorkspaceContextHolder holder;
@@ -37,21 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             var workspacesService = serviceLocator.GetInstance<IWorkspacesCache>();
             var workspace = workspacesService.GetWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             holder.Current = workspace ?? throw new ArgumentNullException(nameof(name));
-        }
-    }
-
-    class WorkspaceContextAccessor : IWorkspaceContextAccessor
-    {
-        private readonly IWorkspaceContextHolder holder;
-
-        public WorkspaceContextAccessor(IWorkspaceContextHolder holder)
-        {
-            this.holder = holder;
-        }
-
-        public WorkspaceContext? CurrentWorkspace()
-        {
-            return holder.Current;
         }
     }
 }
