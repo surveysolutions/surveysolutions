@@ -1,7 +1,7 @@
+#nullable enable
 using System.Collections.Generic;
 using WB.Infrastructure.Native.Workspaces;
 
-#nullable enable
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
     public class Workspace

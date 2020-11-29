@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
@@ -27,8 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
             foreach (var workspace in workspaces)
             {
-                using var scope = jobScope.ServiceProvider.CreateScope();
-                scope.ServiceProvider.GetRequiredService<IWorkspaceContextSetter>().Set(workspace);
+                using var scope = jobScope.ServiceProvider.CreateWorkspaceScope(workspace);
 
                 try
                 {
