@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using HotChocolate.Resolvers;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using WB.Infrastructure.Native.Workspaces;
@@ -25,8 +26,17 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             if (workspace == null)
             {
+                if (!(context.Resource is IDirectiveContext ctx)) return Task.CompletedTask;
+
+                var workspaceArgument = ctx.Argument<string>("workspace");
+
+                if (context.User.HasClaim("Workspace", workspaceArgument))
+                {
+                    context.Succeed(requirement);
+                }
+
                 return Task.CompletedTask;
-            }
+            } 
             
             if (context.User.HasClaim("Workspace", workspace.Name))
             {
