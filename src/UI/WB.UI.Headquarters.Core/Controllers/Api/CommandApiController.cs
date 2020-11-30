@@ -109,6 +109,14 @@ namespace WB.UI.Headquarters.Controllers.Api
                             this.commandService.Execute(transformedCommand);
                             CompleteCalendarEventIfExists(approveInterview.InterviewId, approveInterview.UserId);
                             break;
+                        case HqRejectInterviewCommand rejectInterview:
+                            this.commandService.Execute(transformedCommand);
+                            CompleteCalendarEventIfExists(rejectInterview.InterviewId, rejectInterview.UserId);
+                            break;
+                        case HqApproveInterviewCommand approveInterview:
+                            this.commandService.Execute(transformedCommand);
+                            CompleteCalendarEventIfExists(approveInterview.InterviewId, approveInterview.UserId);
+                            break;
                         default:
                             this.commandService.Execute(transformedCommand);
                             break;
