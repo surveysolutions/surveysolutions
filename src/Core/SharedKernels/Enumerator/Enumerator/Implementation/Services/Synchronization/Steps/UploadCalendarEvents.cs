@@ -75,7 +75,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Events = this.serializer.Serialize(eventsToSend),
                     MetaInfo = new CalendarEventMetaInfo()
                     {
-                        ResponsibleId = calendarEvent.UserId,
                         LastUpdateDateTime = DateTime.SpecifyKind(calendarEvent.LastUpdateDateUtc, DateTimeKind.Utc),
                         InterviewId = calendarEvent.InterviewId,
                         AssignmentId = calendarEvent.AssignmentId,

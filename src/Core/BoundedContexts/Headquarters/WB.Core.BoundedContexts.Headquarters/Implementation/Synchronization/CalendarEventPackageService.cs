@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -26,13 +27,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsLocal;
         private readonly IAssignmentsService assignmentsLocal;
         private readonly ISerializer serializer;
+        private readonly IUserViewFactory userViewFactory;
 
         public CalendarEventPackageService(ILogger<CalendarEventPackageService> logger,
             ICalendarEventService calendarEventService,
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsLocal,
             IAssignmentsService assignmentsLocal,
-            ISerializer serializer
+            ISerializer serializer,
+            IUserViewFactory userViewFactory
             )
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -41,6 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.interviewsLocal = interviewsLocal;
             this.assignmentsLocal = assignmentsLocal;
             this.serializer = serializer;
+            this.userViewFactory = userViewFactory;
         }
 
         public void ProcessPackage(CalendarEventPackage calendarEventPackage)
@@ -62,11 +66,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //ignore calendar event event if responsible is another person
                 var currentResponsibleId = GetResponsibleForCalendarEventEntity(calendarEventPackage);
                 if (currentResponsibleId != null && currentResponsibleId.Value != responsibleId)
-                    deleteCalendarEventAfterApplying = true;
+                {
+                    bool shouldIgnorePackage = true;
+                    var currentUser = userViewFactory.GetUser(currentResponsibleId.Value);
+                    var packageUser = userViewFactory.GetUser(responsibleId);
+                    if (packageUser.IsSupervisor() 
+                        && currentUser.IsInterviewer() 
+                        && currentUser.Supervisor.Id == packageUser.PublicKey)
+                    {
+                        shouldIgnorePackage = false;
+                    }
+
+                    if (shouldIgnorePackage)
+                    {
+                        logger.LogError($"Ignored events by calendar event {calendarEventPackage.Id} from {calendarEventPackage.ResponsibleId} because current responsible {currentUser.PublicKey}");
+                        return;
+                    }
+                }
 
                 //remove other older CE 
-                if (activeCalendarEventByInterviewOrAssignmentId != null &&
-                    activeCalendarEventByInterviewOrAssignmentId.PublicKey != calendarEventPackage.CalendarEventId
+                if (activeCalendarEventByInterviewOrAssignmentId != null 
+                    && activeCalendarEventByInterviewOrAssignmentId.PublicKey != calendarEventPackage.CalendarEventId
                     && activeCalendarEventByInterviewOrAssignmentId.UpdateDateUtc < calendarEventPackage.LastUpdateDateUtc
                     && !deleteCalendarEventAfterApplying)
                 {
