@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 CalendarEventId = package.CalendarEventId,
                 Events = package.Events,
                 IncomingDate = DateTime.UtcNow,
-                ResponsibleId = package.MetaInfo.ResponsibleId,
+                ResponsibleId = authorizedUser.Id,
                 InterviewId = package.MetaInfo.InterviewId,
                 AssignmentId = package.MetaInfo.AssignmentId,
                 LastUpdateDateUtc = package.MetaInfo.LastUpdateDateTime.UtcDateTime,

@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 
                 bool deleteCalendarEventAfterApplying = false, restoreCalendarEventBefore = false, restoreCalendarEventAfter = false;
 
-                var responsibleId = request.CalendarEvent.MetaInfo.ResponsibleId;
+                var responsibleId = request.InterviewerId;
 
                 var activeCalendarEvent = request.CalendarEvent.MetaInfo.InterviewId.HasValue
                     ? calendarEventStorage.GetCalendarEventForInterview(request.CalendarEvent.MetaInfo.InterviewId.Value)
@@ -140,7 +140,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 //ignore calendar event event if responsible is another person
                 var currentResponsibleId = GetResponsibleForCalendarEventEntity(request);
                 if (currentResponsibleId != null && currentResponsibleId.Value != responsibleId)
-                    deleteCalendarEventAfterApplying = true;
+                {
+                    logger.Error($"Ignored events by calendar event {request.CalendarEvent.CalendarEventId} from {responsibleId} because current responsible {currentResponsibleId.Value}");
+                    return Task.FromResult(new OkResponse());
+                }
                 
                 //remove other older CE 
                 if (activeCalendarEvent != null &&
