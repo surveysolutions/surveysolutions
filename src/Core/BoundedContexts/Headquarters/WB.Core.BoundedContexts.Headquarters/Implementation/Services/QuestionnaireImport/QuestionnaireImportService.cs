@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
-                await commandService.ExecuteAsync(new ImportFromDesigner(
+                commandService.Execute(new ImportFromDesigner(
                     userId,
                     questionnaire,
                     isCensusMode,
