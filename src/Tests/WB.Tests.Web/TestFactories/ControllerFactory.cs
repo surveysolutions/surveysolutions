@@ -150,7 +150,7 @@ namespace WB.Tests.Web.TestFactories
                 supportedVersionProvider ?? Abc.Create.Service.SupportedVersionProvider(),
                 identityManager ?? Create.Service.SignInManager(),
                 userManager ?? Create.Service.UserManager(),
-                userRepository, Mock.Of<IWorkspacesService>());
+                userRepository);
             return result;
         }
 

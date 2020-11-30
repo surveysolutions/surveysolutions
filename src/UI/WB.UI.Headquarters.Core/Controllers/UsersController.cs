@@ -38,8 +38,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
-        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
-        private readonly IWorkspacesService workspacesService;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -50,17 +48,13 @@ namespace WB.UI.Headquarters.Controllers
             UserManager<HqUser> userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options,
-            IWorkspaceContextAccessor workspaceContextAccessor,
-            IWorkspacesService workspacesService)
+            IOptions<HeadquartersConfig> options)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
-            this.workspaceContextAccessor = workspaceContextAccessor;
-            this.workspacesService = workspacesService;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -474,9 +468,6 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     await this.userManager.AddToRoleAsync(user, model.Role);
-                    var currentWorkspace = this.workspaceContextAccessor.CurrentWorkspace() 
-                                           ?? throw new Exception("Cannot add user to non existing workspace");
-                    this.workspacesService.AddUserToWorkspace(user.Id, currentWorkspace.Name);
                 }
             }
             
