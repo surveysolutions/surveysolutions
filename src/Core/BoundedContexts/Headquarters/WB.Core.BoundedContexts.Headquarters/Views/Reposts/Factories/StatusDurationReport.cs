@@ -20,14 +20,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     public class StatusDurationReport : IStatusDurationReport
     {
-        private readonly UnitOfWorkConnectionSettings plainStorageSettings;
+        private readonly IUnitOfWork unitOfWork;
 
         private const string InterviewsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportInterviews.sql";
         private const string AssignmentsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportAssignments.sql";
 
-        public StatusDurationReport(UnitOfWorkConnectionSettings plainStorageSettings)
+        public StatusDurationReport(IUnitOfWork unitOfWork)
         {
-            this.plainStorageSettings = plainStorageSettings;
+            this.unitOfWork = unitOfWork;
         }
 
         class InterviewsCounterObject
@@ -166,16 +166,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             string query = GetSqlQueryForInterviews(AssignmentsScriptName);
 
-            IEnumerable<AssignmentsCounterObject> datesAndStatuses;
-            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
+            var datesAndStatuses = await unitOfWork.Session.Connection.QueryAsync<AssignmentsCounterObject>(query, new
             {
-                datesAndStatuses = await connection.QueryAsync<AssignmentsCounterObject>(query, new
-                {
-                    questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion,
-                    supervisorid = input.SupervisorId
-                });
-            }
+                questionnaireid = input.TemplateId,
+                questionnaireversion = input.TemplateVersion,
+                supervisorid = input.SupervisorId
+            });
+
             return datesAndStatuses;
         }
 
@@ -183,16 +180,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             string query = GetSqlQueryForInterviews(InterviewsScriptName);
 
-            IEnumerable<InterviewsCounterObject> datesAndStatuses;
-            using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
+            var datesAndStatuses = await unitOfWork.Session.Connection.QueryAsync<InterviewsCounterObject>(query, new
             {
-                datesAndStatuses = await connection.QueryAsync<InterviewsCounterObject>(query, new
-                {
-                    questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion,
-                    supervisorid = input.SupervisorId
-                });
-            }
+                questionnaireid = input.TemplateId,
+                questionnaireversion = input.TemplateVersion,
+                supervisorid = input.SupervisorId
+            });
+            
             return datesAndStatuses;
         }
 
