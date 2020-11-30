@@ -40,6 +40,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 opt.LoginPath = "/Account/LogOn";
                 opt.AccessDeniedPath = "/Error/401";
                 opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                opt.Cookie.Path = "/";
 
                 opt.ForwardDefaultSelector = ctx =>
                 {

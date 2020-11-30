@@ -100,6 +100,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -367,6 +368,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<SendInterviewCompletedJob>();
+
+            registry.Bind<IVirtualPathService, VirtualPathService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
