@@ -1271,7 +1271,8 @@ namespace WB.Tests.Abc.TestFactories
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
             IAssignmentsService assignments,
-            ISerializer serializer)
+            ISerializer serializer,
+            IUserViewFactory userViewFactory = null)
         {
             return new CalendarEventPackageService(
                 Mock.Of<ILogger<CalendarEventPackageService>>(),
@@ -1279,7 +1280,8 @@ namespace WB.Tests.Abc.TestFactories
                 commandService ?? Mock.Of<ICommandService>(),
                 interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 assignments ?? Mock.Of<IAssignmentsService>(),
-                serializer ?? Mock.Of<ISerializer>());
+                serializer ?? Mock.Of<ISerializer>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>());
         }
     }
 
