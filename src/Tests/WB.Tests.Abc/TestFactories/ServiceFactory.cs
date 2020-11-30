@@ -681,7 +681,11 @@ namespace WB.Tests.Abc.TestFactories
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 currentUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IQRCodeHelper>(),
-                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>());
+                Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(),
+                Options.Create(new HeadquartersConfig
+                {
+                    BaseUrl = "http://hq"
+                }));
         }
 
         public InterviewPackagesService InterviewPackagesService(
@@ -1117,7 +1121,14 @@ namespace WB.Tests.Abc.TestFactories
             var invService = invitationService ?? Mock.Of<IInvitationService>();
 
             var webInterviewConfigProvider1 = webInterviewConfigProvider ?? settingsMock.Object;
-            
+
+            var linkProvider = new WebInterviewLinkProvider(
+                new VirtualPathService(Options.Create(new HeadquartersConfig
+                {
+                    BaseUrl = "http://localhost",
+                    BaseAppUrl = "http://localhost"
+                }), Mock.Of<IWorkspaceContextAccessor>()));
+
             return new SendRemindersJob(
                 Mock.Of<ILogger<SendRemindersJob>>(),
                 invService,
@@ -1125,10 +1136,9 @@ namespace WB.Tests.Abc.TestFactories
                 webInterviewConfigProvider1,
                 emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
-                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() == 
+                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() ==
                                                                               invService)),
-                new WebInterviewLinkProvider(Options.Create(
-                    new HeadquartersConfig{BaseUrl = "http://localhost"})));
+                linkProvider);
         }
 
         public SendInvitationsJob SendInvitationsJob(
