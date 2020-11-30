@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.Name = "headquarters_session";
-                options.Cookie.HttpOnly = true; 
+                options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
 
@@ -396,11 +396,12 @@ namespace WB.UI.Headquarters
             app.UseUnderConstruction();
 
             app.UseRouting();
-            
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseRedirectIntoWorkspace();
 
+            app.UseAuthorization();
+
+            
             app.UseSwagger();
             app.UseSession();
             app.UseResponseCompression();

@@ -26,18 +26,18 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             if (workspace == null)
             {
-                if (!(context.Resource is IDirectiveContext ctx)) return Task.CompletedTask;
-
-                var workspaceArgument = ctx.Argument<string>("workspace");
-
-                if (context.User.HasClaim("Workspace", workspaceArgument))
+                if (context.Resource is IDirectiveContext ctx)
                 {
-                    context.Succeed(requirement);
-                }
+                    var workspaceArgument = ctx.Argument<string>("workspace");
 
-                return Task.CompletedTask;
-            } 
-            
+                    if (context.User.HasClaim("Workspace", workspaceArgument))
+                    {
+                        context.Succeed(requirement);
+                    }
+
+                    return Task.CompletedTask;
+                }
+            } else
             if (context.User.HasClaim("Workspace", workspace.Name))
             {
                 context.Succeed(requirement);
