@@ -123,9 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         .FirstOrDefault(x => x.InterviewId == interviewId 
                                              && x.CompletedAtUtc == null
                                              && x.DeletedAtUtc == null);
-                       return calendarEvent; 
-                    
-                    return null;
+                       return calendarEvent;
                 });
         }
     }
