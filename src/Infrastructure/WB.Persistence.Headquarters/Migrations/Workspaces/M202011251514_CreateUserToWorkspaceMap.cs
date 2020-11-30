@@ -20,7 +20,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 .ToTable("users").InSchema("users").PrimaryColumn("Id").OnDelete(Rule.Cascade);
 
             Insert.IntoTable("workspaces")
-                .Row(new {name = "primary", display_name = "primary"});
+                .Row(new {name = "primary", display_name = "Default Workspace"});
 
             Execute.Sql(@"insert into workspaces.workspace_users (workspace, user_id)
                         select 'primary' as workspace, u.""Id"" as user_id 

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AutoFixture;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -15,7 +13,6 @@ using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,13 +21,10 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
@@ -93,7 +87,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var commandService = new Mock<ICommandService>();
             commandService
-                .Setup(cs => cs.ExecuteAsync(It.IsAny<ICommand>(), It.IsAny<string>(), default))
+                .Setup(cs => cs.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
                 .Throws(new QuestionnaireAssemblyAlreadyExistsException("", Create.Entity.QuestionnaireIdentity()));
 
             var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
@@ -122,7 +116,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var commandService = new Mock<ICommandService>();
             commandService
-                .Setup(cs => cs.ExecuteAsync(It.IsAny<ICommand>(), It.IsAny<string>(),default))
+                .Setup(cs => cs.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
                 .Throws(commandServiceException);
 
             var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
