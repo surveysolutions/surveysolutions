@@ -65,19 +65,21 @@ namespace WB.UI.Headquarters.SupportTool
                 {
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
-                    var workspaceService = locator.GetInstance<IWorkspacesService>();
+                    var workspaceService = locator.GetInstance<IWorkspaceContextSetter>();
+                    workspaceService.Set(workspace ?? WorkspaceConstants.DefaultWorkspaceName);
 
-                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var userManager = locator.GetInstance<HqUserManager>();
                     var user = new HqUser
                     {
                         UserName = login,
                         Email = email
                     };
+
                     var creationResult = await userManager.CreateAsync(user, password);
                     if (creationResult.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
-                        workspaceService.AddUserToWorkspace(user.Id, workspace ?? WorkspaceConstants.DefaultWorkspaceName);
+                        
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }
                     else
