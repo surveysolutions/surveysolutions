@@ -44,22 +44,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 if (calendarEvent.InterviewId.HasValue)
                 {
                     var interviewView = interviewViewRepository.GetById(calendarEvent.InterviewId.Value.FormatGuid());
-                    interviewView.CalendarEvent = null;
-                    interviewView.CalendarEventId = null;
-                    interviewView.CalendarEventTimezoneId = null;
-                    interviewView.CalendarEventComment = null;
-                    interviewView.CalendarEventLastUpdate = null;
-                    interviewViewRepository.Store(interviewView);
+                    if (interviewView != null)
+                    {
+                        interviewView.CalendarEvent = null;
+                        interviewView.CalendarEventId = null;
+                        interviewView.CalendarEventTimezoneId = null;
+                        interviewView.CalendarEventComment = null;
+                        interviewView.CalendarEventLastUpdate = null;
+                        interviewViewRepository.Store(interviewView);
+                    }
                 }
                 else 
                 {
                     var assignment = assignmentDocumentsStorage.GetById(calendarEvent.AssignmentId);
-                    assignment.CalendarEvent = null;
-                    assignment.CalendarEventId = null;
-                    assignment.CalendarEventTimezoneId = null;
-                    assignment.CalendarEventComment = null;
-                    assignment.CalendarEventLastUpdate = null;
-                    assignmentDocumentsStorage.Store(assignment);
+                    if (assignment != null)
+                    {
+                        assignment.CalendarEvent = null;
+                        assignment.CalendarEventId = null;
+                        assignment.CalendarEventTimezoneId = null;
+                        assignment.CalendarEventComment = null;
+                        assignment.CalendarEventLastUpdate = null;
+                        assignmentDocumentsStorage.Store(assignment);
+                    }
                 }
             }
 
