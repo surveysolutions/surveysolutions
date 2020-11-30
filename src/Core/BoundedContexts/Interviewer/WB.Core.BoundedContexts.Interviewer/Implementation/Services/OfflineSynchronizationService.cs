@@ -246,6 +246,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return syncClient.SendAsync<UploadCalendarEventRequest, OkResponse>(
                     new UploadCalendarEventRequest
                     {
+                        InterviewerId = principal.CurrentUserIdentity.UserId,
                         CalendarEvent = calendarEventsPackage,
                     },
                     token);
