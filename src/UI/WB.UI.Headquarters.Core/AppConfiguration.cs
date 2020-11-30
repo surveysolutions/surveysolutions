@@ -24,10 +24,17 @@ namespace WB.UI.Headquarters
         {
             services.AddTransient<IOptions<HeadquartersConfig>>(sp =>
             {
-                var workspace = sp.GetRequiredService<IWorkspaceContextAccessor>();
+                var workspaceAccessor = sp.GetRequiredService<IWorkspaceContextAccessor>();
                 var config = configuration.HeadquarterOptions().Get<HeadquartersConfig>();
+                config.BaseAppUrl = config.BaseUrl;
+                var workspace = workspaceAccessor.CurrentWorkspace();
 
-                config.BaseUrl = (config.BaseUrl + "/" + workspace.CurrentWorkspace()?.Name ?? string.Empty).TrimEnd('/');
+                if (workspace != null)
+                {
+                    config.BaseUrl = config.BaseAppUrl + "/" + workspace.Name;
+                }
+
+                config.BaseUrl = config.BaseUrl.TrimEnd('/');
 
                 return Options.Create(config);
             });
