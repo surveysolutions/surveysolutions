@@ -161,7 +161,7 @@
                                 <td>
                                     <span data-toggle="tooltip"
                                         v-if="model.calendarEvent != null"
-                                        :title="((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? self.$t('Assignments.NoComment') : model.calendarEvent.comment)">
+                                        :title="((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? $t('Assignments.NoComment') : model.calendarEvent.comment)">
                                         {{calendarEventTime}}
                                     </span>
                                 </td>
