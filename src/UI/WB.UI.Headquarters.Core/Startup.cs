@@ -375,7 +375,7 @@ namespace WB.UI.Headquarters
 
                 app.UseHsts();
             }
-
+            
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -387,13 +387,14 @@ namespace WB.UI.Headquarters
                 }
             });
 
+            app.UseUnderConstruction();
             app.UseWorkspaces();
 
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
 
             app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
-            app.UseUnderConstruction();
+     
 
             app.UseRouting();
             app.UseAuthentication();
@@ -401,7 +402,6 @@ namespace WB.UI.Headquarters
 
             app.UseAuthorization();
 
-            
             app.UseSwagger();
             app.UseSession();
             app.UseResponseCompression();
