@@ -15,11 +15,14 @@ namespace WB.UI.Headquarters.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var workspace = workspaceContextAccessor.CurrentWorkspace() 
-                            ?? throw new MissingWorkspaceException();
-            if (!context.HttpContext.User.HasClaim(WorkspaceConstants.ClaimType, workspace.Name))
+            if (context.HttpContext.User.Identity.IsAuthenticated)
             {
-                context.Result = new ForbidResult();
+                var workspace = workspaceContextAccessor.CurrentWorkspace();
+
+                if (workspace != null && !context.HttpContext.User.HasClaim(WorkspaceConstants.ClaimType, workspace.Name))
+                {
+                    context.Result = new ForbidResult();
+                }
             }
         }
     }
