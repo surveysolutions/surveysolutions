@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using NHibernate.Linq;
-using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -20,7 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public HqUserStore(IUnitOfWork unitOfWork, IdentityErrorDescriber describer) : base(describer)
+        public HqUserStore(IUnitOfWork unitOfWork,
+            IdentityErrorDescriber describer) : base(describer)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -172,17 +172,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public override IQueryable<HqUser> Users => unitOfWork.Session.Query<HqUser>();
 
-        public Task<string> GetEmailAsync(HqUser user)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            return Task.FromResult(user.Email);
-        }
-
-        public IQueryable<DeviceSyncInfo> DeviceSyncInfos => unitOfWork.Session.Query<DeviceSyncInfo>();
-
         public HqRole FindRole(Guid id)
         {
             return this.unitOfWork.Session.Get<HqRole>(id);
@@ -226,16 +215,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         }
 
         public Task<IList<HqUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> CheckPasswordAsync(HqUser user, string oldPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Microsoft.AspNetCore.Identity.IdentityResult> ChangePasswordAsync(HqUser user, string password)
         {
             throw new NotImplementedException();
         }
