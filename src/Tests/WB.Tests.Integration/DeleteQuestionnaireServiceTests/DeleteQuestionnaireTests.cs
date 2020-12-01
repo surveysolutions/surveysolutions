@@ -29,6 +29,8 @@ using WB.Core.BoundedContexts.Headquarters.Users.Providers;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.HttpServices.Services;
@@ -378,6 +380,8 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                     typeof(HqUserProfileMap),
                     typeof(HqRoleMap),
                     typeof(SyncStatisticsMap),
+                    typeof(WorkspaceMap),
+                    typeof(WorkspaceUsersMap),
                 },
                 readSideSchemaName,
                 new List<Type>

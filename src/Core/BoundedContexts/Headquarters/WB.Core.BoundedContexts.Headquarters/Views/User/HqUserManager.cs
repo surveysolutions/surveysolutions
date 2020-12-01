@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             if (result.Succeeded)
             {
-                this.workspacesService.AddUserToWorkspace(user.Id, workspace.Name);
+                this.workspacesService.AddUserToWorkspace(user, workspace.Name);
             }
 
             return result;
