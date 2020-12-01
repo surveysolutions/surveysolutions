@@ -66,14 +66,14 @@ namespace WB.UI.Headquarters.SupportTool
                 scope.ServiceProvider.GetRequiredService<IPlainStorageAccessor<Workspace>>();
 
             var service = scope.ServiceProvider.GetRequiredService<IWorkspacesService>();
-            var workspace = new Workspace(name, title);
+            var workspace = new Workspace(name.ToLower(), title);
 
             workspaces.Store(workspace, null);
             await service.Generate(workspace.Name,
                 DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
 
             uow.AcceptChanges();
-            logger.LogInformation("Added workspace {name}");
+            logger.LogInformation("Added workspace {name}", workspace.Name);
         }
     }
 }
