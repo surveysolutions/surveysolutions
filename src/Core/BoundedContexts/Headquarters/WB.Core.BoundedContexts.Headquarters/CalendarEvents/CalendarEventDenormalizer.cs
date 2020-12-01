@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         }
         private CalendarEvent UpdateCalendarEvent(CalendarEvent calendarEvent, DateTimeOffset dateTimeOffset, Action<CalendarEvent> updater)
         {
-            if (calendarEvent.UpdateDateUtc > dateTimeOffset.UtcDateTime) return calendarEvent;
+            //if (calendarEvent.UpdateDateUtc > dateTimeOffset.UtcDateTime) return calendarEvent;
             
             updater.Invoke(calendarEvent);
             calendarEvent.UpdateDateUtc = dateTimeOffset.UtcDateTime;

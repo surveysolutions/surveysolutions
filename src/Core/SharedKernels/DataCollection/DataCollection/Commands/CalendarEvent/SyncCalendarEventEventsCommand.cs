@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
         public bool RestoreCalendarEventAfter { get; set; }
         public bool DeleteCalendarEventAfter { get; set; }
         
+        public bool ShouldRestorePreviousStateAfterApplying { get; set; }
+        
         public SyncCalendarEventEventsCommand(AggregateRootEvent[] synchronizedEvents ,Guid publicKey, Guid userId) 
             : base(publicKey, userId)
         {
@@ -18,13 +20,15 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent
         }
 
         public SyncCalendarEventEventsCommand(AggregateRootEvent[] synchronizedEvents, Guid publicKey, Guid userId,
-            bool restoreCalendarEventBefore, bool restoreCalendarEventAfter, bool deleteCalendarEventAfter) 
+            bool restoreCalendarEventBefore, bool restoreCalendarEventAfter, bool deleteCalendarEventAfter,
+            bool shouldRestorePreviousStateAfterApplying) 
             : base(publicKey, userId)
         {
             SynchronizedEvents = synchronizedEvents;
             RestoreCalendarEventBefore = restoreCalendarEventBefore;
             RestoreCalendarEventAfter = restoreCalendarEventAfter;
             DeleteCalendarEventAfter = deleteCalendarEventAfter;
+            ShouldRestorePreviousStateAfterApplying = shouldRestorePreviousStateAfterApplying;
         }
     }
 }

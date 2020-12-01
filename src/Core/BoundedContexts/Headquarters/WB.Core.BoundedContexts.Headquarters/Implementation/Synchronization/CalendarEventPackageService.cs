@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var deleteCalendarEventAfterApplying = false;
                 var restoreCalendarEventBefore = false;
                 var restoreCalendarEventAfter = false;
-                
+                var shouldRestorePreviousStateAfterApplying = false;
 
                 var responsibleId = calendarEventPackage.ResponsibleId;
 
@@ -94,10 +94,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             activeCalendarEventByInterviewOrAssignmentId.PublicKey,
                             responsibleId));
                 }
-                
-                var calendarEventStream = serializer.Deserialize<CommittedEvent[]>(calendarEventPackage.Events);
-                var aggregateRootEvents = calendarEventStream
-                    .Select(c => new AggregateRootEvent(c)).ToArray();
 
                 var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventPackage.CalendarEventId);
 
@@ -116,12 +112,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                    && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
                         restoreCalendarEventAfter = true;
 
+                if (calendarEvent != null
+                    && calendarEvent.UpdateDateUtc > calendarEventPackage.LastUpdateDateUtc)
+                    shouldRestorePreviousStateAfterApplying = true;
+
+                var calendarEventStream = serializer.Deserialize<CommittedEvent[]>(calendarEventPackage.Events);
+                var aggregateRootEvents = calendarEventStream
+                    .Select(c => new AggregateRootEvent(c)).ToArray();
+                
                 commandService.Execute(
                         new SyncCalendarEventEventsCommand(aggregateRootEvents,
                             calendarEventPackage.CalendarEventId, responsibleId,
                             restoreCalendarEventBefore: restoreCalendarEventBefore,
                             restoreCalendarEventAfter: restoreCalendarEventAfter, 
-                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying));
+                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying,
+                            shouldRestorePreviousStateAfterApplying));
             }
             catch (Exception exception)
             {

@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             if (calendarEvent.InterviewId.HasValue)
             {
                 InterviewView interviewView = this.interviewViewRepository.GetById(calendarEvent.InterviewId.Value.FormatGuid());
-                if (interviewView == null || interviewView.CalendarEventLastUpdate > calendarEvent.LastUpdateDateUtc)
+                if (interviewView == null /*|| interviewView.CalendarEventLastUpdate > calendarEvent.LastUpdateDateUtc*/)
                     return;
 
                 interviewView.CalendarEvent = shouldDisplayData ? calendarEvent.Start : (DateTimeOffset?)null;
