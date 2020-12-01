@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Type;
 
 namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
@@ -23,6 +24,14 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
             Property(x => x.CreatorUserId);
             Property(x => x.UpdateDateUtc,pm => pm.Type<UtcDateTimeType>());
             Property(x => x.DeletedAtUtc,pm => pm.Type<UtcDateTimeType>());
+            
+            ManyToOne(x => x.Creator, mto =>
+            {
+                mto.Column("CreatorUserId");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
         }
     }
 }

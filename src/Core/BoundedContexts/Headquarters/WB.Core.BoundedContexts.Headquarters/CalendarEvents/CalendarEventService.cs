@@ -83,7 +83,27 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
                         && userInterviewIds.Contains(x.InterviewId) )
                     .Select(x => x).ToList());
             
-            return calendarEventsByInterviews.Union(calendarEventsByAssignments).ToList();
+            var calendarEventsWithoutInterviews = calendarEventsAccessor
+                .Query(_ => 
+                    _.Where(x =>
+                            x.DeletedAtUtc == null 
+                            && x.CompletedAtUtc == null
+                            && x.InterviewId != null
+                            && x.CreatorUserId == responsibleId
+                            && !userInterviewIds.Contains(x.InterviewId) )
+                        .Select(x => x).ToList());
+
+            var checkReassignInterviews = interviewerInterviewsFactory.GetInterviewsByIds(
+                calendarEventsWithoutInterviews.Select(c => c.InterviewId!.Value).ToArray());
+            var skipIds = checkReassignInterviews.Where(i => i != null)
+                .Select(i => i.Id).ToList();
+            var filteredCalendarEventsWithoutInterviews = calendarEventsWithoutInterviews
+                .Where(c => !skipIds.Contains(c.InterviewId!.Value)).ToList();
+
+            return calendarEventsByInterviews
+                .Union(calendarEventsByAssignments)
+                .Union(filteredCalendarEventsWithoutInterviews)
+                .ToList();
         }
 
         public List<CalendarEvent> GetAllCalendarEventsUnderSupervisor(Guid supervisorId)
@@ -116,8 +136,28 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
                         && x.InterviewId != null
                         && teamInterviewIds.Contains(x.InterviewId) )
                     .Select(x => x).ToList());
+            
+            var calendarEventsWithoutInterviews = calendarEventsAccessor
+                .Query(_ => 
+                    _.Where(x =>
+                            x.DeletedAtUtc == null 
+                            && x.CompletedAtUtc == null
+                            && x.InterviewId != null
+                            && (x.CreatorUserId == supervisorId || x.Creator!.ReadonlyProfile.SupervisorId == supervisorId)
+                            && !teamInterviewIds.Contains(x.InterviewId) )
+                        .Select(x => x).ToList());
 
-            return calendarEventsByInterviews.Union(calendarEventsByAssignments).ToList();
+            var checkReassignInterviews = interviewerInterviewsFactory.GetInterviewsByIds(
+                calendarEventsWithoutInterviews.Select(c => c.InterviewId!.Value).ToArray());
+            var skipIds = checkReassignInterviews.Where(i => i != null)
+                .Select(i => i.Id).ToList();
+            var filteredCalendarEventsWithoutInterviews = calendarEventsWithoutInterviews
+                .Where(c => !skipIds.Contains(c.InterviewId!.Value)).ToList();
+
+            return calendarEventsByInterviews
+                .Union(calendarEventsByAssignments)
+                .Union(filteredCalendarEventsWithoutInterviews)
+                .ToList();
         }
     }
 }

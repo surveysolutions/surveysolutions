@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using NodaTime;
+using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
@@ -34,6 +35,9 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         public virtual bool IsCompleted() => CompletedAtUtc != null;
         public virtual DateTime UpdateDateUtc { set; get; }
         public virtual Guid CreatorUserId { get; set; }
+        
+        public virtual ReadonlyUser? Creator { get; protected set; }
+
         public virtual DateTime?  DeletedAtUtc { get; set; }
         public virtual bool IsDeleted() => DeletedAtUtc != null;
         public virtual ZonedDateTime Start { get; set; }
