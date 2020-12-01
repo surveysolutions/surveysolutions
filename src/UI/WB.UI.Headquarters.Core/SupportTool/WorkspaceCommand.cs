@@ -1,3 +1,4 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace WB.UI.Headquarters.SupportTool
         {
             this.host = host;
 
-            var addCommand = new Command("add")
+            var addCommand = new Command("add", "Add new workspace to Headquarters")
             {
                 new Option(new[] { "--name", "-n" }, "Name of the workspace")
                 {
@@ -34,24 +35,44 @@ namespace WB.UI.Headquarters.SupportTool
                 }
             };
 
-            addCommand.Handler = CommandHandler.Create<string, string>(Workspace);
+            addCommand.Handler = CommandHandler.Create<string, string>(AddWorkspace);
 
             this.Add(addCommand);
+
+            var listCommand = new Command("list", "List workspaces");
+            listCommand.Handler = CommandHandler.Create(ListWorkspaces);
+            this.Add(listCommand);
         }
 
-        private async Task Workspace(string name, string title)
+        private Task ListWorkspaces()
         {
-            var logger = host.Services.GetRequiredService<ILogger<WorkspacesCommand>>();
-            IPlainStorageAccessor<Workspace> workspaces =
-                            host.Services.GetRequiredService<IPlainStorageAccessor<Workspace>>();
+            var ws = host.Services.GetRequiredService<IWorkspacesCache>();
 
-            var service = host.Services.GetRequiredService<IWorkspacesService>();
+            foreach (var workspaceContext in ws.GetWorkspaces())
+            {
+                Console.WriteLine($"{workspaceContext.Name}\t\t{workspaceContext.DisplayName}");
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private async Task AddWorkspace(string name, string title)
+        {
+            using var scope = host.Services.CreateScope();
+            var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<WorkspacesCommand>>();
+            IPlainStorageAccessor<Workspace> workspaces =
+                scope.ServiceProvider.GetRequiredService<IPlainStorageAccessor<Workspace>>();
+
+            var service = scope.ServiceProvider.GetRequiredService<IWorkspacesService>();
             var workspace = new Workspace(name, title);
 
             workspaces.Store(workspace, null);
             await service.Generate(workspace.Name,
                 DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
 
+            uow.AcceptChanges();
             logger.LogInformation("Added workspace {name}");
         }
     }
