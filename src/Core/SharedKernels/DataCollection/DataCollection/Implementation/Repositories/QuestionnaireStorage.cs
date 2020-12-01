@@ -25,6 +25,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider;
         private readonly IMemoryCache memoryCache;
 
+        private static readonly TimeSpan QuestionnaireDocumentExpiration = TimeSpan.FromMinutes(5);
+
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
             IQuestionnaireTranslator translator,
@@ -48,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             return this.memoryCache.GetOrCreate(questionnaireCacheKey, (entry) =>
             {
-                entry.SetSlidingExpiration(TimeSpan.FromMinutes(20));
+                entry.SetSlidingExpiration(QuestionnaireDocumentExpiration);
                 return CreatePlainQuestionnaire(identity, language);
             });
         }
@@ -109,11 +111,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             string repositoryId = GetRepositoryId(identity);
             this.repository.Store(questionnaireDocument, repositoryId);
 
-            this.memoryCache.Set(GetCacheKey(identity), questionnaireDocument.Clone(),
-                new MemoryCacheEntryOptions
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(20)
-                });
+            if (questionnaireDocument.IsDeleted)
+            {
+                RemoveDocumentFromCache(identity, questionnaireDocument);
+            }
+            else
+            {
+                this.memoryCache.Set(GetCacheKey(identity), questionnaireDocument.Clone(),
+                    new MemoryCacheEntryOptions
+                    {
+                        SlidingExpiration = QuestionnaireDocumentExpiration
+                    });
+            }
         }
 
         public virtual QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
@@ -123,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             return this.memoryCache.GetOrCreate(GetCacheKey(identity), (entry) =>
             {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(20);
+                entry.SlidingExpiration = QuestionnaireDocumentExpiration;
                 return this.repository.GetById(repositoryId);
             });
         }
@@ -145,13 +154,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
+        }
 
+        private void RemoveDocumentFromCache(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument document)
+        {
             this.memoryCache.Remove(GetCacheKey(questionnaireIdentity));
             foreach (var translation in document.Translations)
             {
                 this.memoryCache.Remove(PlainQuestionnaireCacheKey(questionnaireIdentity, translation.Name));
             }
-            
+
             this.memoryCache.Remove(PlainQuestionnaireCacheKey(questionnaireIdentity, null));
         }
 
