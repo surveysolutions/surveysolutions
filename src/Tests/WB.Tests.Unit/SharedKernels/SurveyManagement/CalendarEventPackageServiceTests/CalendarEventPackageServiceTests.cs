@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             Verify(commandService, package, restoreCalendarEventAfter: true);
         }
         
-        
+        [Test]
         public void when_received_updated_calendar_event_but_on_server_it_is_deleted_should_precess_them()
         {
             var package = new CalendarEventPackage()
@@ -169,6 +169,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
             var commandService = ProcessPackage(package, local);
             
             Verify(commandService, package, restoreCalendarEventBefore: false);
+        }
+        
+        [Test]
+        public void when_receiving_package_having_chages_before_local()
+        {
+            var package = new CalendarEventPackage()
+            {
+                ResponsibleId = Id.g1,
+                CalendarEventId = Id.g2,
+                AssignmentId = 7,
+                IsDeleted = false,
+                LastUpdateDateUtc = DateTime.UtcNow
+            };
+            var local = new CalendarEvent()
+            {
+                PublicKey = Id.g2,
+                AssignmentId = 7,
+                DeletedAtUtc = null,
+                UpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
+            };
+            
+            var commandService = ProcessPackage(package, local);
+            
+            Verify(commandService, package, shouldRestorePreviousStateAfterApplying: true);
         }
     }
 }
