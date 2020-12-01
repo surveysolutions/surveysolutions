@@ -259,6 +259,7 @@ namespace WB.UI.Headquarters
 
             services.AddScoped<UnitOfWorkActionFilter>();
             services.AddScoped<InstallationFilter>();
+            services.AddScoped<WorkspaceAccessActionFilter>();
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<GlobalNotificationResultFilter>();
             services.AddTransient<ObservingNotAllowedActionFilter>();
@@ -284,6 +285,7 @@ namespace WB.UI.Headquarters
                     mvc.Filters.Add<WorkspaceInfoFilter>();
                     mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
                     mvc.Filters.AddService<InstallationFilter>(100);
+                    mvc.Filters.AddService<WorkspaceAccessActionFilter>(150);
                     mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
                     mvc.Filters.AddService<ObservingNotAllowedActionFilter>(300);
                     mvc.Filters.AddService<UpdateRequiredFilter>(400);
