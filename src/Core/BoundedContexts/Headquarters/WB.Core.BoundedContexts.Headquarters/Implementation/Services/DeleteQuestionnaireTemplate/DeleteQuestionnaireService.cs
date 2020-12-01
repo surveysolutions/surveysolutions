@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Microsoft.Extensions.Logging;
@@ -110,12 +111,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 DeleteInProcess.Add(questionnaireKey);
             }
+
+            var sw = Stopwatch.StartNew();
+            string? title = null;
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+
             try
             {
-                var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            
                 var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+                
                 if (questionnaireDocument == null)
                     throw new ArgumentException($"questionnaire not found {questionnaireIdentity}");
+                title = questionnaireDocument.Title;
+
+                this.logger.LogWarning("Deletion of questionnaire {title} {id} started",
+                    title, questionnaireIdentity);
 
                 await this.DeleteInterviewsAsync(questionnaireIdentity);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
@@ -125,8 +136,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 var assignmentsImportStatus = this.importService.GetImportStatus();
 
-                var isAssignmentImportIsGoing = assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
-                                                assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
+                var isAssignmentImportIsGoing =
+                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
+                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
 
                 if (!isAssignmentImportIsGoing)
                 {
@@ -138,6 +150,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             catch (Exception e)
             {
                 this.logger.LogError(e, e.Message);
+            }
+            finally
+            {
+                sw.Stop();
+                this.logger.LogInformation("Questionnaire {title} {id} deleted in {seconds:0.00}s",
+                    title ?? string.Empty, questionnaireIdentity, sw.Elapsed.TotalSeconds);
             }
 
             lock (DeleteInProcessLockObject)
