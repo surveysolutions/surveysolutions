@@ -17,5 +17,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Calenda
         public bool IsCompleted { get; set; }
         
         public bool IsDeleted { get; set; }
+        
+        public CalendarEventProperties Clone() => new CalendarEventProperties()
+        {
+            PublicKey = this.PublicKey,
+            Comment = this.Comment,
+            Start = this.Start,
+            StartTimezone = this.StartTimezone,
+            CreatedAt = this.CreatedAt,
+            UpdatedAt = this.UpdatedAt,
+            InterviewId = this.InterviewId,
+            InterviewKey = this.InterviewKey,
+            AssignmentId = this.AssignmentId,
+            IsCompleted = this.IsCompleted,
+            IsDeleted = this.IsDeleted
+        };
     }
 }

@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected void Apply(CalendarEventUpdated @event)
         {
             //ignore event if it occured before last change
-            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            //if (this.properties.UpdatedAt > @event.OriginDate) return;
             
             properties.Start = @event.Start;
             properties.StartTimezone = @event.StartTimezone;
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected void Apply(CalendarEventCompleted @event)
         {
             //ignore event if it occured before last change
-            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            //if (this.properties.UpdatedAt > @event.OriginDate) return;
             
             this.properties.IsCompleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected void Apply(CalendarEventDeleted @event)
         {
             //ignore event if it occured before last change
-            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            //if (this.properties.UpdatedAt > @event.OriginDate) return;
             
             this.properties.IsDeleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected void Apply(CalendarEventRestored @event)
         {
             //ignore event if it occured before last change
-            if (this.properties.UpdatedAt > @event.OriginDate) return;
+            //if (this.properties.UpdatedAt > @event.OriginDate) return;
             
             this.properties.IsDeleted = false;
             this.properties.UpdatedAt = @event.OriginDate;
@@ -125,6 +125,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SyncCalendarEventEvents(SyncCalendarEventEventsCommand command)
         {
+            var propertiesSnapshot = properties.Clone();
+            
             if (command.RestoreCalendarEventBefore)
                 ApplyEvent(new CalendarEventRestored(command.UserId, command.OriginDate));
             
@@ -138,6 +140,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ApplyEvent(new CalendarEventDeleted(command.UserId, command.OriginDate));
             if (command.RestoreCalendarEventAfter)
                 ApplyEvent(new CalendarEventRestored(command.UserId, command.OriginDate));
+            
+            if (command.ShouldRestorePreviousStateAfterApplying && !command.DeleteCalendarEventAfter)
+                Apply(new CalendarEventUpdated(command.UserId, DateTimeOffset.Now, 
+                    propertiesSnapshot.Comment, propertiesSnapshot.Start, propertiesSnapshot.StartTimezone, true));
         }
 
         public void RestoreCalendarEvent(RestoreCalendarEventCommand command)
