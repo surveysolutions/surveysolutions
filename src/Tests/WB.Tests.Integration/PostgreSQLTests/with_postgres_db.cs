@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeSetUp]
         protected void Context()
         {
-            workspace = Create.Service.WorkspaceNameProvider();
+            workspace = Create.Service.WorkspaceContextAccessor();
             TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             ConnectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)

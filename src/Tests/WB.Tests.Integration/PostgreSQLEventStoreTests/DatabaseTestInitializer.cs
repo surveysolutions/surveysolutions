@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 connection.Close();
             }
 
-            InitializeDb(connectionStringBuilder.ConnectionString, Create.Service.WorkspaceNameProvider(), dbType);
+            InitializeDb(connectionStringBuilder.ConnectionString, Create.Service.WorkspaceContextAccessor(), dbType);
 
             return connectionStringBuilder.ConnectionString;
         }

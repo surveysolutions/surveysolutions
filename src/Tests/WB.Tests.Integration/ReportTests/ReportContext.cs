@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.ReportTests
         [OneTimeSetUp]
         public void Init()
         {
-            DatabaseTestInitializer.InitializeDb(connectionStringBuilder.ConnectionString, Create.Service.WorkspaceNameProvider(), DbType.ReadSide, DbType.PlainStore);
+            DatabaseTestInitializer.InitializeDb(connectionStringBuilder.ConnectionString, Create.Service.WorkspaceContextAccessor(), DbType.ReadSide, DbType.PlainStore);
         }
 
         protected PostgreReadSideStorage<InterviewSummary> SetupAndCreateInterviewSummaryRepository()
@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.ReportTests
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
                     typeof(QuestionnaireCompositeItemMap)
-                }, true, Create.Service.WorkspaceNameProvider().CurrentWorkspace().SchemaName);
+                }, true, Create.Service.WorkspaceContextAccessor().CurrentWorkspace().SchemaName);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
         }

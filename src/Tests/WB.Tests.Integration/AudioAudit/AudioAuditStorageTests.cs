@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.AudioAudit
     internal class AudioAuditStorageTests : with_postgres_db
     {
         private ISessionFactory readFactory;
-        private readonly WorkspaceContext workspaceName = Create.Service.WorkspaceNameProvider().CurrentWorkspace();
+        private readonly WorkspaceContext workspaceName = Create.Service.WorkspaceContextAccessor().CurrentWorkspace();
         
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -79,7 +79,7 @@ namespace WB.Tests.Integration.AudioAudit
 
             var auditStorageAccesor = new PostgresPlainStorageRepository<AudioAuditFile>(unitOfWork);
             var auditFileStorage = new AudioAuditFileStorage(auditStorageAccesor, 
-                Create.Service.WorkspaceNameProvider(workspaceName.Name), unitOfWork);
+                Create.Service.WorkspaceContextAccessor(workspaceName.Name), unitOfWork);
 
             var hasAuditFiles = await auditFileStorage.HasAnyAudioAuditFilesStoredAsync(this.questionnaireId);
 
@@ -93,7 +93,7 @@ namespace WB.Tests.Integration.AudioAudit
 
             var auditStorageAccesor = new PostgresPlainStorageRepository<AudioAuditFile>(plain);
             var auditFileStorage = new AudioAuditFileStorage(auditStorageAccesor, 
-                Create.Service.WorkspaceNameProvider(workspaceName.Name), plain);
+                Create.Service.WorkspaceContextAccessor(workspaceName.Name), plain);
 
             var hasAuditFiles = await auditFileStorage.HasAnyAudioAuditFilesStoredAsync(Create.Entity.QuestionnaireIdentity());
 
