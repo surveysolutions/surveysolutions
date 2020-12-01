@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -12,7 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     {
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
         bool IsWorkspaceDefined(string? workspace);
-        IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId);
         void AddUserToWorkspace(HqUser user, string workspace);
         IEnumerable<WorkspaceContext> GetWorkspaces();
     }
