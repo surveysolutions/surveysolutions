@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 if (context.Resource is IDirectiveContext ctx)
                 {
-                    var workspaceArgument = ctx.Argument<string>("workspace");
+                    var workspaceArgument = ctx.Argument<string>("workspace") ?? WorkspaceConstants.DefaultWorkspaceName;
 
                     if (context.User.HasClaim("Workspace", workspaceArgument))
                     {
