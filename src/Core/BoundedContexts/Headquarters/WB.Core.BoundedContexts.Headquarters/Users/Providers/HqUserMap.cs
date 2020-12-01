@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             
             Set(x => x.Workspaces, map =>
             {
-                // map.Key(k => k.Column("user_id"));
+                map.Key(k => k.Column("user_id"));
                 map.Cascade(Cascade.All|Cascade.DeleteOrphans);
                 map.Inverse(true);
             }, rel => rel.OneToMany());
