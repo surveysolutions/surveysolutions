@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -60,24 +59,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             return workspaces.Query(_ => _
                 .Select(workspace => workspace.AsContext())
                 .ToList());
-        }
-
-        public IEnumerable<WorkspaceContext> GetWorkspacesForUser(Guid userId)
-        {
-            var user = this.users.FindById(userId);
-
-            if (user.IsInRole(UserRoles.Administrator))
-            {
-                return this.GetWorkspaces();
-            }
-            
-            var userWorkspaces = workspaces.Query(_ =>
-                _.Where(x => x.Users.Any(u => u.User.Id == userId))
-                    .Select(workspace => workspace.AsContext())
-                    .ToList()
-            );
-
-            return userWorkspaces;
         }
 
         public void AddUserToWorkspace(HqUser user, string workspace)

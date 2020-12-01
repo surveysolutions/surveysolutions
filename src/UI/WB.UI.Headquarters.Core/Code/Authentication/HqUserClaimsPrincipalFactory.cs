@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -39,7 +40,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 }
                 else
                 {
-                    userWorkspaces = workspacesService.GetWorkspacesForUser(user.Id);
+                    userWorkspaces = user.Workspaces.Select(x => x.Workspace.AsContext());
                 }
 
                 var principalIdentity = (ClaimsIdentity)principal.Identity;
