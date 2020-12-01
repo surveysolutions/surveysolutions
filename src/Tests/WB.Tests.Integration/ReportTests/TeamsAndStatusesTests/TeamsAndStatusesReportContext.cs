@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            var workspaceNameProvider = Create.Service.WorkspaceNameProvider();
+            var workspaceNameProvider = Create.Service.WorkspaceContextAccessor();
             DatabaseTestInitializer.InitializeDb(ConnectionStringBuilder.ConnectionString, workspaceNameProvider, DbType.ReadSide, DbType.PlainStore);
 
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[]

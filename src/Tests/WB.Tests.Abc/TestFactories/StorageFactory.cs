@@ -62,7 +62,8 @@ namespace WB.Tests.Abc.TestFactories
         public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(
             this.UserRepository(users),
             NewMemoryCache(),
-            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
+            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>(),
+            Create.Service.WorkspaceContextAccessor());
 
         public InMemoryEventStore InMemoryEventStore() => new InMemoryEventStore(NewAggregateRootCache());
         
