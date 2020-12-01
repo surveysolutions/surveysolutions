@@ -57,7 +57,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
         protected static void Verify(Mock<ICommandService> commandService, CalendarEventPackage package, 
             bool restoreCalendarEventBefore = false, 
             bool restoreCalendarEventAfter = false, 
-            bool deleteCalendarEventAfter = false)
+            bool deleteCalendarEventAfter = false,
+            bool shouldRestorePreviousStateAfterApplying = false)
         {
             commandService.Verify(c => c.Execute(
                 It.Is<SyncCalendarEventEventsCommand>(c =>
