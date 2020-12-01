@@ -46,6 +46,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
@@ -92,6 +93,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -1292,6 +1294,8 @@ namespace WB.Tests.Abc.TestFactories
             bool lockedBySupervisor = false,
             string securityStamp = null)
         {
+            var workspace = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "test");
+
             var user = new HqUser
             {
                 Id = userId ?? Guid.NewGuid(),
@@ -1309,8 +1313,11 @@ namespace WB.Tests.Abc.TestFactories
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1,
                 Roles = new List<HqRole> { Create.Entity.HqRole(role) },
+                
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
+
+            user.Workspaces.Add(new WorkspacesUsers(workspace, user));
 
             return user;
         }
