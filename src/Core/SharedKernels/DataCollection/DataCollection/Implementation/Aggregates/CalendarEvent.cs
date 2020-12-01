@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ApplyEvent(new CalendarEventRestored(command.UserId, command.OriginDate));
             
             if (command.ShouldRestorePreviousStateAfterApplying && !command.DeleteCalendarEventAfter)
-                Apply(new CalendarEventUpdated(command.UserId, DateTimeOffset.Now, 
+                ApplyEvent(new CalendarEventUpdated(command.UserId, DateTimeOffset.Now, 
                     propertiesSnapshot.Comment, propertiesSnapshot.Start, propertiesSnapshot.StartTimezone, true));
         }
 
