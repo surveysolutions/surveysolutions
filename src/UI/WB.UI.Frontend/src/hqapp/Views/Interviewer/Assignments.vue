@@ -12,6 +12,9 @@
                     <DatePicker :config="datePickerConfig"
                         :value="selectedDate">
                     </DatePicker>
+                    <div  v-if="dateInPast">
+                        <span class="danger">{{ $t("Assignments.DateFromPast") }}</span>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -38,17 +41,16 @@
                     {{ $t("Common.Save") }}</button>
                 <button
                     type="button"
-                    class="btn btn-danger"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Cancel") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-danger pull-right"
                     role="delete"
                     v-if="calendarEventId != null"
                     @click="deleteCalendarEvent">
                     {{ $t("Common.Delete") }}</button>
-
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal"
-                    role="cancel">{{ $t("Common.Cancel") }}</button>
             </div>
         </ModalFrame>
     </HqLayout>
@@ -115,6 +117,9 @@ export default {
                     }
                 },
             }
+        },
+        dateInPast(){
+            return moment(this.selectedDate) < moment()
         },
     },
 

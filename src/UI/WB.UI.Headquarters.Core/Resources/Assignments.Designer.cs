@@ -502,6 +502,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected date is in the past.
+        /// </summary>
+        public static string DateFromPast {
+            get {
+                return ResourceManager.GetString("DateFromPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Details.
         /// </summary>
         public static string Details_Column {
