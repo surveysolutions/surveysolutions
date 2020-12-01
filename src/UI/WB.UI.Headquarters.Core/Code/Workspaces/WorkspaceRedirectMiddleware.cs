@@ -19,6 +19,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
         
         public async Task Invoke(HttpContext context)
         {
+            if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
+            {
+                await next(context);
+                return;
+            }
+
             var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
 
             var currentWorkspace = contextAccessor.CurrentWorkspace();
