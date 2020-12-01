@@ -128,7 +128,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 this.logger.Debug($"Calendar events by {request.CalendarEvent.CalendarEventId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
                 
-                bool deleteCalendarEventAfterApplying = false, restoreCalendarEventBefore = false, restoreCalendarEventAfter = false;
+                bool deleteCalendarEventAfterApplying = false, 
+                    restoreCalendarEventBefore = false, 
+                    restoreCalendarEventAfter = false, 
+                    shouldRestorePreviousStateAfterApplying  = false;
 
                 var responsibleId = request.InterviewerId;
 
@@ -171,13 +174,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                    && calendarEvent.LastUpdateDateUtc > request.CalendarEvent.MetaInfo.LastUpdateDateTime)
                         restoreCalendarEventAfter = true;
 
+                if (calendarEvent != null
+                    && calendarEvent.LastUpdateDateUtc > request.CalendarEvent.MetaInfo.LastUpdateDateTime)
+                    shouldRestorePreviousStateAfterApplying = true;
+                
                 var aggregateRootEvents = calendarEventStream.Select(c => new AggregateRootEvent(c)).ToArray();
                 commandService.Execute(
                         new SyncCalendarEventEventsCommand(aggregateRootEvents,
                             request.CalendarEvent.CalendarEventId, responsibleId,
                             restoreCalendarEventBefore: restoreCalendarEventBefore,
                             restoreCalendarEventAfter: restoreCalendarEventAfter, 
-                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying));
+                            deleteCalendarEventAfter: deleteCalendarEventAfterApplying,
+                            shouldRestorePreviousStateAfterApplying));
             
                 RecordProcessedPackageInfo(calendarEventStream);
             }
