@@ -35,6 +35,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 throw new ArgumentNullException(nameof(context));
             }
 
+            if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
+            {
+                await next(context);
+                return;
+            }
+
             var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
             List<WorkspaceContext> workspaces = workspacesService.GetWorkspaces().ToList();
 
