@@ -417,6 +417,9 @@
   <data name="EnterComments" xml:space="preserve">
     <value>Enter your comment here</value>
   </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Selected date is in the past</value>
+  </data>
   <data name="Action_Created" xml:space="preserve">
     <value>Created</value>
   </data>

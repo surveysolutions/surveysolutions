@@ -493,6 +493,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дата находится в прошлом.
+        /// </summary>
+        public static string DateFromPast {
+            get {
+                return ResourceManager.GetString("DateFromPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Детали.
         /// </summary>
         public static string Details_Column {
