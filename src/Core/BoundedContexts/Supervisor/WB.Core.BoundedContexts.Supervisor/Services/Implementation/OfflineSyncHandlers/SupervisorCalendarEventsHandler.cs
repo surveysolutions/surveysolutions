@@ -92,11 +92,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 .LoadAll(arg.UserId)
                 .Where(x => x.CalendarEventId.HasValue)
                 .Select(x => x.CalendarEventId!.Value);
-
-            var calendarEventIds = calendarEventsFormInterviews.Concat(calendarEventsFormAssignments);
+            var calendarEventsWithoutInterviews = calendarEventStorage.GetCalendarEventsForUser(arg.UserId)
+                .Where(ce => ce.InterviewId.HasValue 
+                     && this.interviewViewRepository.GetById(ce.InterviewId.Value.FormatGuid()) == null)
+                .Select(ce => ce.Id);
             
-            //var calendarEvents = calendarEventStorage.GetCalendarEventsForUser(arg.UserId);
 
+            var calendarEventIds = calendarEventsFormInterviews
+                .Union(calendarEventsFormAssignments)
+                .Union(calendarEventsWithoutInterviews);
+            
             List<CalendarEventApiView> response = calendarEventIds
                 .Select(id => new CalendarEventApiView
             {
