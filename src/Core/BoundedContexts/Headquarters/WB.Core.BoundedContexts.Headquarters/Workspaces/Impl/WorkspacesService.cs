@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -71,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             }
             
             var userWorkspaces = workspaces.Query(_ =>
-                _.Where(x => x.Users.Any(u => u.UserId == userId))
+                _.Where(x => x.Users.Any(u => u.User.Id == userId))
                     .Select(workspace => workspace.AsContext())
                     .ToList()
             );
@@ -79,15 +80,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             return userWorkspaces;
         }
 
-        public void AddUserToWorkspace(Guid user, string workspace)
+        public void AddUserToWorkspace(HqUser user, string workspace)
         {
-            var workspaceEntity = workspaces.GetById(workspace) ?? throw new ArgumentNullException("Workspace not found");
+            Workspace workspaceEntity = workspaces.GetById(workspace) ?? throw new ArgumentNullException("Workspace not found");
 
-            var workspaceUser = new WorkspacesUsers
-            {
-                Workspace = workspaceEntity,
-                UserId = user
-            };
+            var workspaceUser = new WorkspacesUsers(workspaceEntity, user);
             
             this.workspaceUsers.Store(workspaceUser, workspaceUser.Id);
             

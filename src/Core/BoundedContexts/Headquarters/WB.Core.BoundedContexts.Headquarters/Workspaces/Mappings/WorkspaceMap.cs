@@ -23,16 +23,4 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
             }, s => s.OneToMany());   
         }
     }
-
-    public class WorkspaceUsersMap : ClassMapping<WorkspacesUsers>
-    {
-        public WorkspaceUsersMap()
-        {
-            Schema(WorkspaceConstants.SchemaName);
-            Table("workspace_users");
-            Id(x => x.Id, idMap => idMap.Generator(Generators.Identity));
-            Property(x => x.UserId, ptp => ptp.Column("user_id"));
-            ManyToOne(x => x.Workspace);
-        }
-    }
 }

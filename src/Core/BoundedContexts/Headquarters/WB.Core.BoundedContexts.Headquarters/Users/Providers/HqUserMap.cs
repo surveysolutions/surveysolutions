@@ -105,6 +105,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                 oto.Cascade(Cascade.All);
                 oto.Column("\"UserProfileId\"");
             });
+            
+            Set(x => x.Workspaces, map =>
+            {
+                // map.Key(k => k.Column("user_id"));
+                map.Cascade(Cascade.All|Cascade.DeleteOrphans);
+                map.Inverse(true);
+            }, rel => rel.OneToMany());
         }
     }
 }

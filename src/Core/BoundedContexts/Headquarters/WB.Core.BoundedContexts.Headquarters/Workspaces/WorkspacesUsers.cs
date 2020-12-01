@@ -1,13 +1,26 @@
-using System;
+#nullable enable
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
     public class WorkspacesUsers
     {
-        public virtual int Id { get; set; }
-        
-        public virtual Workspace Workspace { get; set; }
+        public WorkspacesUsers()
+        {
+            Workspace = null!;
+            User = null!;
+        }
 
-        public virtual Guid UserId { get; set; }
+        public WorkspacesUsers(Workspace workspace, HqUser user)
+        {
+            Workspace = workspace;
+            User = user;
+        }
+
+        public virtual int Id { get; protected set; }
+        
+        public virtual Workspace Workspace { get; protected set; }
+
+        public virtual HqUser User { get; protected set; }
     }
 }
