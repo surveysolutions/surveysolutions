@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
@@ -29,6 +30,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public void OnResultExecuting(ResultExecutingContext context)
         {
+            if(context.Controller is UnderConstructionController) return;
+
             if (context.HttpContext.User.Identity.IsAuthenticated && context.Result is ViewResult view)
             {
                 var claims = context.HttpContext.User.GetWorkspaceClaims().ToHashSet();
