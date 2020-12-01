@@ -28,6 +28,8 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                         inner join users.userroles ur on u.""Id"" = ur.""UserId"" 
                         where ur.""RoleId"" not in ('00000000000000000000000000000001')
                         ");
+
+            Create.Index().OnTable("workspace_users").OnColumn("user_id").Unique().OnColumn("workspace").Unique();
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -20,21 +19,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         private readonly ILoggerProvider loggerProvider;
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
-        private readonly IUserRepository users;
         private readonly ILogger<WorkspacesService> logger;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
             ILoggerProvider loggerProvider, 
             IPlainStorageAccessor<Workspace> workspaces,
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
-            IUserRepository users,
             ILogger<WorkspacesService> logger)
         {
             this.connectionSettings = connectionSettings;
             this.loggerProvider = loggerProvider;
             this.workspaces = workspaces;
             this.workspaceUsers = workspaceUsers;
-            this.users = users;
             this.logger = logger;
         }
 
