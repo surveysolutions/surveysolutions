@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             
             this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.PlainStore, DbType.ReadSide);
 
-            workspace = Create.Service.WorkspaceNameProvider();
+            workspace = Create.Service.WorkspaceContextAccessor();
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
