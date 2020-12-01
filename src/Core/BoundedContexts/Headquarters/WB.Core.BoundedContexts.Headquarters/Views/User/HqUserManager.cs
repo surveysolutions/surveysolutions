@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,21 +30,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             this.workspacesService = workspacesService;
             this.workspaceContextAccessor = workspaceContextAccessor;
-        }
-
-        public override async Task<IdentityResult> CreateAsync(HqUser user, string password)
-        {
-            var workspace = this.workspaceContextAccessor.CurrentWorkspace()
-                            ?? throw new Exception("Cannot add user without specified workspace");
-
-            var result = await base.CreateAsync(user, password);
-
-            if (result.Succeeded)
-            {
-                this.workspacesService.AddUserToWorkspace(user.Id, workspace.Name);
-            }
-
-            return result;
         }
 
         public override async Task<IdentityResult> CreateAsync(HqUser user)
