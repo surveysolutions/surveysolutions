@@ -159,11 +159,12 @@
                                     {{$t("Common.CalendarEvent")}}
                                 </td>
                                 <td>
-                                    <span data-toggle="tooltip"
-                                        v-if="model.calendarEvent != null"
-                                        :title="((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? $t('Assignments.NoComment') : model.calendarEvent.comment)">
+                                    <div>
                                         {{calendarEventTime}}
-                                    </span>
+                                    </div>
+                                    <div>
+                                        {{((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? $t('Assignments.NoComment') : model.calendarEvent.comment)}}
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

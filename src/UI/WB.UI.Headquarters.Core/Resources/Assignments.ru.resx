@@ -396,6 +396,9 @@
     <value>Оставьте свой комментарий здесь</value>
     <comment>Оставьте свой комментарий здесь</comment>
   </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Дата находится в прошлом</value>
+  </data>
   <data name="Action" xml:space="preserve">
     <value>Действие</value>
   </data>
