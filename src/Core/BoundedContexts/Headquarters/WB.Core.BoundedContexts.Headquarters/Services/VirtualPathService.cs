@@ -38,9 +38,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         public string GetRelatedToRootPath(string relativePath)
         {
-            var pathBase = this.workspaceAccessor.CurrentWorkspace()?.PathBase ?? string.Empty;
-            
-            return pathBase +  relativePath.TrimStart('~');
+            var workspace = this.workspaceAccessor.CurrentWorkspace();
+
+            if (workspace == null) return relativePath.Replace("~", "");
+
+            var pathBase = (workspace?.PathBase ?? string.Empty).TrimEnd('/');
+            return $"{pathBase}/{workspace.Name}/{relativePath.Replace("~/", "")}";
         }
     }
 }
