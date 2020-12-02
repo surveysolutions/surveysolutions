@@ -24,6 +24,11 @@ namespace WB.UI.Headquarters.Code.Authentication
                 context.Succeed(requirement);
             }
 
+            if (context.User.Identity.AuthenticationType == AuthType.TenantToken)
+            {
+                context.Succeed(requirement);
+            }
+
             if (workspace == null)
             {
                 if (context.Resource is IDirectiveContext ctx)
@@ -39,11 +44,6 @@ namespace WB.UI.Headquarters.Code.Authentication
                 }
             } else
             if (context.User.HasClaim("Workspace", workspace.Name))
-            {
-                context.Succeed(requirement);
-            }
-
-            if (context.User.Identity.AuthenticationType == "TenantToken")
             {
                 context.Succeed(requirement);
             }

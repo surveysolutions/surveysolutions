@@ -6,11 +6,12 @@ using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
     [Route("api/export/v1/externalstorages")]
-    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = "TenantToken")]
+    [Microsoft.AspNetCore.Authorization.Authorize(AuthenticationSchemes = AuthType.TenantToken)]
     public class ExternalStoragesApiController : Controller
     {
         private readonly ExternalStoragesSettings externalStoragesSettings;

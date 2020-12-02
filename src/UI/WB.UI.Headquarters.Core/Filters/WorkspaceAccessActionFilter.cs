@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -15,6 +16,9 @@ namespace WB.UI.Headquarters.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            if(context.HttpContext.User.Identity.AuthenticationType == AuthType.TenantToken)
+                return;
+
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
                 var workspace = workspaceContextAccessor.CurrentWorkspace();
