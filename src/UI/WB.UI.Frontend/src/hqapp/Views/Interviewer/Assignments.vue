@@ -13,7 +13,7 @@
                         :value="selectedDate">
                     </DatePicker>
                     <div  v-if="dateInPast">
-                        <span class="danger">{{ $t("Assignments.DateFromPast") }}</span>
+                        <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
                     </div>
                 </div>
 
