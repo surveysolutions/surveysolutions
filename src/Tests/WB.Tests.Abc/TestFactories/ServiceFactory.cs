@@ -1283,6 +1283,46 @@ namespace WB.Tests.Abc.TestFactories
                 serializer ?? Mock.Of<ISerializer>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>());
         }
+
+        
+        public ICalendarEventService CalendarEventService(params Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent[] calendarEvents)
+        {
+            var accessor = new TestInMemoryWriter<Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>();
+            foreach (var calendarEvent in calendarEvents)
+            {
+                accessor.Store(calendarEvent, calendarEvent.PublicKey);
+            }
+            return this.CalendarEventService(accessor);
+        }
+        public ICalendarEventService CalendarEventService(Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent[] calendarEvents,
+            Assignment[] assignments, IInterviewInformationFactory interviewerInterviewsFactory = null)
+        {
+            var accessor = new TestInMemoryWriter<Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>();
+            foreach (var calendarEvent in calendarEvents)
+            {
+                accessor.Store(calendarEvent, calendarEvent.PublicKey);
+            }
+            var assignmentsAccessor = new TestInMemoryWriter<Assignment, Guid>();
+            foreach (var assignment in assignments)
+            {
+                assignmentsAccessor.Store(assignment, assignment.PublicKey);
+            }
+            
+            return this.CalendarEventService(accessor, assignmentsAccessor, interviewerInterviewsFactory);
+        }
+        
+        public ICalendarEventService CalendarEventService(
+            IQueryableReadSideRepositoryReader<Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid> calendarEventsAccessor = null,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor = null,  
+            IInterviewInformationFactory interviewerInterviewsFactory = null)
+        {
+            return new CalendarEventService(
+                calendarEventsAccessor ??
+                Mock.Of<IQueryableReadSideRepositoryReader<
+                    Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>>(),
+                assignmentsAccessor ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
+                interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
