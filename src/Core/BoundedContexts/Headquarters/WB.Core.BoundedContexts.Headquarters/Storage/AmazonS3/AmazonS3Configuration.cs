@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Options;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
@@ -10,13 +11,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
     {
         private readonly IOptions<FileStorageConfig> fileStorageOptions;
         private readonly IOptions<HeadquartersConfig> hqOptions;
+        private readonly IWorkspaceContextAccessor contextAccessor;
 
         public AmazonS3Configuration(
             IOptions<FileStorageConfig> fileStorageOptions,
-            IOptions<HeadquartersConfig> hqOptions)
+            IOptions<HeadquartersConfig> hqOptions,
+            IWorkspaceContextAccessor contextAccessor)
         {
             this.fileStorageOptions = fileStorageOptions;
             this.hqOptions = hqOptions;
+            this.contextAccessor = contextAccessor;
         }
 
         private AmazonBucketInfo? bucketInfo;
@@ -30,9 +34,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
             var uri = new Uri(s3Url); // example: new Uri("s3://deccapi/hq/")
 
+            var tenantName = this.hqOptions.Value.TenantName;
+
+            var workspace = contextAccessor.CurrentWorkspace();
+
+            if(workspace == null) throw new MissingWorkspaceException("Cannot store or query S3 data outside of workspaces");
+
+            if (workspace.Name != WorkspaceConstants.DefaultWorkspaceName)
+            {
+                tenantName += "_" + workspace.Name;
+            }
+
             bucketInfo = new AmazonBucketInfo(
                 uri.Host, // example => deccapi
-                uri.AbsolutePath.Trim('/') + "/" + this.hqOptions.Value.TenantName + "/" // example => hq/tenantName/
+                uri.AbsolutePath.Trim('/') + "/" + tenantName + "/" 
+                // example => hq/tenantName/
             );
             
             return bucketInfo;

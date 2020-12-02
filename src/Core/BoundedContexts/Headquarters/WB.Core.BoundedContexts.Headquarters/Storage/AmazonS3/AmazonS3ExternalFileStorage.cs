@@ -17,19 +17,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
     {
         private readonly IAmazonS3Configuration s3Configuration;
         private readonly IAmazonS3 client;
-        private readonly ITransferUtility transferUtility;
         private readonly ILogger log;
 
         public AmazonS3ExternalFileStorage(
             IAmazonS3Configuration s3Configuration,
             IAmazonS3 amazonS3Client,
-            ITransferUtility transferUtility,
             ILoggerProvider loggerProvider)
         {
             log = loggerProvider.GetForType(GetType());
             this.s3Configuration = s3Configuration;
             client = amazonS3Client;
-            this.transferUtility = transferUtility;
         }
 
         private AmazonBucketInfo? _bucketInfo;
@@ -37,14 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public async Task<byte[]?> GetBinaryAsync(string key)
         {
+            var getObject = new GetObjectRequest
+            {
+                BucketName = BucketInfo.BucketName,
+                Key = BucketInfo.PathTo(key)
+            };
+
             try
             {
-                var getObject = new GetObjectRequest
-                {
-                    BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathTo(key)
-                };
-
                 using var response = await client.GetObjectAsync(getObject).ConfigureAwait(false);
                 await using var ms = new MemoryStream();
                 await response.ResponseStream.CopyToAsync(ms);
@@ -52,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.Trace($"Cannot get object from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathTo(key)}");
+                log.Trace($"Cannot get object from S3. [{e.StatusCode.ToString()}] {getObject.BucketName}/{getObject.Key}");
                 return null;
             }
             catch (Exception e)
@@ -131,7 +128,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 {
                     uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
-
+                
+                var transferUtility = new TransferUtility(client);
                 transferUtility.Upload(uploadRequest);
 
                 return new FileObject
@@ -170,6 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
 
+                var transferUtility = new TransferUtility(client);
                 await transferUtility.UploadAsync(uploadRequest).ConfigureAwait(false);
 
                 return new FileObject

@@ -98,10 +98,9 @@ namespace WB.Tests.Abc.TestFactories
         public AmazonS3ExternalFileStorage AmazonS3ExternalFileStorage(
             IAmazonS3Configuration s3Settings, 
             IAmazonS3 client, 
-            ITransferUtility transferUtility, 
             ILoggerProvider loggerProvider)
         { 
-            return new AmazonS3ExternalFileStorage(s3Settings, client, transferUtility, loggerProvider);
+            return new AmazonS3ExternalFileStorage(s3Settings, client, loggerProvider);
         }
 
         public IPlainStorage<TEntity> SqliteInmemoryStorage<TEntity>(params TEntity[] items)
