@@ -20,6 +20,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private bool isDisposed = false;
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
+        private bool rootScopeExecution = false;
         public Guid? SessionId;
         private static long counter = 0;
         public long Id { get; }
@@ -36,7 +37,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             if (scope.Tag == LifetimeScope.RootTag)
             {
                 logger.Error("UnitOfWork should not be created in root scope.");
-                isDisposed = true;
+                rootScopeExecution = true;
                 // throw new ArgumentException("Unit of work cannot be resoled in root scope");
                 // it's not helpful to throw exception here, as there will be no clue on which code 
                 // caused an error
@@ -68,6 +69,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             get
             {
+                if(rootScopeExecution)
+                {
+                    logger.Info($"Error getting session. Old sessionId:{SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                    throw new RootScopeResolveException("UnitOfWork should not be resolved from Root lifetime scope");
+                }
+
                 if (isDisposed)
                 {
                     logger.Info($"Error getting session. Old sessionId:{SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
