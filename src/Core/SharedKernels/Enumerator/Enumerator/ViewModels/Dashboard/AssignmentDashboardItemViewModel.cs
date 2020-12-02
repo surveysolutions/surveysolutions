@@ -90,6 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.SubTitle = subTitle;
             
             string? calendarEvent = null;
+            ZonedDateTime? zonedCalendarEvent = null;
             if (Assignment.CalendarEvent.HasValue)
             {
                 var calendarString = FormatDateTimeString(
@@ -98,9 +99,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     Assignment.CalendarEventTimezoneId);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
                 calendarEvent = $"{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
+                zonedCalendarEvent = GetZonedDateTime(Assignment.CalendarEvent.Value, Assignment.CalendarEventTimezoneId);
             }
 
             this.CalendarEvent = calendarEvent;
+            this.CalendarEventStart = zonedCalendarEvent;
         }
 
         protected abstract void BindActions();
