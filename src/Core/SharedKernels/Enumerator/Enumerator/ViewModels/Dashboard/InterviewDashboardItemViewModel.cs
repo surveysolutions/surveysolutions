@@ -172,6 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             
             this.SubTitle = GetSubTitle();
             this.CalendarEvent = GetCalendarEventText();
+            this.CalendarEventStart = GetCalendarEventDate();
 
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
@@ -199,6 +200,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 string separatorVisit = !string.IsNullOrEmpty(interview.CalendarEventComment) 
                     ? Environment.NewLine : string.Empty;
                 return $"{calendarString}{separatorVisit}{interview.CalendarEventComment}";
+            }
+
+            return null;
+        }
+
+        private ZonedDateTime? GetCalendarEventDate()
+        {
+            if (interview.CalendarEvent.HasValue)
+            {
+                return GetZonedDateTime(interview.CalendarEvent.Value, interview.CalendarEventTimezoneId);
             }
 
             return null;

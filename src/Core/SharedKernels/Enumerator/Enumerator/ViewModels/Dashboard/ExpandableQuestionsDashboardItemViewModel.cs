@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private string idLabel;
         private string subTitle;
         private string calendarEvent;
+        private ZonedDateTime? calendarEventStart;
         private string title;
         private bool isExpanded = true;
         private DashboardInterviewStatus status;
@@ -137,10 +138,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 }
             }
         }
+        
+        public ZonedDateTime? CalendarEventStart
+        {
+            get => calendarEventStart;
+            set
+            {
+                if (this.calendarEventStart != value)
+                {
+                    this.calendarEventStart = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
 
         public virtual string Comments { get; }
         
-        protected string FormatDateTimeString(string formatString, DateTimeOffset dateTimeOffset, string timeZoneId)
+        protected ZonedDateTime GetZonedDateTime(DateTimeOffset dateTimeOffset, string timeZoneId)
         {
             DateTimeZone timeZone = null;
             if (timeZoneId != null)
@@ -149,7 +163,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
             var instant = dateTimeOffset.UtcDateTime.ToInstant();
             var zonedDateTime = new ZonedDateTime(instant, timeZone);
+            return zonedDateTime;
+        }
 
+        protected string FormatDateTimeString(string formatString, DateTimeOffset dateTimeOffset, string timeZoneId)
+        {
+            var zonedDateTime = GetZonedDateTime(dateTimeOffset, timeZoneId);
             return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUtc());
         }
         
