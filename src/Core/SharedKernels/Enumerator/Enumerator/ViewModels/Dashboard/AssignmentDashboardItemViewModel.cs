@@ -86,7 +86,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
                     .FormatString(Assignment.Quantity.GetValueOrDefault());
             }
+
+            this.SubTitle = subTitle;
             
+            string? calendarEvent = null;
             if (Assignment.CalendarEvent.HasValue)
             {
                 var calendarString = FormatDateTimeString(
@@ -94,10 +97,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     Assignment.CalendarEvent.Value,
                     Assignment.CalendarEventTimezoneId);
                 string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
-                subTitle += $"{Environment.NewLine}{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
+                calendarEvent = $"{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
             }
 
-            this.SubTitle = subTitle;
+            this.CalendarEvent = calendarEvent;
         }
 
         protected abstract void BindActions();
