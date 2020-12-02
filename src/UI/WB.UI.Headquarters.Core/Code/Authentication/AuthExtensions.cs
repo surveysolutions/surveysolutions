@@ -14,6 +14,11 @@ using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
+    public static class AuthType
+    {
+        public const string TenantToken = "TenantToken";
+    }
+
     public static class AuthExtensions
     {
         public static void AddHqAuthorization(this IServiceCollection services)
@@ -91,7 +96,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                     opts.Realm = "WB.Headquarters";
                 })
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", _ => { })
-                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>("TenantToken", _ => {});
+                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => {});
 
             services.Configure<IdentityOptions>(options =>
             {
