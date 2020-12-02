@@ -19,21 +19,17 @@ namespace WB.UI.Headquarters.Services
     class ExportServiceApiConfigurator : IHttpClientConfigurator<IExportServiceApi>
     {
         private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
-        private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly ILogger<ExportServiceApiConfigurator> logger;
         private readonly IInScopeExecutor inScopeExecutor;
         private readonly IHttpContextAccessor httpContextAccessor;
 
         public ExportServiceApiConfigurator(
             IOptionsSnapshot<ExportServiceConfig> exportOptions,
-            IOptions<HeadquartersConfig> headquarterOptions,
-            
             IHttpContextAccessor httpContextAccessor,
             ILogger<ExportServiceApiConfigurator> logger, 
             IInScopeExecutor inScopeExecutor)
         {
             this.exportOptions = exportOptions;
-            this.headquarterOptions = headquarterOptions;
             this.httpContextAccessor = httpContextAccessor;
             this.logger = logger;
             this.inScopeExecutor = inScopeExecutor;
@@ -41,42 +37,47 @@ namespace WB.UI.Headquarters.Services
 
         public void ConfigureHttpClient(HttpClient hc)
         {
-            var valueBaseUrl = headquarterOptions.Value.BaseUrl;
             var context = httpContextAccessor.HttpContext;
 
-            if (!Uri.TryCreate(valueBaseUrl, UriKind.Absolute, out var baseUrl))
+            var executor = context != null
+                ? context.RequestServices.GetRequiredService<IInScopeExecutor>()
+                : inScopeExecutor;
+
+            executor.Execute(s =>
             {
-                if (context != null)
+                var headquarterOptions = s.GetInstance<IOptions<HeadquartersConfig>>();
+                var exportServiceSettings = s.GetInstance<IPlainKeyValueStorage<ExportServiceSettings>>();
+
+                var valueBaseUrl = headquarterOptions.Value.BaseUrl;
+
+                if (!Uri.TryCreate(valueBaseUrl, UriKind.Absolute, out var baseUrl))
                 {
-                    var request = context.Request;
+                    if (context != null)
+                    {
+                        var request = context.Request;
 
-                    baseUrl = new Uri($"{request.Scheme}://{request.Host}/");
+                        baseUrl = new Uri($"{request.Scheme}://{request.Host}/");
+                    }
                 }
-            }
-            
-            this.logger.LogTrace("Using {baseUrl} as export service url. Parsed value {baseUrlUri}", valueBaseUrl, baseUrl);
 
-            var executor = context == null
-                ? inScopeExecutor
-                : context.RequestServices.GetRequiredService<IInScopeExecutor>();
+                this.logger.LogTrace("Using {baseUrl} as export service url. Parsed value {baseUrlUri}", valueBaseUrl, baseUrl);
 
-            string key = executor.Execute(s =>
-            {
+
                 var workspace = s.GetInstance<IWorkspaceContextAccessor>().CurrentWorkspace();
 
                 if (workspace != null)
                 {
                     hc.DefaultRequestHeaders.Add(@"x-tenant-space", workspace.Name);
                 }
+                hc.DefaultRequestHeaders.Referrer = baseUrl;
+                hc.DefaultRequestHeaders.Add(@"x-tenant-name", headquarterOptions.Value.TenantName);
 
-                IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings = s.GetInstance<IPlainKeyValueStorage<ExportServiceSettings>>();
-                return exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
+                var key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey)?.Key;
+                hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(@"Bearer", key);
+
             });
 
             hc.BaseAddress = new Uri(exportOptions.Value.ExportServiceUrl);
-            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(@"Bearer", key);
-            hc.DefaultRequestHeaders.Referrer = baseUrl;
-            hc.DefaultRequestHeaders.Add(@"x-tenant-name", headquarterOptions.Value.TenantName);
         }
     }
 }
