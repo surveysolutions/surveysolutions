@@ -163,7 +163,7 @@
                                         {{calendarEventTime}}
                                     </div>
                                     <div>
-                                        {{((model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? $t('Assignments.NoComment') : model.calendarEvent.comment)}}
+                                        {{((model.calendarEvent == null || model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? $t('Assignments.NoComment') : model.calendarEvent.comment)}}
                                     </div>
                                 </td>
                             </tr>
