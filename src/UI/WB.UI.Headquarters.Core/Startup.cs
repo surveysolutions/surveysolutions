@@ -390,13 +390,12 @@ namespace WB.UI.Headquarters
             });
 
             app.UseUnderConstruction();
+
+            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             app.UseWorkspaces();
 
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
-
-            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
-     
 
             app.UseRouting();
             app.UseAuthentication();
