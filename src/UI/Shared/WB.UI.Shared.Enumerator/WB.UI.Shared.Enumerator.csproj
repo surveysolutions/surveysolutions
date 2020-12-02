@@ -59,6 +59,7 @@
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
+    <Compile Include="Converters\CalendarEventAndStatusToColorConverter.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
