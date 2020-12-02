@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -26,6 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         private AmazonS3Configuration settings;
         private AmazonBucketInfo bucketInfo;
         private Mock<IAmazonS3> client;
+        private Mock<ITransferUtility> transferUtility;
         
         [SetUp]
         public void SetUp()
@@ -44,8 +46,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
             bucketInfo = this.settings.GetAmazonS3BucketInfo();
 
             this.client = new Mock<IAmazonS3>();
+            this.transferUtility = new Mock<ITransferUtility>();
 
-            this.storage = Create.Storage.AmazonS3ExternalFileStorage(settings, client.Object, Mock.Of<ILoggerProvider>(l => l.GetForType(It.IsAny<Type>()) == Mock.Of<ILogger>()));
+            this.storage = Create.Storage.AmazonS3ExternalFileStorage(settings, client.Object, transferUtility.Object, Mock.Of<ILoggerProvider>(l => l.GetForType(It.IsAny<Type>()) == Mock.Of<ILogger>()));
         }
 
         [Test]
