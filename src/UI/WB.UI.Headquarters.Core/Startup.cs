@@ -368,13 +368,7 @@ namespace WB.UI.Headquarters
             
             if (!env.IsDevelopment())
             {
-                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
-                    appBuilder =>
-                    {
-                        appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
-                        appBuilder.UseExceptionHandler("/error/500");
-                    });
-
+  
                 app.UseHsts();
             }
             
@@ -393,6 +387,16 @@ namespace WB.UI.Headquarters
 
             app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             app.UseWorkspaces();
+
+            if (!env.IsDevelopment())
+            {
+                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+                    appBuilder =>
+                    {
+                        appBuilder.UseStatusCodePagesWithReExecute("/error/{0}");
+                        appBuilder.UseExceptionHandler("/error/500");
+                    });
+            }
 
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
