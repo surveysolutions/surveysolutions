@@ -316,6 +316,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дата находится в прошлом.
+        /// </summary>
+        public static string Dashboard_PastDateCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_PastDateCalendarEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Время находится в прошлом.
+        /// </summary>
+        public static string Dashboard_PastTimeCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_PastTimeCalendarEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Вы можете создать новое интервью используя пустой опросник.
         /// </summary>
         public static string Dashboard_QuestionnairesTabText {

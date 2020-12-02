@@ -106,6 +106,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref comment, value);
         }
 
+        private string? timeError;
+        public string? TimeError
+        {
+            get => timeError;
+            set => SetProperty(ref timeError, value);
+        }
+        
+        private string? dateError;
+        public string? DateError
+        {
+            get => dateError;
+            set => SetProperty(ref dateError, value);
+        }
+
         public IMvxAsyncCommand CloseCommand =>
             new MvxAsyncCommand(async () => await this.navigationService.Close(this));
         public IMvxAsyncCommand OkCommand =>
@@ -126,7 +140,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         DateTimeKind.Local);
                 },
                 DateTimeValue,
-                DateTime.Today);
+                null /*DateTime.Today*/);
+            ValidateDateTime();
         });
 
         public IMvxAsyncCommand EditTime => new MvxAsyncCommand(async () =>
@@ -140,7 +155,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         DateTimeKind.Local);
                },
                DateTimeValue.TimeOfDay);
+            ValidateDateTime();
         });
+
+        private void ValidateDateTime()
+        {
+            var now = DateTime.Now;
+            DateError = now.Date > DateTimeValue.Date ? EnumeratorUIResources.Dashboard_PastDateCalendarEvent : null;
+            TimeError = now > DateTimeValue ? EnumeratorUIResources.Dashboard_PastTimeCalendarEvent : null;
+        }
 
         private void SaveCalendarEvent()
         {

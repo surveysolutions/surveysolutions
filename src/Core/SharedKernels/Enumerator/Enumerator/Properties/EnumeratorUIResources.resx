@@ -816,6 +816,12 @@ your next synchronization</value>
   <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
     <value>Next contact: {0}</value>
   </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Selected date is in the past</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Selected time is in the past</value>
+  </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
     <value>{0} question(s) answered</value>
   </data>
