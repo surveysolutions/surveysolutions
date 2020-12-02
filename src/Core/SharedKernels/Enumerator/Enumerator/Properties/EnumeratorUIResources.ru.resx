@@ -974,4 +974,10 @@
   <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
     <value>Следуюший контакт: {0}</value>
   </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Дата находится в прошлом</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Время находится в прошлом</value>
+  </data>
 </root>

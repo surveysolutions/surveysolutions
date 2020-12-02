@@ -316,6 +316,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected date is in the past.
+        /// </summary>
+        public static string Dashboard_PastDateCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_PastDateCalendarEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected time is in the past.
+        /// </summary>
+        public static string Dashboard_PastTimeCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_PastTimeCalendarEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can create new interviews using assignments.
         /// </summary>
         public static string Dashboard_QuestionnairesTabText {
