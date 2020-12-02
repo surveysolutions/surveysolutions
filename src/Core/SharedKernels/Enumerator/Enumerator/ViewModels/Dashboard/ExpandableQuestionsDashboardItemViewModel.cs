@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private readonly IServiceLocator serviceLocator;
         private string idLabel;
         private string subTitle;
+        private string calendarEvent;
         private string title;
         private bool isExpanded = true;
         private DashboardInterviewStatus status;
@@ -119,6 +120,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 if (this.subTitle != value)
                 {
                     this.subTitle = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        public string CalendarEvent
+        {
+            get => calendarEvent;
+            set
+            {
+                if (this.calendarEvent != value)
+                {
+                    this.calendarEvent = value;
                     this.RaisePropertyChanged();
                 }
             }
