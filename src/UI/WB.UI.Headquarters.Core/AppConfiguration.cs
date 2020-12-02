@@ -39,25 +39,20 @@ namespace WB.UI.Headquarters
                 return Options.Create(config);
             });
 
-            // configuration
-            services.Configure<ApkConfig>(configuration.GetSection("Apks"));
-            services.Configure<CaptchaConfig>(configuration.CaptchaOptionsSection());
-            services.Configure<ExportServiceConfig>(configuration.GetSection("DataExport"));
-            services.Configure<DesignerConfig>(configuration.GetSection("Designer"));
-            services.Configure<GoogleMapsConfig>(configuration.GetSection("GoogleMap"));
-            
-            services.Configure<PreloadingConfig>(configuration.GetSection("PreLoading"));
-            services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
-            services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
-            services.Configure<FileStorageConfig>(configuration.GetSection("FileStorage"));
-            services.Configure<GeospatialConfig>(configuration.GetSection("Geospatial"));
-            
-            services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
-
-            services.PostConfigure<FileStorageConfig>(c =>
+            services.AddTransient<IOptions<FileStorageConfig>>(sp =>
             {
+                var workspaceAccessor = sp.GetRequiredService<IWorkspaceContextAccessor>();
+
+                var c = configuration.GetSection("FileStorage").Get<FileStorageConfig>();
                 c.AppData = c.AppData.Replace("~", Directory.GetCurrentDirectory());
                 c.TempData = c.TempData.Replace("~", Directory.GetCurrentDirectory());
+
+                var workspace = workspaceAccessor.CurrentWorkspace();
+                if (workspace != null && workspace.Name == WorkspaceConstants.DefaultWorkspaceName)
+                {
+                    c.AppData = Path.Combine(c.AppData, workspace.Name);
+                    c.TempData = Path.Combine(c.TempData, workspace.Name);
+                }
 
                 void EnsureFolderExists(string folder)
                 {
@@ -77,12 +72,31 @@ namespace WB.UI.Headquarters
                 }
 
                 EnsureFolderExists(c.TempData);
+
+                return Options.Create(c);
             });
+
+            // configuration
+            services.Configure<ApkConfig>(configuration.GetSection("Apks"));
+            services.Configure<CaptchaConfig>(configuration.CaptchaOptionsSection());
+            services.Configure<ExportServiceConfig>(configuration.GetSection("DataExport"));
+            services.Configure<DesignerConfig>(configuration.GetSection("Designer"));
+            services.Configure<GoogleMapsConfig>(configuration.GetSection("GoogleMap"));
+            
+            services.Configure<PreloadingConfig>(configuration.GetSection("PreLoading"));
+            services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
+            services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
+           
+            services.Configure<GeospatialConfig>(configuration.GetSection("Geospatial"));
+            
+            services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
+
+           
         }
 
-        public static IConfigurationSection MetricsConfiguration(this IConfiguration conf)
-        {
-            return conf.GetSection("Metrics");
-        }
+    public static IConfigurationSection MetricsConfiguration(this IConfiguration conf)
+    {
+        return conf.GetSection("Metrics");
     }
+}
 }
