@@ -163,7 +163,7 @@
                                         {{calendarEventTime}}
                                     </div>
                                     <div>
-                                        {{((model.calendarEvent == null || model.calendarEvent.comment == null || model.calendarEvent.comment == '') ? $t('Assignments.NoComment') : model.calendarEvent.comment)}}
+                                        {{calendarEventComment}}
                                     </div>
                                 </td>
                             </tr>
@@ -234,6 +234,14 @@ export default {
                     .local()
                     .format(DateFormats.dateTimeInList)
                 : ''
+        },
+        calendarEventComment() {
+            if (this.model.calendarEvent == null)
+                return ''
+
+            return this.model.calendarEvent.comment == null || this.model.calendarEvent.comment == ''
+                ? this.$t('Assignments.NoComment')
+                : this.model.calendarEvent.comment
         },
 
         tableOptions() {
