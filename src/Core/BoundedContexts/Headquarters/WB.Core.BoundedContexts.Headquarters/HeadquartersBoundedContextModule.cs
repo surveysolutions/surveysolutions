@@ -332,7 +332,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWorkspaceContextAccessor, WorkspaceContextAccessor>();
             registry.Bind<IWorkspaceContextSetter, WorkspaceContextSetter>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
-            registry.BindInPerLifetimeScope<IWorkspacesCache, WorkspacesCache>();
+            registry.Bind<IWorkspacesCache, WorkspacesCache>();
 
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
             registry.BindToMethod(ctx =>
