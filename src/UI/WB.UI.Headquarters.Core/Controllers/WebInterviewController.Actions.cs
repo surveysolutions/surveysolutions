@@ -115,10 +115,10 @@ namespace WB.UI.Headquarters.Controllers
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
                 var responsibleId = interview.CurrentResponsibleId;
 
+                this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
+
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
-
-                this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
             }
             catch (Exception e)
             {
