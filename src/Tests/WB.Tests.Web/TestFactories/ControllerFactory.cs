@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +15,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -28,7 +26,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
@@ -83,10 +80,6 @@ namespace WB.Tests.Web.TestFactories
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 syncVersionProvider ?? new InterviewerSyncProtocolVersionProvider(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-                questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x =>
-                    x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
-                interviewInformationFactory ?? Mock.Of<IInterviewInformationFactory>(),
-                assignmentsService ?? Mock.Of<IAssignmentsService>(),
                 Mock.Of<IClientApkProvider>(),
                 interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
                 tenantSettings ?? new InMemoryKeyValueStorage<TenantSettings>(),
