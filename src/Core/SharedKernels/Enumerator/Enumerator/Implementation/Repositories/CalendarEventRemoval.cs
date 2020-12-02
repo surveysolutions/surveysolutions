@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 if (calendarEvent.InterviewId.HasValue)
                 {
                     var interviewView = interviewViewRepository.GetById(calendarEvent.InterviewId.Value.FormatGuid());
-                    if (interviewView != null)
+                    if (interviewView != null && interviewView.CalendarEventId == id)
                     {
                         interviewView.CalendarEvent = null;
                         interviewView.CalendarEventId = null;
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 else 
                 {
                     var assignment = assignmentDocumentsStorage.GetById(calendarEvent.AssignmentId);
-                    if (assignment != null)
+                    if (assignment != null && assignment.CalendarEventId == id)
                     {
                         assignment.CalendarEvent = null;
                         assignment.CalendarEventId = null;
