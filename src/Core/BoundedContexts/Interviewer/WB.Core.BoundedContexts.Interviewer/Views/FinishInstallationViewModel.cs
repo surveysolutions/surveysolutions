@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -79,7 +80,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token,
                 SecurityStamp = interviewer.SecurityStamp,
-                TenantId = tenantId
+                TenantId = tenantId,
+                Workspace = interviewer.Workspaces.First().Name
             };
             return interviewerIdentity;
         }
