@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Controllers;
 
@@ -34,10 +32,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (context.HttpContext.User.Identity.IsAuthenticated && context.Result is ViewResult view)
             {
-                var claims = context.HttpContext.User.GetWorkspaceClaims().ToHashSet();
-                var workspaces = this.workspacesService.GetWorkspaces();
-                var userWorkspaces = workspaces.Where(w => claims.Contains(w.Name));
-                view.ViewData["UserWorkspacesList"] = userWorkspaces;
+                view.ViewData["UserWorkspacesList"] = this.workspacesService.CurrentUserWorkspaces();
 
                 var currentWorkspace = workspaceContextAccessor.CurrentWorkspace();
 

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
@@ -26,10 +27,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             SignInManager<HqUser> signInManager,
             IUserViewFactory userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
+            IWorkspacesCache workspacesCache,
             IUserToDeviceService userToDeviceService) : base(
-                authorizedUser: authorizedUser,
-                userViewFactory: userViewFactory,
-                userToDeviceService)
+                authorizedUser,
+                userViewFactory,
+                userToDeviceService,
+                workspacesCache)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

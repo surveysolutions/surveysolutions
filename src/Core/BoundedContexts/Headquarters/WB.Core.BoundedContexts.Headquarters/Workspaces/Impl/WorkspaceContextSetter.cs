@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         public void Set(string name)
         {
             var workspacesService = serviceLocator.GetInstance<IWorkspacesCache>();
-            var workspace = workspacesService.GetWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var workspace = workspacesService.AllWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             holder.Current = workspace ?? throw new ArgumentNullException(nameof(name));
         }
     }

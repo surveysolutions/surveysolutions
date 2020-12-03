@@ -34,6 +34,9 @@ namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
             Create.Table("hibernate_unique_key")
                 .WithColumn("next_hi").AsInt32().NotNullable();
             
+            
+            
+            
             Execute.WithConnection((c, t) =>
             {
                 var maxValue =

@@ -22,8 +22,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             : base(unitOfWork, memoryCache, entitySerializer)
         {
             this.sessionProvider = unitOfWork;
-
-            this.EnsureTableExists();
         }
 
         protected override object ExecuteScalar(DbCommand command)
