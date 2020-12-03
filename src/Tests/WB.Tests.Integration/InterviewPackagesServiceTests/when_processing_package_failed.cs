@@ -82,6 +82,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(UnitOfWork);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
             var interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin),
@@ -92,8 +93,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
                 interviews: new TestInMemoryWriter<InterviewSummary>(),
-                inScopeExecutor: new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object),
-                sessionFactory: sessionFactory);
+                sessionFactory: sessionFactory,
+                inScopeExecutor: executor);
 
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
