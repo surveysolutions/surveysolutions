@@ -7,14 +7,22 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            if (!Schema.Table("questionnairedocuments").Exists())
+            string[] tables =
             {
-                Create.CreateKeyValueTable("questionnairedocuments");
-            }
+                "questionnairedocuments",
+                "questionnairebackups",
+                "webinterviewconfigs",
+                "questionnairepdfs",
+                "profilesettings",
+                "questionnairelookuptables"
+            };
 
-            if (!Schema.Table("questionnairebackups").Exists())
+            foreach (var table in tables)
             {
-                Create.CreateKeyValueTable("questionnairebackups");
+                if (!Schema.Table(table).Exists())
+                {
+                    Create.CreateKeyValueTable(table);
+                }
             }
         }
     }
