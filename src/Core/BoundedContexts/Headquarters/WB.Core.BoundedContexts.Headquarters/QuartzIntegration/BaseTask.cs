@@ -62,9 +62,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 await this.scheduler.AddJob(job, true);
             }
 
-            var triggersOfJob = await this.scheduler.GetTriggersOfJob(jobKey);
             var trigger = TriggerBuilder.Create()
-                .WithIdentity(new TriggerKey($"{triggerKey.Name}{triggersOfJob?.Count + 1}", triggerKey.Group))
+                .WithDescription(jobKey.ToString())
                 .ForJob(jobKey)
                 .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second))
                 .Build();
