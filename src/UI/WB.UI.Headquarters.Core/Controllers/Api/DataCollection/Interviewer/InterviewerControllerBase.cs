@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IAuthorizedUser authorizedUser,
             IClientApkProvider clientApkProvider,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IPlainStorageAccessor<ServerSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService)
             : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)

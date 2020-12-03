@@ -98,7 +98,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             
             await DeleteQuestionnaire(questionnaire, questionnaireIdentity, userId);
 
-            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory, workspace);
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
             var questionnaireDocument = hqQuestionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             Assert.That(questionnaireDocument, Is.Not.Null);
@@ -188,7 +188,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             QuestionnaireIdentity questionnaireIdentity,
             Guid userId)
         {
-            using var unitOfWorkForDelete = IntegrationCreate.UnitOfWork(factory);
+            using var unitOfWorkForDelete = IntegrationCreate.UnitOfWork(factory, workspace);
             {
                 var service = CreateDeleteQuestionnaireService(unitOfWorkForDelete,
                     questionnaire, questionnaireIdentity);
@@ -322,7 +322,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
         private void SaveQuestionnaire(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaire)
         {
-            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory, workspace);
 
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
 

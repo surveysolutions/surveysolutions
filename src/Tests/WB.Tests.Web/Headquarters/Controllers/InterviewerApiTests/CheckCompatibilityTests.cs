@@ -34,8 +34,12 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         [Test]
         public async Task when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
         {
-            var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
-            tenantSettings.Store(new TenantSettings{ TenantPublicId = "server id"}, AppSetting.TenantSettingsKey);
+            var tenantSettings = new TestPlainStorage<ServerSettings>();
+            tenantSettings.Store(new ServerSettings
+            { 
+                Id = ServerSettings.PublicTenantIdKey,
+                Value = "server id"
+            }, ServerSettings.PublicTenantIdKey);
 
             var controller = Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
 
@@ -63,7 +67,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                interviewInformationFactory: interviews,
                 authorizedUser: authorizedUser,
                 interviewerVersionReader: interviewerVersionReader.Object,
                 userToDeviceService: userToDeviceService);
@@ -109,7 +112,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                assignmentsService: assignments,
                 authorizedUser: authorizedUser,
                 interviewerVersionReader: interviewerVersionReader.Object,
                 userToDeviceService: userToDeviceService);

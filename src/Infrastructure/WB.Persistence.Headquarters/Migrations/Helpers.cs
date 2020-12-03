@@ -1,5 +1,7 @@
 ﻿using System.Data;
 using Dapper;
+using FluentMigrator.Builders.Create;
+using FluentMigrator.Builders.Create.Sequence;
 
 namespace WB.Persistence.Headquarters.Migrations
 {
@@ -17,5 +19,11 @@ namespace WB.Persistence.Headquarters.Migrations
             return res > 0;
         }
 
+        public static void CreateKeyValueTable(this ICreateExpressionRoot create, string tableName)
+        {
+            create.Table(tableName)
+                .WithColumn("id").AsString().PrimaryKey()
+                .WithColumn("value").AsCustom("jsonb").NotNullable();
+        }
     }
 }

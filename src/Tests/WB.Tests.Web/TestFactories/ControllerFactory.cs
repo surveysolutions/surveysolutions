@@ -66,12 +66,8 @@ namespace WB.Tests.Web.TestFactories
             IUserViewFactory userViewFactory = null,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider = null,
             IAuthorizedUser authorizedUser = null,
-            SignInManager<HqUser> signInManager = null,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
-            IAssignmentsService assignmentsService = null,
-            IInterviewInformationFactory interviewInformationFactory = null,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings = null,
+            IPlainStorageAccessor<ServerSettings> tenantSettings = null,
             IInterviewerVersionReader interviewerVersionReader = null,
             IUserToDeviceService userToDeviceService = null)
         {
@@ -82,7 +78,7 @@ namespace WB.Tests.Web.TestFactories
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IClientApkProvider>(),
                 interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
-                tenantSettings ?? new InMemoryKeyValueStorage<TenantSettings>(),
+                tenantSettings ?? new TestPlainStorage<ServerSettings>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 userToDeviceService ?? Mock.Of<IUserToDeviceService>()
             );
