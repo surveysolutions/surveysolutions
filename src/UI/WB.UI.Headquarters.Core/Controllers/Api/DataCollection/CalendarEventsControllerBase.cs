@@ -7,6 +7,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
@@ -20,16 +21,19 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         protected readonly ICalendarEventService calendarEventService;
         protected readonly IAuthorizedUser authorizedUser;
         private readonly ILogger<CalendarEventsControllerBase> logger;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         protected CalendarEventsControllerBase(IHeadquartersEventStore eventStore,
             ICalendarEventService calendarEventService, 
             IAuthorizedUser authorizedUser,
-            ILogger<CalendarEventsControllerBase> logger)
+            ILogger<CalendarEventsControllerBase> logger,
+            IInScopeExecutor inScopeExecutor)
         {
             this.eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
             this.calendarEventService = calendarEventService;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         protected IActionResult PostPackage(CalendarEventPackageApiView package)
@@ -50,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             try
             {
-                InScopeExecutor.Current.Execute(serviceLocator =>
+                inScopeExecutor.Execute(serviceLocator =>
                 {
                     var calendarEventPackageService = serviceLocator.GetInstance<ICalendarEventPackageService>();
                     calendarEventPackageService.ProcessPackage(calendarEventPackage);
