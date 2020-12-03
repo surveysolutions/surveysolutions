@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private AmazonBucketInfo? bucketInfo;
 
         [SuppressMessage("ReSharper", "CommentTypo")]
-        public AmazonBucketInfo GetAmazonS3BucketInfo()
+        public AmazonBucketInfo GetAmazonS3BucketInfo(WorkspaceContext? workspaceContext = null)
         {
             if (bucketInfo != null) return bucketInfo;
 
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
             var tenantName = this.hqOptions.Value.TenantName;
 
-            var workspace = contextAccessor.CurrentWorkspace();
+            var workspace = workspaceContext ?? contextAccessor.CurrentWorkspace();
 
             if(workspace == null) throw new MissingWorkspaceException("Cannot store or query S3 data outside of workspaces");
 
