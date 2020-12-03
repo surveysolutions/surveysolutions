@@ -8,6 +8,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
@@ -20,8 +21,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public CalendarEventsApiV1Controller(IHeadquartersEventStore eventStore, 
             ICalendarEventService calendarEventService, 
             IAuthorizedUser authorizedUser,
-            ILogger<CalendarEventsApiV1Controller> logger) 
-            : base(eventStore, calendarEventService, authorizedUser, logger)
+            ILogger<CalendarEventsApiV1Controller> logger,
+            IInScopeExecutor inScopeExecutor) 
+            : base(eventStore, calendarEventService, authorizedUser, logger, inScopeExecutor)
         {
         }
         
