@@ -156,14 +156,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                          && y.DeletedAtUtc == null
                          && y.CompletedAtUtc == null));
 
-            return calendarEvent == null ? null : new CalendarEventView()
-            {
-                Comment = calendarEvent.Comment,
-                PublicKey = calendarEvent.PublicKey,
-                StartUtc = calendarEvent.Start.ToDateTimeUtc(),
-                StartTimezone = calendarEvent.Start.Zone.Id,
-                Start = calendarEvent.Start
-            };
+            return calendarEvent == null ? null : new CalendarEventView(
+                calendarEvent.Start,
+                calendarEvent.Comment,
+                calendarEvent.PublicKey);
         }
 
         public List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)
