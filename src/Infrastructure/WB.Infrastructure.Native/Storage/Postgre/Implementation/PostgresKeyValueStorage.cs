@@ -31,8 +31,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual TEntity GetById(string id)
         {
-            EnsureTableExists();
-
             string queryResult;
             using (var command = new NpgsqlCommand())
             {
@@ -58,8 +56,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Remove(string id)
         {
-            EnsureTableExists();
-
             int queryResult;
             using (var command = new NpgsqlCommand())
             {
@@ -79,8 +75,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity view, string id)
         {
-            EnsureTableExists();
-
             bool entityExists;
             using (var existsCommand = new NpgsqlCommand())
             {
@@ -120,8 +114,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public bool HasNotEmptyValue(string id)
         {
-            EnsureTableExists();
-
             using (var existsCommand = new NpgsqlCommand())
             {
                 existsCommand.CommandText = $"SELECT 1 FROM {this.tableName} WHERE id = :id AND value IS NOT NULL";
@@ -143,22 +135,5 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public virtual string GetReadableStatus() => "Postgres K/V :/";
 
         private static bool doesExistTable = false;
-
-        protected void EnsureTableExists()
-        {
-            if (doesExistTable) return;
-
-            var command = $@"CREATE TABLE IF NOT EXISTS {this.tableName} (
-    id        text PRIMARY KEY,
-    value       JSON NOT NULL
-)";
-            using (var sqlCommand = this.unitOfWork.Session.Connection.CreateCommand())
-            {
-                sqlCommand.CommandText = command;
-                sqlCommand.ExecuteNonQuery();
-            }
-
-            doesExistTable = true;
-        }
     }
 }

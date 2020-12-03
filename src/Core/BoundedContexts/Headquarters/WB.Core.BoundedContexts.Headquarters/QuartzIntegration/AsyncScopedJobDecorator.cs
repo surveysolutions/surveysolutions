@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         {
             using var jobScope = this.serviceProvider.CreateScope();
             var workspacesService = jobScope.ServiceProvider.GetRequiredService<IWorkspacesCache>();
-            var workspaces = workspacesService.GetWorkspaces();
+            var workspaces = workspacesService.AllWorkspaces();
 
             foreach (var workspace in workspaces)
             {

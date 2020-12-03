@@ -3,7 +3,7 @@ using FluentMigrator;
 namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
 {
     [Migration(2020_11_13_13_16)]
-    public class M202011131316_MigrateLeftovers : Migration
+    public class M202011131316_MigrateLeftovers : ForwardOnlyMigration
     {
         public override void Up()
         {
@@ -49,10 +49,6 @@ AS SELECT a.interview_id AS interview_id,
                   FINALFUNC={M202011131055_MoveOldSchemasToWorkspace.primarySchemaName}._final_median,
                   INITCOND='{{}}'
                 );");
-        }
-
-        public override void Down()
-        {
         }
     }
 }

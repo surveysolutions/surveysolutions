@@ -1,7 +1,9 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -34,14 +36,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public override async Task<IdentityResult> CreateAsync(HqUser user)
         {
-            var workspace = this.workspaceContextAccessor.CurrentWorkspace()
-                            ?? throw new Exception("Cannot add user without specified workspace");
+            var workspace = this.workspaceContextAccessor.CurrentWorkspace();
 
             var result = await base.CreateAsync(user);
 
-            if (result.Succeeded)
+            if (result.Succeeded && !user.IsInRole(UserRoles.Administrator))
             {
-                this.workspacesService.AddUserToWorkspace(user, workspace.Name);
+                if (workspace != null)
+                {
+                    this.workspacesService.AddUserToWorkspace(user, workspace.Name);
+                }
             }
 
             return result;
