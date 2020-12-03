@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -9,7 +8,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -37,13 +35,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
-        }
-
-        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
-                url: string.Concat(this.QuestionnairesController, "/census"),
-                credentials: this.restCredentials, token: token));
         }
 
         public Task<Guid> GetCurrentSupervisor(RestCredentials credentials, CancellationToken token = default)
