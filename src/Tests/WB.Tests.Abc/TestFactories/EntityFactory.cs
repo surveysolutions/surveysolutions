@@ -2571,5 +2571,29 @@ namespace WB.Tests.Abc.TestFactories
                 FileName = fileName
             };
         }
+
+        public CalendarEvent CalendarEvent(Guid? id = null, int? assignmentId = null,
+            Guid? interviewId = null, string interviewKey = null,
+            bool isCompleted = false, bool isDeleted = false, bool isSynchronized = false,
+            DateTimeOffset? start = null, string tomeZoneId = null, string comment = null,
+            DateTime? lastUpdate = null)
+        {
+            return new CalendarEvent()
+            {
+                Id = id ?? Guid.NewGuid(),
+                AssignmentId = assignmentId ?? 7,
+                Comment = comment ?? "comment",
+                InterviewId = interviewId,
+                InterviewKey = interviewKey,
+                IsCompleted = isCompleted,
+                IsDeleted = isDeleted,
+                IsSynchronized = isSynchronized,
+                LastEventId = Guid.NewGuid(),
+                LastUpdateDateUtc = lastUpdate ?? DateTime.UtcNow,
+                Start = start ?? DateTimeOffset.UtcNow,
+                StartTimezone = tomeZoneId ?? "zone",
+                UserId = Guid.NewGuid(),
+            };
+        }
     }
 }

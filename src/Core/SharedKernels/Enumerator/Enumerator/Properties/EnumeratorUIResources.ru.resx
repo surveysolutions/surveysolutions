@@ -963,13 +963,13 @@
     <value>Адрес не верный</value>
   </data>
   <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
-    <value>Удалить вермя посещения</value>
+    <value>Удалить калентарное событие</value>
   </data>
   <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
-    <value>Добавить время посещения</value>
+    <value>Добавить календарное событие</value>
   </data>
   <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
-    <value>Редактировать время посещения</value>
+    <value>Редактировать время календарного события</value>
   </data>
   <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
     <value>Следуюший контакт: {0}</value>
