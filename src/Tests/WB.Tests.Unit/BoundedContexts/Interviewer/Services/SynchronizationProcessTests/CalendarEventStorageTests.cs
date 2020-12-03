@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
 
             var deletedCalendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, isDeleted: true);
-            var calendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId);
+            var calendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, isDeleted: false);
             var completedCalendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, isCompleted: true);
             
             calendarEventStorage.Store(deletedCalendarEvent);
@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
 
             var deletedCalendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, interviewId: interviewId, isDeleted: true);
-            var calendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, interviewId: interviewId);
+            var calendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, interviewId: interviewId, isDeleted: false);
             var completedCalendarEvent = Create.Entity.CalendarEvent(assignmentId: assignmentId, interviewId: interviewId, isCompleted: true);
             
             calendarEventStorage.Store(deletedCalendarEvent);

@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         CalendarEvent? GetActiveCalendarEventForInterviewId(Guid id);
         CalendarEvent? GetActiveCalendarEventForAssignmentId(int id);
         
-        List<CalendarEvent> GetAllCalendarEventsForUser(Guid userId);
+        List<CalendarEvent> GetAllCalendarEventsForInterviewer(Guid interviewerId);
         List<CalendarEvent> GetAllCalendarEventsUnderSupervisor(Guid supervisorId);
     }
 }

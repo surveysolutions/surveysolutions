@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         public override ActionResult<List<CalendarEventApiView>> Get()
         {
             var interviewApiViews = 
-                calendarEventService.GetAllCalendarEventsForUser(this.authorizedUser.Id); 
+                calendarEventService.GetAllCalendarEventsForInterviewer(this.authorizedUser.Id); 
 
             return interviewApiViews.Select(x => new CalendarEventApiView()
             {
