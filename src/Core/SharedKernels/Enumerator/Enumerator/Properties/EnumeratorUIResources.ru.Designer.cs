@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Добавить время посещения.
+        ///   Looks up a localized string similar to Добавить календарное событие.
         /// </summary>
         public static string Dashboard_AddCalendarEvent {
             get {
@@ -206,7 +206,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Редактировать время посещения.
+        ///   Looks up a localized string similar to Редактировать время календарного события.
         /// </summary>
         public static string Dashboard_EditCalendarEvent {
             get {
@@ -371,7 +371,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Удалить вермя посещения.
+        ///   Looks up a localized string similar to Удалить калентарное событие.
         /// </summary>
         public static string Dashboard_RemoveCalendarEvent {
             get {
