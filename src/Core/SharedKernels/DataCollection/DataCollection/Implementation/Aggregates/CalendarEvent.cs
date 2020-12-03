@@ -101,7 +101,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 originDate: command.OriginDate,
                 comment: command.Comment,
                 start: command.Start,
-                startTimezone: command.StartTimezone));
+                startTimezone: command.StartTimezone,
+                false));
         }
 
 

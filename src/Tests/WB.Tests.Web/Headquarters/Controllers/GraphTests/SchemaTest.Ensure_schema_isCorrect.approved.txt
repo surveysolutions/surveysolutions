@@ -21,7 +21,7 @@ type CalendarEvent {
   comment: String
   creatorUserId: Uuid!
   interviewId: Uuid
-  interviewKey: String!
+  interviewKey: String
   isCompleted: Boolean!
   "Id of Calendar Event"
   publicKey: Uuid!

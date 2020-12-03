@@ -155,7 +155,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             Assert.That(calendarEvent, Is.Null);
         }
 
-        [Ignore("why 1, why not 3?")]
         [Test]
         public void when_getting_calendar_events_for_user()
         {
@@ -209,7 +208,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
                 Create.Service.CalendarEventService(new[]{
                 Create.Entity.CalendarEvent(
                     publicKey: calendarEventId,
-                    interviewId: interviewId
+                    interviewId: interviewId,
+                    assignmentId: assignmentId
                 ),
                 Create.Entity.CalendarEvent(
                     publicKey: calendarEventId2,
@@ -218,7 +218,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
                 ),
                 Create.Entity.CalendarEvent(
                     publicKey: calendarEventId3,
-                    assignmentId: assignmentId
+                    assignmentId: assignmentId3
                 ),
                 Create.Entity.CalendarEvent(
                     publicKey: calendarEventId4,
@@ -235,8 +235,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             // Act
             var calendarEvents = calendarEventService.GetAllCalendarEventsForInterviewer(userId);
 
-            Assert.That(calendarEvents.Count, Is.EqualTo(1));
+            Assert.That(calendarEvents.Count, Is.EqualTo(2));
             Assert.That(calendarEvents.First().PublicKey, Is.EqualTo(calendarEventId));
+            Assert.That(calendarEvents.Last().PublicKey, Is.EqualTo(calendarEventId4));
         }
         
         [Test]

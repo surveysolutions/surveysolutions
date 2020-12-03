@@ -9,20 +9,20 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Create.Table("calendarevents")
-                .WithColumn("eventid").AsGuid().PrimaryKey()
-                .WithColumn("startticks").AsInt64().NotNullable()
-                .WithColumn("starttimezone").AsString().Nullable()
+                .WithColumn("event_id").AsGuid().PrimaryKey()
+                .WithColumn("start_ticks").AsInt64().NotNullable()
+                .WithColumn("start_timezone").AsString().Nullable()
                 .WithColumn("comment").AsString().Nullable()
-                .WithColumn("updatedateutc").AsDateTime().NotNullable()
-                .WithColumn("interviewid").AsGuid().Nullable()
-                .WithColumn("interviewkey").AsString().Nullable()
-                .WithColumn("assignmentid").AsInt32().NotNullable()
-                .WithColumn("creatoruserid").AsGuid().NotNullable()
-                .WithColumn("completedatutc").AsDateTime().Nullable()
-                .WithColumn("deletedatutc").AsDateTime().Nullable();
+                .WithColumn("update_date_utc").AsDateTime().NotNullable()
+                .WithColumn("interview_id").AsGuid().Nullable()
+                .WithColumn("interview_key").AsString().Nullable()
+                .WithColumn("assignment_id").AsInt32().NotNullable()
+                .WithColumn("creator_user_id").AsGuid().NotNullable()
+                .WithColumn("completed_at_utc").AsDateTime().Nullable()
+                .WithColumn("deleted_at_utc").AsDateTime().Nullable();
 
-            Create.Index().OnTable("calendarevents").OnColumn("interviewid");
-            Create.Index().OnTable("calendarevents").OnColumn("assignmentid");
+            Create.Index().OnTable("calendarevents").OnColumn("interview_id");
+            Create.Index().OnTable("calendarevents").OnColumn("assignment_id");
         }
     }
 }
