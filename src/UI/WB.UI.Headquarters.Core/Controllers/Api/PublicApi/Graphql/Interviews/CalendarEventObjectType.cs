@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 
             descriptor.Field(x => x.InterviewId);
             descriptor.Field(x => x.AssignmentId);
-            descriptor.Field(x => x.InterviewKey);
+            descriptor.Field(x => x.InterviewKey).Type<StringType>();
             descriptor.Field(x => x.CreatorUserId);
             descriptor.Field(x => x.UpdateDateUtc)
                 .Type<NonNullType<DateTimeType>>();

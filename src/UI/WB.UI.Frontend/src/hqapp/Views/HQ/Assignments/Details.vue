@@ -178,7 +178,7 @@
 
 <script>
 import Vue from 'vue'
-import {DateFormats} from '~/shared/helpers'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
 
 export default {
@@ -229,10 +229,7 @@ export default {
         },
         calendarEventTime() {
             return this.model.calendarEvent != null
-                ? moment.utc(this.model.calendarEvent.startUtc)
-                    .tz(this.model.calendarEvent.startTimezone)
-                    .local()
-                    .format(DateFormats.dateTimeInList)
+                ? convertToLocal(this.model.calendarEvent.startUtc, this.model.calendarEvent.startTimezone)
                 : ''
         },
         calendarEventComment() {

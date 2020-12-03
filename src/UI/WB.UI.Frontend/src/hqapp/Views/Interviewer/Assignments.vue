@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {DateFormats} from '~/shared/helpers'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
 import {map, join} from 'lodash'
 
@@ -230,10 +230,7 @@ export default {
                             return '<span data-toggle="tooltip" title="'
                                 + ((data.comment == null || data.comment == '') ? self.$t('Assignments.NoComment') : data.comment)
                                 + '">'
-                                + moment.utc(data.startUtc)
-                                    .tz(data.startTimezone)
-                                    .local()
-                                    .format(DateFormats.dateTimeInList)
+                                + convertToLocal(data.startUtc, data.startTimezone)
                                 + '</span>'
                     },
                     width: '180px',

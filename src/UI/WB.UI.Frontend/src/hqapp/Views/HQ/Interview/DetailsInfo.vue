@@ -196,7 +196,7 @@ import SwitchLanguage from './SwitchLanguage'
 import StatusesHistory from './StatusesHistory'
 import OverviewModal from './OverviewModal'
 import Vue from 'vue'
-import {DateFormats} from '~/shared/helpers'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
 
 export default {
@@ -301,10 +301,7 @@ export default {
 
         calendarEventTime() {
             return this.calendarEvent != null
-                ? moment.utc(this.calendarEvent.startUtc)
-                    .tz(this.calendarEvent.startTimezone)
-                    .local()
-                    .format(DateFormats.dateTimeInList)
+                ? convertToLocal(this.calendarEvent.startUtc, this.calendarEvent.startTimezone)
                 : ''
         },
     },

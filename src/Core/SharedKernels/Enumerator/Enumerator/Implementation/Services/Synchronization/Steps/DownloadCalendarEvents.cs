@@ -69,8 +69,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var remoteCalendarEventsToDownloadIds = remoteCalendarEventsWithSequence.Keys.Where(
                 ce => !localCalendarEventIds.Contains(ce)).ToList();
             
-            IProgress<TransferProgress> transferProgress = this.Context.Progress.AsTransferReport();
-            
             foreach (var localCalendarEventId in localCalendarEventsToRemoveIds)
             {
                 this.RemoveCalendarEvent(localCalendarEventId);
