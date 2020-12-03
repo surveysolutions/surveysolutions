@@ -183,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             //string dateTimeString = dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase();
             string dateTimeString = StringFormat.ShortDateTime(dateTime.ToLocalTime()).ToPascalCase();
-            if (dateTime > now.AddDays(-1) && dateTime < now.AddDays(2))
+            if (dateTime > now.Date.AddDays(-1) && dateTime < now.Date.AddDays(3))
             {
                 dateTimeString = dateTime.Humanize(utcDate: true, culture: culture) + " (" + dateTimeString + ")";
             }
