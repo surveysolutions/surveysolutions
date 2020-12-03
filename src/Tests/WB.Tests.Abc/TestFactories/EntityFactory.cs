@@ -13,6 +13,8 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Moq;
 using Ncqrs.Eventing;
+using NodaTime;
+using NodaTime.Extensions;
 using NUnit.Framework;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -2582,7 +2584,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Id = id ?? Guid.NewGuid(),
                 AssignmentId = assignmentId ?? 7,
-                Comment = comment ?? "comment",
+                Comment = comment,
                 InterviewId = interviewId,
                 InterviewKey = interviewKey,
                 IsCompleted = isCompleted,
@@ -2591,9 +2593,41 @@ namespace WB.Tests.Abc.TestFactories
                 LastEventId = Guid.NewGuid(),
                 LastUpdateDateUtc = lastUpdate ?? DateTime.UtcNow,
                 Start = start ?? DateTimeOffset.UtcNow,
-                StartTimezone = tomeZoneId ?? "zone",
+                StartTimezone = tomeZoneId,
                 UserId = Guid.NewGuid(),
             };
+        }
+
+        public WB.Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent CalendarEvent(Guid? publicKey = null, 
+            int? assignmentId = null,
+            Guid? interviewId = null, string interviewKey = null,
+            DateTimeOffset? start = null, string tomeZoneId = null, string comment = null,
+            DateTimeOffset? lastUpdate = null, DateTime? deletedAtUtc = null, DateTime? completedAtUtc = null,
+            DateTime? updateDateUtc = null)
+        {
+            var date = (start ?? DateTimeOffset.UtcNow).ToInstant();
+            DateTimeZone zone = null;
+            if (tomeZoneId != null)
+                zone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(tomeZoneId);
+            if (zone == null)
+                zone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+            var zonedDate = new ZonedDateTime(date, zone);
+
+            var calendarEvent = new WB.Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent(
+                publicKey: publicKey ?? Guid.NewGuid(),
+                assignmentId: assignmentId ?? 7,
+                comment: comment,
+                interviewId: interviewId,
+                interviewKey: interviewKey ?? String.Empty,
+                start: zonedDate,
+                userId: Guid.NewGuid(),
+                updateDate: lastUpdate ?? DateTimeOffset.UtcNow
+            );
+            calendarEvent.DeletedAtUtc = deletedAtUtc;
+            calendarEvent.CompletedAtUtc = completedAtUtc;
+            calendarEvent.UpdateDateUtc = updateDateUtc ?? DateTime.UtcNow;
+            
+            return calendarEvent;
         }
     }
 }

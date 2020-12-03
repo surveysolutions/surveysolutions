@@ -41,7 +41,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 CalendarEventId = package.CalendarEventId,
                 Events = package.Events,
-                IncomingDate = DateTime.UtcNow,
                 ResponsibleId = authorizedUser.Id,
                 InterviewId = package.MetaInfo.InterviewId,
                 AssignmentId = package.MetaInfo.AssignmentId,

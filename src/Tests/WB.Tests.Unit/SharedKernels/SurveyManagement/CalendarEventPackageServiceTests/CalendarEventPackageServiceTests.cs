@@ -40,12 +40,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = false,
                 LastUpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                UpdateDateUtc = DateTime.UtcNow
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                updateDateUtc: DateTime.UtcNow
+            );
             
             var commandService = ProcessPackage(package, local);
             
@@ -64,12 +63,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = false,
                 LastUpdateDateUtc = DateTime.UtcNow
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                UpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                updateDateUtc: DateTime.UtcNow.AddMinutes(5)
+            );
             
             var commandService = ProcessPackage(package, local);
             
@@ -87,12 +85,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = true,
                 LastUpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                UpdateDateUtc = DateTime.UtcNow
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                updateDateUtc: DateTime.UtcNow
+            );
             
             var commandService = ProcessPackage(package, local);
             
@@ -110,13 +107,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = true,
                 LastUpdateDateUtc = DateTime.UtcNow
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                DeletedAtUtc = null,
-                UpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                deletedAtUtc: null,
+                updateDateUtc: DateTime.UtcNow.AddMinutes(5)
+            );
             
             var commandService = ProcessPackage(package, local);
             
@@ -134,13 +130,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = false,
                 LastUpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                DeletedAtUtc = DateTime.UtcNow,
-                UpdateDateUtc = DateTime.UtcNow
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                deletedAtUtc: DateTime.UtcNow,
+                updateDateUtc: DateTime.UtcNow
+            );
             
             var commandService = ProcessPackage(package, local);
             
@@ -158,13 +153,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = false,
                 LastUpdateDateUtc = DateTime.UtcNow
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                DeletedAtUtc = DateTime.UtcNow.AddMinutes(5),
-                UpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                deletedAtUtc: DateTime.UtcNow.AddMinutes(5),
+                updateDateUtc: DateTime.UtcNow.AddMinutes(5)
+            );
             
             var commandService = ProcessPackage(package, local);
             
@@ -182,13 +176,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.CalendarEventPackageServi
                 IsDeleted = false,
                 LastUpdateDateUtc = DateTime.UtcNow
             };
-            var local = new CalendarEvent()
-            {
-                PublicKey = Id.g2,
-                AssignmentId = 7,
-                DeletedAtUtc = null,
-                UpdateDateUtc = DateTime.UtcNow.AddMinutes(5)
-            };
+            var local = Create.Entity.CalendarEvent(
+                publicKey: Id.g2,
+                assignmentId: 7,
+                deletedAtUtc: null,
+                updateDateUtc: DateTime.UtcNow.AddMinutes(5)
+            );
             
             var commandService = ProcessPackage(package, local);
             

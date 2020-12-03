@@ -178,14 +178,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 return string.Empty;
             
             var culture = CultureInfo.CurrentUICulture;
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var dateTime = DateTime.SpecifyKind(utcDateTime.Value, DateTimeKind.Utc);
 
-            //string dateTimeString = dateTime.Value.ToString("MMM dd, HH:mm", culture).ToPascalCase();
-            string dateTimeString = StringFormat.ShortDateTime(dateTime.ToLocalTime()).ToPascalCase();
-            if (dateTime > now.Date.AddDays(-1) && dateTime < now.Date.AddDays(3))
+            var localTime = dateTime.ToLocalTime();
+            string dateTimeString = StringFormat.ShortDateTime(localTime).ToPascalCase();
+            if (localTime > now.Date.AddDays(-1) && localTime < now.Date.AddDays(3))
             {
-                dateTimeString = dateTime.Humanize(utcDate: true, culture: culture) + " (" + dateTimeString + ")";
+                dateTimeString = localTime.Humanize(utcDate: false, culture: culture) + " (" + dateTimeString + ")";
             }
             
             return string.Format(formatString, dateTimeString);
