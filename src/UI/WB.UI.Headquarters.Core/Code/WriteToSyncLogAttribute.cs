@@ -34,7 +34,6 @@ namespace WB.UI.Headquarters.Code
         private const string UnknownStringArgumentValue = "unknown";
         private readonly SynchronizationLogType logAction;
         private readonly Counter messagesTotal = new Counter(@"wb_hq_sync_log_total_count", @"Count of sync log actions", "action");
-        //private readonly IInScopeExecutor inScopeExecutor;
 
         public WriteToSyncLogAttribute(SynchronizationLogType logAction)
         {

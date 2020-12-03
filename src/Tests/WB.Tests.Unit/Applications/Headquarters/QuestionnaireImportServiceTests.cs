@@ -433,7 +433,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IAssignmentsUpgradeService>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 Mock.Of<IDesignerUserCredentials>(),
-                inScopeExecutor: executor);
+                executor);
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>())

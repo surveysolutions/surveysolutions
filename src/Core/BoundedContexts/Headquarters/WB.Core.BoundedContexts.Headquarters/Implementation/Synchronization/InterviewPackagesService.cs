@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
+using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
