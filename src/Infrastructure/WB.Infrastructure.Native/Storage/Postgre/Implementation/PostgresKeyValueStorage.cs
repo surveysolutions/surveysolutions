@@ -13,14 +13,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         where TEntity : class
     {
         protected readonly string tableName;
-        private readonly IUnitOfWork unitOfWork;
         protected readonly IEntitySerializer<TEntity> serializer;
 
         private static readonly ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
 
-        public PostgresKeyValueStorage(IUnitOfWork unitOfWork, IEntitySerializer<TEntity> serializer)
+        public PostgresKeyValueStorage(IEntitySerializer<TEntity> serializer)
         {
-            this.unitOfWork = unitOfWork;
             this.serializer = serializer;
 
             tableName = _tableNamesMap.GetOrAdd(typeof(TEntity),
