@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 {
     public class CalendarEvent : IReadSideRepositoryEntity
     {
-        public CalendarEvent()
+        protected CalendarEvent()
         {
         }
 

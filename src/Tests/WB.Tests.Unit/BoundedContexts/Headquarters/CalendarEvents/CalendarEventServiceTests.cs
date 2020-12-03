@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
 
             var calendarEventService = 
                 Create.Service.CalendarEventService(
-                    new CalendarEvent(){PublicKey = calendarEventId},
-                    new CalendarEvent(){PublicKey = calendarEventId2});
+                    Create.Entity.CalendarEvent(publicKey: calendarEventId),
+                    Create.Entity.CalendarEvent(publicKey: calendarEventId2));
 
             // Act
             var calendarEvent = calendarEventService.GetCalendarEventById(calendarEventId);
@@ -40,13 +40,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var interviewId = Id.g2;
             
             var calendarEventService = 
-            Create.Service.CalendarEventService(new CalendarEvent()
-            {
-                PublicKey = calendarEventId, 
-                InterviewId = interviewId,
-                DeletedAtUtc = null,
-                CompletedAtUtc = null
-            });
+            Create.Service.CalendarEventService(Create.Entity.CalendarEvent(
+                publicKey: calendarEventId, 
+                interviewId: interviewId,
+                deletedAtUtc: null,
+                completedAtUtc: null
+            ));
                 
             // Act
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
@@ -62,13 +61,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var interviewId = Id.g2;
             
             var calendarEventService = 
-                Create.Service.CalendarEventService(new CalendarEvent()
-                {
-                    PublicKey = calendarEventId, 
-                    InterviewId = interviewId,
-                    DeletedAtUtc = DateTime.UtcNow,
-                    CompletedAtUtc = null
-                });
+                Create.Service.CalendarEventService(Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId, 
+                    interviewId: interviewId,
+                    deletedAtUtc: DateTime.UtcNow,
+                    completedAtUtc: null
+                ));
                 
             // Act
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
@@ -83,13 +81,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var interviewId = Id.g2;
             
             var calendarEventService = 
-                Create.Service.CalendarEventService(new CalendarEvent()
-                {
-                    PublicKey = calendarEventId, 
-                    InterviewId = interviewId,
-                    DeletedAtUtc = null,
-                    CompletedAtUtc = DateTime.UtcNow
-                });
+                Create.Service.CalendarEventService(Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId, 
+                    interviewId: interviewId,
+                    deletedAtUtc: null,
+                    completedAtUtc: DateTime.UtcNow
+                ));
                 
             // Act
             var calendarEvent = calendarEventService.GetActiveCalendarEventForInterviewId(interviewId);
@@ -104,13 +101,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var assignmentId = 1;
             
             var calendarEventService = 
-            Create.Service.CalendarEventService(new CalendarEvent()
-            {
-                PublicKey = calendarEventId, 
-                AssignmentId = assignmentId,
-                DeletedAtUtc = null,
-                CompletedAtUtc = null
-            });
+            Create.Service.CalendarEventService(Create.Entity.CalendarEvent(
+                publicKey: calendarEventId, 
+                assignmentId: assignmentId,
+                deletedAtUtc: null,
+                completedAtUtc: null
+            ));
                 
             // Act
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignmentId);
@@ -126,13 +122,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var assignmentId = 1;
             
             var calendarEventService = 
-                Create.Service.CalendarEventService(new CalendarEvent()
-                {
-                    PublicKey = calendarEventId, 
-                    AssignmentId = assignmentId,
-                    DeletedAtUtc = DateTime.UtcNow,
-                    CompletedAtUtc = null
-                });
+                Create.Service.CalendarEventService(Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId, 
+                    assignmentId: assignmentId,
+                    deletedAtUtc: DateTime.UtcNow,
+                    completedAtUtc: null
+                ));
                 
             // Act
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignmentId);
@@ -147,13 +142,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var assignmentId = 1;
             
             var calendarEventService = 
-                Create.Service.CalendarEventService(new CalendarEvent()
-                {
-                    PublicKey = calendarEventId, 
-                    AssignmentId = assignmentId,
-                    DeletedAtUtc = null,
-                    CompletedAtUtc = DateTime.UtcNow
-                });
+                Create.Service.CalendarEventService(Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId, 
+                    assignmentId: assignmentId,
+                    deletedAtUtc: null,
+                    completedAtUtc: DateTime.UtcNow
+                ));
                 
             // Act
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignmentId);
@@ -212,38 +206,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
                 } );
             var calendarEventService = 
                 Create.Service.CalendarEventService(new[]{
-                new CalendarEvent()
-                {
-                    PublicKey = calendarEventId,
-                    InterviewId = interviewId,
-                },
-                new CalendarEvent()
-                {
-                    PublicKey = calendarEventId2,
-                    InterviewId = interviewId,
-                    CompletedAtUtc = DateTime.Now
-                },
-                new CalendarEvent()
-                {
-                    PublicKey = calendarEventId3,
-                    AssignmentId = assignmentId
-                },
-                new CalendarEvent()
-                {
-                    PublicKey = calendarEventId4,
-                    AssignmentId = assignmentId
-                },
-                new CalendarEvent()
-                {
-                    PublicKey = calendarEventId5,
-                    AssignmentId = assignmentId2,
-                    DeletedAtUtc = DateTime.Now
-                }
+                Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId,
+                    interviewId: interviewId
+                ),
+                Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId2,
+                    interviewId: interviewId,
+                    completedAtUtc: DateTime.Now
+                ),
+                Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId3,
+                    assignmentId: assignmentId
+                ),
+                Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId4,
+                    assignmentId: assignmentId
+                ),
+                Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId5,
+                    assignmentId: assignmentId2,
+                    deletedAtUtc: DateTime.Now
+                )
             },
                     assignments,
                     interviews.Object);
             // Act
-            var calendarEvents = calendarEventService.GetAllCalendarEventsForUser(userId);
+            var calendarEvents = calendarEventService.GetAllCalendarEventsForInterviewer(userId);
 
             Assert.That(calendarEvents.Count, Is.EqualTo(1));
             Assert.That(calendarEvents.First().PublicKey, Is.EqualTo(calendarEventId));
@@ -293,42 +282,37 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
                     }
                 } );
 
-            var @event1 = new CalendarEvent()
-                {
-                    PublicKey = calendarEventId,
-                    InterviewId = interviewId
-                };
+            var @event1 = Create.Entity.CalendarEvent(
+                    publicKey: calendarEventId,
+                    interviewId: interviewId
+                );
             @event1.AsDynamic().Creator = responsible;
 
-            var @event2 = new CalendarEvent()
-            {
-                PublicKey = calendarEventId2,
-                InterviewId = interviewId,
-                CompletedAtUtc = DateTime.Now
-            };
+            var @event2 = Create.Entity.CalendarEvent(
+                publicKey: calendarEventId2,
+                interviewId: interviewId,
+                completedAtUtc: DateTime.Now
+            );
             event2.AsDynamic().Creator = responsible;
 
-            var @event3 = new CalendarEvent()
-            {
-                PublicKey = calendarEventId3,
-                AssignmentId = assignmentId
-            };
+            var @event3 = Create.Entity.CalendarEvent(
+                publicKey: calendarEventId3,
+                assignmentId: assignmentId
+            );
             event3.AsDynamic().Creator = responsible;
             
-            var @event4 = new CalendarEvent()
-            {
-                PublicKey = calendarEventId4,
-                AssignmentId = assignmentId,
-                InterviewId = interviewId1
-            };
+            var @event4 = Create.Entity.CalendarEvent(
+                publicKey: calendarEventId4,
+                assignmentId: assignmentId,
+                interviewId: interviewId1
+            );
             event4.AsDynamic().Creator = responsible;
             
-            var @event5 = new CalendarEvent()
-            {
-                PublicKey = calendarEventId5,
-                AssignmentId = assignmentId2,
-                DeletedAtUtc = DateTime.Now
-            };
+            var @event5 = Create.Entity.CalendarEvent(
+                publicKey: calendarEventId5,
+                assignmentId: assignmentId2,
+                deletedAtUtc: DateTime.Now
+            );
             event5.AsDynamic().Creator = responsible;
 
             var calendarEventService = 
