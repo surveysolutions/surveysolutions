@@ -17,7 +17,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public PostgresKeyValueStorageWithCache(IUnitOfWork connectionString,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(connectionString, serializer)
+            : base(serializer)
         {
             this.memoryCache = memoryCache;
         }
