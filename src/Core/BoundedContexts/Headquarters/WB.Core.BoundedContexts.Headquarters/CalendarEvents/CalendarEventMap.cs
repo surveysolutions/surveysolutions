@@ -8,26 +8,36 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
     {
         public CalendarEventMap()
         {
-            Id(x => x.PublicKey, mapper => mapper.Column("EventId"));
+            Id(x => x.PublicKey, mapper => mapper.Column("event_id"));
             Property(x => x.Comment);
-            Property(x => x.Start, m=>
+            Property(x => x.Start, pm=>
             {
-                m.Columns(
-                    cm => cm.Name("startticks"),
-                    cm => cm.Name($"starttimezone"));
-                m.Type<NodaTimeZonedDateTimeUserType>();
+                pm.Columns(cm => cm.Name("start_ticks"), 
+                    cm => cm.Name($"start_timezone"));
+                pm.Type<NodaTimeZonedDateTimeUserType>();
             });
-            
-            Property(x => x.AssignmentId);
-            Property(x => x.InterviewId);
-            Property(x => x.CompletedAtUtc, pm => pm.Type<UtcDateTimeType>());
-            Property(x => x.CreatorUserId);
-            Property(x => x.UpdateDateUtc,pm => pm.Type<UtcDateTimeType>());
-            Property(x => x.DeletedAtUtc,pm => pm.Type<UtcDateTimeType>());
+            Property(x => x.AssignmentId, pm => pm.Column("assignment_id"));
+            Property(x => x.InterviewId, pm => pm.Column("interview_id"));
+            Property(x => x.CompletedAtUtc, pm =>
+            {
+                pm.Type<UtcDateTimeType>();
+                pm.Column("completed_at_utc");
+            });
+            Property(x => x.CreatorUserId, pm => pm.Column("creator_user_id"));
+            Property(x => x.UpdateDateUtc,pm =>
+            {
+                pm.Type<UtcDateTimeType>();
+                pm.Column("update_date_utc");
+            });
+            Property(x => x.DeletedAtUtc,pm =>
+            {
+                pm.Type<UtcDateTimeType>();
+                pm.Column("deleted_at_utc");
+            });
             
             ManyToOne(x => x.Creator, mto =>
             {
-                mto.Column("CreatorUserId");
+                mto.Column("creator_user_id");
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
                 mto.Insert(false);
