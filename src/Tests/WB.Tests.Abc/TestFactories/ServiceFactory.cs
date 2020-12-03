@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using Moq;
 using Ncqrs.Domain.Storage;
@@ -41,7 +40,6 @@ using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
@@ -51,19 +49,16 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
-using WB.Core.BoundedContexts.Interviewer.Synchronization.Steps;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
@@ -120,7 +115,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
@@ -129,7 +123,6 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
-using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
@@ -934,28 +927,6 @@ namespace WB.Tests.Abc.TestFactories
             };
 
             return interviewerDownloadInterviews;
-        }
-
-        public CensusQuestionnairesSynchronization CensusQuestionnairesSynchronization(
-            IInterviewerSynchronizationService synchronizationService = null,
-            IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
-            IQuestionnaireDownloader questionnaireDownloader = null)
-        {
-            var censusQuestionnairesSynchronization = new CensusQuestionnairesSynchronization(
-                synchronizationService ?? Mock.Of<IInterviewerSynchronizationService>(),
-                questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-                Mock.Of<ILogger>(),
-                10
-            );
-            censusQuestionnairesSynchronization.Context = new EnumeratorSynchonizationContext
-            {
-                CancellationToken = CancellationToken.None,
-                Progress = new Progress<SyncProgressInfo>(),
-                Statistics = new SynchronizationStatistics()
-            };
-
-            return censusQuestionnairesSynchronization;
         }
 
         public RemoveObsoleteQuestionnaires RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService = null,
