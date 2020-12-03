@@ -18,16 +18,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Extensions.cs" />
-    <Compile Update="Properties\EnumeratorUIResources.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EnumeratorUIResources.ru.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Update="Properties\UIResources.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UIResources.ru.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>    
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
