@@ -101,17 +101,6 @@
 
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Content\**\*.*" />
-    <Compile Update="Resources\Common.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Common.ru.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Update="Resources\SyncLogMessages.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SyncLogMessages.ru.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    
   </ItemGroup>
 
   <ItemGroup>
