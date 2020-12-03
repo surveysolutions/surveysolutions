@@ -15,7 +15,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     [DebuggerDisplay("Id#{Id}; SessionId: {SessionId}")]
     public sealed class UnitOfWork : IUnitOfWork
     {
-        private readonly ISessionFactory sessionFactory;
+        private readonly Lazy<ISessionFactory> sessionFactory;
         private readonly ILogger logger;
         private bool isDisposed = false;
         private bool shouldAcceptChanges = false;
@@ -27,7 +27,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public UnitOfWork(
-            ISessionFactory sessionFactory,
+            Lazy<ISessionFactory> sessionFactory,
             ILogger logger, 
             IWorkspaceContextAccessor workspaceContextAccessor,
             ILifetimeScope scope)
@@ -85,7 +85,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                 var unitOfWork = unitOfWorks.GetOrAdd(ws?.Name ?? WorkspaceConstants.SchemaName, workspace =>
                 {
-                    var session = sessionFactory.OpenSession();
+                    var session = sessionFactory.Value.OpenSession();
                     var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
                     return (session, transaction);
                 });

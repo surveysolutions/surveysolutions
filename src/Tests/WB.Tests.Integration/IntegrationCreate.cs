@@ -432,7 +432,8 @@ namespace WB.Tests.Integration
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
-            return new UnitOfWork(factory, Mock.Of<ILogger>(), Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
+            return new UnitOfWork(new Lazy<ISessionFactory>(() => factory), 
+                Mock.Of<ILogger>(), Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
