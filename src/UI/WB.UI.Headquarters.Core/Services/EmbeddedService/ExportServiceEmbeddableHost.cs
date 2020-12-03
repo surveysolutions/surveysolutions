@@ -16,7 +16,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.HealthChecks;
 
 namespace WB.UI.Headquarters.Services.EmbeddedService
@@ -117,7 +119,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
                 if (fileStorageConfig.Value.GetStorageProviderType() == StorageProviderType.AmazonS3)
                 {
-                    var bucketInfo = this.amazonS3Config.GetAmazonS3BucketInfo();
+                    var bucketInfo = this.amazonS3Config.GetAmazonS3BucketInfo(Workspace.Default.AsContext());
 
                     var folder = bucketInfo.PathPrefix.Replace($"/{headquarterOptions.Value.TenantName}", "").TrimEnd('\\', '/');
 
