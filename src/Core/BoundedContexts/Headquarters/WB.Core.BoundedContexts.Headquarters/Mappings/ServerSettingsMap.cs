@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         public ServerSettingsMap()
         {
             Id(x => x.Id, (id) => id.Generator(Generators.Assigned));
+            Table("server_settings");
             Schema(WorkspaceConstants.SchemaName);
             Property(x => x.Value);
         }
