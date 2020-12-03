@@ -131,7 +131,5 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public Type ViewType => typeof(TEntity);
 
         public virtual string GetReadableStatus() => "Postgres K/V :/";
-
-        private static bool doesExistTable = false;
     }
 }
