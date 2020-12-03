@@ -11,6 +11,7 @@ using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Tests.Abc;
+using M202011201421_InitSingleWorkspace = WB.Persistence.Headquarters.Migrations.Workspace.M202011201421_InitSingleWorkspace;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -80,8 +81,10 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             var schema = workspaceContextAccessor.CurrentWorkspace().SchemaName;
             DatabaseManagement.InitDatabase(connectionString, schema);
             DbMigrationsRunner.MigrateToLatest(connectionString, schema,
-                new DbUpgradeSettings(typeof(M202011131055_MoveOldSchemasToWorkspace).Assembly, 
-                    typeof(M202011131055_MoveOldSchemasToWorkspace).Namespace));
+               DbUpgradeSettings.FromFirstMigration<M202011131055_MoveOldSchemasToWorkspace>());
+
+            DbMigrationsRunner.MigrateToLatest(connectionString, schema,
+                DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
 
         }
 

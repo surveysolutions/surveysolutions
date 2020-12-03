@@ -1159,11 +1159,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public TokenGenerator TokenGenerator(int tokenLength = 8, 
             IPlainStorageAccessor<Invitation> invitationStorage = null,
-            IPlainKeyValueStorage<TenantSettings> tenantSettingsStorage = null)
+            IPlainStorageAccessor<ServerSettings> tenantSettingsStorage = null)
         {
             return new TokenGenerator(
                 invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>(),
-                tenantSettingsStorage ?? new InMemoryPlainStorageAccessor<TenantSettings>())
+                tenantSettingsStorage ?? new InMemoryPlainStorageAccessor<ServerSettings>())
             {
                 tokenLength = tokenLength
             };

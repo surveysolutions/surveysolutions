@@ -2,7 +2,6 @@ using System;
 using Dapper;
 using FluentMigrator;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspaces
 {
@@ -21,7 +20,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
         {
             Create.Table(ServerSettingsTableName)
                 .WithColumn("id").AsString().NotNullable().PrimaryKey()
-                .WithColumn("value").AsCustom("jsonb").NotNullable();
+                .WithColumn("value").AsString().NotNullable();
 
             Execute.WithConnection((connection, transaction) =>
             {
@@ -34,7 +33,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 if (connection.IsTableExistsInSchema("ws_primary", "appsettings"))
                 {
                     Execute($@"INSERT INTO {ServerSettingsTableName} (id, value)
-                SELECT 'TenantSettings', value from ws_primary.appsettings a 
+                SELECT 'TenantPublicId', value ->> 'TenantPublicId' as value from  ws_primary.appsettings a 
                        where a.id = 'TenantSettings'
                 ON CONFLICT (id) DO NOTHING;
                 DELETE FROM ws_primary.appsettings where id = 'TenantSettings'");
@@ -42,11 +41,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 else
                 {
                     var serviceKey = Guid.NewGuid();
-                    var serializeObject = JsonConvert.SerializeObject(new
-                    {
-                        TenantPublicId = serviceKey.ToString("N")
-                    });
-                    Execute($@"INSERT INTO {ServerSettingsTableName} (id, value) VALUES ('TenantSettings', '{serializeObject}')
+                    Execute($@"INSERT INTO {ServerSettingsTableName} (id, value) VALUES ('TenantPublicId', '{serviceKey:N}')
                                ON CONFLICT (id) DO NOTHING;");
                 }
             });
