@@ -14,6 +14,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 "webinterviewconfigs",
                 "questionnairepdfs",
                 "profilesettings",
+                "appsettings",
                 "questionnairelookuptables"
             };
 
