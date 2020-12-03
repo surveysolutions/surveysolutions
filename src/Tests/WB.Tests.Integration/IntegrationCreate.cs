@@ -51,6 +51,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.UI.Designer.Code;
 using Configuration = NHibernate.Cfg.Configuration;
@@ -430,10 +431,11 @@ namespace WB.Tests.Integration
             return cfg.BuildSessionFactory();
         }
 
-        public static IUnitOfWork UnitOfWork(ISessionFactory factory)
+        public static IUnitOfWork UnitOfWork(ISessionFactory factory,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             return new UnitOfWork(new Lazy<ISessionFactory>(() => factory), 
-                Mock.Of<ILogger>(), Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
+                Mock.Of<ILogger>(),  workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
