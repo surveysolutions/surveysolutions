@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
@@ -17,30 +20,40 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         protected readonly IUserRepository userViewFactory;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
+        private readonly IWorkspacesCache workspacesCache;
 
         public UserControllerBase(
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
             SignInManager<HqUser> signInManager, 
-            IApiTokenProvider apiAuthTokenProvider)
+            IApiTokenProvider apiAuthTokenProvider, 
+            IWorkspacesCache workspacesCache)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.apiAuthTokenProvider = apiAuthTokenProvider;
+            this.workspacesCache = workspacesCache;
         }
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
         [Route("current")]
+        [AllowPrimaryWorkspaceFallback]
         public virtual SupervisorApiView Current()
         {
             var user = this.userViewFactory.FindById(this.authorizedUser.Id);
-
-            return new SupervisorApiView()
+            var workspaces = this.workspacesCache.CurrentUserWorkspaces();
+            
+            return new SupervisorApiView
             {
                 Id = user.Id,
-                Email = user.Email
+                Email = user.Email,
+                Workspaces = workspaces.Select(x => new WorkspaceApiView
+                { 
+                    Name = x.Name,
+                    DisplayName = x.DisplayName
+                }).ToList()
             };
         }
 
