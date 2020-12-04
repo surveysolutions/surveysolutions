@@ -35,6 +35,6 @@
     <PackageReference Include="NHibernate" Version="5.3.5" />
     <PackageReference Include="NLog" Version="4.7.4" />
     <PackageReference Include="Npgsql" Version="4.1.4" />
-    <PackageReference Include="prometheus-net" Version="3.6.0" />
+    <PackageReference Include="prometheus-net" Version="4.0.0" />
   </ItemGroup>
 </Project>
