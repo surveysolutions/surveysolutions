@@ -91,6 +91,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
 
-        static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version" };
+        static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account" };
     }
 }
