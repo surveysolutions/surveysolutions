@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
@@ -18,14 +17,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class OnlineSynchronizationService : EnumeratorSynchronizationService, IOnlineSynchronizationService
     {
         protected override string ApiVersion => "v2";
+        
+        
         protected override string ApiUrl => "api/interviewer/";
 
         protected override string InterviewsController => string.Concat(ApiUrl, "v3", "/interviews");
 
-        public OnlineSynchronizationService(IPrincipal principal, IRestService restService,
-            IInterviewerSettings interviewerSettings, IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
-            IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
-            base(principal, restService, interviewerSettings, syncProtocolVersionProvider, fileSystemAccessor,
+        public OnlineSynchronizationService(IPrincipal principal, 
+            IRestService restService,
+            IInterviewerSettings interviewerSettings, 
+            IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
+            IFileSystemAccessor fileSystemAccessor, 
+            ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
+            base(principal, restService, interviewerSettings, syncProtocolVersionProvider,
                 checkVersionUriProvider, logger, interviewerSettings)
         {
         }
@@ -37,7 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        public Task<Guid> GetCurrentSupervisor(RestCredentials credentials, CancellationToken token = default)
+        public Task<Guid> GetCurrentSupervisor(RestCredentials? credentials, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<Guid>(url: string.Concat(this.UsersController, "/supervisor"),
