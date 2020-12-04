@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
             {
-                await next(context);
+                await next(context).ConfigureAwait(false);
                 return;
             }
 
@@ -35,11 +35,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
             {
                 // Redirect into default workspace for old urls
                 string? targetWorkspace = null;
-                //if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
-                //{
-                //    targetWorkspace = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
-                //}
-                //else
+                if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
+                {
+                    targetWorkspace = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
+                }
+                else
                 if (context.User.HasClaim(x => x.Type == WorkspaceConstants.ClaimType))
                 {
                     var userFirstWorkspace = context.User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 }
             }
 
-            await next(context);
+            await next(context).ConfigureAwait(false);
         }
 
         public static readonly string[] NotScopedToWorkspacePaths =
