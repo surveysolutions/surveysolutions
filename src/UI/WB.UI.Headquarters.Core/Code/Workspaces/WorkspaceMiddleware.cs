@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
             {
-                await next(context);
+                await next(context).ConfigureAwait(false);
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             {
                 using var scope = context.RequestServices.CreateWorkspaceScope(workspaceContext);
                 context.RequestServices = scope.ServiceProvider;
-                await next(context);
+                await next(context).ConfigureAwait(false);
             }
 
             foreach (var path in InfrastructureEndpoints)
@@ -77,7 +77,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 try
                 {
                     workspace.PathBase = originalPathBase;
-                    await InvokeNextWithScope(workspace);
+                    await InvokeNextWithScope(workspace).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 return;
             }
 
-            await next(context);
+            await next(context).ConfigureAwait(false);
         }
 
         static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version" };
