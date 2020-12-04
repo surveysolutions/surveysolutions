@@ -11,10 +11,10 @@
                 });
             };
 
-            webTesterService.setLocation = function (webTesterWindow, response, saveScenarioAvailable, scenarioId) {
-                var url = response.data + "?saveScenarioAvailable=" + saveScenarioAvailable;
+            webTesterService.setLocation = function (webTesterWindow, response, scenarioId) {
+                var url = response.data;
                 if (!angular.isUndefined(scenarioId)) {
-                    url += "&scenarioId=" + scenarioId;
+                    url += "?scenarioId=" + scenarioId;
                 }
                 webTesterWindow.location.href = url;
             };
