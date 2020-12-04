@@ -7,6 +7,7 @@ using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Ncqrs.Eventing;
@@ -435,7 +436,7 @@ namespace WB.Tests.Integration
             IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             return new UnitOfWork(new Lazy<ISessionFactory>(() => factory), 
-                Mock.Of<ILogger>(),  workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
+                Mock.Of<ILogger<UnitOfWork>>(),  workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)
