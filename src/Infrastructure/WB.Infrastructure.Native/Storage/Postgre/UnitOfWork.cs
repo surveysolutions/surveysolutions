@@ -6,9 +6,10 @@ using System.Diagnostics;
 using System.Threading;
 using Autofac;
 using Autofac.Core.Lifetime;
+using Microsoft.Extensions.Logging;
 using NHibernate;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Workspaces;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -16,19 +17,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly Lazy<ISessionFactory> sessionFactory;
-        private readonly ILogger logger;
+        private readonly ILogger<UnitOfWork> logger;
         private bool isDisposed = false;
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
-        private bool rootScopeExecution = false;
-        public Guid? SessionId;
+        private readonly bool rootScopeExecution = false;
         private static long counter = 0;
         public long Id { get; }
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public UnitOfWork(
             Lazy<ISessionFactory> sessionFactory,
-            ILogger logger, 
+            ILogger<UnitOfWork> logger, 
             IWorkspaceContextAccessor workspaceContextAccessor,
             ILifetimeScope scope)
         {
@@ -36,7 +36,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             if (scope.Tag == LifetimeScope.RootTag)
             {
-                logger.Error("UnitOfWork should not be created in root scope.");
+                logger.LogError("UnitOfWork should not be created in root scope.");
                 rootScopeExecution = true;
                 // throw new ArgumentException("Unit of work cannot be resoled in root scope");
                 // it's not helpful to throw exception here, as there will be no clue on which code 
@@ -71,13 +71,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 if(rootScopeExecution)
                 {
-                    logger.Info($"Error getting session. Old sessionId:{SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                    logger.LogError("Error getting session. Unit of work Id: {UnitOfWorkId} Thread:{threadId}", Id, Thread.CurrentThread.ManagedThreadId);
                     throw new RootScopeResolveException("UnitOfWork should not be resolved from Root lifetime scope");
                 }
 
                 if (isDisposed)
                 {
-                    logger.Info($"Error getting session. Old sessionId:{SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                    logger.LogError("Error getting session. Unit of work Id: {UnitOfWorkId} Thread:{threadId}", Id, Thread.CurrentThread.ManagedThreadId);
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
 
