@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
-        protected RestCredentials RestCredentials = new RestCredentials();
+        protected RestCredentials? RestCredentials;
         
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Stage = SyncStage.UserAuthentication
                 });
 
-                this.RestCredentials = new RestCredentials
+                this.RestCredentials ??= new RestCredentials
                 {
                     Login = this.principal.CurrentUserIdentity.Name,
                     Token = this.principal.CurrentUserIdentity.Token,
