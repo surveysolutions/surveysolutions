@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
