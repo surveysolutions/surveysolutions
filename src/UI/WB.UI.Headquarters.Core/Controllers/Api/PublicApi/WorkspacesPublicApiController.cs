@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Workspace;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
