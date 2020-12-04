@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -88,14 +89,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(StatusCodes.Status201Created, "Workspace created", typeof(WorkspaceApiView))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [HttpPost]
-        public ActionResult Create([FromBody]WorkspaceApiView request)
+        public async Task<ActionResult> Create([FromBody]WorkspaceApiView request)
         {
             if (ModelState.IsValid)
             {
                 var workspace = new Workspace(request.Name!, request.DisplayName!);
                 
                 this.workspaces.Store(workspace, null);
-                this.workspacesService.Generate(workspace.Name, DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
+                await this.workspacesService.Generate(workspace.Name, DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
                 this.workspacesCache.InvalidateCache();
 
                 return CreatedAtAction("Details", routeValues: new {id = workspace.Name}, value: this.mapper.Map<WorkspaceApiView>(workspace));
