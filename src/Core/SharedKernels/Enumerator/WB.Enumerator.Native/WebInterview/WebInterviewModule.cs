@@ -20,14 +20,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         public void Load(IIocRegistry registry)
         {
-            if (configuration.IsLazyInterviewNotificationEnabled())
-            {
-                registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
-            }
-            else
-            {
-                registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
-            }
+            registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
 
             registry.Bind<InterviewLifecycleEventHandler>();
             registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
