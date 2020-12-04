@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 
@@ -24,16 +25,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
         private readonly IAssignmentsImportService assignmentsImportService;
         private readonly ISystemLog systemLog;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public AssignmentsImportJob(IServiceLocator serviceLocator, ILogger logger,
             IAssignmentsImportService assignmentsImportService, ISystemLog systemLog,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IInScopeExecutor inScopeExecutor)
         {
             this.serviceLocator = serviceLocator;
             this.logger = logger;
             this.assignmentsImportService = assignmentsImportService;
             this.systemLog = systemLog;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -51,11 +55,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                 if (importProcessStatus.ProcessStatus != AssignmentsImportProcessStatus.Import)
                     return;
 
-                Guid responsibleId;
-
                 var userManager = serviceLocator.GetInstance<IUserRepository>();
-                responsibleId = (await userManager
-                        .FindByNameAsync(importProcessStatus.ResponsibleName).ConfigureAwait(false)).Id;
+                var responsibleId = (await userManager
+                    .FindByNameAsync(importProcessStatus.ResponsibleName).ConfigureAwait(false)).Id;
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
@@ -68,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                     new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                        inScopeExecutor.Execute((serviceLocatorLocal) =>
                         {
                             var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
 
@@ -100,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                         });
                     });
 
-                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                inScopeExecutor.Execute((serviceLocatorLocal) =>
                     serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
                         .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
 
@@ -117,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
 
-                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                inScopeExecutor.Execute((serviceLocatorLocal) =>
                     serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
                         .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
             }

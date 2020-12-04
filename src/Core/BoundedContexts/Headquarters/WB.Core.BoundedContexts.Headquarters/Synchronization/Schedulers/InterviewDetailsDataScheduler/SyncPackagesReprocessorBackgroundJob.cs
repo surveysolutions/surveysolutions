@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
@@ -14,14 +15,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
     {
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
+        private readonly IInScopeExecutor inScopeExecutor;
         private readonly ILogger logger;
 
-        public SyncPackagesReprocessorBackgroundJob(IInterviewBrokenPackagesService interviewBrokenPackagesService,
+        public SyncPackagesReprocessorBackgroundJob(
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
+            IInScopeExecutor inScopeExecutor,
             ILogger logger)
         {
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
+            this.inScopeExecutor = inScopeExecutor;
             this.logger = logger;
         }
 
@@ -47,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                        inScopeExecutor.Execute((serviceLocatorLocal) =>
                         {
                             serviceLocatorLocal.GetInstance<IInterviewBrokenPackagesService>().ReprocessSelectedBrokenPackages(new[] { packageId });
                         });

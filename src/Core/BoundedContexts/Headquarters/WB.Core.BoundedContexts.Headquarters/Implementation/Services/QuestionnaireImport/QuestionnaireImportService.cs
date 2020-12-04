@@ -16,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.PlainStorage;
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IArchiveUtils archiveUtils;
         private readonly IDesignerUserCredentials designerUserCredentials;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
@@ -43,7 +45,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
             IArchiveUtils archiveUtils,
-            IDesignerUserCredentials designerUserCredentials)
+            IDesignerUserCredentials designerUserCredentials,
+            IInScopeExecutor inScopeExecutor)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
@@ -52,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.archiveUtils = archiveUtils;
             this.designerUserCredentials = designerUserCredentials;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -101,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var bgTask = Task.Run(async () =>
             {
-                return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
+                return await inScopeExecutor.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
                     var designerServiceCredentials = serviceLocatorLocal.GetInstance<IDesignerUserCredentials>();
 

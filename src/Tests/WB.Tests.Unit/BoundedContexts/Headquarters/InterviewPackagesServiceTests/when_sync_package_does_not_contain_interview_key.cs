@@ -19,7 +19,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -72,13 +71,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
-            InScopeExecutor.Init(executor.Object);
-
-            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object, 
+                inScopeExecutor: executor);
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage());

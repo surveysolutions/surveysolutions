@@ -19,7 +19,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -43,8 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
         [Test]
         public void When_interviewer_was_moved_to_another_team_after_interview_was_created()
         {
-            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
-
+            
             var oldSupervisorId = Id.gE;
             var newSupervisorId = Id.gB;
 
@@ -80,11 +78,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
-
-            InScopeExecutor.Init(executor.Object);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object, inScopeExecutor: executor);
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
@@ -98,8 +93,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
         [Test]
         public void When_interviewer_was_not_moved_to_another_team_after_interview_was_created()
         {
-            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
-
+           
             var oldSupervisorId = Id.gB;
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
@@ -134,11 +128,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
-
-            InScopeExecutor.Init(executor.Object);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object, inScopeExecutor: executor);
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1,
