@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
         }
-        
+
         public async Task Invoke(HttpContext context)
         {
             if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
@@ -35,11 +35,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             {
                 // Redirect into default workspace for old urls
                 string? targetWorkspace = null;
-                //if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
-                //{
-                //    targetWorkspace = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
-                //}
-                //else
+
                 if (context.User.HasClaim(x => x.Type == WorkspaceConstants.ClaimType))
                 {
                     var userFirstWorkspace = context.User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
