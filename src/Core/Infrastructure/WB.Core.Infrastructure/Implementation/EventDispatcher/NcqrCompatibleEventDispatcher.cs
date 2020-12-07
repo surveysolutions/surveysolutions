@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -11,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.Infrastructure.Services;
 
 namespace WB.Core.Infrastructure.Implementation.EventDispatcher
@@ -57,41 +59,47 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             var errorsDuringHandling = new List<Exception>();
 
-            if (!this.prototypeService.IsPrototype(firstEventSourceId))
+            foreach (var functionalEventHandler in denormalizerRegistry.FunctionalDenormalizers)
             {
-                foreach (var functionalEventHandler in denormalizerRegistry.FunctionalDenormalizers)
+                if (this.prototypeService.IsPrototype(firstEventSourceId))
                 {
-                    var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler);
-
-                    try
+                    if (functionalEventHandler.GetCustomAttribute<ReceivesPrototypeEventsAttribute>() == null)
                     {
-                        handler.Handle(events);
+                        continue;
                     }
-                    catch (Exception exception)
+                }
+
+                var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler);
+
+                try
+                {
+                    handler.Handle(events);
+                }
+                catch (Exception exception)
+                {
+                    var eventHandlerType = handler.GetType();
+                    var shouldIgnoreException =
+                        this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
+
+                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
+                        eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
+                        innerException: exception);
+
+                    if (shouldIgnoreException)
                     {
-                        var eventHandlerType = handler.GetType();
-                        var shouldIgnoreException =
-                            this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
+                        this.logger.Error(
+                            $"Failed to handle {eventHandlerException.EventType.Name} in " +
+                            $"{eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
+                            eventHandlerException);
 
-                        var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
-                            eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
-                            innerException: exception);
-
-                        if (shouldIgnoreException)
-                        {
-                            this.logger.Error(
-                                $"Failed to handle {eventHandlerException.EventType.Name} in " +
-                                $"{eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
-                                eventHandlerException);
-
-                        }
-                        else
-                        {
-                            errorsDuringHandling.Add(eventHandlerException);
-                        }
+                    }
+                    else
+                    {
+                        errorsDuringHandling.Add(eventHandlerException);
                     }
                 }
             }
+
 
             foreach (IPublishableEvent publishableEvent in events)
             {
@@ -124,7 +132,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                         try
                         {
                             var denormalizerInstance = this.serviceLocator.GetInstance(handler);
-                            eventHandlerMethod.Handle.Invoke(denormalizerInstance, new[] {publishedEvent});
+                            eventHandlerMethod.Handle.Invoke(denormalizerInstance, new[] { publishedEvent });
                         }
                         catch (Exception exception)
                         {
