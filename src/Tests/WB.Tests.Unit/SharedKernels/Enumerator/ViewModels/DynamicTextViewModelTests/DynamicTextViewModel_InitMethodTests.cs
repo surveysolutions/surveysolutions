@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.DynamicTextViewModel
             var questionnaire = Mock.Of<IQuestionnaire>(x => x.IsRosterGroup(rosterId) == true &&
                                                              x.HasCustomRosterTitle(rosterId) == true);
 
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
 
             var viewModel = Create.ViewModel.DynamicTextViewModel(interviewRepository: Create.Storage.InterviewRepository(interview),
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.DynamicTextViewModel
                 x.GetBrowserReadyTitleHtml(rosterIdentity) == expectedTitle);
             var questionnaire = Mock.Of<IQuestionnaire>(x => x.IsRosterGroup(rosterId) == true);
 
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
 
             var viewModel = Create.ViewModel.DynamicTextViewModel(interviewRepository: Create.Storage.InterviewRepository(interview),

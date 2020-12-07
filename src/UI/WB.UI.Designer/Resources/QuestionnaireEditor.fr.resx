@@ -640,7 +640,7 @@
     <value>Public</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>Nom du questionnaire</value>
+      <value>Titre du questionnaire</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Créer ce questionnaire</value>
@@ -1054,7 +1054,7 @@
     <value>Informations d'enquête</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Description du questionnaire</value>
+      <value>Titre du questionnaire</value>
   </data>
   <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
     <value>Unité d'analyse:</value>

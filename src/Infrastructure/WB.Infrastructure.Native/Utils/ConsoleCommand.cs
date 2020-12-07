@@ -62,7 +62,7 @@ namespace WB.Infrastructure.Native.Utils
             {
                 var errorOutput = process.StandardError.ReadToEndAsync();
                 Task.WaitAll(errorOutput);
-                throw new NonZeroExitCodeException(process.ExitCode);
+                throw new NonZeroExitCodeException(process.ExitCode, readError.Result);
             }
 
             string result = readOutput.Result;
@@ -106,10 +106,13 @@ namespace WB.Infrastructure.Native.Utils
    public class NonZeroExitCodeException : Exception
    {
        public int ProcessExitCode { get; }
+       public string ErrorOutput { get; }
 
-       public NonZeroExitCodeException(in int processExitCode)
+       public NonZeroExitCodeException(in int processExitCode, string errorOutput = null)
        {
            ProcessExitCode = processExitCode;
+           ErrorOutput = errorOutput;
        }
+       
    }
 }

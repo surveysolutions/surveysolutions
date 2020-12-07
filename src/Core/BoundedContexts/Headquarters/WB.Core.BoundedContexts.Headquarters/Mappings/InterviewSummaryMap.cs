@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 cm.NotNullable(true);
             }));
 
-            Bag(x => x.AnswersToFeaturedQuestions,
+            Bag(x => x.IdentifyEntitiesValues,
                 collection =>
                 {
                     collection.Key(key => key.Column("interview_id"));
@@ -168,23 +168,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         }
     }
 
-    public class QuestionAnswerMap : ClassMapping<QuestionAnswer>
+    public class IdentifyEntityValueMap : ClassMapping<IdentifyEntityValue>
     {
-        public QuestionAnswerMap()
+        public IdentifyEntityValueMap()
         {
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
 
-            Table("AnswersToFeaturedQuestions");
+            Table("identifyingentityvalue");
 
             Property(x => x.Position, col => col.Column("Position"));
-            Property(x => x.Answer, col => col.Column("AnswerValue"));
+            Property(x => x.Value, col => col.Column("value"));
             Property(x => x.AnswerCode, col => col.Column("answer_code"));
-            Property(x => x.AnswerLowerCase, col => col.Column("answer_lower_case"));
+            Property(x => x.ValueLowerCase, col => col.Column("value_lower_case"));
             
-            ManyToOne(x => x.Question, mtm =>
+            ManyToOne(x => x.Entity, mtm =>
             {
                 mtm.Lazy(LazyRelation.Proxy);
-                mtm.Column("question_id");                
+                mtm.Column("entity_id");                
             });
 
             ManyToOne(x => x.InterviewSummary, mtm => mtm.Column("interview_id"));

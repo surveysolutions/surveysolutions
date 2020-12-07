@@ -185,6 +185,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.rosterVariableNamesCache
                ?? (this.rosterVariableNamesCache = this.GetRosterNamesCache());
 
+        private IEnumerable<IComposite> AllEntities => this.EntityCache.Values;
+
         private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
@@ -547,6 +549,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
         {
+            if (IsCoverPageSupported)
+            {
+                this.QuestionnaireDocument.Children
+                    .First(c => c.PublicKey == CoverPageSectionId)
+                    .Children
+                    .Where(e => e is IQuestion)
+                    .Select(e => e.PublicKey)
+                    .ToReadOnlyCollection();
+            }
+            
             return this
                 .QuestionnaireDocument
                 .Find<IQuestion>(question => question.Featured)
@@ -784,6 +796,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsVariable(Guid id)
             => this.AllVariables.Any(x => x.PublicKey == id);
 
+        public ReadOnlyCollection<Guid> GetAllEntities()
+            => this.AllEntities.Select(entity => entity.PublicKey).ToReadOnlyCollection();
+
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
 
@@ -1013,6 +1028,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPrefilled(Guid questionId)
         {
+            var entity = GetEntityOrThrow(questionId);
+            if (IsCoverPageSupported)
+            {
+                var parent = entity.GetParent();
+                return parent?.PublicKey == CoverPageSectionId;
+            }
+            else if (entity is IVariable)
+            {
+                return false;
+            }
+            
             var question = this.GetQuestionOrThrow(questionId);
             return question.Featured;
         }
@@ -1772,7 +1798,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
-        private IVariable GetVariable(Guid questionId) => GetVariable(this.VariablesCache, questionId);
+        private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
 
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
