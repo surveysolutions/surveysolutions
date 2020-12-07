@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                 {
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewSummaryMap),
-                    typeof(QuestionAnswerMap),
+                    typeof(IdentifyEntityValueMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
                     typeof(TimeSpanBetweenStatusesMap),

@@ -200,6 +200,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Answer was not saved</value>
   </data>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Not calculated</value>
+  </data>
   <data name="ClickToAnswer" xml:space="preserve">
     <value>Click to answer</value>
   </data>
@@ -425,6 +428,9 @@ Contact support for assistance.</value>
   </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Not answered</value>
+  </data>
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>No value</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Additional question information</value>

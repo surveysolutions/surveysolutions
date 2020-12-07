@@ -64,15 +64,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireId = questionnaireId ?? throw new ArgumentNullException(nameof(questionnaireId));
         }
 
-        public Task NavigateTo(NavigationIdentity navigationItem)
+        public async Task NavigateTo(NavigationIdentity navigationItem)
         {
             if (this.viewModelNavigationService.HasPendingOperations)
             {
                 this.viewModelNavigationService.ShowWaitMessage();
-                return Task.CompletedTask;
             }
 
-            return this.NavigateToImpl(navigationItem);
+            await this.NavigateToImpl(navigationItem);
         }
 
         public void NavigateBack(Action navigateToIfHistoryIsEmpty)

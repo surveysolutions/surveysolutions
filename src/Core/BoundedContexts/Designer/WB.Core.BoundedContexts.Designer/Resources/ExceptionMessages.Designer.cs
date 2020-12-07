@@ -196,11 +196,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cover section can contain only questions and static texts.
+        ///   Looks up a localized string similar to Cover section can contain only questions, static texts and variables.
         /// </summary>
-        public static string CoverPageCanContainsOnlyQuestionsAndStaticTexts {
+        public static string CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables {
             get {
-                return ResourceManager.GetString("CoverPageCanContainsOnlyQuestionsAndStaticTexts", resourceCulture);
+                return ResourceManager.GetString("CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables", resourceCulture);
             }
         }
         

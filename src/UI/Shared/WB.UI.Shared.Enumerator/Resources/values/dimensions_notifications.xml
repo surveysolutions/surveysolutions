@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <dimen name="Dashboard_Notifications_Statistics_Height">80dp</dimen>
+</resources>

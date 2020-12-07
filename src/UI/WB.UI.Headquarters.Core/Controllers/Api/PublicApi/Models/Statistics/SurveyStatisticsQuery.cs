@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
@@ -65,5 +66,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
         /// <remarks>Ignored for supervisors</remarks>
         /// <remarks>Ignored for pivot table</remarks>
         public bool ExpandTeams { get; set; }
+
+        /// <summary>
+        /// List of statuses to apply filtering
+        /// </summary>
+        [FromQuery(Name = "statuses[]")]
+        public string[] Statuses { get; set; }
     }
 }

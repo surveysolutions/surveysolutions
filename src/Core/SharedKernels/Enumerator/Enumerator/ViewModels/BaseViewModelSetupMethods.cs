@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public static void ReloadStateFromBundle(IPrincipal principal, IMvxBundle bundle)
         {
-            if (bundle.Data.ContainsKey("userName") && ! principal.IsAuthenticated)
+            if (bundle.Data.ContainsKey("userName") && !principal.IsAuthenticated)
             {
                 principal.SignInWithHash(bundle.Data["userName"], bundle.Data["passwordHash"], true);
             }

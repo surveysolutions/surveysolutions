@@ -208,6 +208,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
         }
 
+        public string GetVariableValueAsString(Identity variableIdentity)
+        {
+            var variable = this.Tree.GetVariable(variableIdentity);
+            return variable.GetValueAsString();
+        }
+
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);
@@ -449,12 +455,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 };
             }
 
+            var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
+
             return section
                 .TreeToEnumerableDepthFirst(s => s.Children)
-                .Where(x => !(x is InterviewTreeVariable))
+                .Where(x => isCover || !(x is InterviewTreeVariable))
                 .Select(x => x.Identity);
         }
-        
+
+        public IEnumerable<Identity> FindEntity(Guid id) => this.Tree.FindEntity(id).Select(i => i.Identity);
 
         public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
             => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);

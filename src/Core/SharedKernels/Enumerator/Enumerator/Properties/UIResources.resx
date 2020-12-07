@@ -201,6 +201,12 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Adjust" xml:space="preserve">
+    <value>Adjust</value>
+  </data>
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work.</value>
+  </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
     <value>Answer is invalid</value>
   </data>
@@ -752,5 +758,11 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>There is no permission granted to application to self update. Please enable "Allow from this source" option in 'App info' settings menu.</value>
-</data>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>No comment specified</value>
+  </data>
 </root>
