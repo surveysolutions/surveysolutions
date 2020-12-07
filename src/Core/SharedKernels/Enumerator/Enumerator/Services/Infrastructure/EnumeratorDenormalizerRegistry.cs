@@ -23,6 +23,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             this.logger.Trace("Enumerator registry initializing");
             var dashboard = (BaseDenormalizer) serviceLocator.GetInstance(typeof(InterviewDashboardEventHandler));
             this.RegisterDenormalizer(dashboard);
+            var calendarEvents = (BaseDenormalizer) serviceLocator.GetInstance(typeof(CalendarEventEventHandler));
+            this.RegisterDenormalizer(calendarEvents);
         }
 
         public void RegisterDenormalizer(BaseDenormalizer denormalizer)

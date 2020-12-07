@@ -54,10 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Activities\CalendarEventDialog.cs" />
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
+    <Compile Include="Converters\CalendarEventAndStatusToColorConverter.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
     <Compile Include="CustomControls\PdfViewFragment.cs" />
     <Compile Include="CustomServices\GoogleApiService.cs" />
+    <Compile Include="CustomServices\StringFormat.cs" />
     <Compile Include="EnumeratorLoggingModule.cs" />
     <Compile Include="Migrations\Encrypt_Data.cs" />
     <Compile Include="Migrations\M201912091307_ChangeIdTypeInOptionViewTable.cs" />
@@ -259,6 +262,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\calendar_today.xml" />
     <AndroidResource Include="Resources\drawable\interview_approved_by_sv.xml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
@@ -267,6 +271,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\schedule.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_pressed.xml" />
     <AndroidResource Include="Resources\drawable\sidebar_row_selected.xml" />
@@ -2025,6 +2030,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\map_icon.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\calendar_event_dialog.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

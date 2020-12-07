@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -192,8 +193,16 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(Mock.Of<ILogger>()),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
+                answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>(),
+                Mock.Of<IAssignmentDocumentsStorage>(),
+                Mock.Of<ICalendarEventStorage>());
 
+        CalendarEventEventHandler CalendarEventDenormalizer(ICalendarEventStorage calendarEventStorage = null) =>
+            new CalendarEventEventHandler(calendarEventStorage ?? Mock.Of<ICalendarEventStorage>(),
+                Mock.Of<IPlainStorage<InterviewView>>(),
+                Mock.Of<IAssignmentDocumentsStorage>());
+        
+        
         public DomainRepository DomainRepository(
             IServiceLocator serviceLocator = null)
             => new DomainRepository(
@@ -293,7 +302,9 @@ namespace WB.Tests.Abc.TestFactories
             => new ViewModelEventRegistry();
 
         public EnumeratorDenormalizerRegistry DenormalizerRegistry() =>
-            new EnumeratorDenormalizerRegistry(Create.Service.ServiceLocatorService(DashboardDenormalizer()), Mock.Of<ILogger>());
+            new EnumeratorDenormalizerRegistry(
+                Create.Service.ServiceLocatorService(DashboardDenormalizer(),
+                CalendarEventDenormalizer()), Mock.Of<ILogger>());
 
         public WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry DenormalizerRegistryNative() 
             => new WB.Core.Infrastructure.Implementation.EventDispatcher.DenormalizerRegistry(new EventBusSettings());
@@ -1256,6 +1267,64 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireTranslator QuestionnaireTranslator()
             => new QuestionnaireTranslator();
+        
+        public ICalendarEventPackageService CalendarEventPackageService(
+            ICalendarEventService calendarEventService,
+            ICommandService commandService,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
+            IAssignmentsService assignments,
+            ISerializer serializer,
+            IUserViewFactory userViewFactory = null)
+        {
+            return new CalendarEventPackageService(
+                Mock.Of<ILogger<CalendarEventPackageService>>(),
+                calendarEventService ?? Mock.Of<ICalendarEventService>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                assignments ?? Mock.Of<IAssignmentsService>(),
+                serializer ?? Mock.Of<ISerializer>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>());
+        }
+
+        
+        public ICalendarEventService CalendarEventService(params Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent[] calendarEvents)
+        {
+            var accessor = new TestInMemoryWriter<Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>();
+            foreach (var calendarEvent in calendarEvents)
+            {
+                accessor.Store(calendarEvent, calendarEvent.PublicKey);
+            }
+            return this.CalendarEventService(accessor);
+        }
+        public ICalendarEventService CalendarEventService(Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent[] calendarEvents,
+            Assignment[] assignments, IInterviewInformationFactory interviewerInterviewsFactory = null)
+        {
+            var accessor = new TestInMemoryWriter<Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>();
+            foreach (var calendarEvent in calendarEvents)
+            {
+                accessor.Store(calendarEvent, calendarEvent.PublicKey);
+            }
+            var assignmentsAccessor = new TestInMemoryWriter<Assignment, Guid>();
+            foreach (var assignment in assignments)
+            {
+                assignmentsAccessor.Store(assignment, assignment.PublicKey);
+            }
+            
+            return this.CalendarEventService(accessor, assignmentsAccessor, interviewerInterviewsFactory);
+        }
+        
+        public ICalendarEventService CalendarEventService(
+            IQueryableReadSideRepositoryReader<Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid> calendarEventsAccessor = null,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor = null,  
+            IInterviewInformationFactory interviewerInterviewsFactory = null)
+        {
+            return new CalendarEventService(
+                calendarEventsAccessor ??
+                Mock.Of<IQueryableReadSideRepositoryReader<
+                    Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>>(),
+                assignmentsAccessor ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
+                interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
