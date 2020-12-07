@@ -58,6 +58,7 @@
 
 <script>
 import {DateFormats, convertToLocal} from '~/shared/helpers'
+import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment-timezone'
 import {map, join} from 'lodash'
 
@@ -242,11 +243,10 @@ export default {
         deleteCalendarEvent() {
             const self = this
             this.$refs.editCalendarModal.hide()
-            self.$store.dispatch('deleteCalendarEvent',
-                {
-                    id: self.calendarEventId,
-                    callback: self.reload,
-                })
+
+            deleteCalendarEvent(self.$apollo, {
+                'publicKey' : self.calendarEventId,
+            }, self.reload)
         },
 
         editCalendarEvent(assignmentId, calendarEvent) {
@@ -263,15 +263,17 @@ export default {
             this.$refs.editCalendarModal.hide()
             const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
-            self.$store.dispatch('saveCalendarEvent', {
+            const variables = {
+                interviewId : self.calendarInterviewId,
+                interviewKey: self.calendarInterviewKey,
                 assignmentId : self.calendarAssinmentId,
-                id : self.calendarEventId,
-                newDate : startDate,
+                publicKey : self.calendarEventId,
+                newStart : startDate,
                 comment : self.editCalendarComment,
-                timezone: moment.tz.guess(),
+                startTimezone: moment.tz.guess(),
+            }
 
-                callback: self.reload,
-            })
+            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
         },
     },
 }

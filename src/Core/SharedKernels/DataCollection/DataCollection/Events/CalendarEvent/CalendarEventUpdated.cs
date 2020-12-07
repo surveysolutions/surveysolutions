@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.CalendarEvent
         public bool IsSystemGenerated { get; set; }
 
         public CalendarEventUpdated(Guid userId, DateTimeOffset originDate, string comment, DateTimeOffset start,
-            string startTimezone, bool isSystemGenerated) 
+            string startTimezone, bool isSystemGenerated = false) 
             : base(userId, originDate)
         {
             this.Comment = comment;
