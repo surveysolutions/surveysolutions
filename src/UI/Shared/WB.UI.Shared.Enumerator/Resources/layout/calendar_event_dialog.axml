@@ -69,7 +69,7 @@
                      android:orientation="horizontal"
                      android:layout_marginTop="@dimen/calendar_event_dialog_margin">
             <View
-                android:layout_width="20dp"
+                android:layout_width="@dimen/calendar_event_buttons_space"
                 android:layout_height="0dp"
                 android:layout_weight="1"
             />
