@@ -19,7 +19,7 @@
             noSelect
             noSearch
             :noPaging="false"
-            @cell-clicked="cellClicked">
+            :contextMenuItems="contextMenuItems">
         </DataTables>
         <ModalFrame
             ref="createWorkspaceModal"
@@ -148,15 +148,6 @@ export default {
                 this.$refs.table.reload()
             }
         },
-        cellClicked(columnName, rowId, cellData) {
-            if(columnName === 'DisplayName') {
-                const parsedRowId = rowId.replace('row_', '')
-                this.editedRowId = parsedRowId
-                this.editedDisplayName = cellData
-
-                this.$refs.editWorkspaceModal.modal('show')
-            }
-        },
         async updateWorkspace() {
             await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
                 displayName: this.editedDisplayName,
@@ -198,6 +189,52 @@ export default {
                     toastr.error(errorMessage)
                 }
             }
+        },
+        contextMenuItems({rowData}) {
+            let items = [
+                {
+                    name: this.$t('Workspaces.Edit'),
+                    callback: (_, opt) => {
+                        const parsedRowId = rowData.name
+                        this.editedRowId = parsedRowId
+                        this.editedDisplayName = rowData.displayName
+
+                        this.$refs.editWorkspaceModal.modal('show')
+                    },
+                },
+                {
+                    name: this.$t('Workspaces.WorkspaceSettings'),
+                    callback: (_, opt) => {
+                        window.location = this.$hq.basePath + 'Settings'
+                    },
+                },
+                {
+                    name: this.$t('Common.EmailProviders'),
+                    callback: (_, opt) => {
+                        window.location = this.$hq.basePath + 'Settings/EmailProviders'
+                    },
+                },
+                {
+                    name: this.$t('TabletLogs.PageTitle'),
+                    callback: (_, opt) => {
+                        window.location = this.$hq.basePath + 'Diagnostics/AuditLog'
+                    },
+                },
+                {
+                    name: this.$t('Common.AuditLog'),
+                    callback: (_, opt) => {
+                        window.location = this.$hq.basePath + 'Diagnostics/AuditLog'
+                    },
+                },
+                {
+                    name: this.$t('Pages.PackagesInfo_Header'),
+                    callback: (_, opt) => {
+                        window.location = this.$hq.basePath + 'Administration/TabletInfos'
+                    },
+                },
+            ]
+
+            return items
         },
     },
     computed: {
