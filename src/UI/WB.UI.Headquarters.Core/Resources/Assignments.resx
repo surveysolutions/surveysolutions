@@ -417,6 +417,9 @@
   <data name="EnterComments" xml:space="preserve">
     <value>Enter your comment here</value>
   </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Selected date is in the past</value>
+  </data>
   <data name="Action_Created" xml:space="preserve">
     <value>Created</value>
   </data>
@@ -489,5 +492,8 @@
   </data>
   <data name="WebModeEnabledWarning" xml:space="preserve">
       <value>Assignment cannot be finished. It has web mode enabled, while questionnaire has web collection mode disabled</value>
-  </data>  
+  </data>
+  <data name="NoComment" xml:space="preserve">
+      <value>(no comment)</value>
+  </data>    
 </root>

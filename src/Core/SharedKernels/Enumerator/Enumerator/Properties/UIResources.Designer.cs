@@ -340,6 +340,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No questionnaires yet
         ///
         ///You can create or edit your questionnaires in Survey Solutions Designer.
@@ -1589,6 +1598,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No comment specified.
+        /// </summary>
+        public static string NoComment {
+            get {
+                return ResourceManager.GetString("NoComment", resourceCulture);
             }
         }
         

@@ -49,6 +49,11 @@
         <item name="colorPrimary">#FF666666</item>
         <item name="android:textColorHighlight">#9936aee5</item>
         <item name="android:progressBarStyleHorizontal">@style/ProgressBarTheme_Blue_Light</item>
+    </style>   
+    
+    <style name="DialogWithTitle" parent="GrayAppTheme">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">true</item>
     </style>
     
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
