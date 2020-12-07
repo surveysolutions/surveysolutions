@@ -126,8 +126,7 @@ namespace WB.UI.Headquarters
                 new DataExportModule(),
                 GetHqBoundedContextModule(),
                 new HeadquartersUiModule(Configuration),
-                new ProductVersionModule(typeof(Startup).Assembly),
-                GetQuartzModule()
+                new ProductVersionModule(typeof(Startup).Assembly)
                 );
         }
 
@@ -162,16 +161,6 @@ namespace WB.UI.Headquarters
             };
             
             return unitOfWorkConnectionSettings;
-        }
-
-        private QuartzModule GetQuartzModule()
-        {
-            var schedulerSection = this.Configuration.GetSection("Scheduler");
-
-            return new QuartzModule(typeof(M201905151013_AddQuartzTables).Assembly,
-                typeof(M201905151013_AddQuartzTables).Namespace,
-                schedulerSection["InstanceId"],
-                schedulerSection["IsClustered"].ToBool(false));
         }
 
         private HeadquartersBoundedContextModule GetHqBoundedContextModule()
@@ -318,7 +307,8 @@ namespace WB.UI.Headquarters
 #endif
             if (Configuration["no-quartz"].ToBool(false) == false)
             {
-                services.AddHostedService<QuartzHostedService>();
+                services.AddQuartzIntegration(Configuration,
+                    DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
             }
 
             var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
