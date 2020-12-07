@@ -396,6 +396,9 @@
     <value>Оставьте свой комментарий здесь</value>
     <comment>Оставьте свой комментарий здесь</comment>
   </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Дата находится в прошлом</value>
+  </data>
   <data name="Action" xml:space="preserve">
     <value>Действие</value>
   </data>
@@ -482,5 +485,8 @@
   </data>
   <data name="WebModeEnabledWarning" xml:space="preserve">
       <value>Задание не может быть завершено. Оно создано в веб режиме, но веб режим отключен на опроснике</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+      <value>(нет комментария)</value>
   </data>
 </root>

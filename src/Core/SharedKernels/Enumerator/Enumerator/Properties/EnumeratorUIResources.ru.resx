@@ -301,6 +301,9 @@
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Создать резервную копию</value>
   </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Обновление событий календаря</value>
+  </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Ваша учетная запись перепривязана к другому устройству</value>
   </data>
@@ -331,7 +334,10 @@
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
     <value>законченные интервью</value>
   </data>
-  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>календарные события</value>
+  </data>
+    <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} законченных интервью отправлено</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
@@ -343,8 +349,11 @@
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>Были обновлены все назначения</value>
   </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Передача событий календаря</value>
+  </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
-    <value>вопросники</value>
+    <value>опросники</value>
   </data>
   <data name="UpdatingQuestionnaires" xml:space="preserve">
     <value>Обновление вопросников</value>
@@ -940,7 +949,6 @@
   </data>
   <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
     <value>{0} интервью было обновлено</value>
-
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
     <value>изменения по интервью </value>
@@ -952,6 +960,24 @@
     <value>{0} из {1} частичных данных по интервью скачано</value>
   </data>
   <data name="InvalidEndpointShort" xml:space="preserve">
-      <value>Адрес не верный</value>
+    <value>Адрес не верный</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Удалить калентарное событие</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Добавить календарное событие</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Редактировать время календарного события</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Следуюший контакт: {0}</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Дата находится в прошлом</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Время находится в прошлом</value>
   </data>
 </root>

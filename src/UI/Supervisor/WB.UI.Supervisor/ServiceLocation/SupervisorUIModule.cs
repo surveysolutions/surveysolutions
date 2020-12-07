@@ -87,6 +87,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 #endif
 
             registry.BindAsSingleton<InterviewDashboardEventHandler, InterviewDashboardEventHandler>();
+            registry.BindAsSingleton<CalendarEventEventHandler, CalendarEventEventHandler>();
         }
 
         private void BindOfflineServices(IIocRegistry registry)
@@ -101,6 +102,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorSynchronizeHandler>();
             registry.Bind<IHandleCommunicationMessage, InterviewerUpdateHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorCalendarEventsHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
