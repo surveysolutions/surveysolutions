@@ -53,4 +53,10 @@
     <data name="DisplayNameHelpText" xml:space="preserve">
         <value>Будет использовано для отображения в меню. Пробуйте использовать короткие имена</value>
     </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+        <value>Настройки</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Редактировать</value>
+    </data>
 </root>

@@ -60,4 +60,10 @@
     <data name="DisplayNameHelpText" xml:space="preserve">
         <value>Will be used to display workspace in menus. Try to choose shorter names</value>
     </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Edit</value>
+    </data>
 </root>
