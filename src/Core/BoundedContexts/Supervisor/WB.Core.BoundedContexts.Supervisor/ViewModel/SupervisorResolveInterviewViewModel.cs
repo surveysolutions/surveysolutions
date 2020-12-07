@@ -7,12 +7,14 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -30,6 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IUserInteractionService userInteractionService;
+        private readonly ICalendarEventStorage calendarEventStorage;
 
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
@@ -44,7 +47,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             ILogger logger,
             IAuditLogService auditLogService,
             IPlainStorage<InterviewView> interviews,
-            IUserInteractionService userInteractionService) : 
+            IUserInteractionService userInteractionService,
+            ICalendarEventStorage calendarEventStorage) : 
                 base(navigationService,
                 commandService,
                 principal,
@@ -60,6 +64,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.auditLogService = auditLogService;
             this.interviews = interviews;
             this.userInteractionService = userInteractionService;
+            this.calendarEventStorage = calendarEventStorage;
         }
 
         private InterviewStatus status;
@@ -113,6 +118,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                         Comment);
                     await this.commandService.ExecuteAsync(command);
                     auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
+
+                    CompleteCalendarEventIfExists();
                 }
             }
             catch (InterviewException e)
@@ -136,6 +143,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     await this.commandService.ExecuteAsync(command);
                     auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId,
                         interview.GetInterviewKey().ToString()));
+
+                    CompleteCalendarEventIfExists();
                 }
             }
             catch (InterviewException e)
@@ -146,6 +155,18 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             await viewModelNavigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);
+
+        private void CompleteCalendarEventIfExists()
+        {
+            var calendarEvent = calendarEventStorage.GetCalendarEventForInterview(interviewId);
+            if (calendarEvent == null)
+                return;
+
+            var command = new CompleteCalendarEventCommand(calendarEvent.Id, this.principal.CurrentUserIdentity.UserId);
+            this.commandService.Execute(command);
+
+            logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({interviewId})");
+        }
 
         public IMvxAsyncCommand Assign => new MvxAsyncCommand(SelectInterviewer, () => 
             this.status == InterviewStatus.RejectedBySupervisor || 

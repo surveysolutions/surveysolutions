@@ -758,5 +758,11 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
     <value>There is no permission granted to application to self update. Please enable "Allow from this source" option in 'App info' settings menu.</value>
-</data>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>No comment specified</value>
+  </data>
 </root>
