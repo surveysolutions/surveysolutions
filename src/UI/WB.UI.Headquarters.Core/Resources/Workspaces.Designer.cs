@@ -128,5 +128,17 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("DisplayNameHelpText", resourceCulture);
             }
         }
+        
+        public static string WorkspaceSettings {
+            get {
+                return ResourceManager.GetString("WorkspaceSettings", resourceCulture);
+            }
+        }
+        
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
     }
 }

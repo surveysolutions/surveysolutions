@@ -89,11 +89,6 @@
             <ul class="dropdown-menu">
                 @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
                 @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
-                @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
-                @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
-                @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
-                @Html.MainMenuItem("AuditLog", "Diagnostics", Common.AuditLog, MenuItem.AuditLog)
-                @Html.MainMenuItem("TabletInfos", "Administration", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
             </ul>
         </li>
     }
