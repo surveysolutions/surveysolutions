@@ -123,6 +123,7 @@
 <script>
 import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
+import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import {map, join, toNumber, filter} from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
@@ -306,9 +307,6 @@ export default {
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
 
-                    console.log(selectedDates.length > 0 ? selectedDates[0] : '')
-                    console.log(selectedDates.length > 0 ? moment(selectedDates[0]).format() : '')
-
                     if(start != null && start != self.newCalendarStart){
                         self.newCalendarStart = start
                     }
@@ -352,26 +350,27 @@ export default {
 
             const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
 
-            self.$store.dispatch('saveCalendarEvent', {
+            const variables = {
                 interviewId : self.calendarInterviewId,
                 interviewKey: self.calendarInterviewKey,
                 assignmentId : self.calendarAssinmentId,
-                id : self.calendarEventId,
-                newDate : startDate,
+                publicKey : self.calendarEventId,
+                newStart : startDate,
                 comment : self.editCalendarComment,
-                timezone: moment.tz.guess(),
+                startTimezone: moment.tz.guess(),
+            }
 
-                callback: self.reload,
-            })
+            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
+
         },
         deleteCalendarEvent() {
             const self = this
             this.$refs.editCalendarModal.hide()
-            self.$store.dispatch('deleteCalendarEvent',
-                {
-                    id: self.calendarEventId,
-                    callback: self.reload,
-                })
+
+            deleteCalendarEvent(self.$apollo, {
+                'publicKey' : self.calendarEventId,
+            }, self.reload)
+
         },
         contextMenuItems({rowData, rowIndex}) {
             const menu = []
