@@ -118,6 +118,7 @@ namespace WB.UI.Shared.Enumerator
 
             registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
             registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
+            registry.AddOrOverwrite("CalendarEventToColor", new CalendarEventToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
             registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());

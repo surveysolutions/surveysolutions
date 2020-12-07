@@ -56,6 +56,7 @@ namespace WB.UI.Shared.Enumerator
         {
             registry.Bind<IPathUtils, AndroidPathUtils>();
             registry.Bind<IUserInteractionService, UserInteractionService>();
+            registry.Bind<IStringFormat, StringFormat>();
             registry.Bind<IGoogleApiService, GoogleApiService>();
             registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
@@ -93,6 +94,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CompleteInterviewFragment>();
             registry.Bind<CoverInterviewFragment>();
             registry.Bind<OverviewFragment>();
+            registry.Bind<CalendarEventDialog>();
 
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
             registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();

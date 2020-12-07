@@ -259,4 +259,13 @@
   <data name="DownloadReusableCategories" xml:space="preserve">
     <value>Reusable category {0} downloading</value>
   </data>
+  <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Upload calendar event: {0}</value>
+  </data>
+  <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Download calendar event package: {0}</value>
+  </data>
+  <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Download list of calendar events ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+  </data>  
 </root>

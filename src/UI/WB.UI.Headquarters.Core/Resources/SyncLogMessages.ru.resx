@@ -272,4 +272,13 @@
   <data name="GetInterviewPatch" xml:space="preserve">
     <value>Загрузка изменений интервью: {0}</value>
   </data>
+  <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Загрузка календарных событий: {0}</value>
+  </data>
+  <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Скачивание пакета календарного события: {0}</value>
+  </data>
+  <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Скачивани списка календарных событий ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+  </data>
 </root>

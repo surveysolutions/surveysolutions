@@ -41,5 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         AssignmentReceived,
         DownloadReusableCategories,
         GetInterviewPatch,
+        PostCalendarEvent,
+        GetCalendarEvent,
+        GetCalendarEvents
     }
 }
