@@ -10,6 +10,7 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
@@ -76,7 +77,8 @@ namespace WB.UI.Interviewer
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
-                {typeof(SearchViewModel), typeof(InterviewerSearchActivity)}
+                {typeof(SearchViewModel), typeof(InterviewerSearchActivity)},
+                {typeof(CalendarEventDialogViewModel), typeof(CalendarEventDialog)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
                 ,{typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardViewModel), typeof (Shared.Extensions.CustomServices.MapDashboard.MapDashboardActivity)}
@@ -170,6 +172,11 @@ namespace WB.UI.Interviewer
                 // speeds up inflation noticeably.
                 return toReturn;
             }
+        }
+
+        protected override IMvxAndroidViewPresenter CreateViewPresenter()
+        {
+            return new MvxAndroidViewPresenter(AndroidViewAssemblies);
         }
 
         public override IEnumerable<Assembly> GetViewModelAssemblies()

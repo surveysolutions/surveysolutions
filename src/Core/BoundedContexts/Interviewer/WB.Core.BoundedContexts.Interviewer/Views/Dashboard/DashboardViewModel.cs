@@ -8,9 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
@@ -66,7 +64,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient,
             IGoogleApiService googleApiService,
-            IMapInteractionService mapInteractionService) : base(principal, viewModelNavigationService, permissionsService,
+            IMapInteractionService mapInteractionService,
+            DashboardNotificationsViewModel dashboardNotifications) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection)
         {
             this.messenger = messenger;
@@ -76,6 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.auditLogService = auditLogService;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
+            this.DashboardNotifications = dashboardNotifications;
 
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
@@ -90,7 +90,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             GoogleApiService = googleApiService;
             this.mapInteractionService = mapInteractionService;
 
-
             SubscribeOnMessages();
 
             this.Synchronization.Init();
@@ -104,6 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
         }
 
+        public DashboardNotificationsViewModel DashboardNotifications { get; set; }
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -131,8 +131,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             SubscribeOnMessages();
 
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
-        }
 
+            DashboardNotifications.CheckTabletTimeAndWarn();
+        }
+        
         public override void ViewDisappeared()
         {
             UnsubscribeFromMessages();

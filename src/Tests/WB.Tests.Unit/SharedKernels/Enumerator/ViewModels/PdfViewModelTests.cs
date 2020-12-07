@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             // Act
             var viewModel = new PdfViewModel(statefulInterviewRepository, questionnaireRepository, 
-                attachmentContentStorage, Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository));
+                attachmentContentStorage, Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository, questionnaireStorage: questionnaireRepository));
             viewModel.ShouldLogInpc(false);
             viewModel.Configure(interview.Id.FormatGuid(), staticTextIdentity);
 

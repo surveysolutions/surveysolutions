@@ -151,6 +151,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsRosterGroup(Guid groupId);
 
+        ReadOnlyCollection<Guid> GetAllEntities();
+        
         ReadOnlyCollection<Guid> GetAllQuestions();
 
         ReadOnlyCollection<Guid> GetAllVariables();
@@ -245,7 +247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId);
 
-        bool IsPrefilled(Guid questionId);
+        bool IsPrefilled(Guid entityId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
         string GetValidationMessage(Guid questionId, int conditionIndex);

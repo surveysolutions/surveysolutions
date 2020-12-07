@@ -104,6 +104,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
+        protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
+        {
+            var assignmentModel = (AssignmentDashboardItemViewModel) dashboardItem;
+            var newAssignmentModel = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
+            var assignment = this.assignmentsRepository.GetById(assignmentModel.AssignmentId);
+            newAssignmentModel.Init(assignment);
+            return newAssignmentModel;
+        }
+
         public void UpdateAssignment(int? assignmentId)
         {
             if (!assignmentId.HasValue)

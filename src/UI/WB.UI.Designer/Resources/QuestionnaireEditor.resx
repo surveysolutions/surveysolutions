@@ -410,7 +410,7 @@
     <value>Basic information</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Questionnaire description</value>
+      <value>Questionnaire title</value>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
     <value>Subtitle:</value>
@@ -701,7 +701,7 @@
     <value>Public</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>Questionnaire name</value>
+      <value>Questionnaire title</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Make this questionnaire</value>

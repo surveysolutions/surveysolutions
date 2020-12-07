@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
+using NodaTime;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -24,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
+        private readonly IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor;
         private readonly IWebInterviewConfigProvider WebInterviewConfigProvider;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IHeadquartersEventStore hqEventStore;
@@ -34,7 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             IQuestionnaireStorage questionnaireStorage,
             IHeadquartersEventStore hqEventStore,
             IUserViewFactory userViewFactory, 
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+            IWebInterviewConfigProvider webInterviewConfigProvider, 
+            IQueryableReadSideRepositoryReader<CalendarEvent> calendarEventsAccessor)
         {
             this.assignmentsStorage = assignmentsStorage;
             this.summaries = summaries;
@@ -42,6 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.hqEventStore = hqEventStore ?? throw new ArgumentNullException(nameof(hqEventStore));
             this.userViewFactory = userViewFactory;
             WebInterviewConfigProvider = webInterviewConfigProvider;
+            this.calendarEventsAccessor = calendarEventsAccessor;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
@@ -123,7 +128,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         Password = x.Password,
                         WebMode = x.WebMode,
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
-                        Comments = x.Comments
+                        Comments = x.Comments,
+                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
+                            
                     };
 
                     if (input.ShowQuestionnaireTitle)
@@ -138,6 +145,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             result.TotalCount = this.assignmentsStorage.Query(_ => this.ApplyFilter(input, _).Count());
 
             return result;
+        }
+
+        private CalendarEventView GetCalendarEventForAssignmentOrNull(int id)
+        {
+            var calendarEvent = calendarEventsAccessor.Query(
+                x => x.FirstOrDefault(
+                    y => y.InterviewId == null
+                         && y.AssignmentId == id
+                         && y.DeletedAtUtc == null
+                         && y.CompletedAtUtc == null));
+
+            return calendarEvent == null ? null : new CalendarEventView(
+                calendarEvent.Start,
+                calendarEvent.Comment,
+                calendarEvent.PublicKey);
         }
 
         public List<AssignmentIdentifyingQuestionRow> GetIdentifyingColumnText(Assignment assignment)

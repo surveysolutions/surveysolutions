@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -11,6 +13,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     {
         bool HasExpandedView { get; }
         bool IsExpanded { get; set; }
+    }
+
+    public interface IDashboardItemWithEvents : IDashboardItem
+    {
+        event EventHandler? OnItemUpdated;
     }
 
     public interface IDashboardViewItem
@@ -35,11 +42,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
     public class ActionDefinition : INotifyPropertyChanged
     {
-        private string label;
+        private string? label;
         public ActionType ActionType { get; set; }
         public int Tag { get; set; }
 
-        public string Label
+        public string? Label
         {
             get => label;
             set
@@ -52,11 +59,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public bool IsEnabled => Command?.CanExecute() ?? false;
 
-        public IMvxCommand Command { get; set; }
+        public IMvxCommand? Command { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

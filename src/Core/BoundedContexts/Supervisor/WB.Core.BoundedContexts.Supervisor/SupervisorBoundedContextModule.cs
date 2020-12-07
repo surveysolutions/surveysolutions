@@ -11,14 +11,16 @@ namespace WB.Core.BoundedContexts.Supervisor
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUploadInterviews>("sortOrder", 0);
-            registry.BindWithConstructorArgument<ISynchronizationStep, UpdateEncryptionKey>("sortOrder", 1);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UploadCalendarEvents>("sortOrder", 3);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUploadInterviews>("sortOrder", 5);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UpdateEncryptionKey>("sortOrder", 7);
             registry.BindWithConstructorArgument<ISynchronizationStep, SyncronizeInterviewers>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeSupervisor>("sortOrder", 20);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 30);
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadDeletedQuestionnairesList>("sortOrder", 50);
             registry.BindWithConstructorArgument<ISynchronizationStep, RemoveObsoleteQuestionnaires>("sortOrder", 60);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorDownloadInterviews>("sortOrder", 70);
+            registry.BindWithConstructorArgument<ISynchronizationStep, DownloadCalendarEvents>("sortOrder", 73);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeTechnicalInformation>("sortOrder", 80);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 90);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 100);

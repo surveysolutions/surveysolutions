@@ -312,9 +312,6 @@
   <data name="Column" xml:space="preserve">
     <value>column</value>
   </data>
-  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
-    <value>La sección de portada solo puede contener preguntas y textos estáticos</value>
-  </data>
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
     <value>La sección de portada debe ser la primera sección del cuestionario</value>
   </data>

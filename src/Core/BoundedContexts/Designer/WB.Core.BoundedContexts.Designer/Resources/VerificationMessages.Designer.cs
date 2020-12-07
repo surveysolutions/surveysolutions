@@ -1461,5 +1461,17 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB3010_LinkToHiddenQuestionNotAllowed", resourceCulture);
             }
         }
+        
+        public static string WB0311_IdentityVariablesMustHaveLabel {
+            get {
+                return ResourceManager.GetString("WB0311_IdentityVariablesMustHaveLabel", resourceCulture);
+            }
+        }
+        
+        public static string WB0312 {
+            get {
+                return ResourceManager.GetString("WB0312", resourceCulture);
+            }
+        }
     }
 }
