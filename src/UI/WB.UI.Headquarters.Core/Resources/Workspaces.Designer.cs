@@ -110,5 +110,23 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("CurrentWorkspace", resourceCulture);
             }
         }
+        
+        public static string CreateWorkspace {
+            get {
+                return ResourceManager.GetString("CreateWorkspace", resourceCulture);
+            }
+        }
+        
+        public static string CanNotBeChanged {
+            get {
+                return ResourceManager.GetString("CanNotBeChanged", resourceCulture);
+            }
+        }
+        
+        public static string DisplayNameHelpText {
+            get {
+                return ResourceManager.GetString("DisplayNameHelpText", resourceCulture);
+            }
+        }
     }
 }

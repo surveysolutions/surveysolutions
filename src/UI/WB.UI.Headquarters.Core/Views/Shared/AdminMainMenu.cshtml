@@ -54,7 +54,6 @@
         </ul>
     </li>
     @Html.MainMenuItem("New", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
-    @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.DataExport)
     @if (ViewContext.RouteData.Values["controller"].ToString() == "ControlPanel")
     {
         <li class="dropdown  @(new[] {MenuItem.Administration_AppUpdates, MenuItem.Administration_Config, MenuItem.Administration_InterviewPackages, MenuItem.Administration_Exceptions, MenuItem.Administration_ChangePassword, MenuItem.Administration_ReevaluateInterview}.Contains((MenuItem) page) ? "active" : "")">
@@ -75,11 +74,20 @@
 <ul class="nav navbar-nav navbar-right">
     @if (User.IsInRole("Administrator"))
     {
-        <li class="dropdown  @(new[] {MenuItem.Administration_Diagnostics, MenuItem.Administration_Config, MenuItem.Administration_TabletInfo, MenuItem.Settings, MenuItem.TabletLogs, MenuItem.EmailProviders, MenuItem.AuditLog}.Contains((MenuItem) page) ? "active" : "")">
+        <li class="dropdown  @(new[] {MenuItem.Administration_Diagnostics,
+                                 MenuItem.Administration_Config,
+                                 MenuItem.Administration_TabletInfo,
+                                 MenuItem.Settings,
+                                 MenuItem.TabletLogs,
+                                 MenuItem.EmailProviders,
+                                 MenuItem.AuditLog,
+                                 MenuItem.Workspaces
+                             }.Contains((MenuItem) page) ? "active" : "")">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
                 @MainMenu.Administration <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+                @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
                 @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
                 @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
                 @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)

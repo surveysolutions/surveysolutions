@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +14,14 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Workspace;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 {
     [Route("api/v1/workspaces")]
     [Localizable(false)]
-    [Authorize(Roles = "ApiUser, Administrator")]
+    [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
     public class WorkspacesPublicApiController : ControllerBase
     {
         private readonly IPlainStorageAccessor<Workspace> workspaces;

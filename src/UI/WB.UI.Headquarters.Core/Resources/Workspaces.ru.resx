@@ -44,4 +44,13 @@
     <data name="CurrentWorkspace" xml:space="preserve">
         <value>Текущее рабочее пространство</value>
     </data>
+    <data name="CreateWorkspace" xml:space="preserve">
+        <value>Создание рабочего пространства</value>
+    </data>
+    <data name="CanNotBeChanged" xml:space="preserve">
+        <value>Нельзя изменить после создания</value>
+    </data>
+    <data name="DisplayNameHelpText" xml:space="preserve">
+        <value>Будет использовано для отображения в меню. Пробуйте использовать короткие имена</value>
+    </data>
 </root>
