@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HotChocolate.Language;
 using HotChocolate.Resolvers;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
@@ -17,18 +18,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         }
 
         public async Task InvokeAsync(IMiddlewareContext context,
+            IWorkspaceContextAccessor workspaceContextAccessor,
             IWorkspaceContextSetter workspaceContextSetter)
         {
-            var workspace = context.Argument<string>("workspace");
-            
-            if (workspace == null)
+            if (workspaceContextAccessor.CurrentWorkspace() == null)
             {
-                context.Variables.TryGetVariable("workspace", out workspace);
-            }
+                var workspace = context.GetWorkspace();
 
-            if (workspace != null)
-            {
-                workspaceContextSetter.Set(workspace);
+                if (workspace != null)
+                {
+                    workspaceContextSetter.Set(workspace);
+                }
             }
 
             await next(context);
