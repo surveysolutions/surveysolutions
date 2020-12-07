@@ -33,5 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int ReopenedInterviewsAfterReceivedCommentsCount { get; set; }
 
         public HashSet<Guid> FailToPartialProcessInterviewIds { get; set; } = new HashSet<Guid>();
+        
+        public int SuccessfullyUploadedCalendarEventsCount { get; set; }
+        public int SuccessfullyDownloadedCalendarEventsCount { get; set; }
     }
 }

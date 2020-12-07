@@ -15,6 +15,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -396,6 +397,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
                     typeof(AssignmentMap),
+                    typeof(CalendarEventMap)
                     typeof(AudioAuditFileMap),
                     typeof(AudioFileMap),
                     typeof(QuestionnaireBrowseItemMap),

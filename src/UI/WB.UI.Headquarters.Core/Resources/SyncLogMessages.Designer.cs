@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class SyncLogMessages {
@@ -75,6 +75,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentReceivedByTablet {
             get {
                 return ResourceManager.GetString("AssignmentReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download list of calendar events ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;.
+        /// </summary>
+        public static string CalendarEventsListFormat {
+            get {
+                return ResourceManager.GetString("CalendarEventsListFormat", resourceCulture);
             }
         }
         
@@ -210,6 +219,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetAttachmentContent {
             get {
                 return ResourceManager.GetString("GetAttachmentContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download calendar event package: {0}.
+        /// </summary>
+        public static string GetCalendarEventPackage {
+            get {
+                return ResourceManager.GetString("GetCalendarEventPackage", resourceCulture);
             }
         }
         
@@ -417,6 +435,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PatchRequestedFormat {
             get {
                 return ResourceManager.GetString("PatchRequestedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload calendar event: {0}.
+        /// </summary>
+        public static string PostCalendarEventPackage {
+            get {
+                return ResourceManager.GetString("PostCalendarEventPackage", resourceCulture);
             }
         }
         

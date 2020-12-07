@@ -758,9 +758,15 @@
     <value>Опросники</value>
   </data>
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
-      <value>Приложению необходим доступ к микрофону.</value>
+    <value>Приложению необходим доступ к микрофону.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-      <value>Приложению необходимо разрешение на использование хранилища</value>
+    <value>Приложению необходимо разрешение на использование хранилища</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Комментарий</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>Комментарий не указан</value>
   </data>
 </root>
