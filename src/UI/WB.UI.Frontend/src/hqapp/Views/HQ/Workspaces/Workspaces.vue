@@ -1,13 +1,17 @@
 <template>
-    <HqLayout :hasFilter="false"
-        :title="$t('Dashboard.Workspaces')"
-        :subtitle="$t('Workspaces.WorkspacesSubtitle')">
-        <div slot="subtitle">
-            <button type="button"
-                class="btn btn-success"
-                @click="$refs.createWorkspaceModal.modal('show')">
-                {{$t('Workspaces.AddNew')}}
-            </button>
+    <HqLayout :hasFilter="false">
+        <div slot="headers">
+            <div class="topic-with-button">
+                <h1 v-html="$t('Dashboard.Workspaces')"></h1>
+                <button type="button"
+                    class="btn btn-success"
+                    @click="$refs.createWorkspaceModal.modal('show')">
+                    {{$t('Workspaces.AddNew')}}
+                </button>
+            </div>
+            <i
+                v-html="$t('Workspaces.WorkspacesSubtitle')">
+            </i>
         </div>
         <DataTables
             ref="table"
@@ -38,8 +42,13 @@
                         autocomplete="off"
                         @keyup.enter="updateWorkspace"
                         id="newWorkspaceName" />
+                    <p class="help-block">
+                        {{$t('Workspaces.CanNotBeChanged')}}
+                    </p>
+
                     <span
                         class="text-danger">{{ errors.first('newWorkspaceName') }}</span>
+
                 </div>
 
                 <div class="form-group"
@@ -59,6 +68,9 @@
                         autocomplete="off"
                         @keyup.enter="updateWorkspace"
                         id="newDescription" />
+                    <p class="help-block">
+                        {{$t('Workspaces.DisplayNameHelpText')}}
+                    </p>
                     <span
                         class="text-danger">{{ errors.first('editedDisplayName') }}</span>
                 </div>
