@@ -397,7 +397,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
                     typeof(AssignmentMap),
-                    typeof(CalendarEventMap)
+                    typeof(CalendarEventMap),
                     typeof(AudioAuditFileMap),
                     typeof(AudioFileMap),
                     typeof(QuestionnaireBrowseItemMap),
