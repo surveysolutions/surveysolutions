@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
-    <PackageReference Include="Dapper" Version="2.0.35" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="DotNetZip" Version="1.13.8" />
     <PackageReference Include="FluentMigrator" Version="3.2.9" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.9" />
@@ -36,5 +36,6 @@
     <PackageReference Include="NLog" Version="4.7.4" />
     <PackageReference Include="Npgsql" Version="4.1.4" />
     <PackageReference Include="prometheus-net" Version="4.0.0" />
+    <PackageReference Include="System.IO.Packaging" Version="4.3.0" />
   </ItemGroup>
 </Project>

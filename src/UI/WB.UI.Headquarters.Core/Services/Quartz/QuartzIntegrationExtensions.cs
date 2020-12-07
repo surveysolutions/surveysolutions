@@ -10,6 +10,7 @@ using Npgsql;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
@@ -19,7 +20,7 @@ using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Utils;
 
-namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
+namespace WB.UI.Headquarters.Services.Quartz
 {
     public static class QuartzIntegrationExtensions
     {
@@ -64,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 });
             });
 
-            Quartz.Logging.LogProvider.IsDisabled = true;//.SetCurrentLogProvider(loggerFactory);
+            global::Quartz.Logging.LogProvider.IsDisabled = true;//.SetCurrentLogProvider(loggerFactory);
 
             services.AddSingleton<IScheduler>(s => 
                 s.GetRequiredService<ISchedulerFactory>().GetScheduler().GetAwaiter().GetResult());
