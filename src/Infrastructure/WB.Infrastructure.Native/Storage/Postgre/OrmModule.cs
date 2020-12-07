@@ -28,6 +28,7 @@ using WB.Core.Infrastructure.Services;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using WB.Infrastructure.Native.Utils;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
@@ -45,21 +46,26 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             try
             {
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString);
+                connectionStringBuilder.Pooling = false;
+                connectionStringBuilder.SetApplicationPostfix("orm");
+                var connectionString = connectionStringBuilder.ConnectionString;
+
                 var loggerProvider = serviceLocator.GetInstance<ILoggerProvider>();
                 status.Message = Modules.InitializingDb;
 
-                DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                DatabaseManagement.InitDatabase(connectionString,
                     this.connectionSettings.PrimaryWorkspaceSchemaName);
 
-                await using var migrationLock = new MigrationLock(this.connectionSettings.ConnectionString);
+                await using var migrationLock = new MigrationLock(connectionString);
 
                 status.Message = Modules.MigrateDb;
 
                 var hasPlainstoreMigrations = DatabaseManagement.MigratedToWorkspaces(
-                    this.connectionSettings.PlainStorageSchemaName, this.connectionSettings.ConnectionString);
+                    this.connectionSettings.PlainStorageSchemaName, connectionString);
 
                 var hasWorkspacesMigrations = DatabaseManagement.MigratedToWorkspaces(
-                    this.connectionSettings.PrimaryWorkspaceSchemaName, this.connectionSettings.ConnectionString);
+                    this.connectionSettings.PrimaryWorkspaceSchemaName, connectionString);
 
                 if (hasPlainstoreMigrations && !hasWorkspacesMigrations)
                 {
@@ -68,11 +74,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                         if (this.connectionSettings.ReadSideUpgradeSettings != null)
                         {
                             status.Message = Modules.InitializingDb;
-                            DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                            DatabaseManagement.InitDatabase(connectionString,
                                 this.connectionSettings.ReadSideSchemaName);
 
                             status.Message = Modules.MigrateDb;
-                            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                            DbMigrationsRunner.MigrateToLatest(connectionString,
                                 this.connectionSettings.ReadSideSchemaName,
                                 this.connectionSettings.ReadSideUpgradeSettings,
                                 loggerProvider);
@@ -83,9 +89,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                     void MigratePlainstore()
                     {
-                        DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                        DatabaseManagement.InitDatabase(connectionString,
                             this.connectionSettings.PlainStorageSchemaName);
-                        DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                        DbMigrationsRunner.MigrateToLatest(connectionString,
                             this.connectionSettings.PlainStorageSchemaName,
                             this.connectionSettings.PlainStoreUpgradeSettings,
                             loggerProvider);
@@ -106,11 +112,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     MigrateReadside();
 
                     status.Message = Modules.InitializingDb;
-                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                    DatabaseManagement.InitDatabase(connectionString,
                         this.connectionSettings.EventsSchemaName);
 
                     status.Message = Modules.MigrateDb;
-                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    DbMigrationsRunner.MigrateToLatest(connectionString,
                         this.connectionSettings.EventsSchemaName,
                         this.connectionSettings.EventStoreUpgradeSettings,
                         loggerProvider);
@@ -121,11 +127,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 if (this.connectionSettings.LogsUpgradeSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
-                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                    DatabaseManagement.InitDatabase(connectionString,
                         this.connectionSettings.LogsSchemaName);
 
                     status.Message = Modules.MigrateDb;
-                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    DbMigrationsRunner.MigrateToLatest(connectionString,
                         this.connectionSettings.LogsSchemaName,
                         this.connectionSettings.LogsUpgradeSettings,
                         loggerProvider);
@@ -136,11 +142,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 if (this.connectionSettings.UsersUpgradeSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
-                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                    DatabaseManagement.InitDatabase(connectionString,
                         this.connectionSettings.UsersSchemaName);
 
                     status.Message = Modules.MigrateDb;
-                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    DbMigrationsRunner.MigrateToLatest(connectionString,
                         this.connectionSettings.UsersSchemaName,
                         this.connectionSettings.UsersUpgradeSettings,
                         loggerProvider);
@@ -151,7 +157,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 if (hasPlainstoreMigrations && !hasWorkspacesMigrations && this.connectionSettings.MigrateToPrimaryWorkspace != null)
                 {
                     status.Message = Modules.MigrateDb;
-                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    DbMigrationsRunner.MigrateToLatest(connectionString,
                         this.connectionSettings.PrimaryWorkspaceSchemaName,
                         this.connectionSettings.MigrateToPrimaryWorkspace,
                         loggerProvider);
@@ -162,10 +168,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 if (this.connectionSettings.WorkspacesMigrationSettings != null)
                 {
                     status.Message = Modules.InitializingDb;
-                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                    DatabaseManagement.InitDatabase(connectionString,
                         this.connectionSettings.WorkspacesSchemaName);
 
-                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    DbMigrationsRunner.MigrateToLatest(connectionString,
                         this.connectionSettings.WorkspacesSchemaName,
                         this.connectionSettings.WorkspacesMigrationSettings,
                         loggerProvider);
@@ -186,7 +192,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         private async Task MigrateWorkspacesAsync(UnderConstructionInfo status, ILoggerProvider loggerProvider)
         {
-            await using var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString);
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString);
+            connectionStringBuilder.Pooling = false;
+            connectionStringBuilder.SetApplicationPostfix("migrate_workspaces");
+            await using var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            
             IEnumerable<string> workspaces =
                 await connection.QueryAsync<string>($"select name from {this.connectionSettings.WorkspacesSchemaName}.workspaces");
 
@@ -250,8 +260,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
                 {
-                    SearchPath = workspaceSchema
+                    SearchPath = workspaceSchema,
                 };
+
+                connectionStringBuilder.SetApplicationPostfix(workspaceSchema);
 
                 var workspaceConnectionString = connectionStringBuilder.ToString();
 

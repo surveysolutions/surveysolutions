@@ -14,10 +14,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Utils;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.HealthChecks;
 
@@ -108,11 +110,14 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
             logger.LogInformation("Configuring export service to use {serverUrl} as tenant url for {tenant}",
                 serverUrl, this.headquarterOptions.Value.TenantName);
 
+            var connectionString = new NpgsqlConnectionStringBuilder(configuration.GetConnectionString("DefaultConnection"));
+            connectionString.SetApplicationPostfix("export");
+
             exportHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
             {
                 var settings = new Dictionary<string, string>
                 {
-                    ["ConnectionStrings:DefaultConnection"] = configuration.GetConnectionString("DefaultConnection"),
+                    ["ConnectionStrings:DefaultConnection"] = connectionString.ConnectionString,
                     ["TenantUrlOverride:" + this.headquarterOptions.Value.TenantName] = serverUrl,
                     ["ExportSettings:DirectoryPath"] = configuredFolder
                 };

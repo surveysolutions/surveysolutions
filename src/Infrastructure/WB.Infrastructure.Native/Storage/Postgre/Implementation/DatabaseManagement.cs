@@ -5,6 +5,7 @@ using FluentMigrator.Builders.Create.ForeignKey;
 using FluentMigrator.Builders.Create.Table;
 using FluentMigrator.Infrastructure;
 using Npgsql;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -12,8 +13,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         public static void InitDatabase(string connectionString, string schemaName)
         {
-            CreateDatabase(connectionString);
-            CreateSchema(connectionString, schemaName);
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            connectionStringBuilder.SetApplicationPostfix("init");
+            connectionStringBuilder.Pooling = false;
+            CreateDatabase(connectionStringBuilder.ConnectionString);
+            CreateSchema(connectionStringBuilder.ConnectionString, schemaName);
         }
 
         private static void CreateDatabase(string connectionString)
