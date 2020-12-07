@@ -56,6 +56,7 @@
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.7" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.7" />
@@ -67,7 +68,10 @@
     <PackageReference Include="NodaTime" Version="3.0.3" />
     <PackageReference Include="PasswordGenerator" Version="2.0.5" />
     <PackageReference Include="Polly" Version="7.2.1" />
-    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="Quartz" Version="3.2.3" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.2.3" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.2.3" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.2.3" />
     <PackageReference Include="refit" Version="5.1.67" />
     <PackageReference Include="Sendgrid" Version="9.21.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
