@@ -41,9 +41,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         protected void Apply(CalendarEventUpdated @event)
         {
-            //ignore event if it occured before last change
-            //if (this.properties.UpdatedAt > @event.OriginDate) return;
-            
             properties.Start = @event.Start;
             properties.StartTimezone = @event.StartTimezone;
             properties.Comment = @event.Comment;
@@ -52,27 +49,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         protected void Apply(CalendarEventCompleted @event)
         {
-            //ignore event if it occured before last change
-            //if (this.properties.UpdatedAt > @event.OriginDate) return;
-            
             this.properties.IsCompleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
         }
         
         protected void Apply(CalendarEventDeleted @event)
         {
-            //ignore event if it occured before last change
-            //if (this.properties.UpdatedAt > @event.OriginDate) return;
-            
             this.properties.IsDeleted = true;
             this.properties.UpdatedAt = @event.OriginDate;
         }  
         
         protected void Apply(CalendarEventRestored @event)
         {
-            //ignore event if it occured before last change
-            //if (this.properties.UpdatedAt > @event.OriginDate) return;
-            
             this.properties.IsDeleted = false;
             this.properties.UpdatedAt = @event.OriginDate;
         }
@@ -101,11 +89,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 originDate: command.OriginDate,
                 comment: command.Comment,
                 start: command.Start,
-                startTimezone: command.StartTimezone,
-                false));
+                startTimezone: command.StartTimezone));
         }
-
-
+        
         public void CompleteCalendarEvent(CompleteCalendarEventCommand command)
         {
             ThrowIsDeleted();

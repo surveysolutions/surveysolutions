@@ -7,10 +7,7 @@
     @Html.RenderHqConfig(new
     {
         AssignmentsEndpoint = Url.Action("Get", "AssignmentsApi"),
-        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
-        CalendarEventsEndpoint = Url.Content(@"~/calendarEvents")
+        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
     })
 }
-
-
 <div id="vueApp"></div>

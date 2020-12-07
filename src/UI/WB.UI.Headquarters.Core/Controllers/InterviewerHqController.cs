@@ -89,7 +89,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Title = title.ToUiString(),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
-                CalendarEventsEndpoint = Url.Content(@"~/CalendarEvents"),
                 Statuses = statuses.Select(s => s.ToString().ToUpper()).ToArray(),
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
