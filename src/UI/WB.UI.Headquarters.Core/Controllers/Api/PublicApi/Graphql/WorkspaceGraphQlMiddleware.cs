@@ -16,12 +16,21 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             this.next = next;
         }
 
-        public async Task InvokeAsync(IMiddlewareContext context, IWorkspaceContextSetter workspaceContextSetter)
+        public async Task InvokeAsync(IMiddlewareContext context,
+            IWorkspaceContextSetter workspaceContextSetter)
         {
-            var workspace = context.Argument<string>("workspace")
-                ?? context.Variables.GetVariable<string>("workspace");
+            var workspace = context.Argument<string>("workspace");
+            
+            if (workspace == null)
+            {
+                context.Variables.TryGetVariable("workspace", out workspace);
+            }
 
-            workspaceContextSetter.Set(workspace);
+            if (workspace != null)
+            {
+                workspaceContextSetter.Set(workspace);
+            }
+
             await next(context);
         }
     }
