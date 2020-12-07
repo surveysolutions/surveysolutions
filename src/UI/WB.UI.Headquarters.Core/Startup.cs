@@ -74,6 +74,7 @@ using WB.UI.Headquarters.Models.Api.DataTable;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
+using WB.UI.Headquarters.Services.Quartz;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.LoggingIntegration;
