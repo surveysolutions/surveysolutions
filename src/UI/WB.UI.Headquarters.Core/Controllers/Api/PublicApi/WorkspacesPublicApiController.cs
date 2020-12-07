@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -28,16 +29,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
+        private readonly IAuthorizedUser authorizedUser;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
             IMapper mapper,
             IWorkspacesService workspacesService,
-            IWorkspacesCache workspacesCache)
+            IWorkspacesCache workspacesCache, 
+            IAuthorizedUser authorizedUser)
         {
             this.workspaces = workspaces;
             this.mapper = mapper;
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
+            this.authorizedUser = authorizedUser;
         }
 
         /// <summary>
@@ -47,21 +51,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
         public WorkspacesApiView Index([FromQuery] WorkspacesListFilter filter)
         {
-            IEnumerable<WorkspaceApiView> workspaces =
+            var userWorkspaces = this.authorizedUser.Workspaces.ToList();
+            IEnumerable<WorkspaceApiView> result =
                 this.workspaces.Query(_ => _
                     .OrderBy(x => x.Name)
+                    .Where(x => userWorkspaces.Contains(x.Name))
                     .Skip(filter.Offset)
                     .Take(filter.Limit)
                     .ToList())
                     .Select(x => mapper.Map<Workspace, WorkspaceApiView>(x));
-            int totalCount = this.workspaces.Query(x => x.Count());
+            int totalCount = this.workspaces.Query(x => x.Count(x => userWorkspaces.Contains(x.Name)));
             
             return new WorkspacesApiView
             (
                 filter.Offset,
                 filter.Limit,
                 totalCount,
-                workspaces
+                result
             );
         }
 
@@ -75,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public ActionResult<WorkspaceApiView> Details(string id)
         {
             var workspace = this.workspaces.GetById(id);
-            if (workspace == null)
+            if (workspace == null || !this.authorizedUser.Workspaces.Contains(id))
             {
                 return NotFound();
             }
@@ -91,6 +97,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(StatusCodes.Status201Created, "Workspace created", typeof(WorkspaceApiView))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [HttpPost]
+        [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<ActionResult> Create([FromBody]WorkspaceApiView request)
         {
             if (ModelState.IsValid)
@@ -110,8 +117,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Updates new workspace 
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <response code="204">Workspace updated</response>
+        /// <response code="404">Workspace not found</response>
+        /// <response code="400">Validation failed</response>
         [HttpPatch]
         [Route("{id}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace updated")]
@@ -121,6 +129,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (ModelState.IsValid)
             {
                 var existing = this.workspaces.GetById(id);
+
+                if (existing == null || !this.authorizedUser.Workspaces.Contains(id))
+                {
+                    return NotFound();
+                }
                 
                 existing.DisplayName = request.DisplayName!;
                 this.workspacesCache.InvalidateCache();
