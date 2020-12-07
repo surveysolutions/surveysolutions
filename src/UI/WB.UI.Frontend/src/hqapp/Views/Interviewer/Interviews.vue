@@ -67,12 +67,63 @@
             ref="confirmDiscard"
             id="discardConfirm"
             slot="modals">{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
+
+        <ModalFrame ref="editCalendarModal"
+            :title="$t('Common.EditCalendarEvent')">
+            <form onsubmit="return false;">
+
+                <div class="form-group">
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDate">
+                    </DatePicker>
+                    <div  v-if="dateInPast">
+                        <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"
+                        for="commentsId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea
+                        control-id="commentsId"
+                        v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="6"
+                        maxlength="500"
+                        class="form-control"/>
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    role="confirm"
+                    @click="updateCalendarEvent">
+                    {{ $t("Common.Save") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Cancel") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-danger pull-right"
+                    role="delete"
+                    v-if="calendarEventId != null"
+                    @click="deleteCalendarEvent">
+                    {{ $t("Common.Delete") }}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
-import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
+import moment from 'moment-timezone'
+import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import {map, join, toNumber, filter} from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
@@ -91,6 +142,12 @@ const query = gql`query interviews($workspace: String!, $order: InterviewSort, $
       status
       receivedByInterviewerAtUtc
       actionFlags
+      calendarEvent {
+          publicKey
+          comment
+          startUtc
+          startTimezone
+      }
       identifyingData {
         entity {
           questionText
@@ -109,6 +166,13 @@ export default {
             questionnaireId: null,
             questionnaireVersion: null,
             assignmentId: null,
+            editCalendarComment: null,
+            newCalendarStart : null,
+            newCalendarStarTimezone : null,
+            calendarEventId : null,
+            calendarInterviewId : null,
+            calendarInterviewKey : null,
+            calendarAssinmentId : null,
             draw: 0,
         }
     },
@@ -231,6 +295,28 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
+        selectedDate(){
+            return this.newCalendarStart
+        },
+        datePickerConfig() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+
+                    if(start != null && start != self.newCalendarStart){
+                        self.newCalendarStart = start
+                    }
+                },
+            }
+        },
+        dateInPast(){
+            return moment(this.selectedDate) < moment()
+        },
     },
 
     methods: {
@@ -247,6 +333,46 @@ export default {
             this.$refs.table.reload()
         },
 
+        editCalendarEvent(interviewId, interviewKey, assignmentId, calendarEvent) {
+            this.calendarInterviewId = interviewId
+            this.calendarInterviewKey = interviewKey
+            this.calendarAssinmentId = assignmentId
+            this.calendarEventId = calendarEvent?.publicKey
+            this.editCalendarComment = calendarEvent?.comment
+            this.newCalendarStart = calendarEvent?.startUtc
+            this.newCalendarStarTimezone = calendarEvent?.startTimezone
+            this.$refs.editCalendarModal.modal({keyboard: false})
+        },
+
+        updateCalendarEvent() {
+            const self = this
+
+            this.$refs.editCalendarModal.hide()
+
+            const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
+
+            const variables = {
+                interviewId : self.calendarInterviewId,
+                interviewKey: self.calendarInterviewKey,
+                assignmentId : self.calendarAssinmentId,
+                publicKey : self.calendarEventId,
+                newStart : startDate,
+                comment : self.editCalendarComment,
+                startTimezone: moment.tz.guess(),
+            }
+
+            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
+
+        },
+        deleteCalendarEvent() {
+            const self = this
+            this.$refs.editCalendarModal.hide()
+
+            deleteCalendarEvent(self.$apollo, {
+                'publicKey' : self.calendarEventId,
+            }, self.reload)
+
+        },
         contextMenuItems({rowData, rowIndex}) {
             const menu = []
             const self = this
@@ -276,6 +402,14 @@ export default {
                     },
                 })
             }
+
+            const canCalendarBeEdited =  rowData.actionFlags.indexOf('CANBEOPENED') >= 0
+            menu.push({
+                name: self.$t('Common.EditCalendarEvent'),
+                className: canCalendarBeEdited ? 'primary-text' : '',
+                callback: () => self.editCalendarEvent(rowData.id, rowData.key, rowData.assignmentId, rowData.calendarEvent),
+                disabled: !canCalendarBeEdited,
+            })
 
             return menu
         },
@@ -324,6 +458,7 @@ export default {
         },
 
         getTableColumns() {
+            const self = this
             const columns = [
                 {
                     data: 'key',
@@ -368,6 +503,21 @@ export default {
                             .utc(data)
                             .local()
                             .format(DateFormats.dateTimeInList)
+                    },
+                    width: '180px',
+                },
+                {
+                    data: 'calendarEvent',
+                    title: this.$t('Common.CalendarEvent'),
+                    orderable: false,
+                    searchable: false,
+                    render(data) {
+                        if(data != null && data.startUtc != null)
+                            return '<span data-toggle="tooltip" title="'
+                                + ((data.comment == null || data.comment == '') ? self.$t('Assignments.NoComment') : data.comment)
+                                + '">'
+                                + convertToLocal(data.startUtc, data.startTimezone)
+                                + '</span>'
                     },
                     width: '180px',
                 },

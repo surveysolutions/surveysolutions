@@ -15,6 +15,23 @@ type Assignment {
   webMode: Boolean!
 }
 
+type CalendarEvent {
+  assignmentId: Int!
+  "Comment of calendar Event"
+  comment: String
+  creatorUserId: Uuid!
+  interviewId: Uuid
+  interviewKey: String
+  isCompleted: Boolean!
+  "Id of Calendar Event"
+  publicKey: Uuid!
+  "Start Timezone of Event"
+  startTimezone: String
+  "Start of calendar Event"
+  startUtc: DateTime!
+  updateDateUtc: DateTime!
+}
+
 type CategoricalOption {
   parentValue: Int
   title: String!
@@ -33,7 +50,9 @@ type Entity {
 }
 
 type HeadquartersMutations {
+  addOrUpdateCalendarEvent("Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(apply: BEFORE_RESOLVER, roles: [ "Interviewer" ])
   addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
+  deleteCalendarEvent("Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(apply: BEFORE_RESOLVER, roles: [ "Interviewer" ])
   deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
   deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
 }
@@ -99,6 +118,8 @@ type Interview {
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
   assignmentId: Int
+  "Active Calendar Event associated with interview"
+  calendarEvent: CalendarEvent
   "Key that was generated on interviewer tablet when interview was created for the first time"
   clientKey: String!
   "Date when interview was created"

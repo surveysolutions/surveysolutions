@@ -5,9 +5,11 @@ using HotChocolate.Types;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
@@ -99,14 +101,31 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
                 .Type<ListType<AnswerObjectType>>();
 
-            descriptor.Field<InterviewActionFlagsResolver>(f => f.GetActionFlags(default, default))
-                .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
-                .Description("List of actions that can be applied to interview")
-                .Name("actionFlags");
+            descriptor.Field<InterviewActionFlagsResolver>(f => 
+                    f.GetActionFlags(default, default))
+                    .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
+                    .Description("List of actions that can be applied to interview")
+                    .Name("actionFlags");
 
             descriptor.Field(x => x.NotAnsweredCount)
                 .Description(
                     "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");
+            
+            descriptor.Field("calendarEvent")
+                .Description("Active Calendar Event associated with interview")
+                .Type<CalendarEventObjectType>()
+                .Resolver(context =>
+                {
+                    var interviewId = context.Parent<InterviewSummary>().InterviewId;
+                    var unitOfWork = context.Service<IUnitOfWork>();
+                  
+                    var calendarEvent = unitOfWork.Session
+                        .Query<CalendarEvent>()
+                        .FirstOrDefault(x => x.InterviewId == interviewId 
+                                             && x.CompletedAtUtc == null
+                                             && x.DeletedAtUtc == null);
+                       return calendarEvent;
+                });
         }
     }
 }

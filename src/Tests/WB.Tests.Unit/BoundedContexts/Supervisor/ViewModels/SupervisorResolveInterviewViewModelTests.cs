@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -254,7 +255,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 logger ?? Mock.Of<ILogger>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
                 interviewsList ?? stubInterviewsList,
-                userInteractionService ?? Mock.Of<IUserInteractionService>()
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                Mock.Of<ICalendarEventStorage>()
             );
         }
     }
