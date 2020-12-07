@@ -50,7 +50,9 @@ type Entity {
 }
 
 type HeadquartersMutations {
+  addOrUpdateCalendarEvent("Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(apply: BEFORE_RESOLVER, roles: [ "Interviewer" ])
   addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
+  deleteCalendarEvent("Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(apply: BEFORE_RESOLVER, roles: [ "Interviewer" ])
   deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
   deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
 }

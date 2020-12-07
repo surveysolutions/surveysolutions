@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                 .Description("Start Timezone of Event");
 
             descriptor.Field(x => x.InterviewId);
-            descriptor.Field(x => x.AssignmentId).Type<IntType>();
+            descriptor.Field(x => x.AssignmentId).Type<NonNullType<IntType>>();
             
             descriptor.Field(x => x.InterviewKey).Type<StringType>();
             
