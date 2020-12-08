@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.UI.Headquarters.Controllers.Api.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class UniqueWorkspaceNameAttribute : ValidationAttribute
     {

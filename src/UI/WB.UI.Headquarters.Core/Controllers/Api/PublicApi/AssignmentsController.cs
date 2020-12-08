@@ -374,6 +374,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] int quantity)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -400,6 +401,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/archive")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> Archive(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
@@ -423,6 +425,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:int}/unarchive")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> Unarchive(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace WB.UI.Headquarters.Controllers.Api.PublicApi
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class ValidWorkspaceName : ValidationAttribute
     {
