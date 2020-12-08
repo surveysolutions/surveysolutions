@@ -12,6 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Workspace;
@@ -100,6 +101,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [HttpPost]
         [AuthorizeByRole(UserRoles.Administrator)]
+        [ObservingNotAllowed]
         public async Task<ActionResult> Create([FromBody] WorkspaceApiView request)
         {
             if (ModelState.IsValid)
@@ -128,6 +130,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace updated")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
+        [ObservingNotAllowed]
         public ActionResult Update(string id, [FromBody] WorkspaceUpdateApiView request)
         {
             if (ModelState.IsValid)
