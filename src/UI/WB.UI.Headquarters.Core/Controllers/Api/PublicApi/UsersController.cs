@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
@@ -130,6 +131,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">User is not an interviewer or supervisor</response>
         [HttpPatch]
         [Route("users/{id}/archive")]
+        [ObservingNotAllowed]
         public async Task<ActionResult> Archive(string id)
         {
             if (!Guid.TryParse(id, out var userGuid))
@@ -169,6 +171,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="409">User cannot be unarchived</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
+        [ObservingNotAllowed]
         public async Task<ActionResult> UnArchive(string id)
         {
             if (!Guid.TryParse(id, out var userGuid))
@@ -229,6 +232,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="200">Created user id.</response>
         [HttpPost]
         [Route("users")]
+        [ObservingNotAllowed]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody]RegisterUserModel model)
         {
             if (!Enum.IsDefined(typeof(UserRoles), (UserRoles)model.Role))
