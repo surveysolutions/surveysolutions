@@ -111,7 +111,7 @@ namespace WB.UI.Headquarters
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
                 .AsImplementedInterfaces();
-            
+
             autofacKernel.Load(
                 new NcqrsModule(),
                 new SerilogLoggerModule(),
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters
                 WorkspacesMigrationSettings = DbUpgradeSettings.FromFirstMigration<M202011191114_InitWorkspaces>(),
                 SingleWorkspaceUpgradeSettings = DbUpgradeSettings.FromFirstMigration<WB.Persistence.Headquarters.Migrations.Workspace.M202011201421_InitSingleWorkspace>()
             };
-            
+
             return unitOfWorkConnectionSettings;
         }
 
@@ -185,7 +185,8 @@ namespace WB.UI.Headquarters
                     phoneNumberMaxLength: EditUserModel.PhoneNumberLength,
                     personNameFormatRegex: EditUserModel.PersonNameRegex);
 
-            var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin) {
+            var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin)
+            {
                 HumainIdMaxValue = Configuration.GetValue<int>("Headquarters:HumanIdMaxValue", 99_99_99_99)
             };
 
@@ -243,7 +244,7 @@ namespace WB.UI.Headquarters
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRazorPages();
-            
+
             services.AddHqAuthorization();
             services.AddDatabaseStoredExceptional(environment, Configuration);
 
@@ -258,14 +259,14 @@ namespace WB.UI.Headquarters
             services.AddHttpClientWithConfigurator<IExportServiceApi, ExportServiceApiConfigurator>();
             services.AddTransient<DesignerRestServiceHandler>();
             services.AddHttpClientWithConfigurator<IDesignerApi, DesignerApiConfigurator>(new RefitSettings
-                {
-                    ContentSerializer = new DesignerContentSerializer()
-                })
+            {
+                ContentSerializer = new DesignerContentSerializer()
+            })
                 .ConfigurePrimaryHttpMessageHandler<DesignerRestServiceHandler>();
             services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
-            
+
             FileStorageModule.Setup(services, Configuration);
 
             AddCompression(services);
@@ -286,7 +287,7 @@ namespace WB.UI.Headquarters
                     {
                         noContentFormatter.TreatNullValueAsNoContent = false;
                     }
-            })
+                })
 #if DEBUG
                 .AddRazorRuntimeCompilation()
 #endif
@@ -298,7 +299,7 @@ namespace WB.UI.Headquarters
 
             services.AddOptionsConfiguration(this.Configuration);
 
-#if RELEASE            
+#if RELEASE
             var physicalProvider =  environment.ContentRootFileProvider;
             var manifestEmbeddedProvider = new Microsoft.Extensions.FileProviders.ManifestEmbeddedFileProvider(typeof(Program).Assembly, "wwwroot");
             var compositeProvider = new Microsoft.Extensions.FileProviders.CompositeFileProvider(physicalProvider, manifestEmbeddedProvider);
@@ -306,11 +307,8 @@ namespace WB.UI.Headquarters
             services.AddSingleton<Microsoft.Extensions.FileProviders.IFileProvider>(compositeProvider);
             environment.WebRootFileProvider = compositeProvider;
 #endif
-            if (Configuration["no-quartz"].ToBool(false) == false)
-            {
-                services.AddQuartzIntegration(Configuration,
-                    DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
-            }
+            services.AddQuartzIntegration(Configuration,
+                DbUpgradeSettings.FromFirstMigration<M201905151013_AddQuartzTables>());
 
             var passwordOptions = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
 
@@ -347,22 +345,22 @@ namespace WB.UI.Headquarters
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
             services.AddMetrics();
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseForwardedHeaders();
-            
+
             app.UseExceptional();
-            
+
             if (!env.IsDevelopment())
             {
-  
+
                 app.UseHsts();
             }
-            
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -437,7 +435,7 @@ namespace WB.UI.Headquarters
                 // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-3.1#separate-readiness-and-liveness-probes
                 endpoints.MapHealthChecks(".hc/ready", new HealthCheckOptions
                 {
-                    AllowCachingResponses = false, 
+                    AllowCachingResponses = false,
                     ResultStatusCodes =
                     {
                         // return Server Unavailable on Degraded status

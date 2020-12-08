@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -70,10 +71,10 @@ namespace WB.UI.Headquarters.Services.Quartz
             services.AddSingleton<IScheduler>(s => 
                 s.GetRequiredService<ISchedulerFactory>().GetScheduler().GetAwaiter().GetResult());
 
-            services.AddQuartzServer(q =>
+            if (configuration["no-quartz"].ToBool(false) == false)
             {
-                q.WaitForJobsToComplete = false;
-            });
+                services.AddQuartzServer(q => { q.WaitForJobsToComplete = false; });
+            }
         }
 
         public static void RunQuartzMigrations(this IServiceProvider services, DbUpgradeSettings dbUpgradeSettings)
