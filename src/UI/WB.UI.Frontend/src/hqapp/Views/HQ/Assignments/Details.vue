@@ -162,8 +162,8 @@
                                     <div>
                                         {{calendarEventTime}}
                                     </div>
-                                    <div>
-                                        {{calendarEventComment}}
+                                    <div v-html="calendarEventComment">
+
                                     </div>
                                 </td>
                             </tr>
@@ -180,6 +180,7 @@
 import Vue from 'vue'
 import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
+import {escape} from 'lodash'
 
 export default {
     computed: {
@@ -238,7 +239,7 @@ export default {
 
             return this.model.calendarEvent.comment == null || this.model.calendarEvent.comment == ''
                 ? this.$t('Assignments.NoComment')
-                : this.model.calendarEvent.comment
+                : escape(this.model.calendarEvent.comment).replaceAll('\n', '<br/>')
         },
 
         tableOptions() {
