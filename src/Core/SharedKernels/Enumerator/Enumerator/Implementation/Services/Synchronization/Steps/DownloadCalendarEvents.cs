@@ -25,11 +25,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly ILogger log;
         
         public DownloadCalendarEvents(int sortOrder, ISynchronizationService synchronizationService, 
-            ILogger logger, IEnumeratorEventStorage eventStore,
+            IEnumeratorEventStorage eventStore,
             ICalendarEventStorage calendarEventStorage,
             ICalendarEventRemoval calendarEventRemoval,
             ILiteEventBus eventBus, ILogger log) 
-            : base(sortOrder, synchronizationService, logger)
+            : base(sortOrder, synchronizationService, log)
         {
             EventStore = eventStore;
             this.eventBus = eventBus;
