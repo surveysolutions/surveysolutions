@@ -8,7 +8,7 @@
               android:paddingLeft="@dimen/calendar_event_dialog_padding"
               android:paddingTop="@dimen/calendar_event_dialog_padding"
               android:paddingBottom="@dimen/calendar_event_dialog_padding"
-              android:minWidth="800dp"
+              android:minWidth="400dp"
               local:MvxBind="HideKeyboardOnClick .">
     <LinearLayout  android:layout_width="match_parent"
                    android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                   android:maxLength="500"
                   local:MvxBind="Text Comment;" />
         </com.google.android.material.textfield.TextInputLayout>
-        <LinearLayout  android:layout_width="fill_parent"
+        <LinearLayout  android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:orientation="horizontal"
                      android:layout_marginTop="@dimen/calendar_event_dialog_margin">
