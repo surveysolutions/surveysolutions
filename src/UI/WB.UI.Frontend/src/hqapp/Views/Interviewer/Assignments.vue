@@ -229,7 +229,9 @@ export default {
                     render: function(data) {
                         if(data != null && data.startUtc != null) {
                             var hasComment = !(data.comment == null || data.comment == '')
-                            return '<span data-toggle="tooltip">'
+                            return '<span data-toggle="tooltip" title="'
+                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
+                                + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)
                                 + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
                                 + '</span>'
