@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Infrastructure.Native.Workspaces;
@@ -20,7 +21,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
             if(context.HttpContext.User.Identity.AuthenticationType == AuthType.TenantToken)
                 return;
 
-            if (context.HttpContext.User.Identity.IsAuthenticated)
+            var hasAuthorizedAttribute = context.ActionDescriptor.EndpointMetadata.Any(m => m is AuthorizeAttribute);
+
+            if (hasAuthorizedAttribute && context.HttpContext.User.Identity.IsAuthenticated)
             {
                 var workspace = workspaceContextAccessor.CurrentWorkspace();
 
