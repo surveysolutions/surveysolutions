@@ -173,8 +173,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 await designerApi.IsLoggedIn();
             }
-            catch
+            catch (Exception ex)
             {
+                this.logger.Info("Failed to import questionnaire from designer. Need login in it.", ex);
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
                 questionnaireImportResult.ImportError = ErrorMessages.IncorrectUserNameOrPassword;
                 return questionnaireImportResult;
@@ -291,6 +292,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
             catch (RestException ex)
             {
+                this.logger.Info("Failed to import questionnaire from designer. RestException", ex);
+
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
 
                 switch (ex.StatusCode)
@@ -331,6 +334,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
             catch (Exception ex)
             {
+                this.logger.Error($"Failed to import questionnaire from designer. id: #{questionnaireId}", ex);
+
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
 
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
@@ -339,8 +344,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireImportResult.ImportError = domainEx.Message;
                     return questionnaireImportResult;
                 }
-
-                this.logger.Error($"Designer: error when importing template #{questionnaireId}", ex);
 
                 questionnaireImportResult.ImportError = "Fail to import questionnaire to Headquarters. Please contact support to resolve this problem.";
                 return questionnaireImportResult;
