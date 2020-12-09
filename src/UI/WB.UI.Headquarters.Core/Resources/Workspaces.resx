@@ -69,4 +69,7 @@
     <data name="AssignedWorkspaces" xml:space="preserve">
         <value>Select workspaces that user has access to</value>
     </data>
+    <data name="UserWorkspacesTab" xml:space="preserve">
+        <value>Workspaces</value>
+    </data>
 </root>
