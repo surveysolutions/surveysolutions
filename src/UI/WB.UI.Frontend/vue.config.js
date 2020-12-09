@@ -151,21 +151,13 @@ module.exports = {
                 locales
             }])
 
-        config.plugin('stats')
-            .use(StatsPlugin, ['stats.json',
-                {
-                    chunks: true,
-                    assets: false,
-                    chunkModules: false,
-                    modules: false,
-                    children: false
-                }]);
-
-        config.plugin("notifier")
-            .use(WebpackBuildNotifierPlugin)
+        // config.plugin("notifier")
+        //     .use(WebpackBuildNotifierPlugin)
 
         config.plugin("livereload")
             .use(LiveReloadPlugin, [{ appendScriptTag: true, delay: 1000 }])
+
+        // config.plugins.delete('named-chunks')
 
         config.merge({
             optimization: {
@@ -183,8 +175,10 @@ module.exports = {
         });
 
         config.plugin("provide").use(webpack.ProvidePlugin, [{
-            $: "jquery",
-            jQuery: "jquery",
+            $: 'jquery',
+            jquery: 'jquery',
+            'window.jQuery': 'jquery',
+            jQuery: 'jquery'
         }]);
 
         // config.module.rules.delete("eslint");
