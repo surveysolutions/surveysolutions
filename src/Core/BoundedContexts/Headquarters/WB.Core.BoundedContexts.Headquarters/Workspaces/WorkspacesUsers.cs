@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
     public class WorkspacesUsers
     {
-        public WorkspacesUsers()
+        protected WorkspacesUsers()
         {
             Workspace = null!;
             User = null!;
