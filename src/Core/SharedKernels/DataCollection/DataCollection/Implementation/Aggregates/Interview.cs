@@ -2615,7 +2615,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
             IEnumerable<IInterviewTreeNode> result = targetList.Except(x => 
                 (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
-                || questionnaire.IsVariable(x.Identity.Id)
+                || (questionnaire.IsVariable(x.Identity.Id) && !questionnaire.IsPrefilled(x.Identity.Id))
             );
 
             return result.Select(x => x.Identity);
