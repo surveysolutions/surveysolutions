@@ -279,8 +279,8 @@ export default {
                     url: this.$config.model.dataUrl,
                     type: 'GET',
                     dataSrc: function ( responseJson ) {
-                        responseJson.recordsTotal = responseJson.totalCount
-                        responseJson.recordsFiltered = responseJson.totalCount
+                        responseJson.recordsTotal = responseJson.TotalCount
+                        responseJson.recordsFiltered = responseJson.TotalCount
                         return responseJson.Workspaces
                     },
                     contentType: 'application/json',
