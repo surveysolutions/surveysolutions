@@ -124,7 +124,7 @@
     <value>El entrevistador puede navegar a la página de diagnóstico en su dispositivo y tocar el enlace "Enviar registro de seguimiento" para enviar un registro detallado</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>La inicialización del servidor está en curso. Por favor espera...</value>
+    <value>Registros del dispositivo</value>
   </data>
   <data name="ReceiveDateUtc" xml:space="preserve">
     <value>Recibido en </value>
