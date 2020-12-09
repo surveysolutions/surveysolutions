@@ -131,6 +131,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<ActionResult> Workspaces(Guid id)
+        {
+            var user = await this.userManager.FindByIdAsync(id.FormatGuid());
+            if (user == null) 
+                return NotFound();
+
+            var userInfo = await GetUserInfo(user);
+            return View(userInfo);
+        }
+        
+        [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)

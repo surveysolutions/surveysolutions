@@ -140,5 +140,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
+        
+        public static string AssignedWorkspaces {
+            get {
+                return ResourceManager.GetString("AssignedWorkspaces", resourceCulture);
+            }
+        }
     }
 }

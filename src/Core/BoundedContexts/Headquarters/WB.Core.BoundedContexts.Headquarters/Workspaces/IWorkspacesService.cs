@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         bool IsWorkspaceDefined(string? workspace);
         void AddUserToWorkspace(HqUser user, string workspace);
         IEnumerable<WorkspaceContext> GetWorkspaces();
+        void AssignWorkspaces(HqUser user, List<Workspace> workspaces);
     }
 }
