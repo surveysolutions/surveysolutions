@@ -19,12 +19,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Refit;
@@ -34,16 +32,13 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
-using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
@@ -52,7 +47,6 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
@@ -375,8 +369,7 @@ namespace WB.UI.Headquarters
             app.UseUnderConstruction();
 
             app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
-            app.UseWorkspaces();
-
+            
             if (!env.IsDevelopment())
             {
                 app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
@@ -387,11 +380,14 @@ namespace WB.UI.Headquarters
                     });
             }
 
+            app.UseWorkspaces();
+            
             // make sure we do not track static files requests
             app.UseMetrics(Configuration);
 
             app.UseRouting();
             app.UseAuthentication();
+
             app.UseRedirectIntoWorkspace();
 
             app.UseAuthorization();

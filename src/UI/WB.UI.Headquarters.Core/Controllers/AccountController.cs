@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Drawing;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,14 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
-using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
