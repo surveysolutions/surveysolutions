@@ -260,13 +260,13 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: 'name',
+                        data: 'Name',
                         name: 'Name',
                         title: this.$t('Workspaces.Name'),
                         sortable: false,
                     },
                     {
-                        data: 'displayName',
+                        data: 'DisplayName',
                         name: 'DisplayName',
                         title: this.$t('Workspaces.DisplayName'),
                         sortable: false,
