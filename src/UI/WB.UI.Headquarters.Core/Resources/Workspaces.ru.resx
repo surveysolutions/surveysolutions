@@ -62,4 +62,7 @@
     <data name="AssignedWorkspaces" xml:space="preserve">
         <value>Выберите рабочие пространства доступные для пользователя</value>
     </data>
+    <data name="UserWorkspacesTab" xml:space="preserve">
+        <value>Рабочие пространства</value>
+    </data>
 </root>

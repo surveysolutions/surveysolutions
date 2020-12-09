@@ -81,7 +81,6 @@ export default {
         userInfo() {
             return this.model.userInfo
         },
-
     },
     methods: {
         async save() {
