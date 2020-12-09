@@ -98,6 +98,30 @@ class MapsReport {
     }
 }
 
+class Workspaces {
+    constructor(http) {
+        this.http = http
+    }
+    async List(userId) {
+        const response = await this.http.get('api/v1/workspaces',
+            {
+                params: {
+                    userId: userId,
+                    limit: 1000,
+                },
+            })
+        return response.data
+    }
+    Assign(userId, workspaces) {
+        return this.http.put('api/v1/workspaces/assign',
+            {
+                userId: userId,
+                workspaces: workspaces,
+            }
+        )
+    }
+}
+
 class Users {
     constructor(http) {
         this.http = http
@@ -418,6 +442,10 @@ class HqApiClient {
 
     get Util() {
         return new HttpUtil()
+    }
+
+    get Workspaces() {
+        return new Workspaces(this.http)
     }
 }
 

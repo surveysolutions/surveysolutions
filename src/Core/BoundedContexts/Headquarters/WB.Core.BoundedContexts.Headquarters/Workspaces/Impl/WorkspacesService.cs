@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AngleSharp.Common;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -57,6 +59,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 .ToList());
         }
 
+        public void AssignWorkspaces(HqUser user, List<Workspace> workspaces)
+        {
+            foreach (var userWorkspace in user.Workspaces.ToList())
+            {
+                if(!workspaces.Any(w => w.Equals(userWorkspace.Workspace)))
+                {
+                    user.Workspaces.Remove(userWorkspace);
+                    this.logger.LogInformation("Removed {user} from {workspace}", user.UserName, userWorkspace.Workspace.Name);
+                }
+            }
+            
+            foreach (var workspace in workspaces)
+            {
+                if(!user.Workspaces.Any(userWorkspace => userWorkspace.Workspace.Equals(workspace)))
+                {
+                    AddUserToWorkspace(user, workspace.Name);
+                }
+            }
+        }
+
         public void AddUserToWorkspace(HqUser user, string workspace)
         {
             Workspace workspaceEntity = workspaces.GetById(workspace) ?? throw new ArgumentNullException("Workspace not found");
@@ -65,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             
             this.workspaceUsers.Store(workspaceUser, workspaceUser.Id);
             
-            this.logger.LogInformation("Added {user} to {workspace}", user, workspace);
+            this.logger.LogInformation("Added {user} to {workspace}", user.UserName, workspace);
         }
     }
 }
