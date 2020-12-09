@@ -281,7 +281,7 @@ export default {
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.totalCount
                         responseJson.recordsFiltered = responseJson.totalCount
-                        return responseJson.workspaces
+                        return responseJson.Workspaces
                     },
                     contentType: 'application/json',
                 },
