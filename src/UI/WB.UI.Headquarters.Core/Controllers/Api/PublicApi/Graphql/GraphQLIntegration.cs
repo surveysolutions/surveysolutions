@@ -19,7 +19,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             .AddAuthorizeDirectiveType()
             .AddType(new PaginationAmountType(200))
             .AddQueryType<HeadquartersQuery>()
-            .AddMutationType<HeadquartersMutations>().Create(); 
+            .AddMutationType(x => x.Name("HeadquartersMutations"))
+            .AddType<MapsMutationExtension>()            
+            .AddType<CalendarEventsMutationExtension>()
+            .Create(); 
 
         public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {
