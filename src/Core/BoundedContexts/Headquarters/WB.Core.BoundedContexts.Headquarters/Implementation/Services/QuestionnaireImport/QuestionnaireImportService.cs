@@ -129,7 +129,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (includePdf == false) // assume this is automation request
                 return await bgTask;
 
-            return questionnaireImportResult;
+            return await bgTask;
+            //return questionnaireImportResult;
         }
 
         private List<IQuestionnaireImportStep> GetImportSteps(QuestionnaireIdentity questionnaireIdentity, 
