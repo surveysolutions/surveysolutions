@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.authorizedUser = authorizedUser;
         }
 
-        public IEnumerable<WorkspaceContext> AllWorkspaces()
+        public List<WorkspaceContext> AllWorkspaces()
         {
             return MemoryCache.GetOrCreate("workspaces", entry =>
             {
