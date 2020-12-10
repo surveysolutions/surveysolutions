@@ -89,21 +89,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             this.SubTitle = subTitle;
             
-            string? calendarEvent = null;
-            ZonedDateTime? zonedCalendarEvent = null;
-            if (Assignment.CalendarEvent.HasValue)
-            {
-                var calendarString = FormatDateTimeString(
-                    EnumeratorUIResources.Dashboard_ShowCalendarEvent, 
-                    Assignment.CalendarEvent.Value,
-                    Assignment.CalendarEventTimezoneId);
-                string separatorVisit = !string.IsNullOrEmpty(Assignment.CalendarEventComment) ? Environment.NewLine : string.Empty;
-                calendarEvent = $"{calendarString}{separatorVisit}{Assignment.CalendarEventComment}";
-                zonedCalendarEvent = GetZonedDateTime(Assignment.CalendarEvent.Value, Assignment.CalendarEventTimezoneId);
-            }
-
-            this.CalendarEvent = calendarEvent;
-            this.CalendarEventStart = zonedCalendarEvent;
+            this.CalendarEventStart = Assignment.CalendarEvent.HasValue
+                ? GetZonedDateTime(Assignment.CalendarEvent.Value, Assignment.CalendarEventTimezoneId)
+                : (ZonedDateTime?)null;
+            this.CalendarEventComment = Assignment.CalendarEventComment;
         }
 
         protected abstract void BindActions();

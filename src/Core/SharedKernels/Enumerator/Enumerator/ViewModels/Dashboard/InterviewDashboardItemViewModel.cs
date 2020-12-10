@@ -171,8 +171,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             
             this.SubTitle = GetSubTitle();
-            this.CalendarEvent = GetCalendarEventText();
             this.CalendarEventStart = GetCalendarEventDate();
+            this.CalendarEventComment = interview.CalendarEventComment;
 
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
@@ -189,22 +189,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             return subTitle;
         }
         
-        private string GetCalendarEventText()
-        {
-            if (interview.CalendarEvent.HasValue)
-            {
-                var calendarString = FormatDateTimeString(
-                    EnumeratorUIResources.Dashboard_ShowCalendarEvent, 
-                    interview.CalendarEvent.Value,
-                    interview.CalendarEventTimezoneId);
-                string separatorVisit = !string.IsNullOrEmpty(interview.CalendarEventComment) 
-                    ? Environment.NewLine : string.Empty;
-                return $"{calendarString}{separatorVisit}{interview.CalendarEventComment}";
-            }
-
-            return null;
-        }
-
         private ZonedDateTime? GetCalendarEventDate()
         {
             if (interview.CalendarEvent.HasValue)
