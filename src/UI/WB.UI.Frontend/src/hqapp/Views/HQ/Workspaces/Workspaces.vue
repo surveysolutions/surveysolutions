@@ -1,10 +1,12 @@
 <template>
-    <HqLayout :hasFilter="false">
+    <HqLayout :hasFilter="false"
+        tag="workspaces-page">
         <div slot="headers">
             <div class="topic-with-button">
                 <h1 v-html="$t('Dashboard.Workspaces')"></h1>
                 <button type="button"
                     class="btn btn-success"
+                    data-suso="create-new-workspace"
                     @click="$refs.createWorkspaceModal.modal('show')">
                     {{$t('Workspaces.AddNew')}}
                 </button>
@@ -15,6 +17,7 @@
         </div>
         <DataTables
             ref="table"
+            data-suso="workspaces-list"
             :tableOptions="tableOptions"
             noSelect
             noSearch
@@ -24,7 +27,8 @@
         <ModalFrame
             ref="createWorkspaceModal"
             :title="$t('Workspaces.CreateWorkspace')">
-            <form onsubmit="return false;">
+            <form onsubmit="return false;"
+                data-suso="workspaces-create-dialog">
                 <div class="form-group"
                     v-bind:class="{'has-error': errors.has('newWorkspaceName')}">
                     <label class="control-label"
@@ -52,7 +56,7 @@
                 </div>
 
                 <div class="form-group"
-                    v-bind:class="{'has-error': errors.has('editedDisplayName')}">
+                    v-bind:class="{'has-error': errors.has('createDisplayName')}">
                     <label class="control-label"
                         for="newDescription">
                         {{$t("Workspaces.DisplayName")}}
@@ -62,7 +66,7 @@
                         type="text"
                         class="form-control"
                         v-model.trim="editedDisplayName"
-                        name="editedDisplayName"
+                        name="createDisplayName"
                         v-validate="displayNameValidations"
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
@@ -72,12 +76,13 @@
                         {{$t('Workspaces.DisplayNameHelpText')}}
                     </p>
                     <span
-                        class="text-danger">{{ errors.first('editedDisplayName') }}</span>
+                        class="text-danger">{{ errors.first('createDisplayName') }}</span>
                 </div>
             </form>
             <div class="modal-footer">
                 <button
                     type="button"
+                    data-suso="workspace-create-save"
                     class="btn btn-primary"
                     @click="createWorkspace">{{$t("Common.Save")}}</button>
                 <button
@@ -89,12 +94,13 @@
 
         <ModalFrame
             ref="editWorkspaceModal"
+            data-suso="workspaces-edit-dialog"
             :title="$t('Workspaces.EditWorkspace', {name: editedRowId} )">
             <form onsubmit="return false;">
                 <div class="form-group"
                     v-bind:class="{'has-error': errors.has('editedDisplayName')}">
                     <label class="control-label"
-                        for="newDescription">
+                        for="editDescription">
                         {{$t("Workspaces.DisplayName")}}
                     </label>
 
@@ -107,7 +113,7 @@
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
                         @keyup.enter="updateWorkspace"
-                        id="newDescription" />
+                        id="editDescription" />
                     <span
                         class="text-danger">{{ errors.first('editedDisplayName') }}</span>
                 </div>
@@ -115,11 +121,13 @@
             <div class="modal-footer">
                 <button
                     type="button"
+                    data-suso="workspace-edit-save"
                     class="btn btn-primary"
                     @click="updateWorkspace">{{$t("Common.Save")}}</button>
                 <button
                     type="button"
                     class="btn btn-link"
+                    data-suso="workspace-cancel"
                     data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
         </ModalFrame>
@@ -190,57 +198,72 @@ export default {
                 }
             }
         },
+
+
+
         contextMenuItems({rowData}) {
             let items = [
                 {
                     name: this.$t('Workspaces.Edit'),
+                    className: 'suso-edit',
                     callback: (_, opt) => {
-                        const parsedRowId = rowData.name
+                        const parsedRowId = rowData.Name
                         this.editedRowId = parsedRowId
-                        this.editedDisplayName = rowData.displayName
+                        this.editedDisplayName = rowData.DisplayName
 
                         this.$refs.editWorkspaceModal.modal('show')
                     },
                 },
                 {
                     name: this.$t('Workspaces.WorkspaceSettings'),
+                    className: 'suso-settings',
                     callback: (_, opt) => {
-                        window.location = this.$hq.basePath + 'Settings'
+                        window.location = this.workspacePath(rowData.Name) + 'Settings'
                     },
                 },
                 {
                     name: this.$t('Common.EmailProviders'),
+                    className: 'suso-email',
                     callback: (_, opt) => {
-                        window.location = this.$hq.basePath + 'Settings/EmailProviders'
+                        window.location = this.workspacePath(rowData.Name) + 'Settings/EmailProviders'
                     },
                 },
                 {
                     name: this.$t('TabletLogs.PageTitle'),
+                    className: 'suso-logs',
                     callback: (_, opt) => {
-                        window.location = this.$hq.basePath + 'Diagnostics/AuditLog'
+                        window.location = this.workspacePath(rowData.Name) + 'Diagnostics/Logs'
                     },
                 },
                 {
                     name: this.$t('Common.AuditLog'),
+                    className: 'suso-audit',
                     callback: (_, opt) => {
-                        window.location = this.$hq.basePath + 'Diagnostics/AuditLog'
+                        window.location = this.workspacePath(rowData.Name) + 'Diagnostics/AuditLog'
                     },
                 },
                 {
                     name: this.$t('Pages.PackagesInfo_Header'),
+                    className: 'suso-tabletinfo',
                     callback: (_, opt) => {
-                        window.location = this.$hq.basePath + 'Administration/TabletInfos'
+                        window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
                     },
                 },
             ]
 
             return items
         },
+
+        workspacePath(workspace) {
+            return this.$hq.basePath.replace(this.$config.workspace, workspace)
+        },
+
     },
     computed: {
         model() {
             return this.$config.model
         },
+
         displayNameValidations() {
             return {
                 max: 300,
