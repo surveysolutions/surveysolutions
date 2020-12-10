@@ -36,6 +36,6 @@
     <PackageReference Include="NLog" Version="4.7.6" />
     <PackageReference Include="Npgsql" Version="4.1.4" />
     <PackageReference Include="prometheus-net" Version="4.0.0" />
-    <PackageReference Include="System.IO.Packaging" Version="4.3.0" />
+    <PackageReference Include="System.IO.Packaging" Version="5.0.0" />
   </ItemGroup>
 </Project>
