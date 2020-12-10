@@ -5,7 +5,7 @@ namespace WB.Infrastructure.Native.Workspaces
 {
     public interface IWorkspacesCache
     {
-        IEnumerable<WorkspaceContext> AllWorkspaces();
+        List<WorkspaceContext> AllWorkspaces();
 
         IEnumerable<WorkspaceContext> CurrentUserWorkspaces();
 
