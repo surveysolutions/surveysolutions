@@ -96,9 +96,6 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<OverviewFragment>();
             registry.Bind<CalendarEventDialog>();
 
-            registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
-            registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
-
             registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
             registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
             registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
