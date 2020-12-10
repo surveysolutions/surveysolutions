@@ -332,6 +332,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
+            registry.Bind<IRootScopeExecutor, InRootScopeExecutor>();
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
