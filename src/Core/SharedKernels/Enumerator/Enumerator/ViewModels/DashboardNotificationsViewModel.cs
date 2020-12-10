@@ -1,6 +1,7 @@
 ﻿using System;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Ncqrs;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
@@ -8,11 +9,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class DashboardNotificationsViewModel : MvxNotifyPropertyChanged
     {
         public DashboardNotificationsViewModel(IViewModelNavigationService viewModelNavigationService,
-            IEnumeratorSettings enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            IClock clock)
         {
             this.enumeratorSettings = enumeratorSettings;
             this.ViewModelNavigationService = viewModelNavigationService;
+            this.Clock = clock;
         }
+
+        private IClock Clock { get; set; }
 
         public IViewModelNavigationService ViewModelNavigationService { get; set; }
 
@@ -29,15 +34,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             new MvxCommand(() => ViewModelNavigationService.NavigateToSystemDateSettings());
         public void CheckTabletTimeAndWarn()
         {
-            var allowedThresholdInSeconds = 180 * 24 * 60 * 60;
-            
+            var allowedThresholdInSeconds = 80 * 60; //80 minutes
             long? lastHqSyncTimestamp = enumeratorSettings.LastHqSyncTimestamp;
-            var nowSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var nowSeconds =  Clock.DateTimeOffsetNow().ToUnixTimeSeconds();
 
-            IsNotificationPanelVisible = 
-                lastHqSyncTimestamp != null 
-                && (nowSeconds > lastHqSyncTimestamp + allowedThresholdInSeconds
-                    || nowSeconds < lastHqSyncTimestamp - allowedThresholdInSeconds);
+            IsNotificationPanelVisible = lastHqSyncTimestamp != null 
+                                         && nowSeconds <= lastHqSyncTimestamp - allowedThresholdInSeconds;
         }
     }
 }
