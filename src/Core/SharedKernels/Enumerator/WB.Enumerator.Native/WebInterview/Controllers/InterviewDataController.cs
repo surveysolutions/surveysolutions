@@ -183,7 +183,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var interview = this.GetCallerInterview(interviewId);
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
             InterviewEntityWithType[] interviewEntityWithTypes = questionnaire
-                .GetPrefilledQuestions()
+                .GetPrefilledEntities()
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
