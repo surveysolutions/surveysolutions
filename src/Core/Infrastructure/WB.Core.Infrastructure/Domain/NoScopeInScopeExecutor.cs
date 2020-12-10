@@ -4,7 +4,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.Infrastructure.Domain
 {
-    public class NoScopeInScopeExecutor : IInScopeExecutor
+    public class NoScopeInScopeExecutor : IInScopeExecutor, IRootScopeExecutor
     {
         private readonly IServiceLocator lifetimeScope;
 
