@@ -58,4 +58,5 @@
     <dimen name="calendar_event_dialog_padding">10dp</dimen>
     <dimen name="calendar_event_dialog_margin">3dp</dimen>
     <dimen name="calendar_event_text_size">14dp</dimen>
+    <dimen name="calendar_event_buttons_space">20dp</dimen>
 </resources>
