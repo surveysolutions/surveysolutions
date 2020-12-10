@@ -9,7 +9,7 @@
     <ItemGroup>
         <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
         <PackageReference Include="ApprovalTests" Version="5.4.5" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 
         <PackageReference Include="Autofac" Version="4.9.4" />
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
