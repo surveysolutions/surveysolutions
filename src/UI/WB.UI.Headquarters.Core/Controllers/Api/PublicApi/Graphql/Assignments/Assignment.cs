@@ -19,8 +19,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field(x => x.ReceivedByTabletAtUtc)
                 .Description("Will return `null` when assignment is not received by tablet");
             descriptor.Field(x => x.Email);
-            // descriptor.Field(x => x.Quantity)
-            //     .Description("Will return `null` for unlimited assignments, and actual number when its not unlimited");
             descriptor.Field(x => x.InterviewsNeeded);
             descriptor.Field(x => x.Archived);
             descriptor.Field(x => x.WebMode)

@@ -104,13 +104,12 @@ type IPagedConnectionOfQuestionnaire {
   totalCount: Int!
 }
 
+"Identifying variable or question"
 type IdentifyingEntity {
   "Answer value for categorical questions"
   answerValue: Int
   entity: Entity!
   value: String
-  "Lower cased version of value"
-  valueLowerCase: String
 }
 
 type Interview {
@@ -143,14 +142,10 @@ type Interview {
   responsibleId: Uuid!
   "Login of current responsible user"
   responsibleName: String!
-  "Lower cased version of responsibleName field"
-  responsibleNameLowerCase: String!
   responsibleRole: UserRoles!
   status: InterviewStatus!
   "Supervisor login who is responsible for interview"
   supervisorName: String
-  "Lowercased version of supervisor login who is responsible for interview"
-  supervisorNameLowerCase: String
   "Represents date (UTC) when interview was changed last time"
   updateDate: DateTime!
   "Indicates if interview was ever completed by interviewer"
