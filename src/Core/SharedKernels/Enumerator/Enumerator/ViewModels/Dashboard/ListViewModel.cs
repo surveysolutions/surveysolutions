@@ -79,5 +79,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             throw new ArgumentException("Need implement this method to refresh dashboard item");
         }
+        
+        public void RefreshTimeDependantData()
+        {
+            this.UiItems.ToList()
+                .Select(i => i as IDashboardItemWithEvents)
+                .ForEach(i => i?.RefreshDataTime());
+        }
     }
 }

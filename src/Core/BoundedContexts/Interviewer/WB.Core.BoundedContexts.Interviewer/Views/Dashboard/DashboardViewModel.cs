@@ -479,6 +479,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         #endregion
+
+        public void RefreshTimeDependantData()
+        {
+            this.CreateNew.RefreshTimeDependantData();
+            this.StartedInterviews.RefreshTimeDependantData();
+            this.CompletedInterviews.RefreshTimeDependantData();
+            this.RejectedInterviews.RefreshTimeDependantData();
+        }
     }
 
     public class DashboardViewModelArgs
