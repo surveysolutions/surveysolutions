@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var attachmentContentIds2 = new List<string>() { "2", "3", "5" };
 
             synchronizationService = Mock.Of<IInterviewerSynchronizationService>(
-                x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(newCensusInterviewIdentities)
-                && x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
+                x => 
+                   x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[0], Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds1)
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[1], Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds2)
                 && x.GetAttachmentContentAsync("1", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1"))

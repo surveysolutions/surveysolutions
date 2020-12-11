@@ -41,11 +41,13 @@ namespace WB.Services.Export.Host.Infra
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
-                var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
+                var urlOverrideKey = $"TenantUrlOverride:{tenant.ShortName}";
 
                 if (configuration[urlOverrideKey] != null)
                 {
-                    httpClient.BaseAddress = new Uri(configuration[urlOverrideKey]);
+                    var uri = configuration[urlOverrideKey];
+                    
+                    httpClient.BaseAddress = new Uri($"{uri.TrimEnd('/')}/{tenant.Workspace}");
 
                     var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");
                     if (aspnetcoreToken != null)
@@ -57,7 +59,6 @@ namespace WB.Services.Export.Host.Infra
                 {
                     httpClient.BaseAddress = new Uri(tenant.BaseUrl);
                 }
-
 
                 logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
 

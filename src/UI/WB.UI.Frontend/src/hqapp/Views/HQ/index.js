@@ -16,6 +16,7 @@ import UsersUpload from './Users/Upload'
 import ControlPanel from './ControlPanel'
 import Download from './Download'
 import WebInterview from './WebInterview'
+import Workspaces from './Workspaces'
 
 export default [
     Assignments,
@@ -36,4 +37,5 @@ export default [
     ControlPanel,
     Download,
     WebInterview,
+    Workspaces,
 ]

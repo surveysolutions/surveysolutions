@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="DisplayName" xml:space="preserve">
+        <value>Display name</value>
+    </data>
+    <data name="NameRequired" xml:space="preserve">
+        <value>Name is required</value>
+    </data>
+    <data name="DisplayNameRequired" xml:space="preserve">
+        <value>Display name required</value>
+    </data>
+    <data name="InvalidName" xml:space="preserve">
+        <value>Only digits and lower case letters allowed</value>
+    </data>
+    <data name="NameShouldBeUnique" xml:space="preserve">
+        <value>Name should be unique</value>
+    </data>
+    <data name="EditWorkspace" xml:space="preserve">
+        <value>Edit workspace {{name}}</value>
+    </data>
+    <data name="WorkspacesSubtitle" xml:space="preserve">
+        <value>Each workspace has isolated questionnaires, interviews, assignmets and users. After creation of new workspace or adding users into workspace clients need to logout and login again in order to have access to new workspace.</value>
+    </data>
+    <data name="AddNew" xml:space="preserve">
+        <value>Create new</value>
+    </data>
+    <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+        <value>Provided workspace name is not allowed</value>
+    </data>
+    <data name="CurrentWorkspace" xml:space="preserve">
+        <value>Current workspace</value>
+    </data>
+    <data name="CreateWorkspace" xml:space="preserve">
+        <value>Workspace creation</value>
+    </data>
+    <data name="CanNotBeChanged" xml:space="preserve">
+        <value>Can not be changed after creation</value>
+    </data>
+    <data name="DisplayNameHelpText" xml:space="preserve">
+        <value>Will be used to display workspace in menus. Try to choose shorter names</value>
+    </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="AssignedWorkspaces" xml:space="preserve">
+        <value>Select workspaces that user has access to</value>
+    </data>
+    <data name="UserWorkspacesTab" xml:space="preserve">
+        <value>Workspaces</value>
+    </data>
+    <data name="WorkspacesUpdated" xml:space="preserve">
+        <value>List of workspaces updated</value>
+    </data>
+</root>

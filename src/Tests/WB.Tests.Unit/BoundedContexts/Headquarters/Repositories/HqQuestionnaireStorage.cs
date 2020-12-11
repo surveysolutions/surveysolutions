@@ -5,6 +5,8 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -131,6 +133,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             fixture.Register<IReusableCategoriesStorage>(() => reusableCategoriesStorage);
             fixture.Register<IQuestionOptionsRepository>(() => new QuestionnaireQuestionOptionsRepository());
             fixture.Register<IReusableCategoriesFillerIntoQuestionnaire>(() => new ReusableCategoriesFillerIntoQuestionnaire(reusableCategoriesStorage));
+            fixture.Register<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
             var storage = fixture.Create<HqQuestionnaireStorage>();
             storage.StoreQuestionnaire(questionnaire.PublicKey, 1, questionnaire);
 

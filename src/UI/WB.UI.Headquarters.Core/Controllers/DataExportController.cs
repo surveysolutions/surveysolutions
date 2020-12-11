@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Models.DataExport;
 using WB.UI.Headquarters.Services.Impl;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -19,12 +20,13 @@ namespace WB.UI.Headquarters.Controllers
     public class DataExportController: Controller
     {
         private readonly ExternalStoragesSettings externalStoragesSettings;
-        private readonly IOptions<HeadquartersConfig> hqConfig;
+        private readonly IVirtualPathService pathService;
 
-        public DataExportController(ExternalStoragesSettings externalStoragesSettings, IOptions<HeadquartersConfig> hqConfig)
+        public DataExportController(ExternalStoragesSettings externalStoragesSettings, 
+            IVirtualPathService pathService)
         {
             this.externalStoragesSettings = externalStoragesSettings;
-            this.hqConfig = hqConfig;
+            this.pathService = pathService;
         }
 
         [ObservingNotAllowed]
@@ -63,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
                     DataAvailabilityUrl = Url.Action("DataAvailability", "DataExportApi"),
                     WasExportFileRecreatedUrl = Url.Action("WasExportFileRecreated", "DataExportApi"),
                     DownloadDataUrl = Url.Action("DownloadData", "DataExportApi"),
-                    ExportToExternalStorageUrl = hqConfig.Value.BaseUrl + Url.Action("ExportToExternalStorage", "DataExportApi"),
+                    ExportToExternalStorageUrl = pathService.GetAbsolutePath(Url.Action("ExportToExternalStorage", "DataExportApi")),
                     CancelExportProcessUrl = Url.Action("DeleteDataExportProcess", "DataExportApi"),
                 }
             };

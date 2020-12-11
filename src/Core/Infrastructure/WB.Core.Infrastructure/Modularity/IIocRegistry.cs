@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure.Modularity
         void BindAsSingletonWithConstructorArguments<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface;
         void BindToRegisteredInterface<TInterface, TRegisteredInterface>() where TRegisteredInterface : TInterface;
         void BindToMethod<T>(Func<T> func, string name = null);
-        void BindToMethod<T>(Func<IModuleContext, T> func, string name = null);
+        void BindToMethod<T>(Func<IModuleContext, T> func, string name = null, bool externallyOwned = false);
         void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null);
         void BindToConstant<T>(Func<T> func);
         void BindToConstant<T>(Func<IModuleContext, T> func);

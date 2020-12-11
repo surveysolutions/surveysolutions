@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
 
             var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase,
-                SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true, null);
+                SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true);
             this.connection = new SQLiteConnectionWithLock(sqliteConnectionString);
 
             this.logger = logger;

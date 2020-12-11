@@ -22,7 +22,7 @@ namespace WB.Services.Export.Infrastructure
             (
                 baseUrl:"",
                 id : TenantId.None,
-                name : ""
+                shortName : ""
             );
             var connectionSettings = Options.Create(new DbConnectionSettings
             {

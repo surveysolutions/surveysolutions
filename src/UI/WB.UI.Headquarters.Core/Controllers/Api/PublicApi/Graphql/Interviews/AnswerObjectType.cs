@@ -16,16 +16,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
         {
             descriptor.BindFieldsExplicitly();
             
-            descriptor.Name("IdentifyingEntity");
+            descriptor.Name("IdentifyingEntity").Description("Identifying variable or question");
             
             descriptor.Field(x => x.Value)
                 .Name("value")
                 .Type<StringType>();
 
-            descriptor.Field(x => x.ValueLowerCase)
-                .Description("Lower cased version of value")
-                .Type<StringType>();
-            
             descriptor.Field(x => x.AnswerCode)
                 .Type<IntType>()
                 .Name("answerValue")

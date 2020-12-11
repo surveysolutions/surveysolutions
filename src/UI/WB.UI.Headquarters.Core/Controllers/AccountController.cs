@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Captcha;
-using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -108,7 +107,14 @@ namespace WB.UI.Headquarters.Controllers
             if (signInResult.Succeeded)
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
-                return Redirect(returnUrl ?? Url.Action("Index", "Home"));
+
+
+                if (returnUrl != null && returnUrl != "/")
+                {
+                    return Redirect(returnUrl);
+                }
+                
+                return Redirect(Url.Content("~/"));
             }
             if (signInResult.RequiresTwoFactor)
             {

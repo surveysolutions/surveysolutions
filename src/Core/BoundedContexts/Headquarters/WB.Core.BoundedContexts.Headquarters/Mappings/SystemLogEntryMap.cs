@@ -8,7 +8,6 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class SystemLogEntryMap : ClassMapping<SystemLogEntry>
     {
         public SystemLogEntryMap()

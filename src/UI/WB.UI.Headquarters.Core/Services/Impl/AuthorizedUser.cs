@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
@@ -39,5 +42,11 @@ namespace WB.UI.Headquarters.Services.Impl
         }
 
         public string UserName => this.User?.Identity?.Name;
+
+        public bool HasNonDefaultWorkspace => User.Claims.Any(x =>
+            x.Type == WorkspaceConstants.ClaimType && x.Value != WorkspaceConstants.DefaultWorkspaceName);
+
+        public IEnumerable<string> Workspaces => User.Claims.Where(x =>
+            x.Type == WorkspaceConstants.ClaimType).Select(x => x.Value);
     }
 }
