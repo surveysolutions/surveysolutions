@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IMigrationRunner, MigrationRunner>();
 
             registry.BindAsSingleton<IViewModelEventRegistry, ViewModelEventRegistry>();
-            
+            registry.BindAsSingleton<IDenormalizerRegistry, EnumeratorDenormalizerRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.Bind<IAsyncEventDispatcher, AsyncEventDispatcher>();
             registry.BindAsSingleton<IAsyncEventQueue, AsyncEventQueue>();
@@ -212,6 +212,16 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
                 .Handles<ResumeInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Resume)
                 .Handles<PauseInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Pause);
+
+            CommandRegistry
+                .Setup<CalendarEvent>()
+                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
+                .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent)
+                .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
+                .Handles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
+                .Handles<RestoreCalendarEventCommand>(aggregate => aggregate.RestoreCalendarEvent);
 
             return Task.CompletedTask;
         }
