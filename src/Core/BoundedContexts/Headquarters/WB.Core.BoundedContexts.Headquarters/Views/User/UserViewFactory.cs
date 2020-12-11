@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Utils;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -21,14 +22,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         private readonly IUserRepository userRepository;
         private readonly IMemoryCache memoryCache;
         private IPlainStorageAccessor<DeviceSyncInfo> devicesSyncInfos;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public UserViewFactory(IUserRepository userRepository, 
             IMemoryCache memoryCache,
-            IPlainStorageAccessor<DeviceSyncInfo> devicesSyncInfos)
+            IPlainStorageAccessor<DeviceSyncInfo> devicesSyncInfos,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.userRepository = userRepository;
             this.memoryCache = memoryCache;
             this.devicesSyncInfos = devicesSyncInfos;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
 
         public UserViewFactory(IPlainStorageAccessor<DeviceSyncInfo> devicesSyncInfos)
@@ -442,11 +446,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, bool? archived, params UserRoles[] role)
+        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, bool? archived, params UserRoles[] role)
         {
             var selectedRoleId = role.Select(x => x.ToUserId()).ToArray();
-
-            var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)));
+            
+            var currentWorkspace = workspaceContextAccessor.CurrentWorkspace() ?? 
+                                   throw new MissingWorkspaceException();
+            
+            var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)))
+                .Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace.Name));
 
             if (archived.HasValue)
                 allUsers = allUsers.Where(x => x.IsArchived == archived.Value);

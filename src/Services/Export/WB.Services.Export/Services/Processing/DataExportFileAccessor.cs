@@ -42,14 +42,12 @@ namespace WB.Services.Export.Services.Processing
         {
             if (externalArtifactsStorage.IsEnabled())
             {
-                using (var file = File.OpenRead(archiveFile))
-                {
-                    var name = Path.GetFileName(archiveFile);
+                using var file = File.OpenRead(archiveFile);
+                var name = Path.GetFileName(archiveFile);
                     
-                    await this.externalArtifactsStorage.StoreAsync(
-                        GetExternalStoragePath(tenant, name), file, "application/zip",
-                        exportProgress, cancellationToken);
-                }
+                await this.externalArtifactsStorage.StoreAsync(
+                    GetExternalStoragePath(tenant, name), file, "application/zip",
+                    exportProgress, cancellationToken);
 
                 return true;
             }

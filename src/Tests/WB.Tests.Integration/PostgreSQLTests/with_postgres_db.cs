@@ -1,8 +1,10 @@
 using System;
-using System.Configuration;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.PostgreSQLTests
@@ -12,6 +14,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeSetUp]
         protected void Context()
         {
+            workspace = Create.Service.WorkspaceContextAccessor();
             TestConnectionString = TestsConfigurationManager.ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             ConnectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
@@ -28,6 +31,8 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 sqlCommand.ExecuteNonQuery();
             }
         }
+
+        protected IWorkspaceContextAccessor workspace;
 
         [OneTimeTearDown]
         protected void Cleanup()
@@ -46,7 +51,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
 
         public void InitializeDb( params DbType[] dbType)
         {
-            DatabaseTestInitializer.InitializeDb(ConnectionStringBuilder.ConnectionString, dbType);
+            DatabaseTestInitializer.InitializeDb(ConnectionStringBuilder.ConnectionString, workspace, dbType);
         }
 
         protected static NpgsqlConnectionStringBuilder ConnectionStringBuilder;

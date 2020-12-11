@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public int GetNextDisplayId()
         {
-            string sql = "SELECT nextval('plainstore.assignment_id_sequence');";
+            string sql = "SELECT nextval('assignment_id_sequence');";
             var sqlQuery = unitOfWork.Session.CreateSQLQuery(sql);
             var nextDisplayId = sqlQuery.UniqueResult();
             return Convert.ToInt32(nextDisplayId);

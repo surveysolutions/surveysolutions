@@ -74,7 +74,11 @@ window.CONFIG.locale = {{
 // JSONP callback to load localization from '@localePath'
 window.__setLocaleData__ = function(data) {{ window.CONFIG.locale.data = data; }}
 ");
-            output.PostElement.AppendHtml($"<script src='{locales[current]}'></script>");
+            if (locales.ContainsKey(current))
+            {
+                output.PostElement.AppendHtml($"<script src='{locales[current]}'></script>");
+            }
+
             output.PreElement.AppendHtml($"<!-- Locale {Component} -->");
             return Task.CompletedTask;
         }

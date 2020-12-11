@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import Headquarters from './Headquarters'
 import Manage from './Manage'
+import UserWorkspaces from './UserWorkspaces'
 import Observers from './Observers'
 import ApiUsers from './ApiUsers'
 import Create from './Create'
@@ -96,6 +97,9 @@ export default class UsersComponent {
         },
         {
             path: '/Users/ChangePassword/:userId', component: ChangePassword, name: 'usersChangePassword',
+        },
+        {
+            path: '/Users/Workspaces/:userId', component: UserWorkspaces,
         },
         {
             path: '/Users/ChangePassword/', component: ChangePassword,

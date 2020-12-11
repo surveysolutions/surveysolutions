@@ -13,7 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     internal class UserViewFactoryTestContext
     {
         protected static UserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
-            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache(), Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
+            => new UserViewFactory(userRepository, Create.Storage.NewMemoryCache(), 
+                Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>(),
+                Create.Service.WorkspaceContextAccessor());
 
         protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers( params HqUser[] users)
         {

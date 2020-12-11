@@ -5,7 +5,6 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Mapping
 {
-    [PlainStorage]
     public class UsersImportProcessMap : ClassMapping<UsersImportProcess>
     {
         public UsersImportProcessMap()

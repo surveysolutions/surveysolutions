@@ -56,8 +56,10 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import parseInt from 'lodash'
 
-const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questionnaireId: Uuid!, $questionnaireVersion: Long!) {
-  interviews(where: {
+const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($workspace: String!, $questionnaireId: Uuid!, $questionnaireVersion: Long!) {
+  interviews(
+      workspace: $workspace,
+      where: {
        questionnaireId: $questionnaireId,
        questionnaireVersion: $questionnaireVersion,
        receivedByInterviewerAtUtc_not: null,
@@ -66,8 +68,10 @@ const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($questi
   }
 }`
 
-const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($questionnaireId: Uuid!, $version: Long!) {
-  assignments(where: {
+const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($workspace: String!, $questionnaireId: Uuid!, $version: Long!) {
+  assignments(
+       workspace: $workspace,
+       where: {
     receivedByTabletAtUtc_not: null,
     questionnaireId: {
       id: $questionnaireId,
@@ -197,6 +201,7 @@ export default {
                             variables: {
                                 questionnaireId: questionnaireGuid,
                                 questionnaireVersion: parseInt(selectedRow.version),
+                                workspace: this.$store.getters.workspace,
                             },
                             fetchPolicy: 'network-only',
                         })
@@ -206,6 +211,7 @@ export default {
                             variables: {
                                 questionnaireId: questionnaireGuid,
                                 version: parseInt(selectedRow.version),
+                                workspace: this.$store.getters.workspace,
                             },
                             fetchPolicy: 'network-only',
                         })
