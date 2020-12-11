@@ -63,7 +63,7 @@ dotnet run --project src/Services/Export/WB.Services.Export.Host/WB.Services.Exp
 In order to build android applications you can use following command:
 
 ``` sh
-# interviewer: 
+# interviewer
 msbuild src/UI/Interviewer/WB.UI.Interviewer/WB.UI.Interviewer.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
 # supervisor
 msbuild src/UI/Supervisor/WB.UI.Supervisor/WB.UI.Supervisor.csproj /restore /p:XamarinBuildDownloadAllowUnsecure=true /t:SignAndroidPackage
