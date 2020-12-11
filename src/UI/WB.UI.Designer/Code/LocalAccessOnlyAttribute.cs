@@ -22,6 +22,8 @@ namespace WB.UI.Designer.Code
 
         public static bool IsLocalRequest(HttpContext context)
         {
+            if (context.Connection.RemoteIpAddress == null) return false;
+
             if (context.Connection.RemoteIpAddress.Equals(context.Connection.LocalIpAddress))
             {
                 return true;
