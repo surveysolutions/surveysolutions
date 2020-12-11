@@ -20,14 +20,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private readonly IServiceLocator serviceLocator;
         private string idLabel;
         private string subTitle;
-        private string calendarEvent;
         private ZonedDateTime? calendarEventStart;
         private string title;
         private bool isExpanded = true;
         private DashboardInterviewStatus status;
 
         public event EventHandler OnItemUpdated;
-        
+        public virtual void RefreshDataTime()
+        {
+            RaisePropertyChanged(nameof(SubTitle));
+            RaisePropertyChanged(nameof(CalendarEvent));
+        }
+
         protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
 
         public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator)
@@ -113,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        public string SubTitle
+        public virtual string SubTitle
         {
             get => subTitle;
             set
@@ -128,17 +132,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public string CalendarEvent
         {
-            get => calendarEvent;
-            set
+            get
             {
-                if (this.calendarEvent != value)
+                if (CalendarEventStart.HasValue)
                 {
-                    this.calendarEvent = value;
-                    this.RaisePropertyChanged();
+                    var calendarString = FormatDateTimeString(
+                        EnumeratorUIResources.Dashboard_ShowCalendarEvent, 
+                        CalendarEventStart.Value.ToDateTimeUtc());
+                    string separatorVisit = !string.IsNullOrEmpty(CalendarEventComment) 
+                        ? Environment.NewLine : string.Empty;
+                    return $"{calendarString}{separatorVisit}{CalendarEventComment}";
                 }
+
+                return null;
             }
         }
-        
+
         public ZonedDateTime? CalendarEventStart
         {
             get => calendarEventStart;
@@ -147,10 +156,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 if (this.calendarEventStart != value)
                 {
                     this.calendarEventStart = value;
-                    this.RaisePropertyChanged();
+                    this.RaisePropertyChanged(nameof(CalendarEventStart));
+                    this.RaisePropertyChanged(nameof(CalendarEvent));
                 }
             }
         }
+        
+        public string CalendarEventComment { get; set; }
 
         public virtual string Comments { get; }
         

@@ -18,6 +18,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     public interface IDashboardItemWithEvents : IDashboardItem
     {
         event EventHandler? OnItemUpdated;
+
+        void RefreshDataTime();
     }
 
     public interface IDashboardViewItem
