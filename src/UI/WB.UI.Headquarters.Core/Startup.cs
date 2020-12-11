@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Storage;
