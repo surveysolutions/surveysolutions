@@ -188,7 +188,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var subTitle = $"{dateComment}{separator}{comment}";
             return subTitle;
         }
-        
+
+        public override string SubTitle => GetSubTitle();
+
         private ZonedDateTime? GetCalendarEventDate()
         {
             if (interview.CalendarEvent.HasValue)
