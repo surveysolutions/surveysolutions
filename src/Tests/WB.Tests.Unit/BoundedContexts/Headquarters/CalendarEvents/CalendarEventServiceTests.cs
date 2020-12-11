@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
@@ -259,8 +260,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var supervisorId = Id.gC;
             
             var responsible = new ReadonlyUser();
-            var profile = new ReadonlyProfile();
-            profile.AsDynamic().SupervisorId = supervisorId;
+            var profile = new HqUserProfile();
+            profile.SupervisorId = supervisorId;
             responsible.AsDynamic().ReadonlyProfile = profile;
             
             var assidnmentInTeam = new Assignment()

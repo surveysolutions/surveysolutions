@@ -242,10 +242,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             if (exportProcess.IsRunning || exportProcess.HasFile)
                 process.Links = new ExportJobLinks();
+            
             if (exportProcess.IsRunning)
-                process.Links.Cancel = $"{this.env.GetBaseUrl()}{Url.Action("CancelExports", new {id = exportProcess.Id})}";
+                process.Links.Cancel = this.env.GetAbsolutePath(Url.Action("CancelExports", new { id = exportProcess.Id }));
             if (exportProcess.HasFile)
-                process.Links.Download = $"{this.env.GetBaseUrl()}{Url.Action("GetExportFile", new {id = exportProcess.Id})}";
+            {
+                process.Links.Download = this.env.GetAbsolutePath(Url.Action("GetExportFile", new { id = exportProcess.Id }));
+            }
 
             return process;
         }

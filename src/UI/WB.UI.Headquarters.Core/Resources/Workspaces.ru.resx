@@ -1,0 +1,68 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DisplayName" xml:space="preserve">
+        <value>Отображаемое имя</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Имя</value>
+    </data>
+    <data name="NameRequired" xml:space="preserve">
+        <value>Необходимо имя</value>
+    </data>
+    <data name="DisplayNameRequired" xml:space="preserve">
+        <value>Необходимо отображаемое имя</value>
+    </data>
+    <data name="InvalidName" xml:space="preserve">
+        <value>Разрешены только цифры и буквы нижнего регистра</value>
+    </data>
+    <data name="NameShouldBeUnique" xml:space="preserve">
+        <value>Имя должно быть уникальным</value>
+    </data>
+    <data name="EditWorkspace" xml:space="preserve">
+        <value>Редактирование рабочего пространства {{name}}</value>
+    </data>
+    <data name="WorkspacesSubtitle" xml:space="preserve">
+        <value>Каждая рабочая область содержит собственные опросники, интервью и задания. После создания или добавления пользователей в рабочее пространство необходимо выйти и зайти в систему заново</value>
+    </data>
+    <data name="AddNew" xml:space="preserve">
+        <value>Создать новый</value>
+    </data>
+    <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+        <value>Предоставленное имя недопустимо</value>
+    </data>
+    <data name="CurrentWorkspace" xml:space="preserve">
+        <value>Текущее рабочее пространство</value>
+    </data>
+    <data name="CreateWorkspace" xml:space="preserve">
+        <value>Создание рабочего пространства</value>
+    </data>
+    <data name="CanNotBeChanged" xml:space="preserve">
+        <value>Нельзя изменить после создания</value>
+    </data>
+    <data name="DisplayNameHelpText" xml:space="preserve">
+        <value>Будет использовано для отображения в меню. Пробуйте использовать короткие имена</value>
+    </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+        <value>Настройки</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Редактировать</value>
+    </data>
+    <data name="AssignedWorkspaces" xml:space="preserve">
+        <value>Выберите рабочие пространства доступные для пользователя</value>
+    </data>
+    <data name="UserWorkspacesTab" xml:space="preserve">
+        <value>Рабочие пространства</value>
+    </data>
+</root>

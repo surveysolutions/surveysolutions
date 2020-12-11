@@ -5,7 +5,6 @@ using ReusableCategoricalOptions = WB.Infrastructure.Native.Questionnaire.Reusab
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class ReusableCategoricalOptionsMap : ClassMapping<ReusableCategoricalOptions>
     {
         public ReusableCategoricalOptionsMap()

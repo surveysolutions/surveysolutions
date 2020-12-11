@@ -1,0 +1,9 @@
+﻿@using WB.UI.Headquarters.Code
+@model WB.UI.Headquarters.Models.Workspaces.WorkspacesModel
+@{
+    ViewBag.Title = Dashboard.Workspaces;    
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.RenderHqConfig(Model)
+<div id="vueApp"></div>

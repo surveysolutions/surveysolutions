@@ -1,8 +1,11 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
+@using WB.Infrastructure.Native.Storage
+@using WB.Infrastructure.Native.Workspaces
 @using WB.UI.Headquarters.Services
 @inject IAuthorizedUser authorizedUser
 @inject IProductVersion productVersion
+@inject IWorkspaceContextAccessor workspaceName
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid ">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -20,6 +23,8 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar">
+            <partial name="_WorkspaceSelector" />
+
             @if (authorizedUser.IsAdministrator)
             {
                 <partial name="AdminMainMenu" />
