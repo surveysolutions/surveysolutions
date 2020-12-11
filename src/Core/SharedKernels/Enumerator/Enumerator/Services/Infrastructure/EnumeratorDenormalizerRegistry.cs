@@ -36,7 +36,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 
                 eventTypes[eventType].Add(denormalizer);
             }
-
         }
 
         public IReadOnlyCollection<BaseDenormalizer> GetDenormalizers(CommittedEvent @event) =>
