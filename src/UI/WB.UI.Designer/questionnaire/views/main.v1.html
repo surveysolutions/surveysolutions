@@ -103,7 +103,7 @@
                                         <li><a ng-click="editChapter(chapter);" ng-i18next>Open</a></li>
                                         <li><a ng-click="copyRef(chapter);" ng-i18next>Copy</a></li>
                                         <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>PasteAfter</a>
+                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isReadOnly" ng-i18next>PasteAfter</a>
                                         </li>
                                         <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();" ng-if="!questionnaire.isReadOnlyForUser && !chapter.isCover" ng-i18next>Delete</a></li>
                                     </ul>
