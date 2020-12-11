@@ -152,5 +152,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("UserWorkspacesTab", resourceCulture);
             }
         }
+        
+        public static string WorkspacesUpdated {
+            get {
+                return ResourceManager.GetString("WorkspacesUpdated", resourceCulture);
+            }
+        }
     }
 }
