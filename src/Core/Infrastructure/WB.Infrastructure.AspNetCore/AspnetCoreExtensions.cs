@@ -40,6 +40,7 @@ namespace WB.Infrastructure.AspNetCore
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
                 .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
+                .MinimumLevel.Override("WB.UI.Designer.Code.Attributes.BasicAuthenticationHandler", LogEventLevel.Warning)
 #if !DEBUG
                 .MinimumLevel.Override("Serilog.AspNetCore.RequestLoggingMiddleware", LogEventLevel.Warning)
 #endif

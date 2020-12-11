@@ -8,6 +8,7 @@ using Moq;
 using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -26,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -41,7 +43,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
 
-            var UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
+            using var UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
             var origin = "hq";
             expectedException = new InterviewException("Some interview exception",
@@ -79,7 +81,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { SupervisorId = supervisorId } }));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
-
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(UnitOfWork);
             var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
             var interviewPackagesService = Create.Service.InterviewPackagesService(
@@ -124,15 +126,12 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 IsCensusInterview = expectedCommand.CreatedOnClient,
                 Events = expectedEventsString
             });
-
-
-            UnitOfWork.Session.Flush();
         }
 
         [NUnit.Framework.Test]
         public void should_broken_packages_storage_contains_specified_interview()
         {
-            var UoW = IntegrationCreate.UnitOfWork(sessionFactory);
+            using var UoW = IntegrationCreate.UnitOfWork(sessionFactory);
             var brokenPackagesStorageVerifier = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UoW);
 
             var expectedPackage = brokenPackagesStorageVerifier.GetById(1);
@@ -143,14 +142,11 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.InterviewId.Should().Be(expectedCommand.InterviewId);
             expectedPackage.QuestionnaireId.Should().Be(expectedCommand.QuestionnaireId);
             expectedPackage.QuestionnaireVersion.Should().Be(expectedCommand.QuestionnaireVersion);
-           // expectedPackage.ExceptionType.Should().Be(expectedException.ExceptionType.ToString());
-           // expectedPackage.ExceptionMessage.Should().Be(expectedException.Message);
+            // expectedPackage.ExceptionType.Should().Be(expectedException.ExceptionType.ToString());
+            // expectedPackage.ExceptionMessage.Should().Be(expectedException.Message);
             expectedPackage.Events.Should().Be(expectedEventsString);
             expectedPackage.PackageSize.Should().Be(expectedEventsString.Length);
-
-            UoW.Dispose();
         }
-
 
         private ISessionFactory sessionFactory;
         private SynchronizeInterviewEventsCommand expectedCommand;

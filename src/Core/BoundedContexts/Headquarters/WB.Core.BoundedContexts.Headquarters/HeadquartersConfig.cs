@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     public class HeadquartersConfig
     {
         public string BaseUrl { get; set; }
+        public string BaseAppUrl { get; set; }
         public string TenantName { get; set; }
     }
 

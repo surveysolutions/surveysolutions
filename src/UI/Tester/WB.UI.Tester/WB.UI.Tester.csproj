@@ -93,6 +93,7 @@
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Implementation\Services\TesterDenormalizerRegistry.cs" />
     <Compile Include="TesterApplication.cs" />
     <Compile Include="TesterAppStart.cs" />
     <Compile Include="TesterMvxApplication.cs" />

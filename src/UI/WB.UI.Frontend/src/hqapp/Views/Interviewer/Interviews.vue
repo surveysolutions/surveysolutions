@@ -130,8 +130,8 @@ import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
-  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query interviews($workspace: String!, $order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(workspace: $workspace, order_by: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     nodes {
@@ -240,6 +240,7 @@ export default {
                         order: order,
                         skip: data.start,
                         take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
@@ -514,7 +515,7 @@ export default {
                         if(data != null && data.startUtc != null) {
                             var hasComment = !(data.comment == null || data.comment == '')
                             return '<span data-toggle="tooltip" title="'
-                                + ( hasComment ? data.comment : self.$t('Assignments.NoComment'))
+                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
                                 + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)
                                 + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')

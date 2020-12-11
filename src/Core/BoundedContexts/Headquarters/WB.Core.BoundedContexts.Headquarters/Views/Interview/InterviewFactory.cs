@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public void RemoveInterview(Guid interviewId)
         {
             var conn = sessionProvider.Session.Connection;
-            conn.Execute($@"DELETE FROM readside.report_statistics i
+            conn.Execute($@"DELETE FROM report_statistics i
                      WHERE i.interview_id = s.id AND s.interview_id = @InterviewId",
             new { InterviewId = interviewId });
         }

@@ -64,12 +64,11 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             RestCredentials credentials = null,
             bool forceNoCache = false,
             Dictionary<string, string> customHeaders = null,
-            CancellationToken? userCancellationToken = null,
-            IProgress<TransferProgress> progress = null)
+            CancellationToken? userCancellationToken = null)
         {
             var compressedJsonContent = this.CreateCompressedJsonContent(request);
             return this.ExecuteRequestAsync(url, method, queryString, compressedJsonContent, credentials, forceNoCache,
-                customHeaders, userCancellationToken, progress);
+                customHeaders, userCancellationToken);
         }
 
         private async Task<ExecuteRequestResult> ExecuteRequestAsync(
@@ -80,8 +79,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             RestCredentials credentials = null,
             bool forceNoCache = false,
             Dictionary<string, string> customHeaders = null,
-            CancellationToken? userCancellationToken = null,
-            IProgress<TransferProgress> progress = null)
+            CancellationToken? userCancellationToken = null)
         {
             if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
                 throw new RestException("Invalid URL", type: RestExceptionType.InvalidUrl);
@@ -99,7 +97,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default);
 
-            var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
+            var fullUrl = new Url(this.restServiceSettings.Endpoint, (credentials?.Workspace ?? "") + "/" + url, queryString);
 
             var request = new HttpRequestMessage()
             {
@@ -288,7 +286,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             RestCredentials credentials = null, CancellationToken? token = null)
         {
             var response = await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
-                request: request ?? string.Empty, progress: transferProgress, userCancellationToken: token)
+                request: request ?? string.Empty, userCancellationToken: token)
                 .ConfigureAwait(false);
 
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default,
