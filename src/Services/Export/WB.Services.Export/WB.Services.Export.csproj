@@ -45,13 +45,13 @@
     <PackageReference Include="HtmlSanitizer" Version="5.0.355" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
@@ -59,15 +59,15 @@
     <PackageReference Include="Microsoft.Graph" Version="3.21.0" />
     <PackageReference Include="Microsoft.Graph.Core" Version="1.23.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Npgsql" Version="4.1.4" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+    <PackageReference Include="Npgsql" Version="5.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
     <PackageReference Include="Refit" Version="5.2.4" />
-    <PackageReference Include="prometheus-net" Version="3.6.0" />
+    <PackageReference Include="prometheus-net" Version="4.0.0" />
     <PackageReference Include="Scrutor" Version="3.3.0" />
     <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
-    <PackageReference Include="System.Reactive" Version="4.4.1" />
-    <PackageReference Include="System.Runtime.Caching" Version="4.7.0" />
-    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.11.1" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="5.0.0" />
     <PackageReference Include="Unidecode.NET" Version="2.1.0" />
   </ItemGroup>
 
