@@ -2,6 +2,7 @@
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
+using Ncqrs;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -42,7 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
             var mockOfdashboardNotifications = new Mock<DashboardNotificationsViewModel>(
                 mockOfViewModelNavigationService.Object,
-                Mock.Of<IEnumeratorSettings>()
+                Mock.Of<IEnumeratorSettings>(),
+                Mock.Of<IClock>()
             );
             
             var viewModel = CreateDashboardViewModel(
