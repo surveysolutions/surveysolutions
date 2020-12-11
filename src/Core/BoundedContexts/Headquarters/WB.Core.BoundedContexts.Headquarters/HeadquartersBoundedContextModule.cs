@@ -350,6 +350,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             }, externallyOwned: true);
             
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
+            registry.Bind<IRootScopeExecutor, InRootScopeExecutor>();
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
