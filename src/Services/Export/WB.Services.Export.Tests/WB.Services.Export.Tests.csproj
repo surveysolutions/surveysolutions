@@ -38,9 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ddidotnet">
-      <HintPath>..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
     <Reference Include="StatData">
       <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
