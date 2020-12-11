@@ -86,7 +86,8 @@ namespace WB.Services.Export.Host.Infra
                 this.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
                 this.policy = Policy
                     .HandleResult<HttpResponseMessage>(
-                        message => message.RequestMessage.Method == HttpMethod.Get
+                        message => message.RequestMessage != null && 
+                                    message.RequestMessage.Method == HttpMethod.Get
                                    && !message.IsSuccessStatusCode && message.StatusCode != HttpStatusCode.NotFound)
                     .WaitAndRetryAsync(4,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
@@ -94,7 +95,7 @@ namespace WB.Services.Export.Host.Infra
                             {
                                 using (LoggingHelpers.LogContext
                                     (("tenantName", tenant.Name),
-                                    ("uri", response.Result.RequestMessage.RequestUri)))
+                                    ("uri", response.Result.RequestMessage?.RequestUri)))
                                 {
                                     logger.LogWarning("Request failed with {statusCode}. " +
                                                       "Waiting {timeSpan} before next retry. Retry attempt {retryCount}",
@@ -106,7 +107,7 @@ namespace WB.Services.Export.Host.Infra
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
                 CancellationToken cancellationToken)
             {
-                var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
+                var uri = QueryHelpers.AddQueryString(request.RequestUri!.ToString(), "apiKey", this.tenant.Id.ToString());
                 request.RequestUri = new Uri(uri);
 
                 request.Headers.Authorization = new AuthenticationHeaderValue("TenantToken", this.tenant.Id.ToString());
