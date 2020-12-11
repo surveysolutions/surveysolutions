@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Infrastructure.AspNetCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ddidotnet", "Export\Utils\ddidotnet\ddidotnet\ddidotnet.csproj", "{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatData", "Export\Utils\StatData\StatData\StatData.csproj", "{A83D3F11-1C42-494F-947A-2CF43BF945CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,12 @@ Global
 		{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1}.DebugEmptyTenant|Any CPU.Build.0 = Debug|Any CPU
 		{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD}.DebugEmptyTenant|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD}.DebugEmptyTenant|Any CPU.Build.0 = Debug|Any CPU
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +106,7 @@ Global
 		{6C537C22-8C3E-4434-B624-676C95508FE0} = {B749D4D6-745A-49B7-87FF-4667C8F0302B}
 		{CDEFBBD1-B14E-4AC6-A0BA-0A6DE72F0133} = {328B6802-B188-4563-B5AE-802A4BDAF6C5}
 		{BEC2BDD2-6B51-428C-82B2-067AEC1DF8D1} = {FFF35064-A657-45E1-8761-929050A3BB55}
+		{A83D3F11-1C42-494F-947A-2CF43BF945CD} = {FFF35064-A657-45E1-8761-929050A3BB55}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4540629E-1903-4312-A956-8E62E0A49DCA}
