@@ -170,7 +170,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             
-            this.SubTitle = GetSubTitle();
             this.CalendarEventStart = GetCalendarEventDate();
             this.CalendarEventComment = interview.CalendarEventComment;
 
