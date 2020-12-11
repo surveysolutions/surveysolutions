@@ -31,6 +31,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.BindAsSingleton<IInterviewViewModelFactory, TesterInterviewViewModelFactory>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
+            registry.BindAsSingleton<IDenormalizerRegistry, TesterDenormalizerRegistry>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IMapInteractionService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyMapInteractionService>();
