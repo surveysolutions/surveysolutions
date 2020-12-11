@@ -72,4 +72,7 @@
     <data name="UserWorkspacesTab" xml:space="preserve">
         <value>Workspaces</value>
     </data>
+    <data name="WorkspacesUpdated" xml:space="preserve">
+        <value>List of workspaces updated</value>
+    </data>
 </root>

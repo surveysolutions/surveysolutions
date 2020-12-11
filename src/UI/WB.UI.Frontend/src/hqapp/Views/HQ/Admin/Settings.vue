@@ -12,7 +12,8 @@
 
         </template>
 
-        <div class="row extra-margin-bottom contain-input">
+        <div class="row extra-margin-bottom contain-input"
+            data-suso="settings-page">
             <div class="col-sm-7">
                 <h2>{{$t('Settings.ExportEncryption_Title')}}</h2>
                 <p>{{$t('Settings.ExportEncryption_Description')}}</p>

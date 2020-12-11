@@ -1,5 +1,6 @@
 <template>
     <HqLayout :fixedWidth="true"
+        tag="email-providers-page"
         :title="$t('Pages.EmailProvidersTitle')">
         <template slot="headers">
             <ol class="breadcrumb">

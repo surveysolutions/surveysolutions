@@ -32,7 +32,10 @@
                     class="btn btn-success"
                     id="btnSaveWorkspaces"
                     @click="save"
-                    v-bind:disabled="userInfo.isObserving">{{$t('Pages.Update')}}</button>
+                    v-bind:disabled="userInfo.isObserving || inProgress">{{$t('Pages.Update')}}</button>
+                <span
+                    class="text-success marl"
+                    v-if="updated">{{$t('Workspaces.WorkspacesUpdated')}}</span>
             </div>
         </div>
 
@@ -46,6 +49,8 @@ export default {
         return {
             allWorkspaces: [],
             userWorkspaces: [],
+            inProgress: false,
+            updated: false,
         }
     },
     mounted() {
@@ -84,9 +89,19 @@ export default {
     },
     methods: {
         async save() {
-            this.$hq.Workspaces.Assign(this.userInfo.userId,
-                this.allWorkspaces.filter(w => w.Assigned === true)
-                    .map(w => w.Name))
+            this.inProgress = true
+            try {
+                const response = await this.$hq.Workspaces.Assign(this.userInfo.userId,
+                    this.allWorkspaces.filter(w => w.Assigned === true)
+                        .map(w => w.Name))
+
+                if(response.status === 204) {
+                    this.updated = true
+                }
+            }
+            finally {
+                this.inProgress = false
+            }
         },
     },
 }

@@ -435,8 +435,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                 };
             }
+            
+            var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section.Children.Where(x => !(x is InterviewTreeVariable)).Select(x => x.Identity);
+            return section.Children
+                .Where(x => isCover || !(x is InterviewTreeVariable))
+                .Select(x => x.Identity);
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)

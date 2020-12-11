@@ -124,7 +124,7 @@
 import {DateFormats, convertToLocal} from '~/shared/helpers'
 import moment from 'moment-timezone'
 import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
-import {map, join, toNumber, filter} from 'lodash'
+import {map, join, toNumber, filter, escape} from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
@@ -511,13 +511,17 @@ export default {
                     title: this.$t('Common.CalendarEvent'),
                     orderable: false,
                     searchable: false,
-                    render(data) {
-                        if(data != null && data.startUtc != null)
+                    render: function(data) {
+                        if(data != null && data.startUtc != null) {
+                            var hasComment = !(data.comment == null || data.comment == '')
                             return '<span data-toggle="tooltip" title="'
-                                + ((data.comment == null || data.comment == '') ? self.$t('Assignments.NoComment') : data.comment)
+                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
                                 + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)
+                                + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
                                 + '</span>'
+                        }
+                        return ''
                     },
                     width: '180px',
                 },
