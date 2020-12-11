@@ -1,14 +1,16 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Workspaces;
 
@@ -33,6 +35,48 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
+        public async Task when_executing_request_with_cookie_to_workspace_that_user_has_access_should_redirect()
+        {
+            var cookieWorkspace = "2077";
+
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
+
+            string requestPath = $"/testing/Reports/SurveysAndStatuses";
+
+            var middleware = CreateMiddleware();
+            var httpContext = CreateHttpContext(requestPath,
+                userWorkspaces: new[] { cookieWorkspace },
+                cookies: (WorkspaceInfoFilter.CookieName, base64));
+
+            await middleware.Invoke(httpContext);
+
+            httpContext.Response.Headers.Should().ContainKey(HeaderNames.Location);
+            httpContext.Response.Headers["Location"].ToString().StartsWith("/" + cookieWorkspace);
+            httpContext.Response.StatusCode.Should().Be(StatusCodes.Status302Found);
+        }
+
+        [Test]
+        public async Task when_executing_request_with_cookie_to_workspace_that_user_has_no_access_should_redirect_to_other()
+        {
+            var cookieWorkspace = "2077";
+
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
+
+            string requestPath = $"/testing/Reports/SurveysAndStatuses";
+
+            var middleware = CreateMiddleware();
+            var httpContext = CreateHttpContext(requestPath,
+                userWorkspaces: new[] { "cyberpunk" },
+                cookies: (WorkspaceInfoFilter.CookieName, base64));
+
+            await middleware.Invoke(httpContext);
+
+            httpContext.Response.Headers.Should().ContainKey(HeaderNames.Location);
+            httpContext.Response.Headers["Location"].ToString().StartsWith("/cyberpunk");
+            httpContext.Response.StatusCode.Should().Be(StatusCodes.Status302Found);
+        }
+
+        [Test]
         public async Task when_executing_request_into_workspace_Should_not_redirect_anywhere()
         {
             var userWorkspace = "primary";
@@ -52,10 +96,17 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
         private HttpContext CreateHttpContext(string requestPath = "/",
             string[] userWorkspaces = null,
-            string currentWorkspace = null)
+            string currentWorkspace = null,
+            params (string name, string value)[] cookies)
         {
             var result = new DefaultHttpContext();
             result.Request.Path = requestPath;
+
+            if (cookies != null)
+            {
+                result.Request.Headers["Cookie"] = cookies.Select(c => $"{c.name}={c.value}").ToArray();
+            }
+
             var workspaces = userWorkspaces ?? new[] {WorkspaceConstants.DefaultWorkspaceName};
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
             result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
@@ -79,10 +130,37 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                 testNext = innerHttpContext => Task.CompletedTask;
             }
             var middleware = new WorkspaceRedirectMiddleware(
-                testNext
+                testNext,
+                new MockDataProtectorProvider()
                 );
             
             return middleware;
+        }
+    }
+
+    public class MockDataProtectorProvider : IDataProtectionProvider
+    {
+        public IDataProtector CreateProtector(string purpose)
+        {
+            return new MockDataProtector();
+        }
+
+        class MockDataProtector : IDataProtector
+        {
+            public IDataProtector CreateProtector(string purpose)
+            {
+                return this;
+            }
+
+            public byte[] Protect(byte[] plaintext)
+            {
+                return plaintext;
+            }
+
+            public byte[] Unprotect(byte[] protectedData)
+            {
+                return protectedData;
+            }
         }
     }
 }
