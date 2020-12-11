@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -9,7 +9,7 @@
     <ItemGroup>
         <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
         <PackageReference Include="ApprovalTests" Version="5.2.5" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 
         <PackageReference Include="Autofac" Version="4.9.4" />
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
@@ -22,7 +22,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />

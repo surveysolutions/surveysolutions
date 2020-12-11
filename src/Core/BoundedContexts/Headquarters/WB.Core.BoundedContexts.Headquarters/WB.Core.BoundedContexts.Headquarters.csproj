@@ -56,10 +56,10 @@
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="MimeKitLite" Version="2.9.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NHibernate" Version="5.3.5" />
@@ -67,7 +67,7 @@
     <PackageReference Include="PasswordGenerator" Version="2.0.5" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Quartz" Version="3.2.3" />
-    <PackageReference Include="refit" Version="5.1.67" />
+    <PackageReference Include="refit" Version="5.2.4" />
     <PackageReference Include="Sendgrid" Version="9.21.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.18" />
     <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="0.1.1" />
