@@ -219,7 +219,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 BackLink = Url.Action("Index", "SurveySetup"),
                 LoginAction = Url.Action("LoginToDesigner", "Template"),
-                DesignerLogo = Url.Content("~/img/designer-logo.png"),
                 ListUrl = Url.Action("Import")
             });
         }

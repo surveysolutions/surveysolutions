@@ -74,17 +74,21 @@
 <ul class="nav navbar-nav navbar-right">
     @if (User.IsInRole("Administrator"))
     {
-        <li class="dropdown  @(new[] {MenuItem.Administration_Diagnostics, MenuItem.Administration_Config, MenuItem.Administration_TabletInfo, MenuItem.Settings, MenuItem.TabletLogs, MenuItem.EmailProviders, MenuItem.AuditLog}.Contains((MenuItem) page) ? "active" : "")">
+        <li class="dropdown  @(new[] {MenuItem.Administration_Diagnostics,
+                                 MenuItem.Administration_Config,
+                                 MenuItem.Administration_TabletInfo,
+                                 MenuItem.Settings,
+                                 MenuItem.TabletLogs,
+                                 MenuItem.EmailProviders,
+                                 MenuItem.AuditLog,
+                                 MenuItem.Workspaces
+                             }.Contains((MenuItem) page) ? "active" : "")">
             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
                 @MainMenu.Administration <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+                @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
                 @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
-                @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
-                @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
-                @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
-                @Html.MainMenuItem("AuditLog", "Diagnostics", Common.AuditLog, MenuItem.AuditLog)
-                @Html.MainMenuItem("TabletInfos", "Administration", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
             </ul>
         </li>
     }
@@ -93,7 +97,9 @@
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
-            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
+            <li>
+                <a href="/Account/LogOff">@Common.Logoff</a>
+            </li>
         </ul>
     </li>
 

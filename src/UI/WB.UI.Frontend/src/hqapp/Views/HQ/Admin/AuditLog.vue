@@ -1,5 +1,6 @@
 <template>
     <HqLayout :hasFilter="false"
+        tag="audit-log-page"
         :title="$t('AuditLog.PageTitle')" >
         <DataTables
             :tableOptions="tableOptions"

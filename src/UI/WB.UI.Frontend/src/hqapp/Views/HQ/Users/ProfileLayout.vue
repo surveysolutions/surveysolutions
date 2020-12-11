@@ -34,6 +34,13 @@
                             v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
                     </li>
                     <li class="nav-item"
+                        v-if="isHeadquarters || isApiUser"
+                        v-bind:class=" {'active': currentTab == 'workspaces'}" >
+                        <a class="nav-link"
+                            id="profile"
+                            v-bind:href="getUrl(`../../Users/Workspaces`)">{{$t('Workspaces.UserWorkspacesTab')}}</a>
+                    </li>
+                    <li class="nav-item"
                         v-bind:class="{'active': currentTab=='password'}">
                         <a class="nav-link"
                             id="password"
