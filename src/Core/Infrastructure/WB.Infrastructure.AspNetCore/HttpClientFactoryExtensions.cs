@@ -33,7 +33,7 @@ namespace WB.Infrastructure.AspNetCore
                 .ConfigureHttpClient((sp, hc) =>
                 {
                     using var scope = sp.CreateScope();
-                    var configurator = scope.ServiceProvider.GetService<IHttpClientConfigurator<TApi>>();
+                    var configurator = scope.ServiceProvider.GetRequiredService<IHttpClientConfigurator<TApi>>();
                     configurator.ConfigureHttpClient(hc);
                 })
                 .AddTransientHttpErrorsHandling();
