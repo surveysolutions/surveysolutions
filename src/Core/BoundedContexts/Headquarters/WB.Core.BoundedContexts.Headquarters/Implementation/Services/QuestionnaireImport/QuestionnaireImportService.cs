@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IArchiveUtils archiveUtils;
         private readonly IDesignerUserCredentials designerUserCredentials;
-        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IRootScopeExecutor inScopeExecutor;
 
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IAssignmentsUpgradeService assignmentsUpgradeService, 
             IArchiveUtils archiveUtils,
             IDesignerUserCredentials designerUserCredentials,
-            IInScopeExecutor inScopeExecutor)
+            IRootScopeExecutor inScopeExecutor)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
