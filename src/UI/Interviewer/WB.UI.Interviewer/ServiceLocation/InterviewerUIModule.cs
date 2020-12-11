@@ -8,8 +8,6 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
@@ -81,10 +79,6 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
             registry.BindAsSingleton<IInterviewViewModelFactory, InterviewerInterviewViewModelFactory>();
-            registry.BindAsSingleton<IDenormalizerRegistry, EnumeratorDenormalizerRegistry>();
-            
-            registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
-            registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
 
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 #if EXCLUDEEXTENSIONS
@@ -116,16 +110,7 @@ namespace WB.UI.Interviewer.ServiceLocation
 #if !EXCLUDEEXTENSIONS
             WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
 #endif
-            CommandRegistry
-                .Setup<CalendarEvent>()
-                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
-                .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent)
-                .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
-                .Handles<DeleteCalendarEventCommand>(aggregate => aggregate.DeleteCalendarEvent)
-                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
-                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
-                .Handles<RestoreCalendarEventCommand>(aggregate => aggregate.RestoreCalendarEvent);
-            
+
             return Task.CompletedTask;
         }
     }
