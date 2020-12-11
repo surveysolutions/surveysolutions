@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -15,12 +14,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         
         private static readonly string CachePrefix = $"pkvs::{typeof(TEntity).Name}::";
 
-        public PostgresKeyValueStorageWithCache(string connectionString,
-            string schemaName,
-            ILogger logger,
+        public PostgresKeyValueStorageWithCache(IUnitOfWork connectionString,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(connectionString, schemaName, serializer)
+            : base(serializer)
         {
             this.memoryCache = memoryCache;
         }

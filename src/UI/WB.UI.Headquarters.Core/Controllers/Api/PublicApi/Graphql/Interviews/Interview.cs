@@ -30,9 +30,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ResponsibleName).Type<NonNullType<StringType>>()
                 .Description("Login of current responsible user");
             
-            descriptor.Field(x => x.ResponsibleNameLowerCase).Type<NonNullType<StringType>>()
-                .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName).Camelize()} field");
-
             descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
             descriptor.Field(x => x.ResponsibleRole).Type<NonNullType<EnumType<UserRoles>>>();
 
@@ -42,10 +39,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.WasCompleted)
                 .Description("Indicates if interview was ever completed by interviewer")
                 .Type<NonNullType<BooleanType>>();
-            descriptor.Field(x => x.SupervisorNameLowerCase)
-                .Description("Lowercased version of supervisor login who is responsible for interview")
-                .Type<StringType>();
-
+            
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
                   .Description("Identifier for the assignment to which this interview belongs");
 

@@ -35,7 +35,6 @@
 </template>
 <script>
 
-import gql from 'graphql-tag'
 import { find, sortBy } from 'lodash'
 import sanitizeHtml  from 'sanitize-html'
 

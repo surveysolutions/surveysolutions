@@ -1,9 +1,10 @@
 import axios from 'axios'
 
+
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
-        this.base = 'api/v1/questionnaires/'
+        this.base = '/api/v1/questionnaires/'
         this.details = this.base + `${questionnaireId}/${version}`
         this.questionnaireId = questionnaireId
         this.version = version
@@ -94,6 +95,30 @@ class MapsReport {
 
     GetInterviewDetailsUrl(interviewId) {
         return `${this.http.defaults.baseURL}Interview/Review/${interviewId}`
+    }
+}
+
+class Workspaces {
+    constructor(http) {
+        this.http = http
+    }
+    async List(userId) {
+        const response = await this.http.get('api/v1/workspaces',
+            {
+                params: {
+                    userId: userId,
+                    limit: 1000,
+                },
+            })
+        return response.data
+    }
+    Assign(userId, workspaces) {
+        return this.http.put('api/v1/workspaces/assign',
+            {
+                userId: userId,
+                workspaces: workspaces,
+            }
+        )
     }
 }
 
@@ -417,6 +442,10 @@ class HqApiClient {
 
     get Util() {
         return new HttpUtil()
+    }
+
+    get Workspaces() {
+        return new Workspaces(this.http)
     }
 }
 

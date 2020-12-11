@@ -58,13 +58,13 @@ type HeadquartersMutations {
 }
 
 type HeadquartersQuery {
-  assignments(skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
-  interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
-  maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
-  questionnaireItems("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
+  assignments(skip: Int take: Int where: AssignmentsFilter "Workspace name" workspace: String! = "primary"): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
+  interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter "Workspace name" workspace: String! = "primary"): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
+  maps(order_by: MapsSort skip: Int take: Int where: MapsFilter "Workspace name" workspace: String! = "primary"): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
+  questionnaireItems("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionnaireItemsFilter "Workspace name" workspace: String! = "primary"): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
-  questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
-  questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
+  questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long "Workspace name" workspace: String! = "primary"): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
+  questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter "Workspace name" workspace: String! = "primary"): [Entity] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
 }
 
@@ -104,13 +104,12 @@ type IPagedConnectionOfQuestionnaire {
   totalCount: Int!
 }
 
+"Identifying variable or question"
 type IdentifyingEntity {
   "Answer value for categorical questions"
   answerValue: Int
   entity: Entity!
   value: String
-  "Lower cased version of value"
-  valueLowerCase: String
 }
 
 type Interview {
@@ -143,14 +142,10 @@ type Interview {
   responsibleId: Uuid!
   "Login of current responsible user"
   responsibleName: String!
-  "Lower cased version of responsibleName field"
-  responsibleNameLowerCase: String!
   responsibleRole: UserRoles!
   status: InterviewStatus!
   "Supervisor login who is responsible for interview"
   supervisorName: String
-  "Lowercased version of supervisor login who is responsible for interview"
-  supervisorNameLowerCase: String
   "Represents date (UTC) when interview was changed last time"
   updateDate: DateTime!
   "Indicates if interview was ever completed by interviewer"

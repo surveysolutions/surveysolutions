@@ -1,6 +1,19 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div class="row extra-margin-bottom contain-input">
+        <template slot="headers">
+            <ol class="breadcrumb">
+                <li>
+                    <a :href=" this.$hq.basePath + 'Workspaces'">{{$t('MainMenu.Workspaces')}} - {{this.$hq.basePath.replaceAll('/', '')}}</a>
+                </li>
+                <li>
+                    <a :href=" this.$hq.basePath + 'Settings'">{{$t('Common.Settings')}}</a>
+                </li>
+            </ol>
+
+        </template>
+
+        <div class="row extra-margin-bottom contain-input"
+            data-suso="settings-page">
             <div class="col-sm-7">
                 <h2>{{$t('Settings.ExportEncryption_Title')}}</h2>
                 <p>{{$t('Settings.ExportEncryption_Description')}}</p>
