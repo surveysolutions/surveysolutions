@@ -13,7 +13,7 @@ namespace WB.UI.Designer.Extensions
     {
         public static IHost RunMigrations(this IHost host, Type firstMigration, string schemaName = "plainstore")
         {
-            var connectionString = host.Services.GetService<IConfiguration>()["ConnectionStrings:DefaultConnection"];
+            var connectionString = host.Services.GetRequiredService<IConfiguration>()["ConnectionStrings:DefaultConnection"];
 
             DatabaseManagement.InitDatabase(connectionString, schemaName);
             var dbUpgradeSettings = new DbUpgradeSettings(firstMigration.Assembly, firstMigration.Namespace);
