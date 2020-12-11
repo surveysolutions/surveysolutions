@@ -32,6 +32,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Storage;
@@ -97,7 +98,10 @@ namespace WB.UI.Headquarters
         // Don't build the container; that gets done for you by the factory.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            autofacKernel = new AutofacKernel(builder);
+            autofacKernel = new AutofacKernel(builder, container =>
+            {
+                InRootScopeExecutor.RootScope = container;
+            });
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
