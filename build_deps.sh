@@ -4,5 +4,5 @@ cd src/UI/WB.UI.Designer
 yarn
 yarn gulp
 cd ../WB.UI.Frontend
-yarn
-yarn dev
+npm i
+npm dev

@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,11 @@ using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
+    public static class AuthType
+    {
+        public const string TenantToken = "TenantToken";
+    }
+
     public static class AuthExtensions
     {
         public static void AddHqAuthorization(this IServiceCollection services)
@@ -22,15 +28,24 @@ namespace WB.UI.Headquarters.Code.Authentication
                .AddUserStore<HqUserStore>()
                .AddRoleStore<HqRoleStore>()
                .AddDefaultTokenProviders()
+               .AddClaimsPrincipalFactory<HqUserClaimsPrincipalFactory>()
+               .AddUserManager<HqUserManager>()
                .AddSignInManager<HqSignInManager>();
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .AddRequirements(new WorkspaceRequirement())
+                    .Build();
+            });
 
             services.ConfigureApplicationCookie(opt =>
             {
                 opt.LoginPath = "/Account/LogOn";
                 opt.AccessDeniedPath = "/Error/401";
                 opt.ExpireTimeSpan = TimeSpan.FromDays(1);
+                opt.Cookie.Path = "/";
 
                 opt.ForwardDefaultSelector = ctx =>
                 {
@@ -81,7 +96,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                     opts.Realm = "WB.Headquarters";
                 })
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", _ => { })
-                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>("TenantToken", _ => {});
+                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => {});
 
             services.Configure<IdentityOptions>(options =>
             {

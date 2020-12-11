@@ -31,6 +31,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
@@ -42,6 +43,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
         protected IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository;
         protected IUnitOfWork UnitOfWork;
         protected ISessionFactory sessionFactory;
+        private IWorkspaceContextAccessor workspace;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -50,6 +52,8 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
 
             this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.PlainStore, DbType.ReadSide);
 
+            workspace = Create.Service.WorkspaceContextAccessor();
+            
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
@@ -62,7 +66,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap)
-                }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+                }, true, workspace.CurrentWorkspace().SchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());

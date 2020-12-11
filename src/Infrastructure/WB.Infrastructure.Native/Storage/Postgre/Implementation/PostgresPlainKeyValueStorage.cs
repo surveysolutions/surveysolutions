@@ -2,7 +2,6 @@
 using System.Data.Common;
 using Microsoft.Extensions.Caching.Memory;
 using NHibernate;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -13,11 +12,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IUnitOfWork sessionProvider;
 
         public PostgresPlainKeyValueStorage(IUnitOfWork sessionProvider,
-            UnitOfWorkConnectionSettings connectionSettings,
-            ILogger logger,
             IMemoryCache memoryCache,
             IEntitySerializer<TEntity> serializer)
-            : base(connectionSettings.ConnectionString, connectionSettings.PlainStorageSchemaName, logger, memoryCache, serializer)
+            : base(sessionProvider, memoryCache, serializer)
         {
             this.sessionProvider = sessionProvider;
         }

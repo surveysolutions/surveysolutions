@@ -1,5 +1,5 @@
 using System;
-using Main.Core.Entities.SubEntities;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         Guid Id { get; }
         string UserName { get; }
+        bool HasNonDefaultWorkspace { get; }
+        IEnumerable<string> Workspaces { get; }
     }
 
     public static class AuthorizedUserHelpers

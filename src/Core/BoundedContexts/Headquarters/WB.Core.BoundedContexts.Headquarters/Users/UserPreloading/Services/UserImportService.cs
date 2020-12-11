@@ -22,8 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
     public class UserImportService : IUserImportService
     {
-        private const string UserToImportTableName = "\"plainstore\".\"usertoimport\"";
-        private const string UsersImportProcessTableName = "\"plainstore\".\"usersimportprocess\"";
+        private const string UserToImportTableName = "\"usertoimport\"";
+        private const string UsersImportProcessTableName = "\"usersimportprocess\"";
 
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ICsvReader csvReader;

@@ -59,9 +59,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                             && s.QuestionnaireVersion == questionnaireIdentity.Version))
                 .DeleteAsync();*/
 
-            
-            var queryText = $"DELETE FROM events.events as e " +
-                            $"USING readside.interviewsummaries as i " +
+            this.logger.LogWarning("Removing all events for {questionnaireId}", questionnaireIdentity);
+            var queryText = $"DELETE FROM events as e " +
+                            $"USING interviewsummaries as i " +
                             $"WHERE e.eventsourceid = i.interviewid " +
                             $"  AND i.questionnaireid = :questionnaireId " +
                             $"  AND i.questionnaireversion = :questionnaireVersion ";
