@@ -26,8 +26,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private DashboardInterviewStatus status;
 
         public event EventHandler OnItemUpdated;
-        public void RefreshDataTime()
+        public virtual void RefreshDataTime()
         {
+            RaisePropertyChanged(nameof(SubTitle));
             RaisePropertyChanged(nameof(CalendarEvent));
         }
 
@@ -116,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        public string SubTitle
+        public virtual string SubTitle
         {
             get => subTitle;
             set
