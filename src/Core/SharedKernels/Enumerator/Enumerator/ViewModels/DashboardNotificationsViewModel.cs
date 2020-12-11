@@ -34,7 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             new MvxCommand(() => ViewModelNavigationService.NavigateToSystemDateSettings());
         public void CheckTabletTimeAndWarn()
         {
-            var allowedThresholdInSeconds = 80 * 60; //80 minutes
+            var allowedThresholdInSeconds = TimeSpan.FromMinutes(80).TotalSeconds;
+            
             long? lastHqSyncTimestamp = enumeratorSettings.LastHqSyncTimestamp;
             var nowSeconds =  Clock.DateTimeOffsetNow().ToUnixTimeSeconds();
 
