@@ -35,11 +35,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
-    <PackageReference Include="CsvHelper" Version="15.0.5" />
+    <PackageReference Include="CsvHelper" Version="18.0.0" />
     <PackageReference Include="Dapper" Version="2.0.78" />
-    <PackageReference Include="HtmlSanitizer" Version="5.0.343" />
+    <PackageReference Include="HtmlSanitizer" Version="5.0.355" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.2.0" />
-    <PackageReference Include="Markdig" Version="0.20.0" />
+    <PackageReference Include="Markdig" Version="0.22.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
