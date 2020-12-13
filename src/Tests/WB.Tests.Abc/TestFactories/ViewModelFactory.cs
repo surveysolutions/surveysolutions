@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
+using Ncqrs;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
@@ -639,6 +640,22 @@ namespace WB.Tests.Abc.TestFactories
                 Create.ViewModel.QuestionInstructionViewModel(),
                 answeringViewModel,
                 Create.Service.LiteEventRegistry());
+        }
+
+        public DashboardNotificationsViewModel DashboardNotificationsViewModel(IViewModelNavigationService navigationService = null)
+        {
+            return new DashboardNotificationsViewModel(navigationService ?? Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<IEnumeratorSettings>(),
+                Mock.Of<IClock>());
+        }
+
+        public LocalSynchronizationViewModel LocalSynchronizationViewModel()
+        {
+            return new LocalSynchronizationViewModel(
+                Mock.Of<IMvxMessenger>(),
+                Mock.Of<ISynchronizationCompleteSource>(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<ILogger>());
         }
     }
 }
