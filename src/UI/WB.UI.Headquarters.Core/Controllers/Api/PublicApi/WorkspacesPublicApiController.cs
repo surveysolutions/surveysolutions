@@ -7,6 +7,7 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -31,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
         private readonly IUserRepository users;
+        private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
@@ -38,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
             IUserRepository users,
+            ILogger<WorkspacesPublicApiController> logger,
             IAuthorizedUser authorizedUser)
         {
             this.workspaces = workspaces;
@@ -45,6 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
             this.users = users;
+            this.logger = logger;
             this.authorizedUser = authorizedUser;
         }
 
@@ -165,13 +169,80 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return ValidationProblem();
         }
 
+        /// <summary>
+        /// Disables specified workspace
+        /// </summary>
+        /// <response code="204">Workspace disabled</response>
+        /// <response code="400">Validation failed</response>
+        /// <response code="404">Workspace not found</response>
+        [HttpPost]
+        [Route("{id}/disable")]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public ActionResult Disable(string id)
+        {
+            var workspace = this.workspaces.GetById(id);
+            if (workspace == null)
+            {
+                return NotFound();
+            }
+
+            if (workspace.DisabledAtUtc != null)
+            {
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already disabled");
+            }
+            
+            if (ModelState.IsValid)
+            {
+                workspace.Disable();
+                
+                this.logger.LogInformation("Workspace {name} was disabled by {user}", id, this.authorizedUser.UserName);
+                return NoContent();
+            }
+
+            return ValidationProblem();
+        }
+        
+        /// <summary>
+        /// Enables specified workspace
+        /// </summary>
+        /// <response code="204">Workspace enabled</response>
+        /// <response code="400">Validation failed</response>
+        /// <response code="404">Workspace not found</response>
+        [HttpPost]
+        [Route("{id}/enable")]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public ActionResult Enable(string id)
+        {
+            var workspace = this.workspaces.GetById(id);
+            if (workspace == null)
+            {
+                return NotFound();
+            }
+
+            if (workspace.DisabledAtUtc == null)
+            {
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already enabled");
+            }
+            
+            if (ModelState.IsValid)
+            {
+                workspace.Enable();
+                this.logger.LogInformation("Workspace {name} was enabled by {user}", id, this.authorizedUser.UserName);
+                return NoContent();
+            }
+
+            return ValidationProblem();
+        }
+
 
         /// <summary>
-        /// Updates new workspace. Changing list of workspaces currently is allowed only for Headquarters or Api users.
+        /// Assigns workspaces to user.
         /// </summary>
-        /// <response code="204">Workspaces updated</response>
+        /// <response code="204">Workspaces list updated</response>
         /// <response code="400">Validation failed</response>
-        [HttpPut]
+        [HttpPost]
         [Route("assign")]
         [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model)

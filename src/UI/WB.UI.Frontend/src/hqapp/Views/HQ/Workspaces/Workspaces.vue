@@ -131,6 +131,27 @@
                     data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
         </ModalFrame>
+
+        <ModalFrame
+            ref="disableWorkspaceModal"
+            data-suso="workspaces-disable-dialog"
+            :title="$t('Workspaces.DisableWorkspacePopupTitle', {name: editedRowId} )">
+            <form onsubmit="return false;">
+                <p>{{ $t("Workspaces.DisableExplanation" )}}</p>
+            </form>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    data-suso="workspace-disable-ok"
+                    class="btn btn-danger"
+                    @click="disableWorkspace">{{$t("Common.Ok")}}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-suso="workspace-cancel"
+                    data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 
@@ -163,6 +184,11 @@ export default {
             this.$refs.editWorkspaceModal.modal('hide')
             this.loadData()
         },
+        async disableWorkspace() {
+            await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
+            this.$refs.disableWorkspaceModal.modal('hide')
+            this.loadData()
+        },
         async createWorkspace() {
             const validationResult = await this.$validator.validateAll()
 
@@ -193,63 +219,86 @@ export default {
                         errorMessage += this.$t('Workspaces.DisplayName') + ': ' + displayNameErrors
                     }
                 }
-                if(errorMessage){
+                if(errorMessage) {
                     toastr.error(errorMessage)
                 }
             }
         },
-
-
-
         contextMenuItems({rowData}) {
-            let items = [
-                {
-                    name: this.$t('Workspaces.Edit'),
-                    className: 'suso-edit',
-                    callback: (_, opt) => {
-                        const parsedRowId = rowData.Name
-                        this.editedRowId = parsedRowId
-                        this.editedDisplayName = rowData.DisplayName
+            let items = []
 
-                        this.$refs.editWorkspaceModal.modal('show')
-                    },
-                },
-                {
-                    name: this.$t('Workspaces.WorkspaceSettings'),
-                    className: 'suso-settings',
+            if(rowData.isDisabled) {
+                items.push({
+                    name: this.$t('Workspaces.Enable'),
+                    className: 'suso-enable',
                     callback: (_, opt) => {
-                        window.location = this.workspacePath(rowData.Name) + 'Settings'
+                        Vue.$http.post(`${this.$config.model.dataUrl}/${rowData.Name}/enable`)
+                            .then(() => {
+                                this.loadData()
+                            })
                     },
-                },
-                {
-                    name: this.$t('Common.EmailProviders'),
-                    className: 'suso-email',
-                    callback: (_, opt) => {
-                        window.location = this.workspacePath(rowData.Name) + 'Settings/EmailProviders'
+                })
+            }
+            else {
+                items = [
+                    {
+                        name: this.$t('Workspaces.Edit'),
+                        className: 'suso-edit',
+                        callback: (_, opt) => {
+                            const parsedRowId = rowData.Name
+                            this.editedRowId = parsedRowId
+                            this.editedDisplayName = rowData.DisplayName
+
+                            this.$refs.editWorkspaceModal.modal('show')
+                        },
                     },
-                },
-                {
-                    name: this.$t('TabletLogs.PageTitle'),
-                    className: 'suso-logs',
-                    callback: (_, opt) => {
-                        window.location = this.workspacePath(rowData.Name) + 'Diagnostics/Logs'
+                    {
+                        name: this.$t('Workspaces.WorkspaceSettings'),
+                        className: 'suso-settings',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'Settings'
+                        },
                     },
-                },
-                {
-                    name: this.$t('Common.AuditLog'),
-                    className: 'suso-audit',
-                    callback: (_, opt) => {
-                        window.location = this.workspacePath(rowData.Name) + 'Diagnostics/AuditLog'
+                    {
+                        name: this.$t('Common.EmailProviders'),
+                        className: 'suso-email',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'Settings/EmailProviders'
+                        },
                     },
-                },
-                {
-                    name: this.$t('Pages.PackagesInfo_Header'),
-                    className: 'suso-tabletinfo',
-                    callback: (_, opt) => {
-                        window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
+                    {
+                        name: this.$t('TabletLogs.PageTitle'),
+                        className: 'suso-logs',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'Diagnostics/Logs'
+                        },
                     },
-                },
-            ]
+                    {
+                        name: this.$t('Common.AuditLog'),
+                        className: 'suso-audit',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'Diagnostics/AuditLog'
+                        },
+                    },
+                    {
+                        name: this.$t('Pages.PackagesInfo_Header'),
+                        className: 'suso-tabletinfo',
+                        callback: (_, opt) => {
+                            window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
+                        },
+                    },
+                    {
+                        name: this.$t('Workspaces.Disable'),
+                        className: 'suso-disable',
+                        callback: (_, opt) => {
+                            const parsedRowId = rowData.Name
+                            this.editedRowId = parsedRowId
+
+                            this.$refs.disableWorkspaceModal.modal('show')
+                        },
+                    },
+                ]
+            }
 
             return items
         },
@@ -304,6 +353,10 @@ export default {
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.TotalCount
                         responseJson.recordsFiltered = responseJson.TotalCount
+                        responseJson.Workspaces.forEach(w => {
+                            w.isDisabled = w.DisabledAtUtc != null
+                        })
+
                         return responseJson.Workspaces
                     },
                     contentType: 'application/json',
