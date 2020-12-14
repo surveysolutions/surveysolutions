@@ -122,6 +122,19 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var entityIdentity = new Identity(entityId, RosterVector.Empty);
             var entityType = this.interviewEntityFactory.GetEntityType(entityIdentity, questionnaire, interview, IsReviewMode());
 
+            if (entityType == InterviewEntityType.Variable)
+            {
+                var variable = interview.GetVariable(entityIdentity);
+
+                return new IdentifyingVariable()
+                {
+                    Type = entityType.ToString(),
+                    Identity = entityIdentity.ToString(),
+                    Title = variable.Title.BrowserReadyText,
+                };
+            }
+
+            
             if (entityType == InterviewEntityType.StaticText)
             {
                 var staticText = interview.GetStaticText(entityIdentity);
@@ -170,7 +183,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var interview = this.GetCallerInterview(interviewId);
             var questionnaire = this.GetCallerQuestionnaire(interview.QuestionnaireIdentity);
             InterviewEntityWithType[] interviewEntityWithTypes = questionnaire
-                .GetPrefilledQuestions()
+                .GetPrefilledEntities()
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),

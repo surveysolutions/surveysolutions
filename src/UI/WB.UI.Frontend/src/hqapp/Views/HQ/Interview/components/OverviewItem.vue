@@ -52,13 +52,20 @@
                         {{gpsAnswer.latitude}}, {{gpsAnswer.longitude}}
                     </a>
                 </div>
+                <div v-else-if="item.controlType === 'variable'">
+                    {{item.value}}
+                </div>
                 <div v-else>
                     {{item.answer}}
                 </div>
             </div>
             <div class="btn-link"
-                v-if="item.state == 'Unanswered'">
+                v-if="item.state == 'Unanswered' && item.controlType !== 'variable'">
                 {{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}
+            </div>
+            <div class="btn-link"
+                v-if="item.state == 'Unanswered' && item.controlType === 'variable'">
+                {{$t("WebInterviewUI.Interview_Overview_NoValue")}}
             </div>
         </div>
 

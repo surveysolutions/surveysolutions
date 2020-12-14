@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using NodaTime;
+using NodaTime.Extensions;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -10,14 +15,24 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
+    public abstract class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItemWithEvents, IDisposable
     {
         private readonly IServiceLocator serviceLocator;
         private string idLabel;
         private string subTitle;
+        private ZonedDateTime? calendarEventStart;
         private string title;
         private bool isExpanded = true;
         private DashboardInterviewStatus status;
+
+        public event EventHandler OnItemUpdated;
+        public virtual void RefreshDataTime()
+        {
+            RaisePropertyChanged(nameof(SubTitle));
+            RaisePropertyChanged(nameof(CalendarEvent));
+        }
+
+        protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
 
         public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator)
         {
@@ -34,7 +49,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         }
 
         private IExternalAppLauncher ExternalAppLauncher =>
-            serviceLocator.GetInstance<IExternalAppLauncher>();
+            serviceLocator.GetInstance<IExternalAppLauncher>();   
+        
+        private IStringFormat StringFormat =>
+            serviceLocator.GetInstance<IStringFormat>();
 
         public bool HasExpandedView { get; protected set; }
 
@@ -99,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        public string SubTitle
+        public virtual string SubTitle
         {
             get => subTitle;
             set
@@ -112,7 +130,78 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
+        public string CalendarEvent
+        {
+            get
+            {
+                if (CalendarEventStart.HasValue)
+                {
+                    var calendarString = FormatDateTimeString(
+                        EnumeratorUIResources.Dashboard_ShowCalendarEvent, 
+                        CalendarEventStart.Value.ToDateTimeUtc());
+                    string separatorVisit = !string.IsNullOrEmpty(CalendarEventComment) 
+                        ? Environment.NewLine : string.Empty;
+                    return $"{calendarString}{separatorVisit}{CalendarEventComment}";
+                }
+
+                return null;
+            }
+        }
+
+        public ZonedDateTime? CalendarEventStart
+        {
+            get => calendarEventStart;
+            set
+            {
+                if (this.calendarEventStart != value)
+                {
+                    this.calendarEventStart = value;
+                    this.RaisePropertyChanged(nameof(CalendarEventStart));
+                    this.RaisePropertyChanged(nameof(CalendarEvent));
+                }
+            }
+        }
+        
+        public string CalendarEventComment { get; set; }
+
         public virtual string Comments { get; }
+        
+        protected ZonedDateTime GetZonedDateTime(DateTimeOffset dateTimeOffset, string timeZoneId)
+        {
+            DateTimeZone timeZone = null;
+            if (timeZoneId != null)
+                timeZone = DateTimeZoneProviders.Tzdb.GetZoneOrNull(timeZoneId);
+            if (timeZone == null)
+                timeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+            var instant = dateTimeOffset.UtcDateTime.ToInstant();
+            var zonedDateTime = new ZonedDateTime(instant, timeZone);
+            return zonedDateTime;
+        }
+
+        protected string FormatDateTimeString(string formatString, DateTimeOffset dateTimeOffset, string timeZoneId)
+        {
+            var zonedDateTime = GetZonedDateTime(dateTimeOffset, timeZoneId);
+            return FormatDateTimeString(formatString, zonedDateTime.ToDateTimeUtc());
+        }
+        
+        protected string FormatDateTimeString(string formatString, DateTime? utcDateTime)
+        {
+            if (!utcDateTime.HasValue)
+                return string.Empty;
+            
+            var culture = CultureInfo.CurrentUICulture;
+            var now = DateTime.Now;
+            var dateTime = DateTime.SpecifyKind(utcDateTime.Value, DateTimeKind.Utc);
+
+            var localTime = dateTime.ToLocalTime();
+            string dateTimeString = StringFormat.ShortDateTime(localTime).ToPascalCase();
+            if (localTime > now.Date.AddDays(-1) && localTime < now.Date.AddDays(3))
+            {
+                dateTimeString = localTime.Humanize(utcDate: false, culture: culture) + " (" + dateTimeString + ")";
+            }
+            
+            return string.Format(formatString, dateTimeString);
+        }
 
         protected void BindLocationAction(Guid? questionId, double? latitude, double? longtitude)
         {

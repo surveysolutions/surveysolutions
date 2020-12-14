@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.CompletedEmails;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -74,6 +75,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation;
@@ -95,6 +97,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
+using CalendarEvent = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.CalendarEvent;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -183,6 +186,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentDenormalizer>();
             registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
+            
+            registry.Bind<CalendarEventDenormalizer>();
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
@@ -237,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IExportFactory, ExportFactory>();
 
             registry.RegisterDenormalizer<AssignmentDenormalizer>();
-
+            registry.RegisterDenormalizer<CalendarEventDenormalizer>();
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
             registry.RegisterDenormalizer<CompletedEmailDenormalizer>();
@@ -248,7 +253,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<WebModeResponsibleAssignmentValidator>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
-
+            registry.Bind<ICalendarEventPackageService, CalendarEventPackageService>();
+            
             registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
@@ -268,7 +274,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<SampleImportSettings>(() => sampleImportSettings);
 
-            
             registry.Bind<IRosterStructureService, RosterStructureService>();
             registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
             registry.BindAsSingleton<IQuestionnaireImportStatuses, QuestionnaireImportStatuses>();
@@ -288,6 +293,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
             registry.Bind<ICompletedEmailsQueue , CompletedEmailsQueue >();
 
+            registry.Bind<ICalendarEventService, CalendarEventService>();
+            
             registry.Bind<IAuditLogFactory, AuditLogFactory>();
             registry.Bind<IAuditLogService, AuditLogService>();
             registry.BindToConstant<IAuditLogTypeResolver>(() => new AuditLogTypeResolver(typeof(IAuditLogEntity).Assembly));
@@ -325,6 +332,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
+            registry.Bind<IRootScopeExecutor, InRootScopeExecutor>();
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
@@ -350,6 +358,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<SendInterviewCompletedJob>();
+            
+            registry.Bind<CalendarEvent>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -359,6 +369,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterFunctional<CumulativeChartDenormalizer>();
             registry.RegisterFunctional<AssignmentDenormalizer>();
             registry.Register<CompletedEmailDenormalizer>();
+            registry.RegisterFunctional<CalendarEventDenormalizer>();
             
             CommandRegistry
                 .Setup<Questionnaire>()
@@ -435,6 +446,16 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupervisor)
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupervisor);
+            
+            CommandRegistry
+                .Setup<CalendarEvent>()
+                .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
+                .InitializesWith<CreateCalendarEventCommand>( aggregate => aggregate.CreateCalendarEvent)
+                .InitializesWith<SyncCalendarEventEventsCommand>( aggregate => aggregate.SyncCalendarEventEvents)
+                .Handles<DeleteCalendarEventCommand>( aggregate => aggregate.DeleteCalendarEvent)
+                .Handles<UpdateCalendarEventCommand>(aggregate => aggregate.UpdateCalendarEvent)
+                .Handles<CompleteCalendarEventCommand>(aggregate => aggregate.CompleteCalendarEvent)
+                .Handles<RestoreCalendarEventCommand>( aggregate => aggregate.RestoreCalendarEvent);
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration
                 .PreProcessBy<InterviewCacheWarmupPreProcessor>()

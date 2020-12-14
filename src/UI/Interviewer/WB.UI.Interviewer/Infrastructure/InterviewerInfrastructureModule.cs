@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -78,6 +79,9 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
 
             registry.Bind<INotificationsCollector, InterviewerNotificationsCollector>();
+            
+            registry.BindAsSingleton<ICalendarEventStorage, CalendarEventStorage>();
+            registry.BindAsSingleton<ICalendarEventRemoval, CalendarEventRemoval>();
         }
     }
 }

@@ -22,6 +22,19 @@
                 :disabled="selectedQuestionnaire == null"
                 @selected="selectQuestionnaireVersion"/>
         </FilterBlock>
+
+        <FilterBlock :title="$t('Common.Status')">
+            <Typeahead
+                control-id="status"
+                :selectedKey="selectedStatus"
+                data-vv-name="status"
+                data-vv-as="status"
+                :placeholder="$t('Common.AllStatuses')"
+                :value="status"
+                :values="statuses"
+                v-on:selected="statusSelected"/>
+        </FilterBlock>
+
         <FilterBlock :title="$t('Reports.Question')">
             <Typeahead
                 control-id="question"
@@ -128,7 +141,7 @@
 <script>
 import Vue from 'vue'
 import routeSync from '~/shared/routeSync'
-import {xor, find, assign, isEqual, chain, isNumber, isUndefined, filter} from 'lodash'
+import { xor, find, assign, isEqual, chain, isNumber, isUndefined, filter } from 'lodash'
 
 export default {
     mixins: [
@@ -142,7 +155,10 @@ export default {
             questionnaires: [],
             questions: [],
             selectedAnswers: [],
+            status: null,
+            selectedStatus: null,
             changesQueue: [],
+            statuses: this.$config.model.statuses,
             loading: {
                 questions: false,
                 questionnaire: false,
@@ -168,6 +184,10 @@ export default {
 
     async mounted() {
         await this.loadQuestionnaires()
+
+        if(this.query.status != null) {
+            this.status = find(this.statuses, { key: this.query.status})
+        }
 
         if (this.query.name != null)
             this.selectedQuestionnaire = find(this.questionnaireList, {value: this.query.name})
@@ -271,6 +291,14 @@ export default {
             })
         },
 
+        statusSelected(newValue) {
+            this.onChange(query => {
+                query.status = newValue == null ? null : newValue.key
+            })
+
+            this.status = newValue
+        },
+
         pivotChanged(value) {
             this.onChange(query => {
                 query.pivot = value
@@ -305,7 +333,7 @@ export default {
                 },
                 state
             )
-
+            filter.status = this.status == null ? null : JSON.parse(this.status.alias)
             return filter
         },
 
@@ -319,6 +347,7 @@ export default {
                 pivot: this.query.pivot,
                 min: this.min,
                 max: this.max,
+                status: this.query.status,
                 version: this.query.version == '*' ? null : this.query.version,
             }
         },

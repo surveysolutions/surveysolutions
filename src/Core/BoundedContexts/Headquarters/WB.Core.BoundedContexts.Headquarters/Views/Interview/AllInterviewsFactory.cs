@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 var summaries = DefineOrderBy(_, input)
                     .Where(x => ids.Contains(x.SummaryId))
-                    .Fetch(x => x.AnswersToFeaturedQuestions)
+                    .Fetch(x => x.IdentifyEntitiesValues)
                     .ToList();
                 return summaries;
             });
@@ -45,11 +45,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 TotalCount = totalCount,
                 Items = interviews.Select(x => new AllInterviewsViewItem
                 {
-                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
+                    FeaturedQuestions = x.IdentifyEntitiesValues.Select(a => new InterviewFeaturedQuestion
                         {
                             Id = a.Id,
-                            Answer = a.Answer,
-                            Question = a.Question.QuestionText
+                            Answer = a.Value,
+                            Question = a.Entity.QuestionText
                         }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDateUtc = x.UpdateDate,
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var searchLowerCase = input.SearchBy.ToLower();
                 items = items.Where(x => x.Key.StartsWith(searchLowerCase) || 
                                          x.ClientKey.StartsWith(searchLowerCase) || 
-                                         x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(searchLowerCase)) ||
+                                         x.IdentifyEntitiesValues.Any(a => a.Value.ToLower().StartsWith(searchLowerCase)) ||
                                          x.ResponsibleName.ToLower().StartsWith(searchLowerCase)
                                          );
             }

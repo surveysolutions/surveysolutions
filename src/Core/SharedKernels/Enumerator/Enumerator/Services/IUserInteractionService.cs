@@ -15,6 +15,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         bool HasPendingUserInteractions { get; }
 
         Task<string> SelectOneOptionFromList(string message,
-            string[] options);    
+            string[] options);
+
+        Task AskDateAsync(EventHandler<DateTime> okCallback, DateTime date, DateTime? minDate = null);
+        Task AskTimeAsync(EventHandler<TimeSpan> okCallback, TimeSpan time);
     }
 }

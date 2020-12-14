@@ -5,9 +5,11 @@ using HotChocolate.Types;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
@@ -28,9 +30,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ResponsibleName).Type<NonNullType<StringType>>()
                 .Description("Login of current responsible user");
             
-            descriptor.Field(x => x.ResponsibleNameLowerCase).Type<NonNullType<StringType>>()
-                .Description($"Lower cased version of {nameof(InterviewSummary.ResponsibleName).Camelize()} field");
-
             descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
             descriptor.Field(x => x.ResponsibleRole).Type<NonNullType<EnumType<UserRoles>>>();
 
@@ -40,10 +39,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.WasCompleted)
                 .Description("Indicates if interview was ever completed by interviewer")
                 .Type<NonNullType<BooleanType>>();
-            descriptor.Field(x => x.SupervisorNameLowerCase)
-                .Description("Lowercased version of supervisor login who is responsible for interview")
-                .Type<StringType>();
-
+            
             descriptor.Field(x => x.AssignmentId).Type<IntType>()
                   .Description("Identifier for the assignment to which this interview belongs");
 
@@ -78,15 +74,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.QuestionnaireVariable).Type<NonNullType<StringType>>();
             descriptor.Field(x => x.QuestionnaireVersion).Type<NonNullType<LongType>>();
             
-            descriptor.Field(x => x.AnswersToFeaturedQuestions)
-                .Name("identifyingQuestions")
+            descriptor.Field(x => x.IdentifyEntitiesValues)
+                .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
                 .Resolver(context => 
-                    context.GroupDataLoader<string, QuestionAnswer>
+                    context.GroupDataLoader<string, IdentifyEntityValue>
                         ("answersByInterview", async keys =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
-                        var questionAnswers = await unitOfWork.Session.Query<QuestionAnswer>()
+                        var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
                             .OrderBy(a => a.Position)
                             .ToListAsync()
@@ -99,14 +95,31 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
                 .Type<ListType<AnswerObjectType>>();
 
-            descriptor.Field<InterviewActionFlagsResolver>(f => f.GetActionFlags(default, default))
-                .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
-                .Description("List of actions that can be applied to interview")
-                .Name("actionFlags");
+            descriptor.Field<InterviewActionFlagsResolver>(f => 
+                    f.GetActionFlags(default, default))
+                    .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
+                    .Description("List of actions that can be applied to interview")
+                    .Name("actionFlags");
 
             descriptor.Field(x => x.NotAnsweredCount)
                 .Description(
                     "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");
+            
+            descriptor.Field("calendarEvent")
+                .Description("Active Calendar Event associated with interview")
+                .Type<CalendarEventObjectType>()
+                .Resolver(context =>
+                {
+                    var interviewId = context.Parent<InterviewSummary>().InterviewId;
+                    var unitOfWork = context.Service<IUnitOfWork>();
+                  
+                    var calendarEvent = unitOfWork.Session
+                        .Query<CalendarEvent>()
+                        .FirstOrDefault(x => x.InterviewId == interviewId 
+                                             && x.CompletedAtUtc == null
+                                             && x.DeletedAtUtc == null);
+                       return calendarEvent;
+                });
         }
     }
 }

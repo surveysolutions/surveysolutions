@@ -121,7 +121,7 @@
     <value>La bitácora está vacía</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>La inicialización del servidor está en curso. Por favor esperar ...</value>
+    <value>Registro de auditoría</value>
   </data>
   <data name="ServerFilePath" xml:space="preserve">
     <value>Ubicación del archivo en el servidor</value>

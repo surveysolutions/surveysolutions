@@ -78,8 +78,8 @@ namespace WB.UI.Tester
                 new TesterBoundedContextModule(),
                 new TesterInfrastructureModule(basePath),
                 new EnumeratorUIModule(),
+                new EnumeratorSharedKernelModule(),
                 new TesterUIModule(),
-                new EnumeratorSharedKernelModule()
             };
             
             ContainerBuilder builder = new ContainerBuilder();
