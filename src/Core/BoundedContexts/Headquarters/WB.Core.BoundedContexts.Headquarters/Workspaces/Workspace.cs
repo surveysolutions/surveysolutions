@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -16,7 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             Name = name;
             DisplayName = displayName;
-            
         }
 
         public virtual string Name { get; set; }
@@ -25,7 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         
         public static Workspace Default { get; set; } = new Workspace("primary", "Default Space");
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
-        
+        public virtual DateTime? DisabledAtUtc { get; set; }
+
         protected bool Equals(Workspace other)
         {
             return Name == other.Name;
@@ -45,5 +46,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         }
         
         public virtual WorkspaceContext AsContext() => new WorkspaceContext(Name, DisplayName);
+
+        public virtual void Disable()
+        {
+            if(DisabledAtUtc != null)
+                throw new InvalidOperationException("Workspace already disabled");
+            this.DisabledAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void Enable()
+        {
+            if(DisabledAtUtc == null)
+                throw new InvalidOperationException("Workspace already enabled");
+            this.DisabledAtUtc = null;
+        }
     }
 }

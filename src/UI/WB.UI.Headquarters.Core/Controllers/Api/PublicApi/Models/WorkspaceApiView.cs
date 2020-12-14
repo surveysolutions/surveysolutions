@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.UI.Headquarters.Resources;
@@ -19,5 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         [DataMember(IsRequired = true)]
         [MaxLength(300)]
         public string? DisplayName { get; set; }
+        
+        public DateTime? DisabledAtUtc { get; set; }
     }
 }
