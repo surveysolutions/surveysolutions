@@ -195,8 +195,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (ModelState.IsValid)
             {
                 workspace.Disable();
-                
                 this.logger.LogInformation("Workspace {name} was disabled by {user}", id, this.authorizedUser.UserName);
+                this.workspacesCache.InvalidateCache();
                 return NoContent();
             }
 
@@ -230,6 +230,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 workspace.Enable();
                 this.logger.LogInformation("Workspace {name} was enabled by {user}", id, this.authorizedUser.UserName);
+                this.workspacesCache.InvalidateCache();
                 return NoContent();
             }
 
@@ -254,6 +255,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 if (workspace == null)
                 {
                     ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} not found");
+                }
+                else if (workspace.IsDisabled())
+                {
+                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} disabled");
                 }
                 else
                 {
