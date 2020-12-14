@@ -60,5 +60,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
                 throw new InvalidOperationException("Workspace already enabled");
             this.DisabledAtUtc = null;
         }
+
+        public virtual bool IsDisabled()
+        {
+            return this.DisabledAtUtc != null;
+        }
     }
 }
