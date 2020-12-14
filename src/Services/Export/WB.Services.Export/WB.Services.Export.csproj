@@ -73,15 +73,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="ddidotnet">
-      <HintPath>..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="StatData">
-      <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Utils\ddidotnet\ddidotnet\ddidotnet.csproj" />
+    <ProjectReference Include="..\Utils\StatData\StatData\StatData.csproj" />
   </ItemGroup>
 
   <ItemGroup>
