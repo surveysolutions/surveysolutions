@@ -846,4 +846,7 @@
   <data name="WB0312" xml:space="preserve">
       <value>Категория должна иметь минимум 2 опции</value>
   </data>
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>Переменные на обложке должны иметь описание</value>
+  </data>
 </root>

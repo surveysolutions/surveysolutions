@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Amazon.S3;
 using Amazon.S3.Transfer;
@@ -149,6 +150,8 @@ namespace WB.Tests.Abc.TestFactories
             result.Setup(x => x.GetQuestionnaireOrThrow(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()))
+                .Returns(questionnaire);
+            result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()))
                 .Returns(questionnaire);
 
             

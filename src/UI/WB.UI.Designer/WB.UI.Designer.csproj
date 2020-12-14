@@ -92,6 +92,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -162,5 +162,12 @@ namespace WB.UI.Shared.Enumerator.Services
             currentActivity.StartActivity(intent);
             currentActivity.Finish();
         }
+
+        public virtual void NavigateToSystemDateSettings()
+        {
+            var currentActivity = topActivity.Activity;
+            var intent = new Intent(Android.Provider.Settings.ActionDateSettings);
+            currentActivity.StartActivity(intent);
+        }
     }
 }

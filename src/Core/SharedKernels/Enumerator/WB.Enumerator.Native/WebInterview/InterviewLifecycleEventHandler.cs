@@ -14,6 +14,7 @@ using WB.Enumerator.Native.WebInterview.LifeCycle;
 namespace WB.Enumerator.Native.WebInterview
 {
     [ReceivesIgnoredEvents]
+    [ReceivesPrototypeEvents]
     public class InterviewLifecycleEventHandler : FunctionalEventHandlerBase<InterviewLifecycle>,
         IFunctionalEventHandler,
         IUpdateHandler<InterviewLifecycle, AnswersDeclaredInvalid>,

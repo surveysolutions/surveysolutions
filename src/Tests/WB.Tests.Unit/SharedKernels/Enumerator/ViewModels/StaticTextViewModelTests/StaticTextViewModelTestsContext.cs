@@ -31,7 +31,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                             Create.ViewModel.AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: liteEventRegistry,
-                    interviewRepository: statefulInterviewRepository));
+                    interviewRepository: statefulInterviewRepository,
+                    questionnaireStorage: plainQuestionnaireRepository));
         }
     }
 }

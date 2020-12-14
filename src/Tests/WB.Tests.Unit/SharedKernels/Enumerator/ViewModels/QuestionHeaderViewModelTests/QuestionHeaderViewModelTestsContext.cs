@@ -19,8 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
             return new QuestionHeaderViewModel(
                 Create.ViewModel.DynamicTextViewModel(
-                    interviewRepository: interviewRepository,
-                    eventRegistry: liteEventRegistry));
+                    interviewRepository: statefulInterviewRepository,
+                    eventRegistry: liteEventRegistry,
+                    questionnaireStorage: questionnaireStorage));
         }
     }
 }

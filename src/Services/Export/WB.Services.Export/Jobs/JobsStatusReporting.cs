@@ -213,6 +213,7 @@ namespace WB.Services.Export.Jobs
 
             var exportSettings = new ExportSettings
             (
+                jobId: process.ProcessId,
                 tenant : Tenant,
                 questionnaireId : questionnaireId,
                 exportFormat : dataExportProcessView.Format,

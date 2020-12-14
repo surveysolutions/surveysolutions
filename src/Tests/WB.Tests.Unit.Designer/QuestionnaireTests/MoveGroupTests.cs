@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 CreateQuestionnaireWithOneGroup(
                     groupId: groupId,
                     responsibleId: responsibleId);
-            questionnaire.AddVariable(Guid.NewGuid(), groupId, responsibleId);
+            questionnaire.AddGroup(Guid.NewGuid(), groupId, responsibleId);
             
             // act
             TestDelegate act = () => 

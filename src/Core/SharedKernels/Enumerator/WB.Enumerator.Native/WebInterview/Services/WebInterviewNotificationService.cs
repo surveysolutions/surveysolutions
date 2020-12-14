@@ -46,14 +46,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             var entitiesToRefresh = new List<(string section, Identity id)>();
 
+            var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+
+            if (questionnaire == null) return;
+
             foreach (var identity in questions)
             {
                 if (this.IsQuestionPrefield(identity, interview))
                 {
                     entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
-
-                var questionnaire = questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
 
                 if (questionnaire.IsQuestion(identity.Id) && (
                         questionnaire.IsRosterSizeQuestion(identity.Id)
@@ -84,6 +86,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     {
                         if (questionnaire.HasVariable(currentEntity.Id))
                         {
+                            if (questionnaire.IsPrefilled(currentEntity.Id))
+                            {
+                                entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id),
+                                    currentEntity));
+                            }
+                            
                             IEnumerable<Guid> affectedStaticTexts =
                                 questionnaire.GetStaticTextsThatUseVariableAsAttachment(currentEntity.Id);
                             foreach (var staticTextId in affectedStaticTexts.SelectMany(x => interview.GetAllIdentitiesForEntityId(x)))
@@ -118,7 +126,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     if (questionsGroupedByParent.Key == null)
                         continue;
 
-                    var ids = questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray();
+                    var ids = questionsGroupedByParent.Select(p => p.id?.ToString() ?? string.Empty).Distinct().ToArray();
                     this.webInterviewInvoker.RefreshEntities(questionsGroupedByParent.Key, ids);
                 }
                 this.webInterviewInvoker.RefreshSectionState(interviewId);

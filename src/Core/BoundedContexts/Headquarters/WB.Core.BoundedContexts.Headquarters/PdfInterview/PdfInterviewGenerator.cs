@@ -186,6 +186,15 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                     continue;
                 }
 
+                if (questionnaire.IsVariable(node.Id))
+                {
+                    var variable = interview.GetVariable(node);
+                    new VariablePdfWriter(variable, interview, questionnaire)
+                        .Write(section.AddParagraph());
+                    section.AddParagraph();
+                    continue;
+                }
+
                 throw new ArgumentException("Unknown prefilled tree node type for entity " + node);
             }
         }

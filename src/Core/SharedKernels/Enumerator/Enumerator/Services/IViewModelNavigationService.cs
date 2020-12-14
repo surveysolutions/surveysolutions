@@ -24,5 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void CloseApplication();
 
         Task NavigateToCreateAndLoadInterview(int assignmentId);
+        void NavigateToSystemDateSettings();
     }
 }

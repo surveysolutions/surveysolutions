@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -71,7 +72,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IStatefulInterviewRepository statefulInterviewRepository = null,
             IStatefullInterviewSearcher statefullInterviewSearcher = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPdfInterviewGenerator pdfInterviewGenerator = null)
+            IPdfInterviewGenerator pdfInterviewGenerator = null,
+            ICalendarEventService calendarEventService = null)
         {
             var controller = new InterviewsPublicApiController(
                 allInterviewsViewFactory: allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(), 
@@ -85,7 +87,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<InterviewsPublicApiController>>(),
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
                 diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
-                pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>());
+                pdfInterviewGenerator: pdfInterviewGenerator ?? Mock.Of<IPdfInterviewGenerator>(),
+                calendarEventService: calendarEventService ?? Mock.Of<ICalendarEventService>()
+                );
 
             return controller;
         }

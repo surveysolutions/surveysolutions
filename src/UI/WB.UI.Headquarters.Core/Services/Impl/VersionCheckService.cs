@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Enumerator.Native.WebInterview;
@@ -25,14 +26,17 @@ namespace WB.UI.Headquarters.Services.Impl
 
         private readonly IProductVersion productVersion;
         private readonly IOptions<VersionCheckConfig> versionCheckConfig;
+        private readonly IInScopeExecutor inScopeExecutor;
 
         public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage,
             IProductVersion productVersion,
-            IOptions<VersionCheckConfig> versionCheckConfig)
+            IOptions<VersionCheckConfig> versionCheckConfig,
+            IInScopeExecutor inScopeExecutor)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.productVersion = productVersion;
             this.versionCheckConfig = versionCheckConfig;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public bool DoesNewVersionExist()
@@ -85,7 +89,7 @@ namespace WB.UI.Headquarters.Services.Impl
                 AvailableVersion = versionInfo;
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
-                InScopeExecutor.Current.Execute((serviceLocatorLocal) =>
+                inScopeExecutor.Execute((serviceLocatorLocal) =>
                 {
                     serviceLocatorLocal.GetInstance<IPlainKeyValueStorage<VersionCheckingInfo>>()
                         .Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
