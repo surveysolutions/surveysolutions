@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,13 @@ namespace WB.UI.Headquarters.Code.Workspaces
     public class WorkspaceAccessActionFilter : IAuthorizationFilter
     {
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
+        private readonly IWorkspacesCache workspacesCache;
 
-        public WorkspaceAccessActionFilter(IWorkspaceContextAccessor workspaceContextAccessor)
+        public WorkspaceAccessActionFilter(IWorkspaceContextAccessor workspaceContextAccessor,
+            IWorkspacesCache workspacesCache)
         {
             this.workspaceContextAccessor = workspaceContextAccessor;
+            this.workspacesCache = workspacesCache;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -25,13 +29,13 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (hasAuthorizedAttribute && context.HttpContext.User.Identity.IsAuthenticated)
             {
-                var workspace = workspaceContextAccessor.CurrentWorkspace();
-
+                var targetWorkspace = workspaceContextAccessor.CurrentWorkspace();
+                var userWorkspaces = this.workspacesCache.CurrentUserWorkspaces();
+                
                 var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata.OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
-
-                if (workspace != null && !context.HttpContext.User.HasClaim(WorkspaceConstants.ClaimType, workspace.Name))
+                if (targetWorkspace != null && !userWorkspaces.Any(x => x.Name.Equals(targetWorkspace.Name, StringComparison.OrdinalIgnoreCase)))
                 {
-                    if (workspace.Name == WorkspaceConstants.DefaultWorkspaceName && allowsFallbackToPrimaryWorkspace)
+                    if (targetWorkspace.Name == WorkspaceConstants.DefaultWorkspaceName && allowsFallbackToPrimaryWorkspace)
                     {
                         return;
                     }
