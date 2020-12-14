@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Commands;
+using NodaTime;
+using NodaTime.Extensions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -37,9 +43,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
             serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
 
+        private ICommandService CommandService =>
+            serviceLocator.GetInstance<ICommandService>();
+
+        private IPrincipal Principal =>
+            serviceLocator.GetInstance<IPrincipal>();
+
         protected ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetForType(typeof(InterviewDashboardItemViewModel));
 
         public event EventHandler OnItemRemoved;
+
         protected bool isInterviewReadyToLoad = true;
         private QuestionnaireIdentity questionnaireIdentity;
         protected InterviewView interview;
@@ -70,6 +83,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             Actions.Clear();
 
             BindLocationAction(interview.LocationQuestionId, interview.LocationLatitude, interview.LocationLongitude);
+
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxAsyncCommand(this.SetCalendarEventAsync, 
+                    () => this.isInterviewReadyToLoad && interview.Status != InterviewStatus.Completed),
+                Label = interview.CalendarEvent.HasValue 
+                    ? EnumeratorUIResources.Dashboard_EditCalendarEvent
+                    : EnumeratorUIResources.Dashboard_AddCalendarEvent
+            });
+
+            Actions.Add(new ActionDefinition
+            {
+                ActionType = ActionType.Context,
+                Command = new MvxCommand(this.RemoveCalendarEvent, 
+                    () => this.isInterviewReadyToLoad && interview.CalendarEvent.HasValue && interview.Status != InterviewStatus.Completed),
+                Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
+            });
 
             Actions.Add(new ActionDefinition
             {
@@ -139,15 +170,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version);
             
+            this.CalendarEventStart = GetCalendarEventDate();
+            this.CalendarEventComment = interview.CalendarEventComment;
+
+            this.AssignmentIdLabel = interview.Assignment.HasValue
+                ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
+                : EnumeratorUIResources.Dashboard_CensusAssignment;
+        }
+
+        private string GetSubTitle()
+        {
             var comment = GetInterviewCommentByStatus(interview);
             var dateComment = GetInterviewDateCommentByStatus(interview);
 
             string separator = !string.IsNullOrEmpty(comment) ? Environment.NewLine : string.Empty;
-            this.SubTitle = $"{dateComment}{separator}{comment}";
-            
-            this.AssignmentIdLabel = interview.Assignment.HasValue
-                ? EnumeratorUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
-                : EnumeratorUIResources.Dashboard_CensusAssignment;
+            var subTitle = $"{dateComment}{separator}{comment}";
+            return subTitle;
+        }
+
+        public override string SubTitle => GetSubTitle();
+
+        private ZonedDateTime? GetCalendarEventDate()
+        {
+            if (interview.CalendarEvent.HasValue)
+            {
+                return GetZonedDateTime(interview.CalendarEvent.Value, interview.CalendarEventTimezoneId);
+            }
+
+            return null;
         }
 
         public string AssignmentIdLabel
@@ -179,16 +229,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 default:
                     return string.Empty;
             }
-        }
-
-        private string FormatDateTimeString(string formatString, DateTime? utcDateTimeWithOutKind)
-        {
-            if (!utcDateTimeWithOutKind.HasValue)
-                return string.Empty;
-            
-            var utcDateTime = DateTime.SpecifyKind(utcDateTimeWithOutKind.Value, DateTimeKind.Utc);
-            var culture = CultureInfo.CurrentUICulture;
-            return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
 
         private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
@@ -283,7 +323,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        
+        private async Task SetCalendarEventAsync()
+        {
+            if (interview.Assignment.HasValue)
+            {
+                await ViewModelNavigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(
+                    new CalendarEventViewModelArgs(
+                        interview.InterviewId,
+                        interview.InterviewKey,
+                        interview.Assignment.Value,
+                        RaiseOnItemUpdated)
+                );
+            }
+        }
+
+        private void RemoveCalendarEvent()
+        {
+            var calendarEventStorage = serviceLocator.GetInstance<ICalendarEventStorage>();
+            var calendarEvent = calendarEventStorage.GetCalendarEventForInterview(interview.InterviewId);
+
+            if (interview.Assignment.HasValue && calendarEvent != null)
+            {
+                var command = new DeleteCalendarEventCommand(calendarEvent.Id,
+                    Principal.CurrentUserIdentity.UserId);
+                CommandService.Execute(command);
+                
+                RaiseOnItemUpdated();    
+            }
+        }
+
         private string responsible;
         public string Responsible
         {

@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable
             : base(questionnaireId, responsibleId, entityId)
         {
             this.VariableData = variableData;
+            this.VariableData.Label = CommandUtils.SanitizeHtml(variableData.Label);
         }
 
         public VariableData VariableData { get; private set; }

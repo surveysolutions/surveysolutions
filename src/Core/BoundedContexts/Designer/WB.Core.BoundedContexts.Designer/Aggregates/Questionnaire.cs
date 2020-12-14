@@ -583,10 +583,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (IsCoverPage(targetChapter.PublicKey))
                 {
                     bool isContainsNotAllowedEntities = sourceGroup.Children
-                        .Any(c => !(c is IQuestion || c is IStaticText));
+                        .Any(c => !(c is IQuestion || c is IStaticText || c is IVariable));
                     if (isContainsNotAllowedEntities)
                     {
-                        throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+                        throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables);
                     }
                 }
 
@@ -623,7 +623,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (targetIsCoverPage)
             {
                 var elementsToCopy = sourceGroup.Children
-                        .Where(el => el is IQuestion || el is StaticText)
+                        .Where(el => el is IQuestion || el is StaticText || el is IVariable)
                         .Select(el => el.PublicKey)
                         .ToList();
                 foreach (var compositeId in elementsToCopy)
@@ -1509,7 +1509,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.GetGroupOrThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
-            this.ThrowDomainExceptionIfTryAddEntityInCoverPage(command.ParentId);
 
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
@@ -1551,11 +1550,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var sourceVariable = this.innerDocument.Find<IVariable>(entityId);
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceVariable != null ? sourceVariable.GetParent() as IGroup : null);
-
-            if (IsCoverPage(targetEntityId))
-            {
-                throw new QuestionnaireException(DomainExceptionType.CanNotAddElementToCoverPage, ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
-            }
 
             this.innerDocument.MoveItem(entityId, targetEntityId, targetIndex);
         }
@@ -1968,7 +1962,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CanNotAddElementToCoverPage,
-                    ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTexts);
+                    ExceptionMessages.CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables);
             }
         }
 

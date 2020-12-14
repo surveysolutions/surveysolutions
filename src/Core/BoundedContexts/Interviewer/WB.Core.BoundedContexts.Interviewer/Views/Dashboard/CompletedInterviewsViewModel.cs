@@ -36,7 +36,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         protected override void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem)
-            => interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
+        {
+            base.OnItemCreated(interviewDashboardItem);
+            interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
+        }
 
         private void InterviewDashboardItem_OnItemRemoved(object sender, System.EventArgs e)
         {

@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             var interview = Create.AggregateRoot.StatefulInterview(Id.gA, Id.g9, Id.gB, Id.gC, questionnaire);
             
-            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
           
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
@@ -32,13 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 Create.Entity.CategoricalQuestionOption(4, "item4"),
             });
             
-            questionnaireStorage.SetReturnsDefault(questionnaire);
-            interviewRepository.SetReturnsDefault(interview);
-            questionnaireStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null)).Returns(Create.Entity.PlainQuestionnaire(questionnaire));
-            interviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview);
-
-            viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
-                interviewRepository: interviewRepository.Object,
+            viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage,
+                interviewRepository: interviewRepository,
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init(Id.gA.FormatGuid(), questionId, Create.Other.NavigationState());

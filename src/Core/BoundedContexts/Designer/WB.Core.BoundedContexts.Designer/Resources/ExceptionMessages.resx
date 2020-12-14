@@ -217,8 +217,8 @@
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
     <value>Cover section must be first section in questionnaire</value>
   </data>
-  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTexts" xml:space="preserve">
-    <value>Cover section can contain only questions and static texts</value>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>Cover section can contain only questions, static texts and variables</value>
   </data>
   <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
     <value>It is readonly Cover section. You can not edit or re-order questions in it.</value>

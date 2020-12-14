@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
@@ -131,7 +132,40 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [ResponseCache(NoStore = true)]
+        [Route("api/v1/job/{id}/download")]
+        public async Task<ActionResult> DownloadArchive(long id, string archiveName)
+        {
+            var job = await this.jobService.GetJobAsync(id);
+
+            var settings = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
+
+            var exportSettings = settings.ExportSettings;
+            exportSettings.JobId = job.Id;
+            exportSettings.Tenant = tenantContext.Tenant;
+
+            var result = await this.archiveHandleService.DownloadArchiveAsync(exportSettings, archiveName);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(result.Redirect))
+            {
+                Response.Headers.Add("NewLocation", result.Redirect);
+                return Ok();
+            }
+
+            return new FileStreamResult(result.Data, "application/octet-stream")
+            {
+                FileDownloadName = WebUtility.UrlEncode(result.FileName)
+            };
+        }
+
+        [HttpGet]
+        [ResponseCache(NoStore = true)]
         [Route("api/v1/job/download")]
+        [Obsolete("Used by HQ prior to 20.12 release")]
         public async Task<ActionResult> DownloadArchive(
             string questionnaireId,
             string archiveName,

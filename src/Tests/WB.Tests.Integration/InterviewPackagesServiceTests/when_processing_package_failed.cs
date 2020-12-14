@@ -25,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -81,12 +80,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
-
-            InScopeExecutor.Init(executor.Object);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
             var interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin),
@@ -97,7 +91,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
                 interviews: new TestInMemoryWriter<InterviewSummary>(),
-                sessionFactory: sessionFactory);
+                sessionFactory: sessionFactory,
+                inScopeExecutor: executor);
 
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(

@@ -12,13 +12,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Extensions.cs" />
-    <Compile Update="Properties\EnumeratorUIResources.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EnumeratorUIResources.ru.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
@@ -28,6 +27,7 @@
     <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="7.0.1" />
     <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="7.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="NodaTime" Version="3.0.3" />
     <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="System.Reactive" Version="4.4.1" />

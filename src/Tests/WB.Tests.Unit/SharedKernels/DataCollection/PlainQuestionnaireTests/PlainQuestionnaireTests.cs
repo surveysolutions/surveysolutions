@@ -1,3 +1,4 @@
+using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -132,6 +133,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             var staticTextsThatUseVariableAsAttachment = plainQuestionnaire.GetStaticTextsThatUseVariableAsAttachment(Id.g1);
 
             Assert.That(staticTextsThatUseVariableAsAttachment, Is.EquivalentTo(new []{Id.g3}));
+        }
+        
+        [Test]
+        public void when_identifyed_entities_should_return_questions_static_texts_and_variables()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Entity.TextQuestion(Id.g1),
+                    Create.Entity.Variable(Id.g2, VariableType.String),
+                    Create.Entity.StaticText(Id.g3)
+                }
+            );
+            questionnaire.CoverPageSectionId = questionnaire.Children.First().PublicKey;
+
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+            var entities = plainQuestionnaire.GetPrefilledEntities();
+
+            Assert.That(entities.Count, Is.EqualTo(3));
+            Assert.That(entities, Is.EquivalentTo(new []{Id.g1, Id.g2, Id.g3}));
         }
     }
 }

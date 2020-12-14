@@ -436,13 +436,13 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       actionFlags
       questionnaireVersion
       notAnsweredCount
-      identifyingQuestions {
-        question {
+      identifyingData {
+        entity {
           variable
           questionText
           label
         }
-        answer
+        value
       }
     }
   }
@@ -571,7 +571,7 @@ export default {
                     width: '50px',
                 },
                 {
-                    data: 'identifyingQuestions',
+                    data: 'identifyingData',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
@@ -579,8 +579,8 @@ export default {
                     render(data) {
                         const delimiter = self.mode == 'dense'
 
-                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
-                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
+                        var questionsWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
                         })
 
                         const dom = join(questionsWithTitles, ', ')
@@ -730,8 +730,8 @@ export default {
                             { clientKey_starts_with: search.toLowerCase() },
                             { responsibleNameLowerCase_starts_with: search.toLowerCase() },
                             { supervisorNameLowerCase_starts_with: search.toLowerCase() },
-                            { identifyingQuestions_some: {
-                                answerLowerCase_starts_with: search.toLowerCase(),
+                            { identifyingData_some: {
+                                valueLowerCase_starts_with: search.toLowerCase(),
                             },
                             }],
                         })
@@ -825,11 +825,11 @@ export default {
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    let identifyingQuestions_some = { question: {variable: cond.variable}}
+                    let identifyingData_some = { entity: {variable: cond.variable}}
 
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
-                    identifyingQuestions_some[cond.field] = value
-                    and.push({ identifyingQuestions_some })
+                    identifyingData_some[cond.field] = value
+                    and.push({ identifyingData_some })
                 })
             }
 

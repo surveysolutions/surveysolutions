@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Enumerator.Native.WebInterview;
@@ -12,10 +13,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
     public class SystemLog : ISystemLog
     {
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IInScopeExecutor inScopeExecutor;
 
-        public SystemLog(IAuthorizedUser authorizedUser)
+        public SystemLog(IAuthorizedUser authorizedUser, IInScopeExecutor inScopeExecutor)
         {
             this.authorizedUser = authorizedUser;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public void ExportStared(string processName, DataExportFormat format)
@@ -107,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
         {
-            InScopeExecutor.Current.Execute(serviceLocator =>
+            inScopeExecutor.Execute(serviceLocator =>
             {
                 var logEntry = new SystemLogEntry
                 {

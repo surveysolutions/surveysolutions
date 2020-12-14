@@ -352,6 +352,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return result;
             }
 
+            var variable = callerInterview.GetVariable(identity);
+            if (variable != null)
+            {
+                var result = this.autoMapper.Map<InterviewTreeVariable, InterviewVariable>(variable);
+                result.Title = questionnaire.GetVariableLabel(identity.Id);
+                return result;
+            }
+
             InterviewTreeGroup group = callerInterview.GetGroup(identity);
             if (group != null)
             {
@@ -595,7 +603,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             var entityId = identity.Id;
 
-            if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
+            if (callerQuestionnaire.IsVariable(entityId))
+            {
+                var isPrefilled = callerQuestionnaire.IsPrefilled(entityId);
+                return isPrefilled
+                    ? InterviewEntityType.Variable
+                    : InterviewEntityType.Unsupported;
+            }
 
             if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
             {

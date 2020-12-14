@@ -41,8 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = entityIdentity;
             this.variableLabel  = questionnaire.GetVariableLabel(entityIdentity.Id);

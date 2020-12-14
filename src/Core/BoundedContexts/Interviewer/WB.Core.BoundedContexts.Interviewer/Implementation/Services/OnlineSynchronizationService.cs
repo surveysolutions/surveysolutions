@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override string ApiUrl => "api/interviewer/";
 
         protected override string InterviewsController => string.Concat(ApiUrl, "v3", "/interviews");
+        protected override string CalendarEventsController => string.Concat(ApiUrl, "v3", "/calendarevents");
 
         public OnlineSynchronizationService(IPrincipal principal, IRestService restService,
             IInterviewerSettings interviewerSettings, IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,

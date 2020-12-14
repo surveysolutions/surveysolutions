@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.ReportTests
                     typeof(InterviewSummaryMap),
                     typeof(InterviewGpsMap),
                     typeof(TimeSpanBetweenStatusesMap),
-                    typeof(QuestionAnswerMap),
+                    typeof(IdentifyEntityValueMap),
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),

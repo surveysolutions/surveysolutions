@@ -14,8 +14,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
 
@@ -239,8 +241,11 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult SurveyStatistics()
         {
+            var statuses = StatusHelper.GetSurveyStatisticsStatusItems(this.authorizedUser).ToList();
+
             return this.View("SurveyStatistics", new
             {
+                statuses,
                 isSupervisor = this.authorizedUser.IsSupervisor
             });
         }

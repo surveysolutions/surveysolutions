@@ -16,8 +16,10 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -35,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IArchiveUtils archiveUtils;
         private readonly IDesignerUserCredentials designerUserCredentials;
+        private readonly IRootScopeExecutor inScopeExecutor;
 
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
@@ -43,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IQuestionnaireImportStatuses questionnaireImportStatuses,
             IAssignmentsUpgradeService assignmentsUpgradeService, 
             IArchiveUtils archiveUtils,
-            IDesignerUserCredentials designerUserCredentials)
+            IDesignerUserCredentials designerUserCredentials,
+            IRootScopeExecutor inScopeExecutor)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
@@ -52,6 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.archiveUtils = archiveUtils;
             this.designerUserCredentials = designerUserCredentials;
+            this.inScopeExecutor = inScopeExecutor;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -101,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             var bgTask = Task.Run(async () =>
             {
-                return await InScopeExecutor.Current.ExecuteAsync(async (serviceLocatorLocal) =>
+                return await inScopeExecutor.ExecuteAsync(async (serviceLocatorLocal) =>
                 {
                     var designerServiceCredentials = serviceLocatorLocal.GetInstance<IDesignerUserCredentials>();
 
@@ -169,8 +174,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 await designerApi.IsLoggedIn();
             }
-            catch
+            catch (Exception ex)
             {
+                this.logger.Info("Failed to import questionnaire from designer. Need login in it.", ex);
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
                 questionnaireImportResult.ImportError = ErrorMessages.IncorrectUserNameOrPassword;
                 return questionnaireImportResult;
@@ -287,6 +293,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
             catch (RestException ex)
             {
+                this.logger.Info("Failed to import questionnaire from designer. RestException", ex);
+
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
 
                 switch (ex.StatusCode)
@@ -327,6 +335,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
             catch (Exception ex)
             {
+                this.logger.Error($"Failed to import questionnaire from designer. id: #{questionnaireId}", ex);
+
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Error;
 
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
@@ -335,8 +345,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireImportResult.ImportError = domainEx.Message;
                     return questionnaireImportResult;
                 }
-
-                this.logger.Error($"Designer: error when importing template #{questionnaireId}", ex);
 
                 questionnaireImportResult.ImportError = "Fail to import questionnaire to Headquarters. Please contact support to resolve this problem.";
                 return questionnaireImportResult;
