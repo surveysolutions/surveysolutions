@@ -38,15 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ddidotnet">
-      <HintPath>..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="StatData">
-      <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
   </ItemGroup>
 
