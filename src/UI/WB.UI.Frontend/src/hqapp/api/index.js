@@ -112,14 +112,16 @@ class Workspaces {
             })
         return response.data
     }
+
     Assign(userId, workspaces) {
-        return this.http.put('api/v1/workspaces/assign',
+        return this.http.post('api/v1/workspaces/assign',
             {
                 userId: userId,
                 workspaces: workspaces,
             }
         )
     }
+
 }
 
 class Users {
