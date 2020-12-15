@@ -1,5 +1,6 @@
 ﻿using Quartz;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks

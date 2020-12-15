@@ -5,13 +5,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Domain;
 
-namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
+// do not change this namespace since it breaks quartz when it is stored in database
+namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
     internal class UsersImportJob : IJob
