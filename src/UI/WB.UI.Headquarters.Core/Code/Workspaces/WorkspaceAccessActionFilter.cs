@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Authentication;
 
@@ -30,8 +32,16 @@ namespace WB.UI.Headquarters.Code.Workspaces
             if (hasAuthorizedAttribute && context.HttpContext.User.Identity.IsAuthenticated)
             {
                 var targetWorkspace = workspaceContextAccessor.CurrentWorkspace();
+
+                if (targetWorkspace.IsServerAdministration()
+                    && context.HttpContext.User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    return;
+                }
+
+                var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata
+                    .OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
                 
-                var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata.OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
                 if (targetWorkspace != null && !workspacesCache.IsWorkspaceAccessAllowedForCurrentUser(targetWorkspace.Name))
                 {
                     if (targetWorkspace.Name == WorkspaceConstants.DefaultWorkspaceName && allowsFallbackToPrimaryWorkspace)
