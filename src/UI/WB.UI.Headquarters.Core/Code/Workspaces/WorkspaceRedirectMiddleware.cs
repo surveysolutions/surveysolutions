@@ -40,10 +40,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 // Redirect into default workspace for old urls
                 string? targetWorkspace = null;
 
-                if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
+                if(context.Request.Cookies.TryGetValue(WorkspaceInfoFilter.CookieName, out var cookieValue)
+                    && cookieValue != null)
                 {
-                    var cookieValue = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
-
                     try
                     {
                         var workspace = dataProtector.Unprotect(cookieValue);
@@ -72,7 +71,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 if (targetWorkspace != null)
                 {
                     context.Response.Redirect(
-                        $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value.TrimStart('/')}");
+                        $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value!.TrimStart('/')}");
                     return;
                 }
             }
