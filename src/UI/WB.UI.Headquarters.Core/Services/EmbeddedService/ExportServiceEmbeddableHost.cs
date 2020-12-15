@@ -147,7 +147,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
             var host = exportHostBuilder.Build();
 
-            var lifetime = host.Services.GetService<IHostApplicationLifetime>();
+            var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
 
             lifetime.ApplicationStarted.Register(() =>
             {

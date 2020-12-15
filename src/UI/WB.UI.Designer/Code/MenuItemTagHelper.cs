@@ -80,9 +80,9 @@ namespace WB.UI.Designer.Code
 
         private bool IsActiveRoute()
         {
-            string currentAction = ViewContext.CurrentAction();
-            string currentController = ViewContext.CurrentController();
-            string currentArea = ViewContext.CurrentArea();
+            var currentAction = ViewContext.CurrentAction();
+            var currentController = ViewContext.CurrentController();
+            var currentArea = ViewContext.CurrentArea();
 
             if (!string.IsNullOrWhiteSpace(Action) && !Action.Equals(currentAction))
             {
@@ -105,7 +105,7 @@ namespace WB.UI.Designer.Code
             foreach (KeyValuePair<string, string> routeValue in RouteValues)
             {
                 if (!ViewContext.RouteData.Values.ContainsKey(routeValue.Key) ||
-                    ViewContext.RouteData.Values[routeValue.Key].ToString() != routeValue.Value)
+                    ViewContext.RouteData.Values[routeValue.Key]!.ToString() != routeValue.Value)
                 {
                     return false;
                 }
@@ -116,8 +116,8 @@ namespace WB.UI.Designer.Code
 
         private bool IsActivePage()
         {
-            string currentPage = ViewContext.CurrentPage();
-            string currentArea = ViewContext.CurrentArea();
+            var currentPage = ViewContext.CurrentPage();
+            var currentArea = ViewContext.CurrentArea();
             
             if (!string.IsNullOrWhiteSpace(Page) && !Page.Equals(currentPage, StringComparison.OrdinalIgnoreCase))
             {
@@ -135,7 +135,7 @@ namespace WB.UI.Designer.Code
             foreach (KeyValuePair<string, string> routeValue in RouteValues)
             {
                 if (!ViewContext.RouteData.Values.ContainsKey(routeValue.Key) ||
-                    ViewContext.RouteData.Values[routeValue.Key].ToString() != routeValue.Value)
+                    ViewContext.RouteData.Values[routeValue.Key]!.ToString() != routeValue.Value)
                 {
                     return false;
                 }

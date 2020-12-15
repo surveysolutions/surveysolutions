@@ -43,7 +43,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
             for (int i = 0; i < workers.Length; i++)
             {
-                var worker = scope.ServiceProvider.GetService<IJobWorker>();
+                var worker = scope.ServiceProvider.GetRequiredService<IJobWorker>();
                 workers[i] = worker;
                 worker.Task = worker.StartAsync(cancellationToken);
             }
