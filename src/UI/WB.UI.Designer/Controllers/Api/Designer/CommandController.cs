@@ -176,7 +176,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 string fileStreamContent = string.Empty;
                 string commandContent = string.Empty;
                 var section = await reader.ReadNextSectionAsync();
-                while (section != null)
+                while (section != null && section.Headers != null)
                 {
                     Dictionary<string, StringValues> sectionHeaders = section.Headers;
                     //form-data; name="file"; filename="Book1.txt"
