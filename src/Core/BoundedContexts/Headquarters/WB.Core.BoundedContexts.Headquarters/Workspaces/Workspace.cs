@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         
         public static Workspace Default { get; set; } = new Workspace("primary", "Default Space");
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
-        public virtual DateTime? DisabledAtUtc { get; set; }
+        public virtual DateTime? DisabledAtUtc { get; protected set; }
 
         protected bool Equals(Workspace other)
         {
@@ -51,6 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             if(DisabledAtUtc != null)
                 throw new InvalidOperationException("Workspace already disabled");
+            if (Name == Default.Name)
+                throw new InvalidOperationException($"{Default.Name} workspace can not be disabled");
             this.DisabledAtUtc = DateTime.UtcNow;
         }
 
