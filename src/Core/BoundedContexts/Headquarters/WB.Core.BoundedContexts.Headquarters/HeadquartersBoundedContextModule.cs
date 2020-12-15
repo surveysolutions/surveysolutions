@@ -37,7 +37,6 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading;
@@ -367,6 +366,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendRemindersTask>();
             registry.Bind<UpgradeAssignmentJob>();
             registry.Bind<SyncPackagesReprocessorBackgroundJob>();
+            registry.Bind<UsersImportJob>();
             registry.Bind<UsersImportJob>();
             registry.Bind<AssignmentsImportJob>();
             registry.Bind<SendInvitationsJob>();
