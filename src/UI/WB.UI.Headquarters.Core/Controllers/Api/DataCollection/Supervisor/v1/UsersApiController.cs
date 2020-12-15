@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public virtual SupervisorApiView Current()
         {
             var user = this.userViewFactory.FindById(this.authorizedUser.Id);
-            var workspaces = this.workspacesCache.CurrentUserWorkspaces();
+            var workspaces = this.workspacesCache.AllCurrentUserWorkspaces();
             
             return new SupervisorApiView
             {

@@ -26,11 +26,12 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var middleware = CreateMiddleware();
             var userWorkspace = "primary";
-            var httpContext = CreateHttpContext(requestPath, userWorkspaces: new [] {userWorkspace});
-            
+            var httpContext = CreateHttpContext(requestPath, userClaimWorkspaces: new[] {userWorkspace});
+
             await middleware.Invoke(httpContext);
 
-            httpContext.Response.Headers.Should().Contain(HeaderNames.Location, $"/{userWorkspace}/Reports/SurveysAndStatuses");
+            httpContext.Response.Headers.Should()
+                .Contain(HeaderNames.Location, $"/{userWorkspace}/Reports/SurveysAndStatuses");
             httpContext.Response.StatusCode.Should().Be(StatusCodes.Status302Found);
         }
 
@@ -45,7 +46,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var middleware = CreateMiddleware();
             var httpContext = CreateHttpContext(requestPath,
-                userWorkspaces: new[] { cookieWorkspace },
+                userClaimWorkspaces: new[] {cookieWorkspace},
                 cookies: (WorkspaceInfoFilter.CookieName, base64));
 
             await middleware.Invoke(httpContext);
@@ -56,7 +57,8 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
-        public async Task when_executing_request_with_cookie_to_workspace_that_user_has_no_access_should_redirect_to_other()
+        public async Task
+            when_executing_request_with_cookie_to_workspace_that_user_has_no_access_should_redirect_to_other()
         {
             var cookieWorkspace = "2077";
 
@@ -66,7 +68,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var middleware = CreateMiddleware();
             var httpContext = CreateHttpContext(requestPath,
-                userWorkspaces: new[] { "cyberpunk" },
+                userClaimWorkspaces: new[] {"cyberpunk"},
                 cookies: (WorkspaceInfoFilter.CookieName, base64));
 
             await middleware.Invoke(httpContext);
@@ -77,6 +79,29 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
+        public async Task when_user_has_cookie_into_disabled_workspace_Should_not_redirect_into_it()
+        {
+            var cookieWorkspace = "2077";
+
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
+
+            string requestPath = $"/testing/Reports/SurveysAndStatuses";
+
+            var workspacesCache = Mock.Of<IWorkspacesCache>();
+
+            var middleware = CreateMiddleware();
+            var httpContext = CreateHttpContext(requestPath,
+                userClaimWorkspaces: new[] {"2077"},
+                workspacesCache: workspacesCache,
+                cookies: (WorkspaceInfoFilter.CookieName, base64));
+
+            await middleware.Invoke(httpContext);
+
+            httpContext.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+            httpContext.Response.StatusCode.Should().NotBe(StatusCodes.Status302Found);
+        }
+
+        [Test]
         public async Task when_executing_request_into_workspace_Should_not_redirect_anywhere()
         {
             var userWorkspace = "primary";
@@ -84,10 +109,10 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             string requestPath = $"/{userWorkspace}/Reports/SurveysAndStatuses";
 
             var middleware = CreateMiddleware();
-            var httpContext = CreateHttpContext(requestPath, 
-                userWorkspaces: new [] {userWorkspace},
+            var httpContext = CreateHttpContext(requestPath,
+                userClaimWorkspaces: new[] {userWorkspace},
                 currentWorkspace: userWorkspace);
-            
+
             await middleware.Invoke(httpContext);
 
             httpContext.Response.Headers.Should().NotContainKey(HeaderNames.Location);
@@ -95,7 +120,8 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         private HttpContext CreateHttpContext(string requestPath = "/",
-            string[] userWorkspaces = null,
+            string[] userClaimWorkspaces = null,
+            IWorkspacesCache workspacesCache = null,
             string currentWorkspace = null,
             params (string name, string value)[] cookies)
         {
@@ -107,17 +133,25 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                 result.Request.Headers["Cookie"] = cookies.Select(c => $"{c.name}={c.value}").ToArray();
             }
 
-            var workspaces = userWorkspaces ?? new[] {WorkspaceConstants.DefaultWorkspaceName};
+            var workspaces = userClaimWorkspaces ?? new[] {WorkspaceConstants.DefaultWorkspaceName};
+            
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
             result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
 
-            var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == 
-                                                                             (currentWorkspace == null ? null : new WorkspaceContext(currentWorkspace, String.Empty)));
+            var workspacesCacheLocal = workspacesCache ?? Mock.Of<IWorkspacesCache>(x => 
+                x.IsWorkspaceAccessAllowedForCurrentUser(It.IsIn(workspaces)) == true);
+            
+            var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() ==
+                                                                             (currentWorkspace == null
+                                                                                 ? null
+                                                                                 : new WorkspaceContext(
+                                                                                     currentWorkspace, String.Empty)));
 
             result.RequestServices = Mock.Of<IServiceProvider>(
-                x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor
+                x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor 
+                && x.GetService(typeof(IWorkspacesCache)) == workspacesCacheLocal
             );
-            
+
             return result;
         }
 
@@ -129,11 +163,12 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             {
                 testNext = innerHttpContext => Task.CompletedTask;
             }
+
             var middleware = new WorkspaceRedirectMiddleware(
                 testNext,
                 new MockDataProtectorProvider()
-                );
-            
+            );
+
             return middleware;
         }
     }
