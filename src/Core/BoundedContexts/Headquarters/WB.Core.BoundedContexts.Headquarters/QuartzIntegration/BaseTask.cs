@@ -49,15 +49,12 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public virtual async Task ScheduleRunAsync(int startAtInSeconds = 1)
         {
-            if (!await this.scheduler.CheckExists(jobKey))
-            {
-                IJobDetail job = JobBuilder.Create(jobType)
-                    .WithIdentity(jobKey)
-                    .StoreDurably()
-                    .Build();
+            IJobDetail job = JobBuilder.Create(jobType)
+                .WithIdentity(jobKey)
+                .StoreDurably()
+                .Build();
 
-                await this.scheduler.AddJob(job, true);
-            }
+            await this.scheduler.AddJob(job, true);
 
             var trigger = TriggerBuilder.Create()
                 .WithDescription(jobKey.ToString())
