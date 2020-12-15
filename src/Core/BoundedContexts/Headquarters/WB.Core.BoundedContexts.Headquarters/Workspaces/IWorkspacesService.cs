@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     {
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
         void AddUserToWorkspace(HqUser user, string workspace);
-        IEnumerable<WorkspaceContext> GetWorkspaces();
+        IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
         void AssignWorkspaces(HqUser user, List<Workspace> workspaces);
     }
 }

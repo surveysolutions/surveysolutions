@@ -2636,5 +2636,10 @@ namespace WB.Tests.Abc.TestFactories
             
             return calendarEvent;
         }
+
+        public Workspace Workspace()
+        {
+            return new Workspace(Guid.NewGuid().FormatGuid(), "Display name1");
+        }
     }
 }
