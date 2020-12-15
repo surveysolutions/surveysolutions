@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     this.UiItems.ReplaceWith(newItems);
 
                 }, false).ConfigureAwait(false);
-                this.UiItems.ForEach(item =>
+                this.UiItems.ToList().ForEach(item =>
                 {
                     if (item is IDashboardItemWithEvents withEvents)
                         withEvents.OnItemUpdated += ListViewModel_OnItemUpdated;
