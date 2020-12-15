@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (context.HttpContext.User.Identity.IsAuthenticated && context.Result is ViewResult view)
             {
-                view.ViewData["UserWorkspacesList"] = this.workspacesService.CurrentUserWorkspaces();
+                view.ViewData["UserWorkspacesList"] = this.workspacesService.AllCurrentUserWorkspaces();
 
                 var currentWorkspace = workspaceContextAccessor.CurrentWorkspace();
 

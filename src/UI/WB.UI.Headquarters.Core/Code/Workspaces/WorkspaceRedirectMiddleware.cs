@@ -30,6 +30,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }
 
             var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
+            var workspacesCache = context.RequestServices.GetRequiredService<IWorkspacesCache>();
 
             var currentWorkspace = contextAccessor.CurrentWorkspace();
 
@@ -47,8 +48,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     {
                         var workspace = dataProtector.Unprotect(cookieValue);
 
-                        if (context.User.Claims.Any(x =>
-                            x.Type == WorkspaceConstants.ClaimType && x.Value == workspace))
+                        if (context.User.HasClaim(WorkspaceConstants.ClaimType, workspace))
                         {
                             targetWorkspace = workspace;
                         }
@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     targetWorkspace = userFirstWorkspace.Value;
                 }
 
-                if (targetWorkspace != null)
+                if (targetWorkspace != null && workspacesCache.IsWorkspaceAccessAllowedForCurrentUser(targetWorkspace))
                 {
                     context.Response.Redirect(
                         $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value!.TrimStart('/')}");

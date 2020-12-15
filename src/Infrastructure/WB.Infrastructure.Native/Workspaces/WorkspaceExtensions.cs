@@ -19,7 +19,7 @@ namespace WB.Infrastructure.Native.Workspaces
             Action<IServiceLocator, WorkspaceContext> action)
         {
             var workspaceCache = serviceLocator.GetInstance<IWorkspacesCache>();
-            var workspaces = workspaceCache.AllWorkspaces();
+            var workspaces = workspaceCache.AllEnabledWorkspaces();
 
             foreach (var workspace in workspaces)
             {

@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         {
             var user = this.userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id));
 
-            var userWorkspaces = this.workspacesCache.CurrentUserWorkspaces();
+            var userWorkspaces = this.workspacesCache.AllCurrentUserWorkspaces();
             var apiViewsForWorkspaces = userWorkspaces.Select(x => new WorkspaceApiView
             {
                 Name = x.Name,

@@ -30,10 +30,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
             if (hasAuthorizedAttribute && context.HttpContext.User.Identity.IsAuthenticated)
             {
                 var targetWorkspace = workspaceContextAccessor.CurrentWorkspace();
-                var userWorkspaces = this.workspacesCache.CurrentUserWorkspaces();
                 
                 var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata.OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
-                if (targetWorkspace != null && !userWorkspaces.Any(x => x.Name.Equals(targetWorkspace.Name, StringComparison.OrdinalIgnoreCase)))
+                if (targetWorkspace != null && !workspacesCache.IsWorkspaceAccessAllowedForCurrentUser(targetWorkspace.Name))
                 {
                     if (targetWorkspace.Name == WorkspaceConstants.DefaultWorkspaceName && allowsFallbackToPrimaryWorkspace)
                     {

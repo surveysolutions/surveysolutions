@@ -25,20 +25,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.authorizedUser = authorizedUser;
         }
 
-        public List<WorkspaceContext> AllWorkspaces()
+        public List<WorkspaceContext> AllEnabledWorkspaces()
         {
             return MemoryCache.GetOrCreate("workspaces", entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
                 return serviceLocator.ExecuteInScope<IWorkspacesService, List<WorkspaceContext>>(ws =>
-                    ws.GetWorkspaces().ToList());
+                    ws.GetEnabledWorkspaces().ToList());
             });
         }
 
-        public IEnumerable<WorkspaceContext> CurrentUserWorkspaces()
+        public IEnumerable<WorkspaceContext> AllCurrentUserWorkspaces()
         {
             var workspaceNames = this.authorizedUser.Workspaces;
-            var workspaces = this.AllWorkspaces();
+            var workspaces = this.AllEnabledWorkspaces();
             var userWorkspaces = workspaces.Where(w => workspaceNames.Contains(w.Name));
             return userWorkspaces;
         }
@@ -46,6 +46,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         public void InvalidateCache()
         {
             MemoryCache.Remove("workspaces");
+        }
+
+        public bool IsWorkspaceAccessAllowedForCurrentUser(string targetWorkspace)
+        {
+            var allWorkspaces = AllEnabledWorkspaces();
+            return allWorkspaces.Any(x => x.Name.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase))
+                   && authorizedUser.Workspaces.Any(x => x.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

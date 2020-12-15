@@ -192,6 +192,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already disabled");
             }
             
+            if (id == Workspace.Default.Name)
+            {
+                ModelState.AddModelError(nameof(id), $"Workspace {id} can not be disabled");
+            }
+            
             if (ModelState.IsValid)
             {
                 workspace.Disable();

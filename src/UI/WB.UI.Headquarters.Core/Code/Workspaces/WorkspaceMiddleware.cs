@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }
 
             var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
-            List<WorkspaceContext> workspaces = workspacesService.AllWorkspaces().ToList();
+            List<WorkspaceContext> workspaces = workspacesService.AllEnabledWorkspaces().ToList();
 
             async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
             {

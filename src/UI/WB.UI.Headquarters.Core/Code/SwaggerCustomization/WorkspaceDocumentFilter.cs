@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Code.SwaggerCustomization
 
                 swaggerDoc.Servers.Clear();
 
-                foreach (var workspace in workspacesService.GetWorkspaces())
+                foreach (var workspace in workspacesService.GetEnabledWorkspaces())
                 {
                     swaggerDoc.Servers.Add(new OpenApiServer
                     {

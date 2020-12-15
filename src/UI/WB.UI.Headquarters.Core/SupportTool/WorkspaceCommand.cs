@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.SupportTool
         {
             var ws = host.Services.GetRequiredService<IWorkspacesCache>();
 
-            foreach (var workspaceContext in ws.AllWorkspaces())
+            foreach (var workspaceContext in ws.AllEnabledWorkspaces())
             {
                 Console.WriteLine($"{workspaceContext.Name}\t\t{workspaceContext.DisplayName}");
             }
