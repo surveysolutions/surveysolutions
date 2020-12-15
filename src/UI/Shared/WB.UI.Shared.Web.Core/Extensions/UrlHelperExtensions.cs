@@ -13,5 +13,11 @@ namespace WB.UI.Shared.Web.Extensions
 
             return workspace?.PathBase + path;
         }
+
+        public static string ContentAtWorkspace(this IUrlHelper helper, WorkspaceContext workspaceContext, 
+            string path)
+        {
+            return workspaceContext.PathBase + "/" + workspaceContext.Name + "/" + path.TrimStart('/');
+        }
     }
 }
