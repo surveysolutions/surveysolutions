@@ -43,9 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Mock.Of<ILogger>());
 
             var mockOfdashboardNotifications = Create.ViewModel.DashboardNotificationsViewModel(
-                mockOfViewModelNavigationService.Object,
-                Mock.Of<IEnumeratorSettings>(),
-                Mock.Of<IClock>()
+                mockOfViewModelNavigationService.Object
             );
             
             var viewModel = CreateDashboardViewModel(
