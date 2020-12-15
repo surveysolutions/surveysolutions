@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var workspacesCache = context.RequestServices.GetRequiredService<IWorkspacesCache>();
 
             var currentWorkspace = contextAccessor.CurrentWorkspace();
-
+            
             if (currentWorkspace == null
                 && !NotScopedToWorkspacePaths
                     .Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
@@ -81,8 +81,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public static readonly string[] NotScopedToWorkspacePaths =
         {
-            "/graphql", "/Account", "/api", "/.hc", "/metrics"
+            "/graphql", "/Account", "/api", "/.hc", "/metrics", "/" + WorkspaceConstants.AdminWorkspaceName
         };
-
     }
 }
