@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using AutoMapper;
 using FFImageLoading.Mock;
 using Microsoft.AspNetCore.Authentication;
@@ -14,8 +15,12 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.HttpServices.Services;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -133,11 +138,25 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<ILogger<UserManager<HqUser>>>());
         }
 
-        public IWorkspacesCache WorkspacesCache()
+        public IWorkspacesCache WorkspacesCache(List<string> workspaces = null)
         {
-            return Mock.Of<IWorkspacesCache>(x => 
-                x.AllEnabledWorkspaces() == new List<WorkspaceContext>{new WorkspaceContext(WorkspaceConstants.DefaultWorkspaceName, "")}
-                && x.IsWorkspaceAccessAllowedForCurrentUser(WorkspaceConstants.DefaultWorkspaceName) == true);
+            workspaces ??= new List<string>{ WorkspaceConstants.DefaultWorkspaceName };
+            return WorkspacesCache(workspaces.Select(w => new WorkspaceContext(w, w)));
+        }
+
+        public IWorkspacesCache WorkspacesCache(IEnumerable<WorkspaceContext> workspaces = null)
+        {
+            workspaces ??= new List<WorkspaceContext> {Workspace.Default.AsContext()};
+            
+            var workspaceServices =  Mock.Of<IWorkspacesService>(w =>
+                w.GetEnabledWorkspaces() == workspaces);
+
+            var slMock = new Mock<IServiceLocator>();
+            slMock.Setup(s => s.GetInstance(typeof(IWorkspacesService))).Returns(workspaceServices); 
+            slMock.Setup(s => s.GetInstance<IWorkspacesService>()).Returns(workspaceServices);
+            slMock.Setup(s => s.GetInstance(typeof(IWorkspacesService), It.IsAny<string>())).Returns(workspaceServices);
+            
+            return new WorkspacesCache(new NoScopeInScopeExecutor(slMock.Object));
         }
     }
 }
