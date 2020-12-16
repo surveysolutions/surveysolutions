@@ -30,7 +30,7 @@
             <form onsubmit="return false;"
                 data-suso="workspaces-create-dialog">
                 <div class="form-group"
-                    v-bind:class="{'has-error': errors.has('newWorkspaceName')}">
+                    v-bind:class="{'has-error': errors.has('workspaceName')}">
                     <label class="control-label"
                         for="newWorkspaceName">
                         {{$t("Workspaces.Name")}}
@@ -40,23 +40,24 @@
                         type="text"
                         class="form-control"
                         v-model.trim="newWorkspaceName"
-                        name="newWorkspaceName"
+                        name="workspaceName"
                         v-validate="nameValidations"
                         :data-vv-as="$t('Workspaces.Name')"
                         autocomplete="off"
                         @keyup.enter="updateWorkspace"
                         id="newWorkspaceName" />
-                    <p class="help-block">
+                    <p class="help-block"
+                        v-if="!errors.has('workspaceName')">
                         {{$t('Workspaces.CanNotBeChanged')}}
                     </p>
 
-                    <span
-                        class="text-danger">{{ errors.first('newWorkspaceName') }}</span>
+                    <span v-else
+                        class="text-danger">{{ errors.first('workspaceName') }}</span>
 
                 </div>
 
                 <div class="form-group"
-                    v-bind:class="{'has-error': errors.has('createDisplayName')}">
+                    v-bind:class="{'has-error': errors.has('workspaceDisplayName')}">
                     <label class="control-label"
                         for="newDescription">
                         {{$t("Workspaces.DisplayName")}}
@@ -66,17 +67,18 @@
                         type="text"
                         class="form-control"
                         v-model.trim="editedDisplayName"
-                        name="createDisplayName"
+                        name="workspaceDisplayName"
                         v-validate="displayNameValidations"
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
                         @keyup.enter="updateWorkspace"
                         id="newDescription" />
-                    <p class="help-block">
+                    <p class="help-block"
+                        v-if="!errors.has('workspaceDisplayName')">
                         {{$t('Workspaces.DisplayNameHelpText')}}
                     </p>
-                    <span
-                        class="text-danger">{{ errors.first('createDisplayName') }}</span>
+                    <span v-else
+                        class="text-danger">{{ errors.first('workspaceDisplayName') }}</span>
                 </div>
             </form>
             <div class="modal-footer">
@@ -205,10 +207,11 @@ export default {
                 this.loadData()
                 this.editedDisplayName = null
                 this.newWorkspaceName = null
+                await this.$validator.reset()
             }
-            catch (err){
+            catch (err) {
                 let errorMessage = ''
-                const errors = err.response.data.errors
+                const errors = err.response.data.Errors
                 if(errors){
                     if('Name' in errors) {
                         const nameErrors = errors.Name.join('\r\n')
@@ -315,6 +318,7 @@ export default {
 
         displayNameValidations() {
             return {
+                required: true,
                 max: 300,
             }
         },
