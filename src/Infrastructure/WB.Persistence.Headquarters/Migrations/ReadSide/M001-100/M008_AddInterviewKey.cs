@@ -5,8 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using Dapper;
 using FluentMigrator;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NLog;
+
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,11 +16,17 @@ using WB.Infrastructure.Native.Storage;
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
-
     [Localizable(false)]
     [Migration(8)]
     public class M008_AddInterviewKey : Migration
     {
+        private readonly ILogger<M008_AddInterviewKey> logger;
+
+        public M008_AddInterviewKey(ILogger<M008_AddInterviewKey> logger)
+        {
+            this.logger = logger;
+        }
+        
         class JsonString : Dapper.SqlMapper.ICustomQueryParameter
         {
             private string _json;
@@ -54,8 +61,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                     List<dynamic> existingInterviewIds =
                         con.Query("select interviewid from readside.interviewsummaries").ToList();
                     long globalSequence = con.ExecuteScalar<long>("select MAX(globalsequence) from events.events");
-                    var currentClassLogger = LogManager.GetLogger(nameof(M008_AddInterviewKey));
-                    currentClassLogger.Info(
+                     logger.LogInformation(
                         "Starting add of interview keys. Total interviews count: {0} current global sequence: {1}",
                         existingInterviewIds.Count, globalSequence);
 
@@ -72,7 +78,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                         }
                         uniqueKeys.Add(next);
                     }
-                    currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
+                    logger.LogInformation("Generated unique ids for interviews took {0:g}", watch.Elapsed);
                     var keysList = uniqueKeys.ToList();
 
                     watch.Restart();
@@ -116,7 +122,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
                         if (i % 10000 == 0)
                         {
-                            currentClassLogger.Info($"Migrated {i} interviews. Batch took: {batchWatch.Elapsed:g}. In tootal: {watch.Elapsed:g}");
+                            logger.LogInformation($"Migrated {i} interviews. Batch took: {batchWatch.Elapsed:g}. In tootal: {watch.Elapsed:g}");
                             batchWatch.Restart();
                         }
                     }
