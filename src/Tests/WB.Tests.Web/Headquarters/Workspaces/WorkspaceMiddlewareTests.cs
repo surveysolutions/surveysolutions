@@ -1,20 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Services.Impl;
@@ -92,12 +87,12 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
 
-            string requestPath = $"/testing/Reports/SurveysAndStatuses";
-
-            var workspacesCache = Mock.Of<IWorkspacesCache>();
+            string requestPath = $"/Reports/SurveysAndStatuses";
+            
             var middleware = CreateMiddleware();
             var httpContext = CreateHttpContext(requestPath,
                 userClaimWorkspaces: new[] {"2077"},
+                serverWorkspaces: new[] { "primary"},
                 cookies: (WorkspaceInfoFilter.CookieName, base64));
 
             await middleware.Invoke(httpContext);
