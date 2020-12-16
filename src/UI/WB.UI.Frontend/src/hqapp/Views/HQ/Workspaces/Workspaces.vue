@@ -100,7 +100,7 @@
             :title="$t('Workspaces.EditWorkspace', {name: editedRowId} )">
             <form onsubmit="return false;">
                 <div class="form-group"
-                    v-bind:class="{'has-error': errors.has('editedDisplayName')}">
+                    v-bind:class="{'has-error': errors.has('workspaceDisplayName')}">
                     <label class="control-label"
                         for="editDescription">
                         {{$t("Workspaces.DisplayName")}}
@@ -110,14 +110,14 @@
                         type="text"
                         class="form-control"
                         v-model.trim="editedDisplayName"
-                        name="editedDisplayName"
+                        name="workspaceDisplayName"
                         v-validate="displayNameValidations"
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
                         @keyup.enter="updateWorkspace"
                         id="editDescription" />
                     <span
-                        class="text-danger">{{ errors.first('editedDisplayName') }}</span>
+                        class="text-danger">{{ errors.first('workspaceDisplayName') }}</span>
                 </div>
             </form>
             <div class="modal-footer">
