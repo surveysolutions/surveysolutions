@@ -147,16 +147,8 @@ namespace WB.Tests.Web.TestFactories
         public IWorkspacesCache WorkspacesCache(IEnumerable<WorkspaceContext> workspaces = null)
         {
             workspaces ??= new List<WorkspaceContext> {Workspace.Default.AsContext()};
-            
-            var workspaceServices =  Mock.Of<IWorkspacesService>(w =>
-                w.GetEnabledWorkspaces() == workspaces);
 
-            var slMock = new Mock<IServiceLocator>();
-            slMock.Setup(s => s.GetInstance(typeof(IWorkspacesService))).Returns(workspaceServices); 
-            slMock.Setup(s => s.GetInstance<IWorkspacesService>()).Returns(workspaceServices);
-            slMock.Setup(s => s.GetInstance(typeof(IWorkspacesService), It.IsAny<string>())).Returns(workspaceServices);
-            
-            return new WorkspacesCache(new NoScopeInScopeExecutor(slMock.Object));
+            return Mock.Of<IWorkspacesCache>(x => x.AllEnabledWorkspaces() == workspaces.ToList());
         }
     }
 }
