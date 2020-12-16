@@ -40,7 +40,7 @@
         <value>Edit workspace {{name}}</value>
     </data>
     <data name="WorkspacesSubtitle" xml:space="preserve">
-        <value>Each workspace has isolated questionnaires, interviews, assignmets and users. After creation of new workspace or adding users into workspace clients need to logout and login again in order to have access to new workspace.</value>
+        <value>Each workspace has isolated questionnaires, interviews, assignments and users. After creation of new workspace or adding users into workspace clients need to logout and login again in order to have access to new workspace.</value>
     </data>
     <data name="AddNew" xml:space="preserve">
         <value>Create new</value>

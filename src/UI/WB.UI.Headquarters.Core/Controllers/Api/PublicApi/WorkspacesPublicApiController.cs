@@ -76,9 +76,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         private IQueryable<Workspace> Filter(WorkspacesListFilter filter, IQueryable<Workspace> source)
         {
-            var userWorkspaces = this.authorizedUser.Workspaces.ToList();
-            var result = source.OrderBy(x => x.Name)
-                .Where(x => userWorkspaces.Contains(x.Name));
+            IQueryable<Workspace> result = source.OrderBy(x => x.Name);
+
+            if (!this.authorizedUser.IsAdministrator)
+            {
+                var userWorkspaces = this.authorizedUser.Workspaces.ToList();
+                result = result.Where(x => userWorkspaces.Contains(x.Name));
+            }
+
             if (filter.UserId.HasValue)
             {
                 result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
