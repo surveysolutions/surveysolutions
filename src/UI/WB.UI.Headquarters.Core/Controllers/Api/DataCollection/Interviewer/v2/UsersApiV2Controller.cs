@@ -33,8 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             IUserToDeviceService userToDeviceService) : base(
                 authorizedUser,
                 userViewFactory,
-                userToDeviceService,
-                workspacesCache)
+                userToDeviceService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

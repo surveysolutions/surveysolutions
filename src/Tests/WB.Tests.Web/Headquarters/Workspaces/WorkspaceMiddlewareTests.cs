@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -7,12 +8,16 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Workspaces;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.Tests.Web.Headquarters.Workspaces
 {
@@ -26,7 +31,9 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var middleware = CreateMiddleware();
             var userWorkspace = "primary";
-            var httpContext = CreateHttpContext(requestPath, userClaimWorkspaces: new[] {userWorkspace});
+            var httpContext = CreateHttpContext(requestPath, 
+                userClaimWorkspaces: new[] {userWorkspace},
+                serverWorkspaces: new[] {userWorkspace});
 
             await middleware.Invoke(httpContext);
 
@@ -42,7 +49,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
 
-            string requestPath = $"/testing/Reports/SurveysAndStatuses";
+            string requestPath = $"/Reports/SurveysAndStatuses";
 
             var middleware = CreateMiddleware();
             var httpContext = CreateHttpContext(requestPath,
@@ -64,7 +71,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
 
-            string requestPath = $"/testing/Reports/SurveysAndStatuses";
+            string requestPath = $"/Reports/SurveysAndStatuses";
 
             var middleware = CreateMiddleware();
             var httpContext = CreateHttpContext(requestPath,
@@ -88,11 +95,9 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             string requestPath = $"/testing/Reports/SurveysAndStatuses";
 
             var workspacesCache = Mock.Of<IWorkspacesCache>();
-
             var middleware = CreateMiddleware();
             var httpContext = CreateHttpContext(requestPath,
                 userClaimWorkspaces: new[] {"2077"},
-                workspacesCache: workspacesCache,
                 cookies: (WorkspaceInfoFilter.CookieName, base64));
 
             await middleware.Invoke(httpContext);
@@ -100,7 +105,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             httpContext.Response.Headers.Should().NotContainKey(HeaderNames.Location);
             httpContext.Response.StatusCode.Should().NotBe(StatusCodes.Status302Found);
         }
-
+    
         [Test]
         public async Task when_executing_request_into_workspace_Should_not_redirect_anywhere()
         {
@@ -109,7 +114,8 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             string requestPath = $"/{userWorkspace}/Reports/SurveysAndStatuses";
 
             var middleware = CreateMiddleware();
-            var httpContext = CreateHttpContext(requestPath,
+            var httpContext = CreateHttpContext(
+                requestPath,
                 userClaimWorkspaces: new[] {userWorkspace},
                 currentWorkspace: userWorkspace);
 
@@ -121,10 +127,13 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
         private HttpContext CreateHttpContext(string requestPath = "/",
             string[] userClaimWorkspaces = null,
-            IWorkspacesCache workspacesCache = null,
+            string[] serverWorkspaces = null,
             string currentWorkspace = null,
             params (string name, string value)[] cookies)
         {
+            serverWorkspaces ??= userClaimWorkspaces;
+            var workspacesCache = Create.Service.WorkspacesCache(serverWorkspaces?.ToList());
+            
             var result = new DefaultHttpContext();
             result.Request.Path = requestPath;
 
@@ -138,8 +147,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
             result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
 
-            var workspacesCacheLocal = workspacesCache ?? Mock.Of<IWorkspacesCache>(x => 
-                x.IsWorkspaceAccessAllowedForCurrentUser(It.IsIn(workspaces)) == true);
+            var authorizedUser = new AuthorizedUser(Mock.Of<IHttpContextAccessor>(x => x.HttpContext == result), workspacesCache);
             
             var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() ==
                                                                              (currentWorkspace == null
@@ -149,7 +157,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             result.RequestServices = Mock.Of<IServiceProvider>(
                 x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor 
-                && x.GetService(typeof(IWorkspacesCache)) == workspacesCacheLocal
+                && x.GetService(typeof(IAuthorizedUser)) == authorizedUser
             );
 
             return result;

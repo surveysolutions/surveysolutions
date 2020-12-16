@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Authentication;
 
@@ -11,28 +12,28 @@ namespace WB.UI.Headquarters.Code.Workspaces
     public class WorkspaceAccessActionFilter : IAuthorizationFilter
     {
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
-        private readonly IWorkspacesCache workspacesCache;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public WorkspaceAccessActionFilter(IWorkspaceContextAccessor workspaceContextAccessor,
-            IWorkspacesCache workspacesCache)
+        public WorkspaceAccessActionFilter(IWorkspaceContextAccessor workspaceContextAccessor, IAuthorizedUser authorizedUser)
         {
             this.workspaceContextAccessor = workspaceContextAccessor;
-            this.workspacesCache = workspacesCache;
+            this.authorizedUser = authorizedUser;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if(context.HttpContext.User.Identity.AuthenticationType == AuthType.TenantToken)
+            if(context.HttpContext.User.Identity?.AuthenticationType == AuthType.TenantToken)
                 return;
 
             var hasAuthorizedAttribute = context.ActionDescriptor.EndpointMetadata.Any(m => m is AuthorizeAttribute);
 
-            if (hasAuthorizedAttribute && context.HttpContext.User.Identity.IsAuthenticated)
+            if (hasAuthorizedAttribute && context.HttpContext.User.Identity?.IsAuthenticated == true)
             {
                 var targetWorkspace = workspaceContextAccessor.CurrentWorkspace();
                 
                 var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata.OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
-                if (targetWorkspace != null && !workspacesCache.IsWorkspaceAccessAllowedForCurrentUser(targetWorkspace.Name))
+                
+                if (targetWorkspace != null && !authorizedUser.HasAccessToWorkspace(targetWorkspace.Name))
                 {
                     if (targetWorkspace.Name == WorkspaceConstants.DefaultWorkspaceName && allowsFallbackToPrimaryWorkspace)
                     {
