@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
@@ -21,20 +19,18 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         protected readonly IUserRepository userViewFactory;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
-        private readonly IWorkspacesCache workspacesCache;
 
         public UserControllerBase(
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
             SignInManager<HqUser> signInManager, 
-            IApiTokenProvider apiAuthTokenProvider, 
-            IWorkspacesCache workspacesCache)
+            IApiTokenProvider apiAuthTokenProvider)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.apiAuthTokenProvider = apiAuthTokenProvider;
-            this.workspacesCache = workspacesCache;
+            
         }
 
         [HttpGet]
@@ -44,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         public virtual SupervisorApiView Current()
         {
             var user = this.userViewFactory.FindById(this.authorizedUser.Id);
-            var workspaces = this.workspacesCache.AllCurrentUserWorkspaces();
+            var workspaces = this.authorizedUser.GetEnabledWorkspaces();
             
             return new SupervisorApiView
             {
