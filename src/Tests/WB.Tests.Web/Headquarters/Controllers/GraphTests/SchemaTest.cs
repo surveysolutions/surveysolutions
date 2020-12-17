@@ -17,10 +17,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         [Test]
         public async Task Ensure_schema_isCorrect()
         {
-            GraphQLIntegration.AddGraphQL(new ServiceCollection());
-
-            var schema = await GraphQLIntegration.GraphQLBuilder.BuildSchemaAsync();
-            var sdl = schema.ToString();
+            var schema = await GraphQLIntegration.GetSchema(new ServiceCollection());
+            var sdl = schema.Print();
             if (!sdl.EndsWith(Environment.NewLine))
             {
                 sdl += Environment.NewLine;
