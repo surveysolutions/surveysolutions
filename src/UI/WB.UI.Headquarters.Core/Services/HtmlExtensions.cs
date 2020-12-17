@@ -1,10 +1,14 @@
 ﻿using System;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Services
@@ -15,11 +19,10 @@ namespace WB.UI.Headquarters.Services
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-
+        
         public static IHtmlContent MainMenuItem(this IHtmlHelper html, string actionName, string controllerName, string linkText, MenuItem renderedPage)
         {
             var page = html.ViewBag.ActivePage ?? MenuItem.Logon;
-            string isActive = page == renderedPage ? "active" : String.Empty;
             var actionLink = html.ActionLink(linkText, actionName, controllerName, new { area = "", id = "" }, new { title = linkText });
 
             TagBuilder tag = new TagBuilder("li");
@@ -32,7 +35,46 @@ namespace WB.UI.Headquarters.Services
             tag.InnerHtml.AppendHtml(actionLink);
             return tag;
         }
+        
+        public static IHtmlContent MainMenuItem(this IHtmlHelper html, 
+            WorkspaceContext workspace, string actionName, string controllerName,
+            string linkText, MenuItem renderedPage)
+        {
+            var urlFactory = html.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
+            var urlHelper = urlFactory.GetUrlHelper(html.ViewContext);
+            var actionLinkUrl = urlHelper.Action(actionName, controllerName);
 
+            var context = html.ViewContext.HttpContext.RequestServices.GetWorkspaceContext();
+            
+            if (context != null)
+            {
+                var prefix = $"{context.PathBase}/{context.Name}";
+                
+                if (actionLinkUrl.StartsWith(prefix))
+                {
+                    actionLinkUrl = $"{context.PathBase}/{workspace.Name}/" +
+                                    $"{actionLinkUrl.Substring(prefix.Length).TrimStart('/')}";
+                }
+            }
+            
+            var page = html.ViewBag.ActivePage ?? MenuItem.Logon;
+         
+            var actionLink = new TagBuilder("a");
+            actionLink.Attributes.Add("title", linkText);
+            actionLink.Attributes.Add("href", actionLinkUrl);
+            actionLink.InnerHtml.Append(linkText);
+
+            TagBuilder tag = new TagBuilder("li");
+
+            if (page == renderedPage)
+            {
+                tag.AddCssClass("active");
+            }
+
+            tag.InnerHtml.AppendHtml(actionLink);
+            return tag;
+        }
+        
         public static HtmlString ActivePage(this IHtmlHelper html)
         {
             MenuItem page = html.ViewBag.ActivePage ?? MenuItem.Logon;

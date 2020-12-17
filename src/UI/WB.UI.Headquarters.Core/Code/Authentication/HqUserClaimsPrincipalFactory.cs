@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 IEnumerable<WorkspaceContext> userWorkspaces;
                 if (user.IsInRole(UserRoles.Administrator))
                 {
-                    userWorkspaces = workspacesService.GetWorkspaces();
+                    userWorkspaces = workspacesService.GetEnabledWorkspaces();
                 }
                 else
                 {

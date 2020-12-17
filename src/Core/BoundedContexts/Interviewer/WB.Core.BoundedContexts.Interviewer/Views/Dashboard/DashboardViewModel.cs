@@ -246,6 +246,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.StartedInterviews.LoadAsync(lastVisitedInterviewId),
                 this.RejectedInterviews.LoadAsync(lastVisitedInterviewId),
                 this.CompletedInterviews.LoadAsync(lastVisitedInterviewId));
+            
+            DashboardNotifications.CheckTabletTimeAndWarn();
 
             await this.RaisePropertyChanged(() => this.DashboardTitle);
         }

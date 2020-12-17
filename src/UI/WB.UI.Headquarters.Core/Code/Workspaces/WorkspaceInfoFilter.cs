@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Controllers;
 
@@ -10,18 +11,18 @@ namespace WB.UI.Headquarters.Code.Workspaces
 {
     public class WorkspaceInfoFilter : IResultFilter
     {
-        private readonly IWorkspacesCache workspacesService;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IDataProtector dataProtector;
 
         public const string CookieName = "currentWorkspace";
         
-        public WorkspaceInfoFilter(IWorkspacesCache workspacesService,
-            IWorkspaceContextAccessor workspaceContextAccessor,
-            IDataProtectionProvider protectionProvider)
+        public WorkspaceInfoFilter(IWorkspaceContextAccessor workspaceContextAccessor,
+            IDataProtectionProvider protectionProvider,
+            IAuthorizedUser authorizedUser)
         {
-            this.workspacesService = workspacesService;
             this.workspaceContextAccessor = workspaceContextAccessor;
+            this.authorizedUser = authorizedUser;
             this.dataProtector = protectionProvider.CreateProtector("ws_cookie");
         }
 
@@ -33,9 +34,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             if(context.Controller is UnderConstructionController) return;
 
-            if (context.HttpContext.User.Identity.IsAuthenticated && context.Result is ViewResult view)
+            if (context.HttpContext.User.Identity?.IsAuthenticated == true && context.Result is ViewResult view)
             {
-                view.ViewData["UserWorkspacesList"] = this.workspacesService.CurrentUserWorkspaces();
+                view.ViewData["UserWorkspacesList"] = this.authorizedUser.GetEnabledWorkspaces();
 
                 var currentWorkspace = workspaceContextAccessor.CurrentWorkspace();
 

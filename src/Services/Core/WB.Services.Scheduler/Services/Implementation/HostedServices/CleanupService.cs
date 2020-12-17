@@ -37,7 +37,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
                     {
                         using (var scope = this.serviceProvider.CreateScope())
                         {
-                            var cleanup = scope.ServiceProvider.GetService<StaleJobCleanupService>();
+                            var cleanup = scope.ServiceProvider.GetRequiredService<StaleJobCleanupService>();
                             await cleanup.ExecuteAsync(cancellationToken);
                         }
 

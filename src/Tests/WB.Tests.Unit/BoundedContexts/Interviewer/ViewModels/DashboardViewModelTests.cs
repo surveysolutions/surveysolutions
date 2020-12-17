@@ -2,6 +2,7 @@
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
+using Ncqrs;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;

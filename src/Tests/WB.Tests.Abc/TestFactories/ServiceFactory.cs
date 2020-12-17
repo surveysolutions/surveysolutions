@@ -55,6 +55,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -1308,6 +1309,16 @@ namespace WB.Tests.Abc.TestFactories
                     Core.BoundedContexts.Headquarters.CalendarEvents.CalendarEvent, Guid>>(),
                 assignmentsAccessor ?? Mock.Of<IQueryableReadSideRepositoryReader<Assignment, Guid>>(),
                 interviewerInterviewsFactory ?? Mock.Of<IInterviewInformationFactory>());
+        }
+
+        public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces)
+        {
+            return new WorkspacesService(new UnitOfWorkConnectionSettings(),
+                Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
+                workspaces,
+                new TestPlainStorage<WorkspacesUsers>(),
+                Mock.Of<ILogger<WorkspacesService>>()
+            );
         }
     }
 
