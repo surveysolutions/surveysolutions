@@ -6,6 +6,7 @@ using HotChocolate.Types.Descriptors;
 using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
@@ -13,7 +14,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
     {
         public static void AddGraphQL(this IServiceCollection services)
         {
-            GetExecutorBuilder(services);
+            GetExecutorBuilder(services)
+                .AddErrorFilter<GraphQLErrorFilter>()
+                .AddDiagnosticEventListener(x => 
+                    new GraphqlDiagnosticEventListener(x.GetApplicationService<ILogger<GraphqlDiagnosticEventListener>>()));
         }
 
         private static IRequestExecutorBuilder GetExecutorBuilder(IServiceCollection services)
@@ -28,8 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string,CustomStringOperationFilterInput>()
                 .AddFiltering()
-                .AddSorting()
-                .AddErrorFilter<GraphQLErrorFilter>();
+                .AddSorting();
         }
 
         public static async Task<ISchema> GetSchema(IServiceCollection services)
