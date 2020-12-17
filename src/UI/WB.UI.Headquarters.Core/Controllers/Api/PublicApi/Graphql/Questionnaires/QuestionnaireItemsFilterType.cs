@@ -1,4 +1,4 @@
-﻿using HotChocolate.Types.Filters;
+﻿using HotChocolate.Data.Filters;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
@@ -8,27 +8,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
         protected override void Configure(IFilterInputTypeDescriptor<QuestionnaireCompositeItem> descriptor)
         {
             descriptor.BindFieldsExplicitly();
-
             descriptor.Name("QuestionnaireItemsFilter");
             
-            descriptor.Filter(z => z.QuestionText)
-                .Name("title")
-                .BindFiltersExplicitly()
-                .AllowEquals();
+            descriptor.Field(z => z.QuestionText)
+                .Name("title");
             
-            descriptor.Filter(z => z.StataExportCaption)
-                .BindFiltersExplicitly()
-                .AllowEquals()
+            descriptor.Field(z => z.StataExportCaption)
                 .Name("variable");
             
-            descriptor.Filter(x => x.QuestionScope)
-                .BindFiltersExplicitly()
-                .AllowEquals()
+            descriptor.Field(x => x.QuestionScope)
                 .Name("scope");
 
-            descriptor.Filter(x => x.Featured)
-                .BindFiltersExplicitly()
-                .AllowEquals().Name("identifying")
+            descriptor.Field(x => x.Featured)
+                .Name("identifying")
                 .Description("Find only identifying entities");
         }
     }

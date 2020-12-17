@@ -30,29 +30,41 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            descriptor
-                .Field<QuestionnairesResolver>(x => x.Questionnaires(default, default, default))
-                .HasWorkspace()
-                .Authorize(nameof(UserRoles.Administrator),
-                    nameof(UserRoles.Headquarter),
-                    nameof(UserRoles.ApiUser))
-                .Name("questionnaires")
-                .Description("Gets questionnaire details")
-                .UseSimplePaging<Questionnaire, QuestionnaireBrowseItem>()
-
-                .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
-                .Argument("version", a => a.Description("Questionnaire version").Type<LongType>());
-
-            descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
-                .HasWorkspace()
+            descriptor.Field<AssignmentsResolver>(x => x.Assignments(default, default))
                 .Authorize()
+                .UseSimplePaging<Assignment, Core.BoundedContexts.Headquarters.Assignments.Assignment>()
+                .HasWorkspace()
+                .UseFiltering<AssignmentsFilter>();
+            
+            descriptor.Field<InterviewsResolver>(x => x.GetInterviews(default, default))
+                .Authorize()
+                .HasWorkspace()
                 .UseSimplePaging<Interview, InterviewSummary>()
                 .UseFiltering<InterviewsFilterInputType>()
                 .UseSorting<InterviewsSortInputType>();
+            
+            descriptor.Field<MapsResolver>(x => x.GetMaps(default))
+                .Authorize()
+                .HasWorkspace()
+                .UseSimplePaging<Map, MapBrowseItem>()
+                .UseFiltering<MapsFilterInputType>()
+                .UseSorting<MapsSortInputType>();
+            
+            descriptor
+                .Field<QuestionnairesResolver>(x => x.Questionnaires(default, default, default))
+                .Authorize(nameof(UserRoles.Administrator),
+                    nameof(UserRoles.Headquarter),
+                    nameof(UserRoles.ApiUser))
+                .HasWorkspace()
+                .Name("questionnaires")
+                .Description("Gets questionnaire details")
+                .UseSimplePaging<Questionnaire, QuestionnaireBrowseItem>()
+                .Argument("id", a => a.Description("Questionnaire id").Type<UuidType>())
+                .Argument("version", a => a.Description("Questionnaire version").Type<LongType>());
 
             descriptor.Field<QuestionsResolver>(x => x.Questions(default, default, default, default, default))
-                .HasWorkspace()
                 .Authorize()
+                .HasWorkspace()
                 .Type<ListType<EntityItemObjectType>>()
                 .Argument("id", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<NonNullType<LongType>>())
@@ -60,8 +72,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .UseFiltering<QuestionsFilterType>();
 
             descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default, default, default))
-                .HasWorkspace()
                 .Authorize()
+                .HasWorkspace()
                 .Type<ListType<QuestionnaireItemObjectType>>()
                 .Argument("id", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("version", a => a.Description("Questionnaire version").Type<NonNullType<LongType>>())
@@ -72,18 +84,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .Authorize()
                 .Type<UserType>().Name("viewer");
 
-            descriptor.Field<MapsResolver>(x => x.GetMaps())
-                .Authorize()
-                .UseSimplePaging<Map, MapBrowseItem>()
-                .UseFiltering<MapsFilterInputType>()
-                .UseSorting<MapsSortInputType>()
-                .HasWorkspace();
-
-            descriptor.Field<AssignmentsResolver>(x => x.Assignments(default, default))
-                .Authorize()
-                .UseSimplePaging<Assignment, Core.BoundedContexts.Headquarters.Assignments.Assignment>()
-                .UseFiltering<AssignmentsFilter>()
-                .HasWorkspace();
+            
         }
     }
 }
