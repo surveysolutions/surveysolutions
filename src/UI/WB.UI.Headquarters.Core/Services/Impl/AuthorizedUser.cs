@@ -12,11 +12,13 @@ namespace WB.UI.Headquarters.Services.Impl
     public class AuthorizedUser : IAuthorizedUser
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IWorkspacesCache workspacesCache;
         public const string ObserverClaimType = "observer";
 
-        public AuthorizedUser(IHttpContextAccessor httpContextAccessor)
+        public AuthorizedUser(IHttpContextAccessor httpContextAccessor, IWorkspacesCache workspacesCache)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.workspacesCache = workspacesCache;
         }
 
         private ClaimsPrincipal User => httpContextAccessor.HttpContext?.User;
@@ -48,5 +50,20 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public IEnumerable<string> Workspaces => User.Claims.Where(x =>
             x.Type == WorkspaceConstants.ClaimType).Select(x => x.Value);
+
+        public bool HasAccessToWorkspace(string targetWorkspace)
+        {
+            var allWorkspaces = this.workspacesCache.AllEnabledWorkspaces();
+            return allWorkspaces.Any(x => x.Name.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase))
+                   && Workspaces.Any(x => x.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public IEnumerable<WorkspaceContext> GetEnabledWorkspaces()
+        {
+            var workspaceNames = Workspaces;
+            var workspaces = workspacesCache.AllEnabledWorkspaces();
+            var userWorkspaces = workspaces.Where(w => workspaceNames.Contains(w.Name));
+            return userWorkspaces;
+        }
     }
 }
