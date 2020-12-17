@@ -9,6 +9,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -130,7 +131,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected InterviewFactory CreateInterviewFactory()
         {
-            return new InterviewFactory(sessionProvider: this.UnitOfWork);
+            return new InterviewFactory(sessionProvider: this.UnitOfWork, Mock.Of<IAuthorizedUser>());
         }
 
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum
