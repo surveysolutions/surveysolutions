@@ -40,12 +40,6 @@ const pages = {
         template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml")
     },
 
-    hq_legacy: {
-        entry: "src/pages/hq_legacy.js",
-        filename: path.join(hqDist, "Views", "Shared", "_AdminLayout_Legacy.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.Template.cshtml")
-    },
-
     logon: {
         entry: "src/pages/logon.js",
         filename: path.join(hqDist, "Views", "Shared", "_Logon.cshtml"),
@@ -54,8 +48,8 @@ const pages = {
 
     hq_vue: {
         entry: "src/hqapp/main.js",
-        filename: path.join(hqDist, "Views", "Shared", "_AdminLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml")
+        filename: path.join(hqDist, "Views", "Shared", "_Layout.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.cshtml")
     },
 
     webinterview: {
