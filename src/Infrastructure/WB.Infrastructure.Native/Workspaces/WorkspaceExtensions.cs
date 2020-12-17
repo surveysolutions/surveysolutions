@@ -15,6 +15,11 @@ namespace WB.Infrastructure.Native.Workspaces
             return serviceLocator.GetInstance<IWorkspaceContextAccessor>().CurrentWorkspace();
         }
 
+        public static bool IsServerAdministration(this WorkspaceContext? context)
+        {
+            return context?.Name == WorkspaceConstants.AdminWorkspaceName;
+        }
+
         public static void ForEachWorkspaceExecute(this IServiceLocator serviceLocator,
             Action<IServiceLocator, WorkspaceContext> action)
         {
@@ -29,6 +34,11 @@ namespace WB.Infrastructure.Native.Workspaces
                     action(scope, workspace);
                 });
             }
+        }
+
+        public static WorkspaceContext? GetWorkspaceContext(this IServiceProvider provider)
+        {
+            return provider.GetRequiredService<IWorkspaceContextAccessor>().CurrentWorkspace();
         }
 
         public static IServiceScope CreateWorkspaceScope(this IServiceProvider provider, WorkspaceContext? workspace = null)

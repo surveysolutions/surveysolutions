@@ -7,7 +7,6 @@
 @inject IOptions<GoogleMapsConfig> googleMapsConfig
 @inject IAuthorizedUser authorizedUser
 @{
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.InterviewerName);
 }
 
