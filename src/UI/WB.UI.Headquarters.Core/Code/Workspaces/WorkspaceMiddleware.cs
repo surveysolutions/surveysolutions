@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }
 
             var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
-            List<WorkspaceContext> workspaces = workspacesService.AllWorkspaces().ToList();
+            List<WorkspaceContext> workspaces = workspacesService.AllEnabledWorkspaces().ToList();
 
             async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
             {
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 context.RequestServices = scope.ServiceProvider;
                 await next(context).ConfigureAwait(false);
             }
-
+            
             foreach (var path in InfrastructureEndpoints)
             {
                 if (context.Request.Path.StartsWithSegments(path))
@@ -60,6 +60,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 }
             }
 
+            workspaces.Insert(0, Workspace.Admin.AsContext());
+            
             foreach (var workspace in workspaces)
             {
                 var workspaceMatched = context.Request.Path.StartsWithSegments("/" + workspace.Name,
@@ -91,6 +93,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
 
-        static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install" };
+        public static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install", "/workspaces" };
     }
 }

@@ -15,7 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
             });
 
             Property(x => x.DisplayName, ptp => ptp.Column("display_name"));
+            Property(x => x.DisabledAtUtc, ptp => ptp.Column("disabled_at_utc"));
+            
             Schema(WorkspaceConstants.SchemaName);
+            
             Set(x => x.Users, set =>
             {
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);

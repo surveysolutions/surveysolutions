@@ -8,7 +8,9 @@ using ClosedXML.Excel;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using NSubstitute.Extensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -366,14 +368,18 @@ namespace WB.Tests.Unit.Designer.Services
                 new[] {"", "", ""}, 
                 new[] {"2", "option 2", "1"} 
             };
-            var mockOfDbContext = new Mock<DesignerDbContext>();
-            var service = CreateCategoriesService(dbContext: mockOfDbContext.Object);
+            
+            var options = new DbContextOptionsBuilder<DesignerDbContext>().UseInMemoryDatabase(new Random().Next(0, 10000000).ToString());
+
+            var designerDbContext = new DesignerDbContext(options.Options);
+            var service = CreateCategoriesService(dbContext: designerDbContext);
 
             // act
             service.Store(questionnaireId, categoriesId, CreateFileWithHeader(data, type), type);
 
-            // assert
-            mockOfDbContext.Verify(x => x.AddRange(Moq.It.Is<IEnumerable<CategoriesInstance>>(y => y.Count() == 2)), Times.Once);
+            designerDbContext.SaveChanges();
+
+            Assert.That(designerDbContext.CategoriesInstances.ToList(), Has.Count.EqualTo(2));
         }
 
         [Test]
@@ -389,15 +395,17 @@ namespace WB.Tests.Unit.Designer.Services
                 new[] {"", "", ""}, 
                 new[] {"2", "option 2", "1"} 
             };
-            var mockOfDbContext = new Mock<DesignerDbContext>();
-            var service = CreateCategoriesService(dbContext: mockOfDbContext.Object);
+
+            var options = new DbContextOptionsBuilder<DesignerDbContext>().UseInMemoryDatabase(new Random().Next(0, 10000000).ToString());
+            var designerDbContext = new DesignerDbContext(options.Options);
+            var service = CreateCategoriesService(designerDbContext);
             var type = CategoriesFileType.Tsv;
 
             // act
             service.Store(questionnaireId, categoriesId, CreateFileWithHeader(data, type), type);
-
+            designerDbContext.SaveChanges();
             // assert
-            mockOfDbContext.Verify(x => x.AddRange(Moq.It.Is<IEnumerable<CategoriesInstance>>(y => y.Count() == 2)), Times.Once);
+            Assert.That(designerDbContext.CategoriesInstances.ToList(), Has.Count.EqualTo(2));
         }
     }
 }

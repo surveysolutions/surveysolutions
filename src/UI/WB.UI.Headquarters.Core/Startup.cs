@@ -46,6 +46,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.AspNetCore;
+using WB.Infrastructure.AspNetCore.DataProtection;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Logs;
@@ -233,6 +234,9 @@ namespace WB.UI.Headquarters
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddDataProtection().PersistWithPostgres(
+                Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddResponseCaching();
             services.AddResponseCompression();

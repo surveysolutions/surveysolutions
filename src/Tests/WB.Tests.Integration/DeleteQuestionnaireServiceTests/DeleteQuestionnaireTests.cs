@@ -61,20 +61,15 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
     [TestFixture]
     public class DeleteQuestionnaireTests : with_postgres_db
     {
-        private UnitOfWorkConnectionSettings unitOfWorkConnectionSettings;
         private IMemoryCache memoryCache;
         private ISessionFactory factory;
 
         [SetUp]
         public void Setup()
         {
-            unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings()
-            {
-                ConnectionString = ConnectionStringBuilder.ConnectionString
-            };
-            
             memoryCache = new MemoryCache(new MemoryCacheOptions());
-            factory = CreateSessionFactory();
+            InitializeDb(DbType.Users, DbType.PlainStore, DbType.ReadSide);
+            factory = IntegrationCreate.SessionFactoryProd(ConnectionStringBuilder.ConnectionString);
         }
 
         [Test]
@@ -363,47 +358,6 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             unitOfWork.AcceptChanges();
             
             return userId;
-        }
-
-        private ISessionFactory CreateSessionFactory()
-        {
-            InitializeDb(DbType.PlainStore, DbType.ReadSide);
-
-            var readSideSchemaName = workspace.CurrentWorkspace().SchemaName;
-            
-            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
-                unitOfWorkConnectionSettings.UsersSchemaName,
-                new List<Type>
-                {
-                    typeof(HqUserMap),
-                    typeof(HqUserClaimMap),
-                    typeof(DeviceSyncInfoMap),
-                    typeof(HqUserProfileMap),
-                    typeof(HqRoleMap),
-                    typeof(SyncStatisticsMap),
-                    typeof(WorkspaceMap),
-                    typeof(WorkspaceUsersMap),
-                },
-                readSideSchemaName,
-                new List<Type>
-                {
-                    typeof(InterviewSummaryMap),
-                    typeof(QuestionnaireCompositeItemMap),
-                    typeof(IdentifyEntityValueMap),
-                    typeof(InterviewStatisticsReportRowMap),
-                    typeof(TimeSpanBetweenStatusesMap),
-                    typeof(InterviewGpsMap),
-                    typeof(CumulativeReportStatusChangeMap),
-                    typeof(InterviewCommentedStatusMap),
-                    typeof(InterviewCommentMap),
-                    typeof(AssignmentMap),
-                    typeof(CalendarEventMap),
-                    typeof(AudioAuditFileMap),
-                    typeof(AudioFileMap),
-                    typeof(QuestionnaireBrowseItemMap),
-                    typeof(ReadonlyUserMap),
-                }, true);
-            return sessionFactory;
         }
     }
 }

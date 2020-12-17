@@ -158,5 +158,29 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("WorkspacesUpdated", resourceCulture);
             }
         }
+        
+        public static string DisableWorkspacePopupTitle {
+            get {
+                return ResourceManager.GetString("DisableWorkspacePopupTitle", resourceCulture);
+            }
+        }
+        
+        public static string Disable {
+            get {
+                return ResourceManager.GetString("Disable", resourceCulture);
+            }
+        }
+        
+        public static string DisableExplanation {
+            get {
+                return ResourceManager.GetString("DisableExplanation", resourceCulture);
+            }
+        }
+        
+        public static string Enable {
+            get {
+                return ResourceManager.GetString("Enable", resourceCulture);
+            }
+        }
     }
 }

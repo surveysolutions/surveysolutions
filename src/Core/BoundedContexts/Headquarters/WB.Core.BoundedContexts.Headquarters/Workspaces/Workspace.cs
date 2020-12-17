@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -16,16 +17,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         {
             Name = name;
             DisplayName = displayName;
-            
         }
 
         public virtual string Name { get; set; }
         
         public virtual string DisplayName { get; set; }
         
-        public static Workspace Default { get; set; } = new Workspace("primary", "Default Space");
+        public static Workspace Default { get; } = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "Default Space");
+        public static Workspace Admin { get; } = new Workspace(WorkspaceConstants.AdminWorkspaceName, "Server Administration"); 
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
-        
+        public virtual DateTime? DisabledAtUtc { get; protected set; }
+
         protected bool Equals(Workspace other)
         {
             return Name == other.Name;
@@ -45,5 +47,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         }
         
         public virtual WorkspaceContext AsContext() => new WorkspaceContext(Name, DisplayName);
+
+        public virtual void Disable()
+        {
+            if(DisabledAtUtc != null)
+                throw new InvalidOperationException("Workspace already disabled");
+            if (Name == Default.Name)
+                throw new InvalidOperationException($"{Default.Name} workspace can not be disabled");
+            this.DisabledAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void Enable()
+        {
+            if(DisabledAtUtc == null)
+                throw new InvalidOperationException("Workspace already enabled");
+            this.DisabledAtUtc = null;
+        }
+
+        public virtual bool IsDisabled()
+        {
+            return this.DisabledAtUtc != null;
+        }
     }
 }
