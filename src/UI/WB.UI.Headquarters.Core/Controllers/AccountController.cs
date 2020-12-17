@@ -101,12 +101,15 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
-            var user = await userManager.FindByNameAsync(model.UserName);
-            if (user.IsInRole(UserRoles.ApiUser))
+            if (model.UserName != null)
             {
-                this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
+                var user = await userManager.FindByNameAsync(model.UserName);
+                if (user.IsInRole(UserRoles.ApiUser))
+                {
+                    this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
+                }
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return View(model);
