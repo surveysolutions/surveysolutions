@@ -631,7 +631,8 @@ namespace WB.Tests.Abc.TestFactories
             IAuthorizedUser authorizedUser = null,
             IUnitOfWork sessionProvider = null,
             UsersImportTask usersImportTask = null,
-            PasswordOptions passwordOptions = null)
+            PasswordOptions passwordOptions = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             var scheduler = new Mock<IScheduler>();
             scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
@@ -660,7 +661,8 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
-                usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues);
+                usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues, 
+                workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor());
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)
