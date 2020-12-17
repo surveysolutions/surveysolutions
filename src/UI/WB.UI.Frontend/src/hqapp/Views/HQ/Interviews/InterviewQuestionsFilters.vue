@@ -87,7 +87,7 @@ export default {
     apollo: {
         questionnaireItems:{
             query :gql`query questionnaireItems($workspace: String!, $id: Uuid!, $version: Long!) {
-                questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { identifying: true }) {
+                questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { identifying: {eq: true} }) {
                     title, type, variable, entityType
                     options { title, value, parentValue }
                 }

@@ -1,6 +1,5 @@
-using HotChocolate.Types;
-using HotChocolate.Types.Filters;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
+using System;
+using HotChocolate.Data.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
 {
@@ -8,16 +7,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
     {
         protected override void Configure(IFilterInputTypeDescriptor<Core.BoundedContexts.Headquarters.Assignments.Assignment> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
+            descriptor.BindFieldsImplicitly();
             descriptor.Name("AssignmentsFilter");
 
-            descriptor.Object(x => x.QuestionnaireId)
-                .AllowObject<QuestionnaireIdentityFilterInputType>();
-            descriptor.Filter(x => x.Archived).BindFiltersExplicitly().AllowEquals();
-            descriptor.Filter(x => x.ResponsibleId).BindFiltersExplicitly().AllowEquals().And().AllowIn().And().AllowNotIn().And().AllowNotEquals();
-            descriptor.Filter(x => x.WebMode).BindFiltersExplicitly().AllowEquals();
-            descriptor.Filter(x => x.ReceivedByTabletAtUtc).BindFiltersExplicitly()
-                .AllowEquals().And().AllowGreaterThan().And().AllowLowerThan().And().AllowNotEquals();
+            descriptor.Field(x => x.QuestionnaireId).Type<QuestionnaireIdentityFilterInputType>();
+            descriptor.Field(x => x.Archived);
+            descriptor.Field(x => x.ResponsibleId);
+            descriptor.Field(x => x.WebMode);
+            descriptor.Field(x => x.ReceivedByTabletAtUtc);
         }
     }
 }
