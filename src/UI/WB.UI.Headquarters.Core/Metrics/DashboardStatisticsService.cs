@@ -134,7 +134,7 @@ namespace WB.UI.Headquarters.Metrics
 
             result.Add(new MetricState("Cache items", $"Total: {memoryCache.Count} ({cacheItemsDiff.Result:N2}/s)", memoryCache.Count));
             
-            foreach (var workspace in workspaces.AllWorkspaces())
+            foreach (var workspace in workspaces.AllEnabledWorkspaces())
             {
                 result.Add(new MetricState("Workspace - " + workspace.Name, workspace.DisplayName, 0));
 
