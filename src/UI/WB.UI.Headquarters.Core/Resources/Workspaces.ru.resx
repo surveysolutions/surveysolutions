@@ -68,4 +68,16 @@
     <data name="WorkspacesUpdated" xml:space="preserve">
         <value>Список рабочих пространств обновлён</value>
     </data>
+    <data name="Disable" xml:space="preserve">
+        <value>Отключить</value>
+    </data>
+    <data name="DisableWorkspacePopupTitle" xml:space="preserve">
+        <value>Подтвердите отключение {{name}}</value>
+    </data>
+    <data name="DisableExplanation" xml:space="preserve">
+        <value>Отключение остановит возможность пользователей входить в это рабочее пространство и любой сбор данных.</value>
+    </data>
+    <data name="Enable" xml:space="preserve">
+        <value>Включить</value>
+    </data>
 </root>

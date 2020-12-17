@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
@@ -15,37 +13,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
     {
         // Needed for proper cache invalidation, because IMemoryCache is workspace dependent
         private static readonly IMemoryCache MemoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        private readonly IServiceLocator serviceLocator;
-        private readonly IAuthorizedUser authorizedUser;
+        private readonly IInScopeExecutor inScopeExecutor;
+        
+        private const string WorkspacesCacheKey = "workspaces";
 
-        public WorkspacesCache(IServiceLocator serviceLocator,
-            IAuthorizedUser authorizedUser)
+        public WorkspacesCache(IInScopeExecutor serviceLocator)
         {
-            this.serviceLocator = serviceLocator;
-            this.authorizedUser = authorizedUser;
+            this.inScopeExecutor = serviceLocator;
         }
 
-        public List<WorkspaceContext> AllWorkspaces()
+        public List<WorkspaceContext> AllEnabledWorkspaces()
         {
-            return MemoryCache.GetOrCreate("workspaces", entry =>
+            return MemoryCache.GetOrCreateWithDoubleLock(WorkspacesCacheKey, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-                return serviceLocator.ExecuteInScope<IWorkspacesService, List<WorkspaceContext>>(ws =>
-                    ws.GetWorkspaces().ToList());
+                
+                return inScopeExecutor.Execute(serviceLocator =>
+                {
+                    var ws = serviceLocator.GetInstance<IWorkspacesService>();
+                    var list = ws.GetEnabledWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
+                    return list;
+                });
             });
-        }
-
-        public IEnumerable<WorkspaceContext> CurrentUserWorkspaces()
-        {
-            var workspaceNames = this.authorizedUser.Workspaces;
-            var workspaces = this.AllWorkspaces();
-            var userWorkspaces = workspaces.Where(w => workspaceNames.Contains(w.Name));
-            return userWorkspaces;
         }
 
         public void InvalidateCache()
         {
-            MemoryCache.Remove("workspaces");
+            MemoryCache.Remove(WorkspacesCacheKey);
         }
     }
 }

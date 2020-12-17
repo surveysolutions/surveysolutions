@@ -14,8 +14,7 @@
         var workspace = workspaceName.CurrentWorkspace();
         var name = workspace?.Name ?? string.Empty;
     }
-
-
+    
     window.CONFIG = @( new {
                     verboseMode = false,
                     googleApiKey = googleMapsConfig.Value.ApiKey,

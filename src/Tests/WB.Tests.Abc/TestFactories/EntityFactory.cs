@@ -1294,9 +1294,8 @@ namespace WB.Tests.Abc.TestFactories
             string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null,
             int? interviewerBuild = null,
             bool lockedBySupervisor = false,
-            string securityStamp = null)
+            string securityStamp = null, string[] workspaces = null)
         {
-            var workspace = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "test");
 
             var user = new HqUser
             {
@@ -1315,15 +1314,21 @@ namespace WB.Tests.Abc.TestFactories
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1,
                 Roles = new List<HqRole> { Create.Entity.HqRole(role) },
-                
+
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
 
-            user.Workspaces.Add(new WorkspacesUsers(workspace, user));
+            workspaces ??= new[] {WorkspaceConstants.DefaultWorkspaceName};
 
+            foreach (var workspace in workspaces)
+            {
+                var ws = new Workspace(workspace, workspace);
+                user.Workspaces.Add(new WorkspacesUsers(ws, user));
+            }
+            
             return user;
         }
-        
+
         public UserView UserDocument()
             => Create.Entity.UserDocument(userId: null);
 
@@ -2635,6 +2640,11 @@ namespace WB.Tests.Abc.TestFactories
             calendarEvent.UpdateDateUtc = updateDateUtc ?? DateTime.UtcNow;
             
             return calendarEvent;
+        }
+
+        public Workspace Workspace()
+        {
+            return new Workspace(Guid.NewGuid().FormatGuid(), "Display name1");
         }
     }
 }

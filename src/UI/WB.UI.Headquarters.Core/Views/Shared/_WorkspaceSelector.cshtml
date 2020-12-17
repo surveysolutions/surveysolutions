@@ -1,5 +1,6 @@
 @using WB.Infrastructure.Native.Workspaces
 @using WB.Core.BoundedContexts.Headquarters.Workspaces
+@using WB.UI.Shared.Web.Extensions
 @inject IWorkspaceContextAccessor workspaceContext
 
 @{
@@ -18,8 +19,9 @@
             <ul class="dropdown-menu">
                 @foreach (var w in workspaces)
                 {
+                    
                     <li class="@(workspace.Name == w.Name ? "active" : "")">
-                        <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
+                        <a href="@Url.ContentAtWorkspace(w, "/")" >@w.DisplayName</a>
                     </li>
                 }
             </ul>

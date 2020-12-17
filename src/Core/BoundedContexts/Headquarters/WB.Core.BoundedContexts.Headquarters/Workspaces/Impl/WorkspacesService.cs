@@ -47,14 +47,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 upgradeSettings, loggerProvider));
         }
 
-        public bool IsWorkspaceDefined(string? workspace)
-        {
-            return workspaces.Query(_ => _.Any(x => x.Name == workspace));
-        }
-
-        public IEnumerable<WorkspaceContext> GetWorkspaces()
+        public IEnumerable<WorkspaceContext> GetEnabledWorkspaces()
         {
             return workspaces.Query(_ => _
+                .Where(x => x.DisabledAtUtc == null)
                 .Select(workspace => workspace.AsContext())
                 .ToList());
         }
@@ -78,11 +74,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 }
             }
         }
-
+        
         public void AddUserToWorkspace(HqUser user, string workspace)
         {
-            Workspace workspaceEntity = workspaces.GetById(workspace) ?? throw new ArgumentNullException("Workspace not found");
+            Workspace workspaceEntity = workspaces.GetById(workspace) ?? 
+                                        throw new ArgumentException("Workspace not found", nameof(workspace))
+                                        {
+                                            Data =
+                                            {
+                                                {"name", workspace}
+                                            }
+                                        };
 
+            if (workspaceEntity.IsDisabled())
+            {
+                throw new ArgumentException("Workspace disabled", nameof(workspace)){
+                    Data =
+                    {
+                        {"name", workspace}
+                    }
+                };
+            }
+            
             var workspaceUser = new WorkspacesUsers(workspaceEntity, user);
             
             this.workspaceUsers.Store(workspaceUser, workspaceUser.Id);
