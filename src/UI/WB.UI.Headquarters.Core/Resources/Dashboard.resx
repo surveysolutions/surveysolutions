@@ -168,6 +168,9 @@
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Map Dashboard</value>
+  </data>
   <data name="ImportDate" xml:space="preserve">
     <value>Imported on</value>
   </data>

@@ -22,14 +22,14 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Dashboard {
+    public class Dashboard_ru {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Dashboard() {
+        internal Dashboard_ru() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Dashboard", typeof(Dashboard).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.Dashboard.ru", typeof(Dashboard_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actions.
+        ///   Looks up a localized string similar to Действия.
         /// </summary>
         public static string Actions {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All data.
+        ///   Looks up a localized string similar to Все данные.
         /// </summary>
         public static string AllData {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All data Spss.
+        ///   Looks up a localized string similar to Все данные Spss.
         /// </summary>
         public static string AllDataSpss {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All data Stata.
+        ///   Looks up a localized string similar to Все данные Stata.
         /// </summary>
         public static string AllDataStata {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved data.
+        ///   Looks up a localized string similar to Утвержденные данные.
         /// </summary>
         public static string ApprovedData {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved data Spss.
+        ///   Looks up a localized string similar to Утвержденные данные Spss.
         /// </summary>
         public static string ApprovedDataSpss {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved data Stata.
+        ///   Looks up a localized string similar to Утвержденные данные Stata.
         /// </summary>
         public static string ApprovedDataStata {
             get {
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binary data.
+        ///   Looks up a localized string similar to Бинарные данные.
         /// </summary>
         public static string BinaryData {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clone questionnaire.
+        ///   Looks up a localized string similar to Клонировать опросник .
         /// </summary>
         public static string CloneQuestionnaire {
             get {
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created on.
+        ///   Looks up a localized string similar to Создан.
         /// </summary>
         public static string CreationDate {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete map.
+        ///   Looks up a localized string similar to Удалить карту.
         /// </summary>
         public static string DeleteMap {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete map user.
+        ///   Looks up a localized string similar to Удалить пользователя карты.
         /// </summary>
         public static string DeleteMapUser {
             get {
@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete questionnaire.
+        ///   Looks up a localized string similar to Удалить опросник.
         /// </summary>
         public static string DeleteQuestionnaire {
             get {
@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Details.
+        ///   Looks up a localized string similar to Подробности.
         /// </summary>
         public static string Details {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download web links.
+        ///   Looks up a localized string similar to Скачать web ссылки.
         /// </summary>
         public static string DownloadLinks {
             get {
@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export questionnaire.
+        ///   Looks up a localized string similar to Экспортировать опросник.
         /// </summary>
         public static string ExportQuestionnaire {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to History.
+        ///   Looks up a localized string similar to История.
         /// </summary>
         public static string History {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Imported on.
+        ///   Looks up a localized string similar to Дата загрузки.
         /// </summary>
         public static string ImportDate {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Imported by.
+        ///   Looks up a localized string similar to Импортировано.
         /// </summary>
         public static string ImportedBy {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{role}} user {{name}}.
+        ///   Looks up a localized string similar to {{role}} пользователем {{name}}.
         /// </summary>
         public static string ImportedByText {
             get {
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import questionnaire.
+        ///   Looks up a localized string similar to Импорт опросника.
         /// </summary>
         public static string ImportTemplate {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modified on.
+        ///   Looks up a localized string similar to Обновлен.
         /// </summary>
         public static string LastEntryDate {
             get {
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map Dashboard.
+        ///   Looks up a localized string similar to Задания на карте.
         /// </summary>
         public static string MapDashboard {
             get {
@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maps.
+        ///   Looks up a localized string similar to Карты.
         /// </summary>
         public static string Maps {
             get {
@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New assignment.
+        ///   Looks up a localized string similar to Новое задание.
         /// </summary>
         public static string NewAssignment {
             get {
@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire.
+        ///   Looks up a localized string similar to Опросник.
         /// </summary>
         public static string Questionnaire {
             get {
@@ -295,7 +295,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{receivedInterviews}} interviews and {{receivedAssignments}} assignments for new interviews have been received by the interviewers/supervisors working disconnected. After you confirm the deletion of the survey the server will no longer accept the information based on these interviews/assignments, and they will disappear at next synchronization without a possibility of recovery even if contain newly entered/edited information. It is your responsibility to warn/notify the interviewers to no longer fill out t [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {{receivedInterviews}} интервью и {{receivedAssignments}} заданий для новых интервью были получены интервьюерами/супервизорами. После подтверждения удаления обследования сервер не будет принимать информацию по данному опроснику, и они будут удалены при последующей синхронизации без возможности восстановления. Даже в случае наличия новой информации. Это Ваша ответственность уведомить интервьюеров остановить сбор данных по этому опроснику, так как они не будут уведомлены автоматически. Желаете продолжить?.
         /// </summary>
         public static string QuestionnaireDeleteWarn {
             get {
@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
+        ///   Looks up a localized string similar to Опросники.
         /// </summary>
         public static string Questionnaires {
             get {
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record audio.
+        ///   Looks up a localized string similar to Вести аудио запись.
         /// </summary>
         public static string RecordAudio {
             get {
@@ -322,7 +322,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger..
+        ///   Looks up a localized string similar to Когда включено, приложение interviewer будет вести аудио запись интервью. При включении аудио аудита размер данных синхронизации значительно увеличится.
         /// </summary>
         public static string RecordAudioTitle {
             get {
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send invitations.
+        ///   Looks up a localized string similar to Отправить приглашения.
         /// </summary>
         public static string SendInvitations {
             get {
@@ -340,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show on Designer.
+        ///   Looks up a localized string similar to Посмотреть на Дизайнере.
         /// </summary>
         public static string ShowOnDesigner {
             get {
@@ -349,7 +349,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click Import Questionnaire button to load a questionnaire from Designer.
+        ///   Looks up a localized string similar to Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера.
         /// </summary>
         public static string SurveySetupIntroMessage1 {
             get {
@@ -358,7 +358,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click on a questionnaire from the list to create interview assignments.
+        ///   Looks up a localized string similar to Кликните по опроснику из списка для создания интервью.
         /// </summary>
         public static string SurveySetupIntroMessage2 {
             get {
@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title.
+        ///   Looks up a localized string similar to Название.
         /// </summary>
         public static string Title {
             get {
@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please type &apos;{{questionnaireTitle}}&apos; to confirm.
+        ///   Looks up a localized string similar to Введите &apos;{{questionnaireTitle}}&apos; для подтверждения.
         /// </summary>
         public static string TypeQuestionnaireName {
             get {
@@ -385,7 +385,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upgrade assignments.
+        ///   Looks up a localized string similar to Обновить задания.
         /// </summary>
         public static string UpgradeAssignments {
             get {
@@ -394,7 +394,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload assignments.
+        ///   Looks up a localized string similar to Загрузить задания.
         /// </summary>
         public static string UploadAssignments {
             get {
@@ -403,7 +403,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version.
+        ///   Looks up a localized string similar to Версия.
         /// </summary>
         public static string Version {
             get {
@@ -412,7 +412,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web interview setup.
+        ///   Looks up a localized string similar to Настройка web интервью.
         /// </summary>
         public static string WebInterviewSetup {
             get {
@@ -421,7 +421,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web mode.
+        ///   Looks up a localized string similar to Веб режим.
         /// </summary>
         public static string WebMode {
             get {
@@ -430,7 +430,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workspaces.
+        ///   Looks up a localized string similar to Рабочие пространства.
         /// </summary>
         public static string Workspaces {
             get {

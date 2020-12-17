@@ -14,5 +14,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId);
         bool HasAnyGpsAnswerForInterviewer(Guid interviewerId);
+
+        InterviewGpsInfo[] GetPrefilledGpsAnswers(
+            Guid? questionnaireId, long? questionnaireVersion, int? maxAnswersCount);
     }
 }
