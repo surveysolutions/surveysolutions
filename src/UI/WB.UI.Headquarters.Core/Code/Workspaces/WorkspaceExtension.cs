@@ -1,5 +1,10 @@
 #nullable enable
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
