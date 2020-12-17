@@ -1,3 +1,6 @@
+using System.Threading.Tasks;
+using HotChocolate;
+using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types.Descriptors;
 using HotChocolate.Types.Pagination;
@@ -8,10 +11,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
     public static class GraphQLIntegration
     {
-        public static IRequestExecutorBuilder GraphQLBuilder = null; 
         public static void AddGraphQL(this IServiceCollection services)
         {
-            GraphQLBuilder = services
+            GetExecutorBuilder(services);
+        }
+
+        private static IRequestExecutorBuilder GetExecutorBuilder(IServiceCollection services)
+        {
+            return services
                 .AddGraphQLServer()
                 .UseField<WorkspaceGraphQlMiddleware>()
                 .AddAuthorization()
@@ -24,6 +31,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddSorting()
                 .AddErrorFilter<GraphQLErrorFilter>();
         }
+
+        public static async Task<ISchema> GetSchema(IServiceCollection services)
+        {
+            return await GetExecutorBuilder(services).BuildSchemaAsync();
+        }
+
         public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {
             return app.UseEndpoints(x => x.MapGraphQL());

@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             descriptor.Operation(DefaultFilterOperations.StartsWith).Type<StringType>();
             descriptor.Operation(DefaultFilterOperations.NotStartsWith).Type<StringType>();
             
-            //performance 
+            //performance on PostgreSQL
             //descriptor.Operation(DefaultFilterOperations.EndsWith).Type<StringType>();
             //descriptor.Operation(DefaultFilterOperations.NotEndsWith).Type<StringType>();
         }
