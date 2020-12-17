@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Dapper;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -14,10 +15,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly IUnitOfWork sessionProvider;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public InterviewFactory(IUnitOfWork sessionProvider)
+        public InterviewFactory(IUnitOfWork sessionProvider,
+            IAuthorizedUser authorizedUser)
         {
             this.sessionProvider = sessionProvider;
+            this.authorizedUser = authorizedUser;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
@@ -71,6 +75,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             InterviewStatus.ApprovedByHeadquarters
         };
 
+        private static readonly InterviewStatus[] InterviewerStatusesForGps =
+        {
+            InterviewStatus.Created,
+            InterviewStatus.InterviewerAssigned,
+            InterviewStatus.Restarted,
+            InterviewStatus.RejectedBySupervisor,
+        };
+
+        private static readonly InterviewStatus[] SupervisorStatusesForGps =
+            InterviewerStatusesForGps.Concat(new []
+        {
+            InterviewStatus.SupervisorAssigned,
+            InterviewStatus.Completed,
+            InterviewStatus.RejectedByHeadquarters,
+        }).ToArray();
+        
+        private static readonly InterviewStatus[] HeadquartersStatusesForGps =
+            SupervisorStatusesForGps.Concat(new []
+        {
+            InterviewStatus.ApprovedBySupervisor
+        }).ToArray();
+
         public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
             string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId)
         {
@@ -98,6 +124,68 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 RosterVector = x.Answer.RosterVector,
                 Latitude = x.Answer.Latitude,
                 Longitude = x.Answer.Longitude
+            });
+
+            if (maxAnswersCount.HasValue)
+            {
+                result = result.Take(maxAnswersCount.Value);
+            }
+
+            return result.ToArray();
+        }
+        
+        public InterviewGpsInfo[] GetPrefilledGpsAnswers(
+            Guid? questionnaireId, long? questionnaireVersion, int? maxAnswersCount)
+        {
+            var userId = authorizedUser.Id;
+            
+            var gpsQuery = QueryGpsAnswers()
+                .Where(x => x.Answer.IsEnabled &&
+                            x.QuestionnaireItem.Featured == true &&
+                            x.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates);
+
+            if (questionnaireId.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.InterviewSummary.QuestionnaireId == questionnaireId.Value);
+
+                if (questionnaireVersion.HasValue)
+                {
+                    gpsQuery = gpsQuery
+                        .Where(x => x.InterviewSummary.QuestionnaireVersion == questionnaireVersion.Value);
+                }
+            }
+
+            if (authorizedUser.IsInterviewer)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => 
+                        x.InterviewSummary.ResponsibleId == userId
+                        && InterviewerStatusesForGps.Contains(x.InterviewSummary.Status) 
+                    );
+            } else if (authorizedUser.IsSupervisor)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => 
+                        (x.InterviewSummary.SupervisorId == userId || x.InterviewSummary.ResponsibleId == userId)
+                        && SupervisorStatusesForGps.Contains(x.InterviewSummary.Status) 
+                    );
+            } else if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x =>  
+                        HeadquartersStatusesForGps.Contains(x.InterviewSummary.Status) 
+                    );
+            }
+
+            var result = gpsQuery.Select(x => 
+                new InterviewGpsInfo
+            {
+                InterviewId = x.InterviewSummary.InterviewId,
+                InterviewKey = x.InterviewSummary.Key,
+                Status = x.InterviewSummary.Status,
+                Latitude = x.Answer.Latitude,
+                Longitude = x.Answer.Longitude,
             });
 
             if (maxAnswersCount.HasValue)
