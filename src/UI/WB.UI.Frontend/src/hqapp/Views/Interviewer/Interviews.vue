@@ -130,8 +130,8 @@ import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($workspace: String!, $order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
-  interviews(workspace: $workspace, order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     nodes {
@@ -206,17 +206,17 @@ export default {
             const and = []
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                and.push({questionnaireId: {eq : this.where.questionnaireId.replaceAll('-','')}})
 
                 if(this.where.questionnaireVersion) {
-                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                    and.push({questionnaireVersion: {eq : this.where.questionnaireVersion}})
                 }
             }
             if(this.where.assignmentId){
-                and.push({assignmentId: this.where.assignmentId})
+                and.push({assignmentId: {eq : this.where.assignmentId}})
             }
 
-            and.push({ status_in: this.$config.model.statuses})
+            and.push({ status : {in: this.$config.model.statuses}})
 
             return and
         },
@@ -244,24 +244,22 @@ export default {
                     }
 
                     const where = {
-                        AND: [...self.whereQuery],
+                        and: [...self.whereQuery],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push(
+                        where.and.push(
                             {
-                                OR: [
-                                    { key_starts_with: search.toLowerCase() },
-                                    { identifyingData_some: {
-                                        valueLowerCase_starts_with: search.toLowerCase(),
-                                    },
-                                    }],
+                                or: [
+                                    { key: {startsWith: search.toLowerCase()}},
+                                    { identifyingData: {some: {valueLowerCase: {startsWith: search.toLowerCase()}}}},
+                                ],
                             })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 

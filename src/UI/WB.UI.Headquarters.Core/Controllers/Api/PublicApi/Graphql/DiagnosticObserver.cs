@@ -1,19 +1,15 @@
+ /*
+ //TODO: resolve new approach
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using HotChocolate;
-using HotChocolate.Execution;
-using HotChocolate.Execution.Instrumentation;
 using HotChocolate.Resolvers;
 using Microsoft.Extensions.DiagnosticAdapter;
 using Microsoft.Extensions.Logging;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
-     public class DiagnosticObserver
-        : IDiagnosticObserver
+     public class DiagnosticObserver : IDiagnosticObserver
     {
         private readonly ILogger _logger;
         public DiagnosticObserver(ILogger<DiagnosticObserver> logger)
@@ -52,3 +48,5 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         }
     }
 }
+*/
+
