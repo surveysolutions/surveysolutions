@@ -24,18 +24,21 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICaptchaService captchaService;
         private readonly ICaptchaProvider captchaProvider;
         private readonly SignInManager<HqUser> signInManager;
+        private readonly UserManager<HqUser> userManager;
         protected readonly IAuthorizedUser authorizedUser;
         
         public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
+            UserManager<HqUser> userManager,
             IAuthorizedUser authorizedUser)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.captchaService = captchaService;
             this.captchaProvider = captchaProvider;
             this.signInManager = signInManager;
+            this.userManager = userManager;
             this.authorizedUser = authorizedUser;
         }
 
@@ -98,6 +101,12 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
+            var user = await userManager.FindByNameAsync(model.UserName);
+            if (user.IsInRole(UserRoles.ApiUser))
+            {
+                this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
+            }
+            
             if (!ModelState.IsValid)
             {
                 return View(model);
