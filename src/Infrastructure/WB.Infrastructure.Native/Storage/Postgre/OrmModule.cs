@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using NHibernate;
-using NLog;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
@@ -168,8 +167,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             catch (Exception exc)
             {
                 status.Error(Modules.ErrorDuringRunningMigrations, exc);
-
-                LogManager.GetLogger(typeof(OrmModule).FullName).Fatal(exc, "Error during db initialization.");
+                serviceLocator.GetInstance<ILogger<OrmModule>>().LogCritical(exc, "Error during db initialization.");
                 throw exc.AsInitializationException(connectionSettings.ConnectionString);
             }
         }
