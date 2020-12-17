@@ -140,6 +140,29 @@ class Users {
     }
 }
 
+class MapDashboard {
+    constructor(http) {
+        this.http = http
+    }
+
+    async GetMarkers(request) {
+        return await this.http.post('api/MapDashboardApi/Markers', request)
+    }
+
+    async InteriewSummaryUrl(interviewId) {
+        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', {
+            interviewId,
+        })
+
+        return response
+    }
+
+    GetInterviewDetailsUrl(interviewId) {
+        return `${this.http.defaults.baseURL}Interview/Review/${interviewId}`
+    }
+}
+
+
 class Reports {
     constructor(http, basePath) {
         this.http = http
@@ -422,6 +445,10 @@ class HqApiClient {
 
     get Assignments() {
         return new AssignmentsApi(this.http)
+    }
+
+    get MapDashboard() {
+        return new MapDashboard(this.http)
     }
 
     get WebInterviewSettings() {

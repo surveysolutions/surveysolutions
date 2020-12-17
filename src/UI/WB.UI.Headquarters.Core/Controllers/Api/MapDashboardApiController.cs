@@ -1,0 +1,250 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
+using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using Supercluster;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Services;
+using WB.UI.Headquarters.Controllers.Services.Export;
+using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.ComponentModels;
+
+namespace WB.UI.Headquarters.Controllers.Api
+{
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
+    [Route("api/[controller]/[action]")]
+    public class MapDashboardApiController : ControllerBase
+    {
+        private readonly IInterviewFactory interviewFactory;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
+        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly IMemoryCache cache;
+
+        public MapDashboardApiController(
+            IInterviewFactory interviewFactory,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor,
+            IAuthorizedUser authorizedUser,
+            IMemoryCache cache,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+        {
+            this.interviewFactory = interviewFactory;
+            this.questionnairesAccessor = questionnairesAccessor;
+            this.authorizedUser = authorizedUser;
+            this.cache = cache;
+            this.questionnaireItems = questionnaireItems;
+        }
+        
+        public class MapMarkerDetail
+        {
+            public int AssignmentId { get; set; }
+            public Guid AssignmentPublicKey { get; set; }
+            
+            public Guid InterviewId { get; set; }
+            public string InterviewKey { get; set; }
+            public InterviewStatus Status { get; set; }
+        }
+        
+        public class MapDashboardRequest
+        {
+            public Guid? QuestionnaireId { get; set; }
+            public long? QuestionnaireVersion { get; set; }
+
+            public double East { get; set; }
+            public double North { get; set; }
+
+            public double West { get; set; }
+            public double South { get; set; }
+
+            public int Zoom { get; set; }
+            public int ClientMapWidth { get; set; }
+        }
+
+        public class MapDashboardResult
+        {
+            public FeatureCollection FeatureCollection { get; set; }
+            public int TotalPoint { get; set; }
+            public GeoBounds InitialBounds { get; set; }
+        }
+
+        [HttpPost]
+        public MapDashboardResult Markers(MapDashboardRequest input)
+        {
+            var key = $"MapDashboard;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{this.authorizedUser.Id}";
+
+            var cacheLine = cache.Get(key);
+
+            if (cacheLine == null)
+            {
+                lock (locker)
+                {
+                    cacheLine = cache.Get(key);
+
+                    if (cacheLine == null)
+                    {
+                        var sw = Stopwatch.StartNew();
+                        cacheLine = InitializeSuperCluster(input);
+                        sw.Stop();
+
+                        // cache for up to 10 minute depending on how long it took to read out map data
+                        var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5 + 1);
+
+                        cache.Set(key, cacheLine, cacheTime);
+                    }
+                }
+            }
+
+            var map = (MapReportCacheLine) cacheLine;
+
+            if (input.Zoom == -1)
+            {
+                input.Zoom = map.Bounds.ApproximateGoogleMapsZoomLevel(input.ClientMapWidth);
+            }
+
+            var result = map.Cluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
+
+            var collection = new FeatureCollection();
+            collection.Features.AddRange(result.Select(p =>
+            {
+                var props = p.UserData.Props ?? new Dictionary<string, object>();
+
+                if (p.UserData.NumPoints > 1)
+                {
+                    props["count"] = p.UserData.NumPoints;
+                    props["expand"] = map.Cluster.GetClusterExpansionZoom(p.UserData.Index);
+                }
+
+                return new Feature(
+                    new Point(new Position(p.Latitude, p.Longitude)),
+                    props, id: p.UserData.Index.ToString("X"));
+            }));
+
+            return new MapDashboardResult
+            {
+                FeatureCollection = collection,
+                InitialBounds = map.Bounds,
+                TotalPoint = map.Total
+            };
+        }
+
+        public string GetGpsQuestionByQuestionnaire(Guid? questionnaireId, long? version)
+        {
+            var questions = this.questionnaireItems.Query(q =>
+            {
+                if (questionnaireId.HasValue)
+                {
+                    if (version == null)
+                    {
+                        var questionnaire = questionnaireId.Value.FormatGuid();
+                        q = q.Where(i => i.QuestionnaireIdentity.StartsWith(questionnaire));
+                    }
+                    else
+                    {
+                        var identity = new QuestionnaireIdentity(questionnaireId.Value, version.Value).ToString();
+                        q = q.Where(i => i.QuestionnaireIdentity == identity);
+                    }
+                }
+
+                q = q.Where(i => 
+                    i.QuestionType == QuestionType.GpsCoordinates
+                    && i.Featured == true
+                );
+
+                return q.Select(i => i.StataExportCaption).Distinct().ToList();
+            });
+
+            return questions.SingleOrDefault();
+        }
+
+        private static object locker = new object();
+
+        private MapReportCacheLine InitializeSuperCluster(MapDashboardRequest input)
+        {
+            var gpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
+                input.QuestionnaireId, input.QuestionnaireVersion, null);
+
+            var cluster = new SuperCluster();
+            var bounds = GeoBounds.Closed;
+
+            cluster.Load(gpsAnswers.Select(g =>
+            {
+                bounds.Expand(g.Latitude, g.Longitude);
+                return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
+                    new MapMarkerDetail()
+                    {
+                        InterviewId = g.InterviewId,
+                        InterviewKey = g.InterviewKey,
+                        Status = g.Status,
+                    }
+                    /*new Dictionary<string, object>
+                    {
+                        ["interviewId"] = g.InterviewId.ToString()
+                    }*/);
+            }));
+
+            return new MapReportCacheLine
+            {
+                Cluster = cluster,
+                Bounds = bounds,
+                Total = gpsAnswers.Length
+            };
+        }
+
+        [HttpGet]
+        [ApiNoCache]
+        public ComboboxModel<QuestionnaireVersionsComboboxViewItem> Questionnaires(string query = null)
+        {
+            var questionnaires = GetQuestionnaireIdentitiesWithGpsQuestions(query);
+            var options = questionnaires.GetQuestionnaireComboboxViewItems().ToArray();
+            return new ComboboxModel<QuestionnaireVersionsComboboxViewItem>(options);
+        }
+
+        private List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithGpsQuestions(string query)
+        {
+            string lowerCaseQuery = query?.ToLower();
+            var questionnaireIds = this.questionnaireItems.Query(q =>
+            {
+                return q.Where(item => 
+                        item.QuestionType == QuestionType.GpsCoordinates
+                        && item.Featured == true
+                        )
+                    .Select(item => item.QuestionnaireIdentity)
+                    .Distinct().ToList();
+            });
+
+            return this.questionnairesAccessor.Query(_ => _
+                .Where(x => !x.IsDeleted 
+                            && questionnaireIds.Contains(x.Id)
+                            && (query == null || x.Title.ToLower().Contains(lowerCaseQuery)))
+                .ToList());
+        }
+
+        private class MapReportCacheLine
+        {
+            public SuperCluster Cluster { get; set; }
+            public GeoBounds Bounds { get; set; }
+            public int Total { get; set; }
+        }
+    }
+}
