@@ -10,9 +10,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
     public interface IWorkspacesService
     {
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
-        bool IsWorkspaceDefined(string? workspace);
         void AddUserToWorkspace(HqUser user, string workspace);
-        IEnumerable<WorkspaceContext> GetWorkspaces();
+        IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
         void AssignWorkspaces(HqUser user, List<Workspace> workspaces);
     }
 }

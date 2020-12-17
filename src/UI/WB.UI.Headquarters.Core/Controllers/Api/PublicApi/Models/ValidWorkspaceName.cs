@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
@@ -12,8 +13,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         };
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            bool isForbiddenWord =
-                NotAllowedNames.Any(x => string.Equals(x, value?.ToString(), StringComparison.InvariantCultureIgnoreCase));
+            var notValid = NotAllowedNames.Union(WorkspaceRedirectMiddleware
+                .NotScopedToWorkspacePaths.Select(w => w.Trim('/').ToLower()));
+            
+            bool isForbiddenWord = notValid.Any(x => string.Equals(x, value?.ToString(), StringComparison.InvariantCultureIgnoreCase));
             return !isForbiddenWord ? ValidationResult.Success : new ValidationResult(ErrorMessageString);
         }
     }

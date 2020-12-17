@@ -5,10 +5,12 @@ namespace WB.Infrastructure.Native.Workspaces
 {
     public interface IWorkspacesCache
     {
-        List<WorkspaceContext> AllWorkspaces();
-
-        IEnumerable<WorkspaceContext> CurrentUserWorkspaces();
-
+        /// <summary>
+        /// Return list of enabled workspaces
+        /// </summary>
+        /// <returns></returns>
+        List<WorkspaceContext> AllEnabledWorkspaces();
         void InvalidateCache();
+
     }
 }
