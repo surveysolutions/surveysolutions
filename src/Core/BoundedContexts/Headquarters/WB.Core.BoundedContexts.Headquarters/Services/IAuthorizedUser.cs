@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
@@ -17,6 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         string UserName { get; }
         bool HasNonDefaultWorkspace { get; }
         IEnumerable<string> Workspaces { get; }
+        bool HasAccessToWorkspace(string targetWorkspace);
+        IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
     }
 
     public static class AuthorizedUserHelpers

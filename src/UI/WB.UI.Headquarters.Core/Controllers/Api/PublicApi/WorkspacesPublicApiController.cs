@@ -7,6 +7,7 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -31,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
         private readonly IUserRepository users;
+        private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
@@ -38,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
             IUserRepository users,
+            ILogger<WorkspacesPublicApiController> logger,
             IAuthorizedUser authorizedUser)
         {
             this.workspaces = workspaces;
@@ -45,6 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
             this.users = users;
+            this.logger = logger;
             this.authorizedUser = authorizedUser;
         }
 
@@ -76,9 +80,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         private IQueryable<Workspace> Filter(WorkspacesListFilter filter, IQueryable<Workspace> source)
         {
-            var userWorkspaces = this.authorizedUser.Workspaces.ToList();
-            var result = source.OrderBy(x => x.Name)
-                .Where(x => userWorkspaces.Contains(x.Name));
+            IQueryable<Workspace> result = source.OrderBy(x => x.Name);
+
+            if (!this.authorizedUser.IsAdministrator)
+            {
+                var userWorkspaces = this.authorizedUser.Workspaces.ToList();
+                result = result.Where(x => userWorkspaces.Contains(x.Name));
+            }
+
             if (filter.UserId.HasValue)
             {
                 result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
@@ -165,13 +174,86 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return ValidationProblem();
         }
 
+        /// <summary>
+        /// Disables specified workspace
+        /// </summary>
+        /// <response code="204">Workspace disabled</response>
+        /// <response code="400">Validation failed</response>
+        /// <response code="404">Workspace not found</response>
+        [HttpPost]
+        [Route("{id}/disable")]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public ActionResult Disable(string id)
+        {
+            var workspace = this.workspaces.GetById(id);
+            if (workspace == null)
+            {
+                return NotFound();
+            }
+
+            if (workspace.DisabledAtUtc != null)
+            {
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already disabled");
+            }
+            
+            if (id == Workspace.Default.Name)
+            {
+                ModelState.AddModelError(nameof(id), $"Workspace {id} can not be disabled");
+            }
+            
+            if (ModelState.IsValid)
+            {
+                workspace.Disable();
+                this.logger.LogInformation("Workspace {name} was disabled by {user}", id, this.authorizedUser.UserName);
+                this.workspacesCache.InvalidateCache();
+                return NoContent();
+            }
+
+            return ValidationProblem();
+        }
+        
+        /// <summary>
+        /// Enables specified workspace
+        /// </summary>
+        /// <response code="204">Workspace enabled</response>
+        /// <response code="400">Validation failed</response>
+        /// <response code="404">Workspace not found</response>
+        [HttpPost]
+        [Route("{id}/enable")]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public ActionResult Enable(string id)
+        {
+            var workspace = this.workspaces.GetById(id);
+            if (workspace == null)
+            {
+                return NotFound();
+            }
+
+            if (workspace.DisabledAtUtc == null)
+            {
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already enabled");
+            }
+            
+            if (ModelState.IsValid)
+            {
+                workspace.Enable();
+                this.logger.LogInformation("Workspace {name} was enabled by {user}", id, this.authorizedUser.UserName);
+                this.workspacesCache.InvalidateCache();
+                return NoContent();
+            }
+
+            return ValidationProblem();
+        }
+
 
         /// <summary>
-        /// Updates new workspace. Changing list of workspaces currently is allowed only for Headquarters or Api users.
+        /// Assigns workspaces to user.
         /// </summary>
-        /// <response code="204">Workspaces updated</response>
+        /// <response code="204">Workspaces list updated</response>
         /// <response code="400">Validation failed</response>
-        [HttpPut]
+        [HttpPost]
         [Route("assign")]
         [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model)
@@ -183,6 +265,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 if (workspace == null)
                 {
                     ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} not found");
+                }
+                else if (workspace.IsDisabled())
+                {
+                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} disabled");
                 }
                 else
                 {

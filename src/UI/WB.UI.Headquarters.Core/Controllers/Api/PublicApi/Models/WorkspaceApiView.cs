@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.UI.Headquarters.Resources;
@@ -7,9 +8,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class WorkspaceApiView
     {
-        [Required(ErrorMessageResourceType = typeof(Workspaces), ErrorMessageResourceName = nameof(Workspaces.NameRequired))]
+        [Required(ErrorMessageResourceType = typeof(Workspaces), 
+            ErrorMessageResourceName = nameof(Workspaces.NameRequired))]
         [MaxLength(12)]
-        [RegularExpression("^[0-9,a-z]+$", ErrorMessageResourceType = typeof(Workspaces), ErrorMessageResourceName = nameof(Workspaces.InvalidName))]
+        [RegularExpression("^[-0-9,a-z]+$", ErrorMessageResourceType = typeof(Workspaces), 
+            ErrorMessageResourceName = nameof(Workspaces.InvalidName))]
         [UniqueWorkspaceName(ErrorMessageResourceType = typeof(Workspaces), ErrorMessageResourceName = nameof(Workspaces.NameShouldBeUnique))]
         [ValidWorkspaceName(ErrorMessageResourceType = typeof(Workspaces), ErrorMessageResourceName = nameof(Workspaces.NameShouldNotBeOneOfForbidden))]
         [DataMember(IsRequired = true)]
@@ -19,5 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         [DataMember(IsRequired = true)]
         [MaxLength(300)]
         public string? DisplayName { get; set; }
+        
+        public DateTime? DisabledAtUtc { get; set; }
     }
 }

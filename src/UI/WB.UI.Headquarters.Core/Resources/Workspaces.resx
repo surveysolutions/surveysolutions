@@ -40,7 +40,7 @@
         <value>Edit workspace {{name}}</value>
     </data>
     <data name="WorkspacesSubtitle" xml:space="preserve">
-        <value>Each workspace has isolated questionnaires, interviews, assignmets and users. After creation of new workspace or adding users into workspace clients need to logout and login again in order to have access to new workspace.</value>
+        <value>Each workspace has isolated questionnaires, interviews, assignments and users. After creation of new workspace or adding users into workspace clients need to logout and login again in order to have access to new workspace.</value>
     </data>
     <data name="AddNew" xml:space="preserve">
         <value>Create new</value>
@@ -74,5 +74,17 @@
     </data>
     <data name="WorkspacesUpdated" xml:space="preserve">
         <value>List of workspaces updated</value>
+    </data>
+    <data name="DisableWorkspacePopupTitle" xml:space="preserve">
+        <value>Confirm disabling {{name}}</value>
+    </data>
+    <data name="Disable" xml:space="preserve">
+        <value>Disable</value>
+    </data>
+    <data name="DisableExplanation" xml:space="preserve">
+        <value>Disabling workspace will stop access to it for all users. It will stop all data collection that might be in progress. </value>
+    </data>
+    <data name="Enable" xml:space="preserve">
+        <value>Enable</value>
     </data>
 </root>

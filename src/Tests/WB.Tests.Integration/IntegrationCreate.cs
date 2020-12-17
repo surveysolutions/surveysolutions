@@ -16,6 +16,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Npgsql;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
@@ -26,6 +27,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -55,6 +57,7 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.UI.Designer.Code;
+using WB.UI.Headquarters;
 using Configuration = NHibernate.Cfg.Configuration;
 using Environment = System.Environment;
 
@@ -395,6 +398,13 @@ namespace WB.Tests.Integration
            
             return cfg.BuildSessionFactory();
         }
+        public static ISessionFactory SessionFactoryProd(string connectionString, Workspace workspace = null)
+        {
+            workspace ??= Workspace.Default;
+            
+            return new HqSessionFactoryFactory(Startup.BuildUnitOfWorkSettings(connectionString))
+                .BuildSessionFactory(workspace.AsContext().SchemaName);
+        }
 
         public static ISessionFactory SessionFactory(string connectionString, 
             string usersSchemaName,
@@ -419,7 +429,7 @@ namespace WB.Tests.Integration
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(GetMappingsFor(usersEntityMapTypes, usersSchemaName), "user");
+            cfg.AddDeserializedMapping(GetUsersMappings(usersEntityMapTypes), "user");
             cfg.AddDeserializedMapping(GetMappingsFor(readStorageEntityMapTypes, readSideSchemaName), "read");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
@@ -430,6 +440,25 @@ namespace WB.Tests.Integration
             }
             
             return cfg.BuildSessionFactory();
+        }
+
+        private static HbmMapping GetUsersMappings(IEnumerable<Type> assemblies)
+        {
+            var mapper = new ModelMapper();
+            var readSideMappingTypes = assemblies
+                .Where(x => x.GetCustomAttribute<UsersAttribute>() != null &&
+                            x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+
+            mapper.AfterMapProperty += (inspector, member, customizer) =>
+            {
+                var propertyInfo = (PropertyInfo)member.LocalMember;
+
+                customizer.Column('"' + propertyInfo.Name + '"');
+            };
+
+            mapper.AddMappings(readSideMappingTypes);
+
+            return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory,

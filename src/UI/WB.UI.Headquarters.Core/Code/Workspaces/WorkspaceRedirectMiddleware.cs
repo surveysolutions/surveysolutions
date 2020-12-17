@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Workspaces
@@ -32,47 +33,26 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
 
             var currentWorkspace = contextAccessor.CurrentWorkspace();
-
+            
             if (currentWorkspace == null
                 && !NotScopedToWorkspacePaths
                     .Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
             {
                 // Redirect into default workspace for old urls
                 string? targetWorkspace = null;
+                var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
-                if (context.Request.Cookies.ContainsKey(WorkspaceInfoFilter.CookieName))
+                targetWorkspace = HandleCookieRedirect(context);
+                
+                if (targetWorkspace == null)
                 {
-                    var cookieValue = context.Request.Cookies[WorkspaceInfoFilter.CookieName];
-
-                    try
-                    {
-                        var workspace = dataProtector.Unprotect(cookieValue);
-
-                        if (context.User.Claims.Any(x =>
-                            x.Type == WorkspaceConstants.ClaimType && x.Value == workspace))
-                        {
-                            targetWorkspace = workspace;
-                        }
-                       
-                    }
-                    catch
-                    {
-                        /* Unprotect can throw exception if keys have changed.
-                         We can and should ignore it and remove wrong cookie */
-                        context.Response.Cookies.Delete(WorkspaceInfoFilter.CookieName);
-                    }
+                    targetWorkspace = authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name;
                 }
 
-                if (targetWorkspace == null && context.User.HasClaim(x => x.Type == WorkspaceConstants.ClaimType))
-                {
-                    var userFirstWorkspace = context.User.Claims.First(x => x.Type == WorkspaceConstants.ClaimType);
-                    targetWorkspace = userFirstWorkspace.Value;
-                }
-
-                if (targetWorkspace != null)
+                if (targetWorkspace != null && authorizedUser.HasAccessToWorkspace(targetWorkspace))
                 {
                     context.Response.Redirect(
-                        $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value.TrimStart('/')}");
+                        $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value!.TrimStart('/')}");
                     return;
                 }
             }
@@ -80,10 +60,34 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
 
+        private string? HandleCookieRedirect(HttpContext context)
+        {
+            if (context.Request.Cookies.TryGetValue(WorkspaceInfoFilter.CookieName, out var cookieValue)
+                && cookieValue != null)
+            {
+                try
+                {
+                    var workspace = dataProtector.Unprotect(cookieValue);
+
+                    if (context.User.HasClaim(WorkspaceConstants.ClaimType, workspace))
+                    {
+                        return workspace;
+                    }
+                }
+                catch
+                {
+                    /* Unprotect can throw exception if keys have changed.
+                         We can and should ignore it and remove wrong cookie */
+                    context.Response.Cookies.Delete(WorkspaceInfoFilter.CookieName);
+                }
+            }
+
+            return null;
+        }
+
         public static readonly string[] NotScopedToWorkspacePaths =
         {
-            "/graphql", "/Account", "/api", "/.hc", "/metrics"
+            "/graphql", "/Account", "/api", "/.hc", "/metrics", "/" + WorkspaceConstants.AdminWorkspaceName
         };
-
     }
 }

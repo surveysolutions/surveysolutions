@@ -7,9 +7,12 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
     {
         public override void Up()
         {
-            Create.Table("productversionhistory")
-                .WithColumn("updatetimeutc").AsDateTime().PrimaryKey()
-                .WithColumn("productversion").AsString().Nullable();
+            if (!Schema.Table("productversionhistory").Exists())
+            {
+                Create.Table("productversionhistory")
+                    .WithColumn("updatetimeutc").AsDateTime().PrimaryKey()
+                    .WithColumn("productversion").AsString().Nullable();
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
 using WB.Persistence.Headquarters.Migrations.ReadSide;
+using WB.Persistence.Headquarters.Migrations.Users;
 using WB.Tests.Abc;
 using M202011201421_InitSingleWorkspace = WB.Persistence.Headquarters.Migrations.Workspace.M202011201421_InitSingleWorkspace;
 
@@ -45,23 +46,18 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         public static void InitializeDb(string connectionString, IWorkspaceContextAccessor workspaceContextAccessor, params DbType[] dbType)
         {
-            DatabaseManagement.InitDatabase(connectionString, "users");
             DatabaseManagement.InitDatabase(connectionString, "events");
             DbMigrationsRunner.MigrateToLatest(connectionString, "events",
                 new DbUpgradeSettings(typeof(M201812181520_AddedGlobalSequenceSequence).Assembly, typeof(M201812181520_AddedGlobalSequenceSequence).Namespace));
            
             foreach (var db in dbType)
             {
-                string schemaName = null;
-                switch (db)
+                string schemaName = db switch
                 {
-                    case DbType.PlainStore:
-                        schemaName = "plainstore";
-                        break;
-                    case DbType.ReadSide:
-                        schemaName = "readside";
-                        break;
-                }
+                    DbType.PlainStore => "plainstore",
+                    DbType.ReadSide => "readside",
+                    DbType.Users => "users"
+                };
 
                 DatabaseManagement.InitDatabase(connectionString, schemaName);
               
@@ -75,6 +71,11 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                         DbMigrationsRunner.MigrateToLatest(connectionString, schemaName,
                             new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace));
                         break;
+                    case DbType.Users:
+                        DbMigrationsRunner.MigrateToLatest(connectionString, "users",
+                            new DbUpgradeSettings(typeof(M001_AddUsersHqIdentityModel).Assembly,
+                                typeof(M001_AddUsersHqIdentityModel).Namespace));
+                        break;
                 }
             }
 
@@ -85,7 +86,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
             DbMigrationsRunner.MigrateToLatest(connectionString, schema,
                 DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
-
         }
 
         public static void DropDb(string connectionString)
