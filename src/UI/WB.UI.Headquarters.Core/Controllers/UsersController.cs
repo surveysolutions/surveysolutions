@@ -186,6 +186,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private async Task<dynamic> GetUserInfo(HqUser user)
         {
+            UserRoles userRole = user.Roles.First().Id.ToUserRole();
             return new
             {
                 UserInfo = new
@@ -199,13 +200,13 @@ namespace WB.UI.Headquarters.Controllers
                     PersonName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
-
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser),
                     RecoveryCodes = ""
                 },
                 Api = new
