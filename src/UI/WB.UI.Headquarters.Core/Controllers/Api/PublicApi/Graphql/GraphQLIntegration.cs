@@ -8,6 +8,8 @@ using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
@@ -28,8 +30,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .UseField<WorkspaceGraphQlMiddleware>()
                 .AddAuthorization()
                 .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
-                .AddQueryType<HeadquartersQuery>()
-                .AddMutationType<HeadquartersMutations>()
+                .AddQueryType(x => x.Name("HeadquartersQuery"))
+                .AddType<AssignmentsQueryExtension>()
+                .AddType<InterviewsQueryExtension>()
+                .AddType<MapsQueryExtension>()
+                .AddType<QuestionnairesQueryExtension>()
+                .AddType<QuestionsQueryExtension>()
+                .AddType<QuestionnaireItemsQueryExtension>()
+                .AddType<UsersQueryExtension>()
+                .AddMutationType(x => x.Name("HeadquartersMutations"))
+                .AddType<CalendarEventsMutationExtension>()
+                .AddType<MapsMutationExtension>()
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string,CustomStringOperationFilterInput>()
                 .AddFiltering()

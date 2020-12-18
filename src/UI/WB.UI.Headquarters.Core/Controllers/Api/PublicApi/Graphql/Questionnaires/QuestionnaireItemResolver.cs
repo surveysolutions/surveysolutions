@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HotChocolate;
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 };
         }
 
-        private string GetTitle(Guid id, EntityType entityType, IQuestionnaire questionnaire)
+        private string? GetTitle(Guid id, EntityType entityType, IQuestionnaire questionnaire)
         {
             if (entityType == EntityType.Question) 
                 return questionnaire.GetQuestionTitle(id);
