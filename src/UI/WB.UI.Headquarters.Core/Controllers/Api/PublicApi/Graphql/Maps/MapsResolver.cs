@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,19 +17,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         public IQueryable<MapBrowseItem> GetMaps([Service] IUnitOfWork unitOfWork) => 
             unitOfWork.Session.Query<MapBrowseItem>();
         
-        /*public Task AddMap(IFormFile file)
-        {
-            var ms = new MemoryStream();
-            file.CopyTo(ms);
-
-            return this.mapStorageService.SaveOrUpdateMapAsync(new ExtractedFile
-            {
-                Name = file.Name,
-                Size = file.Length,
-                Bytes = ms.ToArray()
-            });
-        }*/
-
         public Task<MapBrowseItem> DeleteMap(string fileName, [Service] IMapStorageService mapStorageService) 
         {
             return mapStorageService.DeleteMap(fileName);
