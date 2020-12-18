@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.AspNetCore;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types.Descriptors;
@@ -42,17 +43,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
         public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {
-            return app.UseEndpoints(x => x.MapGraphQL());
+            var options = new GraphQLServerOptions {EnableSchemaRequests = true};
+            options.Tool.Credentials = DefaultCredentials.Include;
             
-            /*return app.UseGraphQLHttpPost(new HttpPostMiddlewareOptions
-                 {
-                     Path = "/graphql"
- 
-                 })
-                 .UseGraphQLHttpGetSchema(new HttpGetSchemaMiddlewareOptions
-                 {
-                     Path = "/graphql/schema"
-                 });*/
+            return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
         }
     }
 }
