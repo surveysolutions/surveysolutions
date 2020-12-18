@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore;
@@ -15,9 +16,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
     public static class GraphQLIntegration
     {
-        public static void AddGraphQL(this IServiceCollection services)
+        public static IRequestExecutorBuilder AddGraphQL(this IServiceCollection services)
         {
-            GetExecutorBuilder(services)
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+            
+            return GetExecutorBuilder(services)
                 .AddErrorFilter<GraphQLErrorFilter>()
                 .AddDiagnosticEventListener(x => 
                     new GraphqlDiagnosticEventListener(x.GetApplicationService<ILogger<GraphqlDiagnosticEventListener>>()));
@@ -49,11 +55,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
         public static async Task<ISchema> GetSchema(IServiceCollection services)
         {
-            return await GetExecutorBuilder(services).BuildSchemaAsync();
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+            
+            return await GetExecutorBuilder(services)
+                .BuildSchemaAsync();
         }
 
         public static IApplicationBuilder UseGraphQLApi(this IApplicationBuilder app)
         {
+            if (app == null)
+            {
+                throw new ArgumentNullException(nameof(app));
+            }
+            
             var options = new GraphQLServerOptions {EnableSchemaRequests = true};
             options.Tool.Credentials = DefaultCredentials.Include;
             
