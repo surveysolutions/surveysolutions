@@ -5,8 +5,7 @@
 @inject IOptions<GoogleMapsConfig> options
 
 @{
-    ViewBag.Title = Dashboard.MapDashboard;    
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = Dashboard.MapDashboard;
 }
 
 @section Scripts{
@@ -15,5 +14,5 @@
     </script>
     @Html.RenderHqConfig(Model)
 }
-
 <div id="vueApp"></div>
+
