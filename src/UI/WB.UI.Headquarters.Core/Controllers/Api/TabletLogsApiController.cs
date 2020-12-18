@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var response = new DataTableResponse<LogRow>
             {
-                Draw = request.Draw + 1,
+                Draw = request.Draw,
                 RecordsTotal = totalCount,
                 RecordsFiltered = totalCount,
                 Data = result
