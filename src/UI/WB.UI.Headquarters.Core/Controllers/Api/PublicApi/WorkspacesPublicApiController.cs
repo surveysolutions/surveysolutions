@@ -93,6 +93,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
             }
 
+            if(!filter.IncludeDisabled)
+            {
+                result = result.Where(x => x.DisabledAtUtc == null);
+            }
+
             return result;
         }
 
