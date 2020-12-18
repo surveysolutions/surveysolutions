@@ -63,16 +63,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IEnumerable<WorkspaceApiView> result =
                 this.workspaces.Query(_ =>
                         Filter(filter, _)
-                            .Skip(filter.Offset)
-                            .Take(filter.Limit)
+                            .Skip(filter.Start)
+                            .Take(filter.Length)
                             .ToList())
                     .Select(x => mapper.Map<Workspace, WorkspaceApiView>(x));
             int totalCount = this.workspaces.Query(_ => Filter(filter, _).Count());
 
             return new WorkspacesApiView
             (
-                filter.Offset,
-                filter.Limit,
+                filter.Start,
+                filter.Length,
                 totalCount,
                 result
             );
