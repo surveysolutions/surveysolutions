@@ -1,3 +1,4 @@
+using System.Linq;
 using Dapper;
 using FluentMigrator;
 
@@ -40,8 +41,9 @@ namespace WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace
             Execute.WithConnection((c, t) =>
             {
                 var maxValue =
-                    c.ExecuteScalar(
-                        "SELECT MAX(next_hi) FROM readside.hibernate_unique_key UNION SELECT MAX(next_hi) FROM plainstore.hibernate_unique_key;");
+                    c.Query<int>(
+                        "SELECT MAX(next_hi) FROM readside.hibernate_unique_key UNION SELECT MAX(next_hi) FROM plainstore.hibernate_unique_key;")
+                    .Max();
 
                 c.ExecuteScalar("INSERT INTO ws_primary.hibernate_unique_key VALUES (:val)", new {val = maxValue});
             });
