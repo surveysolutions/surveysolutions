@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers
             if (model.UserName != null)
             {
                 var user = await userManager.FindByNameAsync(model.UserName);
-                if (user.IsInRole(UserRoles.ApiUser))
+                if (user?.IsInRole(UserRoles.ApiUser) == true)
                 {
                     this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
                 }
