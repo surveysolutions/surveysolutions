@@ -135,14 +135,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
         
         public InterviewGpsInfo[] GetPrefilledGpsAnswers(
-            Guid? questionnaireId, long? questionnaireVersion, int? maxAnswersCount)
+            Guid? questionnaireId, long? questionnaireVersion, 
+            double east, double north, double west, double south)
         {
             var userId = authorizedUser.Id;
             
             var gpsQuery = QueryGpsAnswers()
                 .Where(x => x.Answer.IsEnabled &&
-                            x.QuestionnaireItem.Featured == true &&
-                            x.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates);
+                            //x.QuestionnaireItem.Featured == true &&
+                            x.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates &&
+                            x.Answer.Latitude <= north &&
+                            x.Answer.Latitude >= south &&
+                            x.Answer.Longitude <= east &&
+                            x.Answer.Longitude >= west 
+                            );
 
             if (questionnaireId.HasValue)
             {
@@ -187,11 +193,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Latitude = x.Answer.Latitude,
                 Longitude = x.Answer.Longitude,
             });
-
-            if (maxAnswersCount.HasValue)
-            {
-                result = result.Take(maxAnswersCount.Value);
-            }
 
             return result.ToArray();
         }

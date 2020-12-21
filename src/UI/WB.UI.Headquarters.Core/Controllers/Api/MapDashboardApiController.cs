@@ -5,6 +5,7 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
+using MarkerClustering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -56,16 +57,42 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.questionnaireItems = questionnaireItems;
         }
         
-        public class MapMarkerDetail
+        public enum MapMarkerType
         {
-            public int AssignmentId { get; set; }
-            public Guid AssignmentPublicKey { get; set; }
-            
-            public Guid InterviewId { get; set; }
-            public string InterviewKey { get; set; }
-            public InterviewStatus Status { get; set; }
+            Interview,
+            Assignment,
+            Cluster,
         }
         
+        public abstract class MapMarker
+        {
+            public abstract MapMarkerType type { get; }
+        }
+
+        public class MapClusterMarker : MapMarker
+        {
+            public override MapMarkerType type => MapMarkerType.Cluster;
+            public int count { get; set; }
+            public int expand { get; set; }
+        }
+
+        public class MapInterviewMarker : MapMarker
+        {
+            public override MapMarkerType type => MapMarkerType.Interview;
+
+            public Guid interviewId { get; set; }
+            public string interviewKey { get; set; }
+            public InterviewStatus status { get; set; }
+        }
+
+        public class MapAssignmentMarker : MapMarker
+        {
+            public override MapMarkerType type => MapMarkerType.Assignment;
+
+            public int assignmentId { get; set; }
+            public Guid publicKey { get; set; }
+        }
+
         public class MapDashboardRequest
         {
             public Guid? QuestionnaireId { get; set; }
@@ -85,11 +112,66 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             public FeatureCollection FeatureCollection { get; set; }
             public int TotalPoint { get; set; }
-            public GeoBounds InitialBounds { get; set; }
+            public GeoBounds Bounds { get; set; }
+        }
+        
+        [HttpPost]
+        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
+        {
+            var interviewGpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
+                input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.East, input.North, input.West, input.South);
+
+            var mapPoints = interviewGpsAnswers.Select(g =>
+                new MapPoint<InterviewGpsInfo>(g.Latitude, g.Longitude, g));
+            
+            var clustering = new Clustering<InterviewGpsInfo>(input.Zoom);
+            var valueCollection = clustering.RunClustering(mapPoints).ToList();
+            var featureCollection = new FeatureCollection(valueCollection.Select(g =>
+            {
+                MapMarker mapMarker = null;
+                if (g.Count > 1)
+                {
+                    mapMarker = new MapClusterMarker()
+                    {
+                        count = g.Count,
+                        expand = input.Zoom + 1,
+                    };
+                }
+                else
+                {
+                    var mapPoint = g.Points[0];
+                    mapMarker = new MapInterviewMarker()
+                    {
+                        interviewId = mapPoint.Data.InterviewId,
+                        interviewKey = mapPoint.Data.InterviewKey,
+                        status = mapPoint.Data.Status,
+                    };
+                }
+                
+                return new Feature(new Point(
+                        new Position(g.X, g.Y)),
+                        mapMarker,
+                        g.ID);
+            }).ToList());
+
+            double south = interviewGpsAnswers.Min(a => a.Latitude); 
+            double west = interviewGpsAnswers.Min(a => a.Longitude); 
+            double north  = interviewGpsAnswers.Max(a => a.Latitude);
+            double east = interviewGpsAnswers.Max(a => a.Longitude);
+            var geoBounds = new GeoBounds(south, west, north, east);
+                
+            return new MapDashboardResult
+            {
+                FeatureCollection = featureCollection,
+                Bounds = geoBounds,
+                TotalPoint = valueCollection.Count
+            };
         }
 
+
         [HttpPost]
-        public MapDashboardResult Markers(MapDashboardRequest input)
+        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
             var key = $"MapDashboard;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{this.authorizedUser.Id}";
 
@@ -143,7 +225,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return new MapDashboardResult
             {
                 FeatureCollection = collection,
-                InitialBounds = map.Bounds,
+                Bounds = map.Bounds,
                 TotalPoint = map.Total
             };
         }
@@ -182,7 +264,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         private MapReportCacheLine InitializeSuperCluster(MapDashboardRequest input)
         {
             var gpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
-                input.QuestionnaireId, input.QuestionnaireVersion, null);
+                input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.East, input.North, input.West, input.South);
 
             var cluster = new SuperCluster();
             var bounds = GeoBounds.Closed;
@@ -191,11 +274,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 bounds.Expand(g.Latitude, g.Longitude);
                 return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
-                    new MapMarkerDetail()
+                    new MapInterviewMarker()
                     {
-                        InterviewId = g.InterviewId,
-                        InterviewKey = g.InterviewKey,
-                        Status = g.Status,
+                        interviewId = g.InterviewId,
+                        interviewKey = g.InterviewKey,
+                        status = g.Status,
                     }
                     /*new Dictionary<string, object>
                     {
@@ -227,7 +310,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 return q.Where(item => 
                         item.QuestionType == QuestionType.GpsCoordinates
-                        && item.Featured == true
+                        //&& item.Featured == true
                         )
                     .Select(item => item.QuestionnaireIdentity)
                     .Distinct().ToList();
