@@ -378,6 +378,7 @@ namespace WB.UI.Headquarters
 
             app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             
+            app.UseWorkspaces();
             if (!env.IsDevelopment())
             {
                 app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
@@ -387,12 +388,8 @@ namespace WB.UI.Headquarters
                         appBuilder.UseExceptionHandler("/error/500");
                     });
             }
-
-            app.UseWorkspaces();
             
-            // make sure we do not track static files requests
             app.UseMetrics(Configuration);
-
             app.UseRouting();
             app.UseAuthentication();
 
