@@ -7,12 +7,13 @@
                 <button type="button"
                     class="btn btn-success"
                     data-suso="create-new-workspace"
-                    @click="$refs.createWorkspaceModal.modal('show')">
+                    @click="createNewWorkspace">
                     {{$t('Workspaces.AddNew')}}
                 </button>
             </div>
             <i
-                v-html="$t('Workspaces.WorkspacesSubtitle')">
+                v-html="
+                    $t('Workspaces.WorkspacesSubtitle')">
             </i>
         </div>
         <DataTables
@@ -174,6 +175,11 @@ export default {
         this.loadData()
     },
     methods: {
+        createNewWorkspace() {
+            this.editedDisplayName = null
+            this.newWorkspaceName = null
+            this.$refs.createWorkspaceModal.modal('show')
+        },
         loadData() {
             if (this.$refs.table){
                 this.$refs.table.reload()
@@ -346,13 +352,16 @@ export default {
                         name: 'DisplayName',
                         title: this.$t('Workspaces.DisplayName'),
                         sortable: false,
+                        render(data, type, row) {
+                            return $('<div>').text(data).html()
+                        },
                     },
                 ],
                 rowId: function(row) {
                     return row.name
                 },
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: `${this.$config.model.dataUrl}?showDisabled=true`,
                     type: 'GET',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.TotalCount
