@@ -7,12 +7,13 @@
                 <button type="button"
                     class="btn btn-success"
                     data-suso="create-new-workspace"
-                    @click="$refs.createWorkspaceModal.modal('show')">
+                    @click="createNewWorkspace">
                     {{$t('Workspaces.AddNew')}}
                 </button>
             </div>
             <i
-                v-html="$t('Workspaces.WorkspacesSubtitle')">
+                v-html="
+                    $t('Workspaces.WorkspacesSubtitle')">
             </i>
         </div>
         <DataTables
@@ -174,22 +175,48 @@ export default {
         this.loadData()
     },
     methods: {
+        createNewWorkspace() {
+            this.editedDisplayName = null
+            this.newWorkspaceName = null
+            this.$validator.reset()
+            this.$refs.createWorkspaceModal.modal('show')
+        },
         loadData() {
             if (this.$refs.table){
                 this.$refs.table.reload()
             }
         },
         async updateWorkspace() {
-            await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
-                displayName: this.editedDisplayName,
-            })
-            this.$refs.editWorkspaceModal.modal('hide')
-            this.loadData()
+            try {
+                await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
+                    displayName: this.editedDisplayName,
+                })
+                this.$refs.editWorkspaceModal.modal('hide')
+                this.loadData()
+            }
+            catch(err) {
+                if(err.response.status === 403) {
+                    toastr.error(this.$t('Workspaces.ReLogin'))
+                }
+                else {
+                    throw err
+                }
+            }
         },
         async disableWorkspace() {
-            await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
-            this.$refs.disableWorkspaceModal.modal('hide')
-            this.loadData()
+            try {
+                await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
+                this.$refs.disableWorkspaceModal.modal('hide')
+
+                this.loadData()
+            }
+            catch(err) {
+                const errors = err.response.data.Errors
+                if(errors?.name) {
+                    const nameErrors = errors.name.join('\r\n')
+                    toastr.error(nameErrors)
+                }
+            }
         },
         async createWorkspace() {
             const validationResult = await this.$validator.validateAll()
@@ -346,13 +373,16 @@ export default {
                         name: 'DisplayName',
                         title: this.$t('Workspaces.DisplayName'),
                         sortable: false,
+                        render(data, type, row) {
+                            return $('<div>').text(data).html()
+                        },
                     },
                 ],
                 rowId: function(row) {
                     return row.name
                 },
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: `${this.$config.model.dataUrl}?IncludeDisabled=true`,
                     type: 'GET',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.TotalCount
