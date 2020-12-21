@@ -202,6 +202,7 @@ export default {
     mounted() {
         this.setMapCanvasStyle()
         this.initializeMap()
+        this.showPointsOnMap(180, 180, -180, -180, true)
     },
 
     methods: {
@@ -258,10 +259,6 @@ export default {
 
             this.map = new google.maps.Map(document.getElementById('map-canvas'), this.getMapOptions())
 
-            this.heatmap = new google.maps.visualization.HeatmapLayer({
-                map: this.map,
-            })
-
             this.infoWindow = new google.maps.InfoWindow()
 
             const delayedMapReload = debounce(() => {
@@ -287,9 +284,61 @@ export default {
 
             this.map.data.setStyle(function(feature) {
                 const styles = mapStyles
-                const count = feature.getProperty('count')
+                const type = feature.getProperty('type')
 
-                if (count > 1) {
+                if (type == 'Interview')
+                {
+                    const status = feature.getProperty('status')
+
+                    let interviewStyle ={
+                        label: {
+                            fontSize: '12px',
+                            text: 'I',
+                        },
+                    }
+
+                    if (status == 'Created'
+                        || status == 'InterviewerAssigned'
+                        || status == 'SupervisorAssigned'
+                        || status == 'Restarted'
+                    ) {
+                        //interviewStyle.label.color =
+                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    }
+
+                    if (status == 'Completed'
+                    ) {
+                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    }
+
+                    if (status == 'RejectedBySupervisor'
+                        || status == 'RejectedByHeadquarters'
+                    ) {
+                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                    }
+
+                    if (status == 'ApprovedBySupervisor'
+                        || status == 'ApprovedByHeadquarters'
+                    ) {
+                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'
+                    }
+
+                    return interviewStyle
+                }
+                if (type == 'Assignment')
+                {
+                    let interviewStyle ={
+                        label: {
+                            fontSize: '12px',
+                            text: 'I',
+                        },
+                        icon: {
+                            url: 'http://maps.google.com/mapfiles/ms/icons/white-dot.png',
+                        },
+                    }
+                }
+                if (type == 'Cluster') {
+                    const count = feature.getProperty('count')
                     const max = self.totalAnswers
                     const percent = (count / max) * styles.length
 
@@ -380,9 +429,9 @@ export default {
             const zoom = extendBounds ? -1 : this.map.getZoom()
 
             var request = {
-                QuestionnaireId: (this.selectedQuestionnaireId || {}).key,
+                QuestionnaireId: (this.selectedQuestionnaireId || {}).key || null,
                 QuestionnaireVersion: this.selectedVersionValue,
-                Zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
+                Zoom: zoom,
                 east,
                 north,
                 west,
@@ -413,7 +462,6 @@ export default {
 
             this.totalAnswers = data.totalPoint
             const features = data.featureCollection.features
-            const heatmapData = {data: []}
 
             this.map.data.forEach(feature => {
                 toRemove[feature.getId()] = feature
@@ -430,26 +478,9 @@ export default {
                 } else {
                     markers.features.push(feature)
                 }
-
-                const coords = feature.geometry.coordinates
-                const count = feature.properties.count || 1
-
-                heatmapData.data.push({
-                    location: new google.maps.LatLng(coords[1], coords[0]),
-                    weight: count,
-                })
             })
 
-            if (this.showHeatmap) {
-                this.map.data.forEach(feature => {
-                    this.map.data.remove(feature)
-                })
-
-                this.heatmap.setData(heatmapData.data)
-            } else {
-                this.map.data.addGeoJson(markers)
-                this.heatmap.setData([])
-            }
+            this.map.data.addGeoJson(markers)
 
             forEach(Object.keys(toRemove), key => {
                 this.map.data.remove(toRemove[key])
@@ -459,10 +490,8 @@ export default {
                 if (this.totalAnswers === 0) {
                     this.map.setZoom(1)
                 } else {
-                    const bounds = data.initialBounds
-
-                    const sw = new google.maps.LatLng(bounds.south, bounds.west)
-                    const ne = new google.maps.LatLng(bounds.north, bounds.east)
+                    const sw = new google.maps.LatLng(data.bounds.south, data.bounds.west)
+                    const ne = new google.maps.LatLng(data.bounds.north, data.bounds.east)
                     const latlngBounds = new google.maps.LatLngBounds(sw, ne)
                     this.isMapReloaded = true
                     this.map.fitBounds(latlngBounds)
