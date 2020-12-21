@@ -382,7 +382,7 @@ export default {
                     return row.name
                 },
                 ajax: {
-                    url: `${this.$config.model.dataUrl}?showDisabled=true`,
+                    url: `${this.$config.model.dataUrl}?IncludeDisabled=true`,
                     type: 'GET',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.TotalCount
