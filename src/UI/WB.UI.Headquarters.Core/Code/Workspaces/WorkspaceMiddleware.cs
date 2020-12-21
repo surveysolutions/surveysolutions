@@ -35,20 +35,23 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 throw new ArgumentNullException(nameof(context));
             }
 
-            /*if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
+            if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
             {
                 await next(context).ConfigureAwait(false);
                 return;
-            }*/
+            }
 
             var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
             List<WorkspaceContext> workspaces = workspacesService.AllEnabledWorkspaces().ToList();
 
             async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
             {
+                var oldContextServices = context.RequestServices;
                 using var scope = context.RequestServices.CreateWorkspaceScope(workspaceContext);
                 context.RequestServices = scope.ServiceProvider;
                 await next(context).ConfigureAwait(false);
+                
+                context.RequestServices = oldContextServices;
             }
             
             foreach (var path in InfrastructureEndpoints)
@@ -93,6 +96,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
 
-        public static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install", "/workspaces", "/UnderConstruction" };
+        public static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install", "/workspaces" };
     }
 }
