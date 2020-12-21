@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
         [HttpGet]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult<WorkspaceApiView> Details([FromQuery, BindRequired]string name)
+        public ActionResult<WorkspaceApiView> Details([BindRequired]string name)
         {
             var workspace = this.workspaces.GetById(name);
             if (workspace == null || !this.authorizedUser.Workspaces.Contains(name))
@@ -159,7 +159,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult Update([FromQuery, BindRequired]string id, [FromBody] WorkspaceUpdateApiView request)
+        public ActionResult Update([BindRequired]string id, [FromBody] WorkspaceUpdateApiView request)
         {
             if (ModelState.IsValid)
             {
@@ -188,7 +188,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{name}/disable")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public ActionResult Disable([FromQuery, BindRequired]string name)
+        public ActionResult Disable([BindRequired]string name)
         {
             var workspace = this.workspaces.GetById(name);
             if (workspace == null)
@@ -227,7 +227,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{name}/enable")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public ActionResult Enable([FromQuery, BindRequired]string name)
+        public ActionResult Enable([BindRequired]string name)
         {
             var workspace = this.workspaces.GetById(name);
             if (workspace == null)
