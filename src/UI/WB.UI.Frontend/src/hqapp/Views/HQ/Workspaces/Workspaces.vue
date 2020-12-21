@@ -178,6 +178,7 @@ export default {
         createNewWorkspace() {
             this.editedDisplayName = null
             this.newWorkspaceName = null
+            this.$validator.reset()
             this.$refs.createWorkspaceModal.modal('show')
         },
         loadData() {
