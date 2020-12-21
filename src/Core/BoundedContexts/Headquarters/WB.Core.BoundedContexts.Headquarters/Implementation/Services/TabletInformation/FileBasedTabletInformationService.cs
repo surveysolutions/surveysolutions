@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             this.encryptionService = encryptionService;
 
             var workspaceName = contextAccessor.CurrentWorkspace()?.Name; 
-            this.basePath = fileSystemAccessor.CombinePath(fileStorageOptions.Value.TempData, TabletInformationFolderName,
+            this.basePath = Path.Combine(fileStorageOptions.Value.TempData, TabletInformationFolderName,
                 workspaceName == WorkspaceConstants.DefaultWorkspaceName ? "" : workspaceName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
