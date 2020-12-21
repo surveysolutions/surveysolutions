@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
@@ -63,16 +66,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IEnumerable<WorkspaceApiView> result =
                 this.workspaces.Query(_ =>
                         Filter(filter, _)
-                            .Skip(filter.Offset)
-                            .Take(filter.Limit)
+                            .Skip(filter.Start)
+                            .Take(filter.Length)
                             .ToList())
                     .Select(x => mapper.Map<Workspace, WorkspaceApiView>(x));
             int totalCount = this.workspaces.Query(_ => Filter(filter, _).Count());
 
             return new WorkspacesApiView
             (
-                filter.Offset,
-                filter.Limit,
+                filter.Start,
+                filter.Length,
                 totalCount,
                 result
             );
@@ -93,21 +96,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
             }
 
+            if(!filter.IncludeDisabled)
+            {
+                result = result.Where(x => x.DisabledAtUtc == null);
+            }
+
             return result;
         }
 
         /// <summary>
         /// Get single workspace details
         /// </summary>
-        [Route("{id}")]
+        [Route("{name}")]
         [SwaggerResponse(404, "Workspace not found")]
         [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
         [HttpGet]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult<WorkspaceApiView> Details(string id)
+        public ActionResult<WorkspaceApiView> Details(string name)
         {
-            var workspace = this.workspaces.GetById(id);
-            if (workspace == null || !this.authorizedUser.Workspaces.Contains(id))
+            var workspace = this.workspaces.GetById(name);
+            if (workspace == null || !this.authorizedUser.Workspaces.Contains(name))
             {
                 return NotFound();
             }
@@ -118,25 +126,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <summary>
         /// Creates new workspace. Accessible only to administrator 
         /// </summary>
-        /// <response code="201">Workspace created</response>
-        /// <response code="400">Validation failed</response>
         [SwaggerResponse(StatusCodes.Status201Created, "Workspace created", typeof(WorkspaceApiView))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [HttpPost]
         [AuthorizeByRole(UserRoles.Administrator)]
         [ObservingNotAllowed]
-        public async Task<ActionResult> Create([FromBody] WorkspaceApiView request)
+        public async Task<ActionResult> Create([FromBody] WorkspaceCreateApiView request)
         {
             if (ModelState.IsValid)
             {
-                var workspace = new Workspace(request.Name!, request.DisplayName!);
+                var workspace = new Workspace(request.Name, request.DisplayName);
 
                 this.workspaces.Store(workspace, null);
                 await this.workspacesService.Generate(workspace.Name,
                     DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
                 this.workspacesCache.InvalidateCache();
 
-                return CreatedAtAction("Details", routeValues: new {id = workspace.Name},
+                return CreatedAtAction("Details", routeValues: new {name = workspace.Name},
                     value: this.mapper.Map<WorkspaceApiView>(workspace));
             }
 
@@ -148,22 +154,28 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <response code="204">Workspace updated</response>
         /// <response code="404">Workspace not found</response>
+        /// <response code="403">User is not authorized to make changes to workspace</response>
         /// <response code="400">Validation failed</response>
         [HttpPatch]
-        [Route("{id}")]
+        [Route("{name}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Workspace updated")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult Update(string id, [FromBody] WorkspaceUpdateApiView request)
+        public ActionResult Update([FromRoute]string name, [FromBody] WorkspaceUpdateApiView request)
         {
             if (ModelState.IsValid)
             {
-                var existing = this.workspaces.GetById(id);
+                var existing = this.workspaces.GetById(name);
 
-                if (existing == null || !this.authorizedUser.Workspaces.Contains(id))
+                if (existing == null)
                 {
                     return NotFound();
+                }
+
+                if (!this.authorizedUser.HasAccessToWorkspace(name))
+                {
+                    return Forbid();
                 }
 
                 existing.DisplayName = request.DisplayName!;
@@ -181,12 +193,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Validation failed</response>
         /// <response code="404">Workspace not found</response>
         [HttpPost]
-        [Route("{id}/disable")]
+        [Route("{name}/disable")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public ActionResult Disable(string id)
+        public ActionResult Disable(string name)
         {
-            var workspace = this.workspaces.GetById(id);
+            var workspace = this.workspaces.GetById(name);
             if (workspace == null)
             {
                 return NotFound();
@@ -194,18 +206,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (workspace.DisabledAtUtc != null)
             {
-                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already disabled");
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {name} is already disabled");
             }
             
-            if (id == Workspace.Default.Name)
+            if (name == Workspace.Default.Name)
             {
-                ModelState.AddModelError(nameof(id), $"Workspace {id} can not be disabled");
+                ModelState.AddModelError(nameof(name), $"Workspace {name} can not be disabled");
             }
             
             if (ModelState.IsValid)
             {
                 workspace.Disable();
-                this.logger.LogInformation("Workspace {name} was disabled by {user}", id, this.authorizedUser.UserName);
+                this.logger.LogInformation("Workspace {name} was disabled by {user}", name, this.authorizedUser.UserName);
                 this.workspacesCache.InvalidateCache();
                 return NoContent();
             }
@@ -220,12 +232,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Validation failed</response>
         /// <response code="404">Workspace not found</response>
         [HttpPost]
-        [Route("{id}/enable")]
+        [Route("{name}/enable")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public ActionResult Enable(string id)
+        public ActionResult Enable(string name)
         {
-            var workspace = this.workspaces.GetById(id);
+            var workspace = this.workspaces.GetById(name);
             if (workspace == null)
             {
                 return NotFound();
@@ -233,13 +245,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (workspace.DisabledAtUtc == null)
             {
-                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {id} is already enabled");
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {name} is already enabled");
             }
             
             if (ModelState.IsValid)
             {
                 workspace.Enable();
-                this.logger.LogInformation("Workspace {name} was enabled by {user}", id, this.authorizedUser.UserName);
+                this.logger.LogInformation("Workspace {name} was enabled by {user}", name, this.authorizedUser.UserName);
                 this.workspacesCache.InvalidateCache();
                 return NoContent();
             }
@@ -258,7 +270,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model)
         {
-            List<Workspace> dbWorkspaces = new List<Workspace>();
+            List<Workspace> dbWorkspaces = new();
             foreach (var modelWorkspace in model.Workspaces)
             {
                 var workspace = this.workspaces.GetById(modelWorkspace);
