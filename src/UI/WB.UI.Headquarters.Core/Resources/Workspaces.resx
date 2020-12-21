@@ -87,4 +87,7 @@
     <data name="Enable" xml:space="preserve">
         <value>Enable</value>
     </data>
+    <data name="ReLogin" xml:space="preserve">
+        <value>Please siginout and sigin again to receive access to new workspace</value>
+    </data>
 </root>
