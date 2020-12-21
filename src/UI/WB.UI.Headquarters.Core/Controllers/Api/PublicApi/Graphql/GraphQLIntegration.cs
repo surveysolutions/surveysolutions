@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             return services
                 .AddGraphQLServer()
-                .UseField<WorkspaceGraphQlMiddleware>()
+                .ConfigureSchema(x=>x.Use<WorkspaceGraphQlMiddleware>())
                 .AddAuthorization()
                 .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
