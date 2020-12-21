@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
@@ -110,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
         [HttpGet]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult<WorkspaceApiView> Details([BindRequired]string name)
+        public ActionResult<WorkspaceApiView> Details(string name)
         {
             var workspace = this.workspaces.GetById(name);
             if (workspace == null || !this.authorizedUser.Workspaces.Contains(name))
@@ -152,6 +154,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <response code="204">Workspace updated</response>
         /// <response code="404">Workspace not found</response>
+        /// <response code="403">User is not authorized to make changes to workspace</response>
         /// <response code="400">Validation failed</response>
         [HttpPatch]
         [Route("{name}")]
@@ -159,15 +162,20 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult Update([BindRequired]string id, [FromBody] WorkspaceUpdateApiView request)
+        public ActionResult Update([FromRoute]string name, [FromBody] WorkspaceUpdateApiView request)
         {
             if (ModelState.IsValid)
             {
-                var existing = this.workspaces.GetById(id);
+                var existing = this.workspaces.GetById(name);
 
-                if (existing == null || !this.authorizedUser.Workspaces.Contains(id))
+                if (existing == null)
                 {
                     return NotFound();
+                }
+
+                if (!this.authorizedUser.HasAccessToWorkspace(name))
+                {
+                    return Forbid();
                 }
 
                 existing.DisplayName = request.DisplayName!;
@@ -188,7 +196,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{name}/disable")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public ActionResult Disable([BindRequired]string name)
+        public ActionResult Disable(string name)
         {
             var workspace = this.workspaces.GetById(name);
             if (workspace == null)
@@ -227,7 +235,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{name}/enable")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public ActionResult Enable([BindRequired]string name)
+        public ActionResult Enable(string name)
         {
             var workspace = this.workspaces.GetById(name);
             if (workspace == null)
