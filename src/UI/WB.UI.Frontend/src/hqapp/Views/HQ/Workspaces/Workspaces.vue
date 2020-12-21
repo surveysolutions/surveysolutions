@@ -193,9 +193,19 @@ export default {
             this.loadData()
         },
         async disableWorkspace() {
-            await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
-            this.$refs.disableWorkspaceModal.modal('hide')
-            this.loadData()
+            try {
+                await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
+                this.$refs.disableWorkspaceModal.modal('hide')
+
+                this.loadData()
+            }
+            catch(err) {
+                const errors = err.response.data.Errors
+                if(errors?.name) {
+                    const nameErrors = errors.name.join('\r\n')
+                    toastr.error(nameErrors)
+                }
+            }
         },
         async createWorkspace() {
             const validationResult = await this.$validator.validateAll()
