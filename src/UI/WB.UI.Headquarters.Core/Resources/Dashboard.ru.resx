@@ -243,4 +243,7 @@
   <data name="Workspaces" xml:space="preserve">
       <value>Рабочие пространства</value>
   </data>
+  <data name="UsersManagement" xml:space="preserve">
+      <value>Управление пользователями</value>
+  </data>
 </root>
