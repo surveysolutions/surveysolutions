@@ -449,6 +449,19 @@ class HqApiClient {
     get Workspaces() {
         return new Workspaces(this.http)
     }
+
+    get UsersManagement() {
+        var self = this
+        return {
+            list() {
+                return self.basePath + 'UsersManagement/List'
+            },
+
+            userManage(id) {
+                return self.basePath + 'Users/Manage/' + id
+            },
+        }
+    }
 }
 
 /*  the Plugin */
