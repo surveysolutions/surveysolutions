@@ -186,11 +186,21 @@ export default {
             }
         },
         async updateWorkspace() {
-            await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
-                displayName: this.editedDisplayName,
-            })
-            this.$refs.editWorkspaceModal.modal('hide')
-            this.loadData()
+            try {
+                await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
+                    displayName: this.editedDisplayName,
+                })
+                this.$refs.editWorkspaceModal.modal('hide')
+                this.loadData()
+            }
+            catch(err) {
+                if(err.response.status === 403) {
+                    toastr.error(this.$t('Workspaces.ReLogin'))
+                }
+                else {
+                    throw err
+                }
+            }
         },
         async disableWorkspace() {
             try {
