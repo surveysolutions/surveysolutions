@@ -15,12 +15,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public override bool Equals(object obj)
         {
-            if (!(obj is InterviewGpsAnswerWithTimeStamp target)) return false;
+            if (!(obj is InterviewGpsInfo target)) return false;
 
             return this.Equals(target);
         }
 
-        protected bool Equals(InterviewGpsAnswerWithTimeStamp other)
+        protected bool Equals(InterviewGpsInfo other)
         {
             return InterviewId.Equals(other.InterviewId) 
                    && Latitude.Equals(other.Latitude) 

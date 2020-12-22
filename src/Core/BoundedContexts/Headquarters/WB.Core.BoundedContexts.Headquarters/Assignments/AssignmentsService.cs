@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,15 +20,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUnitOfWork sessionProvider;
+        private readonly IAuthorizedUser authorizedUser;
 
         public AssignmentsService(
             IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor,
             IInterviewAnswerSerializer answerSerializer,
-            IUnitOfWork sessionProvider)
+            IUnitOfWork sessionProvider,
+            IAuthorizedUser authorizedUser)
         {
             this.assignmentsAccessor = assignmentsAccessor;
             this.answerSerializer = answerSerializer;
             this.sessionProvider = sessionProvider;
+            this.authorizedUser = authorizedUser;
         }
 
         public List<Assignment> GetAssignments(Guid responsibleId)
@@ -113,43 +117,101 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return idsToMigrate;
         }
 
-        public List<Assignment> GetAssignmentsWithGpsAnswer(Guid responsibleId,
+        public List<AssignmentGpsInfo> GetAssignmentsWithGpsAnswer(
             Guid? questionnaireId, long? questionnaireVersion, 
             double east, double north, double west, double south)
         {
-            var assigments = QueryGpsAnswers()
+            Guid responsibleId = authorizedUser.Id;
+            
+            var gpsQuery = QueryGpsAnswers()
                 .Where(a =>
-                    !a.Assignment.Archived
-                        && (a.Assignment.Quantity == null || a.Assignment.InterviewSummaries.Count < a.Assignment.Quantity)
-                )
-                .Select(a => a.Assignment)
+                    a.QuestionnaireItem.Featured == true
+                    && !a.Assignment.Archived
+                    && (a.Assignment.Quantity == null || a.Assignment.InterviewSummaries.Count < a.Assignment.Quantity)
+                    && a.Answer.Latitude <= north
+                    && a.Answer.Latitude >= south
+                    && a.Answer.Longitude <= east
+                    && a.Answer.Longitude >= west 
+                );
+            
+            if (questionnaireId.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireId.Value);
+
+                if (questionnaireVersion.HasValue)
+                {
+                    gpsQuery = gpsQuery
+                        .Where(x => x.Assignment.QuestionnaireId.Version == questionnaireVersion.Value);
+                }
+            }
+
+            if (authorizedUser.IsInterviewer)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => 
+                        x.Assignment.ResponsibleId == responsibleId
+                    );
+            } 
+            else if (authorizedUser.IsSupervisor)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => 
+                        (x.Assignment.Responsible.ReadonlyProfile.SupervisorId == responsibleId || x.Assignment.ResponsibleId == responsibleId)
+                    );
+            } 
+            
+            var assignments = gpsQuery
+                .Select(a => new AssignmentGpsInfo()
+                {
+                    AssignmentId = a.Assignment.Id,
+                    Latitude = a.Answer.Latitude,
+                    Longitude = a.Answer.Longitude
+                })
                 .Distinct()
                 .ToList();
-            return assigments;
+            return assignments;
         }
         
         private class AssigmentGpsAnswer
         {
             public Assignment Assignment { get; set; }
-            public string Answer { get; set; }
+            public AssignmentGps Answer { get; set; }
             public QuestionnaireCompositeItem QuestionnaireItem { get; set; }
         }
         
         private IQueryable<AssigmentGpsAnswer> QueryGpsAnswers()
         {
             IQueryable<AssigmentGpsAnswer> gpsAnswers = this.sessionProvider.Session
-                .Query<IdentifyingAnswer>()
+                .Query<AssignmentGps>()
+                .Join(this.sessionProvider.Session.Query<Assignment>(),
+                    gps => gps.Assignment.Id,
+                    assignment => assignment.Id,
+                    (gps, assignment) => new  { gps, assignment})
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    assignmentAnswer => new { assignmentAnswer.Assignment, assignmentAnswer.Identity.Id },
-                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
-                    (identifyingAnswer, questionnaireItem) => new AssigmentGpsAnswer
+                    assignment_gps => new { QuestionnaireId = assignment_gps.assignment.QuestionnaireId.Id, assignment_gps.gps.QuestionId },
+                    questionnaireItem => new { QuestionnaireId = questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (assignment_gps, questionnaireItem) => new AssigmentGpsAnswer
                     {
-                        Assignment = identifyingAnswer.Assignment,
-                        Answer = identifyingAnswer.Answer,
+                        Assignment = assignment_gps.assignment,
+                        Answer = assignment_gps.gps,
                         QuestionnaireItem = questionnaireItem
                     });
-            gpsAnswers = gpsAnswers
-                .Where(a => a.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates);
+            
+            
+            // IQueryable<AssignmentGps> gpsAnswers = this.sessionProvider.Session
+            //     .Query<IdentifyingAnswer>()
+            //     .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
+            //         assignmentAnswer => new { assignmentAnswer.Assignment, assignmentAnswer.Identity.Id },
+            //         questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+            //         (identifyingAnswer, questionnaireItem) => new AssigmentGpsAnswer
+            //         {
+            //             Assignment = identifyingAnswer.Assignment,
+            //             Answer = identifyingAnswer.Answer,
+            //             QuestionnaireItem = questionnaireItem
+            //         });
+            // gpsAnswers = gpsAnswers
+            //     .Where(a => a.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates);
 
             return gpsAnswers;
         }

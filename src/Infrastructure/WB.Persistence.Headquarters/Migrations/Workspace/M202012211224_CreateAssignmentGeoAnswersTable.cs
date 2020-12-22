@@ -1,3 +1,4 @@
+using System.Data;
 using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspace
@@ -13,9 +14,14 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .WithColumn("assignment_id").AsInt32().PrimaryKey(primaryKeyName)
                 .WithColumn("questionid").AsGuid().PrimaryKey(primaryKeyName)
                 .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName)
-                .WithColumn("latitude").AsDouble()
-                .WithColumn("longitude").AsDouble()
+                .WithColumn("latitude").AsDouble().Indexed()
+                .WithColumn("longitude").AsDouble().Indexed()
                 .WithColumn("timestamp").AsString().Nullable();
+            
+            Create.ForeignKey("fk_assignment_geo_answers_to_assignments")
+                .FromTable("assignment_geo_answers").ForeignColumn("assignment_id")
+                .ToTable("assignments").PrimaryColumn("id")
+                .OnDelete(Rule.Cascade);
         }
     }
 }
