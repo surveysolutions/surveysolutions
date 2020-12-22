@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Services.Impl
         {
             var allWorkspaces = this.workspacesCache.AllEnabledWorkspaces();
             return allWorkspaces.Any(x => x.Name.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase))
-                   && Workspaces.Any(x => x.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase));
+                   && User.HasClaim(WorkspaceConstants.ClaimType, targetWorkspace);
         }
 
         public IEnumerable<WorkspaceContext> GetEnabledWorkspaces()

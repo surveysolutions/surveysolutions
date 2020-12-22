@@ -7,12 +7,13 @@
                 <button type="button"
                     class="btn btn-success"
                     data-suso="create-new-workspace"
-                    @click="$refs.createWorkspaceModal.modal('show')">
+                    @click="createNewWorkspace">
                     {{$t('Workspaces.AddNew')}}
                 </button>
             </div>
             <i
-                v-html="$t('Workspaces.WorkspacesSubtitle')">
+                v-html="
+                    $t('Workspaces.WorkspacesSubtitle')">
             </i>
         </div>
         <DataTables
@@ -44,7 +45,7 @@
                         v-validate="nameValidations"
                         :data-vv-as="$t('Workspaces.Name')"
                         autocomplete="off"
-                        @keyup.enter="updateWorkspace"
+                        @keyup.enter="createWorkspace"
                         id="newWorkspaceName" />
                     <p class="help-block"
                         v-if="!errors.has('workspaceName')">
@@ -71,7 +72,7 @@
                         v-validate="displayNameValidations"
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
-                        @keyup.enter="updateWorkspace"
+                        @keyup.enter="createWorkspace"
                         id="newDescription" />
                     <p class="help-block"
                         v-if="!errors.has('workspaceDisplayName')">
@@ -85,6 +86,7 @@
                 <button
                     type="button"
                     data-suso="workspace-create-save"
+                    v-bind:disabled="inProgress"
                     class="btn btn-primary"
                     @click="createWorkspace">{{$t("Common.Save")}}</button>
                 <button
@@ -125,6 +127,7 @@
                     type="button"
                     data-suso="workspace-edit-save"
                     class="btn btn-primary"
+                    v-bind:disabled="inProgress"
                     @click="updateWorkspace">{{$t("Common.Save")}}</button>
                 <button
                     type="button"
@@ -146,6 +149,7 @@
                     type="button"
                     data-suso="workspace-disable-ok"
                     class="btn btn-danger"
+                    v-bind:disabled="inProgress"
                     @click="disableWorkspace">{{$t("Common.Ok")}}</button>
                 <button
                     type="button"
@@ -168,28 +172,63 @@ export default {
             editedRowId: null,
             editedDisplayName: null,
             newWorkspaceName: null,
+            inProgress: false,
         }
     },
     mounted() {
         this.loadData()
     },
     methods: {
+        createNewWorkspace() {
+            this.editedDisplayName = null
+            this.newWorkspaceName = null
+            this.$validator.reset()
+            this.$refs.createWorkspaceModal.modal('show')
+        },
         loadData() {
             if (this.$refs.table){
                 this.$refs.table.reload()
             }
         },
         async updateWorkspace() {
-            await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
-                displayName: this.editedDisplayName,
-            })
-            this.$refs.editWorkspaceModal.modal('hide')
-            this.loadData()
+            try {
+                this.inProgress = true
+                await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
+                    displayName: this.editedDisplayName,
+                })
+                this.$refs.editWorkspaceModal.modal('hide')
+                this.loadData()
+            }
+            catch(err) {
+                if(err.response.status === 403) {
+                    toastr.error(this.$t('Workspaces.ReLogin'))
+                }
+                else {
+                    throw err
+                }
+            }
+            finally {
+                this.inProgress = false
+            }
         },
         async disableWorkspace() {
-            await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
-            this.$refs.disableWorkspaceModal.modal('hide')
-            this.loadData()
+            try {
+                this.inProgress = true
+                await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
+                this.$refs.disableWorkspaceModal.modal('hide')
+
+                this.loadData()
+            }
+            catch(err) {
+                const errors = err.response.data.Errors
+                if(errors?.name) {
+                    const nameErrors = errors.name.join('\r\n')
+                    toastr.error(nameErrors)
+                }
+            }
+            finally {
+                this.inProgress = false
+            }
         },
         async createWorkspace() {
             const validationResult = await this.$validator.validateAll()
@@ -199,6 +238,7 @@ export default {
             }
 
             try {
+                this.inProgress = true
                 await Vue.$http.post(this.$config.model.dataUrl, {
                     displayName: this.editedDisplayName,
                     name: this.newWorkspaceName,
@@ -225,6 +265,9 @@ export default {
                 if(errorMessage) {
                     toastr.error(errorMessage)
                 }
+            }
+            finally {
+                this.inProgress = false
             }
         },
         contextMenuItems({rowData}) {
@@ -346,13 +389,16 @@ export default {
                         name: 'DisplayName',
                         title: this.$t('Workspaces.DisplayName'),
                         sortable: false,
+                        render(data, type, row) {
+                            return $('<div>').text(data).html()
+                        },
                     },
                 ],
                 rowId: function(row) {
                     return row.name
                 },
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: `${this.$config.model.dataUrl}?IncludeDisabled=true`,
                     type: 'GET',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.TotalCount

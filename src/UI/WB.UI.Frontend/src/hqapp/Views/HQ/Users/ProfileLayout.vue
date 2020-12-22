@@ -34,7 +34,7 @@
                             v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
                     </li>
                     <li class="nav-item"
-                        v-if="isHeadquarters || isApiUser"
+                        v-if="showWorkspaces"
                         v-bind:class=" {'active': currentTab == 'workspaces'}" >
                         <a class="nav-link"
                             id="profile"
@@ -107,6 +107,9 @@ export default {
 
             return this.$t('Pages.Home')
         },
+        showWorkspaces() {
+            return this.$config.model.userInfo.canChangeWorkspacesList
+        },
         referrerUrl() {
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return '../../Headquarters'
@@ -125,7 +128,7 @@ export default {
             if(this.isOwnProfile)
                 return baseUrl
             else
-                return baseUrl + '/' + this.userId
+                return `${baseUrl}/${this.userId}`
 
         },
     },
