@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Supercluster;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -40,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IInterviewFactory interviewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        private readonly IAssignmentsService assignmentsService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IMemoryCache cache;
 
@@ -48,13 +50,15 @@ namespace WB.UI.Headquarters.Controllers.Api
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor,
             IAuthorizedUser authorizedUser,
             IMemoryCache cache,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
+            IAssignmentsService assignmentsService)
         {
             this.interviewFactory = interviewFactory;
             this.questionnairesAccessor = questionnairesAccessor;
             this.authorizedUser = authorizedUser;
             this.cache = cache;
             this.questionnaireItems = questionnaireItems;
+            this.assignmentsService = assignmentsService;
         }
         
         public enum MapMarkerType
@@ -122,11 +126,21 @@ namespace WB.UI.Headquarters.Controllers.Api
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.East, input.North, input.West, input.South);
 
-            var mapPoints = interviewGpsAnswers.Select(g =>
-                new MapPoint<InterviewGpsInfo>(g.Latitude, g.Longitude, g));
+            var assignmentGpsData = this.assignmentsService.GetAssignmentsWithGpsAnswer(
+                input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.East, input.North, input.West, input.South);
+
+            var interviewMapPoints = interviewGpsAnswers.Select(g =>
+                new MapPoint<MapMarker>(g.Latitude, g.Longitude, 
+                    new MapInterviewMarker()
+                    {
+                        interviewId = g.InterviewId,
+                        interviewKey = g.InterviewKey,
+                        status = g.Status
+                    }));
             
-            var clustering = new Clustering<InterviewGpsInfo>(input.Zoom);
-            var valueCollection = clustering.RunClustering(mapPoints).ToList();
+            var clustering = new Clustering<MapMarker>(input.Zoom);
+            var valueCollection = clustering.RunClustering(interviewMapPoints).ToList();
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
             {
                 MapMarker mapMarker = null;
