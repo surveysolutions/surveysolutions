@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -324,6 +325,8 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredLength = passwordOptions.RequiredLength;
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
+
+            services.AddMediatR(typeof(Startup));
         }
 
         private static void AddCompression(IServiceCollection services)

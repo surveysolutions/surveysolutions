@@ -1,7 +1,6 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
@@ -27,7 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         public static Workspace Default { get; } = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "Default Space");
         public static Workspace Admin { get; } = new Workspace(WorkspaceConstants.AdminWorkspaceName, "Server Administration"); 
         
-        [JsonIgnore]
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
         public virtual DateTime? DisabledAtUtc { get; protected set; }
 
