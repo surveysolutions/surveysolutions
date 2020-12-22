@@ -45,7 +45,7 @@
                         v-validate="nameValidations"
                         :data-vv-as="$t('Workspaces.Name')"
                         autocomplete="off"
-                        @keyup.enter="updateWorkspace"
+                        @keyup.enter="createWorkspace"
                         id="newWorkspaceName" />
                     <p class="help-block"
                         v-if="!errors.has('workspaceName')">
@@ -72,7 +72,7 @@
                         v-validate="displayNameValidations"
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
-                        @keyup.enter="updateWorkspace"
+                        @keyup.enter="createWorkspace"
                         id="newDescription" />
                     <p class="help-block"
                         v-if="!errors.has('workspaceDisplayName')">
@@ -86,6 +86,7 @@
                 <button
                     type="button"
                     data-suso="workspace-create-save"
+                    v-bind:disabled="inProgress"
                     class="btn btn-primary"
                     @click="createWorkspace">{{$t("Common.Save")}}</button>
                 <button
@@ -126,6 +127,7 @@
                     type="button"
                     data-suso="workspace-edit-save"
                     class="btn btn-primary"
+                    v-bind:disabled="inProgress"
                     @click="updateWorkspace">{{$t("Common.Save")}}</button>
                 <button
                     type="button"
@@ -147,6 +149,7 @@
                     type="button"
                     data-suso="workspace-disable-ok"
                     class="btn btn-danger"
+                    v-bind:disabled="inProgress"
                     @click="disableWorkspace">{{$t("Common.Ok")}}</button>
                 <button
                     type="button"
@@ -169,6 +172,7 @@ export default {
             editedRowId: null,
             editedDisplayName: null,
             newWorkspaceName: null,
+            inProgress: false,
         }
     },
     mounted() {
@@ -188,6 +192,7 @@ export default {
         },
         async updateWorkspace() {
             try {
+                this.inProgress = true
                 await Vue.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
                     displayName: this.editedDisplayName,
                 })
@@ -202,9 +207,13 @@ export default {
                     throw err
                 }
             }
+            finally {
+                this.inProgress = false
+            }
         },
         async disableWorkspace() {
             try {
+                this.inProgress = true
                 await Vue.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
                 this.$refs.disableWorkspaceModal.modal('hide')
 
@@ -217,6 +226,9 @@ export default {
                     toastr.error(nameErrors)
                 }
             }
+            finally {
+                this.inProgress = false
+            }
         },
         async createWorkspace() {
             const validationResult = await this.$validator.validateAll()
@@ -226,6 +238,7 @@ export default {
             }
 
             try {
+                this.inProgress = true
                 await Vue.$http.post(this.$config.model.dataUrl, {
                     displayName: this.editedDisplayName,
                     name: this.newWorkspaceName,
@@ -252,6 +265,9 @@ export default {
                 if(errorMessage) {
                     toastr.error(errorMessage)
                 }
+            }
+            finally {
+                this.inProgress = false
             }
         },
         contextMenuItems({rowData}) {
@@ -382,7 +398,7 @@ export default {
                     return row.name
                 },
                 ajax: {
-                    url: `${this.$config.model.dataUrl}?showDisabled=true`,
+                    url: `${this.$config.model.dataUrl}?IncludeDisabled=true`,
                     type: 'GET',
                     dataSrc: function ( responseJson ) {
                         responseJson.recordsTotal = responseJson.TotalCount
