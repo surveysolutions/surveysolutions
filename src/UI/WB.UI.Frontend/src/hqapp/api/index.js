@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
@@ -113,11 +112,10 @@ class Workspaces {
         return response.data
     }
 
-    Assign(userId, workspaces) {
+    Assign(userIds, workspaces, mode = 'Assign') {
         return this.http.post('api/v1/workspaces/assign',
             {
-                userId: userId,
-                workspaces: workspaces,
+                userIds, workspaces, mode,
             }
         )
     }

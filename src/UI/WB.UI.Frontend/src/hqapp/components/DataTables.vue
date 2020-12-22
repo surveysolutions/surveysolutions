@@ -252,6 +252,13 @@ export default {
                     },
                     responsivePriority: 1,
                 })
+
+                options.select =  {
+                    style: 'multi',
+                    selector: 'td>.checkbox-filter',
+                    info: false,
+                }
+
             }
 
             if (!options.order) options.order = [[this.selectable ? 1 : 0, 'asc']]
@@ -448,6 +455,7 @@ export default {
             if (!this.selectable) return
 
             var table = this.table
+            var self = this
             var firstHeader = table.column(0).header()
             $(firstHeader).html(
                 '<input class="double-checkbox" id="check-all" type="checkbox">' +
@@ -458,12 +466,12 @@ export default {
             $('#check-all').change(function() {
                 if (!this.checked) {
                     table.rows().deselect()
-                    $(table.rows)
+                    $(self.$refs.table)
                         .find('.checkbox-filter')
                         .prop('checked', false)
                 } else {
                     table.rows().select()
-                    $(table.rows)
+                    $(self.$refs.table)
                         .find('.checkbox-filter')
                         .prop('checked', true)
                 }
