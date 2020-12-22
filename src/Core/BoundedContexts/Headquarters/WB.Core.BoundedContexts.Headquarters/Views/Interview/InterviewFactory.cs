@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result.ToArray();
         }
         
-        public InterviewGpsInfo[] GetPrefilledGpsAnswers(Guid responsibleId,
+        public InterviewGpsInfo[] GetPrefilledGpsAnswers(
             Guid? questionnaireId, long? questionnaireVersion, 
             double east, double north, double west, double south)
         {
