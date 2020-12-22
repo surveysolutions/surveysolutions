@@ -465,7 +465,7 @@ class HqApiClient {
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.basePath)
+        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath)
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$hq', {
