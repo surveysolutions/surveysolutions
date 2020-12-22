@@ -45,7 +45,7 @@
                         v-validate="nameValidations"
                         :data-vv-as="$t('Workspaces.Name')"
                         autocomplete="off"
-                        @keyup.enter="updateWorkspace"
+                        @keyup.enter="createWorkspace"
                         id="newWorkspaceName" />
                     <p class="help-block"
                         v-if="!errors.has('workspaceName')">
@@ -72,7 +72,7 @@
                         v-validate="displayNameValidations"
                         :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off"
-                        @keyup.enter="updateWorkspace"
+                        @keyup.enter="createWorkspace"
                         id="newDescription" />
                     <p class="help-block"
                         v-if="!errors.has('workspaceDisplayName')">
