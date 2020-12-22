@@ -1127,7 +1127,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public SendInvitationsJob SendInvitationsJob(
-            ILogger logger = null, 
+            ILogger<SendInvitationsJob> logger = null, 
             IInvitationService invitationService = null, 
             IEmailService emailService = null, 
             IInvitationMailingService invitationMailingService = null)
@@ -1136,7 +1136,7 @@ namespace WB.Tests.Abc.TestFactories
             emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
 
             return new SendInvitationsJob(
-                logger ?? Mock.Of<ILogger>(),
+                logger ?? Mock.Of<ILogger<SendInvitationsJob>>(),
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
