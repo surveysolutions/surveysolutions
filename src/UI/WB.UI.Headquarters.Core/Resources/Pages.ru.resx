@@ -1624,4 +1624,22 @@
   <data name="UsersManage_LockedUsers" xml:space="preserve">
     <value>Показать заблокированных пользователей</value>
   </data>
+  <data name="UserManagement_SubtitleAdd" xml:space="preserve">
+    <value>Выберите к каким рабочим областям нужно добавить выбранных пользователей</value>
+  </data>
+  <data name="UserManagement_SubtitleRemove" xml:space="preserve">
+    <value>Выберите рабочие области из которых нужно убрать выбранных пользователей</value>
+  </data>
+  <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
+    <value>Управление рабочими областями</value>
+  </data>
+  <data name="UserManagement_AddToWorkspace" xml:space="preserve">
+    <value>Добавить к рабочим областям</value>
+  </data>
+  <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
+    <value>Убрать из рабочих областей</value>
+  </data>
+  <data name="UserManagement_UsersSelected" xml:space="preserve">
+    <value>Выбранных пользователей</value>
+  </data>
 </root>

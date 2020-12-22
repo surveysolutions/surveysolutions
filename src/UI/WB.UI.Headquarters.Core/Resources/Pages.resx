@@ -1565,4 +1565,22 @@
   <data name="UsersManage_LockedUsers" xml:space="preserve">
     <value>Show Locked users</value>
   </data>
+  <data name="UserManagement_SubtitleAdd" xml:space="preserve">
+    <value>Select workspaces that need to be added to selected users</value>
+  </data>
+  <data name="UserManagement_SubtitleRemove" xml:space="preserve">
+    <value>Select workspaces that need to be removed from selected users</value>
+  </data>
+  <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
+    <value>Manage workspaces</value>
+  </data>
+  <data name="UserManagement_AddToWorkspace" xml:space="preserve">
+    <value>Add to workspaces</value>
+  </data>
+  <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
+    <value>Remove from workspaces</value>
+  </data>
+  <data name="UserManagement_UsersSelected" xml:space="preserve">
+    <value>User(s) selected</value>
+  </data>
 </root>

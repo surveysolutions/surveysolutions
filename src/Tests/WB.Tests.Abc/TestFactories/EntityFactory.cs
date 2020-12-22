@@ -1303,6 +1303,7 @@ namespace WB.Tests.Abc.TestFactories
                 IsArchived = isArchived ?? false,
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
+                FullName = string.Empty,
                 IsLockedBySupervisor = lockedBySupervisor,
                 Profile = new HqUserProfile
                 {
@@ -2642,9 +2643,13 @@ namespace WB.Tests.Abc.TestFactories
             return calendarEvent;
         }
 
-        public Workspace Workspace()
+        public Workspace Workspace(string name = null, bool? disabled = false)
         {
-            return new Workspace(Guid.NewGuid().FormatGuid(), "Display name1");
+            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1");
+            
+            if(disabled == true)
+                ws.Disable();
+            return ws;
         }
     }
 }
