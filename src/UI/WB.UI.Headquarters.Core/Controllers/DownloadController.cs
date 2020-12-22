@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [AllowPrimaryWorkspaceFallback]
     public class DownloadController : Controller
     {
         private readonly IQRCodeHelper qRCodeHelper;

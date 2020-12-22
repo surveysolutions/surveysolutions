@@ -80,4 +80,7 @@
     <data name="Enable" xml:space="preserve">
         <value>Включить</value>
     </data>
+    <data name="ReLogin" xml:space="preserve">
+        <value>Выйдите из системы и зайдите заново для получения доступа к рабочему пространству</value>
+    </data>
 </root>

@@ -182,5 +182,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Enable", resourceCulture);
             }
         }
+        
+        public static string ReLogin {
+            get {
+                return ResourceManager.GetString("ReLogin", resourceCulture);
+            }
+        }
     }
 }
