@@ -130,14 +130,21 @@ namespace WB.UI.Headquarters.Controllers.Api
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.East, input.North, input.West, input.South);
 
-            var interviewMapPoints = interviewGpsAnswers.Select(g =>
-                new MapPoint<MapMarker>(g.Latitude, g.Longitude, 
-                    new MapInterviewMarker()
-                    {
-                        interviewId = g.InterviewId,
-                        interviewKey = g.InterviewKey,
-                        status = g.Status
-                    }));
+            var interviewMapPoints = 
+                interviewGpsAnswers.Select(g =>
+                    new MapPoint<MapMarker>(g.Latitude, g.Longitude, 
+                        new MapInterviewMarker()
+                        {
+                            interviewId = g.InterviewId,
+                            interviewKey = g.InterviewKey,
+                            status = g.Status
+                        }))
+                .Concat(assignmentGpsData.Select(a =>
+                    new MapPoint<MapMarker>(a.Latitude, a.Longitude, 
+                        new MapAssignmentMarker()
+                        {
+                            assignmentId = a.AssignmentId,
+                        })));
             
             var clustering = new Clustering<MapMarker>(input.Zoom);
             var valueCollection = clustering.RunClustering(interviewMapPoints).ToList();
@@ -155,12 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 else
                 {
                     var mapPoint = g.Points[0];
-                    mapMarker = new MapInterviewMarker()
-                    {
-                        interviewId = mapPoint.Data.InterviewId,
-                        interviewKey = mapPoint.Data.InterviewKey,
-                        status = mapPoint.Data.Status,
-                    };
+                    mapMarker = mapPoint.Data;
                 }
                 
                 return new Feature(new Point(
