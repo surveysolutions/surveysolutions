@@ -103,6 +103,11 @@
 
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Content\**\*.*" />
+    <Compile Update="Resources\Workspaces.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Workspaces.ru.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
 
 </Project>
