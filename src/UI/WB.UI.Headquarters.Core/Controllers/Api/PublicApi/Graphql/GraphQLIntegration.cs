@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore;
+using HotChocolate.Data.Filters;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types.Descriptors;
@@ -9,8 +10,14 @@ using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.FIlters;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 {
@@ -44,12 +51,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddType<QuestionsQueryExtension>()
                 .AddType<QuestionnaireItemsQueryExtension>()
                 .AddType<UsersQueryExtension>()
-                .AddMutationType(x => x.Name("HeadquartersMutations"))
+                .AddMutationType(x => x.Name("HeadquartersMutation"))
                 .AddType<CalendarEventsMutationExtension>()
                 .AddType<MapsMutationExtension>()
-                .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
-                .BindRuntimeType<string,CustomStringOperationFilterInput>()
                 .AddFiltering()
+                .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
+                .BindRuntimeType<string, CustomStringOperationFilterInput>()
+                .BindRuntimeType<IdentifyEntityValue, IdentifyEntityValueFilterInput>()
+                .BindRuntimeType<QuestionnaireCompositeItem, QuestionnaireItemsFilterType>()
                 .AddSorting();
         }
 

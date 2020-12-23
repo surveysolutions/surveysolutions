@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Name("QuestionFilter");
             
-            descriptor.Field(z => z.QuestionText);
+            //descriptor.Field(z => z.QuestionText);
             
             descriptor.Field(z => z.StataExportCaption)
                       .Name("variable");

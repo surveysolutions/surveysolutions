@@ -138,7 +138,7 @@ const query = gql`query interviews($workspace: String!, $order: [InterviewSort!]
       id
       key
       assignmentId
-      updateDate
+      updateDateUtc
       status
       receivedByInterviewerAtUtc
       actionFlags
@@ -493,7 +493,7 @@ export default {
                     responsivePriority: 4,
                 },
                 {
-                    data: 'updateDate',
+                    data: 'updateDateUtc',
                     title: this.$t('Assignments.UpdatedAt'),
                     searchable: false,
                     render(data) {

@@ -26,7 +26,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("List of actions that can be applied to interview")
                 .Name("actionFlags");
             
-            descriptor.Field(x => x.AssignmentId).Type<IntType>()
+            descriptor.Field(x => x.AssignmentId)
+                .Type<NonNullType<IntType>>()
                 .Description("Identifier for the assignment to which this interview belongs");
             
             descriptor.Field(x => x.SummaryId)
@@ -60,13 +61,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Key that was generated on interviewer tablet when interview was created for the first time");
 
             descriptor.Field(x => x.UpdateDate)
+                .Name("updateDateUtc")
                 .Type<NonNullType<DateTimeType>>()
                 .Description("Represents date (UTC) when interview was changed last time");
             
-            descriptor
+            /*descriptor
                 .Field(x => x.ReceivedByInterviewer)
                 .Type<NonNullType<BooleanType>>()
-                .Description("Indicator for whether the interview is on the interviewer’s tablet now");
+                .Description("Indicator for whether the interview is on the interviewer’s tablet now");*/
                 
             descriptor.Field(x => x.ReceivedByInterviewerAtUtc)
                 .Type<DateTimeType>()

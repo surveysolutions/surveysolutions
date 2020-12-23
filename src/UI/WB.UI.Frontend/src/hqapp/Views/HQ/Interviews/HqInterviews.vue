@@ -431,7 +431,7 @@ const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort
       responsibleRole
       errorsCount
       assignmentId
-      updateDate
+      updateDateUtc
       receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
@@ -601,8 +601,8 @@ export default {
                     width: '100px',
                 },
                 {
-                    data: 'updateDate',
-                    name: 'UpdateDate',
+                    data: 'updateDateUtc',
+                    name: 'UpdateDateUtc',
                     title: this.$t('Assignments.UpdatedAt'),
                     className: 'date last-update',
                     searchable: false,
@@ -798,8 +798,6 @@ export default {
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
-            if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
-            if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
 
             return data
         },
@@ -848,11 +846,11 @@ export default {
             }
 
             if(this.unactiveDateStart) {
-                and.push({ updateDate: {gte: this.unactiveDateStart}})
+                and.push({ updateDateUtc: {gte: this.unactiveDateStart}})
             }
 
             if(this.unactiveDateEnd) {
-                and.push({ updateDate: {lte: this.unactiveDateEnd}})
+                and.push({ updateDateUtc: {lte: this.unactiveDateEnd}})
             }
 
             if(this.assignmentId) {
