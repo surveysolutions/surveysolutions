@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Name("InterviewSort");
             descriptor.Field(x => x.Key);
             descriptor.Field(x => x.CreatedDate);
-            descriptor.Field(x => x.UpdateDate);
+            descriptor.Field(x => x.UpdateDate).Name("updateDateUtc");
             descriptor.Field(x => x.ResponsibleName);
             descriptor.Field(x => x.ResponsibleRole);
             descriptor.Field(x => x.AssignmentId);
