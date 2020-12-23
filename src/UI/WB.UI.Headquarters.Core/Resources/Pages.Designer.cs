@@ -4310,6 +4310,51 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Locked users.
+        /// </summary>
+        public static string UsersManage_LockedUsers {
+            get {
+                return ResourceManager.GetString("UsersManage_LockedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users with missing workspace.
+        /// </summary>
+        public static string UsersManage_MissingWorkspace {
+            get {
+                return ResourceManager.GetString("UsersManage_MissingWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All roles.
+        /// </summary>
+        public static string UsersManage_RoleFilterPlaceholder {
+            get {
+                return ResourceManager.GetString("UsersManage_RoleFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All workspaces.
+        /// </summary>
+        public static string UsersManage_WorkspacesFilterPlaceholder {
+            get {
+                return ResourceManager.GetString("UsersManage_WorkspacesFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace.
+        /// </summary>
+        public static string UsersManage_WorkspacesFilterTitle {
+            get {
+                return ResourceManager.GetString("UsersManage_WorkspacesFilterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verify.
         /// </summary>
         public static string Verify {
