@@ -2,7 +2,6 @@
     <HqLayout :title="title">
         <DataTables ref="table"
             :tableOptions="tableOptions"
-            selectable
             :contextMenuItems="contextMenuItems"></DataTables>
 
         <ModalFrame ref="editCalendarModal"
@@ -93,6 +92,10 @@ export default {
                     url: this.$config.model.assignmentsEndpoint,
                     type: 'GET',
                     contentType: 'application/json',
+                },
+                select: {
+                    style: 'multi',
+                    selector: 'td>.checkbox-filter',
                 },
                 sDom: 'rf<"table-with-scroll"t>ip',
             }

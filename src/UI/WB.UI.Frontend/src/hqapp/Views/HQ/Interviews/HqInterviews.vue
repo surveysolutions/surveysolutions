@@ -767,6 +767,11 @@ export default {
                         toastr.error(err.message.toString())
                     })
                 },
+                select: {
+                    style: 'multi',
+                    selector: 'td>.checkbox-filter',
+                    info: false,
+                },
                 dom: 'fritp',
                 sDom: 'rf<"table-with-scroll"t>ip',
                 searchHighlight: true,
