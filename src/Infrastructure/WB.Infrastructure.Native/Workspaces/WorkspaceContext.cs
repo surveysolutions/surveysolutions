@@ -7,11 +7,14 @@ namespace WB.Infrastructure.Native.Workspaces
     [DebuggerDisplay("{Name} - {DisplayName}")]
     public class WorkspaceContext
     {
-        public WorkspaceContext(string name, string displayName)
+        public WorkspaceContext(string name, string displayName, DateTime? disabledAtUtc = null)
         {
             Name = name;
             DisplayName = displayName;
+            DisabledAtUtc = disabledAtUtc;
         }
+
+        public DateTime? DisabledAtUtc { get; }
 
         public string Name { get; }
         public string DisplayName { get; }

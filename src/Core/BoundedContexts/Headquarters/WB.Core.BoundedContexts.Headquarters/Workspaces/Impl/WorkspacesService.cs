@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 upgradeSettings, loggerProvider));
         }
 
-        public IEnumerable<WorkspaceContext> GetEnabledWorkspaces()
+        public List<WorkspaceContext> GetEnabledWorkspaces()
         {
             return workspaces.Query(_ => _
                 .Where(x => x.DisabledAtUtc == null)
