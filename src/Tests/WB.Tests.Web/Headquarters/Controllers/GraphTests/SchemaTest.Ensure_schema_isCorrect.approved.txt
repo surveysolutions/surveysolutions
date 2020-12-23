@@ -1,6 +1,6 @@
 ﻿schema {
   query: HeadquartersQuery
-  mutation: HeadquartersMutations
+  mutation: HeadquartersMutation
 }
 
 type Assignment {
@@ -49,7 +49,7 @@ type Entity {
   variable: String
 }
 
-type HeadquartersMutations {
+type HeadquartersMutation {
   addOrUpdateCalendarEvent("Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
   deleteCalendarEvent("Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
   deleteMap("Map file name" fileName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
@@ -116,7 +116,7 @@ type Interview {
   "List of actions that can be applied to interview"
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
-  assignmentId: Int
+  assignmentId: Int!
   id: ID!
   status: InterviewStatus!
   "Login of current responsible user"
@@ -134,9 +134,7 @@ type Interview {
   "Key that was generated on interviewer tablet when interview was created for the first time"
   clientKey: String!
   "Represents date (UTC) when interview was changed last time"
-  updateDate: DateTime!
-  "Indicator for whether the interview is on the interviewer’s tablet now"
-  receivedByInterviewer: Boolean!
+  updateDateUtc: DateTime!
   "Represents date (UTC) when the interview was received by the interviewer’s tablet"
   receivedByInterviewerAtUtc: DateTime
   "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1"
@@ -208,37 +206,15 @@ type UserMap {
   userName: String
 }
 
-input AbstractAnswerFilterInput {
-  and: [AbstractAnswerFilterInput!]
-  or: [AbstractAnswerFilterInput!]
-}
-
 input AssignmentsFilter {
   and: [AssignmentsFilter!]
   or: [AssignmentsFilter!]
+  id: ComparableInt32OperationFilterInput
   questionnaireId: QuestionnaireIdentity
   archived: BooleanOperationFilterInput
   responsibleId: ComparableGuidOperationFilterInput
   webMode: BooleanOperationFilterInput
   receivedByTabletAtUtc: ComparableNullableOfDateTimeOperationFilterInput
-  publicKey: ComparableGuidOperationFilterInput
-  id: ComparableInt32OperationFilterInput
-  responsible: ReadonlyUserFilterInput
-  quantity: ComparableNullableOfInt32OperationFilterInput
-  quantityCanBeChanged: BooleanOperationFilterInput
-  createdAtUtc: ComparableDateTimeOperationFilterInput
-  updatedAtUtc: ComparableDateTimeOperationFilterInput
-  audioRecording: BooleanOperationFilterInput
-  email: StringOperationFilterInput
-  password: StringOperationFilterInput
-  identifyingData: ListFilterInputTypeOfIdentifyingAnswerFilterInput
-  answers: ListFilterInputTypeOfInterviewAnswerFilterInput
-  protectedVariables: ListStringOperationFilterInput
-  questionnaire: QuestionnaireBrowseItemFilterInput
-  interviewSummaries: ListFilterInputTypeOfInterviewSummaryFilterInput
-  interviewsNeeded: ComparableNullableOfInt32OperationFilterInput
-  isCompleted: BooleanOperationFilterInput
-  comments: StringOperationFilterInput
 }
 
 input BooleanOperationFilterInput {
@@ -259,21 +235,6 @@ input ComparableDateTimeOperationFilterInput {
   nlt: DateTime
   lte: DateTime
   nlte: DateTime
-}
-
-input ComparableDecimalOperationFilterInput {
-  eq: Decimal
-  neq: Decimal
-  in: [Decimal!]
-  nin: [Decimal!]
-  gt: Decimal
-  ngt: Decimal
-  gte: Decimal
-  ngte: Decimal
-  lt: Decimal
-  nlt: Decimal
-  lte: Decimal
-  nlte: Decimal
 }
 
 input ComparableGuidOperationFilterInput {
@@ -351,21 +312,6 @@ input ComparableNullableOfDecimalOperationFilterInput {
   nlte: Decimal
 }
 
-input ComparableNullableOfGuidOperationFilterInput {
-  eq: Uuid
-  neq: Uuid
-  in: [Uuid]
-  nin: [Uuid]
-  gt: Uuid
-  ngt: Uuid
-  gte: Uuid
-  ngte: Uuid
-  lt: Uuid
-  nlt: Uuid
-  lte: Uuid
-  nlte: Uuid
-}
-
 input ComparableNullableOfInt32OperationFilterInput {
   eq: Int
   neq: Int
@@ -381,88 +327,17 @@ input ComparableNullableOfInt32OperationFilterInput {
   nlte: Int
 }
 
-input ComparableNullableOfInt64OperationFilterInput {
-  eq: Long
-  neq: Long
-  in: [Long]
-  nin: [Long]
-  gt: Long
-  ngt: Long
-  gte: Long
-  ngte: Long
-  lt: Long
-  nlt: Long
-  lte: Long
-  nlte: Long
-}
-
-input CustomStringOperationFilterInput {
-  and: [CustomStringOperationFilterInput!]
-  or: [CustomStringOperationFilterInput!]
-  eq: String
-  neq: String
-  contains: String
-  ncontains: String
-  in: [String]
-  nin: [String]
-  startsWith: String
-  nstartsWith: String
-}
-
-input FeaturedQuestionItemFilterInput {
-  and: [FeaturedQuestionItemFilterInput!]
-  or: [FeaturedQuestionItemFilterInput!]
-  id: ComparableGuidOperationFilterInput
-  title: StringOperationFilterInput
-  caption: StringOperationFilterInput
-}
-
-input HqUserProfileFilterInput {
-  and: [HqUserProfileFilterInput!]
-  or: [HqUserProfileFilterInput!]
-  id: ComparableInt32OperationFilterInput
-  deviceId: StringOperationFilterInput
-  deviceRegistrationDate: ComparableNullableOfDateTimeOperationFilterInput
-  supervisorId: ComparableNullableOfGuidOperationFilterInput
-  deviceAppVersion: StringOperationFilterInput
-  deviceAppBuildVersion: ComparableNullableOfInt32OperationFilterInput
-  storageFreeInBytes: ComparableNullableOfInt64OperationFilterInput
-}
-
-input IdentifyEntityValueFilterInput {
-  and: [IdentifyEntityValueFilterInput!]
-  or: [IdentifyEntityValueFilterInput!]
-  id: ComparableInt32OperationFilterInput
-  entity: QuestionFilter
-  value: StringOperationFilterInput
-  valueLowerCase: StringOperationFilterInput
+input IdentifyEntityValueFilter {
+  and: [IdentifyEntityValueFilter!]
+  or: [IdentifyEntityValueFilter!]
+  "Code of answer for categorical question"
   answerCode: ComparableNullableOfDecimalOperationFilterInput
-  interviewSummary: InterviewFilter
-  position: ComparableInt32OperationFilterInput
-}
-
-input IdentifyingAnswerFilterInput {
-  and: [IdentifyingAnswerFilterInput!]
-  or: [IdentifyingAnswerFilterInput!]
-  identity: IdentityFilterInput
-  answer: StringOperationFilterInput
-  answerAsString: StringOperationFilterInput
-  variableName: StringOperationFilterInput
-  assignment: AssignmentsFilter
-}
-
-input IdentityFilterInput {
-  and: [IdentityFilterInput!]
-  or: [IdentityFilterInput!]
-  id: ComparableGuidOperationFilterInput
-  rosterVector: RosterVectorFilterInput
-}
-
-input InterviewAnswerFilterInput {
-  and: [InterviewAnswerFilterInput!]
-  or: [InterviewAnswerFilterInput!]
-  identity: IdentityFilterInput
-  answer: AbstractAnswerFilterInput
+  "Answer value, supports case sensitive operations"
+  value: StringOperationFilterInput
+  "Answer value in lower case, supports case insensitive operations"
+  valueLowerCase: StringOperationFilterInput
+  "Question or variable entity"
+  entity: QuestionnaireItemsFilter
 }
 
 input InterviewFilter {
@@ -482,7 +357,7 @@ input InterviewFilter {
   supervisorName: StringOperationFilterInput
   supervisorNameLowerCase: StringOperationFilterInput
   responsibleRole: UserRolesOperationFilterInput
-  updateDate: ComparableDateTimeOperationFilterInput
+  updateDateUtc: ComparableDateTimeOperationFilterInput
   receivedByInterviewerAtUtc: ComparableNullableOfDateTimeOperationFilterInput
   errorsCount: ComparableInt32OperationFilterInput
   identifyingData: ListFilterInputTypeOfIdentifyEntityValueFilterInput
@@ -491,7 +366,7 @@ input InterviewFilter {
 input InterviewSort {
   key: SortEnumType
   createdDate: SortEnumType
-  updateDate: SortEnumType
+  updateDateUtc: SortEnumType
   responsibleName: SortEnumType
   responsibleRole: SortEnumType
   assignmentId: SortEnumType
@@ -511,59 +386,10 @@ input InterviewStatusOperationFilterInput {
   nin: [InterviewStatus!]
 }
 
-input ListComparableDecimalOperationFilterInput {
-  all: ComparableDecimalOperationFilterInput
-  none: ComparableDecimalOperationFilterInput
-  some: ComparableDecimalOperationFilterInput
-  any: Boolean
-}
-
-input ListComparableGuidOperationFilterInput {
-  all: ComparableGuidOperationFilterInput
-  none: ComparableGuidOperationFilterInput
-  some: ComparableGuidOperationFilterInput
-  any: Boolean
-}
-
-input ListComparableInt32OperationFilterInput {
-  all: ComparableInt32OperationFilterInput
-  none: ComparableInt32OperationFilterInput
-  some: ComparableInt32OperationFilterInput
-  any: Boolean
-}
-
-input ListFilterInputTypeOfFeaturedQuestionItemFilterInput {
-  all: FeaturedQuestionItemFilterInput
-  none: FeaturedQuestionItemFilterInput
-  some: FeaturedQuestionItemFilterInput
-  any: Boolean
-}
-
 input ListFilterInputTypeOfIdentifyEntityValueFilterInput {
-  all: IdentifyEntityValueFilterInput
-  none: IdentifyEntityValueFilterInput
-  some: IdentifyEntityValueFilterInput
-  any: Boolean
-}
-
-input ListFilterInputTypeOfIdentifyingAnswerFilterInput {
-  all: IdentifyingAnswerFilterInput
-  none: IdentifyingAnswerFilterInput
-  some: IdentifyingAnswerFilterInput
-  any: Boolean
-}
-
-input ListFilterInputTypeOfInterviewAnswerFilterInput {
-  all: InterviewAnswerFilterInput
-  none: InterviewAnswerFilterInput
-  some: InterviewAnswerFilterInput
-  any: Boolean
-}
-
-input ListFilterInputTypeOfInterviewSummaryFilterInput {
-  all: InterviewFilter
-  none: InterviewFilter
-  some: InterviewFilter
+  all: IdentifyEntityValueFilter
+  none: IdentifyEntityValueFilter
+  some: IdentifyEntityValueFilter
   any: Boolean
 }
 
@@ -574,25 +400,18 @@ input ListFilterInputTypeOfUserMapFilterInput {
   any: Boolean
 }
 
-input ListStringOperationFilterInput {
-  all: StringOperationFilterInput
-  none: StringOperationFilterInput
-  some: StringOperationFilterInput
-  any: Boolean
-}
-
 input MapsFilter {
   and: [MapsFilter!]
   or: [MapsFilter!]
   fileName: StringOperationFilterInput
-  importDate: ComparableNullableOfDateTimeOperationFilterInput
+  importDateUtc: ComparableNullableOfDateTimeOperationFilterInput
   size: ComparableInt64OperationFilterInput
   users: ListFilterInputTypeOfUserMapFilterInput
 }
 
 input MapsSort {
   fileName: SortEnumType
-  importDate: SortEnumType
+  importDateUtc: SortEnumType
   size: SortEnumType
 }
 
@@ -606,37 +425,10 @@ input NullableOfQuestionScopeOperationFilterInput {
 input QuestionFilter {
   and: [QuestionFilter!]
   or: [QuestionFilter!]
-  questionText: StringOperationFilterInput
   variable: StringOperationFilterInput
   scope: NullableOfQuestionScopeOperationFilterInput
   "Find only identifying questions"
   identifying: BooleanOperationFilterInput
-}
-
-input QuestionnaireBrowseItemFilterInput {
-  and: [QuestionnaireBrowseItemFilterInput!]
-  or: [QuestionnaireBrowseItemFilterInput!]
-  comment: StringOperationFilterInput
-  id: StringOperationFilterInput
-  creationDate: ComparableDateTimeOperationFilterInput
-  questionnaireId: ComparableGuidOperationFilterInput
-  version: ComparableInt64OperationFilterInput
-  lastEntryDate: ComparableDateTimeOperationFilterInput
-  title: StringOperationFilterInput
-  variable: StringOperationFilterInput
-  isPublic: BooleanOperationFilterInput
-  createdBy: ComparableNullableOfGuidOperationFilterInput
-  isDeleted: BooleanOperationFilterInput
-  allowCensusMode: BooleanOperationFilterInput
-  disabled: BooleanOperationFilterInput
-  disabledBy: ComparableNullableOfGuidOperationFilterInput
-  questionnaireContentVersion: ComparableInt64OperationFilterInput
-  featuredQuestions: ListFilterInputTypeOfFeaturedQuestionItemFilterInput
-  importDate: ComparableNullableOfDateTimeOperationFilterInput
-  importedBy: ComparableNullableOfGuidOperationFilterInput
-  allowAssignments: BooleanOperationFilterInput
-  allowExportVariables: BooleanOperationFilterInput
-  isAudioRecordingEnabled: BooleanOperationFilterInput
 }
 
 input QuestionnaireIdentity {
@@ -656,25 +448,6 @@ input QuestionnaireItemsFilter {
   identifying: BooleanOperationFilterInput
 }
 
-input ReadonlyUserFilterInput {
-  and: [ReadonlyUserFilterInput!]
-  or: [ReadonlyUserFilterInput!]
-  id: ComparableGuidOperationFilterInput
-  name: StringOperationFilterInput
-  readonlyProfile: HqUserProfileFilterInput
-  roleIds: ListComparableGuidOperationFilterInput
-}
-
-input RosterVectorFilterInput {
-  and: [RosterVectorFilterInput!]
-  or: [RosterVectorFilterInput!]
-  coordinates: ListComparableInt32OperationFilterInput
-  coordinatesAsDecimals: ListComparableDecimalOperationFilterInput
-  array: ListComparableInt32OperationFilterInput
-  length: ComparableInt32OperationFilterInput
-  item: ComparableInt32OperationFilterInput
-}
-
 input StringOperationFilterInput {
   and: [StringOperationFilterInput!]
   or: [StringOperationFilterInput!]
@@ -688,6 +461,19 @@ input StringOperationFilterInput {
   nstartsWith: String
   endsWith: String
   nendsWith: String
+}
+
+input StringOperationFilterInputType {
+  and: [StringOperationFilterInputType!]
+  or: [StringOperationFilterInputType!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
 }
 
 input UserMapFilterInput {
