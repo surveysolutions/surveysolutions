@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         {
             var workspacesService = serviceLocator.GetInstance<IWorkspacesCache>();
             var workspace = workspacesService.AllEnabledWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            holder.Current = workspace ?? throw new ArgumentNullException(nameof(name));
+            holder.Current = workspace ?? throw new MissingWorkspaceException { Data = {{"name", name}}};
         }
     }
 }

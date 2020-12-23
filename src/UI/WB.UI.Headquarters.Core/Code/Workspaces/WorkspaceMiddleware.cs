@@ -46,9 +46,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
             {
+                var oldContextServices = context.RequestServices;
                 using var scope = context.RequestServices.CreateWorkspaceScope(workspaceContext);
                 context.RequestServices = scope.ServiceProvider;
                 await next(context).ConfigureAwait(false);
+                
+                context.RequestServices = oldContextServices;
             }
             
             foreach (var path in InfrastructureEndpoints)

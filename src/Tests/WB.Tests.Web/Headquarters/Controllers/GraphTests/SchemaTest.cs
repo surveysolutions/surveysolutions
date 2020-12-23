@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using HotChocolate;
+using HotChocolate.Execution;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
 
@@ -13,11 +15,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
     public class SchemaTest
     {
         [Test]
-        public void Ensure_schema_isCorrect()
+        public async Task Ensure_schema_isCorrect()
         {
-            var schema = GraphQLIntegration.HeadquartersSchema;
-
-            var sdl = schema.ToString();
+            var schema = await GraphQLIntegration.GetSchema(new ServiceCollection());
+            var sdl = schema.Print();
             if (!sdl.EndsWith(Environment.NewLine))
             {
                 sdl += Environment.NewLine;
