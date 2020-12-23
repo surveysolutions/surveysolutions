@@ -159,8 +159,20 @@ class MapDashboard {
         return response
     }
 
+    async AssignmentUrl(assignmentId) {
+        var response = await this.http.post('api/AssignmentsApi/AssignmentMapPoint', {
+            assignmentId,
+        })
+
+        return response
+    }
+
     GetInterviewDetailsUrl(interviewId) {
         return `${this.http.defaults.baseURL}Interview/Review/${interviewId}`
+    }
+
+    GetAssignmentDetailsUrl(assignmentId) {
+        return `${this.http.defaults.baseURL}Assignments/${assignmentId}`
     }
 }
 

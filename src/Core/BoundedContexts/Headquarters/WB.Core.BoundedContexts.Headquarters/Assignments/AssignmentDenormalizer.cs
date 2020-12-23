@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 var gpsAnswer = (GpsAnswer) interviewAnswer.Answer;
                 assignment.GpsAnswers.Add(new AssignmentGps()
                 {
-                    Assignment = assignment,
+                    AssignmentId = assignment.Id,
                     Latitude = gpsAnswer.Value.Latitude,
                     Longitude = gpsAnswer.Value.Longitude,
                     Timestamp = gpsAnswer.Value.Timestamp,

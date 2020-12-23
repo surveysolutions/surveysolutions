@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class AssignmentGps : EntityWithTypedId<int>
     {
-        public virtual Assignment Assignment { get; set; }
+        public virtual int AssignmentId { get; set; }
         public virtual Guid QuestionId { get; set; }
         public virtual string RosterVector { get; set; }
         public virtual double Latitude { get; set; }

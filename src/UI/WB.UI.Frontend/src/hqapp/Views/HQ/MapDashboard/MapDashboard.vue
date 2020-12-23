@@ -5,11 +5,11 @@
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
                     control-id="questionnaireId"
-                    no-clear
+                    :placeholder="$t('Common.AllQuestionnaires')"
                     :ajax-params="{ }"
                     :fetch-url="model.questionnaires"
-                    :placeholder="$t('Common.SelectQuestionnaire')"
                     :value="selectedQuestionnaireId"
+                    :selectedValue="this.query.questionnaire"
                     v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -45,7 +45,7 @@
             </div>
         </Filters>
         <div style="display:none;">
-            <div ref="tooltip">
+            <div ref="interviewTooltip">
                 <div class="row-fluid">
                     <strong>{{$t("Common.InterviewKey")}}:</strong>
                     &nbsp;{{selectedTooltip.interviewKey}}
@@ -71,6 +71,51 @@
                     <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
                     <a
                         v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
+                        target="_blank">{{$t("MapReport.details")}}</a>
+                </div>
+                <div class="row-fluid"
+                    style="white-space:nowrap;">
+                    <button
+                        class="btn btn-lg btn-success"
+                        v-if="selectedTooltip.status == 'InterviewerAssigned'"
+                        @click="assignInterview">{{ $t("Common.Assign") }}</button>
+                    <button
+                        class="btn btn-lg btn-success"
+                        v-if="selectedTooltip.status == ''"
+                        @click="approveInterview">{{ $t("Common.Approve")}}</button>
+                    <button
+                        class="btn btn-lg reject"
+                        v-if="selectedTooltip.status == ''"
+                        @click="rejectInterview">{{ $t("Common.Reject")}}</button>
+                    <button
+                        class="btn btn-lg btn-primary"
+                        v-if="selectedTooltip.status == '' && !config.isSupervisor"
+                        @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
+                    <button
+                        class="btn btn-link"
+                        v-if="selectedTooltip.status == '' && !config.isSupervisor"
+                        @click="deleteInterview">{{ $t("Common.Delete")}}</button>
+                </div>
+            </div>
+
+            <div ref="assignmentTooltip">
+                <div class="row-fluid">
+                    <strong>{{$t("Assignments.AssignmentId")}}:</strong>
+                    &nbsp;{{selectedTooltip.assignmentId}}
+                </div>
+                <div class="row-fluid">
+                    <strong>{{$t("Common.Responsible")}}:</strong>
+                    &nbsp;{{selectedTooltip.responsibleName}}
+                </div>
+                <div class="row-fluid">
+                    <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
+                    &nbsp;{{selectedTooltip.lastUpdatedDate}}
+                </div>
+                <div class="row-fluid"
+                    style="white-space:nowrap;">
+                    <strong>{{$t("MapDashboard.ViewAssignmentDetails")}}:</strong>&nbsp;
+                    <a
+                        v-bind:href="api.GetAssignmentDetailsUrl(selectedTooltip.assignmentId)"
                         target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
             </div>
@@ -152,7 +197,8 @@ export default {
             isMapReloaded: true,
             map: null,
             isLoading: false,
-            totalAnswers: 0,
+            totalMarkers: 0,
+            selectedQuestionnaireId: null,
         }
     },
 
@@ -176,7 +222,7 @@ export default {
             }
         },
 
-        selectedQuestionnaireId() {
+        /* selectedQuestionnaireId() {
             if (this.query == null || this.query.name == null) {
                 return null
             }
@@ -184,7 +230,7 @@ export default {
             return find(this.model.questionnaires, {
                 value: this.query.name,
             })
-        },
+        },*/
 
         selectedVersion() {
             if (this.selectedQuestionnaireId == null || this.query.version == null) return null
@@ -216,10 +262,11 @@ export default {
         selectQuestionnaireVersion(value) {
             this.questionnaireVersion = value
             this.onChange(s => (s.version = value == null ? null : value.key))
+            this.reloadMarkersInBounds()
         },
 
         selectQuestionnaire(value) {
-            this.questionnaireId = value
+            this.selectedQuestionnaireId = value
 
             if (this.$route.query.name !== value.value)
                 this.selectQuestionnaireVersion(null)
@@ -227,8 +274,9 @@ export default {
                 this.selectQuestionnaireVersion(this.$route.query.version ? {key: this.$route.query.version} : null)
 
             this.onChange(q => {
-                q.name = value == null ? null : value.value
+                q.questionnaire = value == null ? null : value.value
             })
+            //this.reloadMarkersInBounds()
         },
 
         getMapOptions() {
@@ -293,7 +341,11 @@ export default {
                     let interviewStyle ={
                         label: {
                             fontSize: '12px',
-                            text: 'I',
+                            text: '',
+                        },
+                        icon: {
+                            url: '/img/google-maps-markers/m2.png',
+                            dark: false,
                         },
                     }
 
@@ -339,7 +391,7 @@ export default {
                 }
                 if (type == 'Cluster') {
                     const count = feature.getProperty('count')
-                    const max = self.totalAnswers
+                    const max = self.totalMarkers
                     const percent = (count / max) * styles.length
 
                     const index = Math.min(styles.length - 1, Math.round(percent))
@@ -365,11 +417,15 @@ export default {
             })
 
             this.map.data.addListener('click', async event => {
-                if (event.feature.getProperty('count') > 1) {
+                const type = event.feature.getProperty('type')
+
+                if (type == 'Cluster') {
                     const expand = event.feature.getProperty('expand')
                     self.map.setZoom(expand)
                     self.map.panTo(event.latLng)
-                } else {
+                }
+                else if (type == 'Interview')
+                {
                     const interviewId = event.feature.getProperty('interviewId')
 
                     const response = await this.api.InteriewSummaryUrl(interviewId)
@@ -382,7 +438,7 @@ export default {
                         self.selectedTooltip = data
 
                         Vue.nextTick(function() {
-                            self.infoWindow.setContent($(self.$refs.tooltip).html())
+                            self.infoWindow.setContent($(self.$refs.interviewTooltip).html())
                             self.infoWindow.setPosition(event.latLng)
                             self.infoWindow.setOptions({
                                 pixelOffset: new google.maps.Size(0, -30),
@@ -390,6 +446,25 @@ export default {
                             self.infoWindow.open(self.map)
                         })
                     }
+                }
+                else if (type == 'Assignment')
+                {
+                    const assignmentId = event.feature.getProperty('assignmentId')
+
+                    const response = await this.api.AssignmentUrl(assignmentId)
+                    const data = response.data
+                    data['assignmentId'] = assignmentId
+
+                    self.selectedTooltip = data
+
+                    Vue.nextTick(function() {
+                        self.infoWindow.setContent($(self.$refs.assignmentTooltip).html())
+                        self.infoWindow.setPosition(event.latLng)
+                        self.infoWindow.setOptions({
+                            pixelOffset: new google.maps.Size(0, -30),
+                        })
+                        self.infoWindow.open(self.map)
+                    })
                 }
             })
 
@@ -460,7 +535,7 @@ export default {
 
             this.infoWindow.close(self.map)
 
-            this.totalAnswers = data.totalPoint
+            this.totalMarkers = data.totalPoint
             const features = data.featureCollection.features
 
             this.map.data.forEach(feature => {
@@ -487,7 +562,7 @@ export default {
             })
 
             if (extendBounds) {
-                if (this.totalAnswers === 0) {
+                if (this.totalMarkers === 0) {
                     this.map.setZoom(1)
                 } else {
                     const sw = new google.maps.LatLng(data.bounds.south, data.bounds.west)
