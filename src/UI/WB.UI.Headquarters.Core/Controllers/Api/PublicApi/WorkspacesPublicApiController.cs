@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
@@ -21,6 +19,8 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Workspace;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.UsersManagement;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
-        private readonly IUserRepository users;
+        private readonly IMediator mediator;
         private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
 
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IMapper mapper,
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
-            IUserRepository users,
+            IMediator mediator,
             ILogger<WorkspacesPublicApiController> logger,
             IAuthorizedUser authorizedUser)
         {
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.mapper = mapper;
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
-            this.users = users;
+            this.mediator = mediator;
             this.logger = logger;
             this.authorizedUser = authorizedUser;
         }
@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 result = result.Where(x => x.Users.Any(u => u.User.Id == filter.UserId));
             }
 
-            if(!filter.IncludeDisabled)
+            if (!filter.IncludeDisabled)
             {
                 result = result.Where(x => x.DisabledAtUtc == null);
             }
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
                 this.workspacesCache.InvalidateCache();
 
-                return CreatedAtAction("Details", routeValues: new {name = workspace.Name},
+                return CreatedAtAction("Details", routeValues: new { name = workspace.Name },
                     value: this.mapper.Map<WorkspaceApiView>(workspace));
             }
 
@@ -162,7 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Validation failed")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
-        public ActionResult Update([FromRoute]string name, [FromBody] WorkspaceUpdateApiView request)
+        public ActionResult Update([FromRoute] string name, [FromBody] WorkspaceUpdateApiView request)
         {
             if (ModelState.IsValid)
             {
@@ -208,12 +208,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {name} is already disabled");
             }
-            
+
             if (name == Workspace.Default.Name)
             {
                 ModelState.AddModelError(nameof(name), $"Workspace {name} can not be disabled");
             }
-            
+
             if (ModelState.IsValid)
             {
                 workspace.Disable();
@@ -224,7 +224,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return ValidationProblem();
         }
-        
+
         /// <summary>
         /// Enables specified workspace
         /// </summary>
@@ -247,7 +247,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {name} is already enabled");
             }
-            
+
             if (ModelState.IsValid)
             {
                 workspace.Enable();
@@ -259,7 +259,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return ValidationProblem();
         }
 
-
         /// <summary>
         /// Assigns workspaces to user.
         /// </summary>
@@ -268,50 +267,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("assign")]
         [AuthorizeByRole(UserRoles.Administrator)]
-        public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model)
+        public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model, CancellationToken cancellationToken)
         {
-            List<Workspace> dbWorkspaces = new();
-            foreach (var modelWorkspace in model.Workspaces)
-            {
-                var workspace = this.workspaces.GetById(modelWorkspace);
-                if (workspace == null)
-                {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} not found");
-                }
-                else if (workspace.IsDisabled())
-                {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} disabled");
-                }
-                else
-                {
-                    dbWorkspaces.Add(workspace);
-                }
-            }
+            await this.mediator.Send(new AssignWorkspacesToUserModelRequest(ModelState, model), cancellationToken);
 
-            var user = await users.FindByIdAsync(model.UserId);
-            if (user == null)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(nameof(model.Workspaces), "User not found");
-            }
-
-            if (user?.IsArchivedOrLocked == true)
-            {
-                ModelState.AddModelError(nameof(model.Workspaces), "User is locked");
-            }
-
-            if (user != null)
-            {
-                if (!user.IsInRole(UserRoles.Headquarter) && !user.IsInRole(UserRoles.ApiUser))
-                {
-                    ModelState.AddModelError(nameof(model.Workspaces),
-                        "Only headquarter or api user workspaces can be edited");
-                }
-                
-                if (ModelState.IsValid)
-                {
-                    workspacesService.AssignWorkspaces(user, dbWorkspaces);
-                    return NoContent();
-                }
+                return NoContent();
             }
 
             return ValidationProblem();
