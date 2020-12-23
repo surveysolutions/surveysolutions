@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
@@ -288,5 +289,44 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             public int? Id { get; set; }
         }
+        
+        [HttpPost]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
+        public AssignmentForMapPointView AssignmentMapPoint([FromBody]AssignmentForMapPointViewModel data)
+        {
+            return data == null ? null : GetAssignmentForMapPointView(data.AssignmentId);
+        }
+
+        private AssignmentForMapPointView GetAssignmentForMapPointView(int assignmentId)
+        {
+            var assignment = this.assignmentsStorage.GetAssignment(assignmentId);
+            if (assignment == null)
+                return null;
+
+            var mapPointView = new AssignmentForMapPointView
+            {
+                ResponsibleName = assignment.Responsible.Name,
+                AssignmentId = assignment.Id,
+                Quantity = assignment.Quantity,
+                InterviewsNeeded = assignment.InterviewsNeeded,
+                LastUpdatedDate = AnswerUtils.AnswerToString(assignment.UpdatedAtUtc),
+            };
+            return mapPointView;
+        }
+
+        public class AssignmentForMapPointViewModel
+        {
+            public int AssignmentId { get; set; }
+        }
+        
+        public class AssignmentForMapPointView
+        {
+            public string ResponsibleName { get; set; }
+            public int? Quantity { get; set; }
+            public int? InterviewsNeeded { get; set; }
+            public string LastUpdatedDate { get; set; }
+            public int AssignmentId { get; set; }
+        }
+
     }
 }

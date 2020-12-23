@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             IQueryable<AssigmentGpsAnswer> gpsAnswers = this.sessionProvider.Session
                 .Query<AssignmentGps>()
                 .Join(this.sessionProvider.Session.Query<Assignment>(),
-                    gps => gps.Assignment.Id,
+                    gps => gps.AssignmentId,
                     assignment => assignment.Id,
                     (gps, assignment) => new  { gps, assignment})
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
