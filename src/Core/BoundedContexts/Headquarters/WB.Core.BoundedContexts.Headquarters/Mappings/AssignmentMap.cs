@@ -109,10 +109,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Set(x => x.GpsAnswers, set =>
                 {
+                    //set.Table("assignment_geo_answers");
                     set.Key(key =>
                     {
                         key.PropertyRef(a => a.Id);
-                        key.Column("assignment_id");
+                        //key.Column("assignment_id");
+                        key.Column(nameof(AssignmentGps.AssignmentId));
                     });
                     set.Lazy(CollectionLazy.Lazy);
                     set.Cascade(Cascade.All | Cascade.DeleteOrphans);

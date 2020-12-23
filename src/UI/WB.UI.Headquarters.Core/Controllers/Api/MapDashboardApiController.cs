@@ -122,6 +122,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
         {
+            double boundCoefficient = 0.5;
+            input.East = Math.Min(input.East + ((input.East - input.West) * boundCoefficient), 180);
+            input.West = Math.Max(input.West - ((input.East - input.West) * boundCoefficient), -180);
+            input.North = Math.Min(input.North + ((input.North - input.South) * boundCoefficient), 180);
+            input.South = Math.Max(input.South - ((input.North - input.South) * boundCoefficient), -180);
+            
             var interviewGpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.East, input.North, input.West, input.South);
@@ -130,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.East, input.North, input.West, input.South);
 
-            var interviewMapPoints = 
+            var mapPoints = 
                 interviewGpsAnswers.Select(g =>
                     new MapPoint<MapMarker>(g.Latitude, g.Longitude, 
                         new MapInterviewMarker()
@@ -144,10 +150,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                         new MapAssignmentMarker()
                         {
                             assignmentId = a.AssignmentId,
-                        })));
+                        })))
+                .ToList();
             
             var clustering = new Clustering<MapMarker>(input.Zoom);
-            var valueCollection = clustering.RunClustering(interviewMapPoints).ToList();
+            var valueCollection = clustering.RunClustering(mapPoints).ToList();
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
             {
                 MapMarker mapMarker = null;
@@ -171,11 +178,17 @@ namespace WB.UI.Headquarters.Controllers.Api
                         g.ID);
             }).ToList());
 
-            double south = interviewGpsAnswers.Min(a => a.Latitude); 
-            double west = interviewGpsAnswers.Min(a => a.Longitude); 
-            double north  = interviewGpsAnswers.Max(a => a.Latitude);
-            double east = interviewGpsAnswers.Max(a => a.Longitude);
-            var geoBounds = new GeoBounds(south, west, north, east);
+
+            GeoBounds geoBounds = null;
+            if (mapPoints.Any())
+            {
+                double south = mapPoints.Min(a => a.Y); 
+                double west = mapPoints.Min(a => a.X); 
+                double north  = mapPoints.Max(a => a.Y);
+                double east = mapPoints.Max(a => a.X);
+                geoBounds = new GeoBounds(south, west, north, east);
+            }
+
                 
             return new MapDashboardResult
             {
