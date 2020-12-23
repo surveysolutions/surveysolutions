@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.FIlters;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
