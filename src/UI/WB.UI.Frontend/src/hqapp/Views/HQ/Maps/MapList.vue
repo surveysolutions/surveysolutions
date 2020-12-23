@@ -56,8 +56,8 @@ import {DateFormats, humanFileSize} from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query MapsList($workspace: String!, $order: MapsSort, $skip: Int, $take: Int, $where: MapsFilter) {
-  maps(workspace: $workspace, order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
+  maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     filteredCount
@@ -169,7 +169,7 @@ export default {
                                     }
                                 }`,
                         variables: {
-                            'fileName' : fileName,
+                            'fileName': fileName,
                             workspace: self.$store.getters.workspace,
                         },
                     }).then(response => {
@@ -238,18 +238,18 @@ export default {
                     }
 
                     const where = {
-                        AND: [],
+                        and: [],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push({ OR: [
-                            { fileName_starts_with: search.toLowerCase() }],
+                        where.and.push({ or: [
+                            { fileName : {startsWith : search.toLowerCase() }}],
                         })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 
