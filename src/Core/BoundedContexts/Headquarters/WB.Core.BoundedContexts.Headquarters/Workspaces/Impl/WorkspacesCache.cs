@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
@@ -13,38 +14,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
     {
         // Needed for proper cache invalidation, because IMemoryCache is workspace dependent
         private static readonly IMemoryCache MemoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        private readonly IInScopeExecutor<IWorkspacesService> inScopeExecutor;
+        private readonly IInScopeExecutor inScopeExecutor;
         
         private const string WorkspacesCacheKey = "workspaces";
+        private const string WorkspacesCacheKeyAll = "workspacesall";
 
-        public WorkspacesCache(IInScopeExecutor<IWorkspacesService> serviceLocator)
+        public WorkspacesCache(IInScopeExecutor serviceLocator)
         {
             this.inScopeExecutor = serviceLocator;
         }
 
         public List<WorkspaceContext> AllEnabledWorkspaces()
         {
-            return GetAllEnabledWorkspaces().workspaces;
-        }
-
-        private (int revision, List<WorkspaceContext> workspaces) GetAllEnabledWorkspaces()
-        {
             return MemoryCache.GetOrCreateWithDoubleLock(WorkspacesCacheKey, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-
-                return inScopeExecutor.Execute(ws =>
+                
+                return inScopeExecutor.Execute(serviceLocator =>
                 {
-                    var list = ws.GetEnabledWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
+                    var ws = serviceLocator.GetInstance<IWorkspacesService>();
+                    var list = ws.GetEnabledWorkspaces().ToList();
+                    return list;
+                });
+            });
+        }
 
-                    int revision = 17;
-
-                    foreach (var listItem in list)
-                    {
-                        revision = revision * 23 + listItem.GetHashCode();
-                    }
-
-                    return (revision, list);
+        public List<WorkspaceContext> AllWorkspaces()
+        {
+            return MemoryCache.GetOrCreateWithDoubleLock(WorkspacesCacheKeyAll, entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+                
+                return inScopeExecutor.Execute(serviceLocator =>
+                {
+                    var ws = serviceLocator.GetInstance<IPlainStorageAccessor<Workspace>>();
+                    var list = ws.Query(_ => _.ToList()).Select(x => new WorkspaceContext(x.Name, x.DisplayName, x.DisabledAtUtc))
+                                 .ToList();
+                    return list;
                 });
             });
         }
@@ -52,9 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         public void InvalidateCache()
         {
             MemoryCache.Remove(WorkspacesCacheKey);
+            MemoryCache.Remove(WorkspacesCacheKeyAll);
         }
-
-        public int Revision() => GetAllEnabledWorkspaces().revision;
-
     }
 }
