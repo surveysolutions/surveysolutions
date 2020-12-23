@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
-namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.FIlters
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters
 {
     public class IdentifyEntityValueFilterInput : FilterInputType<IdentifyEntityValue>
     {

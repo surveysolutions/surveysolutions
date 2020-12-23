@@ -1,5 +1,5 @@
 ﻿using HotChocolate.Data.Filters;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.FIlters;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters
 { 
