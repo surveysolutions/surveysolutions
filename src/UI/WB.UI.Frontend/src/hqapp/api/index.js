@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
@@ -113,11 +112,10 @@ class Workspaces {
         return response.data
     }
 
-    Assign(userId, workspaces) {
+    Assign(userIds, workspaces, mode = 'Assign') {
         return this.http.post('api/v1/workspaces/assign',
             {
-                userId: userId,
-                workspaces: workspaces,
+                userIds, workspaces, mode,
             }
         )
     }
@@ -449,12 +447,25 @@ class HqApiClient {
     get Workspaces() {
         return new Workspaces(this.http)
     }
+
+    get UsersManagement() {
+        var self = this
+        return {
+            list() {
+                return self.basePath + 'UsersManagement/List'
+            },
+
+            userManage(id) {
+                return self.basePath + 'Users/Manage/' + id
+            },
+        }
+    }
 }
 
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.basePath)
+        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath)
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$hq', {

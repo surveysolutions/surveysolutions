@@ -1,4 +1,5 @@
 ﻿@using WB.UI.Headquarters.Code
+@using WB.UI.Shared.Web.Extensions
 @model object
 @{
     ViewBag.Title = MainMenu.Administration;
@@ -7,5 +8,6 @@
 
 @section Scripts{
     @Html.RenderHqConfig(Model)
+    <script>window.CONFIG.apiBasePath = '@Url.Static("/primary/")'</script>
 }
 <div id="vueApp"></div>

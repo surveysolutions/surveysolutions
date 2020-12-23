@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
                 Create.Entity.HqUser(Id.g3, userName: "super", role: UserRoles.Supervisor)
             };
 
-            var userManager = Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
+            var userManager = Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable().GetNhQueryable());
 
             var deviceSyncInfos = new[] { Create.Entity.DeviceSyncInfo(Id.g1, "device1") };
             var trafficUsage = new Dictionary<Guid, long>
@@ -140,7 +140,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
                 report.Data[0], 
                 Is.EquivalentTo(new object[]
                 { 
-                    "u1", Id.g1, "super", null, null, null, string.Empty,"AppVersion", false, null, 0, 0, 
+                    "u1", Id.g1, "super", string.Empty, null, null, string.Empty,"AppVersion", false, null, 0, 0, 
                     null, string.Empty, "device1", "DeviceSerialNumber", "DeviceType", "DeviceManufacturer", 
                     "DeviceModel", "DeviceBuildNumber", 30000, "DeviceLanguage", "Android AndroidSdkVersionName(25)",
                     deviceSyncInfos[0].LastAppUpdatedDate.ToString("s", CultureInfo.InvariantCulture), 
