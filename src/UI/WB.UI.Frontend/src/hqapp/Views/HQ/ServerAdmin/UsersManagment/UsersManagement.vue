@@ -44,6 +44,7 @@
             :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest"
             @selectedRowsChanged="rows => selectedRows = rows"
+            mutliRowSelect
             selectable
             :selectableId="'userId'"
             :noPaging="false">
