@@ -1,12 +1,13 @@
 ﻿using HotChocolate.Data.Filters;
 using HotChocolate.Types;
 
-namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.FIlters
 {
     public class CustomStringOperationFilterInput : StringOperationFilterInputType
     {
         protected override void Configure(IFilterInputTypeDescriptor descriptor)
         {
+            descriptor.Name("StringOperationFilterInputType");
             descriptor.Operation(DefaultFilterOperations.Equals).Type<StringType>();
             descriptor.Operation(DefaultFilterOperations.NotEquals).Type<StringType>();
             descriptor.Operation(DefaultFilterOperations.Contains).Type<StringType>();

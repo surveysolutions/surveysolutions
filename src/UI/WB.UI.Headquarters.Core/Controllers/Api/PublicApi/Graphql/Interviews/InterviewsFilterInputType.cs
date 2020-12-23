@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.SupervisorName);
             descriptor.Field(x => x.SupervisorNameLowerCase);
             descriptor.Field(x => x.ResponsibleRole);       
-            descriptor.Field(x => x.UpdateDate);
+            descriptor.Field(x => x.UpdateDate).Name("updateDateUtc");
             descriptor.Field(x => x.ReceivedByInterviewerAtUtc);
             descriptor.Field(x => x.ErrorsCount);
             descriptor.Field(x => x.IdentifyEntitiesValues)

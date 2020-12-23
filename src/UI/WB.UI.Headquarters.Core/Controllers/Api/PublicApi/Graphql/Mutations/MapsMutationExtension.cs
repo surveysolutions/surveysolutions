@@ -10,7 +10,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
     {
         protected override void Configure(IObjectTypeDescriptor descriptor)
         {
-            descriptor.Name("HeadquartersMutations");
+            descriptor.Name("HeadquartersMutation");
             
             descriptor.Field<MapsResolver>(t => t.DeleteMap(default!, default!))
                 .Use<TransactionMiddleware>()
