@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using HotChocolate.Types;
 
-namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.FIlters
+namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters
 {
     public class CustomStringOperationFilterInput : StringOperationFilterInputType
     {
