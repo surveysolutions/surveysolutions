@@ -52,8 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound();
             }
 
-            QuestionnaireBrowseItem questionnaire1 = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            QuestionnaireBrowseItem questionnaire = questionnaire1;
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaire == null)
             {
                 return NotFound();
@@ -88,8 +87,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (status == null)
                 return NotFound();
 
-            QuestionnaireBrowseItem questionnaire1 = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
-            QuestionnaireBrowseItem questionnaire = questionnaire1;
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
             if (questionnaire == null)
             {
                 return NotFound();
