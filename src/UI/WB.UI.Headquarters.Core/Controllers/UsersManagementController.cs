@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -24,10 +25,10 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.UsersManagement)]
         public IActionResult Index() => View();
 
-        public async Task<IActionResult> List(UsersManagementRequest request, CancellationToken cancellationToken)
+        public async Task<DataTableResponse<UserManagementListItem>?> List(UsersManagementRequest request, CancellationToken cancellationToken)
         {
-            var result = await this.mediator.Send(request, cancellationToken);
-            return Json(result);
+            DataTableResponse<UserManagementListItem>? result = await this.mediator.Send(request, cancellationToken);
+            return result;
         }
     }
 }
