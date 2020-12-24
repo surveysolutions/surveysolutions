@@ -1,10 +1,12 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
+    [DebuggerDisplay("{Name}")]
     public class Workspace
     {
         protected Workspace()

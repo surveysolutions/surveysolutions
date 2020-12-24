@@ -35,6 +35,7 @@
                     name="lockedSelector"
                     :value="selectedLocked"
                     @input="onLockedSelected" />
+
             </FilterBlock>
 
         </Filters>
@@ -65,11 +66,11 @@
                     </label>
                     <button
                         class="btn btn-lg btn-success"
-                        v-if="selectedRows.length"
+                        :disabled="filteredToAdd.length == 0"
                         @click="addToWorkspace">{{ $t("Pages.UserManagement_AddToWorkspace") }}</button>
                     <button
                         class="btn btn-lg btn-success"
-                        v-if="selectedRows.length"
+                        :disabled="filteredToAdd.length == 0"
                         @click="removeFromWorkspace">{{ $t("Pages.UserManagement_RemoveFromWorkspace")}}</button>
                 </div>
             </div>
@@ -105,6 +106,9 @@ export default {
             roles: [
                 { key: 'Headquarter', value: this.$t('Users.Headquarters') },
                 { key: 'ApiUser',     value: this.$t('Users.APIUsers') },
+                { key: 'Interviewer', value: this.$t('Users.Interviewer') },
+                { key: 'Supervisor',     value: this.$t('Users.Supervisor') },
+                { key: 'Observer',     value: this.$t('Users.Observer') },
             ],
 
             selectedWorkspace: null,
@@ -168,26 +172,55 @@ export default {
                     {
                         data: 'userName',
                         name: 'UserName',
-                        title: this.$t('Users.UserName'),
+                        title: this.$t('Pages.Interviewers_UserNameTitle'),
                         className: 'nowrap',
                         render: function(data, type, row) {
-                            return `<a href='${self.$hq.UsersManagement.userManage(row.userId)}'>${data}</a>`
+                            var tdHtml = !row.isArchived
+                                ? `<a href='${self.$hq.UsersManagement.userManage(row.userId)}'>${data}</a>`
+                                : data
+
+                            if (row.isLocked) {
+                                tdHtml += `<span class='lock' style="left: auto" title='${self.$t('Users.Locked')}'></span>`
+                            }
+                            return tdHtml
                         },
+                    },
+                    {
+                        data: 'role',
+                        name: 'Role',
+                        title: this.$t('Pages.AccountManage_Role'),
+                        sortable: false,
+                        className: 'created-by',
                     },
                     {
                         data: 'workspaces',
                         name: 'Workspaces',
-                        title: 'Workspaces',
+                        title: this.$t('Pages.UsersManage_WorkspacesFilterTitle'),
                         sortable: false,
                         render(data, type, row) {
-                            return map(row.workspaces, w => row.workspaces.length < 4 ? w.name : w.displayName).join(', ')
+                            return map(row.workspaces, w => w.disabled ? '<strike>'  + w.displayName + '</strike>' :  w.displayName).join(', ')
                         },
                     },
                     {
-                        data: 'isLocked',
-                        className: 'date',
-                        sortable: false,
-                        title: this.$t('Users.Locked'),
+                        data: 'fullName',
+                        name: 'FullName',
+                        title: this.$t('Pages.Interviewers_FullNameTitle'),
+                        className: 'created-by',
+                    },
+                    {
+                        data: 'email',
+                        name: 'Email',
+                        className: 'changed-recently',
+                        title: this.$t('Assignments.Email'),
+                        render: function(data, type, row) {
+                            return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
+                        },
+                    },
+                    {
+                        data: 'phone',
+                        name: 'Phone',
+                        title: this.$t('UploadUsers.Phone'),
+                        className: 'created-by',
                     },
                 ],
 
@@ -199,6 +232,12 @@ export default {
                 responsive: false,
                 order: [[1, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
+                createdRow: function(row, data) {
+                    if (data.isLocked) {
+                        var jqCell = $(row.cells[1])
+                        jqCell.addClass('locked-user')
+                    }
+                },
             }
         },
 
@@ -213,13 +252,13 @@ export default {
 
         filteredToAdd() {
             return this.getFilteredItems(item => {
-                return item
+                return item.role == 'Headquarter' || item.role == 'ApiUser'
             })
         },
 
         filteredToRemove() {
             return this.getFilteredItems(item => {
-                return item
+                return item.role == 'Headquarter' || item.role == 'ApiUser'
             })
         },
 
@@ -247,12 +286,12 @@ export default {
         },
 
         async addWorkspacesSelected(workspaces) {
-            const response = await this.$hq.Workspaces.Assign(this.selectedRows, workspaces, 'Add')
+            const response = await this.$hq.Workspaces.Assign(map(this.filteredToAdd, 'userId'), workspaces, 'Add')
             this.$refs.table.reload()
         },
 
         async removeWorkspacesSelected(workspaces) {
-            const response = await this.$hq.Workspaces.Assign(this.selectedRows, workspaces, 'Remove')
+            const response = await this.$hq.Workspaces.Assign(map(this.filteredToRemove, 'userId'), workspaces, 'Remove')
             this.$refs.table.reload()
         },
 
@@ -261,7 +300,7 @@ export default {
 
             var selectedItems = this.$refs.table.table.rows({selected: true}).data()
 
-            if (selectedItems.length !== 0 && selectedItems[0] != null)
+            if (this.selectedRows.length > 0 && selectedItems.length !== 0 && selectedItems[0] != null)
                 return arrayFilter(selectedItems, filterPredicat)
 
             return []

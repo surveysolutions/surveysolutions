@@ -59,8 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         {
             foreach (var userWorkspace in user.Workspaces.ToList())
             {
-                if(!workspaces.Any(w => w.Equals(userWorkspace.Workspace)))
+                var workspaceExists = workspaces.Any(w => Equals(w, userWorkspace.Workspace));
+                
+                if(!workspaceExists)
                 {
+                    this.workspaceUsers.Remove(userWorkspace.Id);
                     user.Workspaces.Remove(userWorkspace);
                     this.logger.LogInformation("Removed {user} from {workspace}", user.UserName, userWorkspace.Workspace.Name);
                 }
@@ -68,7 +71,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             
             foreach (var workspace in workspaces)
             {
-                if(!user.Workspaces.Any(userWorkspace => userWorkspace.Workspace.Equals(workspace)))
+                var workspaceExists = user.Workspaces.Any(uw => Equals(uw.Workspace, workspace));
+                
+                if (!workspaceExists)
                 {
                     AddUserToWorkspace(user, workspace.Name);
                 }
@@ -85,16 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                                                 {"name", workspace}
                                             }
                                         };
-
-            if (workspaceEntity.IsDisabled())
-            {
-                throw new ArgumentException("Workspace disabled", nameof(workspace)){
-                    Data =
-                    {
-                        {"name", workspace}
-                    }
-                };
-            }
             
             var workspaceUser = new WorkspacesUsers(workspaceEntity, user);
             
