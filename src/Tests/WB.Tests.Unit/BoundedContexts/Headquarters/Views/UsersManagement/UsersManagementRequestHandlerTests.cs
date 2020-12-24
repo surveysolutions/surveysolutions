@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 Role = UserRoles.Headquarter
             });
 
-            Assert.That(response.RecordsTotal, Is.EqualTo(3)); // only HQ and API users
+            Assert.That(response.RecordsTotal, Is.EqualTo(4));
             Assert.That(response.RecordsFiltered, Is.EqualTo(2)); // filtered to HQ users
         }
         
@@ -50,7 +50,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         public async Task should_not_return_locked_users_by_default()
         {
             Users = new[] {
-                Create.Entity.HqUser(role: UserRoles.Interviewer),
                 Create.Entity.HqUser(role: UserRoles.Headquarter, lockedBySupervisor: true),
                 Create.Entity.HqUser(role: UserRoles.Headquarter, isLockedByHQ: true),
                 Create.Entity.HqUser(role: UserRoles.ApiUser)
@@ -68,7 +67,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         public async Task should_return_locked_users_by_request()
         {
             Users = new[] {
-                Create.Entity.HqUser(role: UserRoles.Interviewer),
                 Create.Entity.HqUser(role: UserRoles.Headquarter, lockedBySupervisor: true),
                 Create.Entity.HqUser(role: UserRoles.Headquarter, isLockedByHQ: true),
                 Create.Entity.HqUser(role: UserRoles.ApiUser)
@@ -80,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 Length = 10
             });
             
-            Assert.That(response.RecordsFiltered, Is.EqualTo(3));
+            Assert.That(response.RecordsFiltered, Is.EqualTo(2));
         }
         
         [Test]
@@ -163,6 +161,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 Create.Entity.HqUser(Id.g2, role: UserRoles.Headquarter, workspaces: new [] {"verysmoorphik"}),
                 Create.Entity.HqUser(Id.g3, role: UserRoles.Headquarter),
             };
+
+            foreach (var hqUser in Users)
+            {
+                hqUser.PhoneNumber = "";
+                hqUser.Email = "";
+            }
 
             Users[2].Workspaces.First().Workspace.DisplayName = "jengaworld";
             

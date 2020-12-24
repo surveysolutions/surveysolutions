@@ -1642,4 +1642,7 @@
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>Выбранных пользователей</value>
   </data>
+  <data name="UsersManage_ArchivedUsers" xml:space="preserve">
+    <value>Показать архивированных пользователей</value>
+  </data>
 </root>

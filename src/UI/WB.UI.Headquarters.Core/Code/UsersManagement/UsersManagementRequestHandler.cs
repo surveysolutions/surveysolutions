@@ -25,12 +25,9 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         public async Task<DataTableResponse<UserManagementListItem>> Handle(
             UsersManagementRequest request, CancellationToken cancellationToken = default)
         {
-            var selectedRoleId = new[] { UserRoles.ApiUser,
-                UserRoles.Headquarter }.Select(x => x.ToUserId()).ToArray();
-
             var query = this.userRepository.Users
-                .Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)));
-
+                .Where(u => u.Roles.All(r => r.Id != UserRoles.Administrator.ToUserId()));
+            
             var recordsTotal = await query.CountAsync(cancellationToken);
 
             query = ApplyFiltering(request, query);
@@ -39,23 +36,26 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             var sortOrder = request.GetSortOrder();
 
             var list = await query
-                .OrderUsingSortExpression(sortOrder)
-                .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
-                .Select(u => new UserManagementListItem
+                .Select(u => new UserManagementListItem(u.Id, u.UserName, u.Roles)
                 {
                     UserName = u.UserName,
                     FullName = u.FullName,
                     Email = u.Email,
+                    Phone = u.PhoneNumber,
                     UserId = u.Id,
                     CreationDate = u.CreationDate,
                     Workspaces = u.Workspaces.Select(w => new WorkspaceApiView
                     {
+                        Disabled = w.Workspace.DisabledAtUtc != null,
                         Name = w.Workspace.Name,
                         DisplayName = w.Workspace.DisplayName
                     }).ToList(),
                     IsLocked = u.IsLockedByHeadquaters || u.IsLockedBySupervisor,
                     IsArchived = u.IsArchived
-                }).ToListAsync(cancellationToken);
+                })
+                .OrderUsingSortExpression(sortOrder)
+                .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+                .ToListAsync(cancellationToken);
 
             return new DataTableResponse<UserManagementListItem>
             {
@@ -70,10 +70,13 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         {
             if (request.Search?.Value != null)
             {
-                query = query.Where(u => u.UserName.Contains(request.Search.Value)
-                                         || u.FullName.Contains(request.Search.Value)
+                var search = request.Search.Value;
+                query = query.Where(u => u.UserName.Contains(search)
+                                         || u.FullName.Contains(search)
+                                         || u.PhoneNumber.Contains(search)
+                                         || u.Email.Contains(search)
                                          || u.Workspaces.Any(w
-                                             => (w.Workspace.Name + w.Workspace.DisplayName).Contains(request.Search.Value)));
+                                             => (w.Workspace.Name + w.Workspace.DisplayName).Contains(search)));
             }
 
             if (request.Role != null)
@@ -82,15 +85,11 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 query = query.Where(u => u.Roles.Any(r => r.Id == roleId));
             }
 
-            if (!request.ShowArchived)
-            {
-                query = query.Where(u => u.IsArchived == false);
-            }
+            query = query.Where(u => u.IsArchived == request.ShowArchived);
 
-            if (!request.ShowLocked)
-            {
-                query = query.Where(u => !u.IsLockedByHeadquaters && !u.IsLockedBySupervisor);
-            }
+            query = request.ShowLocked
+                ? query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor)
+                : query.Where(u => !u.IsLockedByHeadquaters && !u.IsLockedBySupervisor);
 
             if (request.WorkspaceName != null && request.MissingWorkspace == false)
             {
