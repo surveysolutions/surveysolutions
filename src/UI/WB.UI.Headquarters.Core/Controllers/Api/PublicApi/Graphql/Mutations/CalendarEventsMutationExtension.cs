@@ -14,12 +14,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
 
             descriptor.Field<CalendarEventResolver>(t => 
                     t.AddOrUpdateCalendarEvent(default, default, default, default, 
-                        default, default!, default!,default!))
+                        default, default!, default!,default!,
+                        default!, default!))
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
                 {
                     nameof(UserRoles.Interviewer)
                 })
+                .HasWorkspace()
                 .Type<CalendarEventObjectType>()
                 .Argument("assignmentId", ad=>ad.Description("Assignment Id").Type<IntType>())
                 .Argument("comment", ad => ad.Description("Comment").Type<StringType>())
@@ -31,12 +33,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
 
             
             descriptor.Field<CalendarEventResolver>(t => 
-                    t.DeleteCalendarEvent(default, default!))
+                    t.DeleteCalendarEvent(default, default!, default!, default!))
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
                 {
                     nameof(UserRoles.Interviewer)
                 })
+                .HasWorkspace()
                 .Type<CalendarEventObjectType>()
                 .Argument("publicKey", a => a.Description("Calendar event publicKey").Type<NonNullType<UuidType>>());
         }

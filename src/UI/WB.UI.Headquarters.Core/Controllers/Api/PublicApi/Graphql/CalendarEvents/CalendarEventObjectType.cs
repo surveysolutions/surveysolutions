@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents
                 .Type<NonNullType<UuidType>>()
                 .Description("Id of Calendar Event");
             descriptor.Field(x => x.StartTimezone())
-                .Type<StringType>()
+                .Type<NonNullType<StringType>>()
                 .Description("Start Timezone of Event");
 
             descriptor.Field(x => x.StartUtc())

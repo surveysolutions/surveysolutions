@@ -20,6 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                     nameof(UserRoles.Headquarter),
                     nameof(UserRoles.ApiUser)
                 })
+                .HasWorkspace()
                 .Type<Map>()
                 .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>());
 
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                     nameof(UserRoles.Supervisor),
                     nameof(UserRoles.ApiUser)
                 })
+                .HasWorkspace()
                 .Type<Map>()
                 .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>())
                 .Argument("userName", a => a.Type<NonNullType<StringType>>());
@@ -45,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                     nameof(UserRoles.Supervisor),
                     nameof(UserRoles.ApiUser)
                 })
+                .HasWorkspace()
                 .Type<Map>()
                 .Argument("fileName", a => a.Description("Map file name").Type<NonNullType<StringType>>())
                 .Argument("userName", a => a.Type<NonNullType<StringType>>());
