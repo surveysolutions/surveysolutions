@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,12 +12,9 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -110,17 +108,30 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<UsersImportTask>().ScheduleRunAsync();
             await services.GetRequiredService<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
-            await services.GetRequiredService<DeleteQuestionnaireJobScheduler>()
-                    .Schedule(repeatIntervalInSeconds: 250);
+
             await services.GetRequiredService<UpgradeAssignmentJobScheduler>()
                 .Schedule(importSettings.BackgroundExportIntervalInSeconds);
             await services.GetRequiredService<SendInvitationsTask>().ScheduleRunAsync();
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
 
+            var scheduler = services.GetRequiredService<IScheduler>();
+
+            await CleanupTrigger(scheduler, "Delete questionnaire trigger", "Delete questionnaire");
+            
+
             foreach (var schedule in services.GetServices<IScheduledJob>())
             {
                 await schedule.RegisterJob();
+            }
+        }
+
+        private static async Task CleanupTrigger(IScheduler scheduler, string name, string group)
+        {
+            var trigger = await scheduler.GetTrigger(new TriggerKey(name, group));
+            if (trigger != null)
+            {
+                await scheduler.UnscheduleJob(trigger.Key);
             }
         }
 

@@ -274,6 +274,7 @@ namespace WB.UI.Headquarters
                     ContentSerializer = new DesignerContentSerializer()
                 });
             
+
             services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
