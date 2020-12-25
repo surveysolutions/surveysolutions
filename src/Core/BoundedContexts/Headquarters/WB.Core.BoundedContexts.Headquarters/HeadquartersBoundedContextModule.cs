@@ -357,10 +357,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentsImportTask>();
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
             registry.Bind<UsersImportTask>();
-            registry.Bind<UpgradeAssignmentJobScheduler>();
             registry.Bind<SendInvitationsTask>();
             registry.Bind<SendRemindersTask>();
-            registry.Bind<UpgradeAssignmentJob>();
             registry.Bind<SyncPackagesReprocessorBackgroundJob>();
             registry.Bind<UsersImportJob>();
             registry.Bind<UsersImportJob>();
@@ -376,6 +374,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
+            registry.BindScheduledJob<UpgradeAssignmentJob, QueuedUpgrade>();
             
             registry.Bind<CalendarEvent>();
 

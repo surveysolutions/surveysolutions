@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Automation
 
                     var processId = Guid.NewGuid();
                     var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
-                    this.upgradeService.Upgrade(processId, this.user.Id, sourceQuestionnaireId, result.Identity, CancellationToken.None);
+                    this.upgradeService.Upgrade(new QueuedUpgrade(processId, this.user.Id, sourceQuestionnaireId, result.Identity), CancellationToken.None);
                 }
 
                 return result.Identity;
