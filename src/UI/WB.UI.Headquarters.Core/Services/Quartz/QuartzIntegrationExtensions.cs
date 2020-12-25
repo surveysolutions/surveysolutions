@@ -108,9 +108,6 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<UsersImportTask>().ScheduleRunAsync();
             await services.GetRequiredService<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
-
-            await services.GetRequiredService<UpgradeAssignmentJobScheduler>()
-                .Schedule(importSettings.BackgroundExportIntervalInSeconds);
             await services.GetRequiredService<SendInvitationsTask>().ScheduleRunAsync();
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
@@ -118,7 +115,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             var scheduler = services.GetRequiredService<IScheduler>();
 
             await CleanupTrigger(scheduler, "Delete questionnaire trigger", "Delete questionnaire");
-            
+            await CleanupTrigger(scheduler, "Import trigger", "Import");
 
             foreach (var schedule in services.GetServices<IScheduledJob>())
             {
@@ -128,11 +125,7 @@ namespace WB.UI.Headquarters.Services.Quartz
 
         private static async Task CleanupTrigger(IScheduler scheduler, string name, string group)
         {
-            var trigger = await scheduler.GetTrigger(new TriggerKey(name, group));
-            if (trigger != null)
-            {
-                await scheduler.UnscheduleJob(trigger.Key);
-            }
+            await scheduler.UnscheduleJob(new TriggerKey(name, group));
         }
 
         private class QuartzMigratorConfig
