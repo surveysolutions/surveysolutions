@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         bool HasAnyGpsAnswerForInterviewer(Guid interviewerId);
 
         InterviewGpsInfo[] GetPrefilledGpsAnswers(Guid? questionnaireId, long? questionnaireVersion,
+            Guid? responsibleId, int? assignmentId,
             double east, double north, double west, double south);
     }
 }

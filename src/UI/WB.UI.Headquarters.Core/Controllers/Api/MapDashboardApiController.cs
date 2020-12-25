@@ -101,6 +101,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             public Guid? QuestionnaireId { get; set; }
             public long? QuestionnaireVersion { get; set; }
+            public Guid? ResponsibleId { get; set; }
+            public int? AssignmentId { get; set; }
 
             public double East { get; set; }
             public double North { get; set; }
@@ -130,10 +132,12 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             var interviewGpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.ResponsibleId, input.AssignmentId,
                 input.East, input.North, input.West, input.South);
 
             var assignmentGpsData = this.assignmentsService.GetAssignmentsWithGpsAnswer(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.ResponsibleId, input.AssignmentId,
                 input.East, input.North, input.West, input.South);
 
             var mapPoints = 
@@ -157,6 +161,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var valueCollection = clustering.RunClustering(mapPoints).ToList();
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
             {
+                string id = g.ID;
                 MapMarker mapMarker = null;
                 if (g.Count > 1)
                 {
@@ -165,6 +170,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         count = g.Count,
                         expand = input.Zoom + 1,
                     };
+                    id += $" {g.Count}";
                 }
                 else
                 {
@@ -175,7 +181,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return new Feature(new Point(
                         new Position(g.X, g.Y)),
                         mapMarker,
-                        g.ID);
+                        id);
             }).ToList());
 
 
@@ -294,6 +300,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var gpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.ResponsibleId, input.AssignmentId,
                 input.East, input.North, input.West, input.South);
 
             var cluster = new SuperCluster();

@@ -136,6 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         
         public InterviewGpsInfo[] GetPrefilledGpsAnswers(
             Guid? questionnaireId, long? questionnaireVersion, 
+            Guid? responsibleId, int? assignmentId,
             double east, double north, double west, double south)
         {
             var userId = authorizedUser.Id;
@@ -160,6 +161,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     gpsQuery = gpsQuery
                         .Where(x => x.InterviewSummary.QuestionnaireVersion == questionnaireVersion.Value);
                 }
+            }
+
+            if (assignmentId.HasValue)
+            {
+                gpsQuery = gpsQuery.Where(x => x.InterviewSummary.AssignmentId == assignmentId.Value);
+            }
+
+            if (responsibleId.HasValue)
+            {
+                gpsQuery = gpsQuery.Where(x => 
+                    x.InterviewSummary.ResponsibleId == responsibleId.Value
+                    || x.InterviewSummary.SupervisorId == responsibleId.Value);
             }
 
             if (authorizedUser.IsInterviewer)
