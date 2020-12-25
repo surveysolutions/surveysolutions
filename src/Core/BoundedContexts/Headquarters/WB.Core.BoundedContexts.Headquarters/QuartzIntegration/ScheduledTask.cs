@@ -1,0 +1,89 @@
+﻿#nullable enable
+using System.ComponentModel;
+using System.Reflection;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Quartz;
+using WB.Infrastructure.Native.Workspaces;
+
+namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
+{
+    public class ScheduledTask<TJob, TJobData> : IScheduledJob, IScheduledTask<TJob, TJobData>
+        where TJob : IJob<TJobData>
+    {
+        private readonly IScheduler scheduler;
+        private readonly IWorkspaceContextAccessor contextAccessor;
+
+        public ScheduledTask(IScheduler scheduler, IWorkspaceContextAccessor contextAccessor)
+        {
+            this.scheduler = scheduler;
+            this.contextAccessor = contextAccessor;
+        }
+
+        static ScheduledTask()
+        {
+            var displayName = typeof(TJob).GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
+            var category = typeof(TJob).GetCustomAttribute<CategoryAttribute>()?.Category;
+
+            if (!string.IsNullOrWhiteSpace(displayName))
+            {
+                Key = string.IsNullOrWhiteSpace(category)
+                    ? new JobKey(displayName)
+                    : new JobKey(displayName, category);
+            }
+            else
+            {
+                Key = new JobKey(typeof(TJob).Name);
+            }
+
+            Description = typeof(TJob).GetCustomAttribute<DescriptionAttribute>()?.Description;
+        }
+
+        // ReSharper disable once StaticMemberInGenericType
+        public static readonly JobKey Key;
+
+        // ReSharper disable once StaticMemberInGenericType
+        public static string? Description;
+
+        public Task Schedule(TJobData data)
+        {
+            return scheduler.ScheduleJob(GetTrigger(data));
+        }
+
+        public Task RegisterJob()
+        {
+            return this.scheduler.AddJob(JobDetails(), true);
+        }
+
+        ITrigger GetTrigger(TJobData data)
+        {
+            var workspace = contextAccessor.CurrentWorkspace();
+
+            var trigger = TriggerBuilder.Create()
+                .ForJob(Key)
+                .UsingJobData(BaseTask.DATA_KEY, JsonSerializer.Serialize(data));
+
+            if (workspace != null)
+            {
+                trigger = trigger.UsingJobData(WorkspaceConstants.QuartzJobKey, workspace.Name);
+            }
+
+            return trigger.Build();
+        }
+
+        IJobDetail JobDetails()
+        {
+            var job = JobBuilder.Create<TJob>()
+                .WithIdentity(Key)
+                .StoreDurably()
+                .RequestRecovery();
+
+            if (!string.IsNullOrWhiteSpace(Description))
+            {
+                job = job.WithDescription(Description);
+            }
+
+            return job.Build();
+        }
+    }
+}

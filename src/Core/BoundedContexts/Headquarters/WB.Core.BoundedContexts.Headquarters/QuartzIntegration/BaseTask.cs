@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
@@ -7,6 +8,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public abstract class BaseTask
     {
+        public const string DATA_KEY = "_data_";
+
         protected readonly IScheduler scheduler;
 
         private readonly Type jobType;
