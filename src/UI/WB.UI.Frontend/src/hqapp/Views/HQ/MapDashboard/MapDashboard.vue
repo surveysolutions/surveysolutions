@@ -21,6 +21,32 @@
                     v-on:selected="selectQuestionnaireVersion"
                     :disabled="selectedQuestionnaireId == null"/>
             </FilterBlock>
+            <FilterBlock :title="$t('Common.Responsible')">
+                <Typeahead
+                    control-id="responsibleId"
+                    :placeholder="$t('Common.AllResponsible')"
+                    :value="responsibleId"
+                    :ajax-params="responsibleParams"
+                    :selectedValue="this.query.responsible"
+                    v-on:selected="selectResponsible"
+                    :fetch-url="model.responsible"></Typeahead>
+            </FilterBlock>
+            <FilterBlock :title="$t('Pages.Filters_Assignment')">
+                <div class="input-group">
+                    <input
+                        class="form-control with-clear-btn"
+                        :placeholder="$t('Common.AllAssignments')"
+                        type="text"
+                        v-model="assignmentId"/>
+                    <div class="input-group-btn"
+                        @click="clearAssignmentFilter">
+                        <div class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove"
+                                aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </FilterBlock>
             <FilterBlock v-if="isLoading"
                 :title="$t('Reports.MapDataLoading')">
                 <div class="progress">
@@ -199,11 +225,19 @@ export default {
             isLoading: false,
             totalMarkers: 0,
             selectedQuestionnaireId: null,
+            responsibleId: null,
+            responsibleParams: {showArchived: true, showLocked: true},
+            assignmentId: null,
         }
     },
 
     watch: {
-
+        'assignmentId'(to) {
+            this.onChange(q => {
+                q.assignmentId = to
+            })
+            this.reloadMarkersInBounds()
+        },
     },
 
     computed: {
@@ -221,16 +255,6 @@ export default {
                 version: this.query.version,
             }
         },
-
-        /* selectedQuestionnaireId() {
-            if (this.query == null || this.query.name == null) {
-                return null
-            }
-
-            return find(this.model.questionnaires, {
-                value: this.query.name,
-            })
-        },*/
 
         selectedVersion() {
             if (this.selectedQuestionnaireId == null || this.query.version == null) return null
@@ -268,7 +292,7 @@ export default {
         selectQuestionnaire(value) {
             this.selectedQuestionnaireId = value
 
-            if (this.$route.query.name !== value.value)
+            if (value == null || this.$route.query.questionnaire !== value.value)
                 this.selectQuestionnaireVersion(null)
             else
                 this.selectQuestionnaireVersion(this.$route.query.version ? {key: this.$route.query.version} : null)
@@ -276,7 +300,19 @@ export default {
             this.onChange(q => {
                 q.questionnaire = value == null ? null : value.value
             })
-            //this.reloadMarkersInBounds()
+        },
+
+        selectResponsible(newValue) {
+            this.responsibleId = newValue
+            this.onChange(q => {
+                q.responsible = newValue == null ? null : newValue.value
+            })
+            this.reloadMarkersInBounds()
+        },
+
+        clearAssignmentFilter() {
+            this.assignmentId = null
+            this.reloadMarkersInBounds()
         },
 
         getMapOptions() {
@@ -354,8 +390,7 @@ export default {
                         || status == 'SupervisorAssigned'
                         || status == 'Restarted'
                     ) {
-                        //interviewStyle.label.color =
-                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        interviewStyle.icon.url = '/img/google-maps-markers/donut.png'
                     }
 
                     if (status == 'Completed'
@@ -506,6 +541,8 @@ export default {
             var request = {
                 QuestionnaireId: (this.selectedQuestionnaireId || {}).key || null,
                 QuestionnaireVersion: this.selectedVersionValue,
+                ResponsibleId: (this.responsibleId || {}).key || null,
+                AssignmentId: this.assignmentId,
                 Zoom: zoom,
                 east,
                 north,
