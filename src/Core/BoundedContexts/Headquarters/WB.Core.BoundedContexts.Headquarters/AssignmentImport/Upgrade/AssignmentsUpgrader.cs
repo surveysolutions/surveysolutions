@@ -5,7 +5,6 @@ using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
@@ -29,9 +28,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.inScopeExecutor = inScopeExecutor;
         }
 
-        public void Upgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom,
-            QuestionnaireIdentity migrateTo, CancellationToken cancellation)
+        public void Upgrade(QueuedUpgrade upgrade, CancellationToken cancellation)
         {
+            var migrateFrom = upgrade.From;
+            var migrateTo = upgrade.To;
+            var userId = upgrade.UserId;
+            var processId = upgrade.ProcessId;
+
             var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
 
             IQuestionnaire targetQuestionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(migrateTo, null);

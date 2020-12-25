@@ -11,9 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         void EnqueueUpgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
 
         void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails);
-
-        QueuedUpgrade DequeueUpgrade();
-
+        
         AssignmentUpgradeProgressDetails Status(Guid processId);
 
         CancellationToken GetCancellationToken(Guid processId);
