@@ -35,6 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 return;
             }
 
+            var jobWorkspace = context.MergedJobDataMap.GetString(WorkspaceConstants.QuartzJobKey);
+
+            if (!string.IsNullOrWhiteSpace(jobWorkspace))
+            {
+                await ExecuteJobAsync(context, jobWorkspace);
+                return;
+            }
+
             foreach (var workspace in this.workspacesCache.AllEnabledWorkspaces())
             {
                 await ExecuteJobAsync(context, workspace.Name);

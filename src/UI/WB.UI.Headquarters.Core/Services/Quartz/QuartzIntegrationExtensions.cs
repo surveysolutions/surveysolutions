@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewD
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -101,8 +102,6 @@ namespace WB.UI.Headquarters.Services.Quartz
 
         public static async Task InitQuartzJobs(this IServiceProvider services)
         {
-            var scheduler = services.GetRequiredService<IScheduler>();
-
             var jobSetting = services.GetRequiredService<SyncPackagesProcessorBackgroundJobSetting>();
             var importSettings = services.GetRequiredService<AssignmentImportOptions>();
 
@@ -119,8 +118,10 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
 
-            
-            await scheduler.AddJob(DeleteWorkspaceSchemaJob.JobDetail(), true);
+            foreach (var schedule in services.GetServices<IScheduledJob>())
+            {
+                await schedule.RegisterJob();
+            }
         }
 
         private class QuartzMigratorConfig
