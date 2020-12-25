@@ -119,9 +119,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public List<AssignmentGpsInfo> GetAssignmentsWithGpsAnswer(
             Guid? questionnaireId, long? questionnaireVersion, 
+            Guid? responsibleId, int? assignmentId,
             double east, double north, double west, double south)
         {
-            Guid responsibleId = authorizedUser.Id;
+            Guid currentUserId = authorizedUser.Id;
             
             var gpsQuery = QueryGpsAnswers()
                 .Where(a =>
@@ -146,18 +147,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 }
             }
 
+            if (assignmentId.HasValue)
+            {
+                gpsQuery = gpsQuery.Where(x => x.Assignment.Id == assignmentId.Value);
+            }
+
+            if (responsibleId.HasValue)
+            {
+                gpsQuery = gpsQuery.Where(x => 
+                    x.Assignment.Responsible.Id == responsibleId.Value
+                    || x.Assignment.Responsible.ReadonlyProfile.SupervisorId == responsibleId.Value);
+            }        
+
             if (authorizedUser.IsInterviewer)
             {
                 gpsQuery = gpsQuery
                     .Where(x => 
-                        x.Assignment.ResponsibleId == responsibleId
+                        x.Assignment.ResponsibleId == currentUserId
                     );
             } 
             else if (authorizedUser.IsSupervisor)
             {
                 gpsQuery = gpsQuery
                     .Where(x => 
-                        (x.Assignment.Responsible.ReadonlyProfile.SupervisorId == responsibleId || x.Assignment.ResponsibleId == responsibleId)
+                        (x.Assignment.Responsible.ReadonlyProfile.SupervisorId == currentUserId || x.Assignment.ResponsibleId == currentUserId)
                     );
             } 
             
