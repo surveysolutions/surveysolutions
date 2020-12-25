@@ -159,8 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
             registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
-            registry.Bind<DeleteQuestionnaireJobScheduler>();
-
+            
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
@@ -369,13 +368,14 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInvitationsJob>();
             registry.Bind<AssignmentsVerificationJob>();
             registry.Bind<SendRemindersJob>();
-            registry.Bind<DeleteQuestionnaireJob>();
+                
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<DeleteWorkspaceSchemaJob>();
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
+            registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
             
             registry.Bind<CalendarEvent>();
 
