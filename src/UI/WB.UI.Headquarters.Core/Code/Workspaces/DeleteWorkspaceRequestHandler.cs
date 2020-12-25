@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         private readonly IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory;
         private readonly IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService;
         private readonly IInScopeExecutor<IExportServiceApi> exportService;
-        private readonly IScheduler scheduler;
+        private readonly IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask;
         private readonly IWorkspacesCache workspacesCache;
 
         public DeleteWorkspaceRequestHandler(
@@ -26,13 +26,13 @@ namespace WB.UI.Headquarters.Code.Workspaces
             IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory,
             IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService, 
             IInScopeExecutor<IExportServiceApi> exportService,
-            IScheduler scheduler)
+            IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.workspacesCache = workspacesCache;
             this.deleteService = deleteService;
             this.exportService = exportService;
-            this.scheduler = scheduler;
+            this.scheduledTask = scheduledTask;
         }
 
         public async Task<DeleteWorkspaceResponse> Handle(
@@ -81,7 +81,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             workspacesCache.InvalidateCache();
 
-            await DeleteWorkspaceSchemaJob.Schedule(scheduler, workspace);
+            await scheduledTask.Schedule(new DeleteWorkspaceJobData(workspace));
             
             return new DeleteWorkspaceResponse
             {
