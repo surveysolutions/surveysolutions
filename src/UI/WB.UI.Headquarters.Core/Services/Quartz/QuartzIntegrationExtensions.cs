@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using Quartz;
+using Quartz.Listener;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -25,11 +26,10 @@ namespace WB.UI.Headquarters.Services.Quartz
 {
     public static class QuartzIntegrationExtensions
     {
-        public static void AddQuartzIntegration(this IServiceCollection services, 
-            IConfiguration configuration, 
+        public static void AddQuartzIntegration(this IServiceCollection services,
+            IConfiguration configuration,
             DbUpgradeSettings dbUpgradeSettings)
         {
-            var schedulerSection = configuration.GetSection("Scheduler").Get<SchedulerConfig>();
             services.AddHostedService<QuartzMigrator>();
 
             services.Configure<QuartzMigratorConfig>(c =>
@@ -39,9 +39,12 @@ namespace WB.UI.Headquarters.Services.Quartz
 
             services.AddQuartz(q =>
             {
-                q.SchedulerId = "Headquarters";
+                q.SchedulerId = "AUTO";
+                q.SchedulerName = "Headquarters Background Services";
+                
                 q.UseJobFactory<AsyncScopedJobFactory>();
                 q.UseDefaultThreadPool();
+                
 
                 q.UsePersistentStore(c =>
                 {
@@ -50,27 +53,19 @@ namespace WB.UI.Headquarters.Services.Quartz
                         var connection = configuration.GetConnectionString("DefaultConnection");
                         var connectionBuilder = new NpgsqlConnectionStringBuilder(connection);
                         connectionBuilder.SetApplicationPostfix("quartz");
-                        
+
                         a.ConnectionString = connectionBuilder.ConnectionString;
                         a.TablePrefix = "quartz.";
                     });
 
                     c.UseProperties = true;
-
-                    if (schedulerSection.IsClustered)
-                    {
-                        c.UseClustering();
-                    }
-
+                    c.UseClustering();
                     c.UseJsonSerializer();
                 });
             });
 
             global::Quartz.Logging.LogProvider.IsDisabled = true;//.SetCurrentLogProvider(loggerFactory);
-
-            services.AddSingleton<IScheduler>(s => 
-                s.GetRequiredService<ISchedulerFactory>().GetScheduler().GetAwaiter().GetResult());
-
+          
             if (configuration["no-quartz"].ToBool(false) == false)
             {
                 services.AddQuartzHostedService(q => { q.WaitForJobsToComplete = false; });
@@ -85,14 +80,14 @@ namespace WB.UI.Headquarters.Services.Quartz
             {
                 services.Configure(configure);
             }
-            
+
             return services.AddSingleton<IHostedService, HqQuartzHostedService>();
         }
 
         public static void RunQuartzMigrations(this IServiceProvider services, DbUpgradeSettings dbUpgradeSettings)
         {
             var migrationSettings = services.GetRequiredService<UnitOfWorkConnectionSettings>();
-            
+
             DatabaseManagement.InitDatabase(migrationSettings.ConnectionString, "quartz");
             DbMigrationsRunner.MigrateToLatest(migrationSettings.ConnectionString, "quartz", dbUpgradeSettings,
                 services.GetRequiredService<ILoggerProvider>());
@@ -112,7 +107,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
 
-            var scheduler = services.GetRequiredService<IScheduler>();
+            var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
 
             await CleanupTrigger(scheduler, "Delete questionnaire trigger", "Delete questionnaire");
             await CleanupTrigger(scheduler, "Import trigger", "Import");
