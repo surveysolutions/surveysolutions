@@ -66,8 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(Stream data, string fileName)
         {
-            if (this.usersImportTask.IsJobRunning())
-                throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
+            //if (this.usersImportTask.IsJobRunning())
+            //    throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
 
             var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
 
@@ -160,8 +160,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 
         public async Task ScheduleRunUserImportAsync()
         {
-            if (this.usersImportTask.IsJobRunning())
-                throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
+            //if (this.usersImportTask.IsJobRunning())
+            //    throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
 
             await usersImportTask.ScheduleRunAsync();
         }

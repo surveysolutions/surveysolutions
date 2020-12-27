@@ -11,12 +11,12 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     public class ScheduledTask<TJob, TJobData> : IScheduledJob, IScheduledTask<TJob, TJobData>
         where TJob : IJob<TJobData>
     {
-        private readonly IScheduler scheduler;
+        private readonly ISchedulerFactory schedulerFactory;
         private readonly IWorkspaceContextAccessor contextAccessor;
 
-        public ScheduledTask(IScheduler scheduler, IWorkspaceContextAccessor contextAccessor)
+        public ScheduledTask(ISchedulerFactory schedulerFactory, IWorkspaceContextAccessor contextAccessor)
         {
-            this.scheduler = scheduler;
+            this.schedulerFactory = schedulerFactory;
             this.contextAccessor = contextAccessor;
         }
 
@@ -45,14 +45,16 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         // ReSharper disable once StaticMemberInGenericType
         public static string? Description;
 
-        public Task Schedule(TJobData data)
+        public async Task Schedule(TJobData data)
         {
-            return scheduler.ScheduleJob(GetTrigger(data));
+            var scheduler = await this.schedulerFactory.GetScheduler();
+            await scheduler.ScheduleJob(GetTrigger(data));
         }
 
-        public Task RegisterJob()
+        public async Task RegisterJob()
         {
-            return this.scheduler.AddJob(JobDetails(), true);
+            var scheduler = await this.schedulerFactory.GetScheduler();
+            await scheduler.AddJob(JobDetails(), true);
         }
 
         ITrigger GetTrigger(TJobData data)
