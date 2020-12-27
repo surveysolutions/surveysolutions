@@ -97,17 +97,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
     public class UnitOfWorkInScopeExecutor : IInScopeExecutor
     {
         private readonly ILifetimeScope lifetimeScope;
+        private long Depth = 0;
 
         public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope)
         {
             lifetimeScope = rootScope;
+
+            if (rootScope.Tag is long depth)
+            {
+                Depth = depth;
+            }
         }
         
         protected ILifetimeScope CreateChildContainer(string workspace = null)
         {
             if (lifetimeScope == null) throw new Exception($"Class was not initialized");
             
-            var scope = lifetimeScope.BeginLifetimeScope();
+            var scope = lifetimeScope.BeginLifetimeScope(Depth + 1);
 
             if (workspace == null)
             {

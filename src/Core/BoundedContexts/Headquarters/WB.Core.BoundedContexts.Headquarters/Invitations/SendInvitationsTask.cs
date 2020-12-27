@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class SendInvitationsTask : BaseTask
     {
-        public SendInvitationsTask(IScheduler scheduler) 
-            : base(scheduler, "Send invitations", typeof(SendInvitationsJob)) { }
+        public SendInvitationsTask(ISchedulerFactory schedulerFactory) 
+            : base(schedulerFactory, "Send invitations", typeof(SendInvitationsJob)) { }
     }
 }
