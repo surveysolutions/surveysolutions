@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -88,6 +89,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             
             return services.AddSingleton<IHostedService, HqQuartzHostedService>();
         }
+
         public static void RunQuartzMigrations(this IServiceProvider services, DbUpgradeSettings dbUpgradeSettings)
         {
             var migrationSettings = services.GetRequiredService<UnitOfWorkConnectionSettings>();
@@ -99,6 +101,8 @@ namespace WB.UI.Headquarters.Services.Quartz
 
         public static async Task InitQuartzJobs(this IServiceProvider services)
         {
+            var scheduler = services.GetRequiredService<IScheduler>();
+
             var jobSetting = services.GetRequiredService<SyncPackagesProcessorBackgroundJobSetting>();
             var importSettings = services.GetRequiredService<AssignmentImportOptions>();
 
@@ -108,13 +112,15 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<DeleteQuestionnaireJobScheduler>()
-                    .Schedule(repeatIntervalInSeconds: 250)
-                ;
+                    .Schedule(repeatIntervalInSeconds: 250);
             await services.GetRequiredService<UpgradeAssignmentJobScheduler>()
                 .Schedule(importSettings.BackgroundExportIntervalInSeconds);
             await services.GetRequiredService<SendInvitationsTask>().ScheduleRunAsync();
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
+
+            
+            await scheduler.AddJob(DeleteWorkspaceSchemaJob.JobDetail(), true);
         }
 
         private class QuartzMigratorConfig
