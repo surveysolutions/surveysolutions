@@ -37,6 +37,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             var service = scope.Resolve<TService>();
             await action(service);
             scope.Resolve<IUnitOfWork>().AcceptChanges();
+        }        
+        
+        public async Task<T> ExecuteAsync<T>(Func<TService, Task<T>> action, string workspace)
+        {
+            using var scope = this.CreateChildContainer(workspace);
+            var service = scope.Resolve<TService>();
+            var res = await action(service);
+            scope.Resolve<IUnitOfWork>().AcceptChanges();
+            return res;
         }
     }
 
@@ -130,9 +139,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             return result;
         }
 
-        public async Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func)
+        public async Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func, string workspace = null)
         {
-            using var scope = CreateChildContainer();
+            using var scope = CreateChildContainer(workspace);
 
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
             var result = await func(serviceLocatorLocal);

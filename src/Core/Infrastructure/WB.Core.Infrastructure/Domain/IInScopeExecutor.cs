@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.Domain
     {
         void Execute(Action<IServiceLocator> action, string workspace = null);
         T Execute<T>(Func<IServiceLocator, T> func);
-        Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func);
+        Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func, string workspace = null);
         Task ExecuteAsync(Func<IServiceLocator, Task> func, string workspace = null);
     }
 
@@ -16,7 +16,8 @@ namespace WB.Core.Infrastructure.Domain
     {
         void Execute(Action<TService> action, string workspace = null);
         TResult Execute<TResult>(Func<TService, TResult> action, string workspace = null);
-        Task ExecuteAsync(Func<TService, Task> action, string workspace);
+        Task ExecuteAsync(Func<TService, Task> action, string workspace = null);
+        Task<T> ExecuteAsync<T>(Func<TService, Task<T>> action, string workspace = null);
     }
 
     public interface IInScopeExecutor<out TService1, out TService2>
