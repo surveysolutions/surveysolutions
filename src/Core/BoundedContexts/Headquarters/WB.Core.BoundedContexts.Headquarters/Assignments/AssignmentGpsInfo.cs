@@ -1,3 +1,5 @@
+using System;
+
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class AssignmentGpsInfo
@@ -5,6 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public int AssignmentId { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public Guid ResponsibleRoleId { get; set; }
 
         public override bool Equals(object obj)
         {

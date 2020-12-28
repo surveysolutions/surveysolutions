@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -95,6 +96,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             public int assignmentId { get; set; }
             public Guid publicKey { get; set; }
+            public UserRoles responsibleRole { get; set; }
         }
 
         public class MapDashboardRequest
@@ -154,6 +156,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                         new MapAssignmentMarker()
                         {
                             assignmentId = a.AssignmentId,
+                            responsibleRole = a.ResponsibleRoleId.ToUserRole(),
+                            //publicKey = a.
                         })))
                 .ToList();
             
