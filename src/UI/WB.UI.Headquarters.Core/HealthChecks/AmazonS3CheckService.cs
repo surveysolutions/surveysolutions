@@ -4,10 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WB.Core.BoundedContexts.Headquarters.Implementation;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Workspaces;
@@ -19,22 +15,20 @@ namespace WB.UI.Headquarters.HealthChecks
     /// </summary>
     public class AmazonS3CheckService : IHostedService
     {
-        private readonly IServiceLocator serviceLocator;
+        private readonly IInScopeExecutor<IExternalFileStorage> externalFileStorageService;
         private readonly ILogger<AmazonS3CheckService> logger;
 
-        public AmazonS3CheckService(IServiceLocator serviceLocator,
+        public AmazonS3CheckService(IInScopeExecutor<IExternalFileStorage> externalFileStorage,
             ILogger<AmazonS3CheckService> logger)
         {
-            this.serviceLocator = serviceLocator;
+            this.externalFileStorageService = externalFileStorage;
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            await serviceLocator.ExecuteInScopeAsync(Workspace.Default.AsContext(), async sl =>
+            return externalFileStorageService.ExecuteAsync(async externalFileStorage =>
             {
-                var externalFileStorage = sl.GetInstance<IExternalFileStorage>();
-
                 if (!externalFileStorage.IsEnabled()) return;
 
                 try
@@ -51,7 +45,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 }
 
                 logger.LogInformation("Amazon S3 file storage configuration check completed.");
-            });
+            }, WorkspaceConstants.AdminWorkspaceName);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

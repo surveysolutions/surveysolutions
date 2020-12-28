@@ -9,6 +9,8 @@ using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.AspNetCore;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Headquarters.Services.EmbeddedService;
 
 namespace WB.UI.Headquarters
@@ -28,6 +30,8 @@ namespace WB.UI.Headquarters
             var applicationVersion = version.ToString();
             var logger = host.Services.GetRequiredService<ILogger>();
             logger.Warning("HQ application starting. Version {version}", applicationVersion);
+
+            DatabaseManagement.CreateDatabase(host.Services.GetRequiredService<UnitOfWorkConnectionSettings>().ConnectionString);
 
             await host.RunAsync();
             return 0;
