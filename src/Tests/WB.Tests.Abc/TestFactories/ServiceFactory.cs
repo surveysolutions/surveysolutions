@@ -1315,10 +1315,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces)
         {
-            return new WorkspacesService(new UnitOfWorkConnectionSettings(),
+            return new WorkspacesService(
+                new UnitOfWorkConnectionSettings(),
                 Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
                 workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
+                Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>()
             );
         }
