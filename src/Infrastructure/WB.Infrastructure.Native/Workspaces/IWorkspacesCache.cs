@@ -12,5 +12,6 @@ namespace WB.Infrastructure.Native.Workspaces
         List<WorkspaceContext> AllEnabledWorkspaces();
         void InvalidateCache();
 
+        int Revision();
     }
 }
