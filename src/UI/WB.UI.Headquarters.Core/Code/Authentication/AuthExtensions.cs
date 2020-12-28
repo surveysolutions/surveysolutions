@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
@@ -24,13 +21,13 @@ namespace WB.UI.Headquarters.Code.Authentication
         public static void AddHqAuthorization(this IServiceCollection services)
         {
             services.AddIdentity<HqUser, HqRole>()
-               .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
-               .AddUserStore<HqUserStore>()
-               .AddRoleStore<HqRoleStore>()
-               .AddDefaultTokenProviders()
-               .AddClaimsPrincipalFactory<HqUserClaimsPrincipalFactory>()
-               .AddUserManager<HqUserManager>()
-               .AddSignInManager<HqSignInManager>();
+                .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
+                .AddUserStore<HqUserStore>()
+                .AddRoleStore<HqRoleStore>()
+                .AddDefaultTokenProviders()
+                .AddClaimsPrincipalFactory<HqUserClaimsPrincipalFactory>()
+                .AddUserManager<HqUserManager>()
+                .AddSignInManager<HqSignInManager>();
 
             services.AddAuthorization(options =>
             {
@@ -51,43 +48,18 @@ namespace WB.UI.Headquarters.Code.Authentication
                 {
                     if (ctx.Request.Headers.ContainsKey(HeaderNames.Authorization))
                     {
-                        AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
+                        AuthenticationHeaderValue authHeader =
+                            AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
                         return authHeader.Scheme;
                     }
 
                     return null;
                 };
 
-                opt.Events = new CookieAuthenticationEvents
-                {
-                    OnRedirectToLogin = ctx =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        }
-                        else
-                        {
-                            ctx.Response.Redirect(ctx.RedirectUri);
-                        }
-
-                        return Task.CompletedTask;
-                    },
-                    OnRedirectToAccessDenied = ctx =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
-                        }
-                        else
-                        {
-                            ctx.Response.Redirect(ctx.RedirectUri);
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
+                opt.EventsType = typeof(HqCookieAuthenticationEvents);
             });
+
+            services.AddTransient<HqCookieAuthenticationEvents>();
 
             services
                 .AddAuthentication(IdentityConstants.ApplicationScheme)
@@ -96,12 +68,12 @@ namespace WB.UI.Headquarters.Code.Authentication
                     opts.Realm = "WB.Headquarters";
                 })
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>("AuthToken", _ => { })
-                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => {});
+                .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { });
 
             services.Configure<IdentityOptions>(options =>
             {
-                // Default Password settings.
-                options.Password.RequireDigit = true;
+                    // Default Password settings.
+                    options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
