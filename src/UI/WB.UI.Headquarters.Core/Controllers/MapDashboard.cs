@@ -33,18 +33,26 @@ namespace WB.UI.Headquarters.Controllers
             public string DataUrl { get; set; }
             public string Questionnaires { get; set; }
             public string Responsible { get; set; }
+            public string UserRole { get; set; }
         }
 
         [ActivePage(MenuItem.Interviews)]
         public ActionResult Index()
         {
+            var userRole = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator
+                ? UserRoles.Headquarter
+                : authorizedUser.IsSupervisor
+                    ? UserRoles.Supervisor
+                    : UserRoles.Interviewer;
+            
             var model = new MapDashboardModel()
             {
                 DataUrl = Url.Action("Markers", "MapDashboardApi"),
                 Questionnaires = Url.Action("Questionnaires", "MapDashboardApi"),
                 Responsible = authorizedUser.IsSupervisor
                     ? Url.Action("InterviewersCombobox", "Teams")
-                    : Url.Action("ResponsiblesCombobox", "Teams")
+                    : Url.Action("ResponsiblesCombobox", "Teams"),
+                UserRole = userRole.ToString(),
             };
             return this.View(model);
         }
