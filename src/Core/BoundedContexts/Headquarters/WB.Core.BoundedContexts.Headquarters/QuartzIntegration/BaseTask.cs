@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 
@@ -10,7 +9,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     {
         public const string DATA_KEY = "_data_";
         protected readonly ISchedulerFactory schedulerFactory;
-
 
         private readonly Type jobType;
 
@@ -27,8 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             this.triggerKey = new TriggerKey($"{groupName} trigger", groupName);
         }
 
-        //public virtual bool IsJobRunning() =>
-        //    this.scheduler.GetCurrentlyExecutingJobs().Result.FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
+        private static Random rnd = new ();
 
         public virtual async Task Schedule(int repeatIntervalInSeconds)
         {
@@ -37,12 +34,13 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 .StoreDurably()
                 .Build();
             var scheduler = await this.schedulerFactory.GetScheduler();
+
             await scheduler.AddJob(job, true);
 
             var trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
                 .ForJob(jobKey)
-                .StartAt(DateBuilder.FutureDate(2, IntervalUnit.Second))
+                .StartAt(DateBuilder.FutureDate(rnd.Next(2,15), IntervalUnit.Second))
                 .WithSimpleSchedule(x => x.WithIntervalInSeconds(repeatIntervalInSeconds).RepeatForever())
                 .Build();
 

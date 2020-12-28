@@ -335,7 +335,7 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
         }
 
         private static void AddCompression(IServiceCollection services)

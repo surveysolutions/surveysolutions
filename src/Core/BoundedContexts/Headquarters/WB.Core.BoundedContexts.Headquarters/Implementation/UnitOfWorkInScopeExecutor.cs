@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         {
         }
 
-        public void Execute(Action<TService> action, string workspace)
+        public void Execute(Action<TService> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             scope.Resolve<IUnitOfWork>().AcceptChanges();
         }
 
-        public TResult Execute<TResult>(Func<TService, TResult> action, string workspace)
+        public TResult Execute<TResult>(Func<TService, TResult> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             return result;
         }
 
-        public async Task ExecuteAsync(Func<TService, Task> action, string workspace)
+        public async Task ExecuteAsync(Func<TService, Task> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
@@ -40,15 +40,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         }        
         
         public async Task<T> ExecuteAsync<T>(Func<TService, Task<T>> action, string workspace)
-        {
-            using var scope = this.CreateChildContainer(workspace);
-            var service = scope.Resolve<TService>();
-            var res = await action(service);
-            scope.Resolve<IUnitOfWork>().AcceptChanges();
-            return res;
-        }
-
-        public async Task<T> ExecuteAsync<T>(Func<TService, Task<T>> action, string workspace = null)
         {
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();

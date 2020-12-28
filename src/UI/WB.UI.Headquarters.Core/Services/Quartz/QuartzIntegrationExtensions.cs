@@ -44,7 +44,6 @@ namespace WB.UI.Headquarters.Services.Quartz
                 
                 q.UseJobFactory<AsyncScopedJobFactory>();
                 q.UseDefaultThreadPool();
-                
 
                 q.UsePersistentStore(c =>
                 {
@@ -96,11 +95,9 @@ namespace WB.UI.Headquarters.Services.Quartz
         public static async Task InitQuartzJobs(this IServiceProvider services)
         {
             var jobSetting = services.GetRequiredService<SyncPackagesProcessorBackgroundJobSetting>();
-            var importSettings = services.GetRequiredService<AssignmentImportOptions>();
-
+            
             await services.GetRequiredService<InterviewDetailsBackgroundSchedulerTask>()
                 .Schedule(repeatIntervalInSeconds: jobSetting.SynchronizationInterval);
-            await services.GetRequiredService<UsersImportTask>().ScheduleRunAsync();
             await services.GetRequiredService<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             await services.GetRequiredService<SendInvitationsTask>().ScheduleRunAsync();
@@ -108,7 +105,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
 
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
-
+            
             await CleanupTrigger(scheduler, "Delete questionnaire trigger", "Delete questionnaire");
             await CleanupTrigger(scheduler, "Import trigger", "Import");
 

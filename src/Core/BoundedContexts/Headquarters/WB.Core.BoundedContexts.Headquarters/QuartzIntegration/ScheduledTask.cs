@@ -1,7 +1,9 @@
 ﻿#nullable enable
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Infrastructure.Native.Workspaces;
@@ -49,6 +51,13 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         {
             var scheduler = await this.schedulerFactory.GetScheduler();
             await scheduler.ScheduleJob(GetTrigger(data));
+        }
+
+        public async Task<bool> IsJobRunning(CancellationToken cancellationToken = default)
+        {
+            var scheduler = await this.schedulerFactory.GetScheduler(cancellationToken);
+            var executing = await scheduler.GetCurrentlyExecutingJobs(cancellationToken);
+            return executing.Any(x => Equals(x.JobDetail.Key, Key));
         }
 
         public async Task RegisterJob()
