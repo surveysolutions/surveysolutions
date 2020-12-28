@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
 
         /// <summary>
-        /// Updates new workspace 
+        /// Updates workspace 
         /// </summary>
         /// <response code="204">Workspace updated</response>
         /// <response code="404">Workspace not found</response>
