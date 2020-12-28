@@ -1,4 +1,5 @@
 ﻿using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -13,7 +14,7 @@ using WB.UI.Headquarters.Models.Maps;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+    [Authorize]
     public class MapDashboard : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
