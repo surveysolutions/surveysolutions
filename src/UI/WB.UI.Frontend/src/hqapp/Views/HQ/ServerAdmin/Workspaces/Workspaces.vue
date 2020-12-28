@@ -208,14 +208,6 @@ export default {
                 this.$refs.editWorkspaceModal.modal('hide')
                 this.loadData()
             }
-            catch(err) {
-                if(err.response.status === 403) {
-                    toastr.error(this.$t('Workspaces.ReLogin'))
-                }
-                else {
-                    throw err
-                }
-            }
             finally {
                 this.inProgress = false
             }

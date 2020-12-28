@@ -34,7 +34,7 @@
         <value>Редактирование рабочего пространства {{name}}</value>
     </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-        <value>Каждое рабочее пространство содержит собственные опросники, интервью и задания. После создания или добавления пользователей в рабочее пространство необходимо выйти и зайти в систему заново.</value>
+        <value>Каждое рабочее пространство содержит собственные опросники, интервью и задания.</value>
     </data>
   <data name="AddNew" xml:space="preserve">
         <value>Создать новый</value>
@@ -80,9 +80,6 @@
     </data>
   <data name="Enable" xml:space="preserve">
         <value>Включить</value>
-    </data>
-  <data name="ReLogin" xml:space="preserve">
-        <value>Выйдите из системы и зайдите заново для получения доступа к рабочему пространству</value>
     </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
         <value>Удаление рабочего пространства {{name}}</value>
