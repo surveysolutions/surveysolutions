@@ -99,28 +99,32 @@
                         v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
                         target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
-                <div class="row-fluid"
+                <div class="row-fluid tooltip-buttons"
                     style="white-space:nowrap;">
                     <button
-                        class="btn btn-lg btn-success"
-                        v-if="selectedTooltip.status == 'InterviewerAssigned'"
+                        class="btn btn-sm btn-success"
+                        v-if="model.userRole == 'Supervisor' && selectedTooltip.lastStatus == 'InterviewerAssigned'"
                         @click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
-                        class="btn btn-lg btn-success"
-                        v-if="selectedTooltip.status == ''"
-                        @click="approveInterview">{{ $t("Common.Approve")}}</button>
+                        class="btn btn-sm btn-success"
+                        v-if="model.userRole == 'Supervisor' && selectedTooltip.lastStatus == 'Completed'"
+                        @click="approveSvInterview">{{ $t("Common.Approve")}}</button>
                     <button
-                        class="btn btn-lg reject"
-                        v-if="selectedTooltip.status == ''"
-                        @click="rejectInterview">{{ $t("Common.Reject")}}</button>
+                        class="btn btn-sm reject"
+                        v-if="model.userRole == 'Supervisor' && selectedTooltip.lastStatus == 'Completed'"
+                        @click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
                     <button
-                        class="btn btn-lg btn-primary"
-                        v-if="selectedTooltip.status == '' && !config.isSupervisor"
+                        class="btn btn-sm btn-success"
+                        v-if="model.userRole == 'Headquarter' && selectedTooltip.lastStatus == 'Completed' || selectedTooltip.lastStatus == 'ApprovedBySupervisor'"
+                        @click="approveHqInterview">{{ $t("Common.Approve")}}</button>
+                    <button
+                        class="btn btn-sm reject"
+                        v-if="model.userRole == 'Headquarter' && selectedTooltip.lastStatus == 'Completed' || selectedTooltip.lastStatus == 'ApprovedBySupervisor'"
+                        @click="rejectHqInterview">{{ $t("Common.Reject")}}</button>
+                    <button
+                        class="btn btn-sm btn-primary"
+                        v-if="model.userRole == 'Headquarter' && selectedTooltip.lastStatus == 'ApprovedByHeadquarters'"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
-                    <button
-                        class="btn btn-link"
-                        v-if="selectedTooltip.status == '' && !config.isSupervisor"
-                        @click="deleteInterview">{{ $t("Common.Delete")}}</button>
                 </div>
             </div>
 
@@ -143,6 +147,13 @@
                     <a
                         v-bind:href="api.GetAssignmentDetailsUrl(selectedTooltip.assignmentId)"
                         target="_blank">{{$t("MapReport.details")}}</a>
+                </div>
+                <div class="row-fluid tooltip-buttons"
+                    style="white-space:nowrap;">
+                    <button
+                        class="btn btn-lg btn-success"
+                        v-if="model.userRole == 'Interviewer'"
+                        @click="createInterview">{{ $t("Common.Create") }}</button>
                 </div>
             </div>
         </div>
@@ -181,6 +192,19 @@
     75% {
         content: '..';
     }
+}
+
+.reject {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.tooltip-buttons {
+    margin-top: 5px;
+}
+
+.tooltip-buttons button {
+    margin-right: 10px;
 }
 </style>
 <script>
@@ -276,6 +300,35 @@ export default {
     },
 
     methods: {
+
+        createInterview() {
+            alert('createInterview')
+        },
+
+        assignInterview() {
+            alert('assignInterview')
+        },
+
+        approveSvInterview() {
+            alert('approveSvInterview')
+        },
+
+        approveHqInterview() {
+            alert('approveHqInterview')
+        },
+
+        rejectSvInterview() {
+            alert('rejectSvInterview')
+        },
+
+        rejectHqInterview() {
+            alert('rejectHqInterview')
+        },
+
+        unapproveInterview() {
+            alert('unapproveInterview')
+        },
+
         setMapCanvasStyle() {
             $('body').addClass('map-report')
             var windowHeight = $(window).height()
@@ -514,7 +567,8 @@ export default {
                 const type = event.feature.getProperty('type')
 
                 if (type == 'Cluster') {
-                    const expand = event.feature.getProperty('expand')
+                    //const expand = event.feature.getProperty('expand')
+                    const expand = this.map.getZoom() + 1
                     self.map.setZoom(expand)
                     self.map.panTo(event.latLng)
                 }
