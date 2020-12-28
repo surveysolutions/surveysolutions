@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
@@ -9,6 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     [DisallowConcurrentExecution]
     [RetryFailedJob]
+    [DisplayName("Upgrade assignments"), Category("Import")]
     public class UpgradeAssignmentJob : IJob<QueuedUpgrade>
     {
         public UpgradeAssignmentJob(IAssignmentsUpgrader assignmentsUpgrader)

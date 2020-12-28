@@ -56,31 +56,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         }
 
         [Test]
-        public void When_job_by_previous_import_is_not_completed_Then_UserPreloadingException_should_be_thrown()
-        {
-            //arrange
-            var scheduler = new Mock<IScheduler>();
-            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new[]
-                {
-                    Mock.Of<IJobExecutionContext>(y =>
-                        y.JobDetail ==
-                        Mock.Of<IJobDetail>(z => z.Key == new JobKey("Import users job", "Import users")))
-                });
-
-            var usersImportTask = new UsersImportTask(scheduler.Object);
-
-            var userImportService = CreateUserImportServiceWithRepositories(usersImportTask: usersImportTask);
-
-            //act
-            var exception = Assert.Catch<PreloadingException>(() => userImportService
-                .VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray());
-
-            //assert
-            Assert.That(exception, Is.Not.Null);
-        }
-
-        [Test]
         public void GetAvaliableDataColumnNames_Then_list_of_expected_columns_is_returned()
         {
             var userImportService = CreateUserImportService(null);
@@ -465,7 +440,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             IPlainStorageAccessor<UserToImport> importUsersRepository = null,
             IAuthorizedUser authorizedUser = null,
             HqUser[] dbUsers = null,
-            UsersImportTask usersImportTask = null,
             params UserToImport[] usersToImport)
         {
             var csvReader = Create.Service.CsvReader(new[]
@@ -480,8 +454,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             return Create.Service.UserImportService(
                 csvReader: csvReader,
-                userStorage: userStorage,
-                usersImportTask: usersImportTask);
+                userStorage: userStorage);
         }
     }
 }

@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
     public interface IUserImportService
     {
         IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(Stream data, string fileName);
-        Task ScheduleRunUserImportAsync();
         string[] GetUserProperties();
         UserToImport GetUserToImport();
         void RemoveImportedUser(UserToImport importedUser);

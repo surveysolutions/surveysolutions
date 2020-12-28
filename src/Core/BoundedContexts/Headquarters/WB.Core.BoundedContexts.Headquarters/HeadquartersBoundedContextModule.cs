@@ -1,5 +1,6 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System.Threading.Tasks;
+using MediatR;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
@@ -356,12 +357,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentsVerificationTask>();
             registry.Bind<AssignmentsImportTask>();
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
-            registry.Bind<UsersImportTask>();
             registry.Bind<SendInvitationsTask>();
             registry.Bind<SendRemindersTask>();
             registry.Bind<SyncPackagesReprocessorBackgroundJob>();
-            registry.Bind<UsersImportJob>();
-            registry.Bind<UsersImportJob>();
             registry.Bind<AssignmentsImportJob>();
             registry.Bind<SendInvitationsJob>();
             registry.Bind<AssignmentsVerificationJob>();
@@ -369,13 +367,13 @@ namespace WB.Core.BoundedContexts.Headquarters
                 
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
-            registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<DeleteWorkspaceSchemaJob>();
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
             registry.BindScheduledJob<UpgradeAssignmentJob, QueuedUpgrade>();
-            
+            registry.BindScheduledJob<UsersImportJob, Unit>();
+
             registry.Bind<CalendarEvent>();
 
             registry.Bind<IVirtualPathService, VirtualPathService>();

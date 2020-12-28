@@ -630,16 +630,9 @@ namespace WB.Tests.Abc.TestFactories
             IUserImportVerifier userImportVerifier = null,
             IAuthorizedUser authorizedUser = null,
             IUnitOfWork sessionProvider = null,
-            UsersImportTask usersImportTask = null,
             PasswordOptions passwordOptions = null,
             IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
-            var scheduler = new Mock<IScheduler>();
-            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Array.Empty<IJobExecutionContext>());
-
-            usersImportTask ??= new UsersImportTask(scheduler.Object);
-            
             PasswordOptions defaultPasswordOptions = passwordOptions ?? new PasswordOptions
             {
                 RequireDigit = true,
@@ -661,7 +654,6 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
-                usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues, 
                 workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor());
         }
 
