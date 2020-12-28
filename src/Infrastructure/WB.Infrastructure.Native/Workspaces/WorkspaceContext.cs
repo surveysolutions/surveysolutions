@@ -16,6 +16,8 @@ namespace WB.Infrastructure.Native.Workspaces
         public string DisplayName { get; }
         public string? PathBase { get; set; }
 
-        public string SchemaName => $"ws_{Name}";
+        public string SchemaName => $"{SchemaPrefix}{Name}";
+
+        public const string SchemaPrefix = "ws_";
     }
 }

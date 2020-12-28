@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
@@ -8,12 +7,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
     class WorkspaceContextSetter : IWorkspaceContextSetter
     {
         private readonly IWorkspaceContextHolder holder;
-        private readonly IServiceLocator serviceLocator;
-
-        public WorkspaceContextSetter(IWorkspaceContextHolder holder, IServiceLocator serviceLocator)
+        private readonly IWorkspacesCache workspacesService;
+        
+        public WorkspaceContextSetter(
+            IWorkspaceContextHolder holder, 
+            IWorkspacesCache workspacesService)
         {
             this.holder = holder;
-            this.serviceLocator = serviceLocator;
+            this.workspacesService = workspacesService;
         }
 
         public void Set(WorkspaceContext workspace)
@@ -23,8 +24,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
         public void Set(string name)
         {
-            var workspacesService = serviceLocator.GetInstance<IWorkspacesCache>();
-            var workspace = workspacesService.AllEnabledWorkspaces().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var workspace = name == WorkspaceConstants.AdminWorkspaceName 
+                ? Workspace.Admin.AsContext() 
+                : workspacesService.AllEnabledWorkspaces()
+                    .FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            
             holder.Current = workspace ?? throw new MissingWorkspaceException { Data = {{"name", name}}};
         }
     }
