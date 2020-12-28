@@ -162,6 +162,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 Create.Entity.HqUser(Id.g3, role: UserRoles.Headquarter),
             };
 
+            foreach (var hqUser in Users)
+            {
+                hqUser.PhoneNumber = "";
+                hqUser.Email = "";
+            }
+
             Users[2].Workspaces.First().Workspace.DisplayName = "jengaworld";
             
             var response = await Subject.Handle(new UsersManagementRequest
