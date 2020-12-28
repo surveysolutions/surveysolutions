@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
     public class AssignUsersToWorkspaceRequestHandlerTests
     {
         private HqUser[] Users = null;
-        private AssignUsersToWorkspaceRequestHandler Subject;
+        private AssignWorkspacesToUserModelHandler Subject;
         private IPlainStorageAccessor<Workspace> workspaces;
         private ModelStateDictionary modelState = null;
         private Mock<IWorkspacesService> workspacesService;
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 assignedWorkspaces = workspaces;
             });
 
-            Subject = new AssignUsersToWorkspaceRequestHandler(
+            Subject = new AssignWorkspacesToUserModelHandler(
                 workspaces,
                 userRepo.Object, workspacesService.Object);
 

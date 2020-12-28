@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -266,6 +267,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="400">Validation failed</response>
         [HttpPost]
         [Route("assign")]
+        [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator)]
         public async Task<ActionResult> AssignWorkspaces([FromBody] AssignWorkspacesToUserModel model, CancellationToken cancellationToken)
         {
@@ -277,6 +279,34 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             return ValidationProblem();
+        }
+
+        /// <summary>
+        /// Request server for information about workspace status and it's ability to delete
+        /// </summary>
+        /// <param name="name">Workspace name</param>
+        /// <returns>Workspace status information</returns>
+        [HttpGet]
+        [Route("status/{name}")]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<WorkspaceStatusInformation> Status(string name)
+        {
+            var response = await this.mediator.Send(new GetWorkspaceStatusInformation(name));
+            return response;
+        }
+        
+        /// <summary>
+        /// Delete workspace
+        /// </summary>
+        /// <param name="name">Workspace name</param>
+        [HttpDelete]
+        [Route("{name}")]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<DeleteWorkspaceResponse> Delete(string name)
+        {
+            var response = await this.mediator.Send(new DeleteWorkspaceRequest(name));
+            return response;
         }
     }
 }
