@@ -28,6 +28,11 @@ namespace WB.Core.Infrastructure.Domain
             action(service);
             return Task.CompletedTask;
         }
+
+        public Task<T1> ExecuteAsync<T1>(Func<T, Task<T1>> action, string workspace = null)
+        {
+            return action(service);
+        }
     } 
     
     public class NoScopeInScopeExecutor<T1, T2>: IInScopeExecutor<T1, T2>
@@ -73,6 +78,11 @@ namespace WB.Core.Infrastructure.Domain
         }
 
         public T Execute<T>(Func<IServiceLocator, T> func)
+        {
+            return func(lifetimeScope);
+        }
+
+        public Task<T> ExecuteAsync<T>(Func<IServiceLocator, Task<T>> func, string workspace = null)
         {
             return func(lifetimeScope);
         }
