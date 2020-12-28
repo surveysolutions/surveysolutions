@@ -13,11 +13,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
     {
         // Needed for proper cache invalidation, because IMemoryCache is workspace dependent
         private static readonly IMemoryCache MemoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IInScopeExecutor<IWorkspacesService> inScopeExecutor;
         
         private const string WorkspacesCacheKey = "workspaces";
 
-        public WorkspacesCache(IInScopeExecutor serviceLocator)
+        public WorkspacesCache(IInScopeExecutor<IWorkspacesService> serviceLocator)
         {
             this.inScopeExecutor = serviceLocator;
         }
@@ -28,9 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
                 
-                return inScopeExecutor.Execute(serviceLocator =>
+                return inScopeExecutor.Execute(ws =>
                 {
-                    var ws = serviceLocator.GetInstance<IWorkspacesService>();
                     var list = ws.GetEnabledWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
                     return list;
                 });

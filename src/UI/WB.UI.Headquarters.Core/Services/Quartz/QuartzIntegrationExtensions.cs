@@ -73,10 +73,21 @@ namespace WB.UI.Headquarters.Services.Quartz
 
             if (configuration["no-quartz"].ToBool(false) == false)
             {
-                services.AddQuartzServer(q => { q.WaitForJobsToComplete = false; });
+                services.AddQuartzHostedService(q => { q.WaitForJobsToComplete = false; });
             }
         }
 
+        public static IServiceCollection AddQuartzHostedService(
+            this IServiceCollection services,
+            Action<QuartzHostedServiceOptions> configure = null)
+        {
+            if (configure != null)
+            {
+                services.Configure(configure);
+            }
+            
+            return services.AddSingleton<IHostedService, HqQuartzHostedService>();
+        }
         public static void RunQuartzMigrations(this IServiceProvider services, DbUpgradeSettings dbUpgradeSettings)
         {
             var migrationSettings = services.GetRequiredService<UnitOfWorkConnectionSettings>();

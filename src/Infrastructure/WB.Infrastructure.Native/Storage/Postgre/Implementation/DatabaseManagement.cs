@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             CreateSchema(connectionStringBuilder.ConnectionString, schemaName);
         }
 
-        private static void CreateDatabase(string connectionString)
+        public static void CreateDatabase(string connectionString)
         {
             var masterDbConnectionString = new NpgsqlConnectionStringBuilder(connectionString);
             var databaseName = masterDbConnectionString.Database;
