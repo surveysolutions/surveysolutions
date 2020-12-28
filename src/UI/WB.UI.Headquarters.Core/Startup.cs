@@ -50,6 +50,7 @@ using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.AspNetCore.DataProtection;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
@@ -259,7 +260,8 @@ namespace WB.UI.Headquarters
             services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
-            services.AddHttpClientWithConfigurator<IExportServiceApi, ExportServiceApiConfigurator>();
+            services.AddWorkspaceAwareHttpClient<IExportServiceApi, ExportServiceApiConfigurator>();
+
             services.AddTransient<DesignerRestServiceHandler>();
             services.AddHttpClientWithConfigurator<IDesignerApi, DesignerApiConfigurator>(new RefitSettings
             {
