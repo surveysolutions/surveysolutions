@@ -372,55 +372,114 @@ export default {
 
                 if (type == 'Interview')
                 {
+                    const userRole = self.model.userRole
                     const status = feature.getProperty('status')
 
                     let interviewStyle ={
-                        label: {
-                            fontSize: '12px',
-                            text: '',
-                        },
                         icon: {
                             url: '/img/google-maps-markers/m2.png',
                             dark: false,
                         },
                     }
 
-                    if (status == 'Created'
-                        || status == 'InterviewerAssigned'
-                        || status == 'SupervisorAssigned'
-                        || status == 'Restarted'
-                    ) {
-                        interviewStyle.icon.url = '/img/google-maps-markers/donut.png'
+                    let action = ''
+                    let markerForm = ''
+
+                    if (userRole == 'Interviewer') {
+                        markerForm = 'circle'
+
+                        switch(status) {
+                            case 'Created':
+                            case 'InterviewerAssigned':
+                            case 'Restarted':
+                                action = 'action'
+                                break
+                            case 'RejectedBySupervisor':
+                            case 'RejectedByHeadquarters':
+                                action = 'reject'
+                                break
+                            default:
+                                action = 'noaction'
+                                break
+                        }
                     }
 
-                    if (status == 'Completed'
-                    ) {
-                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    else if (userRole == 'Supervisor') {
+                        switch(status) {
+                            case 'Completed':
+                            case 'SupervisorAssigned':
+                                markerForm = 'thomb'
+                                action = 'action'
+                                break
+                            case 'RejectedByHeadquarters':
+                                markerForm = 'thomb'
+                                action = 'reject'
+                                break
+                            default:
+                                markerForm = 'circle'
+                                action = 'noaction'
+                                break
+                        }
                     }
 
-                    if (status == 'RejectedBySupervisor'
-                        || status == 'RejectedByHeadquarters'
-                    ) {
-                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                    else if (userRole == 'Headquarter') {
+                        switch(status) {
+                            case 'ApprovedBySupervisor':
+                                markerForm = 'triangle'
+                                action = 'action'
+                                break
+                            case 'UnapprovedByHeadquarters':
+                                markerForm = 'triangle'
+                                action = 'reject'
+                                break
+                            case 'ApprovedByHeadquarters':
+                                markerForm = 'triangle'
+                                action = 'noaction'
+                                break
+
+                            case 'Created':
+                            case 'InterviewerAssigned':
+                            case 'Restarted':
+                            case 'RejectedBySupervisor':
+                                markerForm = 'circle'
+                                action = 'noaction'
+                                break
+
+                            case 'Completed':
+                            case 'SupervisorAssigned':
+                            case 'RejectedByHeadquarters':
+                                markerForm = 'thomb'
+                                action = 'noaction'
+                                break
+
+                            default:
+                                markerForm = 'circle'
+                                action = 'noaction'
+                                break
+                        }
                     }
 
-                    if (status == 'ApprovedBySupervisor'
-                        || status == 'ApprovedByHeadquarters'
-                    ) {
-                        interviewStyle.icon.url = 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'
-                    }
-
+                    interviewStyle.icon.url = `/img/google-maps-markers/${markerForm}-${action}.png`
                     return interviewStyle
                 }
                 if (type == 'Assignment')
                 {
-                    let interviewStyle ={
-                        label: {
-                            fontSize: '12px',
-                            text: 'I',
-                        },
+                    const rRole = feature.getProperty('responsibleRole')
+                    let markerForm = ''
+                    switch(rRole) {
+                        case 'Interviewer':
+                            markerForm = 'circle'
+                            break
+                        case 'Supervisor':
+                            markerForm = 'thomb'
+                            break
+                        default:
+                            markerForm = 'triangle'
+                            break
+                    }
+                    return {
                         icon: {
-                            url: 'http://maps.google.com/mapfiles/ms/icons/white-dot.png',
+                            url: `/img/google-maps-markers/${markerForm}-assignment.png`,
                         },
                     }
                 }

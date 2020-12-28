@@ -179,7 +179,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 {
                     AssignmentId = a.Assignment.Id,
                     Latitude = a.Answer.Latitude,
-                    Longitude = a.Answer.Longitude
+                    Longitude = a.Answer.Longitude,
+                    ResponsibleRoleId = a.Assignment.Responsible.RoleIds.FirstOrDefault()
                 })
                 .Distinct()
                 .ToList();
