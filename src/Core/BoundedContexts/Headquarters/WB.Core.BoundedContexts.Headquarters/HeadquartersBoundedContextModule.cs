@@ -351,6 +351,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
             registry.Bind<IRootScopeExecutor, InRootScopeExecutor>();
+            registry.Bind(typeof(IInScopeExecutor<>), typeof(UnitOfWorkInScopeExecutor<>));
+            registry.Bind(typeof(IInScopeExecutor<,>), typeof(UnitOfWorkInScopeExecutor<,>));
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
