@@ -120,6 +120,14 @@ class Workspaces {
         )
     }
 
+    async Status(workspace) {
+        return await this.http.get('api/v1/workspaces/status/' + workspace)
+    }
+
+    async Delete(workspace) {
+        return await this.http.delete('api/v1/workspaces/' + workspace)
+    }
+
 }
 
 class Users {
