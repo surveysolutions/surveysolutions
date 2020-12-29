@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Code.Authentication
                 }
             }
             else
-            if (context.User.HasClaim("Workspace", workspace.Name))
+            if (context.User.HasClaim("Workspace", workspace.Name) && workspace.IsEnabled())
             {
                 context.Succeed(requirement);
             }

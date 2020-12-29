@@ -22,12 +22,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.inScopeExecutor = serviceLocator;
         }
 
-        public List<WorkspaceContext> AllEnabledWorkspaces()
-        {
-            return GetAllEnabledWorkspaces().workspaces;
-        }
+        public List<WorkspaceContext> AllEnabledWorkspaces() => GetAllWorkspaces().EnabledWorkspaces;
 
-        private (int revision, List<WorkspaceContext> workspaces) GetAllEnabledWorkspaces()
+        public List<WorkspaceContext> AllWorkspaces() => GetAllWorkspaces().AllWorkspaces;
+
+        private CacheItem GetAllWorkspaces()
         {
             return MemoryCache.GetOrCreateWithDoubleLock(WorkspacesCacheKey, entry =>
             {
@@ -35,26 +34,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
                 return inScopeExecutor.Execute(ws =>
                 {
-                    var list = ws.GetEnabledWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
-
+                    var workspaces = ws.GetAllWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
+                    var enabledWorkspaces = new List<WorkspaceContext>();
                     int revision = 17;
 
-                    foreach (var listItem in list)
+                    foreach (var workspace in workspaces)
                     {
-                        revision = revision * 23 + listItem.GetHashCode();
+                        if (workspace.DisabledAtUtc == null)
+                        {
+                            enabledWorkspaces.Add(workspace);
+                        }
+
+                        revision = revision * 23 + workspace.GetHashCode();
                     }
 
-                    return (revision, list);
+                    return new CacheItem(revision, workspaces, enabledWorkspaces);
                 });
             });
         }
 
-        public void InvalidateCache()
+        public void InvalidateCache() => MemoryCache.Remove(WorkspacesCacheKey);
+
+        public int Revision() => GetAllWorkspaces().Revision;
+
+        internal class CacheItem
         {
-            MemoryCache.Remove(WorkspacesCacheKey);
+            public CacheItem(int revision, 
+                List<WorkspaceContext> allWorkspaces, 
+                List<WorkspaceContext> enabledWorkspaces)
+            {
+                Revision = revision;
+                AllWorkspaces = allWorkspaces;
+                EnabledWorkspaces = enabledWorkspaces;
+            }
+
+            public int Revision { get; }
+            public List<WorkspaceContext> AllWorkspaces { get;  }
+            public List<WorkspaceContext> EnabledWorkspaces { get; set; }
         }
-
-        public int Revision() => GetAllEnabledWorkspaces().revision;
-
     }
 }
