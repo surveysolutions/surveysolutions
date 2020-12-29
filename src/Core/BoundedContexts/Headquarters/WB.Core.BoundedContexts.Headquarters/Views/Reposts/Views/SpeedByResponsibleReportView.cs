@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
         }
 
         public DateTimeRange[] DateTimeRanges { get; private set; }
+        public int Draw { get; set; }
     }
 
     public class SpeedByResponsibleTotalRow
