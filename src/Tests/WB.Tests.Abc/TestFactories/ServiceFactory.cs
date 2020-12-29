@@ -1251,7 +1251,7 @@ namespace WB.Tests.Abc.TestFactories
         public IWorkspaceContextAccessor WorkspaceContextAccessor(string workspaceName = "primary")
         {
             return !string.IsNullOrEmpty(workspaceName) 
-                ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == new WorkspaceContext(workspaceName, String.Empty)) 
+                ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == new WorkspaceContext(workspaceName, String.Empty, null)) 
                 : new WorkspaceContextAccessor(new WorkspaceContextHolder());
         }
         

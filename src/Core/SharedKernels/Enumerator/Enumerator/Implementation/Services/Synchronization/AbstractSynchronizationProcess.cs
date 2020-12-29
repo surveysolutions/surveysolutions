@@ -428,6 +428,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Stage = SyncStage.FailedUpgradeRequired
                         });
                         break;
+                    case SynchronizationExceptionType.WorkspaceDisabled:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
+                            Description = EnumeratorUIResources.Synchronization_WorkspaceDisabled,
+                            Status = SynchronizationStatus.Fail,
+                            Stage = SyncStage.UserAuthentication
+                        });
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {
