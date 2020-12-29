@@ -7,11 +7,14 @@ namespace WB.Infrastructure.Native.Workspaces
     [DebuggerDisplay("{Name} - {DisplayName}")]
     public class WorkspaceContext
     {
-        public WorkspaceContext(string name, string displayName)
+        public WorkspaceContext(string name, string displayName, DateTime? disabledAtUtc = null)
         {
             Name = name;
             DisplayName = displayName;
+            DisabledAtUtc = disabledAtUtc;
         }
+
+        public DateTime? DisabledAtUtc { get; }
 
         public string Name { get; }
         public string DisplayName { get; }
@@ -23,7 +26,7 @@ namespace WB.Infrastructure.Native.Workspaces
 
         protected bool Equals(WorkspaceContext other)
         {
-            return Name == other.Name && DisplayName == other.DisplayName;
+            return Nullable.Equals(DisabledAtUtc, other.DisabledAtUtc) && Name == other.Name && DisplayName == other.DisplayName;
         }
 
         public override bool Equals(object? obj)
@@ -36,7 +39,9 @@ namespace WB.Infrastructure.Native.Workspaces
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name, DisplayName);
+            return HashCode.Combine(DisabledAtUtc, Name, DisplayName);
         }
+
+        public bool IsEnabled() => DisabledAtUtc == null;
     }
 }
