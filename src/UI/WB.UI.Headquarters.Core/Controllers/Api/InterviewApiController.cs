@@ -168,6 +168,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 SupervisorName = interviewSummaryView.SupervisorName,
                 InterviewKey = interviewSummaryView.Key,
                 AssignmentId = interviewSummaryView.AssignmentId,
+                Status = interviewSummaryView.Status,
                 LastStatus = interviewSummaryView.Status.ToLocalizeString(),
                 LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate),
                 InterviewId = interviewSummaryView.InterviewId,
