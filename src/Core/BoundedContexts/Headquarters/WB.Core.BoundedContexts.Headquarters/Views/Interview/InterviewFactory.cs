@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             
             var gpsQuery = QueryGpsAnswers()
                 .Where(x => x.Answer.IsEnabled &&
-                            //x.QuestionnaireItem.Featured == true &&
+                            x.QuestionnaireItem.Featured == true &&
                             x.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates &&
                             x.Answer.Latitude <= north &&
                             x.Answer.Latitude >= south &&
