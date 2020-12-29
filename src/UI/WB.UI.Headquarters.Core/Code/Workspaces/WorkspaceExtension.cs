@@ -4,9 +4,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 using Refit;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -24,35 +29,30 @@ namespace WB.UI.Headquarters.Code.Workspaces
             app.UseMiddleware<WorkspaceRedirectMiddleware>();
         }
 
-        private static readonly ConcurrentDictionary<string, IServiceProvider> providersCache = new();
-
-        public static void AddWorkspaceAwareHttpClient<TApi, TConfigurator>(this IServiceCollection services, 
-            RefitSettings? settings = null)
-            where TApi: class
-            where TConfigurator : class, IHttpClientConfigurator<TApi>
+        private static readonly ConcurrentDictionary<(string, Type), object> httpClientsCache = new();
+        
+        public static void AddWorkspaceAwareHttpClient<TApi, TConfigurator, THandler>(
+            this IServiceCollection services,
+            RefitSettings? refitSettings = null)
+          where TApi : class
+          where THandler: DelegatingHandler
+          where TConfigurator : class, IHttpClientConfigurator<TApi>
         {
             services.AddTransient<IHttpClientConfigurator<TApi>, TConfigurator>();
-
-            services.AddTransient<TApi>(provider =>
+            services.AddTransient<THandler>();
+            
+            services.AddTransient<TApi>(s =>
             {
-                var workspace = provider.GetWorkspaceContext();
-                var workspaceName = workspace?.Name ?? WorkspaceConstants.DefaultWorkspaceName;
-                var configurator = provider.GetRequiredService<IHttpClientConfigurator<TApi>>();
-                var httpClient = providersCache.GetOrAdd(workspaceName, name =>
-                {
-                    var collection = new ServiceCollection();
-                    collection.AddRefitClient<TApi>(settings)
-                        .ConfigureHttpClient((sp, hc) =>
-                        {
-                            configurator.ConfigureHttpClient(hc);
-                        }).AddTransientHttpErrorsHandling();
+                var configurator = s.GetRequiredService<IHttpClientConfigurator<TApi>>();
+                var handler = s.GetRequiredService<THandler>();
+                handler.InnerHandler = new HttpClientHandler();
 
-                    return collection.BuildServiceProvider();
-                });
+                var hc = new HttpClient(handler, false);
 
-                return httpClient.GetRequiredService<TApi>();
+                configurator.ConfigureHttpClient(hc);
+
+                return RestService.For<TApi>(hc, refitSettings);
             });
-
         }
     }
 }
