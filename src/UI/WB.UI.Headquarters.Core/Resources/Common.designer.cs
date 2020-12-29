@@ -727,6 +727,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View assignment details.
+        /// </summary>
+        public static string ViewAssignmentDetails {
+            get {
+                return ResourceManager.GetString("ViewAssignmentDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {
