@@ -40,7 +40,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
                     foreach (var workspace in workspaces)
                     {
-                        if(workspace.DisabledAtUtc == null) enabledWorkspaces.Add(workspace);
+                        if (workspace.DisabledAtUtc == null)
+                        {
+                            enabledWorkspaces.Add(workspace);
+                        }
 
                         revision = revision * 23 + workspace.GetHashCode();
                     }
