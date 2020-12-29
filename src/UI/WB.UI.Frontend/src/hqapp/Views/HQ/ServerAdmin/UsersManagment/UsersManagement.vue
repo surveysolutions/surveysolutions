@@ -93,6 +93,7 @@
 import { keyBy, map, find, filter } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
+import InterviewQuestionsFiltersVue from '../../Interviews/InterviewQuestionsFilters.vue'
 
 var arrayFilter = function(array, predicate) {
     array = array || []
@@ -101,6 +102,33 @@ var arrayFilter = function(array, predicate) {
     return result
 }
 
+/**
+ * Workspace item in user properties
+ * @typedef {Object} UserWorkspace
+ * @property {String} name - Workspace name
+ * @property {String} displayName - Workspace display name
+ * @property {String} disabled - Indicated whether the workspace is disabled
+ */
+
+/**
+ * User item row from database
+ * @typedef {Object} UserInfo
+ * @property {String} creationDate - Date when user were created
+ * @property {boolean} isArchived - Indicates whether the user is in Archived state
+ * @property {boolean} isLocked - Indicates whether the user is in Locked state
+ * @property {String} role - Indicates user role
+ * @property {String} userId - Indicates user ID
+ * @property {String} userName - Indicates user login
+ * @property {String} userId - Indicates user ID
+ * @property {UserWorkspace[]} workspaces - User related workspaces
+ * @property {Strign} phone - User Phone number
+ * @property {Strign} email - User email
+ * @property {Strign} fullName - User full name *
+ */
+
+/**
+ * Users management page
+ */
 export default {
     components: { WorkspaceManager },
     name: 'users-management',
@@ -152,7 +180,7 @@ export default {
                 }
 
                 if(this.queryString.role) {
-                    this.role = find(this.roles, { key: this.queryString.role})
+                    this.selectedRole = find(this.roles, { key: this.queryString.role})
                 }
 
                 if(this.queryString.missingWorkspace) {
@@ -186,7 +214,7 @@ export default {
                         className: 'nowrap',
                         render: function(data, type, row) {
                             var tdHtml = !row.isArchived
-                                ? `<a href='${self.$hq.UsersManagement.userManage(row.userId)}'>${data}</a>`
+                                ? `<a href='${self.getUserProfileLink(row)}'>${data}</a>`
                                 : data
 
                             if (row.isLocked) {
@@ -216,12 +244,14 @@ export default {
                         name: 'FullName',
                         title: this.$t('Pages.Interviewers_FullNameTitle'),
                         className: 'created-by',
+                        defaultContent: '',
                     },
                     {
                         data: 'email',
                         name: 'Email',
                         className: 'changed-recently',
                         title: this.$t('Assignments.Email'),
+                        defaultContent: '',
                         render: function(data, type, row) {
                             return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
@@ -229,6 +259,7 @@ export default {
                     {
                         data: 'phone',
                         name: 'Phone',
+                        defaultContent: '',
                         title: this.$t('UploadUsers.Phone'),
                         className: 'created-by',
                     },
@@ -257,6 +288,7 @@ export default {
                 role: this.query.role,
                 missingWorkspace: this.query.missingWorkspace,
                 locked: this.query.locked,
+                archived: this.query.archived,
             }
         },
 
@@ -275,6 +307,36 @@ export default {
     },
 
     methods: {
+
+        /**
+         * Return link to user profile
+         * @param {UserInfo} row - user info row
+         */
+        getUserProfileLink(row) {
+            const returnUrl = encodeURIComponent(this.$config.basePath + this.$route.fullPath.substring(1))
+            const userWorkspace = row.workspaces == null || row.workspaces.length == 0 ? null : row.workspaces[0].name
+
+            const InUserWorkspace = (path, includeReturnUrl = true) => {
+                return this.$hq.workspacePath(userWorkspace) + path + '/' + row.userId + (includeReturnUrl ? '?returnUrl=' + returnUrl : '')
+            }
+
+            const InAdminWorkspace = (path) => {
+                return this.$config.basePath + path + '/' + row.userId + '?returnUrl=' + returnUrl
+            }
+
+            const GetUrl = () => {
+                switch(row.role) {
+                    case 'ApiUser': return InAdminWorkspace('Users/Manage')
+                    case 'Headquarter': return InAdminWorkspace('Users/Manage')
+                    case 'Observer': return InAdminWorkspace('Users/Manage')
+                    case 'Interviewer': return InUserWorkspace('Interviewer/Profile', false)
+                    case 'Supervisor': return InUserWorkspace('Users/Manage')
+                    default: return InAdminWorkspace('Users/Manage')
+                }
+            }
+
+            return GetUrl()
+        },
 
         addToWorkspace() {
             this.$refs.manageWorkspaces.addToWorkspace(this.workspaces)
