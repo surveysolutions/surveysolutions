@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         })))
                 .ToList();
             
-            var clustering = new Clustering<MapMarker>(input.Zoom + 1);
+            var clustering = new Clustering<MapMarker>(input.Zoom);
             var valueCollection = clustering.RunClustering(mapPoints).ToList();
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
             {
@@ -212,31 +212,13 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
-            var key = $"MapDashboard;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{this.authorizedUser.Id}{input.Zoom}";
+            double boundCoefficient = 0.5;
+            input.East = Math.Min(input.East + ((input.East - input.West) * boundCoefficient), 180);
+            input.West = Math.Max(input.West - ((input.East - input.West) * boundCoefficient), -180);
+            input.North = Math.Min(input.North + ((input.North - input.South) * boundCoefficient), 180);
+            input.South = Math.Max(input.South - ((input.North - input.South) * boundCoefficient), -180);
 
-            var cacheLine = cache.Get(key);
-
-            if (cacheLine == null)
-            {
-                lock (locker)
-                {
-                    cacheLine = cache.Get(key);
-
-                    if (cacheLine == null)
-                    {
-                        var sw = Stopwatch.StartNew();
-                        cacheLine = InitializeSuperCluster(input);
-                        sw.Stop();
-
-                        // cache for up to 10 minute depending on how long it took to read out map data
-                        var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5 + 1);
-
-                        cache.Set(key, cacheLine, cacheTime);
-                    }
-                }
-            }
-
-            var map = (MapReportCacheLine) cacheLine;
+            var map = InitializeSuperCluster(input);
 
             if (input.Zoom == -1)
             {
@@ -257,7 +239,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     };
                     return new Feature(
                         new Point(new Position(p.Latitude, p.Longitude)),
-                        mapMarker, id: p.UserData.Index.ToString("X"));
+                        mapMarker, id: p.UserData.Index.ToString("X") + ":" + p.UserData.NumPoints);
                 }
 
                 return new Feature(
@@ -272,37 +254,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 TotalPoint = map.Total
             };
         }
-
-        public string GetGpsQuestionByQuestionnaire(Guid? questionnaireId, long? version)
-        {
-            var questions = this.questionnaireItems.Query(q =>
-            {
-                if (questionnaireId.HasValue)
-                {
-                    if (version == null)
-                    {
-                        var questionnaire = questionnaireId.Value.FormatGuid();
-                        q = q.Where(i => i.QuestionnaireIdentity.StartsWith(questionnaire));
-                    }
-                    else
-                    {
-                        var identity = new QuestionnaireIdentity(questionnaireId.Value, version.Value).ToString();
-                        q = q.Where(i => i.QuestionnaireIdentity == identity);
-                    }
-                }
-
-                q = q.Where(i => 
-                    i.QuestionType == QuestionType.GpsCoordinates
-                    && i.Featured == true
-                );
-
-                return q.Select(i => i.StataExportCaption).Distinct().ToList();
-            });
-
-            return questions.SingleOrDefault();
-        }
-
-        private static object locker = new object();
 
         private MapReportCacheLine InitializeSuperCluster(MapDashboardRequest input)
         {
