@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         public Task Generate(string name, DbUpgradeSettings upgradeSettings);
         void AddUserToWorkspace(HqUser user, string workspace);
         List<WorkspaceContext> GetEnabledWorkspaces();
+        List<WorkspaceContext> GetAllWorkspaces();
         void AssignWorkspaces(HqUser user, List<Workspace> workspaces);
         Task DeleteAsync(WorkspaceContext workspace, CancellationToken token = default);
     }
