@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             return Name.GetHashCode();
         }
         
-        public virtual WorkspaceContext AsContext() => new WorkspaceContext(Name, DisplayName);
+        public virtual WorkspaceContext AsContext() => new (Name, DisplayName, DisabledAtUtc);
 
         public virtual void Disable()
         {

@@ -8,6 +8,7 @@ namespace WB.Infrastructure.Native.Workspaces
         List<WorkspaceContext> AllEnabledWorkspaces();
         
         int Revision();
+
         List<WorkspaceContext> AllWorkspaces();
 
         void InvalidateCache();
