@@ -267,6 +267,9 @@
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Открыть профиль ответственного</value>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Дешбоард с картой</value>
+  </data>
   <data name="OpenAssignment" xml:space="preserve">
     <value>Открыть задание</value>
   </data>

@@ -385,6 +385,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дешбоард с картой.
+        /// </summary>
+        public static string MapDashboard {
+            get {
+                return ResourceManager.GetString("MapDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Имя.
         /// </summary>
         public static string Name {

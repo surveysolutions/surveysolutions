@@ -22,14 +22,14 @@ namespace WB.UI.Headquarters.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class MainMenu {
+    public class MainMenu_ru {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal MainMenu() {
+        internal MainMenu_ru() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.MainMenu", typeof(MainMenu).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.MainMenu.ru", typeof(MainMenu_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Administration.
+        ///   Looks up a localized string similar to Администрирование.
         /// </summary>
         public static string Administration {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Users.
+        ///   Looks up a localized string similar to API пользователи.
         /// </summary>
         public static string ApiUsers {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignments.
+        ///   Looks up a localized string similar to Задания.
         /// </summary>
         public static string Assignments {
             get {
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed.
+        ///   Looks up a localized string similar to Завершенные.
         /// </summary>
         public static string Completed {
             get {
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new.
+        ///   Looks up a localized string similar to Создать.
         /// </summary>
         public static string CreateNew {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cumulative Interview Chart.
+        ///   Looks up a localized string similar to График.
         /// </summary>
         public static string CumulativeChart {
             get {
@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data Export.
+        ///   Looks up a localized string similar to Экспорт данных.
         /// </summary>
         public static string DataExport {
             get {
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Devices/Interviewers.
+        ///   Looks up a localized string similar to Устройства/Интервьюеры.
         /// </summary>
         public static string DevicesInterviewers {
             get {
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters.
+        ///   Looks up a localized string similar to Хедквотеры.
         /// </summary>
         public static string Headquarters {
             get {
@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help.
+        ///   Looks up a localized string similar to Справка.
         /// </summary>
         public static string Help {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewers.
+        ///   Looks up a localized string similar to Интервьюеры.
         /// </summary>
         public static string Interviewers {
             get {
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews.
+        ///   Looks up a localized string similar to Интервью.
         /// </summary>
         public static string Interviews {
             get {
@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map Dashboard.
+        ///   Looks up a localized string similar to Дешбоард с картой.
         /// </summary>
         public static string MapDashboard {
             get {
@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map Report.
+        ///   Looks up a localized string similar to Карта.
         /// </summary>
         public static string MapReport {
             get {
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maps.
+        ///   Looks up a localized string similar to Карты.
         /// </summary>
         public static string Maps {
             get {
@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observers.
+        ///   Looks up a localized string similar to Наблюдатели .
         /// </summary>
         public static string Observers {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quantity.
+        ///   Looks up a localized string similar to Количество.
         /// </summary>
         public static string Quantity {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaires.
+        ///   Looks up a localized string similar to Опросники.
         /// </summary>
         public static string Questionnaires {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviews synchronized but not yet processed.
+        ///   Looks up a localized string similar to Количество синхронизированных, но пока необработанных интервью.
         /// </summary>
         public static string QueueSizeTitle {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected.
+        ///   Looks up a localized string similar to Отклоненные.
         /// </summary>
         public static string Rejected {
             get {
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports.
+        ///   Looks up a localized string similar to Отчеты.
         /// </summary>
         public static string Reports {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server Administration.
+        ///   Looks up a localized string similar to Администрирование Сервера.
         /// </summary>
         public static string ServerAdministration {
             get {
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Speed.
+        ///   Looks up a localized string similar to Скорость.
         /// </summary>
         public static string Speed {
             get {
@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Started.
+        ///   Looks up a localized string similar to Начатые.
         /// </summary>
         public static string Started {
             get {
@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status Duration.
+        ///   Looks up a localized string similar to Длительность статусов.
         /// </summary>
         public static string StatusDuration {
             get {
@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisors.
+        ///   Looks up a localized string similar to Супервизоры.
         /// </summary>
         public static string Supervisors {
             get {
@@ -295,7 +295,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surveys and Statuses.
+        ///   Looks up a localized string similar to Обследования и статусы.
         /// </summary>
         public static string SurveysAndStatuses {
             get {
@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Setup.
+        ///   Looks up a localized string similar to Настройка обследований.
         /// </summary>
         public static string SurveySetup {
             get {
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Statistics.
+        ///   Looks up a localized string similar to Статистика обследования.
         /// </summary>
         public static string SurveyStatistics {
             get {
@@ -322,7 +322,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team and Roles.
+        ///   Looks up a localized string similar to Команды и роли.
         /// </summary>
         public static string TeamAndRoles {
             get {
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team members and Statuses.
+        ///   Looks up a localized string similar to Члены команды и статусы.
         /// </summary>
         public static string TeamMembersAndStatuses {
             get {
@@ -340,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teams and Roles.
+        ///   Looks up a localized string similar to Группы и роли.
         /// </summary>
         public static string TeamsAndRoles {
             get {
@@ -349,7 +349,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teams and Statuses.
+        ///   Looks up a localized string similar to Команды и статусы.
         /// </summary>
         public static string TeamsAndStatuses {
             get {
@@ -358,7 +358,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
+        ///   Looks up a localized string similar to Устранение неполадок.
         /// </summary>
         public static string Troubleshooting {
             get {
@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Batch User Upload.
+        ///   Looks up a localized string similar to Загрузка пользователей.
         /// </summary>
         public static string UserBatchUpload {
             get {
@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users.
+        ///   Looks up a localized string similar to Пользователи.
         /// </summary>
         public static string Users {
             get {
@@ -385,7 +385,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workspaces.
+        ///   Looks up a localized string similar to Рабочие пространства.
         /// </summary>
         public static string Workspaces {
             get {
