@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,33 +16,20 @@ using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Services
 {
-    class ExportServiceApiConfigurator : IHttpClientConfigurator<IExportServiceApi>
+    class ExportServiceApiHttpHandler : DelegatingHandler
     {
-        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
-
-        private readonly ILogger<ExportServiceApiConfigurator> logger;
         private readonly IOptions<HeadquartersConfig> headquarterOptions;
         private readonly IHttpContextAccessor contextAccessor;
-        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
-        private readonly string exportServiceKey;
 
-        public ExportServiceApiConfigurator(
-            IOptionsSnapshot<ExportServiceConfig> exportOptions,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
+        public ExportServiceApiHttpHandler(
             IOptions<HeadquartersConfig> headquarterOptions,
-            IHttpContextAccessor contextAccessor,
-            IWorkspaceContextAccessor workspaceContextAccessor,
-            ILogger<ExportServiceApiConfigurator> logger)
+            IHttpContextAccessor contextAccessor)
         {
-            this.exportOptions = exportOptions;
-            this.exportServiceKey = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey)?.Key;
             this.headquarterOptions = headquarterOptions;
             this.contextAccessor = contextAccessor;
-            this.workspaceContextAccessor = workspaceContextAccessor;
-            this.logger = logger;
         }
 
-        public void ConfigureHttpClient(HttpClient hc)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var valueBaseUrl = headquarterOptions.Value.BaseUrl;
 
@@ -49,26 +38,52 @@ namespace WB.UI.Headquarters.Services
                 var context = contextAccessor.HttpContext;
                 if (context != null)
                 {
-                    var request = context.Request;
+                    var httpRequest = context.Request;
 
-                    baseUrl = new Uri($"{request.Scheme}://{request.Host}/");
+                    baseUrl = new Uri($"{httpRequest.Scheme}://{httpRequest.Host}/");
                 }
             }
-
-            this.logger.LogTrace("Using {baseUrl} as export service url. Parsed value {baseUrlUri}", valueBaseUrl, baseUrl);
             
+            request.Headers.Referrer = baseUrl;
+
+
+            return base.SendAsync(request, cancellationToken);
+        }
+
+    }
+
+    class ExportServiceApiConfigurator : IHttpClientConfigurator<IExportServiceApi>
+    {
+        private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
+        private readonly IOptions<HeadquartersConfig> headquarterOptions;
+        private readonly string exportServiceKey;
+
+        public ExportServiceApiConfigurator(
+            IOptionsSnapshot<ExportServiceConfig> exportOptions,
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
+            IWorkspaceContextAccessor workspaceContextAccessor,
+            IOptions<HeadquartersConfig> headquarterOptions)
+        {
+            this.exportOptions = exportOptions;
+            this.workspaceContextAccessor = workspaceContextAccessor;
+            this.exportServiceKey = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey)?.Key;
+            this.headquarterOptions = headquarterOptions;
+        }
+
+        public void ConfigureHttpClient(HttpClient hc)
+        {
+            hc.BaseAddress = new Uri(this.exportOptions.Value.ExportServiceUrl);
+            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(@"Bearer", exportServiceKey);
+            hc.DefaultRequestHeaders.Add(@"x-tenant-name", headquarterOptions.Value.TenantName);
+
             var workspace = workspaceContextAccessor.CurrentWorkspace();
 
             if (workspace != null)
             {
                 hc.DefaultRequestHeaders.Add(@"x-tenant-space", workspace.Name);
             }
-
-            hc.DefaultRequestHeaders.Referrer = baseUrl;
-            hc.DefaultRequestHeaders.Add(@"x-tenant-name", headquarterOptions.Value.TenantName);
-            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(@"Bearer", exportServiceKey);
-
-            hc.BaseAddress = new Uri(exportOptions.Value.ExportServiceUrl);
         }
     }
+    
 }

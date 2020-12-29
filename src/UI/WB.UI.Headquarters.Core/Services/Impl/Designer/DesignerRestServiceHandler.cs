@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
+
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
-    public class DesignerRestServiceHandler : HttpClientHandler
+    public class DesignerRestServiceHandler : DelegatingHandler
     {
         private readonly IDesignerUserCredentials designerCredentials;
 

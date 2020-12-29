@@ -260,14 +260,20 @@ namespace WB.UI.Headquarters
             services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
-            services.AddWorkspaceAwareHttpClient<IExportServiceApi, ExportServiceApiConfigurator>();
+            services.AddTransient<ExportServiceApiConfigurator>();
+            
+            services.AddHttpClient();
+            services.AddWorkspaceAwareHttpClient<IExportServiceApi, 
+                ExportServiceApiConfigurator, 
+                ExportServiceApiHttpHandler>();
 
-            services.AddTransient<DesignerRestServiceHandler>();
-            services.AddHttpClientWithConfigurator<IDesignerApi, DesignerApiConfigurator>(new RefitSettings
-            {
-                ContentSerializer = new DesignerContentSerializer()
-            })
-                .ConfigurePrimaryHttpMessageHandler<DesignerRestServiceHandler>();
+            services.AddWorkspaceAwareHttpClient<IDesignerApi, 
+                DesignerApiConfigurator,
+                DesignerRestServiceHandler>(new RefitSettings
+                {
+                    ContentSerializer = new DesignerContentSerializer()
+                });
+            
             services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
@@ -367,6 +373,7 @@ namespace WB.UI.Headquarters
 
                 app.UseHsts();
             }
+
 
             app.UseStaticFiles(new StaticFileOptions
             {
