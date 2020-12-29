@@ -37,9 +37,12 @@ namespace WB.UI.Headquarters.Controllers
             public string UserRole { get; set; }
         }
 
-        [ActivePage(MenuItem.Interviews)]
         public ActionResult Index()
         {
+            ViewBag.ActivePage = authorizedUser.IsInterviewer
+                ? MenuItem.MapDashboard
+                : MenuItem.Interviews;
+            
             var userRole = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator
                 ? UserRoles.Headquarter
                 : authorizedUser.IsSupervisor

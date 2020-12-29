@@ -297,6 +297,9 @@
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Map Dashboard</value>
+  </data>
   <data name="OpenAssignment" xml:space="preserve">
     <value>Open assignment</value>
   </data>

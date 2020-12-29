@@ -21,7 +21,8 @@
                     v-on:selected="selectQuestionnaireVersion"
                     :disabled="selectedQuestionnaireId == null"/>
             </FilterBlock>
-            <FilterBlock :title="$t('Common.Responsible')">
+            <FilterBlock :title="$t('Common.Responsible')"
+                v-if="model.userRole != 'Interviewer'">
                 <Typeahead
                     control-id="responsibleId"
                     :placeholder="$t('Common.AllResponsible')"

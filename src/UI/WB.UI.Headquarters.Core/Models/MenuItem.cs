@@ -50,6 +50,7 @@
         ChangePassword = 46,
         Administration_Diagnostics = 40,
         Workspaces = 47,
-        ServerAdministration = 48
+        ServerAdministration = 48,
+        MapDashboard = 49,
     }
 }

@@ -4,6 +4,17 @@
         :hasFilter="true"
         :topicButton="$t('Assignments.NewAssignment')"
         :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
+        <div slot="headers">
+            <a href="MapDashboard"
+                style="float:right; margin-right:320px; margin-top:14px;">
+                <img style="padding-top:2px;"
+                    height="26px;"
+                    src="/img/google-maps-markers/map.png"
+                    :title="$t('Common.MapDashboard')" />
+            </a>
+            <h1>{{title}}</h1>
+        </div>
+
         <Filters slot="filters">
             <FilterBlock
                 :title="$t('Common.Questionnaire')"
