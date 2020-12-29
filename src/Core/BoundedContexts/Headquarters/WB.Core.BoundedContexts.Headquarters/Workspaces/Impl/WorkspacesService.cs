@@ -60,6 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 .ToList());
         }
 
+        public List<WorkspaceContext> GetAllWorkspaces()
+        {
+            return workspaces.Query(_ => _.Select(w => w.AsContext()).ToList());
+        }
+
         public void AssignWorkspaces(HqUser user, List<Workspace> workspaces)
         {
             foreach (var userWorkspace in user.Workspaces.ToList())
