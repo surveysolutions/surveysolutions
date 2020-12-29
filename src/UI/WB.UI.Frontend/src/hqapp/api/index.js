@@ -408,9 +408,9 @@ class HttpUtil {
 }
 
 class HqApiClient {
-    constructor(basePath) {
+    constructor(basePath, workspace) {
         this.basePath = basePath
-
+        this.workspace = workspace
         this.http = axios.create({
             baseURL: basePath,
         })
@@ -462,18 +462,18 @@ class HqApiClient {
             list() {
                 return self.basePath + 'UsersManagement/List'
             },
-
-            userManage(id) {
-                return self.basePath + 'Users/Manage/' + id
-            },
         }
+    }
+
+    workspacePath(workspace) {
+        return this.basePath.replace(this.workspace, workspace)
     }
 }
 
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath)
+        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath, vue.$config.workspace)
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$hq', {
