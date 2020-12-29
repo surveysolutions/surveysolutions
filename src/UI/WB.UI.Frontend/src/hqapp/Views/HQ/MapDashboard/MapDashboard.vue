@@ -94,6 +94,12 @@
                     &nbsp;{{selectedTooltip.lastUpdatedDate}}
                 </div>
                 <div class="row-fluid"
+                    v-for="answer in selectedTooltip.identifyingData">
+                    <strong>{{answer.title}}:</strong>
+                    &nbsp;{{answer.answer}}
+                </div>
+
+                <div class="row-fluid"
                     style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
                     <a
@@ -143,8 +149,15 @@
                     &nbsp;{{selectedTooltip.lastUpdatedDate}}
                 </div>
                 <div class="row-fluid"
+                    v-for="answer in selectedTooltip.identifyingData">
+                    <strong>{{answer.title}}:</strong>
+                    &nbsp;{{answer.answer}}
+                </div>
+
+                <div class="row-fluid"
+                    v-if="model.userRole != 'Interviewer'"
                     style="white-space:nowrap;">
-                    <strong>{{$t("MapDashboard.ViewAssignmentDetails")}}:</strong>&nbsp;
+                    <strong>{{$t("Common.ViewAssignmentDetails")}}:</strong>&nbsp;
                     <a
                         v-bind:href="api.GetAssignmentDetailsUrl(selectedTooltip.assignmentId)"
                         target="_blank">{{$t("MapReport.details")}}</a>
@@ -152,7 +165,7 @@
                 <div class="row-fluid tooltip-buttons"
                     style="white-space:nowrap;">
                     <button
-                        class="btn btn-lg btn-success"
+                        class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Interviewer'"
                         @click="createInterview">{{ $t("Common.Create") }}</button>
                 </div>

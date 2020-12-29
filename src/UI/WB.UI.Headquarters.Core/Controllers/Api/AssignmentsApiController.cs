@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -303,6 +305,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (assignment == null)
                 return null;
 
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(assignment.QuestionnaireId, null);
+
             var mapPointView = new AssignmentForMapPointView
             {
                 ResponsibleName = assignment.Responsible.Name,
@@ -310,6 +314,13 @@ namespace WB.UI.Headquarters.Controllers.Api
                 Quantity = assignment.Quantity,
                 InterviewsNeeded = assignment.InterviewsNeeded,
                 LastUpdatedDate = AnswerUtils.AnswerToString(assignment.UpdatedAtUtc),
+                IdentifyingData = assignment.IdentifyingData.Select(d =>
+                    new AnswerView()
+                    {
+                        Title = questionnaire.GetQuestionTitle(d.Identity.Id),
+                        Answer = d.AnswerAsString,
+                    })
+                    .ToList()
             };
             return mapPointView;
         }
@@ -326,7 +337,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public int? InterviewsNeeded { get; set; }
             public string LastUpdatedDate { get; set; }
             public int AssignmentId { get; set; }
+            public List<AnswerView> IdentifyingData { get; set; }
         }
-
     }
 }

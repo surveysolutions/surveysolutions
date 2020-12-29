@@ -12,6 +12,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -27,15 +29,18 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public InterviewApiController(
             IAuthorizedUser authorizedUser, 
             IAllInterviewsFactory allInterviewsViewFactory,
-            IChangeStatusFactory changeStatusFactory)
+            IChangeStatusFactory changeStatusFactory,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.authorizedUser = authorizedUser;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.changeStatusFactory = changeStatusFactory;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpGet]
@@ -154,6 +159,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (interviewSummaryView == null)
                 return null;
 
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireOrThrow(
+                new QuestionnaireIdentity(interviewSummaryView.QuestionnaireId, interviewSummaryView.QuestionnaireVersion), null);
+
             var interviewSummaryForMapPointView = new InterviewSummaryForMapPointView
             {
                 InterviewerName = interviewSummaryView.ResponsibleName,
@@ -162,7 +170,15 @@ namespace WB.UI.Headquarters.Controllers.Api
                 AssignmentId = interviewSummaryView.AssignmentId,
                 LastStatus = interviewSummaryView.Status.ToLocalizeString(),
                 LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate),
-                InterviewId = interviewSummaryView.InterviewId
+                InterviewId = interviewSummaryView.InterviewId,
+                IdentifyingData = interviewSummaryView.IdentifyEntitiesValues.Select(d =>
+                        new AnswerView()
+                        {
+                            Title = questionnaire.GetQuestionTitle(d.Entity.EntityId),
+                            Answer = d.Value,
+                        })
+                    .ToList()
+
             };
             return interviewSummaryForMapPointView;
         }

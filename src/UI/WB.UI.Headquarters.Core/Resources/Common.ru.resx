@@ -135,6 +135,9 @@
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
   </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Посмотреть детали задания</value>
+  </data>
   <data name="CreatedOnClient" xml:space="preserve">
     <value>Создан на клиенте</value>
   </data>
