@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -13,5 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public int? AssignmentId { get; set; }
         public Guid InterviewId { get; set; }
         public List<AnswerView> IdentifyingData { get; set; }
+        public InterviewStatus Status { get; set; }
     }
 }

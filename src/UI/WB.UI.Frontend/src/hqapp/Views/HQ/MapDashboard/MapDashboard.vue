@@ -110,27 +110,27 @@
                     style="white-space:nowrap;">
                     <button
                         class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.lastStatus == 'InterviewerAssigned'"
+                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'InterviewerAssigned'"
                         @click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
                         class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.lastStatus == 'Completed'"
+                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
                         @click="approveSvInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-sm reject"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.lastStatus == 'Completed'"
+                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
                         @click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Headquarter' && selectedTooltip.lastStatus == 'Completed' || selectedTooltip.lastStatus == 'ApprovedBySupervisor'"
-                        @click="approveHqInterview">{{ $t("Common.Approve")}}</button>
+                        v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
+                        click="alert('approveHqInterview')">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-sm reject"
-                        v-if="model.userRole == 'Headquarter' && selectedTooltip.lastStatus == 'Completed' || selectedTooltip.lastStatus == 'ApprovedBySupervisor'"
+                        v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
                         @click="rejectHqInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-sm btn-primary"
-                        v-if="model.userRole == 'Headquarter' && selectedTooltip.lastStatus == 'ApprovedByHeadquarters'"
+                        v-if="model.userRole == 'Headquarter' && selectedTooltip.status == 'ApprovedByHeadquarters'"
                         @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
                 </div>
             </div>
