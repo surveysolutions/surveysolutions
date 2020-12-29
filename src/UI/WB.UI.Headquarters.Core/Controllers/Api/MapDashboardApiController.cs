@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         })))
                 .ToList();
             
-            var clustering = new Clustering<MapMarker>(input.Zoom);
+            var clustering = new Clustering<MapMarker>(input.Zoom + 1);
             var valueCollection = clustering.RunClustering(mapPoints).ToList();
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
             {
@@ -212,7 +212,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
-            var key = $"MapDashboard;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{this.authorizedUser.Id}";
+            var key = $"MapDashboard;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{this.authorizedUser.Id}{input.Zoom}";
 
             var cacheLine = cache.Get(key);
 
@@ -248,17 +248,21 @@ namespace WB.UI.Headquarters.Controllers.Api
             var collection = new FeatureCollection();
             collection.Features.AddRange(result.Select(p =>
             {
-                var props = p.UserData.Props ?? new Dictionary<string, object>();
-
                 if (p.UserData.NumPoints > 1)
                 {
-                    props["count"] = p.UserData.NumPoints;
-                    props["expand"] = map.Cluster.GetClusterExpansionZoom(p.UserData.Index);
+                    var mapMarker = new MapClusterMarker()
+                    {
+                        count = p.UserData.NumPoints,
+                        expand = map.Cluster.GetClusterExpansionZoom(p.UserData.Index),
+                    };
+                    return new Feature(
+                        new Point(new Position(p.Latitude, p.Longitude)),
+                        mapMarker, id: p.UserData.Index.ToString("X"));
                 }
 
                 return new Feature(
-                    new Point(new Position(p.Latitude, p.Longitude)),
-                    props, id: p.UserData.Index.ToString("X"));
+                        new Point(new Position(p.Latitude, p.Longitude)),
+                        p.UserData.Props, id: p.UserData.Index.ToString("X"));
             }));
 
             return new MapDashboardResult
@@ -302,15 +306,15 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         private MapReportCacheLine InitializeSuperCluster(MapDashboardRequest input)
         {
+            var cluster = new SuperCluster();
+            var bounds = GeoBounds.Closed;
+
             var gpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.ResponsibleId, input.AssignmentId,
                 input.East, input.North, input.West, input.South);
 
-            var cluster = new SuperCluster();
-            var bounds = GeoBounds.Closed;
-
-            cluster.Load(gpsAnswers.Select(g =>
+            var features = gpsAnswers.Select(g =>
             {
                 bounds.Expand(g.Latitude, g.Longitude);
                 return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
@@ -319,12 +323,26 @@ namespace WB.UI.Headquarters.Controllers.Api
                         interviewId = g.InterviewId,
                         interviewKey = g.InterviewKey,
                         status = g.Status,
-                    }
-                    /*new Dictionary<string, object>
+                    });
+            });
+            
+            var assignmentGpsData = this.assignmentsService.GetAssignmentsWithGpsAnswer(
+                input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.ResponsibleId, input.AssignmentId,
+                input.East, input.North, input.West, input.South);
+
+            features = features.Concat(assignmentGpsData.Select(g =>
+            {
+                bounds.Expand(g.Latitude, g.Longitude);
+                return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
+                    new MapAssignmentMarker()
                     {
-                        ["interviewId"] = g.InterviewId.ToString()
-                    }*/);
+                        assignmentId = g.AssignmentId,
+                        responsibleRole = g.ResponsibleRoleId.ToUserRole(),
+                    });
             }));
+
+            cluster.Load(features);
 
             return new MapReportCacheLine
             {
