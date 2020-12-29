@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                         fileName, string.Join(", ", missingColumns)));
 
             var currentWorkspace = this.workspaceContextAccessor.CurrentWorkspace()
-                                   ?? throw new ApplicationException("Cannot preload users outside of workspace");
+                                   ?? throw new MissingWorkspaceException("Cannot preload users outside of workspace");
             
             var usersToImport = new List<UserToImport>();
             
