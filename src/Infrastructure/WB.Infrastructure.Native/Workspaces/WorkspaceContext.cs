@@ -26,7 +26,7 @@ namespace WB.Infrastructure.Native.Workspaces
 
         protected bool Equals(WorkspaceContext other)
         {
-            return Name == other.Name && DisplayName == other.DisplayName;
+            return Nullable.Equals(DisabledAtUtc, other.DisabledAtUtc) && Name == other.Name && DisplayName == other.DisplayName;
         }
 
         public override bool Equals(object? obj)
@@ -39,7 +39,9 @@ namespace WB.Infrastructure.Native.Workspaces
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name, DisplayName);
+            return HashCode.Combine(DisabledAtUtc, Name, DisplayName);
         }
+
+        public bool IsEnabled() => DisabledAtUtc == null;
     }
 }
