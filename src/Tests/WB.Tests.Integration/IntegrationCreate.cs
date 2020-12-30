@@ -352,13 +352,12 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
+        public static PostgresKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
             IUnitOfWork sessionProvider = null, UnitOfWorkConnectionSettings postgreConnectionSettings = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
-            return new PostgresReadSideKeyValueStorage<TEntity>(
+            return new PostgresKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
         }
 
