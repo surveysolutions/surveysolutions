@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
@@ -113,13 +112,20 @@ class Workspaces {
         return response.data
     }
 
-    Assign(userId, workspaces) {
+    Assign(userIds, workspaces, mode = 'Assign') {
         return this.http.post('api/v1/workspaces/assign',
             {
-                userId: userId,
-                workspaces: workspaces,
+                userIds, workspaces, mode,
             }
         )
+    }
+
+    async Status(workspace) {
+        return await this.http.get('api/v1/workspaces/status/' + workspace)
+    }
+
+    async Delete(workspace) {
+        return await this.http.delete('api/v1/workspaces/' + workspace)
     }
 
 }
@@ -499,9 +505,9 @@ class HttpUtil {
 }
 
 class HqApiClient {
-    constructor(basePath) {
+    constructor(basePath, workspace) {
         this.basePath = basePath
-
+        this.workspace = workspace
         this.http = axios.create({
             baseURL: basePath,
         })
@@ -554,12 +560,25 @@ class HqApiClient {
     get InterviewsPublicApi() {
         return new InterviewsPublicApi(this.http)
     }
+
+    get UsersManagement() {
+        var self = this
+        return {
+            list() {
+                return self.basePath + 'UsersManagement/List'
+            },
+        }
+    }
+
+    workspacePath(workspace) {
+        return this.basePath.replace(this.workspace, workspace)
+    }
 }
 
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.basePath)
+        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath, vue.$config.workspace)
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$hq', {

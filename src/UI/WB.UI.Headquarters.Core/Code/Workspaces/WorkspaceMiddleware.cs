@@ -42,13 +42,22 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }
 
             var workspacesService = context.RequestServices.GetRequiredService<IWorkspacesCache>();
-            List<WorkspaceContext> workspaces = workspacesService.AllEnabledWorkspaces().ToList();
+            List<WorkspaceContext> workspaces = workspacesService.AllWorkspaces();
 
             async Task InvokeNextWithScope(WorkspaceContext workspaceContext)
             {
-                using var scope = context.RequestServices.CreateWorkspaceScope(workspaceContext);
-                context.RequestServices = scope.ServiceProvider;
-                await next(context).ConfigureAwait(false);
+                var oldContextServices = context.RequestServices;
+
+                try
+                {
+                    using var scope = context.RequestServices.CreateWorkspaceScope(workspaceContext);
+                    context.RequestServices = scope.ServiceProvider;
+                    await next(context).ConfigureAwait(false);
+                }
+                finally
+                {
+                    context.RequestServices = oldContextServices;
+                }
             }
             
             foreach (var path in InfrastructureEndpoints)
@@ -59,10 +68,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     return;
                 }
             }
-
-            workspaces.Insert(0, Workspace.Admin.AsContext());
             
-            foreach (var workspace in workspaces)
+            foreach (var workspace in AdministrationWorkspaces.Concat(workspaces))
             {
                 var workspaceMatched = context.Request.Path.StartsWithSegments("/" + workspace.Name,
                     out var matchedPath,
@@ -92,6 +99,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             await next(context).ConfigureAwait(false);
         }
+        
+        private static readonly WorkspaceContext[] AdministrationWorkspaces = { Workspace.Admin.AsContext() };
 
         public static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install", "/workspaces" };
     }

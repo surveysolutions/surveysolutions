@@ -13,33 +13,64 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
     {
         // Needed for proper cache invalidation, because IMemoryCache is workspace dependent
         private static readonly IMemoryCache MemoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IInScopeExecutor<IWorkspacesService> inScopeExecutor;
         
         private const string WorkspacesCacheKey = "workspaces";
 
-        public WorkspacesCache(IInScopeExecutor serviceLocator)
+        public WorkspacesCache(IInScopeExecutor<IWorkspacesService> serviceLocator)
         {
             this.inScopeExecutor = serviceLocator;
         }
 
-        public List<WorkspaceContext> AllEnabledWorkspaces()
+        public List<WorkspaceContext> AllEnabledWorkspaces() => GetAllWorkspaces().EnabledWorkspaces;
+
+        public List<WorkspaceContext> AllWorkspaces() => GetAllWorkspaces().AllWorkspaces;
+
+        private CacheItem GetAllWorkspaces()
         {
             return MemoryCache.GetOrCreateWithDoubleLock(WorkspacesCacheKey, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-                
-                return inScopeExecutor.Execute(serviceLocator =>
+
+                return inScopeExecutor.Execute(ws =>
                 {
-                    var ws = serviceLocator.GetInstance<IWorkspacesService>();
-                    var list = ws.GetEnabledWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
-                    return list;
+                    var workspaces = ws.GetAllWorkspaces()?.ToList() ?? new List<WorkspaceContext>();
+                    var enabledWorkspaces = new List<WorkspaceContext>();
+                    int revision = 17;
+
+                    foreach (var workspace in workspaces)
+                    {
+                        if (workspace.DisabledAtUtc == null)
+                        {
+                            enabledWorkspaces.Add(workspace);
+                        }
+
+                        revision = revision * 23 + workspace.GetHashCode();
+                    }
+
+                    return new CacheItem(revision, workspaces, enabledWorkspaces);
                 });
             });
         }
 
-        public void InvalidateCache()
+        public void InvalidateCache() => MemoryCache.Remove(WorkspacesCacheKey);
+
+        public int Revision() => GetAllWorkspaces().Revision;
+
+        internal class CacheItem
         {
-            MemoryCache.Remove(WorkspacesCacheKey);
+            public CacheItem(int revision, 
+                List<WorkspaceContext> allWorkspaces, 
+                List<WorkspaceContext> enabledWorkspaces)
+            {
+                Revision = revision;
+                AllWorkspaces = allWorkspaces;
+                EnabledWorkspaces = enabledWorkspaces;
+            }
+
+            public int Revision { get; }
+            public List<WorkspaceContext> AllWorkspaces { get;  }
+            public List<WorkspaceContext> EnabledWorkspaces { get; set; }
         }
     }
 }

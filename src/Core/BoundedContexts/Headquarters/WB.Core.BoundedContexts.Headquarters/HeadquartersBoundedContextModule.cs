@@ -61,6 +61,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -353,6 +354,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
             registry.Bind<IRootScopeExecutor, InRootScopeExecutor>();
+            registry.Bind(typeof(IInScopeExecutor<>), typeof(UnitOfWorkInScopeExecutor<>));
+            registry.Bind(typeof(IInScopeExecutor<,>), typeof(UnitOfWorkInScopeExecutor<,>));
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
@@ -378,6 +381,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<SendInterviewCompletedJob>();
+            registry.Bind<DeleteWorkspaceSchemaJob>();
             
             registry.Bind<CalendarEvent>();
 

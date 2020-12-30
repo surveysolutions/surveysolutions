@@ -9,7 +9,6 @@ using Autofac.Core.Lifetime;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using WB.Infrastructure.Native.Workspaces;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -62,8 +61,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             shouldDiscardChanges = true;
         }
 
-        readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> unitOfWorks 
-            = new ConcurrentDictionary<string, (ISession, ITransaction)>();
+        readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> unitOfWorks = new();
 
         public ISession Session
         {
