@@ -96,7 +96,7 @@
                 <div class="row-fluid"
                     v-for="answer in selectedTooltip.identifyingData">
                     <strong>{{answer.title}}:</strong>
-                    &nbsp;{{answer.answer}}
+                    &nbsp;{{answer.answer || $t("Details.NoAnswer") }}
                 </div>
 
                 <div class="row-fluid"
@@ -151,7 +151,7 @@
                 <div class="row-fluid"
                     v-for="answer in selectedTooltip.identifyingData">
                     <strong>{{answer.title}}:</strong>
-                    &nbsp;{{answer.answer}}
+                    &nbsp;{{answer.answer || $t("Details.NoAnswer")}}
                 </div>
 
                 <div class="row-fluid"
