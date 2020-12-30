@@ -15,7 +15,8 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 "questionnairepdfs",
                 "profilesettings",
                 "appsettings",
-                "questionnairelookuptables"
+                "questionnairelookuptables",
+                "emailparams"
             };
 
             foreach (var table in tables)

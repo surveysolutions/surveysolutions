@@ -91,7 +91,7 @@ export default {
         async save() {
             this.inProgress = true
             try {
-                const response = await this.$hq.Workspaces.Assign(this.userInfo.userId,
+                const response = await this.$hq.Workspaces.Assign([this.userInfo.userId],
                     this.allWorkspaces.filter(w => w.Assigned === true)
                         .map(w => w.Name))
 

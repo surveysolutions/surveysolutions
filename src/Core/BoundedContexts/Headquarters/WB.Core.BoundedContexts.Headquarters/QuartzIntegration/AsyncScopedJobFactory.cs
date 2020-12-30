@@ -1,17 +1,27 @@
 ﻿using System;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Spi;
+using WB.Core.Infrastructure.Domain;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AsyncScopedJobFactory : IJobFactory
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IWorkspacesCache workspacesCache;
+        private readonly ILogger<AsyncScopedJobDecorator> logger;
 
-        public AsyncScopedJobFactory(IServiceProvider serviceProvider)
+        public AsyncScopedJobFactory(
+            IInScopeExecutor inScopeExecutor,
+            IWorkspacesCache workspacesCache,
+            ILogger<AsyncScopedJobDecorator> logger)
         {
-            this.serviceProvider = serviceProvider;
+            this.inScopeExecutor = inScopeExecutor;
+            this.workspacesCache = workspacesCache;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -38,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                return new AsyncScopedJobDecorator(serviceProvider, jobType);
+                return new AsyncScopedJobDecorator(inScopeExecutor, workspacesCache, logger, jobType);
             }
             catch (Exception e)
             {

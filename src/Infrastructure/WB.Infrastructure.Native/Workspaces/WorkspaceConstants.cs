@@ -6,5 +6,6 @@ namespace WB.Infrastructure.Native.Workspaces
         public const string AdminWorkspaceName = "administration";
         public const string ClaimType = "Workspace";
         public const string DefaultWorkspaceName = "primary";
+        public const string RevisionClaimType = "WorkspaceRevision";
     }
 }

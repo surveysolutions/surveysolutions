@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
 {
-    [DisallowConcurrentExecution]
+ [DisallowConcurrentExecution]
     public class DeleteQuestionnaireJob : IJob
     {
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
