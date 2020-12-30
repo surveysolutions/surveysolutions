@@ -11,8 +11,8 @@ using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal abstract class PostgresKeyValueStorage<TEntity>
-        where TEntity : class
+    public class PostgresKeyValueStorage<TEntity> : IPlainKeyValueStorage<TEntity>
+        where TEntity : class 
     {
         private readonly IUnitOfWork unitOfWork;
         protected readonly IEntitySerializer<TEntity> serializer;
@@ -23,7 +23,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         // ReSharper disable once StaticMemberInGenericType
         protected static readonly bool AllowReadFallback = false;
         
-        protected PostgresKeyValueStorage(IUnitOfWork unitOfWork, IEntitySerializer<TEntity> serializer)
+        public PostgresKeyValueStorage(IUnitOfWork unitOfWork, IEntitySerializer<TEntity> serializer)
         {
             this.unitOfWork = unitOfWork;
             this.serializer = serializer;

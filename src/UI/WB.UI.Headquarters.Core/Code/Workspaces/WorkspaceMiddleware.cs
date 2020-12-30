@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             {
                 if (context.Request.Path.StartsWithSegments(path))
                 {
-                    await InvokeNextWithScope(workspaces.First(w => w.Name == Workspace.Default.Name));
+                    await InvokeNextWithScope(WorkspaceContext.Default);
                     return;
                 }
             }
