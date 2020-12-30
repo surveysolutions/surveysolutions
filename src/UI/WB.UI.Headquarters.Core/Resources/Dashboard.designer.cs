@@ -403,6 +403,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Users Management.
+        /// </summary>
+        public static string UsersManagement {
+            get {
+                return ResourceManager.GetString("UsersManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version.
         /// </summary>
         public static string Version {

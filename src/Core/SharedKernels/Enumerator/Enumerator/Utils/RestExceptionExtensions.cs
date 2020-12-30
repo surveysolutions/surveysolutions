@@ -118,6 +118,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                                 exceptionMessage =
                                     EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
                             }
+                            if(restException.Message.Contains("Workspace is disabled"))
+                            {
+                                exceptionType = SynchronizationExceptionType.WorkspaceDisabled;
+                                exceptionMessage =
+                                    EnumeratorUIResources.Synchronization_WorkspaceDisabled;
+                            }
                             else
                             {
                                 exceptionMessage = EnumeratorUIResources.Unauthorized;

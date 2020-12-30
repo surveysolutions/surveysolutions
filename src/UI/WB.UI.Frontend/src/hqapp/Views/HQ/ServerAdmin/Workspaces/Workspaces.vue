@@ -158,6 +158,9 @@
                     data-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
         </ModalFrame>
+
+        <DeleteWorkspaceModal ref="deleteWorkspaceModal"
+            @workspace:deleted="loadData"></DeleteWorkspaceModal>
     </HqLayout>
 </template>
 
@@ -165,8 +168,13 @@
 
 import Vue from 'vue'
 import * as toastr from 'toastr'
+import DeleteWorkspaceModal  from './DeleteWorkspaceModal'
 
 export default {
+    components: {
+        DeleteWorkspaceModal,
+    },
+
     data() {
         return {
             editedRowId: null,
@@ -175,6 +183,7 @@ export default {
             inProgress: false,
         }
     },
+
     mounted() {
         this.loadData()
     },
@@ -198,14 +207,6 @@ export default {
                 })
                 this.$refs.editWorkspaceModal.modal('hide')
                 this.loadData()
-            }
-            catch(err) {
-                if(err.response.status === 403) {
-                    toastr.error(this.$t('Workspaces.ReLogin'))
-                }
-                else {
-                    throw err
-                }
             }
             finally {
                 this.inProgress = false
@@ -341,6 +342,16 @@ export default {
                             this.editedRowId = parsedRowId
 
                             this.$refs.disableWorkspaceModal.modal('show')
+                        },
+                    },
+                    {
+                        name: this.$t('Common.Delete'),
+                        className: 'suso-delete',
+                        callback: (_, opt) => {
+                            const parsedRowId = rowData.Name
+                            this.editedRowId = parsedRowId
+
+                            this.$refs.deleteWorkspaceModal.showModal(rowData.Name)
                         },
                     },
                 ]

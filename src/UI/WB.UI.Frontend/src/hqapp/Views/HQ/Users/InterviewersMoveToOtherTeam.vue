@@ -282,9 +282,7 @@ export default {
                 const interviewersArray = map(self.interviewersToMove, (i) => i.userId)
                 const response = await self.$apollo.query({
                     query,
-                    variables: {
-                        responsibleIds: interviewersArray,
-                    },
+                    variables: {responsibleIds: interviewersArray},
                     fetchPolicy: 'network-only',
                 })
 

@@ -1,10 +1,12 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Workspaces
 {
+    [DebuggerDisplay("{Name}")]
     public class Workspace
     {
         protected Workspace()
@@ -25,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         
         public static Workspace Default { get; } = new Workspace(WorkspaceConstants.DefaultWorkspaceName, "Default Space");
         public static Workspace Admin { get; } = new Workspace(WorkspaceConstants.AdminWorkspaceName, "Server Administration"); 
+        
         public virtual ISet<WorkspacesUsers> Users { get; set; } = new HashSet<WorkspacesUsers>();
         public virtual DateTime? DisabledAtUtc { get; protected set; }
 
@@ -46,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
             return Name.GetHashCode();
         }
         
-        public virtual WorkspaceContext AsContext() => new WorkspaceContext(Name, DisplayName);
+        public virtual WorkspaceContext AsContext() => new (Name, DisplayName, DisabledAtUtc);
 
         public virtual void Disable()
         {

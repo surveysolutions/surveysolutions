@@ -12,9 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.holder = holder;
         }
 
-        public WorkspaceContext? CurrentWorkspace()
-        {
-            return holder.Current;
-        }
+        public WorkspaceContext? CurrentWorkspace() => holder.Current;
     }
 }
