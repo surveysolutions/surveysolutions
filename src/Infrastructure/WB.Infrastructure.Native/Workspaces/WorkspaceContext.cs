@@ -20,9 +20,14 @@ namespace WB.Infrastructure.Native.Workspaces
         public string DisplayName { get; }
         public string? PathBase { get; set; }
 
-        public string SchemaName => $"{SchemaPrefix}{Name}";
+        public string SchemaName => Name == WorkspaceConstants.AdminWorkspaceName 
+            ? WorkspaceConstants.SchemaName 
+            : $"{SchemaPrefix}{Name}";
 
         public const string SchemaPrefix = "ws_";
+
+        public static WorkspaceContext Default = new (WorkspaceConstants.DefaultWorkspaceName,
+            WorkspaceConstants.DefaultWorkspaceName, null);
 
         protected bool Equals(WorkspaceContext other)
         {
