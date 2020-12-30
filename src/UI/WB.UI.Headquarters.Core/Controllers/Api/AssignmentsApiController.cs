@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
@@ -317,8 +318,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 IdentifyingData = assignment.IdentifyingData.Select(d =>
                     new AnswerView()
                     {
-                        Title = questionnaire.GetQuestionTitle(d.Identity.Id),
-                        Answer = d.AnswerAsString,
+                        Title = questionnaire.GetQuestionTitle(d.Identity.Id).RemoveHtmlTags(),
+                        Answer = d.AnswerAsString.RemoveHtmlTags(),
                     })
                     .ToList()
             };

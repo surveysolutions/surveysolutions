@@ -175,11 +175,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                 IdentifyingData = interviewSummaryView.IdentifyEntitiesValues.Select(d =>
                         new AnswerView()
                         {
-                            Title = questionnaire.GetQuestionTitle(d.Entity.EntityId),
-                            Answer = d.Value,
+                            Title = questionnaire.GetQuestionTitle(d.Entity.EntityId).RemoveHtmlTags(),
+                            Answer = d.Value.RemoveHtmlTags(),
                         })
                     .ToList()
-
             };
             return interviewSummaryForMapPointView;
         }
