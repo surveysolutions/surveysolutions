@@ -146,7 +146,7 @@ namespace WB.Tests.Web.TestFactories
 
         public IWorkspacesCache WorkspacesCache(IEnumerable<WorkspaceContext> workspaces = null)
         {
-            workspaces ??= new List<WorkspaceContext> {Workspace.Default.AsContext()};
+            workspaces ??= new List<WorkspaceContext> {WorkspaceContext.Default};
 
             return Mock.Of<IWorkspacesCache>(x => x.AllEnabledWorkspaces() == workspaces.ToList());
         }

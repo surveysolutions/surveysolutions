@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Services.EmbeddedService
 
                 if (fileStorageConfig.Value.GetStorageProviderType() == StorageProviderType.AmazonS3)
                 {
-                    var bucketInfo = this.amazonS3Config.GetAmazonS3BucketInfo(Workspace.Default.AsContext());
+                    var bucketInfo = this.amazonS3Config.GetAmazonS3BucketInfo(WorkspaceContext.Default);
 
                     var folder = bucketInfo.PathPrefix.Replace($"/{headquarterOptions.Value.TenantName}", "").TrimEnd('\\', '/');
 
