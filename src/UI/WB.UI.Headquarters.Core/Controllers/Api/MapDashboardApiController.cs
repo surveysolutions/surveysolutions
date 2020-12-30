@@ -126,12 +126,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
         {
-            double boundCoefficient = 0.5;
-            input.East = Math.Min(input.East + ((input.East - input.West) * boundCoefficient), 180);
-            input.West = Math.Max(input.West - ((input.East - input.West) * boundCoefficient), -180);
-            input.North = Math.Min(input.North + ((input.North - input.South) * boundCoefficient), 180);
-            input.South = Math.Max(input.South - ((input.North - input.South) * boundCoefficient), -180);
-            
+            IncreaseBound(input);
+
             var interviewGpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.ResponsibleId, input.AssignmentId,
@@ -208,59 +204,30 @@ namespace WB.UI.Headquarters.Controllers.Api
             };
         }
 
-
-        [HttpPost]
-        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
+        private static void IncreaseBound(MapDashboardRequest input)
         {
             double boundCoefficient = 0.5;
             input.East = Math.Min(input.East + ((input.East - input.West) * boundCoefficient), 180);
             input.West = Math.Max(input.West - ((input.East - input.West) * boundCoefficient), -180);
             input.North = Math.Min(input.North + ((input.North - input.South) * boundCoefficient), 180);
             input.South = Math.Max(input.South - ((input.North - input.South) * boundCoefficient), -180);
-
-            var map = InitializeSuperCluster(input);
-
-            if (input.Zoom == -1)
-            {
-                input.Zoom = map.Bounds.ApproximateGoogleMapsZoomLevel(input.ClientMapWidth);
-            }
-
-            var result = map.Cluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
-
-            var collection = new FeatureCollection();
-            collection.Features.AddRange(result.Select(p =>
-            {
-                if (p.UserData.NumPoints > 1)
-                {
-                    var mapMarker = new MapClusterMarker()
-                    {
-                        count = p.UserData.NumPoints,
-                        expand = map.Cluster.GetClusterExpansionZoom(p.UserData.Index),
-                    };
-                    return new Feature(
-                        new Point(new Position(p.Latitude, p.Longitude)),
-                        mapMarker, id: p.UserData.Index.ToString("X") + ":" + p.UserData.NumPoints);
-                }
-
-                return new Feature(
-                        new Point(new Position(p.Latitude, p.Longitude)),
-                        p.UserData.Props, id: p.UserData.Index.ToString("X"));
-            }));
-
-            return new MapDashboardResult
-            {
-                FeatureCollection = collection,
-                Bounds = map.Bounds,
-                TotalPoint = map.Total
-            };
         }
 
-        private MapReportCacheLine InitializeSuperCluster(MapDashboardRequest input)
+
+        [HttpPost]
+        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
+            IncreaseBound(input);
+
             var cluster = new SuperCluster();
             var bounds = GeoBounds.Closed;
 
             var gpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
+                input.QuestionnaireId, input.QuestionnaireVersion, 
+                input.ResponsibleId, input.AssignmentId,
+                input.East, input.North, input.West, input.South);
+
+            var assignmentGpsData = this.assignmentsService.GetAssignmentsWithGpsAnswer(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
                 input.ResponsibleId, input.AssignmentId,
                 input.East, input.North, input.West, input.South);
@@ -275,14 +242,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         interviewKey = g.InterviewKey,
                         status = g.Status,
                     });
-            });
-            
-            var assignmentGpsData = this.assignmentsService.GetAssignmentsWithGpsAnswer(
-                input.QuestionnaireId, input.QuestionnaireVersion, 
-                input.ResponsibleId, input.AssignmentId,
-                input.East, input.North, input.West, input.South);
-
-            features = features.Concat(assignmentGpsData.Select(g =>
+            }).Concat(assignmentGpsData.Select(g =>
             {
                 bounds.Expand(g.Latitude, g.Longitude);
                 return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
@@ -291,15 +251,42 @@ namespace WB.UI.Headquarters.Controllers.Api
                         assignmentId = g.AssignmentId,
                         responsibleRole = g.ResponsibleRoleId.ToUserRole(),
                     });
-            }));
+            })).ToList();
 
             cluster.Load(features);
 
-            return new MapReportCacheLine
+            if (input.Zoom == -1)
             {
-                Cluster = cluster,
+                input.Zoom = bounds.ApproximateGoogleMapsZoomLevel(input.ClientMapWidth);
+            }
+
+            var result = cluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
+
+            var collection = new FeatureCollection();
+            collection.Features.AddRange(result.Select(p =>
+            {
+                if (p.UserData.NumPoints > 1)
+                {
+                    var mapMarker = new MapClusterMarker()
+                    {
+                        count = p.UserData.NumPoints,
+                        expand = cluster.GetClusterExpansionZoom(p.UserData.Index),
+                    };
+                    return new Feature(
+                        new Point(new Position(p.Latitude, p.Longitude)),
+                        mapMarker, id: p.UserData.Index.ToString("X") + ":" + p.UserData.NumPoints);
+                }
+
+                return new Feature(
+                        new Point(new Position(p.Latitude, p.Longitude)),
+                        p.UserData.Props, id: p.UserData.Index.ToString("X"));
+            }));
+
+            return new MapDashboardResult
+            {
+                FeatureCollection = collection,
                 Bounds = bounds,
-                Total = gpsAnswers.Length
+                TotalPoint = features.Count
             };
         }
 
@@ -319,7 +306,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 return q.Where(item => 
                         item.QuestionType == QuestionType.GpsCoordinates
-                        //&& item.Featured == true
+                        && item.Featured == true
                         )
                     .Select(item => item.QuestionnaireIdentity)
                     .Distinct().ToList();
@@ -330,13 +317,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                             && questionnaireIds.Contains(x.Id)
                             && (query == null || x.Title.ToLower().Contains(lowerCaseQuery)))
                 .ToList());
-        }
-
-        private class MapReportCacheLine
-        {
-            public SuperCluster Cluster { get; set; }
-            public GeoBounds Bounds { get; set; }
-            public int Total { get; set; }
         }
     }
 }
