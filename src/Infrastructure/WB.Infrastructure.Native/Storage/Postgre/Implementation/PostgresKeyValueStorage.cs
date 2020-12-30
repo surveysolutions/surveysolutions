@@ -1,52 +1,75 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿#nullable enable
+using System;
 using System.Data;
 using Humanizer;
 using WB.Core.Infrastructure.PlainStorage;
 using System.Linq;
+using System.Reflection;
 using Dapper;
+using Npgsql;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal abstract class PostgresKeyValueStorage<TEntity>
         where TEntity : class
     {
-        protected readonly string tableName;
         private readonly IUnitOfWork unitOfWork;
         protected readonly IEntitySerializer<TEntity> serializer;
 
         // ReSharper disable once StaticMemberInGenericType
-        private static readonly ConcurrentDictionary<Type, string> tableNamesMap = new();
+        protected static readonly string TableName;
 
+        // ReSharper disable once StaticMemberInGenericType
+        protected static readonly bool AllowReadFallback = false;
+        
         protected PostgresKeyValueStorage(IUnitOfWork unitOfWork, IEntitySerializer<TEntity> serializer)
         {
             this.unitOfWork = unitOfWork;
             this.serializer = serializer;
+        }
 
-            tableName = tableNamesMap.GetOrAdd(typeof(TEntity),
-                (type) => type.GetInterfaces().Contains(typeof(IStorableEntity))
-                    ? type.BaseType.Name.Pluralize()
-                    : type.Name.Pluralize());
+        static PostgresKeyValueStorage()
+        {
+            var type = typeof(TEntity);
+            TableName = type.GetInterfaces().Contains(typeof(IStorableEntity))
+                    ? type.BaseType?.Name.Pluralize() ?? type.UnderlyingSystemType.Name.Pluralize()
+                    : type.Name.Pluralize();
+
+            var appSetting = type.GetCustomAttribute<AppSettingAttribute>();
+
+            if (appSetting != null)
+            {
+                AllowReadFallback = appSetting.FallbackReadFromPrimaryWorkspace;
+            }
         }
 
         private IDbConnection Connection => this.unitOfWork.Session.Connection;
 
-        public virtual TEntity GetById(string id)
+        public virtual TEntity? GetById(string id)
         {
-            string queryResult = Connection.QueryFirstOrDefault<string>(
-                $"SELECT value FROM {this.tableName} WHERE id = @id", new { id });
+            var connectionBuilder = new NpgsqlConnectionStringBuilder(Connection.ConnectionString);
 
-            if (queryResult != null)
-            {
-                return this.serializer.Deserialize(queryResult);
+            if (AllowReadFallback)
+            { 
+                // this will allow PG to read from default schema. LOCAL - scope set to transaction
+                Connection.Execute($"SET LOCAL search_path = {connectionBuilder.SearchPath},{WorkspaceContext.Default.SchemaName}");
             }
 
-            return null;
+            string queryResult = Connection.QueryFirstOrDefault<string>(
+                $"SELECT value FROM {TableName} WHERE id = @id", new { id });
+
+            if (AllowReadFallback)
+            {
+                Connection.Execute($"SET LOCAL search_path = {connectionBuilder.SearchPath}");
+            }
+
+            return queryResult != null ? this.serializer.Deserialize(queryResult) : null;
         }
 
         public virtual void Remove(string id)
         {
-            int queryResult = Connection.Execute($"DELETE FROM {this.tableName} WHERE id = @id", new { id });
+            int queryResult = Connection.Execute($"DELETE FROM {TableName} WHERE id = @id", new { id });
 
             if (queryResult > 1)
             {
@@ -59,18 +82,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             var serializedValue = this.serializer.Serialize(view);
             Connection.Execute($@"
-                INSERT into {this.tableName} (id, value) Values (@id, @value::jsonb)
+                INSERT into {TableName} (id, value) Values (@id, @value::jsonb)
                 ON CONFLICT (id) DO UPDATE SET value = @value::jsonb", new { id, value = serializedValue });
         }
-
 
         public bool HasNotEmptyValue(string id)
         {
             return Connection.QuerySingle<bool>(
-                $"SELECT exists(select 1 from {this.tableName} where id = @id and value is not null)", 
-                new {id});
+                $"SELECT exists(select 1 from {TableName} where id = @id and value is not null)",
+                new { id });
         }
-        
+
         public virtual string GetReadableStatus() => "Postgres K/V :/";
     }
 }
