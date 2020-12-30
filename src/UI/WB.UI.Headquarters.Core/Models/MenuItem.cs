@@ -51,6 +51,7 @@
         Administration_Diagnostics = 40,
         Workspaces = 47,
         ServerAdministration = 48,
-        MapDashboard = 49,
+        UsersManagement = 49,
+        MapDashboard = 50,
     }
 }

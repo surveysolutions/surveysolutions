@@ -11,9 +11,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         }
 
         [Required]
-        public Guid UserId { get; set; }
+        public Guid[] UserIds { get; set; }
 
         [Required]
         public string[] Workspaces { get; set; }
+
+        public AssignWorkspacesMode Mode { get; set; } = AssignWorkspacesMode.Assign;
     }
 }

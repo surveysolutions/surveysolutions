@@ -114,6 +114,10 @@ module.exports = {
 
         config.devtool("source-map")
 
+        Object.keys(pages).forEach(name => {
+            config.plugins.delete('prefetch-' + name)
+        });
+
         config.plugin("fileManager").use(FileManagerPlugin, [{
             // verbose: true,
             onEnd: { copy: fileTargets }
@@ -145,13 +149,9 @@ module.exports = {
                 locales
             }])
 
-        // config.plugin("notifier")
-        //     .use(WebpackBuildNotifierPlugin)
 
         config.plugin("livereload")
             .use(LiveReloadPlugin, [{ appendScriptTag: true, delay: 1000 }])
-
-        // config.plugins.delete('named-chunks')
 
         config.merge({
             optimization: {

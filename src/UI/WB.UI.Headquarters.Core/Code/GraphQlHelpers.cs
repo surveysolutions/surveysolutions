@@ -1,3 +1,4 @@
+using HotChocolate;
 using HotChocolate.Resolvers;
 
 namespace WB.UI.Headquarters.Code
@@ -6,13 +7,21 @@ namespace WB.UI.Headquarters.Code
     {
         public static string GetWorkspace(this IResolverContext ctx)
         {
-            var workspaceArgument = ctx.Argument<string>("workspace");
-            
+            ctx.Variables.TryGetVariable("workspace", out string workspaceArgument);
+
             if (workspaceArgument == null)
             {
-                ctx.Variables.TryGetVariable("workspace", out workspaceArgument);
+                try
+                {
+                    workspaceArgument = ctx.ArgumentValue<string>("workspace");
+                }
+                catch (GraphQLException)
+                {
+                    // now HotChocolate throws exception instead of null
+                    workspaceArgument = null;
+                }
             }
-
+            
             return workspaceArgument;
         }
     }

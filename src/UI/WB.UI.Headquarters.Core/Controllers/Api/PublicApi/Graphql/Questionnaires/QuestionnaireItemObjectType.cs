@@ -51,9 +51,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Field("options")
                 .Name("options")
-                .Resolver(context =>
-                    context.BatchDataLoader<int, List<CategoricalOption>>
-                    ("optionsByQuestion", async keys =>
+                .Resolver(context => 
+                    context.BatchDataLoader<int, List<CategoricalOption>>(async (keys, token) =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
                         var questions = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
@@ -86,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                 return new List<CategoricalOption>();
                             });
                       
-                    }).LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
+                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
         }
     }
