@@ -108,30 +108,30 @@
                 </div>
                 <div class="row-fluid tooltip-buttons"
                     style="white-space:nowrap;">
-                    <button
+                    <!--button
                         class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'InterviewerAssigned'"
-                        @click="assignInterview">{{ $t("Common.Assign") }}</button>
+                        click="assignInterview">{{ $t("Common.Assign") }}</button-->
                     <button
                         class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
-                        @click="approveSvInterview">{{ $t("Common.Approve")}}</button>
+                        click="approveSvInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-sm reject"
                         v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
-                        @click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
+                        click="rejectSvInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
-                        click="alert('approveHqInterview')">{{ $t("Common.Approve")}}</button>
+                        click="approveHqInterview">{{ $t("Common.Approve")}}</button>
                     <button
                         class="btn btn-sm reject"
                         v-if="model.userRole == 'Headquarter' && (selectedTooltip.status == 'Completed' || selectedTooltip.status == 'ApprovedBySupervisor')"
-                        @click="rejectHqInterview">{{ $t("Common.Reject")}}</button>
+                        click="rejectHqInterview">{{ $t("Common.Reject")}}</button>
                     <button
                         class="btn btn-sm btn-primary"
                         v-if="model.userRole == 'Headquarter' && selectedTooltip.status == 'ApprovedByHeadquarters'"
-                        @click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
+                        click="unapproveInterview">{{ $t("Common.Unapprove")}}</button>
                 </div>
             </div>
 
@@ -167,7 +167,7 @@
                     <button
                         class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Interviewer'"
-                        @click="createInterview">{{ $t("Common.Create") }}</button>
+                        click="createInterview">{{ $t("Common.Create") }}</button>
                 </div>
             </div>
         </div>
@@ -316,31 +316,59 @@ export default {
     methods: {
 
         createInterview() {
-            alert('createInterview')
+            const assignmentId = this.selectedTooltip.assignmentId
+            $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
+                window.location = response
+            })
         },
 
         assignInterview() {
             alert('assignInterview')
         },
 
-        approveSvInterview() {
-            alert('approveSvInterview')
+        async approveSvInterview() {
+            await this.$hq.InterviewsPublicApi.SvApprove(this.selectedTooltip.interviewId)
+            await this.refreshInterviewData()
         },
 
-        approveHqInterview() {
-            alert('approveHqInterview')
+        async approveHqInterview() {
+            await this.$hq.InterviewsPublicApi.HqApprove(this.selectedTooltip.interviewId)
+            await this.refreshInterviewData()
         },
 
-        rejectSvInterview() {
-            alert('rejectSvInterview')
+        async rejectSvInterview() {
+            await this.$hq.InterviewsPublicApi.SvReject(this.selectedTooltip.interviewId)
+            await this.refreshInterviewData()
         },
 
-        rejectHqInterview() {
-            alert('rejectHqInterview')
+        async rejectHqInterview() {
+            await this.$hq.InterviewsPublicApi.HqReject(this.selectedTooltip.interviewId)
+            await this.refreshInterviewData()
         },
 
-        unapproveInterview() {
-            alert('unapproveInterview')
+        async unapproveInterview() {
+            await this.$hq.InterviewsPublicApi.HqUnapprove(this.selectedTooltip.interviewId)
+            await this.refreshInterviewData()
+        },
+
+        async refreshInterviewData() {
+            const self = this
+            const interviewId = this.selectedTooltip.interviewId
+            const marker = this.selectedTooltip.marker
+            const response = await this.api.InteriewSummaryUrl(interviewId)
+            const data = response.data
+
+            if (data != null) {
+                data['interviewId'] = interviewId
+                data['marker'] = marker
+                self.selectedTooltip = data
+
+                Vue.nextTick(function() {
+                    self.infoWindow.setContent($(self.$refs.interviewTooltip).html())
+                })
+            }
+
+            marker.setProperty('status', this.selectedTooltip.status)
         },
 
         setMapCanvasStyle() {
@@ -408,7 +436,8 @@ export default {
         initializeMap() {
             const self = this
 
-            this.map = new google.maps.Map(document.getElementById('map-canvas'), this.getMapOptions())
+            const mapDiv = document.getElementById('map-canvas')
+            this.map = new google.maps.Map(mapDiv, this.getMapOptions())
 
             this.infoWindow = new google.maps.InfoWindow()
 
@@ -596,6 +625,7 @@ export default {
                     if (data != null) {
 
                         data['interviewId'] = interviewId
+                        data['marker'] = event.feature
 
                         self.selectedTooltip = data
 
@@ -616,6 +646,7 @@ export default {
                     const response = await this.api.AssignmentUrl(assignmentId)
                     const data = response.data
                     data['assignmentId'] = assignmentId
+                    data['marker'] = event.feature
 
                     self.selectedTooltip = data
 
@@ -627,6 +658,14 @@ export default {
                         })
                         self.infoWindow.open(self.map)
                     })
+                }
+            })
+
+            google.maps.event.addDomListener(mapDiv, 'click', event => {
+                if (event.srcElement.nodeName == 'BUTTON') {
+                    var methodName = event.srcElement.getAttribute('click')
+                    if (methodName)
+                        self[methodName].call(self)
                 }
             })
 

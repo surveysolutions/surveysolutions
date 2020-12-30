@@ -176,6 +176,68 @@ class MapDashboard {
     }
 }
 
+class InterviewsPublicApi {
+    constructor(http) {
+        this.http = http
+        this.base = 'api/v1/interviews'
+    }
+
+    async SvApprove(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/approve`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async SvReject(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/reject`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async HqApprove(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/hqapprove`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async HqReject(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/hqreject`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async HqUnapprove(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/hqunapprove`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+}
+
 
 class Reports {
     constructor(http, basePath) {
@@ -487,6 +549,10 @@ class HqApiClient {
 
     get Workspaces() {
         return new Workspaces(this.http)
+    }
+
+    get InterviewsPublicApi() {
+        return new InterviewsPublicApi(this.http)
     }
 }
 
