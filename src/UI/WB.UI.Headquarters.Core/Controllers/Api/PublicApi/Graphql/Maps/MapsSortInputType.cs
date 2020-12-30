@@ -1,4 +1,4 @@
-﻿using HotChocolate.Types.Sorting;
+﻿using HotChocolate.Data.Sorting;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
@@ -9,9 +9,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
         {
             descriptor.BindFieldsExplicitly();
             descriptor.Name("MapsSort");
-            descriptor.Sortable(x => x.Id).Name("fileName");
-            descriptor.Sortable(x => x.ImportDate);
-            descriptor.Sortable(x => x.Size);
+            
+            descriptor.Field(x => x.Id).Name("fileName");
+            descriptor.Field(x => x.ImportDate).Name("importDateUtc");
+            descriptor.Field(x => x.Size);
         }
     }
 }

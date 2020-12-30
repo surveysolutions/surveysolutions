@@ -13,6 +13,7 @@
        COUNT(up."Id") TeamSize
 from users.users u
 	inner join users.userprofiles up on u."UserProfileId" = up."Id"
+    inner join workspaces.workspace_users wu on wu.user_id = u."Id" and wu.workspace = @workspace
 -- find last synchronization info
 	LEFT JOIN 
 	(

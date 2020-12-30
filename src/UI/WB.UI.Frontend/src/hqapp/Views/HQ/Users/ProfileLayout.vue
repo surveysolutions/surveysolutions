@@ -73,6 +73,7 @@ export default {
             type: String,
             required: true,
         },
+
     },
     computed:{
         isAdmin() {
@@ -97,6 +98,11 @@ export default {
             return this.isInterviewer
         },
         referrerTitle() {
+            const returnUrl = this.$route.query['returnUrl']
+            if(returnUrl != null) {
+                return this.$t('Dashboard.UsersManagement')
+            }
+
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
                 if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
@@ -111,6 +117,11 @@ export default {
             return this.$config.model.userInfo.canChangeWorkspacesList
         },
         referrerUrl() {
+            const returnUrl = this.$route.query['returnUrl']
+            if(returnUrl != null) {
+                return returnUrl
+            }
+
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return '../../Headquarters'
                 if (this.isSupervisor) return '../../Supervisors'
@@ -127,8 +138,13 @@ export default {
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
                 return baseUrl
-            else
+            else{
+                const returnUrl = this.$route.query['returnUrl']
+                if(returnUrl != null) {
+                    return `${baseUrl}/${this.userId}?returnUrl=${encodeURIComponent(returnUrl)}`
+                }
                 return `${baseUrl}/${this.userId}`
+            }
 
         },
     },

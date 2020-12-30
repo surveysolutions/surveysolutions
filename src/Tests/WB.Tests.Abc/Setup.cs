@@ -279,5 +279,10 @@ namespace WB.Tests.Abc
 
             return questionnaireBrowseItemStorage;
         }
+
+        public static IQueryable<TEntity> GetNhQueryable<TEntity>(this IQueryable<TEntity> source)
+        {
+            return new TestingQueryable<TEntity>(source);
+        }
     }
 }

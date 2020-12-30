@@ -1,51 +1,73 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class AsyncScopedJobDecorator : IJob
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IWorkspacesCache workspacesCache;
+        private readonly ILogger<AsyncScopedJobDecorator> logger;
         private readonly Type jobType;
 
-        public AsyncScopedJobDecorator(IServiceProvider serviceProvider, Type jobType)
+        public AsyncScopedJobDecorator(IInScopeExecutor inScopeExecutor,
+            IWorkspacesCache workspacesCache,
+            ILogger<AsyncScopedJobDecorator> logger,
+            Type jobType)
         {
-            this.serviceProvider = serviceProvider;
+            this.inScopeExecutor = inScopeExecutor;
+            this.workspacesCache = workspacesCache;
+            this.logger = logger;
             this.jobType = jobType;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            using var jobScope = this.serviceProvider.CreateScope();
-            var workspacesService = jobScope.ServiceProvider.GetRequiredService<IWorkspacesCache>();
-            var workspaces = workspacesService.AllEnabledWorkspaces();
-
-            foreach (var workspace in workspaces)
+            if (jobType.GetCustomAttribute<NoWorkspaceJobAttribute>() != null)
             {
-                using var scope = jobScope.ServiceProvider.CreateWorkspaceScope(workspace);
+                await ExecuteJobAsync(context);
+                return;
+            }
 
+            foreach (var workspace in this.workspacesCache.AllEnabledWorkspaces())
+            {
+                await ExecuteJobAsync(context, workspace.Name);
+            }
+        }
+
+        private Task ExecuteJobAsync(IJobExecutionContext context, string? workspace = null)
+        {
+            return inScopeExecutor.ExecuteAsync(async scope =>
+            {
                 try
                 {
-                    using var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-                    var job = scope.ServiceProvider.GetService(jobType) as IJob;
-                    if (job == null)
-                        throw new ArgumentNullException(nameof(job));
+                    var job = scope.GetInstance(jobType) as IJob;
 
+                    if (job == null) throw new ArgumentNullException(nameof(job));
+
+                    logger.LogDebug("Executing job {jobType} in workspace {workspace}",
+                        jobType.Name, workspace);
                     await job.Execute(context);
-                    uow.AcceptChanges();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    var logger = jobScope.ServiceProvider.GetRequiredService<ILogger<AsyncScopedJobDecorator>>();
-                    logger.LogError(e, $"Exception during job {jobType.Name} run in workspace {workspace}");
+                    if (jobType.GetCustomAttribute<RetryFailedJobAttribute>() != null)
+                    {
+                        logger.LogError(e, "Exception during job {jobType} run in workspace {workspace}."
+                                           + " Scheduling for retry", jobType, workspace);
+                        throw new JobExecutionException(e, true);
+                    }
+
+                    logger.LogError(e, "Exception during job {jobType} run in workspace {workspace}", 
+                        jobType, workspace);
                 }
-            }
+            }, workspace);
         }
     }
 }

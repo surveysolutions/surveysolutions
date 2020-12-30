@@ -11,6 +11,7 @@
             abs(extract(epoch from date_trunc('minute', lastSync."SyncDate") - date_trunc('minute', lastSync."DeviceDate"))) / 60 > @minutesMismatch then 1 else 0 end) WrongDateOnTabletCount,
        1 TeamSize
 from users.users u
+    inner join workspaces.workspace_users wu on wu.user_id = u."Id" and wu.workspace = @workspace
 	inner join users.userprofiles up on u."UserProfileId" = up."Id"
 -- find last synchronization info
 	LEFT JOIN 
