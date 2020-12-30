@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Data.Common;
+using System.Data;
 using Humanizer;
-using Npgsql;
-using NpgsqlTypes;
 using WB.Core.Infrastructure.PlainStorage;
 using System.Linq;
+using Dapper;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -13,33 +12,29 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         where TEntity : class
     {
         protected readonly string tableName;
+        private readonly IUnitOfWork unitOfWork;
         protected readonly IEntitySerializer<TEntity> serializer;
 
-        private static readonly ConcurrentDictionary<Type, string> _tableNamesMap = new ConcurrentDictionary<Type, string>();
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly ConcurrentDictionary<Type, string> tableNamesMap = new();
 
-        public PostgresKeyValueStorage(IEntitySerializer<TEntity> serializer)
+        protected PostgresKeyValueStorage(IUnitOfWork unitOfWork, IEntitySerializer<TEntity> serializer)
         {
+            this.unitOfWork = unitOfWork;
             this.serializer = serializer;
 
-            tableName = _tableNamesMap.GetOrAdd(typeof(TEntity),
+            tableName = tableNamesMap.GetOrAdd(typeof(TEntity),
                 (type) => type.GetInterfaces().Contains(typeof(IStorableEntity))
                     ? type.BaseType.Name.Pluralize()
                     : type.Name.Pluralize());
         }
 
+        private IDbConnection Connection => this.unitOfWork.Session.Connection;
+
         public virtual TEntity GetById(string id)
         {
-            string queryResult;
-            using (var command = new NpgsqlCommand())
-            {
-                string commandText = $"SELECT value FROM {this.tableName} WHERE id = :id";
-
-                command.CommandText = commandText;
-                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) {Value = id};
-                command.Parameters.Add(parameter);
-
-                queryResult = (string) this.ExecuteScalar(command);
-            }
+            string queryResult = Connection.QueryFirstOrDefault<string>(
+                $"SELECT value FROM {this.tableName} WHERE id = @id", new { id });
 
             if (queryResult != null)
             {
@@ -49,20 +44,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return null;
         }
 
-        protected abstract object ExecuteScalar(DbCommand command);
-        protected abstract int ExecuteNonQuery(DbCommand command);
-
         public virtual void Remove(string id)
         {
-            int queryResult;
-            using (var command = new NpgsqlCommand())
-            {
-                command.CommandText = $"DELETE FROM {this.tableName} WHERE id = :id";
-                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) {Value = id};
-                command.Parameters.Add(parameter);
-
-                queryResult = this.ExecuteNonQuery(command);
-            }
+            int queryResult = Connection.Execute($"DELETE FROM {this.tableName} WHERE id = @id", new { id });
 
             if (queryResult > 1)
             {
@@ -73,63 +57,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity view, string id)
         {
-            bool entityExists;
-            using (var existsCommand = new NpgsqlCommand())
-            {
-                existsCommand.CommandText = $"SELECT 1 FROM {this.tableName} WHERE id = :id LIMIT 1";
-
-                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) {Value = id};
-
-                existsCommand.Parameters.Add(idParameter);
-
-                object existsResult = this.ExecuteScalar(existsCommand);
-
-                entityExists = existsResult != null;
-            }
-
-            using (var upsertCommand = new NpgsqlCommand())
-            {
-                upsertCommand.CommandText = entityExists
-                    ? $"UPDATE {this.tableName} SET value = :value WHERE id = :id"
-                    : $"INSERT INTO {this.tableName} VALUES(:id, :value)";
-
-                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) {Value = id};
-                var serializedValue = this.serializer.Serialize(view);
-                var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Jsonb) {Value = serializedValue};
-
-                upsertCommand.Parameters.Add(parameter);
-                upsertCommand.Parameters.Add(valueParameter);
-
-                var queryResult = this.ExecuteNonQuery(upsertCommand);
-
-                if (queryResult > 1)
-                {
-                    throw new Exception(
-                        $"Unexpected row count of deleted records. Expected to delete not more than 1 row, but affected {queryResult} number of rows");
-                }
-            }
+            var serializedValue = this.serializer.Serialize(view);
+            Connection.Execute($@"
+                INSERT into {this.tableName} (id, value) Values (@id, @value::jsonb)
+                ON CONFLICT (id) DO UPDATE SET value = @value::jsonb", new { id, value = serializedValue });
         }
+
 
         public bool HasNotEmptyValue(string id)
         {
-            using (var existsCommand = new NpgsqlCommand())
-            {
-                existsCommand.CommandText = $"SELECT 1 FROM {this.tableName} WHERE id = :id AND value IS NOT NULL";
-                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) {Value = id};
-                existsCommand.Parameters.Add(idParameter);
-
-                object existsResult = this.ExecuteScalar(existsCommand);
-
-                return existsResult != null;
-            }
+            return Connection.QuerySingle<bool>(
+                $"SELECT exists(select 1 from {this.tableName} where id = @id and value is not null)", 
+                new {id});
         }
-
-        public void Dispose()
-        {
-        }
-
-        public Type ViewType => typeof(TEntity);
-
+        
         public virtual string GetReadableStatus() => "Postgres K/V :/";
     }
 }
