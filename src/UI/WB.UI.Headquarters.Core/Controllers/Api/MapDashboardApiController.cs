@@ -95,7 +95,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             public override MapMarkerType type => MapMarkerType.Assignment;
 
             public int assignmentId { get; set; }
-            public Guid publicKey { get; set; }
             public UserRoles responsibleRole { get; set; }
         }
 
@@ -124,7 +123,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
         
         [HttpPost]
-        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
+        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
             IncreaseBound(input);
 
@@ -215,7 +214,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
 
         [HttpPost]
-        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
+        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
         {
             IncreaseBound(input);
 
