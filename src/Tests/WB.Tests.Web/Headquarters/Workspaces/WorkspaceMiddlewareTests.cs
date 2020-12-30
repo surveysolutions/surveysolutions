@@ -148,7 +148,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                                                                              (currentWorkspace == null
                                                                                  ? null
                                                                                  : new WorkspaceContext(
-                                                                                     currentWorkspace, String.Empty)));
+                                                                                     currentWorkspace, String.Empty, null)));
 
             result.RequestServices = Mock.Of<IServiceProvider>(
                 x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor 

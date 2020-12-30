@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         Task SaveOrUpdateMapAsync(ExtractedFile map);
         Task<MapBrowseItem> DeleteMap(string map);
+        Task DeleteAllMaps();
         Task<byte[]> GetMapContentAsync(string mapName);
 
         MapBrowseItem DeleteMapUserLink(string map, string user);

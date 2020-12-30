@@ -1128,7 +1128,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public SendInvitationsJob SendInvitationsJob(
-            ILogger logger = null, 
+            ILogger<SendInvitationsJob> logger = null, 
             IInvitationService invitationService = null, 
             IEmailService emailService = null, 
             IInvitationMailingService invitationMailingService = null)
@@ -1137,7 +1137,7 @@ namespace WB.Tests.Abc.TestFactories
             emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
 
             return new SendInvitationsJob(
-                logger ?? Mock.Of<ILogger>(),
+                logger ?? Mock.Of<ILogger<SendInvitationsJob>>(),
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
@@ -1254,7 +1254,7 @@ namespace WB.Tests.Abc.TestFactories
         public IWorkspaceContextAccessor WorkspaceContextAccessor(string workspaceName = "primary")
         {
             return !string.IsNullOrEmpty(workspaceName) 
-                ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == new WorkspaceContext(workspaceName, String.Empty)) 
+                ? Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == new WorkspaceContext(workspaceName, String.Empty, null)) 
                 : new WorkspaceContextAccessor(new WorkspaceContextHolder());
         }
         
@@ -1318,10 +1318,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public WorkspacesService WorkspacesService(IPlainStorageAccessor<Workspace> workspaces)
         {
-            return new WorkspacesService(new UnitOfWorkConnectionSettings(),
+            return new WorkspacesService(
+                new UnitOfWorkConnectionSettings(),
                 Mock.Of<Microsoft.Extensions.Logging.ILoggerProvider>(),
                 workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
+                Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>()
             );
         }

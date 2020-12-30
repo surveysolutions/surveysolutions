@@ -2,20 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB;
-using WB.Core;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
@@ -28,7 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public AudioAuditFileS3Storage(
             IExternalFileStorage externalFileStorage,
             IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor,
-            IWorkspaceContextAccessor workspaceContextAccessor,
             IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             this.externalFileStorage = externalFileStorage ?? throw new ArgumentNullException(nameof(externalFileStorage));

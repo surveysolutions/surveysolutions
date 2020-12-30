@@ -250,6 +250,7 @@ export default {
 
             deleteCalendarEvent(self.$apollo, {
                 'publicKey' : self.calendarEventId,
+                workspace: self.$store.getters.workspace,
             }, self.reload)
         },
 
@@ -275,6 +276,7 @@ export default {
                 newStart : startDate,
                 comment : self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
+                workspace: self.$store.getters.workspace,
             }
 
             addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)

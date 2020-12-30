@@ -16,8 +16,8 @@
             <a href="javascript:void(0);"
                class="dropdown-toggle" data-toggle="dropdown"
                title="@Workspaces.CurrentWorkspace">@workspace.DisplayName <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                @foreach (var w in workspaces)
+            <ul class="dropdown-menu" style="max-height: 400px; overflow: overlay;">
+                @foreach (var w in workspaces.OrderBy(w => w.DisplayName))
                 {
                     
                     <li class="@(workspace.Name == w.Name ? "active" : "")">

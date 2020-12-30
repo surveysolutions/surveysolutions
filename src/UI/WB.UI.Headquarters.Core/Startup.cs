@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -49,6 +50,7 @@ using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.AspNetCore.DataProtection;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
@@ -258,13 +260,20 @@ namespace WB.UI.Headquarters
             services.AddTransient<ObservingNotAllowedActionFilter>();
             services.AddHeadquartersHealthCheck();
 
-            services.AddHttpClientWithConfigurator<IExportServiceApi, ExportServiceApiConfigurator>();
-            services.AddTransient<DesignerRestServiceHandler>();
-            services.AddHttpClientWithConfigurator<IDesignerApi, DesignerApiConfigurator>(new RefitSettings
-            {
-                ContentSerializer = new DesignerContentSerializer()
-            })
-                .ConfigurePrimaryHttpMessageHandler<DesignerRestServiceHandler>();
+            services.AddTransient<ExportServiceApiConfigurator>();
+            
+            services.AddHttpClient();
+            services.AddWorkspaceAwareHttpClient<IExportServiceApi, 
+                ExportServiceApiConfigurator, 
+                ExportServiceApiHttpHandler>();
+
+            services.AddWorkspaceAwareHttpClient<IDesignerApi, 
+                DesignerApiConfigurator,
+                DesignerRestServiceHandler>(new RefitSettings
+                {
+                    ContentSerializer = new DesignerContentSerializer()
+                });
+            
             services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
@@ -324,6 +333,8 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredLength = passwordOptions.RequiredLength;
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
+
+            services.AddMediatR(typeof(Startup));
         }
 
         private static void AddCompression(IServiceCollection services)
@@ -362,6 +373,7 @@ namespace WB.UI.Headquarters
 
                 app.UseHsts();
             }
+
 
             app.UseStaticFiles(new StaticFileOptions
             {

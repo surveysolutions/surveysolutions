@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
     {
         IQueryable<HqUser> Users { get; }
         HqRole FindRole(Guid id);
-        Task<HqUser> FindByIdAsync(Guid userId, CancellationToken cancellationToken = new CancellationToken());
+        Task<HqUser> FindByIdAsync(Guid userId, CancellationToken cancellationToken = default);
         Task<HqUser> FindByNameAsync(string userName, CancellationToken cancellationToken = new CancellationToken());
         HqUser FindById(Guid userId);
         Task<Microsoft.AspNetCore.Identity.IdentityResult> UpdateAsync(HqUser interviewer, CancellationToken cancellationToken = new CancellationToken());
