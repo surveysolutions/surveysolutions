@@ -11,28 +11,29 @@
             abs(extract(epoch from date_trunc('minute', lastSync."SyncDate") - date_trunc('minute', lastSync."DeviceDate"))) / 60 > @minutesMismatch then 1 else 0 end) WrongDateOnTabletCount,
        1 TeamSize
 from users.users u
+    inner join workspaces.workspace_users wu on wu.user_id = u."Id" and wu.workspace = @workspace
 	inner join users.userprofiles up on u."UserProfileId" = up."Id"
 -- find last synchronization info
 	LEFT JOIN 
 	(
 		SELECT dsi1."DeviceDate", dsi1."SyncDate", dsi1."AndroidSdkVersion", dsi1."InterviewerId", dsi1."StorageFreeInBytes"
-		FROM plainstore.devicesyncinfo dsi1
+		FROM devicesyncinfo dsi1
 		INNER JOIN (SELECT dsi."InterviewerId", MAX(dsi."Id") AS maxid
-			    FROM plainstore.devicesyncinfo dsi GROUP BY dsi."InterviewerId") AS p2
+			    FROM devicesyncinfo dsi GROUP BY dsi."InterviewerId") AS p2
 		  ON (dsi1."Id" = p2.maxid)
-		  LEFT JOIN  plainstore.devicesyncstatistics dss on dsi1."StatisticsId" = dss."Id"
+		  LEFT JOIN  devicesyncstatistics dss on dsi1."StatisticsId" = dss."Id"
 		) AS lastSync ON lastSync."InterviewerId" = u."Id" 
 -- find if there was a sync with > 0 uploaded interviews
-LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "UploadedInterviewsCount" > 0)) 
+LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "UploadedInterviewsCount" > 0)) 
 	AS anySync ON anySync."InterviewerId" = u."Id"
 
 -- find how many interviewers have more than 1 tablet
-LEFT JOIN (SELECT "InterviewerId" FROM plainstore.devicesyncinfo dsi 
+LEFT JOIN (SELECT "InterviewerId" FROM devicesyncinfo dsi 
 GROUP BY "InterviewerId"
 HAVING COUNT(DISTINCT "DeviceId") > 1) AS wasReassign ON wasReassign."InterviewerId" = u."Id"
 
 -- find if there was any questionnaire received
-LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM plainstore.devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 
+LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM devicesyncinfo dsi WHERE EXISTS(SELECT 1 FROM devicesyncstatistics WHERE dsi."StatisticsId" = "Id" AND "DownloadedQuestionnairesCount" > 0)) 
 	AS anySyncWithQuestionnaire ON anySyncWithQuestionnaire."InterviewerId" = u."Id"
 
 

@@ -3,15 +3,76 @@
         <DataTables ref="table"
             :tableOptions="tableOptions"
             :contextMenuItems="contextMenuItems"></DataTables>
+
+        <ModalFrame ref="editCalendarModal"
+            :title="$t('Common.EditCalendarEvent')">
+            <form onsubmit="return false;">
+
+                <div class="form-group">
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDate">
+                    </DatePicker>
+                    <div  v-if="dateInPast">
+                        <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"
+                        for="commentsId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea
+                        control-id="commentsId"
+                        v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="6"
+                        maxlength="500"
+                        class="form-control"/>
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    role="confirm"
+                    @click="updateCalendarEvent">
+                    {{ $t("Common.Save") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Cancel") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-danger pull-right"
+                    role="delete"
+                    v-if="calendarEventId != null"
+                    @click="deleteCalendarEvent">
+                    {{ $t("Common.Delete") }}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
-import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
-import {map, join} from 'lodash'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
+import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
+import moment from 'moment-timezone'
+import {map, join, escape } from 'lodash'
 
 export default {
+    data() {
+        return {
+            editCalendarComment: null,
+            newCalendarStart : null,
+            newCalendarStarTimezone : null,
+            calendarEventId : null,
+            calendarAssinmentId : null,
+        }
+    },
+
     computed: {
         title() {
             return this.$config.title
@@ -39,14 +100,44 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
+        selectedDate(){
+            return this.newCalendarStart
+        },
+        datePickerConfig() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+
+                    if(start != null && start != self.newCalendarStart){
+                        self.newCalendarStart = start
+                    }
+                },
+            }
+        },
+        dateInPast(){
+            return moment(this.selectedDate) < moment()
+        },
     },
 
     methods: {
+        reload() {
+            this.$refs.table.reload()
+        },
         contextMenuItems({rowData}) {
             return [
                 {
                     name: this.$t('Assignments.CreateInterview'),
                     callback: () => this.$store.dispatch('createInterview', rowData.id),
+                },
+                {
+                    name: this.$t('Common.EditCalendarEvent'),
+                    className: 'primary-text',
+                    callback: () => this.editCalendarEvent(rowData.id, rowData.calendarEvent),
                 },
             ]
         },
@@ -130,9 +221,65 @@ export default {
                     searchable: false,
                     orderable: true,
                 },
+                {
+                    data: 'calendarEvent',
+                    title: this.$t('Common.CalendarEvent'),
+                    orderable: false,
+                    searchable: false,
+                    render: function(data) {
+                        if(data != null && data.startUtc != null) {
+                            var hasComment = !(data.comment == null || data.comment == '')
+                            return '<span data-toggle="tooltip" title="'
+                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
+                                + '">'
+                                + convertToLocal(data.startUtc, data.startTimezone)
+                                + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
+                                + '</span>'
+                        }
+                        return ''
+                    },
+                    width: '180px',
+                },
             ]
 
             return columns
+        },
+        deleteCalendarEvent() {
+            const self = this
+            this.$refs.editCalendarModal.hide()
+
+            deleteCalendarEvent(self.$apollo, {
+                'publicKey' : self.calendarEventId,
+                workspace: self.$store.getters.workspace,
+            }, self.reload)
+        },
+
+        editCalendarEvent(assignmentId, calendarEvent) {
+            this.calendarAssinmentId = assignmentId
+            this.calendarEventId = calendarEvent?.publicKey
+            this.editCalendarComment = calendarEvent?.comment
+            this.newCalendarStart = calendarEvent?.startUtc
+            this.newCalendarStarTimezone = calendarEvent?.startTimezone
+            this.$refs.editCalendarModal.modal({keyboard: false})
+        },
+        updateCalendarEvent() {
+            const self = this
+
+            this.$refs.editCalendarModal.hide()
+            const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
+
+            const variables = {
+                interviewId : self.calendarInterviewId,
+                interviewKey: self.calendarInterviewKey,
+                assignmentId : self.calendarAssinmentId,
+                publicKey : self.calendarEventId,
+                newStart : startDate,
+                comment : self.editCalendarComment,
+                startTimezone: moment.tz.guess(),
+                workspace: self.$store.getters.workspace,
+            }
+
+            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
         },
     },
 }

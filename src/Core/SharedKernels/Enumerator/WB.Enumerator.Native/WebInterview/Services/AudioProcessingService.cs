@@ -63,10 +63,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.logger.LogDebug("Starting audio audio encoder in {ffmpegHome}", 
                     this.fileStorageConfig.Value.FFmpegExecutablePath);
 
-                var pathToFfmpeg = Path.Combine(this.fileStorageConfig.Value.FFmpegExecutablePath, "ffmpeg");
-                
+                string pathToFfmpeg = this.fileStorageConfig.Value.FFmpegExecutablePath;
+
+                if (!File.Exists(pathToFfmpeg))
+                {
+                    pathToFfmpeg = Path.Combine(this.fileStorageConfig.Value.FFmpegExecutablePath, "ffmpeg");                    
+                }
+
+                if (!File.Exists(pathToFfmpeg))
+                {
+                    pathToFfmpeg = Path.Combine(this.fileStorageConfig.Value.FFmpegExecutablePath, "ffmpeg.exe");
+                }
+
                 var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg
-                    , $"-i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
+                    , $"-hide_banner -i {fullPathForSourceFile} -y -c:a aac -b:a 64k {fullPathForDestFile}");
                 var match = Regex.Match(ffmpegOutput, @"Duration: (\d\d):(\d\d):((\d\d)(\.\d\d)?)");
                 var hours = Int32.Parse(match.Groups[1].Value);
                 var minutes = Int32.Parse(match.Groups[2].Value);

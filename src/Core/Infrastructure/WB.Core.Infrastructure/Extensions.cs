@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Domain;
@@ -11,10 +12,17 @@ namespace WB.Core.Infrastructure
     {
         public static void ExecuteInScope<T>(this IServiceLocator sl, Action<T> action)
         {
-            sl.GetInstance<IInScopeExecutor>().Execute(scope =>
-            {
-                action(scope.GetInstance<T>());
-            });
+            sl.GetInstance<IInScopeExecutor>().Execute(scope => action(scope.GetInstance<T>()));
+        }   
+        
+        public static void ExecuteInScope<T>(this IServiceProvider sl, Action<T> action)
+        {
+            sl.GetService<IInScopeExecutor>().Execute(scope => action(scope.GetInstance<T>()));
+        }        
+        
+        public static TR ExecuteInScope<T, TR>(this IServiceLocator sl, Func<T, TR> action)
+        {
+            return sl.GetInstance<IInScopeExecutor>().Execute(scope => action(scope.GetInstance<T>()));
         }
 
         /// <summary>

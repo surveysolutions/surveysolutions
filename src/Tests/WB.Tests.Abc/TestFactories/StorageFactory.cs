@@ -62,7 +62,8 @@ namespace WB.Tests.Abc.TestFactories
         public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(
             this.UserRepository(users),
             NewMemoryCache(),
-            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
+            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>(),
+            Create.Service.WorkspaceContextAccessor());
 
         public InMemoryEventStore InMemoryEventStore() => new InMemoryEventStore(NewAggregateRootCache());
         
@@ -123,7 +124,7 @@ namespace WB.Tests.Abc.TestFactories
             return storage;
         }
 
-        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository()
         {
             var optionsRepository = new QuestionnaireQuestionOptionsRepository(
                 );
@@ -154,6 +155,8 @@ namespace WB.Tests.Abc.TestFactories
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()))
                 .Returns(questionnaire);
 
+            
+            
             return result.Object;
         }
 

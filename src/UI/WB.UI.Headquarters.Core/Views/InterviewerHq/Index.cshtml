@@ -1,7 +1,6 @@
 ﻿@using WB.UI.Headquarters.Code
 @{
     ViewBag.Title = MainMenu.CreateNew;
-    Layout = @"~/Views/Shared/_AdminLayout.cshtml";
 }
 @section Scripts{
     @Html.RenderHqConfig(new
@@ -10,6 +9,4 @@
         InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
     })
 }
-
-
 <div id="vueApp"></div>

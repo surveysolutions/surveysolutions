@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -35,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public abstract string TabTitle { get; }
         public abstract string TabDescription { get; }
         protected abstract Expression<Func<InterviewView, bool>> GetDbQuery();
+
         protected virtual void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem) { }
 
         protected void UpdateTitle() => this.Title = string.Format(this.TabTitle, this.ItemsCount);
@@ -47,6 +49,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         private IReadOnlyCollection<InterviewView> GetDbItems()
             => this.Principal.IsAuthenticated ? interviewViewRepository.Where(this.GetDbQuery()) : Array.Empty<InterviewView>();
+
+        private InterviewView GetDbItem(Guid interviewId)
+            => interviewViewRepository.GetById(interviewId.FormatGuid());
 
         private int GetDbItemsCount()
             => this.Principal.IsAuthenticated ? this.interviewViewRepository.Count(this.GetDbQuery()) : 0;
@@ -93,6 +98,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
                 yield return interviewDashboardItem;
             }
+        }
+        
+        protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItemWithEvents)
+        {
+            var dashboardItem = (InterviewDashboardItemViewModel) dashboardItemWithEvents;
+
+            var interviewId = dashboardItem.InterviewId;
+            var updatedView = GetDbItem(interviewId);
+            var details = this.identifyingQuestionsRepo
+                .Where(p => p.InterviewId == interviewId)
+                .OrderBy(x => x.SortIndex)
+                .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
+                .ToList();
+
+            var newDashboardItemViewModel = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
+            newDashboardItemViewModel.Init(updatedView, details);
+            return newDashboardItemViewModel;
         }
     }
 }

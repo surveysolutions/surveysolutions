@@ -69,10 +69,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         return GenerateAttachmentUrl(interview.Id, attachment.ContentId);
                     }
 
-                    
                     return MakeNavigationLinkToQuestionOrRoster(text, entityIdentity, questionnaire, interview, virtualDirectoryName) ?? DefaultNavigationLink;
                 }
-
             }
         }
 

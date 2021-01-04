@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -7,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -64,6 +67,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerPrincipal.SaveInterviewer(interviewerIdentity);
         }
 
+        protected override async Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
+            CancellationToken token)
+        {
+            var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
+                .ConfigureAwait(false);
+            return interviewer.Workspaces;
+        }
+
         private async Task<InterviewerIdentity> GenerateInterviewerIdentity(RestCredentials credentials, CancellationToken token)
         {
             var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token)
@@ -79,7 +90,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token,
                 SecurityStamp = interviewer.SecurityStamp,
-                TenantId = tenantId
+                TenantId = tenantId,
+                Workspace = interviewer.Workspaces.First().Name
             };
             return interviewerIdentity;
         }

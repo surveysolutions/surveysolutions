@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using HeaderNames = Microsoft.Net.Http.Headers.HeaderNames;
@@ -72,7 +73,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         {
             var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
                 interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>(),
-                new InMemoryKeyValueStorage<TenantSettings>(),
+                new TestPlainStorage<ServerSettings>(), 
                 Mock.Of<ISecureStorage>());
 
             var defaultHttpContext = new DefaultHttpContext();

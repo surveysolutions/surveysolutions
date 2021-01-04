@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         
         public bool IsExpanded { get; set; }
 
-
         public void Dispose()
         {
         }

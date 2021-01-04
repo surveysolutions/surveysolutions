@@ -34,8 +34,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         [BindProperty]
         public IFormFile? Upload { get; set; }
 
-        [BindProperty]
-        public bool CreateNew { get; set; }
+        [BindProperty] public bool CreateNew { get; set; } = true;
 
         public IActionResult OnPost()
         {

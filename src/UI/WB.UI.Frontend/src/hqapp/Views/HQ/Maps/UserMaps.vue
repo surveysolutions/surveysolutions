@@ -122,23 +122,20 @@ export default {
                     }
 
                     const where = {
-                        AND: [],
+                        and: [],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push({ OR: [
-                            {fileName_starts_with: search.toLowerCase() },
-                            {
-                                users_some:
-                                {
-                                    userName_starts_with: search.toLowerCase(),
-                                }}],
+                        where.and.push({ or: [
+                            {fileName : {startsWith : search.toLowerCase() }},
+                            {users : {some : {userName : {startsWith: search.toLowerCase()}}}},
+                        ],
                         })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 

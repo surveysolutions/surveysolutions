@@ -344,4 +344,16 @@
   <data name="Unknown" xml:space="preserve">
     <value>Не известно</value>
   </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Редактировать календарь</value>
+  </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Календарь</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
 </root>

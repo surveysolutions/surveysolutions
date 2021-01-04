@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private string GetInterviewDirectoryPath(Guid interviewId) => $"images/{interviewId.FormatGuid()}";
         public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
         {
+            if (!interviewIds.Any()) return;
+
             var paths = interviewIds.Select(id => GetInterviewDirectoryPath(id));
             await externalFileStorage.RemoveAsync(paths).ConfigureAwait(false);
         }

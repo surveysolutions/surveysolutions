@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
@@ -34,13 +35,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 var newItems = await Task.Run(this.GetUiItems).ConfigureAwait(false);
 
-                this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
+                this.UiItems.ToList().ForEach(uiItem =>
+                {
+                    if (uiItem is IDashboardItemWithEvents withEvents)
+                        withEvents.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                    uiItem.DisposeIfDisposable();
+                });
 
                 await this.InvokeOnMainThreadAsync(() =>
                 {
                     this.UiItems.ReplaceWith(newItems);
 
                 }, false).ConfigureAwait(false);
+                this.UiItems.ToList().ForEach(item =>
+                {
+                    if (item is IDashboardItemWithEvents withEvents)
+                        withEvents.OnItemUpdated += ListViewModel_OnItemUpdated;
+                });
             }
             finally
             {
@@ -48,6 +59,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
             
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        {
+            if (sender is IDashboardItemWithEvents dashboardItem)
+            {
+                var newDashboardItem = GetUpdatedDashboardItem(dashboardItem);
+                
+                var indexOf = UiItems.IndexOf(dashboardItem);
+                UiItems[indexOf] = newDashboardItem;
+
+                dashboardItem.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                newDashboardItem.OnItemUpdated += ListViewModel_OnItemUpdated;
+            }
+        }
+
+        protected virtual IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
+        {
+            throw new ArgumentException("Need implement this method to refresh dashboard item");
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+
+            this.UiItems.ToList()
+                .Select(i => i as IDashboardItemWithEvents)
+                .ForEach(i => i?.RefreshDataTime());
         }
     }
 }

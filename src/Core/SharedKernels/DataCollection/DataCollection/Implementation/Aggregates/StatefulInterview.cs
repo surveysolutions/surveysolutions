@@ -435,8 +435,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                 };
             }
+            
+            var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section.Children.Where(x => !(x is InterviewTreeVariable)).Select(x => x.Identity);
+            return section.Children
+                .Where(x => isCover || !(x is InterviewTreeVariable))
+                .Select(x => x.Identity);
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
@@ -462,7 +466,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(x => isCover || !(x is InterviewTreeVariable))
                 .Select(x => x.Identity);
         }
-        
+
+        public IEnumerable<Identity> FindEntity(Guid id) => this.Tree.FindEntity(id).Select(i => i.Identity);
 
         public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
             => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);

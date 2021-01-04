@@ -41,7 +41,7 @@ namespace WB.Services.Export.Events
 
         private async Task EnsureMigrated(CancellationToken cancellationToken)
         {
-            var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
+            var tenantDbContext = this.serviceProvider.GetRequiredService<TenantDbContext>();
             await tenantDbContext.EnsureMigrated(cancellationToken);
         }
 
@@ -49,7 +49,7 @@ namespace WB.Services.Export.Events
         {
             await EnsureMigrated(token);
 
-            var tenantDbContext = this.serviceProvider.GetService<TenantDbContext>();
+            var tenantDbContext = this.serviceProvider.GetRequiredService<TenantDbContext>();
             var sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
 
             await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);

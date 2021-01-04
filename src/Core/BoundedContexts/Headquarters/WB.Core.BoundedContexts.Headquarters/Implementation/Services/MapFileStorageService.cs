@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -228,8 +229,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             var valueGdalHome = this.geospatialConfig.Value.GdalHome;
                             this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
                                 fullPath, valueGdalHome);
-                            var startInfo = ConsoleCommand.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, "gdalinfo")
-                                , $"{fullPath} -json");
+                            var startInfo = 
+                                ConsoleCommand.Read(this.fileSystemAccessor.CombinePath(valueGdalHome, 
+                                    "gdalinfo"),
+                                    $"\"{fullPath}\" -json");
                             var deserialized = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
 
                             /*var allX = new List<double>
@@ -296,6 +299,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         }
                         catch (NonZeroExitCodeException e)
                         {
+                            if(!string.IsNullOrEmpty(e.ErrorOutput))
+                                logger.LogError(e.ErrorOutput);
+                            
                             if (e.ProcessExitCode == 4)
                             {
                                 throw new Exception(".tif file is not recognized as map", e);
@@ -318,10 +324,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (externalFileStorage.IsEnabled())
             {
+                this.logger.LogWarning("Deleting map: '{map}' from external storage", mapName);
                 await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(mapName));
             }
             else
             {
+                this.logger.LogWarning("Deleting map: '{map}' from {folder}", mapName, this.mapsFolderPath);
                 var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
 
                 if (this.fileSystemAccessor.IsFileExists(filePath))
@@ -329,6 +337,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             return map;
+        }
+
+        public async Task DeleteAllMaps()
+        {
+            this.logger.LogWarning("Deleting all maps execution started");
+            var maps = await this.mapPlainStorageAccessor.Query(m => m.ToListAsync());
+            
+            foreach (var map in maps)
+            {
+                await this.DeleteMap(map.Id);
+            }
         }
 
         public MapBrowseItem DeleteMapUserLink(string mapName, string user)

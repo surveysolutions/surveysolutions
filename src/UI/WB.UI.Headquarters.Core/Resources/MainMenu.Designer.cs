@@ -241,6 +241,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server Administration.
+        /// </summary>
+        public static string ServerAdministration {
+            get {
+                return ResourceManager.GetString("ServerAdministration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Speed.
         /// </summary>
         public static string Speed {
@@ -363,6 +372,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users {
             get {
                 return ResourceManager.GetString("Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces.
+        /// </summary>
+        public static string Workspaces {
+            get {
+                return ResourceManager.GetString("Workspaces", resourceCulture);
             }
         }
     }
