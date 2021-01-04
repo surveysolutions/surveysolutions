@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
@@ -25,19 +26,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
         private readonly ILogger<WorkspacesService> logger;
         private readonly IUserRepository userRepository;
+        private readonly ISystemLog systemLog;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
             ILoggerProvider loggerProvider, 
             IPlainStorageAccessor<Workspace> workspaces,
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
             IUserRepository userRepository,
-            ILogger<WorkspacesService> logger)
+            ILogger<WorkspacesService> logger, 
+            ISystemLog systemLog)
         {
             this.connectionSettings = connectionSettings;
             this.loggerProvider = loggerProvider;
             this.workspaces = workspaces;
             this.workspaceUsers = workspaceUsers;
             this.logger = logger;
+            this.systemLog = systemLog;
             this.userRepository = userRepository;
         }
 
@@ -65,28 +69,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             return workspaces.Query(_ => _.Select(w => w.AsContext()).ToList());
         }
 
-        public void AssignWorkspaces(HqUser user, List<Workspace> workspaces)
+        public void AssignWorkspaces(HqUser user, List<Workspace> workspacesList)
         {
+            List<string> workspacesRemoved = new ();
+
             foreach (var userWorkspace in user.Workspaces.ToList())
             {
-                var workspaceExists = workspaces.Any(w => Equals(w, userWorkspace.Workspace));
+                var workspaceExists = workspacesList.Any(w => Equals(w, userWorkspace.Workspace));
                 
                 if(!workspaceExists)
                 {
                     this.workspaceUsers.Remove(userWorkspace.Id);
                     user.Workspaces.Remove(userWorkspace);
+                    workspacesRemoved.Add(userWorkspace.Workspace.Name);
                     this.logger.LogInformation("Removed {user} from {workspace}", user.UserName, userWorkspace.Workspace.Name);
                 }
             }
-            
-            foreach (var workspace in workspaces)
+
+            if (workspacesRemoved.Any())
+            {
+                this.systemLog.WorkspaceUserUnAssigned(user.UserName, workspacesRemoved);
+            }
+
+            List<string> workspacesAdded = new();
+
+            foreach (var workspace in workspacesList)
             {
                 var workspaceExists = user.Workspaces.Any(uw => Equals(uw.Workspace, workspace));
                 
                 if (!workspaceExists)
                 {
                     AddUserToWorkspace(user, workspace.Name);
+                    workspacesAdded.Add(workspace.Name);
                 }
+            }
+
+            if (workspacesAdded.Any())
+            {
+                this.systemLog.WorkspaceUserAssigned(user.UserName, workspacesAdded);
             }
         }
 
@@ -123,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         public void AddUserToWorkspace(HqUser user, string workspace)
         {
             Workspace workspaceEntity = workspaces.GetById(workspace) ?? 
-                                        throw new ArgumentException("Workspace not found", nameof(workspace))
+                                        throw new ArgumentException(@"Workspace not found", nameof(workspace))
                                         {
                                             Data =
                                             {
