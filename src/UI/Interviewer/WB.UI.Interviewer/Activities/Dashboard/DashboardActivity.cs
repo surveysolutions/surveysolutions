@@ -60,7 +60,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var notificationsPublisher = Mvx.IoCProvider.Resolve<INotificationPublisher>();
             notificationsPublisher.CancelAllNotifications(this);
         }
-
+        
         protected override void OnCreate(Bundle bundle)
         {
             this.RestoreGoogleApiConnectionIfNeeded();

@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Tests.Abc;
+using WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
@@ -24,7 +25,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task should_sign_in_user_with_new_credentials()
         {
             var newPassword = "new password";
-            var interviewerIdentity = new InterviewerIdentity() { Name = "name", Token = "Outdated token" };
+            var interviewerIdentity = new InterviewerIdentity()
+            {
+                Name = "name",
+                Token = "Outdated token",
+                Workspace = "primary"
+            };
 
             Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             Mock<IUserInteractionService> userInteractionServiceMock = new Mock<IUserInteractionService>();
@@ -33,7 +39,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
             var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
-            principalMock.Setup(x => x.GetInterviewerByName(It.IsAny<string>())).Returns(interviewerIdentity);
+            principalMock
+                .Setup(x => x.GetInterviewerByName(It.IsAny<string>()))
+                .Returns(interviewerIdentity);
             
             userInteractionServiceMock
                 .Setup(x => x.ConfirmWithTextInputAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
@@ -43,14 +51,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.LoginAsync(
                     It.IsAny<LogonInfo>(),
                     It.IsAny<RestCredentials>(), default))
-                .Returns(Task.FromResult("new token"));
+                .ReturnsAsync("new token");
 
             synchronizationServiceMock
-                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == interviewerIdentity.Token), null, It.IsAny<CancellationToken>()))
-                .Throws(new SynchronizationException(type: SynchronizationExceptionType.Unauthorized, message: "Test unauthorized", innerException: null));
+                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == interviewerIdentity.Token), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new SynchronizationException(type: SynchronizationExceptionType.Unauthorized, message: "Test unauthorized", innerException: null));
 
             synchronizationServiceMock
-                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == "new token"), null, It.IsAny<CancellationToken>()))
+                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == "new token"), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
             passwordHasherMock
@@ -71,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 passwordHasher: passwordHasherMock.Object);
 
             // Act
-            await viewModel.SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await viewModel.SynchronizeAsync(new Progress<SyncProgressInfo>(), default);
 
             // Assert
 

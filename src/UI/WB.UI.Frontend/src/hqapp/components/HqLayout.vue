@@ -1,5 +1,6 @@
 <template>
-    <main :class="mainClass">
+    <main :class="mainClass"
+        :data-suso="tag">
         <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" >
             <div :class="{ 'row' : hasRow }">
                 <slot name="filters" />
@@ -50,6 +51,7 @@ export default {
             type: Boolean,
             default() { return true },
         },
+        tag: String,
         hasFilter: {
             type: Boolean,
             default() { return false },

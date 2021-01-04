@@ -88,14 +88,15 @@ export default {
                 {
                     self.$apollo.mutate({
                         mutation: gql`
-                                mutation deleteUserFromMap($fileName: String!, $userName: String!) {
-                                    deleteUserFromMap(fileName: $fileName, userName: $userName) {
+                                mutation deleteUserFromMap($workspace: String!, $fileName: String!, $userName: String!) {
+                                    deleteUserFromMap(workspace: $workspace, fileName: $fileName, userName: $userName) {
                                         fileName
                                     }
                                 }`,
                         variables: {
                             'fileName' : fileName,
                             'userName': userName,
+                            workspace: self.$store.getters.workspace,
                         },
                     }).then(response => {
                         self.$refs.table.reload()
@@ -128,8 +129,8 @@ export default {
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
 
-                    const query = gql`query ($fileName: String!) {
-                                        maps(where: {fileName: $fileName}) {
+                    const query = gql`query ($workspace: String!, $fileName: String!) {
+                                        maps(workspace: $workspace, where: {fileName: $fileName}) {
                                             nodes {
                                                 users {
                                                     userName
@@ -142,6 +143,7 @@ export default {
                         query,
                         variables: {
                             'fileName' : self.$config.model.fileName,
+                            workspace: self.$store.getters.workspace,
                         },
                         fetchPolicy: 'network-only',
                     }).then(response => {

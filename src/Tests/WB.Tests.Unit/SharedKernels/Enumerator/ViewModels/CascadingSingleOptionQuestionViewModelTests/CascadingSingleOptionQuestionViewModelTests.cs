@@ -12,11 +12,10 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
-using Range = Moq.Range;
 
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
@@ -260,6 +259,51 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
             combo.FilterText.Should().BeNullOrEmpty();
             combo.AutoCompleteSuggestions.Should().BeEmpty();
+        }
+
+        [Test]
+        public void when_initializing_answered_question_should_set_filter_text_to_answer()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                children: new IComposite[]
+                {
+                    Create.Entity.SingleQuestion(id: parentIdentity.Id, options: new List<Answer>
+                    {
+                        Create.Entity.Answer("one", 1),
+                        Create.Entity.Answer("one", 2)
+                    }),
+                    Create.Entity.SingleQuestion(id: questionIdentity.Id, cascadeFromQuestionId: parentIdentity.Id,
+                        options: Options.Select(x => Create.Entity.Answer(x.Title, x.Value, x.ParentValue)).ToList())
+                }
+            );
+
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 1,
+                questionOptionsRepository: new QuestionnaireQuestionOptionsRepository());
+
+            var questionnaireRepository = Create.Storage.QuestionnaireStorage(plainQuestionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(interviewGuid,
+                questionnaireRepository: questionnaireRepository
+                );
+
+            interview.AnswerSingleOptionQuestion(userId, parentIdentity.Id, RosterVector.Empty, 
+                DateTimeOffset.Now, 1);
+            interview.AnswerSingleOptionQuestion(userId, questionIdentity.Id, RosterVector.Empty,
+                DateTimeOffset.Now, 1);
+
+
+            SetUp();
+            var cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
+                interviewRepository: Create.Storage.InterviewRepository(interview),
+                questionnaireRepository: questionnaireRepository);
+
+            //act
+            cascadingModel.Init(interviewGuid.FormatGuid(), Create.Identity(questionIdentity.Id), navigationState);
+
+            var autocompleteViewModel = cascadingModel.Children.OfType<CategoricalComboboxAutocompleteViewModel>()
+                .FirstOrDefault();
+
+            Assert.That(autocompleteViewModel,
+                Has.Property(nameof(CategoricalComboboxAutocompleteViewModel.FilterText)).Not.Null.Or.Empty);
         }
 
         [Test]
@@ -603,9 +647,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var interviewRepository = Create.Storage.InterviewRepository(StatefulInterviewMock.Object);
 
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire();
 
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion(optionsRepository);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
             var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>()
             {

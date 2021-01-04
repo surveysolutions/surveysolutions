@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.LifeCycle;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 
@@ -121,6 +122,27 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
         }
 
         [Test]
+        public void should_not_refresh_variable_without_cover_page_support()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.Variable(Id.Identity2.Id)
+            });
+
+            var localInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: true);
+            var localHubMock = new Mock<IWebInterviewInvoker>();
+
+            var service = Web.Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview),
+                Create.Storage.QuestionnaireStorage(questionnaire), localHubMock.Object);
+
+            // act
+            Assert.DoesNotThrow(() => service.RefreshEntities(localInterview.Id, Id.Identity2));
+
+            // Assert
+            localHubMock.Verify(g => g.RefreshEntities(localInterview.Id.FormatGuid(), new [] { Id.Identity2.ToString() }), Times.Never);
+        }
+
+        [Test]
         public void should_refresh_section_when_cascading_with_showAsList()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -153,13 +175,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             });
 
             var localInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: true);
-            var localHubMock = new Mock<IWebInterviewInvoker>();
 
-            var service = Web.Create.Service.WebInterviewNotificationService(Create.Storage.InterviewRepository(localInterview),
-                Create.Storage.QuestionnaireStorage(questionnaire), localHubMock.Object);
-
+            var service = new WebInterviewNotificationBuilder(Create.Storage.QuestionnaireStorage(questionnaire),
+                Create.Storage.InterviewRepository(localInterview));
             // act
-            Assert.DoesNotThrow(() => service.RefreshLinkedToListQuestions(localInterview.Id, new[] { Id.Identity3 }));
+            Assert.DoesNotThrow(() => service.RefreshLinkedToListQuestions(new InterviewLifecycle(), localInterview.Id, Id.Identity3));
         }
     }
 }

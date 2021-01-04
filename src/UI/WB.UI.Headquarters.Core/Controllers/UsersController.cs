@@ -15,10 +15,13 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
@@ -128,6 +131,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator)]
+        public async Task<ActionResult> Workspaces(Guid id)
+        {
+            var user = await this.userManager.FindByIdAsync(id.FormatGuid());
+            if (user == null) 
+                return NotFound();
+
+            var userInfo = await GetUserInfo(user);
+            return View(userInfo);
+        }
+        
+        [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
@@ -171,6 +186,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private async Task<dynamic> GetUserInfo(HqUser user)
         {
+            UserRoles userRole = user.Roles.First().Id.ToUserRole();
             return new
             {
                 UserInfo = new
@@ -184,13 +200,13 @@ namespace WB.UI.Headquarters.Controllers
                     PersonName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     UserName = user.UserName,
-                    Role = user.Roles.FirstOrDefault().Id.ToUserRole().ToString(),
+                    Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
                     CanBeLockedAsHeadquarters = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
-
+                    CanChangeWorkspacesList = authorizedUser.IsAdministrator && (userRole == UserRoles.Headquarter || userRole == UserRoles.ApiUser),
                     RecoveryCodes = ""
                 },
                 Api = new
@@ -408,7 +424,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();

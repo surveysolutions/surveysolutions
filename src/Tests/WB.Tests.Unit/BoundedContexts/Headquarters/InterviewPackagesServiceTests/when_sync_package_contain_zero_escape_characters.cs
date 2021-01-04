@@ -13,7 +13,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
@@ -51,19 +50,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             packageStore.Setup(x => x.Query(It.IsAny<Func<IQueryable<ReceivedPackageLogEntry>, ReceivedPackageLogEntry>>())).Returns((ReceivedPackageLogEntry)null);
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>()).Returns(packageStore.Object);
-            serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator> ()).Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
-            
-            var executor = new Mock<IInScopeExecutor>();
-            executor.Setup(x => x.Execute(It.IsAny<Action<IServiceLocator>>())).Callback(
-                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator>()).Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
-            InScopeExecutor.Init(executor.Object);
+            var executor = new NoScopeInScopeExecutor(serviceLocatorNestedMock.Object);
 
-           var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
-                // Act
-                service.ProcessPackage(Create.Entity.InterviewPackage(Guid.NewGuid(),
-                    Create.Event.TextQuestionAnswered(answer: new string(new[] { 'a', '\0', '1' }))));
-           
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object,
+                inScopeExecutor: executor);
+
+            // Act
+            service.ProcessPackage(Create.Entity.InterviewPackage(Guid.NewGuid(),
+                Create.Event.TextQuestionAnswered(answer: new string(new[] { 'a', '\0', '1' }))));
+
             // Assert
             Assert.That(syncCommand, Is.Not.Null);
             Assert.That(syncCommand.SynchronizedEvents[0].Payload, Has.Property(nameof(TextQuestionAnswered.Answer)).EqualTo("a1"));

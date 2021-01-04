@@ -67,36 +67,93 @@
             ref="confirmDiscard"
             id="discardConfirm"
             slot="modals">{{ $t("Pages.InterviewerHq_DiscardConfirm") }}</Confirm>
+
+        <ModalFrame ref="editCalendarModal"
+            :title="$t('Common.EditCalendarEvent')">
+            <form onsubmit="return false;">
+
+                <div class="form-group">
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDate">
+                    </DatePicker>
+                    <div  v-if="dateInPast">
+                        <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"
+                        for="commentsId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea
+                        control-id="commentsId"
+                        v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="6"
+                        maxlength="500"
+                        class="form-control"/>
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    role="confirm"
+                    @click="updateCalendarEvent">
+                    {{ $t("Common.Save") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Cancel") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-danger pull-right"
+                    role="delete"
+                    v-if="calendarEventId != null"
+                    @click="deleteCalendarEvent">
+                    {{ $t("Common.Delete") }}</button>
+            </div>
+        </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
-import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
-import {map, join, toNumber, filter} from 'lodash'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
+import moment from 'moment-timezone'
+import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
+import {map, join, toNumber, filter, escape} from 'lodash'
 import gql from 'graphql-tag'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
-  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewFilter) {
+  interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     nodes {
       id
       key
       assignmentId
-      updateDate
+      updateDateUtc
       status
       receivedByInterviewerAtUtc
       actionFlags
-      identifyingQuestions {
-        question {
+      calendarEvent {
+          publicKey
+          comment
+          startUtc
+          startTimezone
+      }
+      identifyingData {
+        entity {
           questionText
           label
         }
-        answer
+        value
       }
     }
   }
@@ -109,6 +166,13 @@ export default {
             questionnaireId: null,
             questionnaireVersion: null,
             assignmentId: null,
+            editCalendarComment: null,
+            newCalendarStart : null,
+            newCalendarStarTimezone : null,
+            calendarEventId : null,
+            calendarInterviewId : null,
+            calendarInterviewKey : null,
+            calendarAssinmentId : null,
             draw: 0,
         }
     },
@@ -142,17 +206,17 @@ export default {
             const and = []
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                and.push({questionnaireId: {eq : this.where.questionnaireId.replaceAll('-','')}})
 
                 if(this.where.questionnaireVersion) {
-                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                    and.push({questionnaireVersion: {eq : this.where.questionnaireVersion}})
                 }
             }
             if(this.where.assignmentId){
-                and.push({assignmentId: this.where.assignmentId})
+                and.push({assignmentId: {eq : this.where.assignmentId}})
             }
 
-            and.push({ status_in: this.$config.model.statuses})
+            and.push({ status : {in: this.$config.model.statuses}})
 
             return and
         },
@@ -176,27 +240,26 @@ export default {
                         order: order,
                         skip: data.start,
                         take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
-                        AND: [...self.whereQuery],
+                        and: [...self.whereQuery],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push(
+                        where.and.push(
                             {
-                                OR: [
-                                    { key_starts_with: search.toLowerCase() },
-                                    { identifyingQuestions_some: {
-                                        valueLowerCase_starts_with: search.toLowerCase(),
-                                    },
-                                    }],
+                                or: [
+                                    { key: {startsWith: search.toLowerCase()}},
+                                    { identifyingData: {some: {valueLowerCase: {startsWith: search.toLowerCase()}}}},
+                                ],
                             })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 
@@ -230,6 +293,28 @@ export default {
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
         },
+        selectedDate(){
+            return this.newCalendarStart
+        },
+        datePickerConfig() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+
+                    if(start != null && start != self.newCalendarStart){
+                        self.newCalendarStart = start
+                    }
+                },
+            }
+        },
+        dateInPast(){
+            return moment(this.selectedDate) < moment()
+        },
     },
 
     methods: {
@@ -246,6 +331,48 @@ export default {
             this.$refs.table.reload()
         },
 
+        editCalendarEvent(interviewId, interviewKey, assignmentId, calendarEvent) {
+            this.calendarInterviewId = interviewId
+            this.calendarInterviewKey = interviewKey
+            this.calendarAssinmentId = assignmentId
+            this.calendarEventId = calendarEvent?.publicKey
+            this.editCalendarComment = calendarEvent?.comment
+            this.newCalendarStart = calendarEvent?.startUtc
+            this.newCalendarStarTimezone = calendarEvent?.startTimezone
+            this.$refs.editCalendarModal.modal({keyboard: false})
+        },
+
+        updateCalendarEvent() {
+            const self = this
+
+            this.$refs.editCalendarModal.hide()
+
+            const startDate = moment(self.newCalendarStart).format('YYYY-MM-DD[T]HH:mm:ss.SSSZ')
+
+            const variables = {
+                interviewId : self.calendarInterviewId,
+                interviewKey: self.calendarInterviewKey,
+                assignmentId : self.calendarAssinmentId,
+                publicKey : self.calendarEventId,
+                newStart : startDate,
+                comment : self.editCalendarComment,
+                startTimezone: moment.tz.guess(),
+                workspace: self.$store.getters.workspace,
+            }
+
+            addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
+
+        },
+        deleteCalendarEvent() {
+            const self = this
+            this.$refs.editCalendarModal.hide()
+
+            deleteCalendarEvent(self.$apollo, {
+                'publicKey' : self.calendarEventId,
+                workspace: self.$store.getters.workspace,
+            }, self.reload)
+
+        },
         contextMenuItems({rowData, rowIndex}) {
             const menu = []
             const self = this
@@ -275,6 +402,14 @@ export default {
                     },
                 })
             }
+
+            const canCalendarBeEdited =  rowData.actionFlags.indexOf('CANBEOPENED') >= 0
+            menu.push({
+                name: self.$t('Common.EditCalendarEvent'),
+                className: canCalendarBeEdited ? 'primary-text' : '',
+                callback: () => self.editCalendarEvent(rowData.id, rowData.key, rowData.assignmentId, rowData.calendarEvent),
+                disabled: !canCalendarBeEdited,
+            })
 
             return menu
         },
@@ -323,6 +458,7 @@ export default {
         },
 
         getTableColumns() {
+            const self = this
             const columns = [
                 {
                     data: 'key',
@@ -341,7 +477,7 @@ export default {
                     width: '50px',
                 },
                 {
-                    data: 'identifyingQuestions',
+                    data: 'identifyingData',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
@@ -349,17 +485,17 @@ export default {
                     render(data) {
                         const delimiter = self.mode == 'dense'
 
-                        var questionsWithTitles = map(filter(data, d => d.answer != null && d.answer != ''), node => {
-                            return `${sanitizeHtml(node.question.label || node.question.questionText)}: <strong>${node.answer}</strong>`
+                        var entitiesWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
                         })
 
-                        const dom = join(questionsWithTitles, ', ')
+                        const dom = join(entitiesWithTitles, ', ')
                         return dom
                     },
                     responsivePriority: 4,
                 },
                 {
-                    data: 'updateDate',
+                    data: 'updateDateUtc',
                     title: this.$t('Assignments.UpdatedAt'),
                     searchable: false,
                     render(data) {
@@ -367,6 +503,25 @@ export default {
                             .utc(data)
                             .local()
                             .format(DateFormats.dateTimeInList)
+                    },
+                    width: '180px',
+                },
+                {
+                    data: 'calendarEvent',
+                    title: this.$t('Common.CalendarEvent'),
+                    orderable: false,
+                    searchable: false,
+                    render: function(data) {
+                        if(data != null && data.startUtc != null) {
+                            var hasComment = !(data.comment == null || data.comment == '')
+                            return '<span data-toggle="tooltip" title="'
+                                + ( hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
+                                + '">'
+                                + convertToLocal(data.startUtc, data.startTimezone)
+                                + ( hasComment ? ('<br/>' + escape(data.comment)).replaceAll('\n', '<br/>') : '')
+                                + '</span>'
+                        }
+                        return ''
                     },
                     width: '180px',
                 },

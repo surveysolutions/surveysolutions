@@ -95,7 +95,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     credentials: new RestCredentials
                     {
                         Login = this.userIdentityToRelink.Name,
-                        Token = this.userIdentityToRelink.Token
+                        Token = this.userIdentityToRelink.Token,
+                        Workspace = this.userIdentityToRelink.Workspace
                     },
                     token: this.cancellationTokenSource.Token).ConfigureAwait(false);
 

@@ -34,6 +34,13 @@
                             v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
                     </li>
                     <li class="nav-item"
+                        v-if="showWorkspaces"
+                        v-bind:class=" {'active': currentTab == 'workspaces'}" >
+                        <a class="nav-link"
+                            id="profile"
+                            v-bind:href="getUrl(`../../Users/Workspaces`)">{{$t('Workspaces.UserWorkspacesTab')}}</a>
+                    </li>
+                    <li class="nav-item"
                         v-bind:class="{'active': currentTab=='password'}">
                         <a class="nav-link"
                             id="password"
@@ -66,6 +73,7 @@ export default {
             type: String,
             required: true,
         },
+
     },
     computed:{
         isAdmin() {
@@ -90,6 +98,11 @@ export default {
             return this.isInterviewer
         },
         referrerTitle() {
+            const returnUrl = this.$route.query['returnUrl']
+            if(returnUrl != null) {
+                return this.$t('Dashboard.UsersManagement')
+            }
+
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return this.$t('Pages.Profile_HeadquartersList')
                 if (this.isSupervisor) return this.$t('Pages.Profile_SupervisorsList')
@@ -100,7 +113,15 @@ export default {
 
             return this.$t('Pages.Home')
         },
+        showWorkspaces() {
+            return this.$config.model.userInfo.canChangeWorkspacesList
+        },
         referrerUrl() {
+            const returnUrl = this.$route.query['returnUrl']
+            if(returnUrl != null) {
+                return returnUrl
+            }
+
             if (!this.isOwnProfile) {
                 if (this.isHeadquarters) return '../../Headquarters'
                 if (this.isSupervisor) return '../../Supervisors'
@@ -117,8 +138,13 @@ export default {
         getUrl: function(baseUrl){
             if(this.isOwnProfile)
                 return baseUrl
-            else
-                return baseUrl + '/' + this.userId
+            else{
+                const returnUrl = this.$route.query['returnUrl']
+                if(returnUrl != null) {
+                    return `${baseUrl}/${this.userId}?returnUrl=${encodeURIComponent(returnUrl)}`
+                }
+                return `${baseUrl}/${this.userId}`
+            }
 
         },
     },

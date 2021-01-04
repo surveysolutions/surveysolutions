@@ -29,7 +29,7 @@ namespace WB.Services.Export.InterviewDataStorage
         public string GenerateCreateSchema(TenantInfo tenant)
         {
             var schemaName = tenant.SchemaName();
-            return $@"CREATE SCHEMA IF NOT EXISTS ""{schemaName}""; COMMENT ON SCHEMA ""{schemaName}"" IS '{tenant.Name}';";
+            return $@"CREATE SCHEMA IF NOT EXISTS ""{schemaName}""; COMMENT ON SCHEMA ""{schemaName}"" IS '{tenant.ShortName}';";
         }
 
         public string GenerateDropTable(string tableName)

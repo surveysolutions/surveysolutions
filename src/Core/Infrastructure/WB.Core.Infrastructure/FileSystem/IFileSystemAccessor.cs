@@ -36,6 +36,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void WriteAllBytes(string pathToFile, byte[] content);
         Task WriteAllBytesAsync(string pathToFile, byte[] content);
         byte[] ReadHash(string pathToFile);
+        byte[] ReadHash(Stream fileContent);
         bool IsHashValid(byte[] fileContent, byte[] hash);
         byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null);
         string ReadAllText(string pathToFile);

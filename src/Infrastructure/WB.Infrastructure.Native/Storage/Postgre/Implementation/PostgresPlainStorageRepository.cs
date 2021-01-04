@@ -8,7 +8,8 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
+    internal class PostgresPlainStorageRepository<TEntity> 
+        : IPlainStorageAccessor<TEntity> where TEntity : class
     {
         private readonly IUnitOfWork unitOfWork;
 
