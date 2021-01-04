@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             
             var result = await exportServiceApi.DownloadArchive(jobId, archiveFileName);
             
-            if (result.StatusCode == HttpStatusCode.NotFound) return null;
+            if (result.StatusCode == HttpStatusCode.NotFound 
+                || result.Content.Headers.ContentDisposition == null) return null;
 
             result.EnsureSuccessStatusCode();
 
