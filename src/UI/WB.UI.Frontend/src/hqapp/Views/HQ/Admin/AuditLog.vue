@@ -39,6 +39,7 @@ export default {
                     {
                         data: 'type',
                         name: 'Type',
+                        orderable: false,
                         width: '10%',
                         title: this.$t('AuditLog.EventType'),
                     },
