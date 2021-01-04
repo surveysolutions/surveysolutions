@@ -8,6 +8,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.Infrastructure.Domain;
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
                  questionnaireViewFactory.Object.AsNoScopeExecutor(),
                  executor,
                  exportApi.Object.AsNoScopeExecutor(),
-                 scheduler.Object);
+                 scheduler.Object, Mock.Of<ISystemLog>());
 
             StoreWorkspaces(Workspace);
         }

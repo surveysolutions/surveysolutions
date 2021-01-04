@@ -24,6 +24,7 @@ export default {
                     {
                         data: 'logDate',
                         name: 'LogDate',
+                        width: '20%',
                         title: this.$t('AuditLog.LogDate'),
                         render: function(data) {
                             return self.formatUtcDate(data)
@@ -32,11 +33,13 @@ export default {
                     {
                         data: 'userName',
                         name: 'UserName',
+                        width: '10%',
                         title: this.$t('AuditLog.User'),
                     },
                     {
                         data: 'type',
                         name: 'Type',
+                        width: '10%',
                         title: this.$t('AuditLog.EventType'),
                     },
                     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
@@ -6,19 +7,22 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 {
     public class SystemLog : ISystemLog
     {
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IInScopeExecutor<IPlainStorageAccessor<SystemLogEntry>> inScopeExecutor;
+        private readonly ILogger logger;
 
-        public SystemLog(IAuthorizedUser authorizedUser, IInScopeExecutor inScopeExecutor)
+        public SystemLog(IAuthorizedUser authorizedUser, 
+            IInScopeExecutor<IPlainStorageAccessor<SystemLogEntry>> inScopeExecutor,
+            ILogger logger)
         {
             this.authorizedUser = authorizedUser;
             this.inScopeExecutor = inScopeExecutor;
+            this.logger = logger;
         }
 
         public void ExportStared(string processName, DataExportFormat format)
@@ -69,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 $"User {this.authorizedUser.UserName} has archived interviewer account {interviewerName}");
 
         public void InterviewerUnArchived(string interviewerName)
-            => this.Append(LogEntryType.InterviewerUnArchived, "Interviewer", "Unarhive",
+            => this.Append(LogEntryType.InterviewerUnArchived, "Interviewer", "Unarchive",
                 $"User {this.authorizedUser.UserName} has unarchived interviewer account {interviewerName}");
 
         public void SupervisorArchived(string supervisorName)
@@ -77,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 $"User {this.authorizedUser.UserName} has archived interviewer account {supervisorName}");
 
         public void SupervisorUnArchived(string supervisorName)
-            => this.Append(LogEntryType.SupervisorUnarchived, "Supervisor", "Unarhive",
+            => this.Append(LogEntryType.SupervisorUnarchived, "Supervisor", "Unarchive",
                 $"User {this.authorizedUser.UserName} has unarchived interviewer account {supervisorName}");
 
         public void UserCreated(UserRoles role, string userName)
@@ -100,6 +104,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
+        public void WorkspaceCreated(string workspaceName, string displayName)
+        {
+            this.Append(LogEntryType.WorkspaceCreated, "workspace", workspaceName, displayName);
+        }
+
+        public void WorkspaceUpdated(string workspaceName, string oldName, string newName)
+        {
+            this.Append(LogEntryType.WorkspaceUpdated, workspaceName, oldName, newName);
+        }
+
+        public void WorkspaceDeleted(string workspaceName)
+        {
+            this.Append(LogEntryType.WorkspaceDeleted, "workspace", workspaceName);
+        }
+
+        public void WorkspaceEnabled(string workspaceName)
+        {
+            this.Append(LogEntryType.WorkspaceEnabled, "workspace", workspaceName);
+        }
+
+        public void WorkspaceDisabled(string workspaceName)
+        {
+            this.Append(LogEntryType.WorkspaceDisabled, "workspace", workspaceName);
+        }
+
+        public void WorkspaceUserAssigned(string userName, ICollection<string> workspaces)
+        {
+            this.Append(LogEntryType.WorkspaceUserAssigned,userName, string.Join(", ", workspaces));
+        }
+
+        public void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces)
+        {
+            this.Append(LogEntryType.WorkspaceUserUnAssigned, userName, string.Join(", ", workspaces));
+        }
+
         private void Append(LogEntryType type, string target, string action, string args = null, string responsibleName = null, Guid? responsibleUserId = null)
         {
             AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
@@ -110,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
         {
-            inScopeExecutor.Execute(serviceLocator =>
+            inScopeExecutor.Execute(systemLogStorage =>
             {
                 var logEntry = new SystemLogEntry
                 {
@@ -121,14 +160,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                     Log = log
                 };
 
-                var systemLogStorage = serviceLocator.GetInstance<IPlainStorageAccessor<SystemLogEntry>>();
                 try
                 {
                     systemLogStorage.Store(logEntry, logEntry.Id);
                 }
                 catch (Exception e)
                 {
-                    serviceLocator.GetInstance<ILogger>().Error("Error on system log writing", e);
+                    logger.Error("Error on system log writing", e);
                 }
             });
         }
