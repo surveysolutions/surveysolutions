@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var columnList = userImportService.GetUserProperties();
 
             Assert.That(columnList,
-                Is.EqualTo(new[] {"login", "password", "role", "supervisor", "fullname", "email", "phonenumber"}));
+                Is.EqualTo(new[] { "login", "password", "role", "supervisor", "fullname", "email", "phonenumber" }));
         }
 
         [Test]
@@ -98,7 +98,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userName = "nastya";
 
             var userImportService = CreateUserImportService(
-                new[] {Create.Entity.HqUser(userName: userName)},
+                new[]
+                {
+                    Create.Entity.HqUser(userName: userName)
+                },
                 Create.Entity.UserToImport(userName));
 
             //act
@@ -122,7 +125,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Create.Entity.UserToImport(userName), Create.Entity.UserToImport(userName));
 
             //act
-            var errors = userImportService.VerifyAndSaveIfNoErrors(new MemoryStream(new byte[0]), "file.txt").ToArray();
+            var errors = userImportService.VerifyAndSaveIfNoErrors(
+                new MemoryStream(new byte[0]), "file.txt").ToArray();
 
             //assert
             Assert.AreEqual(2, errors.Length);
@@ -135,6 +139,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             Assert.AreEqual(3, errors[1].RowNumber);
             Assert.AreEqual("Login", errors[1].ColumnName);
             Assert.AreEqual(userName, errors[1].CellValue);
+        }
+
+        [Test]
+        public void When_interviewer_preloaded_with_supervisor_from_another_workspace_Then_record_verification_error_with_code_PLU0010()
+        {
+            //arrange
+            var userName = "nastya";
+            var supervisor = "arena";
+            
+            var userImportService = CreateUserImportService(new[]
+                {
+                    Create.Entity.HqUser(userName: supervisor, role: UserRoles.Supervisor, workspaces: new [] {"quake"})
+                }, Create.Entity.UserToImport(userName, supervisor: supervisor, role: "Interviewer")
+            );
+
+            //act
+            var errors = userImportService.VerifyAndSaveIfNoErrors(
+                new MemoryStream(new byte[0]), "file.txt").ToArray();
+
+            //assert
+            Assert.AreEqual(1, errors.Length);
+            Assert.AreEqual("PLU0010", errors[0].Code);
+            Assert.AreEqual(2, errors[0].RowNumber);
+            Assert.AreEqual("Supervisor", errors[0].ColumnName);
+            Assert.AreEqual(supervisor, errors[0].CellValue);
         }
 
         [Test]
@@ -208,12 +237,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         }
 
         [TestCase("", "PLU0021")] //empty
-        [TestCase("Q12wzyt#", "PLU0015")]  
-        [TestCase("Qwerty12345", "PLU0016")] 
-        [TestCase("QwertyQW$werty", "PLU0017")] 
-        [TestCase("QWE1TYQWWE$RTY", "PLU0018")] 
-        [TestCase("qw1erty$qwerty", "PLU0019")] 
-        [TestCase("qq1q$qqqqqqqqQ", "PLU0020")] 
+        [TestCase("Q12wzyt#", "PLU0015")]
+        [TestCase("Qwerty12345", "PLU0016")]
+        [TestCase("QwertyQW$werty", "PLU0017")]
+        [TestCase("QWE1TYQWWE$RTY", "PLU0018")]
+        [TestCase("qw1erty$qwerty", "PLU0019")]
+        [TestCase("qq1q$qqqqqqqqQ", "PLU0020")]
         public void When_users_password_is_empty_Then_record_verification_error_with_code_PLU0006(string password, string expectedCode)
         {
             //arrange
@@ -425,7 +454,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             TestDelegate act = () => service.VerifyAndSaveIfNoErrors(new MemoryStream(Encoding.UTF8.GetBytes(data)), "file.txt").ToList();
 
             // Assert
-            Assert.DoesNotThrow(act); 
+            Assert.DoesNotThrow(act);
         }
 
         private UserImportService CreateUserImportService(HqUser[] dbUsers = null, params UserToImport[] usersToImport)
@@ -433,8 +462,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
         private UserImportService CreateUserImportServiceWithRepositories(
             IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository = null,
-            IPlainStorageAccessor<UserToImport> importUsersRepository = null, IAuthorizedUser authorizedUser = null,
-            HqUser[] dbUsers = null, UsersImportTask usersImportTask = null, params UserToImport[] usersToImport)
+            IPlainStorageAccessor<UserToImport> importUsersRepository = null,
+            IAuthorizedUser authorizedUser = null,
+            HqUser[] dbUsers = null,
+            UsersImportTask usersImportTask = null,
+            params UserToImport[] usersToImport)
         {
             var csvReader = Create.Service.CsvReader(new[]
             {
@@ -446,7 +478,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             var userStorage = Create.Storage.UserRepository(dbUsers ?? new HqUser[0]);
 
-            return Create.Service.UserImportService(csvReader: csvReader, userStorage: userStorage, usersImportTask: usersImportTask);
+            return Create.Service.UserImportService(
+                csvReader: csvReader,
+                userStorage: userStorage,
+                usersImportTask: usersImportTask);
         }
     }
 }

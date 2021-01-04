@@ -634,7 +634,7 @@
     <value>عام</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>اسم الاستبيان:</value>
+      <value>عنوان الاستبيان</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>قم بإجراء هذا الاستبيان</value>
@@ -926,5 +926,8 @@
   <data name="Translation_Original" xml:space="preserve">
       <value>أصلي</value>
       <comment>أصلي</comment>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+      <value>عنوان الاستبيان</value>
   </data>
 </root>

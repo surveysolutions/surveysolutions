@@ -41,8 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .DeleteAsync();*/
 
             
-            var queryText = $"DELETE FROM events.events as e " +
-                            $"USING readside.assignments as a " +
+            var queryText = $"DELETE FROM events as e " +
+                            $"USING assignments as a " +
                             $"WHERE e.eventsourceid = a.publickey " +
                             $"  AND a.questionnaireid = :questionnaireId " +
                             $"  AND a.questionnaireversion = :questionnaireVersion ";

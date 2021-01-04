@@ -146,8 +146,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         {
             var status = interviewStatus == ExportInterviewType.All ? null : (InterviewStatus?) interviewStatus;
 
+            string questionnaireId = null;
+            if (!string.IsNullOrEmpty(questionnaireIdentity))
+            {
+                questionnaireId = QuestionnaireIdentity.Parse(questionnaireIdentity).ToString();
+            }
+            
             var filteredProcesses = await this.exportServiceApi.GetJobsByQuery((DataExportFormat?) exportType,
-                status, questionnaireIdentity, (DataExportJobStatus?) exportStatus, hasFile, limit, offset);
+                status, questionnaireId, (DataExportJobStatus?) exportStatus, hasFile, limit, offset);
 
             return this.Ok(filteredProcesses.Select(ToExportProcess));
         }
@@ -203,9 +209,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 return File(content, "application/zip", fileNameForDdiByQuestionnaire);
             }
 
-            var result = await this.dataExportStatusReader.GetDataArchive(
-                exportProcess.QuestionnaireIdentity, exportProcess.Format, exportProcess.InterviewStatus,
-                exportProcess.FromDate, exportProcess.ToDate, exportProcess.TranslationId, exportProcess.IncludeMeta);
+            var result = await this.dataExportStatusReader.GetDataArchive(id);
 
             return result == null
                 ? BadRequest()
@@ -238,10 +242,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             if (exportProcess.IsRunning || exportProcess.HasFile)
                 process.Links = new ExportJobLinks();
+            
             if (exportProcess.IsRunning)
-                process.Links.Cancel = $"{this.env.GetBaseUrl()}{Url.Action("CancelExports", new {id = exportProcess.Id})}";
+                process.Links.Cancel = this.env.GetAbsolutePath(Url.Action("CancelExports", new { id = exportProcess.Id }));
             if (exportProcess.HasFile)
-                process.Links.Download = $"{this.env.GetBaseUrl()}{Url.Action("GetExportFile", new {id = exportProcess.Id})}";
+            {
+                process.Links.Download = this.env.GetAbsolutePath(Url.Action("GetExportFile", new { id = exportProcess.Id }));
+            }
 
             return process;
         }

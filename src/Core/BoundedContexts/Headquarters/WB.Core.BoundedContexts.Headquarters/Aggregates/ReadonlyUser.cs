@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Aggregates
 {
@@ -14,14 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Aggregates
 
         public virtual string Name { get; protected set; }
 
-        public virtual ReadonlyProfile ReadonlyProfile { get; protected set; }
+        public virtual HqUserProfile ReadonlyProfile { get; protected set; }
 
         public virtual ISet<Guid> RoleIds { get; protected set; }
     }
 
-    public class ReadonlyProfile
-    {
-        public virtual Guid? SupervisorId { get; protected set; }
-        public virtual int Id { get; protected set; }
-    }
+    
 }

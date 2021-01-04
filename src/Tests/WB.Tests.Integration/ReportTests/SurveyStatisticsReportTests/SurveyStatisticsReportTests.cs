@@ -14,6 +14,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.InterviewFactoryTests;
 
@@ -58,20 +60,20 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             // Creating 4 interviews with different members configuration
 
-            CreateInterview(Dwelling.House,
+            CreateInterview(Dwelling.House,  workspace,
                 (Relation.Head, Sex.Male),
                 (Relation.Spouse, Sex.Female));
 
-            CreateInterview(Dwelling.Barrack,
+            CreateInterview(Dwelling.Barrack,  workspace,
                 (Relation.Head, Sex.Female),
                 (Relation.Spouse, Sex.Male));
 
-            CreateInterview(Dwelling.Hole,
+            CreateInterview(Dwelling.Hole, workspace,
                 (Relation.Head, Sex.Male),
                 (Relation.Spouse, Sex.Female),
                 (Relation.Child, Sex.Male));
 
-            CreateInterview(Dwelling.House,
+            CreateInterview(Dwelling.House, workspace,
                 (Relation.Head, Sex.Female));
 
             // there is in total 8 members in survey
@@ -196,7 +198,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             Assert.That(report.Totals, Is.EqualTo(new object[] { "Total", 4, 4, 8}));
         }
 
-        private void CreateInterview(Dwelling dwelling, params (Relation rel, Sex sex)[] members)
+        private void CreateInterview(Dwelling dwelling, IWorkspaceContextAccessor workspaceContextAccessor, params (Relation rel, Sex sex)[] members)
         {
             var interviewId = Guid.NewGuid();
 
@@ -224,7 +226,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             void SetIntAnswer(Guid questionId, int answer, params int[] rosterVector)
             {
                 this.UnitOfWork.Session.Connection.Execute(
-                    "INSERT INTO readside.report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
+                    $"INSERT INTO report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
                     "is_enabled) VALUES(@interviewId, @entityId, @rosterVector, @answer, 0, @enabled); ", new
                     {
                         interviewId = summary.Id,

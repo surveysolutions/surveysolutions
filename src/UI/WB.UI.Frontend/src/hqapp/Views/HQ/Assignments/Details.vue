@@ -154,6 +154,19 @@
                                 </td>
                                 <td>{{model.comments}}</td>
                             </tr>
+                            <tr>
+                                <td class="text-nowrap">
+                                    {{$t("Common.CalendarEvent")}}
+                                </td>
+                                <td>
+                                    <div>
+                                        {{calendarEventTime}}
+                                    </div>
+                                    <div v-html="calendarEventComment">
+
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -165,8 +178,9 @@
 
 <script>
 import Vue from 'vue'
-import {DateFormats} from '~/shared/helpers'
-import moment from 'moment'
+import {DateFormats, convertToLocal} from '~/shared/helpers'
+import moment from 'moment-timezone'
+import {escape} from 'lodash'
 
 export default {
     computed: {
@@ -213,6 +227,19 @@ export default {
         },
         quantity() {
             return this.model.quantity == null ? this.$t('Assignments.Unlimited') : this.model.quantity
+        },
+        calendarEventTime() {
+            return this.model.calendarEvent != null
+                ? convertToLocal(this.model.calendarEvent.startUtc, this.model.calendarEvent.startTimezone)
+                : ''
+        },
+        calendarEventComment() {
+            if (this.model.calendarEvent == null)
+                return ''
+
+            return this.model.calendarEvent.comment == null || this.model.calendarEvent.comment == ''
+                ? this.$t('Assignments.NoComment')
+                : escape(this.model.calendarEvent.comment).replaceAll('\n', '<br/>')
         },
 
         tableOptions() {

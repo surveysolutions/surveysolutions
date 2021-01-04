@@ -38,7 +38,8 @@
             </a>
             {{$t("Pages.Or")}}
             <a target="_blank"
-                v-bind:href="this.export.tab">
+                v-bind:href="this.export
+                ">
                 TAB
             </a>
         </div>
@@ -435,13 +436,11 @@ export default {
             const self = this
             this.table.on('processing', function(evnt, dt, show) {
                 self.isProcessingFlag = show
-            })
-            this.table.on(
-                'processing',
+
                 debounce(function(evnt, dt, show) {
                     self.isProcessing = show
                 }, 250)
-            )
+            })
         },
 
         initHeaderCheckBox() {

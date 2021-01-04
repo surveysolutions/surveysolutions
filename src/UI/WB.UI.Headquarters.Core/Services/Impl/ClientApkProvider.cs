@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -19,8 +20,9 @@ namespace WB.UI.Headquarters.Services.Impl
     public class ClientApkProvider : IClientApkProvider
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IOptions<ApkConfig> options;
+        private readonly IOptionsSnapshot<ApkConfig> options;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly ILogger<ClientApkProvider> logger;
         private readonly IAndroidPackageReader androidPackageReader;
         private readonly IMemoryCache appVersionCache;
         
@@ -28,14 +30,16 @@ namespace WB.UI.Headquarters.Services.Impl
         public ClientApkProvider(
             IAndroidPackageReader androidPackageReader,
             IFileSystemAccessor fileSystemAccessor,
-            IOptions<ApkConfig> options,
+            IOptionsSnapshot<ApkConfig> options,
             IHttpClientFactory httpClientFactory,
+            ILogger<ClientApkProvider> logger,
             IMemoryCache appVersionCache)
         {
             this.androidPackageReader = androidPackageReader;
             this.fileSystemAccessor = fileSystemAccessor;
             this.options = options;
             this.httpClientFactory = httpClientFactory;
+            this.logger = logger;
             this.appVersionCache = appVersionCache;
         }
 
@@ -78,27 +82,27 @@ namespace WB.UI.Headquarters.Services.Impl
             apkClient.BaseAddress = uri;
 
             var requestUri = $"/{fileName}";
-            var headResponse = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, requestUri));
-            if (headResponse.StatusCode != HttpStatusCode.OK)
+            
+            HttpResponseMessage body = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, requestUri));
+            if (body.StatusCode != HttpStatusCode.OK)
             {
-                return new StatusCodeResult((int) headResponse.StatusCode);
+                return new StatusCodeResult((int) body.StatusCode);
             }
-
-            var remoteEtag = headResponse.Headers.ETag.Tag;
-
-            if (request.RequestHasMatchingFileHash(remoteEtag))
+            
+            var responseStream = await body.Content.ReadAsStreamAsync();
+            var hash = this.fileSystemAccessor.ReadHash(responseStream);
+            
+            if (request.RequestHasMatchingFileHash(hash))
             {
                 return new StatusCodeResult(StatusCodes.Status304NotModified);
             }
 
-            HttpResponseMessage body = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, requestUri));
-            var responseStream = await body.Content.ReadAsStreamAsync();
-
+            responseStream.Seek(0, SeekOrigin.Begin);
             return new FileStreamResult(responseStream, "application/vnd.android.package-archive")
             {
                 FileDownloadName = responseFileName,
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue(body.Headers.ETag.Tag)
+                EntityTag = new EntityTagHeaderValue($"\"{Convert.ToBase64String(hash)}\"")
             };
         }
 
@@ -135,7 +139,7 @@ namespace WB.UI.Headquarters.Services.Impl
                 if (Uri.TryCreate(ApkClientsFolder(), UriKind.Absolute, out Uri uri))
                 {
                     var version = await GetApplicationVersionFromRemoteServer(uri, appName);
-                    return version.BuildNumber;
+                    return version?.BuildNumber;
                 }
 
                 return null;
@@ -147,12 +151,21 @@ namespace WB.UI.Headquarters.Services.Impl
         private async Task<AndroidPackageInfo> GetApplicationVersionFromRemoteServer(Uri remoteUri, string appName)
         {
             HttpClient apkClient = httpClientFactory.CreateClient("apks");
-            apkClient.BaseAddress = remoteUri;
+            try
+            {
+                apkClient.BaseAddress = remoteUri;
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.LogError(e, "Failed to receive app version from {path}", remoteUri);
+                return null;
+            }
 
             var requestUri = appName;
             var headResponse = await apkClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, requestUri));
             if (headResponse.StatusCode != HttpStatusCode.OK)
             {
+                this.logger.LogError("Failed to receive app version from {path}. Server responded with {responseCode}", remoteUri, headResponse.StatusCode);
                 return null;
             }
 
@@ -168,6 +181,7 @@ namespace WB.UI.Headquarters.Services.Impl
             var responseStream = await body.Content.ReadAsStreamAsync();
             AndroidPackageInfo packageInfo = this.androidPackageReader.Read(responseStream);
 
+            
             this.appVersionCache.Set(cacheKey, packageInfo, TimeSpan.FromMinutes(5));
             return packageInfo;
         }
@@ -182,7 +196,7 @@ namespace WB.UI.Headquarters.Services.Impl
                 if (Uri.TryCreate(ApkClientsFolder(), UriKind.Absolute, out Uri uri))
                 {
                     var version = await GetApplicationVersionFromRemoteServer(uri, appName);
-                    return version.VersionString;
+                    return version?.VersionString;
                 }
                 
                 return null;

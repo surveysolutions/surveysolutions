@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
@@ -33,6 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly IAuditLogService auditLogService;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUserInteractionService userInteractionService;
+        private readonly ICalendarEventStorage calendarEventStorage;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -47,7 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IAuditLogService auditLogService, 
             IInterviewAnswerSerializer answerSerializer, 
             IUserInteractionService userInteractionService,
-            IJsonAllTypesSerializer serializer) 
+            IJsonAllTypesSerializer serializer,
+            ICalendarEventStorage calendarEventStorage) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
                 userInteractionService, interviewsRepository, serializer)
         {
@@ -60,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.auditLogService = auditLogService;
             this.answerSerializer = answerSerializer;
             this.userInteractionService = userInteractionService;
+            this.calendarEventStorage = calendarEventStorage;
         }
 
         protected int AssignmentId { get; set; }
@@ -138,6 +143,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 this.commandService.Execute(createInterviewCommand);
                 assignment.CreatedInterviewsCount = (assignment.CreatedInterviewsCount ?? 0) + 1;
                 assignmentsRepository.Store(assignment);
+
+                var calendarEvent = calendarEventStorage.GetCalendarEventForAssigment(assignment.Id);
+                if (calendarEvent != null)
+                {
+                    var createCalendarEvent = new CreateCalendarEventCommand(Guid.NewGuid(), 
+                        interviewerIdentity.UserId,
+                        calendarEvent.Start,
+                        calendarEvent.StartTimezone,
+                        interviewId,
+                        interviewKey.ToString(),
+                        assignment.Id,
+                        calendarEvent.Comment);
+                    commandService.Execute(createCalendarEvent);
+                }
+                
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assignment {assignment.Id}({assignment.Title}) at {DateTime.Now}");

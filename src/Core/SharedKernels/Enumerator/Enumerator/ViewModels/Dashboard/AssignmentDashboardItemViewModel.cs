@@ -1,11 +1,22 @@
 ﻿#nullable enable
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using Humanizer;
+using MvvmCross.Commands;
+using NodaTime;
+using NodaTime.Extensions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
@@ -49,35 +60,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             BindTitles();
             BindDetails();
             BindActions();
+            this.RaiseAllPropertiesChanged();
         }
 
         protected virtual void BindTitles()
         {
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, Assignment.Title, questionnaireIdentity.Version);
             IdLabel = "#" + Assignment.Id;
+            string subTitle;
 
             if (Assignment.Quantity.HasValue)
             {
                 if (InterviewsLeftByAssignmentCount == 1)
                 {
-                    SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
+                    subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
                 }
                 else
                 {
-                    SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
+                    subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
                         .FormatString(InterviewsLeftByAssignmentCount, Assignment.Quantity);
                 }
             }
             else
             {
-                SubTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
+                subTitle = EnumeratorUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat
                     .FormatString(Assignment.Quantity.GetValueOrDefault());
             }
+
+            this.SubTitle = subTitle;
+            
+            this.CalendarEventStart = Assignment.CalendarEvent.HasValue
+                ? GetZonedDateTime(Assignment.CalendarEvent.Value, Assignment.CalendarEventTimezoneId)
+                : (ZonedDateTime?)null;
+            this.CalendarEventComment = Assignment.CalendarEventComment;
         }
 
-        protected virtual void BindActions()
-        {
-        }
+        protected abstract void BindActions();
 
         private void BindDetails()
         {
@@ -107,6 +125,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             get => responsible;
             set => SetProperty(ref this.responsible, value);
+        }
+
+        protected async Task SetCalendarEventAsync()
+        {
+            var navigationService = serviceLocator.GetInstance<IViewModelNavigationService>();
+            await navigationService.NavigateToAsync<CalendarEventDialogViewModel, CalendarEventViewModelArgs>(
+                new CalendarEventViewModelArgs(
+                    null,
+                null,
+                Assignment.Id,
+                RaiseOnItemUpdated
+            ));
+        }
+
+        protected void RemoveCalendarEvent()
+        {
+            var calendarEventStorage = serviceLocator.GetInstance<ICalendarEventStorage>();
+            var calendarEvent = calendarEventStorage.GetCalendarEventForAssigment(Assignment.Id);
+
+            if (calendarEvent == null)
+                throw new ArgumentException("Cant delete calendar event, because it didn't setup early");
+
+            var commandService = serviceLocator.GetInstance<ICommandService>();
+            var principal = serviceLocator.GetInstance<IPrincipal>();
+            var command = new DeleteCalendarEventCommand(calendarEvent.Id,
+                principal.CurrentUserIdentity.UserId);
+            commandService.Execute(command);
+            
+            RaiseOnItemUpdated();
         }
 
         protected override void Dispose(bool disposing)

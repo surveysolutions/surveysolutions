@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
         public SettingsV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IPlainStorageAccessor<ServerSettings> tenantSettings,
             ISecureStorage secureStorage) : base(appSettingsStorage, tenantSettings, secureStorage)
         {
             this.interviewerSettingsStorage = interviewerSettingsStorage;

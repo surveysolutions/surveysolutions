@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
@@ -23,17 +24,23 @@ namespace WB.Infrastructure.AspNetCore
             return http.AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(delays));
         }
 
-        public static IHttpClientBuilder AddHttpClientWithConfigurator<TApi, TConfigurator>(this IServiceCollection services,
-            RefitSettings? settings = null)
+        public static IHttpClientBuilder AddHttpClientWithConfigurator<TApi, TConfigurator>(
+            this IServiceCollection services,
+            RefitSettings? settings = null,
+            Func<IServiceProvider, IServiceProvider?>? scopedServiceProvider = null)
             where TApi : class
             where TConfigurator : class, IHttpClientConfigurator<TApi>
         {
             services.AddTransient<IHttpClientConfigurator<TApi>, TConfigurator>();
+
             return services.AddRefitClient<TApi>(settings)
                 .ConfigureHttpClient((sp, hc) =>
                 {
-                    using var scope = sp.CreateScope();
-                    var configurator = scope.ServiceProvider.GetService<IHttpClientConfigurator<TApi>>();
+                    var scope = scopedServiceProvider?.Invoke(sp)
+                                ?? sp.GetService<IHttpContextAccessor>()?.HttpContext?.RequestServices
+                                ?? sp;
+                    var configurator = scope.GetRequiredService<IHttpClientConfigurator<TApi>>();
+
                     configurator.ConfigureHttpClient(hc);
                 })
                 .AddTransientHttpErrorsHandling();

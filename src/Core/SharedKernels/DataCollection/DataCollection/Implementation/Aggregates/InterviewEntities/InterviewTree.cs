@@ -117,24 +117,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             IEnumerable<InterviewTreeNodeDiff> GetDiffs()
             {                
-                foreach (var identity in this.nodesCache.Keys)
+                foreach (var (key, value) in this.nodesCache)
                 {
-                    if (that.nodesCache.ContainsKey(identity))
+                    if (that.nodesCache.TryGetValue(key, out var thatNode))
                     {
-                        yield return InterviewTreeNodeDiff.Create(this.nodesCache[identity], that.nodesCache[identity]);
+                        yield return InterviewTreeNodeDiff.Create(value, thatNode);
                     }
-
-                    if (!that.nodesCache.ContainsKey(identity))
+                    else
                     {
-                        yield return InterviewTreeNodeDiff.Create(this.nodesCache[identity], null);
+                        yield return InterviewTreeNodeDiff.Create(value, null);
                     }
                 }
 
-                foreach (var identity in that.nodesCache.Keys)
+                foreach (var (key, value) in that.nodesCache)
                 {
-                    if (!this.nodesCache.ContainsKey(identity))
+                    if (!this.nodesCache.ContainsKey(key))
                     {
-                        yield return InterviewTreeNodeDiff.Create(null, that.nodesCache[identity]);
+                        yield return InterviewTreeNodeDiff.Create(null, value);
                     }
                 }
             }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
@@ -16,26 +16,27 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserRepository userRepository;
-        private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
 
         public InterviewerController(IAuthorizedUser authorizedUser,
-                            IUserRepository userRepository,
-                              IDeviceSyncInfoRepository deviceSyncInfoRepository, 
+                            IUserRepository userRepository, 
                               IInterviewerProfileFactory interviewerProfileFactory)
         {
             this.authorizedUser = authorizedUser;
             this.userRepository = userRepository;
-            this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerProfileFactory = interviewerProfileFactory;
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [ActionName("Profile")]
         [ActivePage(MenuItem.Interviewers)]
-        public async Task<ActionResult> InterviewerProfile(Guid? id)
+        public async Task<ActionResult> InterviewerProfile(string? id)
         {
-            var userId = id ?? this.authorizedUser.Id;
+            if (id == null || !Guid.TryParse(id, out var userId))
+            {
+                userId = this.authorizedUser.Id;
+            }
+
             var interviewer = await this.userRepository.FindByIdAsync(userId);
             if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) 
                 return NotFound();

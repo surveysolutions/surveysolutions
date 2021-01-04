@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
@@ -41,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
-        protected RestCredentials RestCredentials = null!;
+        protected RestCredentials? RestCredentials;
         
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
@@ -229,7 +228,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 this.RestCredentials ??= new RestCredentials
                 {
                     Login = this.principal.CurrentUserIdentity.Name,
-                    Token = this.principal.CurrentUserIdentity.Token
+                    Token = this.principal.CurrentUserIdentity.Token,
+                    Workspace = this.principal.CurrentUserIdentity.Workspace
                 };
 
                 if (this.remoteLoginRequired)
@@ -426,6 +426,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             IsApplicationUpdateRequired = true,
                             Statistics = statistics,
                             Stage = SyncStage.FailedUpgradeRequired
+                        });
+                        break;
+                    case SynchronizationExceptionType.WorkspaceDisabled:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
+                            Description = EnumeratorUIResources.Synchronization_WorkspaceDisabled,
+                            Status = SynchronizationStatus.Fail,
+                            Stage = SyncStage.UserAuthentication
                         });
                         break;
                     default:

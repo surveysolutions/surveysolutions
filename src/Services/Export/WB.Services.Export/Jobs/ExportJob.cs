@@ -45,7 +45,7 @@ namespace WB.Services.Export.Jobs
                 if (pendingExportProcess.ShouldDropTenantSchema)
                 {
                     await questionnaireSchemaGenerator.DropTenantSchemaAsync(
-                        pendingExportProcess.ExportSettings.Tenant.Name, cancellationToken);
+                        pendingExportProcess.ExportSettings.Tenant.ShortName, cancellationToken);
                 }
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);

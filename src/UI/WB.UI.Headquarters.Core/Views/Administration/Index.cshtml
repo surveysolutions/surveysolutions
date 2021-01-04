@@ -1,12 +1,13 @@
 ﻿@using WB.UI.Headquarters.Code
+@using WB.UI.Shared.Web.Extensions
 @model object
 @{
     ViewBag.Title = MainMenu.Administration;
     ViewBag.SpecificPageCaption = MainMenu.Administration;
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 @section Scripts{
     @Html.RenderHqConfig(Model)
+    <script>window.CONFIG.apiBasePath = '@Url.Static("/primary/")'</script>
 }
 <div id="vueApp"></div>

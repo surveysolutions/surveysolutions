@@ -393,6 +393,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Synchronization_Download_CalendarEvents_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_CalendarEvents_Title", resourceCulture);
+            }
+        }
+        
         public static string Synchronization_Update_Interviews_Title {
             get {
                 return ResourceManager.GetString("Synchronization_Update_Interviews_Title", resourceCulture);
@@ -477,6 +483,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string TransferringCalendarEvents {
+            get {
+                return ResourceManager.GetString("TransferringCalendarEvents", resourceCulture);
+            }
+        }
+        
         public static string Synchronization_Success_Description {
             get {
                 return ResourceManager.GetString("Synchronization_Success_Description", resourceCulture);
@@ -534,6 +546,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_Upload_CompletedAssignments_Text {
             get {
                 return ResourceManager.GetString("Synchronization_Upload_CompletedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_Upload_CalendarEvents_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_CalendarEvents_Text", resourceCulture);
             }
         }
         
@@ -1377,6 +1395,42 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_AddCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_AddCalendarEvent", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_EditCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_EditCalendarEvent", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_RemoveCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_RemoveCalendarEvent", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ShowCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_ShowCalendarEvent", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_PastDateCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_PastDateCalendarEvent", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_PastTimeCalendarEvent {
+            get {
+                return ResourceManager.GetString("Dashboard_PastTimeCalendarEvent", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_Interview_QuestionsAnsweredFormat {
             get {
                 return ResourceManager.GetString("Dashboard_Interview_QuestionsAnsweredFormat", resourceCulture);
@@ -1638,6 +1692,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Diagnostics_SendLogs_Success {
             get {
                 return ResourceManager.GetString("Diagnostics_SendLogs_Success", resourceCulture);
+            }
+        }
+        
+        public static string Synchronization_WorkspaceDisabled {
+            get {
+                return ResourceManager.GetString("Synchronization_WorkspaceDisabled", resourceCulture);
             }
         }
     }

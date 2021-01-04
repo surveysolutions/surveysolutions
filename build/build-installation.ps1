@@ -47,12 +47,12 @@ if (!(Test-Path $HQsitePath)) {
 #$supportPath = Join-path $workdir "SupportPackage"
 #$targetSupportPath = Join-path $HQsitePath "Support"
 
-Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse
+Copy-Item $sitePatha\* $HQsitePath\Site -Force -Recurse -Exclude '*.pdb'
 Rename-Item $HQsitePath\Site\web.config $HQsitePath\Site\Web.config
 
 #Remove-Item "$HQsitePath\HostMap.config"
 
-Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse
+Copy-Item $HQSourcePath\Client $HQsitePath\Site\Client -Force -Recurse -Exclude '*.pdb'
 
 $files = (Get-ChildItem -Path $HQsitePath\Site -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll" -or $_.Name -match "WB.UI.Headquarters.exe"})
 
