@@ -6,6 +6,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.Infrastructure.Domain;
@@ -20,19 +21,21 @@ namespace WB.UI.Headquarters.Code.Workspaces
         private readonly IInScopeExecutor<IExportServiceApi> exportService;
         private readonly IScheduler scheduler;
         private readonly IWorkspacesCache workspacesCache;
+        private readonly ISystemLog systemLog;
 
         public DeleteWorkspaceRequestHandler(
             IWorkspacesCache workspacesCache,
             IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory,
             IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService, 
             IInScopeExecutor<IExportServiceApi> exportService,
-            IScheduler scheduler)
+            IScheduler scheduler, ISystemLog systemLog)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.workspacesCache = workspacesCache;
             this.deleteService = deleteService;
             this.exportService = exportService;
             this.scheduler = scheduler;
+            this.systemLog = systemLog;
         }
 
         public async Task<DeleteWorkspaceResponse> Handle(
@@ -80,6 +83,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }, workspace.Name);
 
             workspacesCache.InvalidateCache();
+            this.systemLog.WorkspaceDeleted(workspace.Name);
 
             await DeleteWorkspaceSchemaJob.Schedule(scheduler, workspace);
             

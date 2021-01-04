@@ -1,4 +1,5 @@
 using System;
+using MassTransit;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.SystemLog
 {
@@ -11,4 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SystemLog
         public virtual DateTime LogDate { get; set; }
         public virtual string Log { get; set; }
     }
+
+
 }
