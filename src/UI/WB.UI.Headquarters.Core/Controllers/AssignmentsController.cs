@@ -355,6 +355,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [HttpGet]
         [ObservingNotAllowed]
+        [Route("{controller}/{action=Index}")]
         public IActionResult GetInvalidAssignmentsByLastImport()
         {
             var sb = new StringBuilder();
