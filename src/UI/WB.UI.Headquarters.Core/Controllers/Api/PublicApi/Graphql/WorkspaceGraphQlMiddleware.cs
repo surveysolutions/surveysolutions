@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             if (workspaceContextAccessor.CurrentWorkspace() == null)
             {
-                var workspace = context.GetWorkspace();
+                var workspace = context.GetWorkspaceNameOrDefault();
 
                 if (workspace != null)
                 {
