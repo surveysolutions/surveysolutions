@@ -874,7 +874,7 @@ export default {
 
             if (extendBounds) {
                 if (this.totalMarkers === 0) {
-                    this.map.setZoom(1)
+                    this.map.setZoom(3)
                 } else {
                     const sw = new google.maps.LatLng(data.bounds.south, data.bounds.west)
                     const ne = new google.maps.LatLng(data.bounds.north, data.bounds.east)
