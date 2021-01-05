@@ -38,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IMediator mediator;
         private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly ISystemLog systemLog;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
             IMapper mapper,
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IWorkspacesCache workspacesCache,
             IMediator mediator,
             ILogger<WorkspacesPublicApiController> logger,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser, ISystemLog systemLog)
         {
             this.workspaces = workspaces;
             this.mapper = mapper;
@@ -54,6 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.mediator = mediator;
             this.logger = logger;
             this.authorizedUser = authorizedUser;
+            this.systemLog = systemLog;
         }
 
         /// <summary>
@@ -142,6 +144,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 await this.workspacesService.Generate(workspace.Name,
                     DbUpgradeSettings.FromFirstMigration<M202011201421_InitSingleWorkspace>());
                 this.workspacesCache.InvalidateCache();
+                
+                this.systemLog.WorkspaceCreated(workspace.Name, workspace.DisplayName);
 
                 return CreatedAtAction("Details", routeValues: new { name = workspace.Name },
                     value: this.mapper.Map<WorkspaceApiView>(workspace));
@@ -178,9 +182,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 {
                     return Forbid();
                 }
+                var oldName = existing.DisplayName;
 
                 existing.DisplayName = request.DisplayName!;
                 this.workspacesCache.InvalidateCache();
+                this.systemLog.WorkspaceUpdated(name, oldName, existing.DisplayName);
                 return NoContent();
             }
 
@@ -220,6 +226,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 workspace.Disable();
                 this.logger.LogInformation("Workspace {name} was disabled by {user}", name, this.authorizedUser.UserName);
                 this.workspacesCache.InvalidateCache();
+                this.systemLog.WorkspaceDisabled(name);
                 return NoContent();
             }
 
@@ -254,6 +261,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 workspace.Enable();
                 this.logger.LogInformation("Workspace {name} was enabled by {user}", name, this.authorizedUser.UserName);
                 this.workspacesCache.InvalidateCache();
+                this.systemLog.WorkspaceEnabled(name);
                 return NoContent();
             }
 

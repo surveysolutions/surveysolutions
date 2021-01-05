@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
         private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
 
-        protected internal int tokenLength = 8;
+        internal int tokenLength = 8;
 
         public TokenGenerator(
             IPlainStorageAccessor<Invitation> invitationStorage,
