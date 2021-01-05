@@ -141,7 +141,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             return interviewSummary;
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         public InterviewSummaryForMapPointView InterviewSummaryForMapPoint([FromBody]InterviewSummaryForMapPointViewModel data)
         {
             return data == null ? null : GetInterviewSummaryForMapPointView(data.InterviewId);
@@ -178,7 +178,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                             Title = questionnaire.GetQuestionTitle(d.Entity.EntityId).RemoveHtmlTags(),
                             Answer = d.Value.RemoveHtmlTags(),
                         })
-                    .ToList()
+                    .ToList(),
+                IsReceivedByTablet = interviewSummaryView.ReceivedByInterviewer,
             };
             return interviewSummaryForMapPointView;
         }

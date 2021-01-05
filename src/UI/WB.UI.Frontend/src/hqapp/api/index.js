@@ -242,6 +242,28 @@ class InterviewsPublicApi {
 
         return responseData
     }
+
+    async SvAssign(interviewId, responsibleId) {
+        var url = `${this.base}/${interviewId}/assignsupervisor`
+
+        const response = await this.http.patch(url, {
+            responsibleId,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async Assign(interviewId, responsibleId) {
+        var url = `${this.base}/${interviewId}/assign`
+
+        const response = await this.http.patch(url, {
+            responsibleId,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
 }
 
 

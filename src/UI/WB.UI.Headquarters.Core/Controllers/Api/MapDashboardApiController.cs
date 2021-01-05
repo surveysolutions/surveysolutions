@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
-            IncreaseBound(input);
+            IncreaseBound(input, 0.5);
 
             var interviewGpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
@@ -203,9 +203,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             };
         }
 
-        private static void IncreaseBound(MapDashboardRequest input)
+        private static void IncreaseBound(MapDashboardRequest input, double boundCoefficient)
         {
-            double boundCoefficient = 0.5;
             input.East = Math.Min(input.East + ((input.East - input.West) * boundCoefficient), 180);
             input.West = Math.Max(input.West - ((input.East - input.West) * boundCoefficient), -180);
             input.North = Math.Min(input.North + ((input.North - input.South) * boundCoefficient), 180);
@@ -216,7 +215,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
         {
-            IncreaseBound(input);
+            IncreaseBound(input, 1);
 
             var cluster = new SuperCluster();
             var bounds = GeoBounds.Closed;
