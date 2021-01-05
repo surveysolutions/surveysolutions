@@ -224,7 +224,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.Bind(typeof(IReadSideRepositoryWriter<,>), typeof(PostgreReadSideStorage<,>));
 
             registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
-            registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(PostgresPlainKeyValueStorage<>));
+            registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(PostgresKeyValueStorageWithCache<>));
             registry.BindAsSingleton(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
         }
 
