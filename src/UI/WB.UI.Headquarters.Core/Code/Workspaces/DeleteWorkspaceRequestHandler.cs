@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.Infrastructure.Domain;
@@ -20,19 +21,22 @@ namespace WB.UI.Headquarters.Code.Workspaces
         private readonly IInScopeExecutor<IExportServiceApi> exportService;
         private readonly IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask;
         private readonly IWorkspacesCache workspacesCache;
+        private readonly ISystemLog systemLog;
 
         public DeleteWorkspaceRequestHandler(
             IWorkspacesCache workspacesCache,
             IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory,
             IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService, 
             IInScopeExecutor<IExportServiceApi> exportService,
-            IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask)
+            IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask,
+            ISystemLog systemLog)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.workspacesCache = workspacesCache;
             this.deleteService = deleteService;
             this.exportService = exportService;
             this.scheduledTask = scheduledTask;
+            this.systemLog = systemLog;
         }
 
         public async Task<DeleteWorkspaceResponse> Handle(
@@ -80,6 +84,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }, workspace.Name);
 
             workspacesCache.InvalidateCache();
+            this.systemLog.WorkspaceDeleted(workspace.Name);
 
             await scheduledTask.Schedule(new DeleteWorkspaceJobData(workspace));
             

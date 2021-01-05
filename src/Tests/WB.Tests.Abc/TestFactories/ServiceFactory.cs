@@ -1313,7 +1313,8 @@ namespace WB.Tests.Abc.TestFactories
                 workspaces,
                 new TestPlainStorage<WorkspacesUsers>(),
                 Mock.Of<IUserRepository>(),
-                Mock.Of<ILogger<WorkspacesService>>()
+                Mock.Of<ILogger<WorkspacesService>>(),
+                Mock.Of<ISystemLog>()
             );
         }
     }
