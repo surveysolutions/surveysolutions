@@ -275,9 +275,17 @@ namespace WB.UI.Headquarters.Controllers.Api
                         mapMarker, id: p.UserData.Index.ToString("X") + ":" + p.UserData.NumPoints);
                 }
 
+                string id = p.UserData.Index.ToString("X");
+                if (p.UserData.Props.TryGetValue("interviewId", out var interviewId))
+                    id = interviewId.ToString();
+                else if (p.UserData.Props.TryGetValue("assignmentId", out var assignmentId))
+                    id = assignmentId.ToString();
+
                 return new Feature(
                         new Point(new Position(p.Latitude, p.Longitude)),
-                        p.UserData.Props, id: p.UserData.Index.ToString("X"));
+                        p.UserData.Props, 
+                        id: id
+                        );
             }));
 
             return new MapDashboardResult
