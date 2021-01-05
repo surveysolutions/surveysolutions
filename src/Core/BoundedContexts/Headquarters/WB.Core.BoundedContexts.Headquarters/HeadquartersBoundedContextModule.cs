@@ -191,7 +191,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<InterviewExportedCommentariesDenormalizer>();
             registry.Bind<CumulativeChartDenormalizer>();
             registry.Bind<AssignmentDenormalizer>();
-            registry.Bind<AssignmentGeoLocationAnswersDenormalizer>();
             registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             
@@ -250,7 +249,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IExportFactory, ExportFactory>();
 
             registry.RegisterDenormalizer<AssignmentDenormalizer>();
-            registry.RegisterDenormalizer<AssignmentGeoLocationAnswersDenormalizer>();
             registry.RegisterDenormalizer<CalendarEventDenormalizer>();
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
@@ -394,7 +392,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterFunctional<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterFunctional<CumulativeChartDenormalizer>();
             registry.RegisterFunctional<AssignmentDenormalizer>();
-            registry.RegisterFunctional<AssignmentGeoLocationAnswersDenormalizer>();
             registry.Register<CompletedEmailDenormalizer>();
             registry.RegisterFunctional<CalendarEventDenormalizer>();
             
