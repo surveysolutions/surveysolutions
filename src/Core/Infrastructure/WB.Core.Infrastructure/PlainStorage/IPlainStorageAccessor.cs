@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.PlainStorage
 {
     public interface IPlainStorageAccessor<TEntity> where TEntity : class
     {
         TEntity GetById(object id);
+        Task<TEntity> GetByIdAsync(object id);
 
         void Remove(object id);
         void Remove(IEnumerable<TEntity> entities);

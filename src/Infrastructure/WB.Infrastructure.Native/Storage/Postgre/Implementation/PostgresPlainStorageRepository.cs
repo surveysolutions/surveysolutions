@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
@@ -21,6 +22,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public TEntity GetById(object id)
         {
             return this.GetSession().Get<TEntity>(id);
+        }
+
+        public Task<TEntity> GetByIdAsync(object id)
+        {
+            return this.GetSession().GetAsync<TEntity>(id);
         }
 
         public void Remove(object id)
