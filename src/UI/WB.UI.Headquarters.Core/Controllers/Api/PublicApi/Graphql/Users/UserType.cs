@@ -17,6 +17,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
             descriptor.Field(x => x.Roles).Type<NonNullType<ListType<NonNullType<EnumType<UserRoles>>>>>();
             descriptor.Field(x => x.UserName).Type<NonNullType<StringType>>();
+            
+            descriptor.Field(x => x.Workspaces).Type<NonNullType<ListType<NonNullType<StringType>>>>();
         }
     }
 }
