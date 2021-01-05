@@ -15,5 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid InterviewId { get; set; }
         public List<AnswerView> IdentifyingData { get; set; }
         public InterviewStatus Status { get; set; }
+        public bool IsReceivedByTablet { get; set; }
     }
 }
