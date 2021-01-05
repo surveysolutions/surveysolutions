@@ -1645,4 +1645,7 @@
   <data name="UsersManage_ArchivedUsers" xml:space="preserve">
     <value>Показать архивированных пользователей</value>
   </data>
+  <data name="Interviewer_CreateText" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя с правами интервьюера&lt;br&gt; Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+  </data>
 </root>
