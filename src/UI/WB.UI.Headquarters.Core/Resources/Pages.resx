@@ -852,7 +852,7 @@
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,
-        &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+        &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
@@ -1585,5 +1585,8 @@
   </data>
   <data name="UsersManage_ArchivedUsers" xml:space="preserve">
     <value>Show archived users</value>
-  </data>  
+  </data>
+  <data name="Interviewer_CreateText" xml:space="preserve">
+    <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+  </data>
 </root>
