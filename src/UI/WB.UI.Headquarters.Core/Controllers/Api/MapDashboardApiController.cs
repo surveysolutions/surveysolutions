@@ -123,9 +123,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
         
         [HttpPost]
-        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
+        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
         {
             IncreaseBound(input, 0.5);
+            
+            var bounds = GeoBounds.Closed;
 
             var interviewGpsAnswers = this.interviewFactory.GetPrefilledGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, 
@@ -156,6 +158,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                         })))
                 .ToList();
             
+            mapPoints.ForEach(m => bounds.Expand(m.Y, m.X));
+            
+            if (input.Zoom == -1)
+                input.Zoom = Math.Max(bounds.ApproximateGoogleMapsZoomLevel(input.ClientMapWidth), 3);
+            
             var clustering = new Clustering<MapMarker>(input.Zoom);
             var valueCollection = clustering.RunClustering(mapPoints).ToList();
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
@@ -184,7 +191,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }).ToList());
 
 
-            GeoBounds geoBounds = null;
+            /*GeoBounds geoBounds = null;
             if (mapPoints.Any())
             {
                 double south = mapPoints.Min(a => a.Y); 
@@ -192,14 +199,14 @@ namespace WB.UI.Headquarters.Controllers.Api
                 double north  = mapPoints.Max(a => a.Y);
                 double east = mapPoints.Max(a => a.X);
                 geoBounds = new GeoBounds(south, west, north, east);
-            }
-
+            }*/
                 
             return new MapDashboardResult
             {
                 FeatureCollection = featureCollection,
-                Bounds = geoBounds,
-                TotalPoint = valueCollection.Count
+                //Bounds = geoBounds,
+                Bounds = bounds,
+                TotalPoint = mapPoints.Count
             };
         }
 
@@ -213,7 +220,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
 
         [HttpPost]
-        public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
+        public MapDashboardResult Markers2([FromBody] MapDashboardRequest input)
         {
             IncreaseBound(input, 1);
 
