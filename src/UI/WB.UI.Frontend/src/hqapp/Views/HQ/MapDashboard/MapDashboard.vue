@@ -100,6 +100,7 @@
                 </div>
 
                 <div class="row-fluid"
+                    v-if="model.userRole != 'Interviewer'"
                     style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
                     <a
@@ -108,10 +109,14 @@
                 </div>
                 <div class="row-fluid tooltip-buttons"
                     style="white-space:nowrap;">
-                    <!--button
+                    <button
                         class="btn btn-sm btn-success"
-                        v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'InterviewerAssigned'"
-                        click="assignInterview">{{ $t("Common.Assign") }}</button-->
+                        v-if="model.userRole == 'Interviewer' && (selectedTooltip.status == 'InterviewerAssigned' || selectedTooltip.status == 'RejectedBySupervisor')"
+                        click="openInterview">{{ $t("Common.Open")}}</button>
+                    <button
+                        class="btn btn-sm btn-success"
+                        v-if="canAssign"
+                        click="assignInterview">{{ $t("Common.Assign") }}</button>
                     <button
                         class="btn btn-sm btn-success"
                         v-if="model.userRole == 'Supervisor' && selectedTooltip.status == 'Completed'"
@@ -172,6 +177,69 @@
             </div>
         </div>
         <div id="map-canvas"></div>
+
+        <ModalFrame ref="assignModal"
+            :title="$t('Common.Assign')">
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label
+                        class="control-label"
+                        for="newResponsibleId">{{$t("Assignments.SelectResponsible")}}</label>
+                    <Typeahead
+                        control-id="newResponsibleId"
+                        :placeholder="$t('Common.Responsible')"
+                        :value="newResponsibleId"
+                        :ajax-params="{ }"
+                        @selected="newResponsibleSelected"
+                        :fetch-url="model.responsible"></Typeahead>
+                </div>
+                <div id="pnlAssignToOtherTeamConfirmMessage">
+                    <p
+                        v-html="this.model.userRole == 'Supervisor' ? $t('Interviews.AssignConfirmMessage', {
+                            count: 1,
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor'} )
+                            : $t('Interviews.AssignToOtherTeamConfirmMessage', {
+                                count: 1,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters'} )"></p>
+                </div>
+
+                <div v-if="selectedTooltip.isReceivedByTablet">
+                    <br />
+                    <input
+                        type="checkbox"
+                        id="reassignReceivedByInterviewer"
+                        v-model="isReassignReceivedByInterviewer"
+                        class="checkbox-filter"/>
+                    <label for="reassignReceivedByInterviewer"
+                        style="font-weight: normal">
+                        <span class="tick"></span>
+                        {{$t("Interviews.AssignReceivedConfirm", 1)}}
+                    </label>
+                    <br />
+                    <span v-if="isReassignReceivedByInterviewer"
+                        class="text-danger">
+                        {{$t("Interviews.AssignReceivedWarning")}}
+                    </span>
+                </div>
+            </form>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    role="confirm"
+                    @click="assign"
+                    :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal"
+                    role="cancel">{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
+
     </HqLayout>
 </template>
 <style>
@@ -266,6 +334,7 @@ export default {
             responsibleId: null,
             responsibleParams: {showArchived: true, showLocked: true},
             assignmentId: null,
+            newResponsibleId: null,
         }
     },
 
@@ -281,6 +350,23 @@ export default {
     computed: {
         model() {
             return this.$config.model
+        },
+
+        canAssign() {
+            if (this.model.userRole == 'Supervisor' &&
+                (this.selectedTooltip.status == 'InterviewerAssigned' || this.selectedTooltip.status == 'RejectedBySupervisor')
+            )
+                return true
+
+            if (this.model.userRole == 'Headquarter' &&
+                (this.selectedTooltip.status == 'InterviewerAssigned'
+                || this.selectedTooltip.status == 'RejectedBySupervisor'
+                || this.selectedTooltip.status == 'RejectedByHeadquarters'
+                )
+            )
+                return true
+
+            return false
         },
 
         selectedVersionValue() {
@@ -315,16 +401,38 @@ export default {
 
     methods: {
 
+        openInterview() {
+            window.open('InterviewerHq/OpenInterview/' + this.selectedTooltip.interviewId, '_blank')
+        },
+
         createInterview() {
             const assignmentId = this.selectedTooltip.assignmentId
             $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
-                window.location = response
+                //window.location = response
+                window.open(response, '_blank')
             })
         },
 
         assignInterview() {
-            alert('assignInterview')
+            this.newResponsibleId = null
+            this.$refs.assignModal.modal({keyboard: false})
         },
+
+        async assign() {
+            if (this.newResponsibleId.iconClass === 'supervisor')
+                await this.$hq.InterviewsPublicApi.SvAssign(this.selectedTooltip.interviewId, this.newResponsibleId.key)
+            else
+                await this.$hq.InterviewsPublicApi.Assign(this.selectedTooltip.interviewId, this.newResponsibleId.key)
+
+            this.$refs.assignModal.hide()
+            this.newResponsibleId = null
+            await this.refreshInterviewData()
+        },
+
+        newResponsibleSelected(newValue) {
+            this.newResponsibleId = newValue
+        },
+
 
         async approveSvInterview() {
             await this.$hq.InterviewsPublicApi.SvApprove(this.selectedTooltip.interviewId)
