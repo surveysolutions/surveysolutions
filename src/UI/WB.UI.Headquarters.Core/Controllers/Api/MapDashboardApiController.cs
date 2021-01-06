@@ -129,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         public MapDashboardResult Markers([FromBody] MapDashboardRequest input)
         {
-            IncreaseBound(input, 0.5);
+            IncreaseBound(input, 0.2);
             
             var bounds = GeoBounds.Closed;
 
@@ -158,7 +158,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                         {
                             assignmentId = a.AssignmentId,
                             responsibleRole = a.ResponsibleRoleId.ToUserRole(),
-                            //publicKey = a.
                         })))
                 .ToList();
             
