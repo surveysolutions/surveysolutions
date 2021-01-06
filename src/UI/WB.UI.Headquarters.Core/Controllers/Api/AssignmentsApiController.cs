@@ -315,7 +315,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 Quantity = assignment.Quantity,
                 InterviewsNeeded = assignment.InterviewsNeeded,
                 LastUpdatedDate = AnswerUtils.AnswerToString(assignment.UpdatedAtUtc),
-                IdentifyingData = assignment.IdentifyingData.Select(d =>
+                IdentifyingData = assignment.IdentifyingData
+                    .Where(d => questionnaire.GetQuestionType(d.Identity.Id) != QuestionType.GpsCoordinates)
+                    .Select(d =>
                     new AnswerView()
                     {
                         Title = questionnaire.GetQuestionTitle(d.Identity.Id).RemoveHtmlTags(),
