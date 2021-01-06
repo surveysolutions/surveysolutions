@@ -4,7 +4,8 @@
         :hasFilter="true"
         :topicButton="$t('Assignments.NewAssignment')"
         :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
-        <div slot="headers">
+        <div slot="headers"
+            :class="{'topic-with-button': !config.isSupervisor}">
             <a href="MapDashboard"
                 style="float:right; margin-right:320px; margin-top:14px;">
                 <img style="padding-top:2px;"
@@ -12,9 +13,13 @@
                     src="/img/google-maps-markers/map.png"
                     :title="$t('Common.MapDashboard')" />
             </a>
-            <h1>{{title}}</h1>
+            <h1 v-html='title'></h1>
+            <a v-if="!config.isSupervisor"
+                class="btn btn-success"
+                :href="config.isSupervisor ? null : config.api.surveySetup">
+                {{ $t('Assignments.NewAssignment') }}
+            </a>
         </div>
-
         <Filters slot="filters">
             <FilterBlock
                 :title="$t('Common.Questionnaire')"
