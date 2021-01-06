@@ -153,6 +153,9 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Assignments</value>
+  </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
   </data>
