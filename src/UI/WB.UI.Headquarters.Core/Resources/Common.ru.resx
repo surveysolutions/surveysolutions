@@ -153,6 +153,9 @@
   <data name="GetInterviewerApp" xml:space="preserve">
     <value>Скачать Interviewer</value>
   </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Задания</value>
+  </data>
   <data name="Interviews" xml:space="preserve">
     <value>Интервью</value>
   </data>

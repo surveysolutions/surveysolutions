@@ -79,6 +79,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             public override MapMarkerType type => MapMarkerType.Cluster;
             public int count { get; set; }
             public int expand { get; set; }
+            
+            public int? interviewsCount { get; set; }
+            public int? assignmentsCount { get; set; }
         }
 
         public class MapInterviewMarker : MapMarker
@@ -112,6 +115,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public double South { get; set; }
 
             public int Zoom { get; set; }
+            public int MaxZoom { get; set; }
             public int ClientMapWidth { get; set; }
         }
 
@@ -162,20 +166,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             if (input.Zoom == -1)
                 input.Zoom = Math.Max(bounds.ApproximateGoogleMapsZoomLevel(input.ClientMapWidth), 3);
-            
+
             var clustering = new Clustering<MapMarker>(input.Zoom);
-            var valueCollection = clustering.RunClustering(mapPoints).ToList();
+            var valueCollection = clustering.RunClustering(mapPoints);
             var featureCollection = new FeatureCollection(valueCollection.Select(g =>
             {
                 string id = g.ID;
                 MapMarker mapMarker = null;
                 if (g.Count > 1)
                 {
-                    mapMarker = new MapClusterMarker()
+                    var clusterMarker = new MapClusterMarker()
                     {
                         count = g.Count,
                         expand = input.Zoom + 1,
                     };
+                    clusterMarker.interviewsCount = g.Points.Count(p => p.Data is MapInterviewMarker);
+                    clusterMarker.assignmentsCount = clusterMarker.count - clusterMarker.interviewsCount;
+
+                    mapMarker = clusterMarker;
                     id += $" {g.Count}";
                 }
                 else
