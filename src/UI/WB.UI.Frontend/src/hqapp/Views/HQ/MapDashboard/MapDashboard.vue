@@ -38,7 +38,7 @@
                         class="form-control with-clear-btn"
                         :placeholder="$t('Common.AllAssignments')"
                         type="text"
-                        v-model="assignmentId"/>
+                        v-model="this.assignmentId"/>
                     <div class="input-group-btn"
                         @click="clearAssignmentFilter">
                         <div class="btn btn-default">
@@ -369,8 +369,10 @@ export default {
 
         queryString() {
             return {
-                name: this.query.name,
+                questionnaire: this.query.questionnaire,
                 version: this.query.version,
+                responsible: this.query.responsible,
+                assignmentId: this.query.assignmentId,
             }
         },
 
@@ -388,6 +390,8 @@ export default {
     },
 
     mounted() {
+        this.assignmentId = this.query.assignmentId
+
         this.setMapCanvasStyle()
         this.initializeMap()
         this.showPointsOnMap(180, 180, -180, -180, true)
