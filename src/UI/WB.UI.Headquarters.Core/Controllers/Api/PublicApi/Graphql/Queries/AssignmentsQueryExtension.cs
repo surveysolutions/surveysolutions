@@ -13,8 +13,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
             
             descriptor.Field<AssignmentsResolver>(x => x.Assignments(default!, default!))
                 .Authorize()
-                .UseSimplePaging<Assignment, Core.BoundedContexts.Headquarters.Assignments.Assignment>()
                 .HasWorkspace()
+                .UseSimplePaging<Assignment, Core.BoundedContexts.Headquarters.Assignments.Assignment>()
                 .UseFiltering<AssignmentsFilter>();
         }
     }

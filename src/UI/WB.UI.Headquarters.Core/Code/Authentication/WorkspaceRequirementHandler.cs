@@ -17,8 +17,6 @@ namespace WB.UI.Headquarters.Code.Authentication
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, WorkspaceRequirement requirement)
         {
-            var workspace = workspaceContextAccessor.CurrentWorkspace();
-
             if (context.User.IsInRole(UserRoles.Administrator.ToString()))
             {
                 context.Succeed(requirement);
@@ -29,11 +27,12 @@ namespace WB.UI.Headquarters.Code.Authentication
                 context.Succeed(requirement);
             }
 
+            var workspace = workspaceContextAccessor.CurrentWorkspace();
             if (workspace == null)
             {
                 if (context.Resource is IDirectiveContext ctx)
                 {
-                    var workspaceArgument = ctx.GetWorkspace();
+                    var workspaceArgument = ctx.GetWorkspaceNameOrDefault();
 
                     if (context.User.HasClaim("Workspace", workspaceArgument))
                     {

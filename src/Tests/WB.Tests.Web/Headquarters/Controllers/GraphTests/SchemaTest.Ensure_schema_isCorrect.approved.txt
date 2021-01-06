@@ -58,7 +58,7 @@ type HeadquartersMutation {
 }
 
 type HeadquartersQuery {
-  assignments(skip: Int take: Int "Workspace name" workspace: String! = "primary" where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
+  assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
   interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
   maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
@@ -199,6 +199,7 @@ type User {
   id: ID!
   roles: [UserRoles!]!
   userName: String!
+  workspaces: [String!]!
 }
 
 type UserMap {
