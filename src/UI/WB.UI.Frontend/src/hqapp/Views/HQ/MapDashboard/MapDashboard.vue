@@ -234,7 +234,7 @@
                     class="btn btn-primary"
                     role="confirm"
                     @click="assign"
-                    :disabled="!canClickAssign()">{{ $t("Common.Assign") }}</button>
+                    :disabled="!canClickAssign">{{ $t("Common.Assign") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
