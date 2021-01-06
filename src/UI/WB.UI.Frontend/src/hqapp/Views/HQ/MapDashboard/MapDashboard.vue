@@ -175,6 +175,22 @@
                         click="createInterview">{{ $t("Common.Create") }}</button>
                 </div>
             </div>
+
+            <div ref="clusterTooltip">
+                <div class="row-fluid">
+                    <strong>{{$t("Reports.ClusterInfo")}}</strong>
+                </div>
+                <div class="row-fluid"
+                    v-if="selectedTooltip.interviewsCount > 0">
+                    <strong>{{$t("Common.Interviews")}}:</strong>
+                    &nbsp;{{selectedTooltip.interviewsCount}}
+                </div>
+                <div class="row-fluid"
+                    v-if="selectedTooltip.assignmentsCount > 0">
+                    <strong>{{$t("Common.Assignments")}}:</strong>
+                    &nbsp;{{selectedTooltip.assignmentsCount}}
+                </div>
+            </div>
         </div>
         <div id="map-canvas"></div>
 
@@ -193,35 +209,22 @@
                         @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
                 </div>
-                <div id="pnlAssignToOtherTeamConfirmMessage">
-                    <p
-                        v-html="this.model.userRole == 'Supervisor' ? $t('Interviews.AssignConfirmMessage', {
-                            count: 1,
-                            status1: 'Supervisor assigned',
-                            status2: 'Interviewer assigned',
-                            status3: 'Rejected by Supervisor'} )
-                            : $t('Interviews.AssignToOtherTeamConfirmMessage', {
-                                count: 1,
-                                status1: 'Approved by Supervisor',
-                                status2: 'Approved by Headquarters'} )"></p>
-                </div>
-
                 <div v-if="selectedTooltip.isReceivedByTablet">
                     <br />
                     <input
                         type="checkbox"
-                        id="reassignReceivedByInterviewer"
-                        v-model="isReassignReceivedByInterviewer"
+                        id="reassignReceivedByTablet"
+                        v-model="isReassignReceivedByTablet"
                         class="checkbox-filter"/>
-                    <label for="reassignReceivedByInterviewer"
+                    <label for="reassignReceivedByTablet"
                         style="font-weight: normal">
                         <span class="tick"></span>
-                        {{$t("Interviews.AssignReceivedConfirm", 1)}}
+                        {{$t("Reports.AssignReceivedConfirm", 1)}}
                     </label>
                     <br />
-                    <span v-if="isReassignReceivedByInterviewer"
+                    <span v-if="isReassignReceivedByTablet"
                         class="text-danger">
-                        {{$t("Interviews.AssignReceivedWarning")}}
+                        {{$t("Reports.AssignReceivedWarning")}}
                     </span>
                 </div>
             </form>
@@ -231,7 +234,7 @@
                     class="btn btn-primary"
                     role="confirm"
                     @click="assign"
-                    :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
+                    :disabled="!canClickAssign()">{{ $t("Common.Assign") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
@@ -295,29 +298,6 @@ import Vue from 'vue'
 import {isNull, chain, debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 
-const mapStyles = [
-    {
-        url: '/img/google-maps-markers/m1.png',
-        dark: true,
-    },
-    {
-        url: '/img/google-maps-markers/m2.png',
-        dark: false,
-    },
-    {
-        url: '/img/google-maps-markers/m3.png',
-        dark: true,
-    },
-    {
-        url: '/img/google-maps-markers/m4.png',
-        dark: true,
-    },
-    {
-        url: '/img/google-maps-markers/m5.png',
-        dark: true,
-    },
-]
-
 export default {
     mixins: [routeSync],
 
@@ -335,6 +315,7 @@ export default {
             responsibleParams: {showArchived: true, showLocked: true},
             assignmentId: null,
             newResponsibleId: null,
+            isReassignReceivedByTablet: false,
         }
     },
 
@@ -354,7 +335,10 @@ export default {
 
         canAssign() {
             if (this.model.userRole == 'Supervisor' &&
-                (this.selectedTooltip.status == 'InterviewerAssigned' || this.selectedTooltip.status == 'RejectedBySupervisor')
+                (this.selectedTooltip.status == 'InterviewerAssigned'
+                || this.selectedTooltip.status == 'SupervisorAssigned'
+                || this.selectedTooltip.status == 'RejectedBySupervisor'
+                )
             )
                 return true
 
@@ -366,6 +350,16 @@ export default {
             )
                 return true
 
+            return false
+        },
+
+        canClickAssign() {
+            if (this.newResponsibleId)
+            {
+                if (this.selectedTooltip.isReceivedByTablet)
+                    return this.isReassignReceivedByTablet
+                return true
+            }
             return false
         },
 
@@ -415,6 +409,7 @@ export default {
 
         assignInterview() {
             this.newResponsibleId = null
+            this.isReassignReceivedByTablet = false
             this.$refs.assignModal.modal({keyboard: false})
         },
 
@@ -571,7 +566,6 @@ export default {
             })
 
             this.map.data.setStyle(function(feature) {
-                const styles = mapStyles
                 const type = feature.getProperty('type')
 
                 if (type == 'Interview')
@@ -688,27 +682,41 @@ export default {
                     }
                 }
                 if (type == 'Cluster') {
+                    const iconStyle = {
+                        url: '/img/google-maps-markers/m1.png',
+                        dark: true,
+                    }
                     const count = feature.getProperty('count')
+                    if (count < 10) {
+                        iconStyle.url = '/img/google-maps-markers/m1.png'
+                    } else if (count < 100) {
+                        iconStyle.url = '/img/google-maps-markers/m2.png'
+                        iconStyle.dark = false
+                    } else if (count < 1000) {
+                        iconStyle.url = '/img/google-maps-markers/m3.png'
+                    } else if (count < 10000) {
+                        iconStyle.url = '/img/google-maps-markers/m4.png'
+                    } else {
+                        iconStyle.url = '/img/google-maps-markers/m5.png'
+                    }
+
                     const max = self.totalMarkers
-                    const percent = (count / max) * styles.length
+                    const percent = (count / max) * 5
 
-                    const index = Math.min(styles.length - 1, Math.round(percent))
+                    const index = Math.min(4, Math.round(percent))
 
-                    const style = styles[index]
-
-                    const ratio = 1
                     const extend = 20
-                    const radius = 60 + index * extend * ratio
-                    style.scaledSize = new google.maps.Size(radius, radius)
-                    style.anchor = new google.maps.Point(radius / 2, radius / 2)
+                    const radius = 60 + index * extend
+                    iconStyle.scaledSize = new google.maps.Size(radius, radius)
+                    iconStyle.anchor = new google.maps.Point(radius / 2, radius / 2)
 
                     return {
                         label: {
                             fontSize: '12px',
                             text: count,
-                            color: style.dark ? '#fff' : '#000',
+                            color: iconStyle.dark ? '#fff' : '#000',
                         },
-                        icon: style,
+                        icon: iconStyle,
                     }
                 }
                 return {}
@@ -719,9 +727,35 @@ export default {
 
                 if (type == 'Cluster') {
                     //const expand = event.feature.getProperty('expand')
-                    const expand = this.map.getZoom() + 1
-                    self.map.setZoom(expand)
-                    self.map.panTo(event.latLng)
+
+                    var mapZoomService = new google.maps.MaxZoomService()
+                    const currentZoom = this.map.getZoom()
+                    await mapZoomService.getMaxZoomAtLatLng(event.latLng, result => {
+                        if (result.zoom <= currentZoom) {
+                            const interviewsCount = event.feature.getProperty('interviewsCount')
+                            const assignmentsCount = event.feature.getProperty('assignmentsCount')
+
+                            var data = {
+                                assignmentsCount: assignmentsCount,
+                                interviewsCount: interviewsCount,
+                            }
+
+                            self.selectedTooltip = data
+
+                            Vue.nextTick(function() {
+                                self.infoWindow.setContent($(self.$refs.clusterTooltip).html())
+                                self.infoWindow.setPosition(event.latLng)
+                                self.infoWindow.setOptions({
+                                    pixelOffset: new google.maps.Size(0, -30),
+                                })
+                                self.infoWindow.open(self.map)
+                            })
+
+                        } else {
+                            self.map.setZoom(currentZoom + 1)
+                            self.map.panTo(event.latLng)
+                        }
+                    })
                 }
                 else if (type == 'Interview')
                 {
@@ -811,6 +845,11 @@ export default {
 
         async showPointsOnMap(east, north, west, south, extendBounds) {
             const zoom = extendBounds ? -1 : this.map.getZoom()
+            /*const center = this.map.getCenter()
+            var mapZoomService = new google.maps.MaxZoomService()
+            const coor = {lng: center.lng(), lat: center.lat()}
+            const maxZoom = await mapZoomService.getMaxZoomAtLatLng(coor)*/
+            const maxZoom = 19
 
             var request = {
                 QuestionnaireId: (this.selectedQuestionnaireId || {}).key || null,
@@ -818,6 +857,7 @@ export default {
                 ResponsibleId: (this.responsibleId || {}).key || null,
                 AssignmentId: this.assignmentId,
                 Zoom: zoom,
+                MaxZoom: maxZoom,
                 east,
                 north,
                 west,
