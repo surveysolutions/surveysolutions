@@ -1,11 +1,12 @@
 using HotChocolate;
 using HotChocolate.Resolvers;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Code
 {
     public static class GraphQlHelpers
     {
-        public static string GetWorkspace(this IResolverContext ctx)
+        public static string GetWorkspaceNameOrDefault(this IResolverContext ctx)
         {
             ctx.Variables.TryGetVariable("workspace", out string workspaceArgument);
 
@@ -18,7 +19,7 @@ namespace WB.UI.Headquarters.Code
                 catch (GraphQLException)
                 {
                     // now HotChocolate throws exception instead of null
-                    workspaceArgument = null;
+                    workspaceArgument = WorkspaceConstants.DefaultWorkspaceName;
                 }
             }
             
