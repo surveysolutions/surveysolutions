@@ -81,13 +81,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             InterviewStatus.InterviewerAssigned,
             InterviewStatus.Restarted,
             InterviewStatus.RejectedBySupervisor,
+            InterviewStatus.Completed,
         };
 
         private static readonly InterviewStatus[] SupervisorStatusesForGps =
             InterviewerStatusesForGps.Concat(new []
         {
             InterviewStatus.SupervisorAssigned,
-            InterviewStatus.Completed,
             InterviewStatus.RejectedByHeadquarters,
         }).ToArray();
         
