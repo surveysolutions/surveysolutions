@@ -11,8 +11,8 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
             Execute.Sql($@"insert into assignment_geo_answers (assignment_id, questionid, latitude, longitude)
                                 select aia.assignmentId, 
 	                                   aia.questionid, 
-	                                   cast(left(aia.answer, strpos(aia.answer, ',') - 1) as float), 
-	                                   cast(right(left(aia.answer, strpos(aia.answer, '[') - 1), strpos(aia.answer, ',')-2) as float)	
+	                                   cast(split_part(left(aia.answer, strpos(aia.answer, '[') - 1),',',1) as float), 
+	                                   cast(split_part(left(aia.answer, strpos(aia.answer, '[') - 1),',',2) as float)
                                 from assignments as ass
                                 left join assignmentsidentifyinganswers as aia 
                                 on ass.id = aia.assignmentid 
