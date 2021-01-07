@@ -214,7 +214,7 @@
     <value>Archived user cannot be re-used because it exists in another role</value>
   </data>
   <data name="PLU0005Recomendation" xml:space="preserve">
-    <value>It should be between 3 and 15 characters, and can contain only letters, digits and the underscore symbol</value>
+    <value>The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: 'A'..'Z' or 'a'..'z'. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names.</value>
   </data>
   <data name="PLU0006Recomendation" xml:space="preserve">
     <value>It must contain at least one number, one upper case character, and one lower case character. Length should be between 10 and 100 characters</value>
