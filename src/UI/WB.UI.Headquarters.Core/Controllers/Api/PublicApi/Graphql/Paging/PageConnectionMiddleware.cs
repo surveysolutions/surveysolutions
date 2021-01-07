@@ -20,10 +20,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Paging
 
             PageRequestInfo pageRequestInfo = new PageRequestInfo
             {
-                Skip = context.Argument<int?>("skip"),
-                Take = context.Argument<int?>("take"),
-                HasTotalCount = context.FieldSelection.SelectionSet.HasSelectedField("totalCount"),
-                HasFilteredCount =  context.FieldSelection.SelectionSet.HasSelectedField("filteredCount"),
+                Skip = context.ArgumentValue<int?>("skip"),
+                Take = context.ArgumentValue<int?>("take"),
+                HasTotalCount = context.Selection.SyntaxNode.SelectionSet.HasSelectedField("totalCount"),
+                HasFilteredCount =  context.Selection.SyntaxNode.SelectionSet.HasSelectedField("filteredCount"),
             };
 
             if (context.Result is IQueryable<TClrType> source)
