@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var plainStorageAccessor = validationContext.GetService<IPlainStorageAccessor<Workspace>>();
-            var suchNameStoredInDatabase = plainStorageAccessor.Query(_ => _.Any(x => x.Name == value));
+            if (plainStorageAccessor == null)
+                throw new InvalidOperationException("Workspace accessor was not resolved");
+            
+            var suchNameStoredInDatabase = plainStorageAccessor.Query(_ => _.Any(x => x.Name == value as string));
 
             return !suchNameStoredInDatabase ? ValidationResult.Success : new ValidationResult(ErrorMessageString);
         }

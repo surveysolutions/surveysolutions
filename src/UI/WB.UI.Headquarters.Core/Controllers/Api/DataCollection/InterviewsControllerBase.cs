@@ -218,7 +218,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             });
         }
         
-        protected IActionResult DetailsAfter(Guid id, Guid eventId)
+        protected IActionResult DetailsAfterV3(Guid id, Guid eventId)
         {
             var events = eventStore.ReadAfter(id, eventId).ToList();
             return new JsonResult(events, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
