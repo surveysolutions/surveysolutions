@@ -390,10 +390,11 @@ export default {
     },
 
     mounted() {
-        this.assignmentId = this.query.assignmentId
-
         this.setMapCanvasStyle()
         this.initializeMap()
+
+        this.assignmentId = this.query.assignmentId
+
         this.showPointsOnMap(180, 180, -180, -180, true)
     },
 
@@ -404,10 +405,12 @@ export default {
         },
 
         createInterview() {
+            const self = this
             const assignmentId = this.selectedTooltip.assignmentId
             $.post('InterviewerHq/StartNewInterview/' + assignmentId, response => {
                 //window.location = response
                 window.open(response, '_blank')
+                self.reloadMarkersInBounds()
             })
         },
 
