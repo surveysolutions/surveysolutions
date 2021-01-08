@@ -280,7 +280,7 @@ export default {
                 const where = {and :[
                     {webMode: {eq: true}},
                     {archived: {eq: false}},
-                    {responsibleId: {in:interviewersArray}}]}
+                    {responsibleId: {in: interviewersArray}}]}
 
                 const response = await self.$apollo.query({
                     query,
