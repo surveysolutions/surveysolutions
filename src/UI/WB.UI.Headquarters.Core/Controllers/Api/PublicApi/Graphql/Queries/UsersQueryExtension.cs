@@ -12,7 +12,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
             
             descriptor.Field<UsersResolver>(x => x.GetViewer(default!))
                 .Authorize()
-                .Type<UserType>().Name("viewer");
+                .Type<UserType>()
+                .Name("viewer");
         }
     }
 }
