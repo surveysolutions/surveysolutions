@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlServerCe;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -44,16 +45,30 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             else
             {
-                state.GpsAnswers.Add(new InterviewGps
+                var answerToRestore = state.GpsAnswersToRemove.FirstOrDefault(x => x.QuestionId == questionId && x.RosterVector == rosterVector);
+
+                if (answerToRestore != null)
                 {
-                    QuestionId = @event.Payload.QuestionId,
-                    RosterVector = rosterVector,
-                    Latitude = @event.Payload.Latitude,
-                    Longitude = @event.Payload.Longitude,
-                    Timestamp = @event.Payload.Timestamp,
-                    IsEnabled = true,
-                    InterviewSummary = state
-                });
+                    state.GpsAnswersToRemove.Remove(answerToRestore);
+                    
+                    answerToRestore.Latitude = @event.Payload.Latitude;
+                    answerToRestore.Longitude = @event.Payload.Longitude;
+                    answerToRestore.Timestamp = @event.Payload.Timestamp;
+                    answerToRestore.IsEnabled = true;
+                    answerToRestore.InterviewSummary = state;
+                    state.GpsAnswers.Add(answerToRestore);
+                }
+                else
+                    state.GpsAnswers.Add(new InterviewGps
+                    {
+                        QuestionId = @event.Payload.QuestionId,
+                        RosterVector = rosterVector,
+                        Latitude = @event.Payload.Latitude,
+                        Longitude = @event.Payload.Longitude,
+                        Timestamp = @event.Payload.Timestamp,
+                        IsEnabled = true,
+                        InterviewSummary = state
+                    });
             }
 
             return state;
@@ -72,6 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             foreach (var remove in toRemove)
             {
+                state.GpsAnswersToRemove.Add(remove);
                 state.GpsAnswers.Remove(remove);
             }
             return state;
@@ -147,6 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     {
                         if (storedAnswer.identityToRemove == removedRosterInstance)
                         {
+                            state.GpsAnswersToRemove.Add(storedAnswer.entity);
                             state.GpsAnswers.Remove(storedAnswer.entity);
                         }
                     }
