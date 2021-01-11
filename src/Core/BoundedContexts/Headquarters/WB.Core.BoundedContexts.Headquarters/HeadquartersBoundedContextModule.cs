@@ -371,7 +371,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
-            registry.BindScheduledJob<UpgradeAssignmentJob, QueuedUpgrade>();
+            registry.BindScheduledJob<UpgradeAssignmentJob, AssignmentsUpgradeProcess>();
             registry.BindScheduledJob<UsersImportJob, Unit>();
 
             registry.Bind<CalendarEvent>();

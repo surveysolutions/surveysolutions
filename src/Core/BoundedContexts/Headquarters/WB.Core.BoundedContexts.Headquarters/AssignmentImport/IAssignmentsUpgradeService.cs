@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public interface IAssignmentsUpgradeService
     {
-        void EnqueueUpgrade(Guid processId, Guid userId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
+        Task EnqueueUpgrade(Guid processId, Guid userId, 
+            QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken token = default);
 
         void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails);
         
