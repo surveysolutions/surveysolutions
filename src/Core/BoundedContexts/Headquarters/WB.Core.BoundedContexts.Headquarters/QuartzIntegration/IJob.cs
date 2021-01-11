@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         
         async Task IJob.Execute(IJobExecutionContext context)
         {
-            var data = JsonSerializer.Deserialize<T>(context.MergedJobDataMap.GetString(BaseTask.DATA_KEY));
+            var data = JsonSerializer.Deserialize<T>(context.MergedJobDataMap.GetString(BaseTask.TaskDataKey));
             await Execute(data, context);
         }
     }
