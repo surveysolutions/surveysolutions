@@ -44,10 +44,10 @@
     <Property Id="NETCOREHOSTVERSION">
       <RegistrySearch Id="NetCoreHostVersion" Type="raw" Win64="yes" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost" Name="Version" />
     </Property>
-    <Condition Message="This setup requires .NET Core 3.1 or higher">
-      <![CDATA[Installed OR (NETCOREHOSTVERSION >= "3.1.0")]]>
-    </Condition>
 
+    <Condition Message="This setup requires .NET Core 5.0 or higher">
+      <![CDATA[Installed OR (NETCOREHOSTVERSION >= "5.0.0")]]>
+    </Condition>
 
     <Property Id="SITEPORT" Value="9700"></Property>
     <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
@@ -163,6 +163,7 @@
     <Binary Id="CustomActionBinary"
             SourceFile="..\SurveySolutionsCustomActions\bin\$(var.Configuration)\SurveySolutionsCustomActions.CA.dll" />
 
+ 
     <CustomAction Id="SetSiteSettingsDataValue"
                   Return="check"
                   Property="WriteSiteSettings"
@@ -171,6 +172,18 @@
     <CustomAction Id="WriteSiteSettings"
                   BinaryKey="CustomActionBinary"
                   DllEntry="WriteSiteIniSettings"
+                  Execute="deferred"
+                  Return="check"
+                  Impersonate="no"/>
+
+    <CustomAction Id="SetUpdateWebConfigDataValue"
+                  Return="check"
+                  Property="UpdateWebConfig"
+                  Value="InstallFolder=[INSTALLSITEFOLDER]" />
+
+    <CustomAction Id="UpdateWebConfig"
+                  BinaryKey="CustomActionBinary"
+                  DllEntry="UpdateWebConfig"
                   Execute="deferred"
                   Return="check"
                   Impersonate="no"/>
@@ -200,6 +213,14 @@
       </Custom>
       <Custom Action="WriteSiteSettings" After="InstallFiles" >
         <![CDATA[NOT Installed]]>
+      </Custom>
+
+      <Custom Action="SetUpdateWebConfigDataValue" Before="UpdateWebConfig">
+          <![CDATA[NOT Installed]]>
+      </Custom>
+
+      <Custom Action="UpdateWebConfig" After="InstallFiles" >
+          <![CDATA[NOT Installed]]>
       </Custom>
       <DeleteServices>NOT UPGRADINGPRODUCTCODE</DeleteServices>
     </InstallExecuteSequence>
