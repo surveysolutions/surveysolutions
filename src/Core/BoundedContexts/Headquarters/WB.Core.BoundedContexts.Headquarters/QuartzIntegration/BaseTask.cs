@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public abstract class BaseTask
     {
-        public const string DATA_KEY = "_data_";
+        public const string TaskDataKey = "_data_";
         protected readonly ISchedulerFactory schedulerFactory;
 
         private readonly Type jobType;

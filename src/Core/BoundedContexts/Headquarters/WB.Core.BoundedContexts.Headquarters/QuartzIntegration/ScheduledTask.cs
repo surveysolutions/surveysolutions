@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
             var trigger = TriggerBuilder.Create()
                 .ForJob(Key)
-                .UsingJobData(BaseTask.DATA_KEY, JsonSerializer.Serialize(data));
+                .UsingJobData(BaseTask.TaskDataKey, JsonSerializer.Serialize(data));
 
             if (workspace != null)
             {
