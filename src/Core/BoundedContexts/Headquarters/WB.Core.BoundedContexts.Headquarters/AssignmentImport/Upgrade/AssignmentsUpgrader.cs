@@ -28,12 +28,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.inScopeExecutor = inScopeExecutor;
         }
 
-        public void Upgrade(QueuedUpgrade upgrade, CancellationToken cancellation)
+        public void Upgrade(AssignmentsUpgradeProcess upgradeProcess, CancellationToken cancellation)
         {
-            var migrateFrom = upgrade.From;
-            var migrateTo = upgrade.To;
-            var userId = upgrade.UserId;
-            var processId = upgrade.ProcessId;
+            var migrateFrom = upgradeProcess.From;
+            var migrateTo = upgradeProcess.To;
+            var userId = upgradeProcess.UserId;
+            var processId = upgradeProcess.ProcessId;
 
             var idsToMigrate = assignments.GetAllAssignmentIdsForMigrateToNewVersion(migrateFrom);
 
