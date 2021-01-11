@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
         [HttpGet]
         [Route("{id:guid}/{eventId:guid}")]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewPatch)]
-        public IActionResult DetailsAfter(Guid id, Guid eventId) => base.DetailsAfter(id, eventId);
+        public IActionResult DetailsAfter(Guid id, Guid eventId) => base.DetailsAfterV3(id, eventId);
 
         [HttpPost]
         [Route("{id:guid}")]
