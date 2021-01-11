@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     [DisallowConcurrentExecution]
     [RetryFailedJob]
     [DisplayName("Upgrade assignments"), Category("Import")]
-    public class UpgradeAssignmentJob : IJob<QueuedUpgrade>
+    public class UpgradeAssignmentJob : IJob<AssignmentsUpgradeProcess>
     {
         public UpgradeAssignmentJob(IAssignmentsUpgrader assignmentsUpgrader)
         {
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private readonly IAssignmentsUpgrader assignmentsUpgrader;
 
-        public Task Execute(QueuedUpgrade data, IJobExecutionContext context)
+        public Task Execute(AssignmentsUpgradeProcess data, IJobExecutionContext context)
         {
             assignmentsUpgrader.Upgrade(data, CancellationToken.None);
 
