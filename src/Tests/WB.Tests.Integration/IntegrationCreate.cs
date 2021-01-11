@@ -2,32 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using Ncqrs;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
-using NHibernate.Properties;
+using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
+using Npgsql;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -36,7 +36,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -55,8 +54,10 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.UI.Designer.Code;
+using WB.UI.Headquarters;
 using Configuration = NHibernate.Cfg.Configuration;
 using Environment = System.Environment;
 
@@ -351,15 +352,12 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
+        public static PostgresKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
             IUnitOfWork sessionProvider = null, UnitOfWorkConnectionSettings postgreConnectionSettings = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
-            return new PostgresReadSideKeyValueStorage<TEntity>(
+            return new PostgresKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
-                Mock.Of<ILogger>(),
-                Create.Storage.NewMemoryCache(),
                 new EntitySerializer<TEntity>());
         }
 
@@ -372,24 +370,39 @@ namespace WB.Tests.Integration
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = connectionString;
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString)
+                {
+                    SearchPath = schemaName
+                };
+
+                var workspaceConnectionString = connectionStringBuilder.ToString();
+                db.ConnectionString = workspaceConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes), "Plain");
+            cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes, schemaName), "Plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
-            if (executeSchemaUpdate)
-            {
-                var update = new SchemaUpdate(cfg);
-                update.Execute(false, true);
-            }
             if (schemaName != null)
             {
                 cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             }
             
+            if (executeSchemaUpdate)
+            {
+                var update = new SchemaUpdate(cfg);
+                update.Execute(false, true);
+            }
+           
             return cfg.BuildSessionFactory();
+        }
+        public static ISessionFactory SessionFactoryProd(string connectionString, Workspace workspace = null)
+        {
+            workspace ??= Workspace.Default;
+            
+            return new HqSessionFactoryFactory(Startup.BuildUnitOfWorkSettings(connectionString))
+                .BuildSessionFactory(workspace.AsContext().SchemaName);
         }
 
         public static ISessionFactory SessionFactory(string connectionString, 
@@ -397,8 +410,6 @@ namespace WB.Tests.Integration
             IEnumerable<Type> usersEntityMapTypes,
             string readSideSchemaName,
             IEnumerable<Type> readStorageEntityMapTypes,
-            string plainStoreSchemaName,
-            IEnumerable<Type> plainStorageEntityMapTypes,
             bool executeSchemaUpdate)
         {
             var cfg = new Configuration();
@@ -406,13 +417,19 @@ namespace WB.Tests.Integration
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = connectionString;
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString)
+                {
+                    SearchPath = readSideSchemaName
+                };
+
+                var workspaceConnectionString = connectionStringBuilder.ToString();
+                db.ConnectionString = workspaceConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(GetMappingsFor(usersEntityMapTypes, usersSchemaName), "user");
+            cfg.AddDeserializedMapping(GetUsersMappings(usersEntityMapTypes), "user");
             cfg.AddDeserializedMapping(GetMappingsFor(readStorageEntityMapTypes, readSideSchemaName), "read");
-            cfg.AddDeserializedMapping(GetMappingsFor(plainStorageEntityMapTypes, plainStoreSchemaName), "plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
             if (executeSchemaUpdate)
@@ -424,9 +441,30 @@ namespace WB.Tests.Integration
             return cfg.BuildSessionFactory();
         }
 
-        public static IUnitOfWork UnitOfWork(ISessionFactory factory)
+        private static HbmMapping GetUsersMappings(IEnumerable<Type> assemblies)
         {
-            return new UnitOfWork(factory, Mock.Of<ILogger>());
+            var mapper = new ModelMapper();
+            var readSideMappingTypes = assemblies
+                .Where(x => x.GetCustomAttribute<UsersAttribute>() != null &&
+                            x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+
+            mapper.AfterMapProperty += (inspector, member, customizer) =>
+            {
+                var propertyInfo = (PropertyInfo)member.LocalMember;
+
+                customizer.Column('"' + propertyInfo.Name + '"');
+            };
+
+            mapper.AddMappings(readSideMappingTypes);
+
+            return mapper.CompileMappingForAllExplicitlyAddedEntities();
+        }
+
+        public static IUnitOfWork UnitOfWork(ISessionFactory factory,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
+        {
+            return new UnitOfWork(new Lazy<ISessionFactory>(() => factory), 
+                Mock.Of<ILogger<UnitOfWork>>(),  workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)

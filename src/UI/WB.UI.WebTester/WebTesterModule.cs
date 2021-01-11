@@ -36,6 +36,7 @@ using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
@@ -71,6 +72,7 @@ namespace WB.UI.WebTester
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.BindAsSingleton<IScenarioSerializer, ScenarioSerializer>();
             registry.Bind<IAggregateRootPrototypeService, WebTesterAggregateRootPrototypeService>();
+            registry.Bind<IWorkspaceContextAccessor, WebTesterWorkspaceContextAccessor>();
 
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
 

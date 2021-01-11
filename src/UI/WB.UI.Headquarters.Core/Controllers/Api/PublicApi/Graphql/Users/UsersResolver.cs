@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
+using System.Linq;
 using HotChocolate;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -20,7 +22,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             {
                 Id = authorizedUser.Id,
                 UserName = authorizedUser.UserName,
-                Roles = roles.ToArray()
+                Roles = roles.ToArray(),
+                Workspaces = authorizedUser.Workspaces.ToArray()
             };
         }
     }

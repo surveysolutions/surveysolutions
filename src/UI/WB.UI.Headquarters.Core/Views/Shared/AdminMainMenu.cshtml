@@ -1,6 +1,8 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.BoundedContexts.Headquarters.Workspaces
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Services
+@using WB.UI.Shared.Web.Extensions
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -62,7 +64,6 @@
             </a>
             <ul class="dropdown-menu">
                 @Html.MainMenuItem("Configuration", "ControlPanel", Pages.Configuration, MenuItem.Administration_Config)
-                
                 @Html.MainMenuItem("AppUpdates", "ControlPanel", Pages.AppUpdates, MenuItem.Administration_AppUpdates)
                 @Html.MainMenuItem("InterviewPackages", "ControlPanel", Pages.InterviewPackages, MenuItem.Administration_InterviewPackages)
                 @Html.MainMenuItem("Exceptions", "ControlPanel", Pages.Exceptions, MenuItem.Administration_Exceptions)
@@ -74,26 +75,18 @@
 <ul class="nav navbar-nav navbar-right">
     @if (User.IsInRole("Administrator"))
     {
-        <li class="dropdown  @(new[] {MenuItem.Administration_Diagnostics, MenuItem.Administration_Config, MenuItem.Administration_TabletInfo, MenuItem.Settings, MenuItem.TabletLogs, MenuItem.EmailProviders, MenuItem.AuditLog}.Contains((MenuItem) page) ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
-                @MainMenu.Administration <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                @Html.MainMenuItem("Diagnostics", "Administration", Pages.Diagnostics, MenuItem.Administration_Config)
-                @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
-                @Html.MainMenuItem("Logs", "Diagnostics", TabletLogs.PageTitle, MenuItem.TabletLogs)
-                @Html.MainMenuItem("EmailProviders", "Settings", Common.EmailProviders, MenuItem.EmailProviders)
-                @Html.MainMenuItem("AuditLog", "Diagnostics", Common.AuditLog, MenuItem.AuditLog)
-                @Html.MainMenuItem("TabletInfos", "Administration", Pages.PackagesInfo_Header, MenuItem.Administration_TabletInfo)
-            </ul>
-        </li>
-    }
+        <li><a href="@Url.ContentAtWorkspace(Workspace.Admin.AsContext(), "Workspaces")"></a></li>
+        @Html.MainMenuItem(Workspace.Admin.AsContext(), "Index", "Workspaces", 
+            @MainMenu.ServerAdministration, MenuItem.ServerAdministration)
+    }   
     <li><a href="http://support.mysurvey.solutions/admin" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
-            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
+            <li>
+                <a href="/Account/LogOff">@Common.Logoff</a>
+            </li>
         </ul>
     </li>
 

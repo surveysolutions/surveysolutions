@@ -9,20 +9,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
         {
             descriptor.BindFieldsExplicitly();
             descriptor.Name("Assignment");
-            descriptor.Field(x => x.Id)
-                .Type<NonNullType<IdType>>();
-            descriptor.Field(x => x.ResponsibleId)
-                .Type<NonNullType<UuidType>>();
-            descriptor.Field(x => x.CreatedAtUtc)
-                .Type<NonNullType<DateTimeType>>();
-
+            
+            descriptor.Field(x => x.Archived);
+            descriptor.Field(x => x.CreatedAtUtc).Type<NonNullType<DateTimeType>>();
+            descriptor.Field(x => x.Email);
+            descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
+            descriptor.Field(x => x.InterviewsNeeded);
             descriptor.Field(x => x.ReceivedByTabletAtUtc)
                 .Description("Will return `null` when assignment is not received by tablet");
-            descriptor.Field(x => x.Email);
-            descriptor.Field(x => x.InterviewsNeeded);
-            descriptor.Field(x => x.Archived);
-            descriptor.Field(x => x.WebMode)
-                .Type<NonNullType<BooleanType>>();
+            descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
+            descriptor.Field(x => x.WebMode).Type<NonNullType<BooleanType>>();
         }
     }
 }

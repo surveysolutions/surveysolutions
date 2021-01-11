@@ -30,40 +30,38 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             this.scope = rootScope.BeginLifetimeScope();
 
-            using (var assemblyStream = new MemoryStream(Convert.FromBase64String(supportingAssembly)))
-            {
-                context = new InterviewAssemblyLoadContext();
-                var assembly = context.LoadFromStream(assemblyStream);
+            using var assemblyStream = new MemoryStream(Convert.FromBase64String(supportingAssembly));
+            context = new InterviewAssemblyLoadContext();
+            var assembly = context.LoadFromStream(assemblyStream);
 
-                AppDomainsAliveGauge.Inc();
+            AppDomainsAliveGauge.Inc();
 
-                var questionnaireStorage = this.scope.Resolve<IQuestionnaireStorage>();
-                var questionnaireAssemblyAccessor =  this.scope.Resolve<IQuestionnaireAssemblyAccessor>();
+            var questionnaireStorage = this.scope.Resolve<IQuestionnaireStorage>();
+            var questionnaireAssemblyAccessor =  this.scope.Resolve<IQuestionnaireAssemblyAccessor>();
 
-                ((WebTesterQuestionnaireAssemblyAccessor)questionnaireAssemblyAccessor).Assembly = assembly;
+            ((WebTesterQuestionnaireAssemblyAccessor)questionnaireAssemblyAccessor).Assembly = assembly;
 
-                var questionnaire =
-                    questionnaireStorage.GetQuestionnaire(
-                        identity, null);
-                var prototype =  new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
-                    new InterviewExpressionStateUpgrader(),
-                    this.scope.Resolve<ILoggerProvider>());
+            var questionnaire =
+                questionnaireStorage.GetQuestionnaire(
+                    identity, null);
+            var prototype =  new InterviewExpressionStatePrototypeProvider(questionnaireAssemblyAccessor,
+                new InterviewExpressionStateUpgrader(),
+                this.scope.Resolve<ILoggerProvider>());
 
-                if (questionnaire == null)
-                    throw new InvalidOperationException("Questionnaire must not be null.");
+            if (questionnaire == null)
+                throw new InvalidOperationException("Questionnaire must not be null.");
 
-                questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(identity);
+            questionnaire.ExpressionStorageType = prototype.GetExpressionStorageType(identity);
 
-                statefulInterview = this.scope.Resolve<WebTesterStatefulInterview>();
-                statefulInterview.SetId(interviewId);
-            }
+            statefulInterview = this.scope.Resolve<WebTesterStatefulInterview>();
+            statefulInterview.SetId(interviewId);
         }
 
         private static readonly Gauge AppDomainsAliveGauge =
             new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
 
         private readonly InterviewAssemblyLoadContext context;
-        private ILifetimeScope scope;
+        private readonly ILifetimeScope scope;
 
         public WebTesterStatefulInterview? statefulInterview { get; private set; }
 

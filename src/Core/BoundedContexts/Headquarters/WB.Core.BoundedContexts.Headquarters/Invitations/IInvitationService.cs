@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);
         void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message);
         List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
-        IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
+        IEnumerable<QuestionnaireBrowseItem> GetQuestionnairesWithInvitations();
         Invitation GetInvitationByToken(string token);
         Invitation GetInvitationByTokenAndPassword(string token, string password);
         Invitation GetInvitationByAssignmentId(int assignmentId);

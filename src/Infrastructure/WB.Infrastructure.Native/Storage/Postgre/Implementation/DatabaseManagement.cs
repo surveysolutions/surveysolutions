@@ -1,9 +1,11 @@
 ﻿using System;
+using Dapper;
 using FluentMigrator;
 using FluentMigrator.Builders.Create.ForeignKey;
 using FluentMigrator.Builders.Create.Table;
 using FluentMigrator.Infrastructure;
 using Npgsql;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -11,11 +13,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         public static void InitDatabase(string connectionString, string schemaName)
         {
-            CreateDatabase(connectionString);
-            CreateSchema(connectionString, schemaName);
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            connectionStringBuilder.SetApplicationPostfix("init");
+            connectionStringBuilder.Pooling = false;
+            CreateDatabase(connectionStringBuilder.ConnectionString);
+            CreateSchema(connectionStringBuilder.ConnectionString, schemaName);
         }
 
-        private static void CreateDatabase(string connectionString)
+        public static void CreateDatabase(string connectionString)
         {
             var masterDbConnectionString = new NpgsqlConnectionStringBuilder(connectionString);
             var databaseName = masterDbConnectionString.Database;
@@ -39,14 +44,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private static void CreateSchema(string connectionString, string schemaName)
         {
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
+            using var connection = new NpgsqlConnection(connectionString);
+            connection.Open();
 
-                var checkSchemaExistsCommand = connection.CreateCommand();
-                checkSchemaExistsCommand.CommandText = $"CREATE SCHEMA IF NOT EXISTS {schemaName}";
-                checkSchemaExistsCommand.ExecuteNonQuery();
-            }
+            var checkSchemaExistsCommand = connection.CreateCommand();
+            checkSchemaExistsCommand.CommandText = $"CREATE SCHEMA IF NOT EXISTS \"{schemaName}\"";
+            checkSchemaExistsCommand.ExecuteNonQuery();
         }
 
         public static IFluentSyntax CreateTableIfNotExists(this MigrationBase self, string tableName,
@@ -62,6 +65,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return !self.Schema.Table(tableName).Constraint(constraintName).Exists()
                 ? constructTableFunction(self.Create.ForeignKey(constraintName).FromTable(tableName))
                 : null;
+        }
+
+        public static bool MigratedToWorkspaces(string workspaceSchemaName, string connectionString)
+        {
+            using var connection = new NpgsqlConnection(connectionString);
+            var versionInfoExists = connection.ExecuteScalar<bool>(
+                "select exists (select 1 FROM information_schema.tables WHERE table_schema = :schemaName AND table_name = 'VersionInfo')",
+                new {schemaName = workspaceSchemaName});
+
+            if (versionInfoExists)
+            {
+                int migrationsCount = connection.ExecuteScalar<int>($"SELECT COUNT(\"Version\") FROM {workspaceSchemaName}.\"VersionInfo\"");
+                return migrationsCount >= 2;
+            }
+            
+            return false;
         }
     }
 }

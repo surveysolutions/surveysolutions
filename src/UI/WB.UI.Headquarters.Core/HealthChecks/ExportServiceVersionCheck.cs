@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Domain;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
@@ -14,10 +15,10 @@ namespace WB.UI.Headquarters.HealthChecks
     public class ExportServiceVersionCheck : IHealthCheck
     {
         private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
-        private readonly IInScopeExecutor scope;
+        private readonly IInScopeExecutor<IExportServiceApi> scope;
 
         public ExportServiceVersionCheck(
-            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
+            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor<IExportServiceApi> scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;
@@ -28,12 +29,11 @@ namespace WB.UI.Headquarters.HealthChecks
             var uri = this.exportOptions.Value.ExportServiceUrl + "/.version";
             try
             {
-                return await scope.ExecuteAsync(async sl =>
+                return await scope.ExecuteAsync(async api =>
                 {
-                    var api = sl.GetInstance<IExportServiceApi>();
                     var version = await api.Version();
                     return HealthCheckResult.Healthy(Diagnostics.export_service_check_Healthy.FormatString(uri, version));
-                });
+                }, WorkspaceConstants.DefaultWorkspaceName);
             }
             catch (Exception e)
             {

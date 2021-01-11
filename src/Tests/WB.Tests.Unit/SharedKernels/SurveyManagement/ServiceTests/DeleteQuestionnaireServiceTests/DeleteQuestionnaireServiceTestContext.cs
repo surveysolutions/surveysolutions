@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -11,12 +10,9 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
@@ -42,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 new DeleteQuestionnaireService(
                     interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>(),
                     commandService ?? Mock.Of<ICommandService>(),
-                    Mock.Of<ILogger>(),
+                    Mock.Of<ILogger<DeleteQuestionnaireService>>(),
                     Mock.Of<ITranslationManagementService>(),
                     interviewImportService ?? Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
                     Mock.Of<ISystemLog>(),

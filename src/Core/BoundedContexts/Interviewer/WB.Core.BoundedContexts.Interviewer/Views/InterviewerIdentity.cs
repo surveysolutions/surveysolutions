@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string? Id { get; set; }
 
         public string? Email { get; set; }
+        
+        public string? Workspace { get; set; }
 
         public string? SecurityStamp { get; set; }
 

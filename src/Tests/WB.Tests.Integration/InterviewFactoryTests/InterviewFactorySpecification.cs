@@ -27,6 +27,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
@@ -36,13 +37,10 @@ namespace WB.Tests.Integration.InterviewFactoryTests
     {
         private string connectionString;
         protected PostgreReadSideStorage<InterviewSummary> interviewSummaryRepository;
-        protected PostgreReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsRepository;
-        protected PostgresPlainStorageRepository<InterviewFlag> interviewFlagsStorage;
-        protected HqQuestionnaireStorage questionnaireStorage;
-        protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
 
         protected IUnitOfWork UnitOfWork;
         protected ISessionFactory sessionFactory;
+        protected IWorkspaceContextAccessor workspace;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -51,6 +49,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             
             this.connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.PlainStore, DbType.ReadSide);
 
+            workspace = Create.Service.WorkspaceContextAccessor();
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
@@ -64,7 +63,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewFlagMap),
                     typeof(InterviewGpsMap),
                     typeof(InterviewCommentMap)
-                }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+                }, true, workspace.CurrentWorkspace().SchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<InterviewTextListAnswer[]>>(new EntitySerializer<InterviewTextListAnswer[]>());
@@ -77,25 +76,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         public void EachTestSetup()
         {
             this.UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
-
             this.interviewSummaryRepository = IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);
-            this.questionnaireItemsRepository = IntegrationCreate.PostgresReadSideRepository<QuestionnaireCompositeItem, int>(UnitOfWork);
-            this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
-            this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
-                Mock.Of<ITranslationStorage>(),
-                Mock.Of<IQuestionnaireTranslator>(),
-                this.questionnaireItemsRepository, 
-                this.questionnaireItemsRepository, 
-                Mock.Of<IQuestionOptionsRepository>(),
-                Mock.Of<ISubstitutionService>(),
-                Create.Service.ExpressionStatePrototypeProvider(),
-                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>());
-
-            this.interviewFlagsStorage = new PostgresPlainStorageRepository<InterviewFlag>(IntegrationCreate.UnitOfWork(IntegrationCreate.SessionFactory(this.connectionString,
-                new List<Type>
-                {
-                    typeof(InterviewFlagMap)
-                }, true, new UnitOfWorkConnectionSettings().PlainStorageSchemaName)));
         }
 
         [TearDown]
@@ -138,7 +119,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>(),
                 Create.Service.ExpressionStatePrototypeProvider(),
-                reusableCategoriesFillerIntoQuestionnaire.Object);
+                reusableCategoriesFillerIntoQuestionnaire.Object,
+                Create.Storage.NewMemoryCache());
 
             document.Id = document.PublicKey.FormatGuid();
             questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);

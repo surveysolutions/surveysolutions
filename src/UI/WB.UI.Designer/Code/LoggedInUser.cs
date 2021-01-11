@@ -15,8 +15,8 @@ namespace WB.UI.Designer.Code
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid Id => httpContextAccessor.HttpContext.User.GetId();
-        public string Login => httpContextAccessor.HttpContext.User.GetUserName();
-        public bool IsAdmin => httpContextAccessor.HttpContext.User.IsAdmin();
+        public Guid Id => httpContextAccessor.HttpContext!.User.GetId();
+        public string Login => httpContextAccessor.HttpContext!.User.GetUserName();
+        public bool IsAdmin => httpContextAccessor.HttpContext!.User.IsAdmin();
     }
 }

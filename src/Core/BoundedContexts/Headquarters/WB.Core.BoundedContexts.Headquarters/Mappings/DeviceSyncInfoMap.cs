@@ -6,7 +6,6 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class DeviceSyncInfoMap : ClassMapping<DeviceSyncInfo>
     {
         public DeviceSyncInfoMap()
@@ -59,7 +58,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         }
     }
 
-    [PlainStorage]
     public class SyncStatisticsMap : ClassMapping<SyncStatistics>
     {
         public SyncStatisticsMap()

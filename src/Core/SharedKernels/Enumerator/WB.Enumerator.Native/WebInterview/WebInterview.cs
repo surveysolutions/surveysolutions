@@ -1,21 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview.Pipeline;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Enumerator.Native.WebInterview
 {
     public class WebInterview : Hub
     {
         private const string SectionId = "sectionId";
-
-        private readonly IPipelineModule[] hubPipelineModules;
-
+        
         private string CallerInterviewId
         {
             get
@@ -34,13 +32,11 @@ namespace WB.Enumerator.Native.WebInterview
             }
         }
 
-        public WebInterview(IPipelineModule[] hubPipelineModules)
-        {
-            this.hubPipelineModules = hubPipelineModules;
-        }
-
         public override async Task OnConnectedAsync()
         {
+            var ctx = this.Context.GetHttpContext();
+            var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
+
             await RegisterClient();
 
             foreach (var pipelineModule in hubPipelineModules)
@@ -53,6 +49,9 @@ namespace WB.Enumerator.Native.WebInterview
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            var ctx = this.Context.GetHttpContext();
+            var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
+
             foreach (var pipelineModule in hubPipelineModules)
             {
                 await pipelineModule.OnDisconnected(this, exception);

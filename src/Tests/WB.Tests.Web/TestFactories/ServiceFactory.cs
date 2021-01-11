@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using AutoMapper;
+using FFImageLoading.Mock;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +14,13 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.HttpServices.Services;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,6 +29,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services.Impl;
@@ -127,6 +136,19 @@ namespace WB.Tests.Web.TestFactories
                 new LocalizedIdentityErrorDescriber(), 
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<ILogger<UserManager<HqUser>>>());
+        }
+
+        public IWorkspacesCache WorkspacesCache(List<string> workspaces = null)
+        {
+            workspaces ??= new List<string>{ WorkspaceConstants.DefaultWorkspaceName };
+            return WorkspacesCache(workspaces.Select(w => new WorkspaceContext(w, w)));
+        }
+
+        public IWorkspacesCache WorkspacesCache(IEnumerable<WorkspaceContext> workspaces = null)
+        {
+            workspaces ??= new List<WorkspaceContext> {WorkspaceContext.Default};
+
+            return Mock.Of<IWorkspacesCache>(x => x.AllEnabledWorkspaces() == workspaces.ToList());
         }
     }
 }

@@ -189,6 +189,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
+        [Route("{controller}/{action}")]
         [ObservingNotAllowed]
         public IActionResult ImportStatus() => this.Ok(this.assignmentsImportService.GetImportStatus());
 
@@ -354,6 +355,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [HttpGet]
         [ObservingNotAllowed]
+        [Route("{controller}/{action=Index}")]
         public IActionResult GetInvalidAssignmentsByLastImport()
         {
             var sb = new StringBuilder();

@@ -47,14 +47,10 @@ namespace WB.Services.Export.Storage
                 };
 
                 log.LogTrace("GetBinary: {bucketName}/{key}", S3Settings.BucketName, getObject.Key);
-                using (var response = await client.GetObjectAsync(getObject))
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        response.ResponseStream.CopyTo(ms);
-                        return ms.ToArray();
-                    }
-                }
+                using var response = await client.GetObjectAsync(getObject);
+                await using var ms = new MemoryStream();
+                await response.ResponseStream.CopyToAsync(ms);
+                return ms.ToArray();
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -141,7 +137,8 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                log.LogDebug("Storing: {bucketName}/{key} [{contentType}]", S3Settings.BucketName, key, contentType);
+                log.LogDebug("Storing: {bucketName}/{key} [{contentType}] ({getKey})", S3Settings.BucketName, key, 
+                    contentType, GetKey(key));
 
                 var uploadRequest = new TransferUtilityUploadRequest
                 {

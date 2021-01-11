@@ -219,4 +219,10 @@
   <data name="Administration" xml:space="preserve">
     <value>Administration</value>
   </data>
+  <data name="Workspaces" xml:space="preserve">
+      <value>Workspaces</value>
+  </data>
+  <data name="ServerAdministration">
+    <value>Server Administration</value>
+  </data>
 </root>

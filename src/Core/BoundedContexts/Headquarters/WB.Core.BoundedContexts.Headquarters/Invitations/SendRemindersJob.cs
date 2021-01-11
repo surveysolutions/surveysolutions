@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Domain;
@@ -64,9 +65,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 ISenderInformation senderInfo = emailService.GetSenderInfo();
 
-                foreach (QuestionnaireLiteViewItem questionnaire in questionnaires)
+                foreach (QuestionnaireBrowseItem questionnaire in questionnaires)
                 {
-                    var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+                    var questionnaireIdentity = questionnaire.Identity();
                     WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
                     
                     await SendNoResponseReminder(questionnaireIdentity, 
