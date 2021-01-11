@@ -375,7 +375,6 @@ namespace WB.UI.Headquarters
                 app.UseHsts();
             }
 
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -387,11 +386,33 @@ namespace WB.UI.Headquarters
                 }
             });
 
+            app.UseRequestLocalization(opt =>
+            {
+                opt.ApplyCurrentCultureToResponseHeaders = true;
+                opt.DefaultRequestCulture = new RequestCulture("en-US");
+                opt.SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en")
+                };
+                opt.SupportedUICultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ru"),
+                    new CultureInfo("fr"),
+                    new CultureInfo("es"),
+                    new CultureInfo("ar"),
+                    new CultureInfo("id"),
+                    new CultureInfo("pt"),
+                    new CultureInfo("zh")
+                };
+            });
+
             app.UseUnderConstruction();
 
             app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             
             app.UseWorkspaces();
+
             if (!env.IsDevelopment())
             {
                 app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
@@ -419,25 +440,7 @@ namespace WB.UI.Headquarters
 
             app.UseGraphQLApi();
 
-            app.UseRequestLocalization(opt =>
-            {
-                opt.DefaultRequestCulture = new RequestCulture("en-US");
-                opt.SupportedCultures = new List<CultureInfo>
-                {
-                    new CultureInfo("en")
-                };
-                opt.SupportedUICultures = new List<CultureInfo>
-                {
-                    new CultureInfo("en"),
-                    new CultureInfo("ru"),
-                    new CultureInfo("fr"),
-                    new CultureInfo("es"),
-                    new CultureInfo("ar"),
-                    new CultureInfo("id"),
-                    new CultureInfo("pt"),
-                    new CultureInfo("zh")
-                };
-            });
+         
 
             app.UseEndpoints(endpoints =>
             {
