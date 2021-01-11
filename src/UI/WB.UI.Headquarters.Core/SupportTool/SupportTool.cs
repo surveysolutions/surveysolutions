@@ -21,7 +21,8 @@ namespace WB.UI.Headquarters.SupportTool
             {
                 new MigrateCommand(this.host),
                 new UsersCommand(this.host),
-                new VersionCommand(this.host)
+                new VersionCommand(this.host),
+                new WorkspacesCommand(this.host)
             };
 
             // Parse the incoming args and invoke the handler

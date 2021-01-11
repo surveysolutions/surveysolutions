@@ -48,6 +48,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
@@ -94,6 +95,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -1292,14 +1294,16 @@ namespace WB.Tests.Abc.TestFactories
             string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null,
             int? interviewerBuild = null,
             bool lockedBySupervisor = false,
-            string securityStamp = null)
+            string securityStamp = null, string[] workspaces = null)
         {
+
             var user = new HqUser
             {
                 Id = userId ?? Guid.NewGuid(),
                 IsArchived = isArchived ?? false,
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
+                FullName = string.Empty,
                 IsLockedBySupervisor = lockedBySupervisor,
                 Profile = new HqUserProfile
                 {
@@ -1311,12 +1315,21 @@ namespace WB.Tests.Abc.TestFactories
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1,
                 Roles = new List<HqRole> { Create.Entity.HqRole(role) },
+
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
 
+            workspaces ??= new[] {WorkspaceConstants.DefaultWorkspaceName};
+
+            foreach (var workspace in workspaces)
+            {
+                var ws = new Workspace(workspace, workspace);
+                user.Workspaces.Add(new WorkspacesUsers(ws, user));
+            }
+            
             return user;
         }
-        
+
         public UserView UserDocument()
             => Create.Entity.UserDocument(userId: null);
 
@@ -1791,9 +1804,12 @@ namespace WB.Tests.Abc.TestFactories
             result.QuestionnaireId = questionnaireIdentity ?? Create.Entity.QuestionnaireIdentity();
             result.Archived = isArchived;
 
-            var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
-            var readonlyProfile = new ReadonlyProfile();
-            
+            var readonlyUser = new ReadonlyUser
+            {
+            };
+            readonlyUser.RoleIds.Add(UserRoles.Interviewer.ToUserId());
+
+            var readonlyProfile = new HqUserProfile();
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
             result.AsDynamic().Responsible = readonlyUser;
 
@@ -1809,11 +1825,8 @@ namespace WB.Tests.Abc.TestFactories
 
             if (!string.IsNullOrWhiteSpace(questionnaireTitle))
             {
-                result.AsDynamic().Questionnaire = new QuestionnaireLiteViewItem
-                {
-                    Id = questionnaireIdentity?.Id,
-                    Title = questionnaireTitle
-                };
+                result.AsDynamic().Questionnaire = Create.Entity.QuestionnaireBrowseItem(questionnaireId: questionnaireIdentity?.QuestionnaireId, 
+                    version: questionnaireIdentity?.Version, title: questionnaireTitle);
             }
 
             if (updatedAt.HasValue)
@@ -2628,6 +2641,15 @@ namespace WB.Tests.Abc.TestFactories
             calendarEvent.UpdateDateUtc = updateDateUtc ?? DateTime.UtcNow;
             
             return calendarEvent;
+        }
+
+        public Workspace Workspace(string name = null, bool? disabled = false)
+        {
+            var ws  = new Workspace(name ?? Guid.NewGuid().FormatGuid(), (name ?? "") + " Display name1");
+            
+            if(disabled == true)
+                ws.Disable();
+            return ws;
         }
     }
 }

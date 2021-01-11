@@ -1,13 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
     public class InterviewerApiView
     {
         public Guid Id { get; set; }
+        
         public Guid SupervisorId { get; set; }
 
         public string SecurityStamp { get; set; }
+        
+        public List<WorkspaceApiView> Workspaces { get; set; }
+    }
+
+    public class WorkspaceApiView
+    {
+        public string Name { get; set; }
+        
+        public string DisplayName { get; set; }
+        public bool Disabled { get; set; }
     }
 
     public class InterviewerFullApiView

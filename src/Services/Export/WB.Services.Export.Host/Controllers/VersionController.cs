@@ -13,7 +13,7 @@ namespace WB.Services.Export.Host.Controllers
         {
             var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            string productVersion = fvi.FileVersion;
+            var productVersion = fvi.FileVersion;
             return Ok(productVersion);
         }
     }

@@ -1,5 +1,5 @@
 ARG NODEJS_VERSION
-ARG DOTNET_VERSION
+
 
 FROM node:${NODEJS_VERSION} AS js_builder
 
@@ -10,9 +10,9 @@ COPY src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources src/Core/S
 COPY src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources
 
 WORKDIR /src/UI/WB.UI.Frontend
-RUN yarn && yarn build --package
+RUN npm ci && npm build -- --package --modern
 
-FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_VERSION} as builder
+FROM mcr.microsoft.com/dotnet/sdk:5.0 as builder
 
 ARG GIT_BRANCH
 ARG HQ_BUILD
@@ -27,13 +27,14 @@ RUN dotnet publish /src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq \
     --version-suffix $GIT_BRANCH \
     /p:BuildNumber=$HQ_BUILD
+    
 RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release \
     -o /export \
     --version-suffix $GIT_BRANCH \
     /p:BuildNumber=$EXPORT_BUILD
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:${DOTNET_VERSION}
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
 ARG BUILD_DATE
 ARG VCS_REF

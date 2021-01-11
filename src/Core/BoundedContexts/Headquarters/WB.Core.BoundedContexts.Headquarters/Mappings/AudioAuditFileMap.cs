@@ -6,7 +6,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class AudioAuditFileMap : ClassMapping<AudioAuditFile>
     {
         public AudioAuditFileMap()

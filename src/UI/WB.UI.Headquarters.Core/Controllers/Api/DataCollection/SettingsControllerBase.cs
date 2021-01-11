@@ -16,12 +16,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
     public abstract class SettingsControllerBase : ControllerBase
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
-        private readonly IPlainKeyValueStorage<TenantSettings> tenantSettings;
+        private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
         private readonly ISecureStorage secureStorage;
 
         protected SettingsControllerBase(
             IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IPlainStorageAccessor<ServerSettings> tenantSettings,
             ISecureStorage secureStorage)
         {
             this.appSettingsStorage = appSettingsStorage;
@@ -54,12 +54,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual ActionResult<TenantIdApiView> TenantId()
         {
-            var byId = tenantSettings.GetById(AppSetting.TenantSettingsKey);
+            var byId = tenantSettings.GetById(ServerSettings.PublicTenantIdKey);
             if(byId == null) 
                 throw new NullReferenceException("Tenant public key is not set");
             return new TenantIdApiView
             {
-                TenantId = byId.TenantPublicId
+                TenantId = byId.Value
             };
         }
 

@@ -14,6 +14,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Headquarters.Models.CompanyLogo;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             adminSettingsModel.UpdateLogoUrl = Url.Action("Index");
             adminSettingsModel.RemoveLogoUrl = Url.Action("RemoveLogo");
             adminSettingsModel.LogoUrl = Url.Content("~/api/CompanyLogo/Thumbnail");
-            adminSettingsModel.DefaultLogoUrl = Url.Content("~/img/HQ-login-3_05.png");
+            adminSettingsModel.DefaultLogoUrl = Url.Static("/img/HQ-login-3_05.png");
             return adminSettingsModel;
         }
 

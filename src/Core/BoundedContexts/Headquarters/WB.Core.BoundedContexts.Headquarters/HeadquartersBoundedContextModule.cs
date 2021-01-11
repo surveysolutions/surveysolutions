@@ -34,6 +34,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Storage;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
@@ -48,7 +50,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
@@ -58,6 +59,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -97,7 +102,9 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using CalendarEvent = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.CalendarEvent;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -329,10 +336,24 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
             registry.Bind<IUserImportService, UserImportService>();
 
-            registry.BindToConstant<IMemoryCache>(() => new MemoryCache(Options.Create(new MemoryCacheOptions())));
+            registry.BindInPerLifetimeScope<IWorkspaceContextHolder, WorkspaceContextHolder>();
+            registry.Bind<IWorkspaceContextAccessor, WorkspaceContextAccessor>();
+            registry.Bind<IWorkspaceContextSetter, WorkspaceContextSetter>();
+            registry.Bind<IWorkspacesService, WorkspacesService>();
+            registry.Bind<IWorkspacesCache, WorkspacesCache>();
 
+            registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
+            registry.BindToMethod(ctx =>
+            {
+                var cacheSource = ctx.Resolve<IMemoryCacheSource>();
+                var contextAccessor = ctx.Resolve<IWorkspaceContextAccessor>();
+                return cacheSource.GetCache(contextAccessor.CurrentWorkspace()?.Name ?? WorkspaceConstants.SchemaName);
+            }, externallyOwned: true);
+            
             registry.Bind<IInScopeExecutor, UnitOfWorkInScopeExecutor>();
             registry.Bind<IRootScopeExecutor, InRootScopeExecutor>();
+            registry.Bind(typeof(IInScopeExecutor<>), typeof(UnitOfWorkInScopeExecutor<>));
+            registry.Bind(typeof(IInScopeExecutor<,>), typeof(UnitOfWorkInScopeExecutor<,>));
 
             registry.BindInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>();
 
@@ -358,8 +379,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<SendInterviewCompletedJob>();
+            registry.Bind<DeleteWorkspaceSchemaJob>();
             
             registry.Bind<CalendarEvent>();
+
+            registry.Bind<IVirtualPathService, VirtualPathService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

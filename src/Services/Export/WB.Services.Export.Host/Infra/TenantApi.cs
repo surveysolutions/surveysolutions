@@ -41,11 +41,13 @@ namespace WB.Services.Export.Host.Infra
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
 
-                var urlOverrideKey = $"TenantUrlOverride:{tenant.Name}";
+                var urlOverrideKey = $"TenantUrlOverride:{tenant.ShortName}";
 
                 if (configuration[urlOverrideKey] != null)
                 {
-                    httpClient.BaseAddress = new Uri(configuration[urlOverrideKey]);
+                    var uri = configuration[urlOverrideKey];
+                    
+                    httpClient.BaseAddress = new Uri($"{uri.TrimEnd('/')}/{tenant.Workspace}");
 
                     var aspnetcoreToken = Environment.GetEnvironmentVariable("ASPNETCORE_TOKEN");
                     if (aspnetcoreToken != null)
@@ -57,7 +59,6 @@ namespace WB.Services.Export.Host.Infra
                 {
                     httpClient.BaseAddress = new Uri(tenant.BaseUrl);
                 }
-
 
                 logger.LogDebug("Using tenantApi for {tenant} - {url}", tenant.Name, httpClient.BaseAddress);
 
@@ -85,7 +86,8 @@ namespace WB.Services.Export.Host.Infra
                 this.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
                 this.policy = Policy
                     .HandleResult<HttpResponseMessage>(
-                        message => message.RequestMessage.Method == HttpMethod.Get
+                        message => message.RequestMessage != null && 
+                                    message.RequestMessage.Method == HttpMethod.Get
                                    && !message.IsSuccessStatusCode && message.StatusCode != HttpStatusCode.NotFound)
                     .WaitAndRetryAsync(4,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
@@ -93,7 +95,7 @@ namespace WB.Services.Export.Host.Infra
                             {
                                 using (LoggingHelpers.LogContext
                                     (("tenantName", tenant.Name),
-                                    ("uri", response.Result.RequestMessage.RequestUri)))
+                                    ("uri", response.Result.RequestMessage?.RequestUri)))
                                 {
                                     logger.LogWarning("Request failed with {statusCode}. " +
                                                       "Waiting {timeSpan} before next retry. Retry attempt {retryCount}",
@@ -105,7 +107,7 @@ namespace WB.Services.Export.Host.Infra
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
                 CancellationToken cancellationToken)
             {
-                var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
+                var uri = QueryHelpers.AddQueryString(request.RequestUri!.ToString(), "apiKey", this.tenant.Id.ToString());
                 request.RequestUri = new Uri(uri);
 
                 request.Headers.Authorization = new AuthenticationHeaderValue("TenantToken", this.tenant.Id.ToString());

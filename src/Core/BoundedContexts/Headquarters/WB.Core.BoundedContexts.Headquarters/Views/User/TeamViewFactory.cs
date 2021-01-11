@@ -127,12 +127,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             string searchLowerText = searchBy?.ToLower();
 
-            return sessionProvider.Session.Connection.Query<UsersViewItem>(@"
+            return sessionProvider.Session.Connection.Query<UsersViewItem>($@"
                 SELECT u.username, u.userid 
                 FROM (
                     SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username, coalesce(i1.teamleadid, i2.responsibleid) userid
-                      FROM readside.interviewsummaries i1
-                        FULL JOIN readside.interviewsummaries AS i2 ON 1 = 2
+                      FROM interviewsummaries i1
+                        FULL JOIN interviewsummaries AS i2 ON 1 = 2
                 ) AS u
                 WHERE @searchText is NULL OR LOWER(u.username) like @searchTextForLike
                 ORDER BY u.username
@@ -149,12 +149,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             string searchLowerText = searchBy?.ToLower();
 
-            return sessionProvider.Session.Connection.QuerySingle<int>(@"
+            return sessionProvider.Session.Connection.QuerySingle<int>($@"
                 SELECT COUNT(u.username) 
                 FROM (
                     SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username
-                      FROM readside.interviewsummaries i1
-                        FULL JOIN readside.interviewsummaries AS i2 ON 1 = 2
+                      FROM interviewsummaries i1
+                        FULL JOIN interviewsummaries AS i2 ON 1 = 2
                 ) AS u
                 WHERE @searchText is NULL OR LOWER(u.username) like @searchTextForLike",
                     new

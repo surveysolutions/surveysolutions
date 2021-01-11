@@ -25,7 +25,7 @@ namespace WB.UI.Designer
                 return await new SupportTool.SupportTool(webHost).Run(args.Skip(1).ToArray());
             }
 
-            var version = webHost.Services.GetService<IProductVersion>();
+            var version = webHost.Services.GetRequiredService<IProductVersion>();
             var applicationVersion = version.ToString();
             var logger = webHost.Services.GetRequiredService<ILogger<Program>>();
             logger.LogWarning("Designer application started. Version {version}", applicationVersion);

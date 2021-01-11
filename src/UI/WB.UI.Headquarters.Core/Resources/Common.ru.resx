@@ -349,5 +349,11 @@
   </data>
   <data name="CalendarEvent" xml:space="preserve">
     <value>Календарь</value>
-  </data>  
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
 </root>

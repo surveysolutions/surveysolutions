@@ -72,21 +72,6 @@ function GetPathToMSBuild() {
     return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
-function GetPathToConfigTransformator() {
-    $path = ".\packages\WebConfigTransformRunner.1.0.0.1\Tools\WebConfigTransformRunner.exe"
-
-    if(Test-Path $path) {
-        return $path
-    } else {
-
-        & $nuget install WebConfigTransformRunner -Version 1.0.0.1 | Out-Null
-        return $path
-    }
-}
-
-function GetMainSolutionPath() {
-    return "src\WB.sln"
-}
 
 function CleanFolders($Filter) {
     $progressMessage = "Cleaning $Filter folders"
@@ -273,15 +258,6 @@ function BuildSolution($Solution, $BuildConfiguration, $BuildArgs) {
     return Log-Block "Building solution $Solution in configuration '$BuildConfiguration'" {
         return Execute-MSBuild $Solution $BuildConfiguration $BuildArgs
     }
-}
-
-function RunConfigTransform($Project, $BuildConfiguration) {
-    $file = get-childitem $Project
-    $PathToConfigFile = Join-Path $file.directoryname "Web.config"
-    $PathToTransformFile = Join-Path $file.directoryname "Web.$BuildConfiguration.config"
-
-    "GetPathToConfigTransformator $PathToConfigFile $PathToTransformFile $PathToConfigFile" | Write-Verbose
-    & GetPathToConfigTransformator $PathToConfigFile $PathToTransformFile $PathToConfigFile 
 }
 
 function AddArtifacts($Project, $BuildConfiguration, $folder) {

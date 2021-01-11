@@ -18,7 +18,6 @@ namespace WB.UI.WebTester.Controllers
     [Route("WebTester")]
     public class WebTesterController : Controller
     {
-        private const string SaveScenarioSessionKey = "SaveScenarioAvailable";
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IEvictionNotifier evictionService;
         private readonly IInterviewFactory interviewFactory;
@@ -37,13 +36,8 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [Route("Run/{id:Guid}")]
-        public IActionResult Run(Guid id, string sid, string saveScenarioAvailable, int? scenarioId = null)
+        public IActionResult Run(Guid id, string sid, int? scenarioId = null)
         {
-            if (!string.IsNullOrEmpty(saveScenarioAvailable) && bool.TryParse(saveScenarioAvailable, out var saveScenarioAvailableBool))
-            {
-                this.HttpContext.Session.SetInt32(SaveScenarioSessionKey, saveScenarioAvailableBool ? 1 : 0);
-            }
-
             return this.View(new InterviewPageModel
             {
                 Id = id.ToString(),
@@ -142,13 +136,10 @@ namespace WB.UI.WebTester.Controllers
                 GoogleMapsKey = testerConfig.Value.GoogleMapApiKey,
                 ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
-            var saveFlagInt = this.HttpContext.Session.GetInt32(SaveScenarioSessionKey);
-            if (saveFlagInt.HasValue && saveFlagInt == 1)
-            {
-                interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
-                interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
-                interviewPageModel.DesignerUrl = designerUrl;
-            }
+            
+            interviewPageModel.GetScenarioUrl = Url.Content("~/api/ScenariosApi");
+            interviewPageModel.SaveScenarioUrl = saveScenarioDesignerUrl;
+            interviewPageModel.DesignerUrl = designerUrl;
             
             return interviewPageModel;
         }

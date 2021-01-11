@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -57,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Logins = new List<HqUserLogin>();
             DeviceSyncInfos = new HashSet<DeviceSyncInfo>();
             Profile = new HqUserProfile();
+            Workspaces = new HashSet<WorkspacesUsers>();
         }
 
         public virtual HqUserProfile Profile { get; set; }
@@ -91,6 +93,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual ICollection<HqUserLogin> Logins { get; set; }
 
         public virtual ICollection<DeviceSyncInfo> DeviceSyncInfos { get; set; }
+        
+        public virtual ISet<WorkspacesUsers> Workspaces { get; protected set; }
     }
 
     public class HqUserToken : IdentityUserToken<Guid>

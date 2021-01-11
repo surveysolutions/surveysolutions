@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
@@ -41,16 +42,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<ILogger>());
 
-            var mockOfdashboardNotifications = new Mock<DashboardNotificationsViewModel>(
-                mockOfViewModelNavigationService.Object,
-                Mock.Of<IEnumeratorSettings>(),
-                Mock.Of<IClock>()
+            var mockOfdashboardNotifications = Create.ViewModel.DashboardNotificationsViewModel(
+                mockOfViewModelNavigationService.Object
             );
             
             var viewModel = CreateDashboardViewModel(
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
                 synchronization: mockOfSynchronizationViewModel.Object,
-                dashboardNotifications: mockOfdashboardNotifications.Object);
+                dashboardNotifications: mockOfdashboardNotifications);
 
             //act
             viewModel.SynchronizationCommand.Execute();
@@ -72,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             return new DashboardViewModel(
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
-                    synchronization: synchronization ?? Substitute.For<LocalSynchronizationViewModel>(),
+                    synchronization: synchronization ?? Create.ViewModel.LocalSynchronizationViewModel(),
                     messenger: messenger ?? Mock.Of<IMvxMessenger>(),
                     interviewerSettings: Mock.Of<IInterviewerSettings>(),
                     createNewViewModel: DashboardQuestionnairesViewModel(),
@@ -88,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     userInteractionService: Mock.Of<IUserInteractionService>(),
                     googleApiService: Mock.Of<IGoogleApiService>(),
                     mapInteractionService: Mock.Of<IMapInteractionService>(),
-                    dashboardNotifications: dashboardNotifications ?? Substitute.For<DashboardNotificationsViewModel>());
+                    dashboardNotifications: dashboardNotifications ?? Create.ViewModel.DashboardNotificationsViewModel());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

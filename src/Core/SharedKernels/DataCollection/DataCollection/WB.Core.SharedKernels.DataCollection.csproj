@@ -12,7 +12,7 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.20.0" />
+    <PackageReference Include="Markdig" Version="0.22.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
