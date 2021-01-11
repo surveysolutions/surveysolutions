@@ -3,7 +3,7 @@ import axios from 'axios'
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
-        this.base = 'api/v1/questionnaires/'
+        this.base = '/api/v1/questionnaires/'
         this.details = this.base + `${questionnaireId}/${version}`
         this.questionnaireId = questionnaireId
         this.version = version
@@ -95,6 +95,39 @@ class MapsReport {
     GetInterviewDetailsUrl(interviewId) {
         return `${this.http.defaults.baseURL}Interview/Review/${interviewId}`
     }
+}
+
+class Workspaces {
+    constructor(http) {
+        this.http = http
+    }
+    async List(userId) {
+        const response = await this.http.get('api/v1/workspaces',
+            {
+                params: {
+                    userId: userId,
+                    limit: 1000,
+                },
+            })
+        return response.data
+    }
+
+    Assign(userIds, workspaces, mode = 'Assign') {
+        return this.http.post('api/v1/workspaces/assign',
+            {
+                userIds, workspaces, mode,
+            }
+        )
+    }
+
+    async Status(workspace) {
+        return await this.http.get('api/v1/workspaces/status/' + workspace)
+    }
+
+    async Delete(workspace) {
+        return await this.http.delete('api/v1/workspaces/' + workspace)
+    }
+
 }
 
 class Users {
@@ -375,9 +408,9 @@ class HttpUtil {
 }
 
 class HqApiClient {
-    constructor(basePath) {
+    constructor(basePath, workspace) {
         this.basePath = basePath
-
+        this.workspace = workspace
         this.http = axios.create({
             baseURL: basePath,
         })
@@ -418,12 +451,29 @@ class HqApiClient {
     get Util() {
         return new HttpUtil()
     }
+
+    get Workspaces() {
+        return new Workspaces(this.http)
+    }
+
+    get UsersManagement() {
+        var self = this
+        return {
+            list() {
+                return self.basePath + 'UsersManagement/List'
+            },
+        }
+    }
+
+    workspacePath(workspace) {
+        return this.basePath.replace(this.workspace, workspace)
+    }
 }
 
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.basePath)
+        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath, vue.$config.workspace)
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$hq', {

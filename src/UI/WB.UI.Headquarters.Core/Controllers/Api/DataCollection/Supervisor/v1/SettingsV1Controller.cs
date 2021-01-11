@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     public class SettingsV1Controller : SettingsControllerBase
     {
         public SettingsV1Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
-            IPlainKeyValueStorage<TenantSettings> settings, 
+            IPlainStorageAccessor<ServerSettings> settings, 
             ISecureStorage secureStorage)
             : base(appSettingsStorage, settings, secureStorage)
         {

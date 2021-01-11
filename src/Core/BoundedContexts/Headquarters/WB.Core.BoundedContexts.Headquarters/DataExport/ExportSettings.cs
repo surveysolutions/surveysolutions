@@ -1,72 +1,69 @@
-﻿using Microsoft.Extensions.Options;
+﻿#nullable enable
+using System;
+using Microsoft.Extensions.Caching.Memory;
 using PasswordGenerator;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public class ExportSettings : IExportSettings
     {
-        private static ExportEncryptionSettings settingCache = null;
-
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
-        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
-        private readonly IOptions<ExportServiceConfig> exportOptions;
-
+        private readonly IMemoryCache settingCache; 
+        
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
-            IOptions<ExportServiceConfig> exportOptions)
+            IMemoryCache memoryCache)
         {
             this.appSettingsStorage = appSettingsStorage;
-            this.exportServiceSettings = exportServiceSettings;
-            this.exportOptions = exportOptions;
+            this.settingCache = memoryCache;
         }
 
         public bool EncryptionEnforced()
         {
-            if (settingCache == null)
-                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
+            ExportEncryptionSettings? setting = GetSetting();
+            
+            return setting?.IsEnabled == true;
+        }
 
-            return settingCache != null && settingCache.IsEnabled;
+        private ExportEncryptionSettings? GetSetting()
+        {
+            return this.settingCache.GetOrCreate("ExportEncryptionSettings", cache =>
+            {
+                cache.SlidingExpiration = TimeSpan.FromMinutes(5);
+                return this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
+            });
         }
 
         public string GetPassword()
         {
-            if (settingCache == null)
-                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
-
-            return settingCache != null ? settingCache.Value : string.Empty;
+            var setting = GetSetting();
+            
+            return setting != null ? setting.Value : string.Empty;
         }
 
         public void SetEncryptionEnforcement(bool enabled)
         {
-            var setting = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
+            var setting = GetSetting();
             var password = setting != null ? setting.Value : this.GeneratePassword();
 
             var newSetting = new ExportEncryptionSettings(enabled, password);
             this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncryptionSettingId);
 
-            settingCache = newSetting;
+            settingCache.Remove("ExportEncryptionSettings");
         }
 
         public void RegeneratePassword()
         {
-            var setting = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
+            var setting = GetSetting();
             if (setting == null || !setting.IsEnabled) return;
 
             var newSetting = new ExportEncryptionSettings(setting.IsEnabled, GeneratePassword());
             this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncryptionSettingId);
 
-            settingCache = newSetting;
+            settingCache.Remove("ExportEncryptionSettings");
         }
-
-        public string ExportServiceBaseUrl => exportOptions.Value.ExportServiceUrl;
-
-        public string ApiKey =>
-            this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 
         private string GeneratePassword()
         {

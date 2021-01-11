@@ -17,6 +17,13 @@
         InterviewerArchived = 12,
         InterviewerUnArchived = 13,
         SupervisorArchived = 14,
-        SupervisorUnarchived = 15
+        SupervisorUnarchived = 15,
+        WorkspaceCreated = 16,
+        WorkspaceDeleted = 17,
+        WorkspaceDisabled = 18,
+        WorkspaceEnabled = 19,
+        WorkspaceUserAssigned = 20,
+        WorkspaceUserUnAssigned = 21,
+        WorkspaceUpdated = 22,
     }
 }

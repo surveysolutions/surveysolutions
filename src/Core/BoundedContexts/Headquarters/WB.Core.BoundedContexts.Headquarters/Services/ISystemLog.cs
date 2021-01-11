@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -23,5 +24,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void InterviewerUnArchived(string interviewerName);
         void SupervisorArchived(string supervisorName);
         void SupervisorUnArchived(string supervisorName);
+        void WorkspaceCreated(string workspaceName, string displayName);
+        void WorkspaceUpdated(string workspaceName, string oldName, string newName);
+        void WorkspaceDeleted(string workspaceName);
+        void WorkspaceEnabled(string workspaceName);
+        void WorkspaceDisabled(string workspaceName);
+        void WorkspaceUserAssigned(string userName, ICollection<string> workspaces);
+        void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces);
     }
 }

@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public static readonly string InvitationsDistributionStatus = "InvitationsDistributionStatus";
         public static readonly string DeviceNotificationsSettings = "DeviceNotificationsSettings";
         public static readonly string ProfileSettings = "ProfileSettings";
-        public static readonly string TenantSettingsKey = "TenantSettings";
         public static readonly string WebInterviewSettings = "WebInterviewSettings";
         public static readonly string NatualKeySettings = "NatualKeySettings";
 

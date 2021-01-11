@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -27,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         private readonly IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter;
         private readonly INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader;
         private readonly IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire;
+        private readonly IMemoryCache memoryCache;
 
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
             ITranslationStorage translationStorage,
@@ -36,12 +38,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
             IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
-            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire)
-            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider)
+            IReusableCategoriesFillerIntoQuestionnaire categoriesFillerIntoQuestionnaire,
+            IMemoryCache memoryCache)
+            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService, expressionStatePrototypeProvider, memoryCache)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
             this.questionnaireItemsReader = questionnaireItemsReader;
             this.categoriesFillerIntoQuestionnaire = categoriesFillerIntoQuestionnaire;
+            this.memoryCache = memoryCache;
         }
 
         public override void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
@@ -101,9 +105,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
             string repositoryId = GetRepositoryId(questionnaireIdentity);
 
-            return questionnaireDocumentsCache.GetOrAdd(repositoryId, key =>
+            return memoryCache.GetOrCreate(GetCacheKey(questionnaireIdentity), key =>
             {
-                var questionnaire = this.repository.GetById(key);
+                var questionnaire = this.repository.GetById(repositoryId);
 
                 if (questionnaire == null)
                 {

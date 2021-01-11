@@ -13,7 +13,6 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
@@ -23,16 +22,16 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.Providers;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.HttpServices.Services;
@@ -42,15 +41,11 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Questionnaire;
@@ -58,35 +53,30 @@ using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 {
     [TestFixture]
     public class DeleteQuestionnaireTests : with_postgres_db
     {
-        private UnitOfWorkConnectionSettings unitOfWorkConnectionSettings;
         private IMemoryCache memoryCache;
         private ISessionFactory factory;
-        
+
         [SetUp]
         public void Setup()
         {
-            unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings()
-            {
-                ConnectionString = ConnectionStringBuilder.ConnectionString
-            };
-            
             memoryCache = new MemoryCache(new MemoryCacheOptions());
-            factory = CreateSessionFactory();
+            InitializeDb(DbType.Users, DbType.PlainStore, DbType.ReadSide);
+            factory = IntegrationCreate.SessionFactoryProd(ConnectionStringBuilder.ConnectionString);
         }
 
         [Test]
         public async Task when_remove_questionnaire_then_should_clear_all_dependency()
         {
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 5);
-            var questionnaire = new QuestionnaireDocument()
+            var questionnaire = new QuestionnaireDocument
             {
                 PublicKey = questionnaireIdentity.QuestionnaireId,
             };
@@ -101,12 +91,10 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             CreateAudioFiles(interviewId);
             CreateAudioAuditFiles(interviewId);
             CreateEvents(interviewId);
-
             
             await DeleteQuestionnaire(questionnaire, questionnaireIdentity, userId);
 
-
-            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory, workspace);
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
             var questionnaireDocument = hqQuestionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             Assert.That(questionnaireDocument, Is.Not.Null);
@@ -196,7 +184,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             QuestionnaireIdentity questionnaireIdentity,
             Guid userId)
         {
-            using var unitOfWorkForDelete = IntegrationCreate.UnitOfWork(factory);
+            using var unitOfWorkForDelete = IntegrationCreate.UnitOfWork(factory, workspace);
             {
                 var service = CreateDeleteQuestionnaireService(unitOfWorkForDelete,
                     questionnaire, questionnaireIdentity);
@@ -211,8 +199,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         private HqQuestionnaireStorage CreateQuestionnaireStorage(IUnitOfWork unitOfWork)
         {
             return new HqQuestionnaireStorage(
-                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(unitOfWork, unitOfWorkConnectionSettings, 
-                    Mock.Of<ILogger>(), memoryCache, new EntitySerializer<QuestionnaireDocument>()),
+                new PostgresKeyValueStorage<QuestionnaireDocument>(unitOfWork, new EntitySerializer<QuestionnaireDocument>()),
                 new TranslationStorage(new PostgresPlainStorageRepository<TranslationInstance>(unitOfWork)),
                 new QuestionnaireTranslator(), 
                 new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(unitOfWork, memoryCache),
@@ -220,7 +207,8 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 new QuestionnaireQuestionOptionsRepository(), 
                 new SubstitutionService(), 
                 Mock.Of<IInterviewExpressionStatePrototypeProvider>(), 
-                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>()
+                Mock.Of<IReusableCategoriesFillerIntoQuestionnaire>(),
+                Create.Storage.NewMemoryCache()
             );
         }
 
@@ -290,16 +278,11 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
             var questionnaireBrowseItem = new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(unitOfWork);
 
-            var lookupTablesStorage = new PostgresPlainKeyValueStorage<QuestionnaireLookupTable>(unitOfWork,
-                unitOfWorkConnectionSettings,
-                Mock.Of<ILogger>(),
-                memoryCache,
+            var lookupTablesStorage = new PostgresKeyValueStorage<QuestionnaireLookupTable>(unitOfWork,
                 new EntitySerializer<QuestionnaireLookupTable>());
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
-            var questionnaireBackupStorage = new PostgresPlainKeyValueStorage<QuestionnaireBackup>(unitOfWork,
-                unitOfWorkConnectionSettings,
-                Mock.Of<ILogger>(),
-                memoryCache,
+            var questionnaireBackupStorage = new PostgresKeyValueStorage<QuestionnaireBackup>(unitOfWork,
+
                 new EntitySerializer<QuestionnaireBackup>());
             var commandService = new Mock<ICommandService>();
             commandService.Setup(c => c.Execute(It.IsAny<DeleteQuestionnaire>(), null))
@@ -315,7 +298,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             IDeleteQuestionnaireService service = new DeleteQuestionnaireService(
                 interviewsToDeleteFactory,
                 commandService.Object,
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<DeleteQuestionnaireService>>(),
                 translationManagementService,
                 Mock.Of<IAssignmentsImportService>(),
                 Mock.Of<ISystemLog>(),
@@ -334,7 +317,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
         private void SaveQuestionnaire(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaire)
         {
-            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory, workspace);
 
             var hqQuestionnaireStorage = CreateQuestionnaireStorage(unitOfWork);
 
@@ -374,49 +357,6 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             unitOfWork.AcceptChanges();
             
             return userId;
-        }
-
-        private ISessionFactory CreateSessionFactory()
-        {
-            InitializeDb(DbType.PlainStore, DbType.ReadSide);
-            
-            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
-                "users",
-                new List<Type>()
-                {
-                    typeof(HqUserMap),
-                    typeof(HqUserClaimMap),
-                    typeof(DeviceSyncInfoMap),
-                    typeof(HqUserProfileMap),
-                    typeof(HqRoleMap),
-                    typeof(SyncStatisticsMap),
-                },
-                unitOfWorkConnectionSettings.ReadSideSchemaName,
-                new List<Type>
-                {
-                    typeof(InterviewSummaryMap),
-                    typeof(QuestionnaireCompositeItemMap),
-                    typeof(IdentifyEntityValueMap),
-                    typeof(InterviewStatisticsReportRowMap),
-                    typeof(TimeSpanBetweenStatusesMap),
-                    typeof(InterviewGpsMap),
-                    typeof(CumulativeReportStatusChangeMap),
-                    typeof(InterviewCommentedStatusMap),
-                    typeof(InterviewCommentMap),
-                    typeof(AssignmentMap),
-                    typeof(CalendarEventMap)
-                },
-                unitOfWorkConnectionSettings.PlainStorageSchemaName,
-                new List<Type>
-                {
-                    typeof(AudioAuditFileMap),
-                    typeof(AudioFileMap),
-                    typeof(QuestionnaireBrowseItemMap),
-                    typeof(QuestionnaireLiteViewItemMap),
-                    typeof(ReadonlyUserMap),
-                    typeof(ProfileMap),
-                }, true);
-            return sessionFactory;
         }
     }
 }

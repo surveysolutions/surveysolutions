@@ -17,13 +17,14 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
     public class UserImportService : IUserImportService
     {
-        private const string UserToImportTableName = "\"plainstore\".\"usertoimport\"";
-        private const string UsersImportProcessTableName = "\"plainstore\".\"usersimportprocess\"";
+        private const string UserToImportTableName = "\"usertoimport\"";
+        private const string UsersImportProcessTableName = "\"usersimportprocess\"";
 
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ICsvReader csvReader;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUnitOfWork sessionProvider;
         private readonly UsersImportTask usersImportTask;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
@@ -47,7 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             IUserImportVerifier userImportVerifier,
             IAuthorizedUser authorizedUser,
             IUnitOfWork sessionProvider,
-            UsersImportTask usersImportTask)
+            UsersImportTask usersImportTask,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.csvReader = csvReader;
@@ -58,6 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             this.authorizedUser = authorizedUser;
             this.sessionProvider = sessionProvider;
             this.usersImportTask = usersImportTask;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(Stream data, string fileName)
@@ -78,17 +82,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 throw new PreloadingException(string.Format(UserPreloadingServiceMessages.FileColumnsMissingFormat,
                         fileName, string.Join(", ", missingColumns)));
 
+            var currentWorkspace = this.workspaceContextAccessor.CurrentWorkspace()
+                                   ?? throw new MissingWorkspaceException("Cannot preload users outside of workspace");
+            
             var usersToImport = new List<UserToImport>();
-
-            var allInterviewersAndSupervisors = this.userStorage.Users.Select(x => new UserToValidate
+            
+            var allInterviewersAndSupervisors = this.userStorage.Users
+                .Select(x => new UserToValidate
             {
                 UserId = x.Id,
                 UserName = x.UserName,
                 IsArchived = x.IsArchived,
                 SupervisorId = x.Profile.SupervisorId,
                 IsSupervisor = x.Roles.Any(role => role.Id == supervisorRoleId),
-                IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId)
-            }).ToArray();
+                IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId),
+                IsInCurrentWorkspace = x.Workspaces.Any(w => w.Workspace.Name == currentWorkspace.Name)
+                }).ToArray();
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);
             var hasErrors = false;

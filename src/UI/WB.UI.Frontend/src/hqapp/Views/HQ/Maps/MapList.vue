@@ -56,8 +56,8 @@ import {DateFormats, humanFileSize} from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-const query = gql`query MapsList($order: MapsSort, $skip: Int, $take: Int, $where: MapsFilter) {
-  maps(order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
+  maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     filteredCount
@@ -163,13 +163,14 @@ export default {
                 if (ok) {
                     self.$apollo.mutate({
                         mutation: gql`
-                                mutation deleteMap($fileName: String!) {
-                                    deleteMap(fileName: $fileName) {
+                                mutation deleteMap($workspace: String!, $fileName: String!) {
+                                    deleteMap(workspace: $workspace, fileName: $fileName) {
                                         fileName
                                     }
                                 }`,
                         variables: {
-                            'fileName' : fileName,
+                            'fileName': fileName,
+                            workspace: self.$store.getters.workspace,
                         },
                     }).then(response => {
                         self.$refs.table.reload()
@@ -233,21 +234,22 @@ export default {
                         order: order,
                         skip: data.start,
                         take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
-                        AND: [],
+                        and: [],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push({ OR: [
-                            { fileName_starts_with: search.toLowerCase() }],
+                        where.and.push({ or: [
+                            { fileName : {startsWith : search.toLowerCase() }}],
                         })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 

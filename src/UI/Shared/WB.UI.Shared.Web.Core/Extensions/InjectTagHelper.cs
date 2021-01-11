@@ -32,7 +32,6 @@ namespace WB.UI.Shared.Web.Extensions
 
         private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(json)", RegexOptions.Compiled);
 
-        // TODO: Add memory caching
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var folder = Path.TrimEnd('/') + "/" + Component;
@@ -56,6 +55,7 @@ namespace WB.UI.Shared.Web.Extensions
                 }
 
                 entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                entry.AddExpirationToken(webHostEnvironment.WebRootFileProvider.Watch(folder + "/" + "*.json"));
                 return localeFiles;
             });
 
@@ -74,7 +74,11 @@ window.CONFIG.locale = {{
 // JSONP callback to load localization from '@localePath'
 window.__setLocaleData__ = function(data) {{ window.CONFIG.locale.data = data; }}
 ");
-            output.PostElement.AppendHtml($"<script src='{locales[current]}'></script>");
+            if (locales.ContainsKey(current))
+            {
+                output.PostElement.AppendHtml($"<script src='{locales[current]}'></script>");
+            }
+
             output.PreElement.AppendHtml($"<!-- Locale {Component} -->");
             return Task.CompletedTask;
         }

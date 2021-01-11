@@ -401,11 +401,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             };
         }
 
-        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token = default)
-        {
-            return Task.FromResult(new List<QuestionnaireIdentity>());
-        }
-
         public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
             return Task.CompletedTask;
