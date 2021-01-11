@@ -62,7 +62,7 @@ type HeadquartersQuery {
   interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
   maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
-  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: Uuid "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
+  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: Uuid "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER)
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
