@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,7 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
-    public class CreateOrUnArchiveUserRequestHandler : IRequestHandler<CreateOrUnArchiveUserRequest, UserToImport>
+    public class CreateOrUnArchiveUserRequestHandler : IRequestHandler<CreateOrUnArchiveUserRequest, UserToImport?>
     {
         private readonly IUserRepository userRepository;
         private readonly UserManager<HqUser> userManager;
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             this.systemLog = systemLog;
         }
 
-        public async Task<UserToImport> Handle(CreateOrUnArchiveUserRequest _, CancellationToken cancellationToken)
+        public async Task<UserToImport?> Handle(CreateOrUnArchiveUserRequest _, CancellationToken cancellationToken)
         {
             var userToImport = userImportService.GetUserToImport();
             await CreateUserOrUnarchiveAndUpdateAsync(userToImport);

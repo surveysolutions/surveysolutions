@@ -106,18 +106,13 @@ namespace WB.UI.Headquarters.Services.Quartz
 
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
             
-            await CleanupTrigger(scheduler, "Delete questionnaire trigger", "Delete questionnaire");
-            await CleanupTrigger(scheduler, "Import trigger", "Import");
+            await scheduler.UnscheduleJob(new TriggerKey("Delete questionnaire trigger", "Delete questionnaire"));
+            await scheduler.UnscheduleJob(new TriggerKey("Import trigger", "Import"));
 
             foreach (var schedule in services.GetServices<IScheduledJob>())
             {
                 await schedule.RegisterJob();
             }
-        }
-
-        private static async Task CleanupTrigger(IScheduler scheduler, string name, string group)
-        {
-            await scheduler.UnscheduleJob(new TriggerKey(name, group));
         }
 
         private class QuartzMigratorConfig
