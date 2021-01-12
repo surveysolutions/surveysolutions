@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
@@ -60,7 +62,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Factories
         private QuestionnaireBrowseViewFactory CreateViewFactory(
             IPlainStorageAccessor<QuestionnaireBrowseItem> storage = null)
         {
-            return new QuestionnaireBrowseViewFactory(storage ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+            return new QuestionnaireBrowseViewFactory(
+                storage ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
+                Mock.Of<IWebInterviewConfigProvider>());
         }
     }
 }
