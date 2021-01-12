@@ -112,13 +112,13 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
                         case HttpStatusCode.Forbidden:
+                        {
                             if (restException.Message.Contains("relinked"))
                             {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
                                 exceptionMessage =
                                     EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
-                            }
-                            if(restException.Message.Contains("Workspace is disabled"))
+                            }else if(restException.Message.Contains("Workspace is disabled"))
                             {
                                 exceptionType = SynchronizationExceptionType.WorkspaceDisabled;
                                 exceptionMessage =
@@ -130,6 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                                 exceptionType = SynchronizationExceptionType.Unauthorized;
                             }
                             break;
+                        }
                     }
 
                     break;
