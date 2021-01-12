@@ -63,22 +63,59 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return new QuestionnaireApiView(questionnairesFromStore);
         }
 
+        /// <summary>
+        /// Gets list of imported questionnaires by questionnaire id
+        /// </summary>
+        /// <param name="id">Questionnaire Id</param>
+        /// <param name="limit">Limit number of returned rows. Max allowed value is 40</param>
+        /// <param name="offset">Page number starting from 1. Actual skipped rows are calculated as `(offset - 1) * limit`</param>
         [HttpGet]
-        [Route("{id:guid}/{version:long?}")]
+        [Route("{id:guid}")]
         [Authorize(Roles = "ApiUser, Administrator")]
-        public QuestionnaireApiView Questionnaires(Guid id, [FromRoute]long? version = null, int limit = 10, int offset = 1)
+        public QuestionnaireApiView Questionnaires([FromRoute] Guid id, int limit = 10, int offset = 1)
         {
             var input = new QuestionnaireBrowseInputModel
             {
                 Page = offset.CheckAndRestrictOffset(),
                 PageSize = limit.CheckAndRestrictLimit(),
+                QuestionnaireId = id
+            };
+
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(input);
+
+            return new QuestionnaireApiView(questionnaires);
+        }
+
+        /// <summary>
+        /// Gets imported questionnaire by id and version
+        /// </summary>
+        /// <param name="version">Questionnaire version</param>
+        /// <param name="id">Questionnaire Id</param>
+        [HttpGet]
+        [Route("{id:guid}/{version}")]
+        [Authorize(Roles = "ApiUser, Administrator")]
+        public ActionResult<QuestionnaireApiItem> Questionnaires([FromRoute] Guid id, [FromRoute] long version)
+        {
+            var input = new QuestionnaireBrowseInputModel
+            {
+                Page = 1,
+                PageSize = 1,
                 QuestionnaireId = id,
                 Version = version
             };
 
             var questionnaires = this.questionnaireBrowseViewFactory.Load(input);
 
-            return new QuestionnaireApiView(questionnaires);
+            var apiView = new QuestionnaireApiView(questionnaires);
+
+            var result = apiView.Questionnaires.FirstOrDefault();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -158,6 +195,38 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             questionnaire.IsAudioRecordingEnabled = requestData.Enabled;
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Gets audio recording enabled setting for provided questionnaire
+        /// </summary>
+        /// <param name="id">Questionnaire guid</param>
+        /// <param name="version">Questionnaire version</param>
+        /// <response code="204">Questionnaire setting updated</response>
+        /// <response code="404">Questionnaire cannot be found</response>
+        [HttpGet]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
+        [ObservingNotAllowed]
+        public ActionResult GetRecordAudio(Guid id, long version)
+        {
+            var questionnaire = 
+                this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
+                    x => x.QuestionnaireId == id
+                        && x.Version == version
+                        && x.IsDeleted == false
+                        && x.Disabled == false
+            ));
+
+            if (questionnaire == null)
+            {
+                return NotFound();
+            }
+
+            return new JsonResult(new
+            {
+               questionnaire.IsAudioRecordingEnabled
+            });
         }
     }
 }
