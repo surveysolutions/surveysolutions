@@ -12,8 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Table("assignment_geo_answers");
             
             Id(x => x.Id, map => map.Generator(Generators.Identity));
-
-            //ManyToOne(x => x.Assignment, mto => mto.Column("assignment_id"));
             Property(x => x.AssignmentId, mto => mto.Column("assignment_id"));
 
             Property(x => x.QuestionId);
