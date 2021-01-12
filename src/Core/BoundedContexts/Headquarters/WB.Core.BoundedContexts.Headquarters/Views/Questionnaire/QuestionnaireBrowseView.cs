@@ -4,8 +4,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 {
     public class QuestionnaireBrowseView
     {
-        private string _order = string.Empty;
-
         public QuestionnaireBrowseView(
             int page, int? pageSize, int totalCount, IEnumerable<QuestionnaireBrowseItem> items, string order)
         {
@@ -18,18 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 
         public IEnumerable<QuestionnaireBrowseItem> Items { get; private set; }
 
-        public string Order
-        {
-            get
-            {
-                return this._order;
-            }
-
-            set
-            {
-                this._order = value;
-            }
-        }
+        public string Order { get; set; } = string.Empty;
 
         public int Page { get; private set; }
 
