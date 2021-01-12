@@ -50,8 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             
             var result = await exportServiceApi.DownloadArchive(jobId, archiveFileName);
             
-            if (result.StatusCode == HttpStatusCode.NotFound 
-                || result.Content.Headers.ContentDisposition == null) return null;
+            if (result.StatusCode == HttpStatusCode.NotFound) return null;
 
             result.EnsureSuccessStatusCode();
 
@@ -62,6 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     Redirect = values.First()
                 };
             }
+
+            if (result.Content.Headers.ContentDisposition == null) return null;
 
             return new DataExportArchive
             {
