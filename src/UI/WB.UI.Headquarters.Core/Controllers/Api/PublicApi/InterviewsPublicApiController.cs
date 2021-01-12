@@ -297,7 +297,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assign")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Assign(Guid id, [FromBody] AssignChangeApiModel request)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -324,7 +324,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
         [HttpPatch]
         [Route("{id:guid}/approve")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Approve(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -358,7 +358,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         [HttpPatch]
         [Route("{id:guid}/reject")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
         public ActionResult Reject(Guid id, string comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -403,7 +403,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
         [HttpPatch]
         [Route("{id:guid}/hqapprove")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult HQApprove(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -424,7 +424,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult HQReject(Guid id, string comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -457,7 +457,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
         [HttpPatch]
         [Route("{id:guid}/hqunapprove")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult HQUnapprove(Guid id, string comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
@@ -476,7 +476,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
         public ActionResult PostAssignSupervisor(Guid id, [FromBody]  AssignChangeApiModel request)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
