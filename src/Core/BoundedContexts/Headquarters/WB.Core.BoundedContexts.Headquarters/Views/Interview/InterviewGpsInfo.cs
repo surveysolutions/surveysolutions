@@ -7,11 +7,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     [DebuggerDisplay("{ToString()}")]
     public class InterviewGpsInfo
     {
-        public Guid InterviewId { get; set; }
-        public string InterviewKey { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public InterviewStatus Status { get; set; }
+        public Guid InterviewId { get; init; }
+        public string InterviewKey { get; init; }
+        public double Latitude { get; init; }
+        public double Longitude { get; init; }
+        public InterviewStatus Status { get; init; }
 
         public override bool Equals(object obj)
         {
@@ -29,13 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = InterviewId.GetHashCode();
-                hashCode = (hashCode * 397) ^ Latitude.GetHashCode();
-                hashCode = (hashCode * 397) ^ Longitude.GetHashCode();
-                return hashCode;
-            }
+            return HashCode.Combine(InterviewId, Latitude, Longitude);
         }
 
         public override string ToString() => $"lat:{this.Latitude}, long: {this.Longitude}, id: {this.InterviewId}";
