@@ -512,8 +512,8 @@ export default {
 
             if (this.selectedQuestionnaireId == null || this.selectedQuestion == null) {
                 this.setMapData({
-                    FeatureCollection: [],
-                    TotalPoint: 0,
+                    featureCollection: [],
+                    totalPoint: 0,
                 })
                 return
             }

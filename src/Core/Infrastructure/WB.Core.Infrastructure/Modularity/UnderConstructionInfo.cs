@@ -36,6 +36,11 @@ namespace WB.Core.Infrastructure.Modularity
             Message = message;
             Exception = exception;
             this.awaitingBlock.SetException(exception);
+            
+            #if DEBUG
+            Message = exception.ToString();
+            #endif
+            
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;

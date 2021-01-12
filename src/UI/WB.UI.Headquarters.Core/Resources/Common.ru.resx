@@ -135,6 +135,9 @@
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
   </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Посмотреть детали задания</value>
+  </data>
   <data name="CreatedOnClient" xml:space="preserve">
     <value>Создан на клиенте</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
     <value>Скачать Interviewer</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Задания</value>
   </data>
   <data name="Interviews" xml:space="preserve">
     <value>Интервью</value>
@@ -266,6 +272,9 @@
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Открыть профиль ответственного</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Дешбоард с картой</value>
   </data>
   <data name="OpenAssignment" xml:space="preserve">
     <value>Открыть задание</value>

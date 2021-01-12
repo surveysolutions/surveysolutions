@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.IdentifyingData = new List<IdentifyingAnswer>();
             this.InterviewSummaries = new HashSet<InterviewSummary>();
             this.ProtectedVariables = new List<string>();
+            this.GpsAnswers = new HashSet<AssignmentGps>();
         }
 
         internal Assignment(
@@ -96,6 +97,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             return (WebMode == null || WebMode == true) && Quantity == 1;
         }
+        
+        public virtual ISet<AssignmentGps> GpsAnswers { get; protected set; }
 
         public static List<InterviewAnswer> GetAnswersFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
         {

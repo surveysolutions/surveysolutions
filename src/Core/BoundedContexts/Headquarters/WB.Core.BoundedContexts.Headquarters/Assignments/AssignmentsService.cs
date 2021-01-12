@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Fetching;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -15,13 +19,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor;
         private readonly IInterviewAnswerSerializer answerSerializer;
+        private readonly IUnitOfWork sessionProvider;
+        private readonly IAuthorizedUser authorizedUser;
 
         public AssignmentsService(
             IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsAccessor,
-            IInterviewAnswerSerializer answerSerializer)
+            IInterviewAnswerSerializer answerSerializer,
+            IUnitOfWork sessionProvider,
+            IAuthorizedUser authorizedUser)
         {
             this.assignmentsAccessor = assignmentsAccessor;
             this.answerSerializer = answerSerializer;
+            this.sessionProvider = sessionProvider;
+            this.authorizedUser = authorizedUser;
         }
 
         public List<Assignment> GetAssignments(Guid responsibleId)
@@ -105,6 +115,119 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 _.Where(x => x.QuestionnaireId.Id == questionnaireIdentity.Id && x.QuestionnaireId.Version == questionnaireIdentity.Version && !x.Archived)
                     .Select(x => x.Id).ToList());
             return idsToMigrate;
+        }
+
+        public List<AssignmentGpsInfo> GetAssignmentsWithGpsAnswer(
+            Guid? questionnaireId, long? questionnaireVersion, 
+            Guid? responsibleId, int? assignmentId,
+            double east, double north, double west, double south)
+        {
+            Guid currentUserId = authorizedUser.Id;
+            
+            var gpsQuery = QueryGpsAnswers()
+                .Where(a =>
+                    a.QuestionnaireItem.Featured == true
+                    && !a.Assignment.Archived
+                    && (a.Assignment.Quantity == null || a.Assignment.InterviewSummaries.Count < a.Assignment.Quantity)
+                    && a.Answer.Latitude <= north
+                    && a.Answer.Latitude >= south
+                    && a.Answer.Longitude <= east
+                    && a.Answer.Longitude >= west 
+                );
+            
+            if (questionnaireId.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireId.Value);
+
+                if (questionnaireVersion.HasValue)
+                {
+                    gpsQuery = gpsQuery
+                        .Where(x => x.Assignment.QuestionnaireId.Version == questionnaireVersion.Value);
+                }
+            }
+
+            if (assignmentId.HasValue)
+            {
+                gpsQuery = gpsQuery.Where(x => x.Assignment.Id == assignmentId.Value);
+            }
+
+            if (responsibleId.HasValue)
+            {
+                gpsQuery = gpsQuery.Where(x => 
+                    x.Assignment.Responsible.Id == responsibleId.Value
+                    || x.Assignment.Responsible.ReadonlyProfile.SupervisorId == responsibleId.Value);
+            }        
+
+            if (authorizedUser.IsInterviewer)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => 
+                        x.Assignment.ResponsibleId == currentUserId
+                    );
+            } 
+            else if (authorizedUser.IsSupervisor)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => 
+                        (x.Assignment.Responsible.ReadonlyProfile.SupervisorId == currentUserId || x.Assignment.ResponsibleId == currentUserId)
+                    );
+            } 
+            
+            var assignments = gpsQuery
+                .Select(a => new AssignmentGpsInfo()
+                {
+                    AssignmentId = a.Assignment.Id,
+                    Latitude = a.Answer.Latitude,
+                    Longitude = a.Answer.Longitude,
+                    ResponsibleRoleId = a.Assignment.Responsible.RoleIds.FirstOrDefault()
+                })
+                .Distinct()
+                .ToList();
+            return assignments;
+        }
+        
+        private class AssigmentGpsAnswer
+        {
+            public Assignment Assignment { get; set; }
+            public AssignmentGps Answer { get; set; }
+            public QuestionnaireCompositeItem QuestionnaireItem { get; set; }
+        }
+        
+        private IQueryable<AssigmentGpsAnswer> QueryGpsAnswers()
+        {
+            IQueryable<AssigmentGpsAnswer> gpsAnswers = this.sessionProvider.Session
+                .Query<AssignmentGps>()
+                .Join(this.sessionProvider.Session.Query<Assignment>(),
+                    gps => gps.AssignmentId,
+                    assignment => assignment.Id,
+                    (gps, assignment) => new  { gps, assignment})
+                .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
+                    assignment_gps => new { QuestionnaireId = assignment_gps.assignment.QuestionnaireId.Id, assignment_gps.gps.QuestionId },
+                    questionnaireItem => new { QuestionnaireId = questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (assignment_gps, questionnaireItem) => new AssigmentGpsAnswer
+                    {
+                        Assignment = assignment_gps.assignment,
+                        Answer = assignment_gps.gps,
+                        QuestionnaireItem = questionnaireItem
+                    });
+            
+            
+            // IQueryable<AssignmentGps> gpsAnswers = this.sessionProvider.Session
+            //     .Query<IdentifyingAnswer>()
+            //     .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
+            //         assignmentAnswer => new { assignmentAnswer.Assignment, assignmentAnswer.Identity.Id },
+            //         questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+            //         (identifyingAnswer, questionnaireItem) => new AssigmentGpsAnswer
+            //         {
+            //             Assignment = identifyingAnswer.Assignment,
+            //             Answer = identifyingAnswer.Answer,
+            //             QuestionnaireItem = questionnaireItem
+            //         });
+            // gpsAnswers = gpsAnswers
+            //     .Where(a => a.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates);
+
+            return gpsAnswers;
         }
 
         public bool HasAssignmentWithProtectedVariables(Guid responsibleId)

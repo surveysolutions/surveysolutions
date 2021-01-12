@@ -345,6 +345,15 @@
   <data name="MapDataLoading" xml:space="preserve">
     <value>Map data is loading</value>
   </data>
+  <data name="ClusterInfo" xml:space="preserve">
+    <value>This area contains</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>I understood this interview already received by tablet</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Current responsible interviewer will not be notified about the reassignment until the next synchronization. If he has started working on the interview already, all the data that he has entered before the next synchronization will be DISCARDED!</value>
+  </data>
   <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
     <value>There are compatibility issues between questionnaire versions. Answers in earlier versions of the questionnaire that no longer exist in the latest questionnaire version were ignored.</value>
   </data>
