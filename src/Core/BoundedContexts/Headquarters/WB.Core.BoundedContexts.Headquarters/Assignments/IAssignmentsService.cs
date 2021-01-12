@@ -30,5 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         bool HasAssignmentWithAudioRecordingEnabled(QuestionnaireIdentity questionnaireIdentity);
         bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password);
         List<int> GetAllAssignmentIdsForMigrateToNewVersion(QuestionnaireIdentity questionnaireIdentity);
+        List<AssignmentGpsInfo> GetAssignmentsWithGpsAnswer(Guid? questionnaireId, long? questionnaireVersion,
+            Guid? responsibleId, int? assignmentId,
+            double east, double north, double west, double south);
     }
 }

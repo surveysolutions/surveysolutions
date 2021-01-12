@@ -97,9 +97,9 @@ namespace WB.Services.Export.Storage
 
         private void LogError(string message, Exception exception, params object[] args)
         {
-            log.LogError(exception, message + 
+            log.LogError(exception, message +
                 ". Bucket: {bucketName}. BasePath: {S3BasePath}",
-                args.Union(new []{S3Settings.BucketName, S3Settings.BasePath}).ToArray());
+                args.Union(new[] { S3Settings.BucketName, S3Settings.BasePath }).ToArray());
         }
 
         public bool IsEnabled() => true;
@@ -113,7 +113,7 @@ namespace WB.Services.Export.Storage
                 ? Protocol.HTTPS
                 : Protocol.HTTP;
 
-            log.LogTrace("GetDirectLink: {bucketName}/{key}", S3Settings.BucketName, key);
+            log.LogDebug("GetDirectLink: {bucketName}/{key}", S3Settings.BucketName, GetKey(key));
 
             var preSignedUrlRequest = new GetPreSignedUrlRequest
             {
@@ -121,7 +121,7 @@ namespace WB.Services.Export.Storage
                 BucketName = S3Settings.BucketName,
                 Key = GetKey(key),
                 Expires = DateTime.UtcNow.Add(expiration)
-             };
+            };
 
             if (!string.IsNullOrWhiteSpace(asFilename))
             {
@@ -137,9 +137,6 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                log.LogDebug("Storing: {bucketName}/{key} [{contentType}] ({getKey})", S3Settings.BucketName, key, 
-                    contentType, GetKey(key));
-
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = S3Settings.BucketName,
@@ -149,6 +146,8 @@ namespace WB.Services.Export.Storage
                     AutoResetStreamPosition = false,
                     InputStream = inputStream
                 };
+                
+                log.LogDebug("Storing: {bucketName}/{key} [{contentType}]", uploadRequest.BucketName, uploadRequest.Key, contentType);
 
                 if (progress != null)
                 {
@@ -206,7 +205,7 @@ namespace WB.Services.Export.Storage
             return (await GetObjectMetadataAsync(key)) != null;
         }
 
-        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, 
+        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType,
             ExportProgress? progress = null, CancellationToken cancellationToken = default)
         {
             using (var ms = new MemoryStream(data))

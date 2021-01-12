@@ -123,6 +123,9 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>View assignment details</value>
+  </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Save changes</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Assignments</value>
   </data>
   <data name="Interviews" xml:space="preserve">
     <value>Interviews</value>
@@ -296,6 +302,9 @@
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Map Dashboard</value>
   </data>
   <data name="OpenAssignment" xml:space="preserve">
     <value>Open assignment</value>
