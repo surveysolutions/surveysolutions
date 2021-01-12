@@ -44,18 +44,36 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                     Phone = u.PhoneNumber,
                     UserId = u.Id,
                     CreationDate = u.CreationDate,
-                    Workspaces = u.Workspaces.Select(w => new WorkspaceApiView
-                    {
-                        Disabled = w.Workspace.DisabledAtUtc != null,
-                        Name = w.Workspace.Name,
-                        DisplayName = w.Workspace.DisplayName
-                    }).ToList(),
                     IsLocked = u.IsLockedByHeadquaters || u.IsLockedBySupervisor,
                     IsArchived = u.IsArchived
                 })
                 .OrderUsingSortExpression(sortOrder)
                 .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                 .ToListAsync(cancellationToken);
+
+            var userIds = list.Select(l => l.UserId).ToArray();
+
+            var workspaces = (await this.userRepository.Users
+                .Where(u => userIds.Contains(u.Id))
+                .Select(u => new
+                {
+                    u.Id,
+                    Workspaces = u.Workspaces.Select(w => new WorkspaceApiView
+                    {
+                        Disabled = w.Workspace.DisabledAtUtc != null,
+                        Name = w.Workspace.Name,
+                        DisplayName = w.Workspace.DisplayName
+                    }).ToList()
+                }).ToListAsync(cancellationToken))
+                .ToDictionary(u => u.Id, u => u.Workspaces);
+
+            foreach (var user in list)
+            {
+                if(workspaces.TryGetValue(user.UserId, out var ws))
+                {
+                    user.Workspaces = ws;
+                }
+            }
 
             return new DataTableResponse<UserManagementListItem>
             {
