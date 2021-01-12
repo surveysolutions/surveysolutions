@@ -31,6 +31,7 @@
     <PackageReference Include="Humanizer.Core.pt" Version="2.8.26" />
     <PackageReference Include="Humanizer.Core.ru" Version="2.8.26" />
     <PackageReference Include="Humanizer.Core.zh-CN" Version="2.8.26" />
+    <PackageReference Include="MarkerClustering" Version="0.6.1" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />

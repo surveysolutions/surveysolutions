@@ -25,10 +25,17 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.TotalCount = questionnaireBrowseView.TotalCount;
             this.Limit = questionnaireBrowseView.PageSize.GetValueOrDefault();
             this.Questionnaires = questionnaireBrowseView.Items.Select(
-                    item => new QuestionnaireApiItem(item.QuestionnaireId, item.Version, item.Title, item.Variable, item.LastEntryDate));
+                    item => new QuestionnaireApiItem(item.QuestionnaireId, item.Version)
+                    {
+                        Title = item.Title,
+                        Variable = item.Variable,
+                        LastEntryDate = item.LastEntryDate,
+                        IsAudioRecordingEnabled = item.IsAudioRecordingEnabled,
+                        WebModeEnabled = item.WebModeEnabled
+                    });
             this.Order = questionnaireBrowseView.Order;
         }
-        
+
         public IEnumerable<QuestionnaireApiItem> Questionnaires { get; private set; }
     }
 }

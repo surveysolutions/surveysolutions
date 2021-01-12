@@ -591,7 +591,8 @@ namespace WB.Tests.Abc.TestFactories
                 accessor.Store(assignment, assignment.PublicKey);
             }
 
-            var service = new AssignmentsService(accessor, Mock.Of<IInterviewAnswerSerializer>());
+            var service = new AssignmentsService(accessor, Mock.Of<IInterviewAnswerSerializer>(),
+                Mock.Of<IUnitOfWork>(), Mock.Of<IAuthorizedUser>());
 
             return service;
         }
@@ -1193,7 +1194,9 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewAnswerSerializer interviewAnswerSerializer = null)
         {
             return new AssignmentsService(assignments, 
-                interviewAnswerSerializer ?? Mock.Of<IInterviewAnswerSerializer>());
+                interviewAnswerSerializer ?? Mock.Of<IInterviewAnswerSerializer>(),
+                Mock.Of<IUnitOfWork>(),
+                Mock.Of<IAuthorizedUser>());
         }
 
         public IReusableCategoriesFillerIntoQuestionnaire ReusableCategoriesFillerIntoQuestionnaire(IReusableCategoriesStorage reusableCategoriesStorage)

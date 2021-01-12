@@ -211,6 +211,9 @@
     <value>Отклоненные</value>
     <comment>Отклоненные</comment>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Дешбоард с картой</value>
+  </data>
   <data name="DevicesInterviewers" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>
