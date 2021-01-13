@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
         protected override void Configure(IFilterInputTypeDescriptor<InterviewSummary> descriptor)
         {
             descriptor.BindFieldsExplicitly();
-            descriptor.Name("InterviewFilter");
+            descriptor.Name("InterviewsFilter");
             
             descriptor.Field(x => x.Status);
             descriptor.Field(x => x.QuestionnaireId);
