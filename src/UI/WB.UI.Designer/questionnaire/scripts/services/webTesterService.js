@@ -7,7 +7,7 @@
                 var webTesterWindow = window.open("about:blank", '_blank');
 
                 return $http.get('../../api/questionnaire/webTest/' + questionnaireId).then(function (response) {
-                    webTesterService.setLocation(webTesterWindow, response, !questionnaire.isReadOnlyForUser, scenarioId);
+                    webTesterService.setLocation(webTesterWindow, response, scenarioId);
                 });
             };
 
