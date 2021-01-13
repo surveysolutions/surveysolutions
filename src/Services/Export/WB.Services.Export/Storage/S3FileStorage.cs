@@ -201,7 +201,7 @@ namespace WB.Services.Export.Storage
             }
             catch (Exception e)
             {
-                LogError("Unable to remove object in S3. Path: {key}", e, key);
+                LogError("Unable to get object metadata in S3. Path: {key}", e, key);
                 throw;
             }
 
