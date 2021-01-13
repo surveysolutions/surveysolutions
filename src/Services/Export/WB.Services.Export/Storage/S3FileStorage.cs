@@ -128,8 +128,13 @@ namespace WB.Services.Export.Storage
                 asFilename = WebUtility.UrlEncode(asFilename)?.Replace('+', ' ');
                 preSignedUrlRequest.ResponseHeaderOverrides.ContentDisposition = $"attachment; filename =\"{asFilename}\"";
             }
-
-            return client.GetPreSignedURL(preSignedUrlRequest);
+            
+            var presignedURL =  client.GetPreSignedURL(preSignedUrlRequest);
+            
+            if(string.IsNullOrEmpty(presignedURL))
+                log.LogWarning($"GetDirectLink: Presigned URL was empty for {key}");
+            
+            return presignedURL;
         }
 
         public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType,
@@ -155,7 +160,9 @@ namespace WB.Services.Export.Storage
                 }
 
                 await transferUtility.UploadAsync(uploadRequest);
-
+                
+                progress?.Report(100);
+                
                 return new FileObject
                 {
                     Path = uploadRequest.Key,
@@ -184,6 +191,8 @@ namespace WB.Services.Export.Storage
                         Size = response.ContentLength,
                         LastModified = response.LastModified
                     };
+                
+                log.LogWarning($"GetObjectMetadata: metadata request for {key} returned status {response.HttpStatusCode}");
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
