@@ -51,11 +51,9 @@ namespace WB.UI.Headquarters.Services.Impl
         public IEnumerable<string> Workspaces => User.Claims.Where(x =>
             x.Type == WorkspaceConstants.ClaimType).Select(x => x.Value);
 
-        public bool HasAccessToWorkspace(string targetWorkspace)
+        public bool HasAccessToWorkspace(string workspace)
         {
-            var allWorkspaces = this.workspacesCache.AllEnabledWorkspaces();
-            return allWorkspaces.Any(x => x.Name.Equals(targetWorkspace, StringComparison.OrdinalIgnoreCase))
-                   && User.HasClaim(WorkspaceConstants.ClaimType, targetWorkspace);
+            return User.HasClaim(WorkspaceConstants.ClaimType, workspace);
         }
 
         public IEnumerable<WorkspaceContext> GetEnabledWorkspaces()

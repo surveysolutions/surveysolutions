@@ -330,8 +330,18 @@ export default {
                     case 'ApiUser': return InAdminWorkspace('Users/Manage')
                     case 'Headquarter': return InAdminWorkspace('Users/Manage')
                     case 'Observer': return InAdminWorkspace('Users/Manage')
-                    case 'Interviewer': return InUserWorkspace('Interviewer/Profile', false)
-                    case 'Supervisor': return InUserWorkspace('Users/Manage')
+                    case 'Interviewer': {
+                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
+                            return InAdminWorkspace('Users/Manage')
+                        }
+                        return InUserWorkspace('Interviewer/Profile', false)
+                    }
+                    case 'Supervisor': {
+                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
+                            return InAdminWorkspace('Users/Manage')
+                        }
+                        return InUserWorkspace('Users/Manage')
+                    }
                     default: return InAdminWorkspace('Users/Manage')
                 }
             }
