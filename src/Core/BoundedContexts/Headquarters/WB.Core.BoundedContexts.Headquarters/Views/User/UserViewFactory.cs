@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -35,17 +34,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             this.devicesSyncInfos = devicesSyncInfos;
             this.workspaceContextAccessor = workspaceContextAccessor;
         }
-        
-        public UserViewLite? GetUser(Guid id)
+
+        public UserViewFactory(IPlainStorageAccessor<DeviceSyncInfo> devicesSyncInfos)
+        {
+            this.devicesSyncInfos = devicesSyncInfos;
+        }
+
+        public UserViewLite GetUser(Guid id)
         {
             return memoryCache.GetOrCreate(nameof(UserViewFactory) + ":" + id, entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(1);
 
                     var user = GetUser(new UserViewInputModel(id));
-                    return user == null
-                        ? null
-                        : new UserViewLite
+
+                    return new UserViewLite
                     {
                         Supervisor = user.Supervisor,
                         PublicKey = user.PublicKey,
@@ -55,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 });
         }
 
-        public UserView? GetUser(UserViewInputModel input)
+        public UserView GetUser(UserViewInputModel input)
         {
             var query = this.userRepository.Users;
 
@@ -190,7 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             Func<IQueryable<HqUser>, IQueryable<InterviewerFullApiView>> query = allUsers =>
             {
-                var interviewers = ApplyFilter(allUsers, string.Empty, null, UserRoles.Interviewer);
+                var interviewers = ApplyFilter(allUsers, null, null, UserRoles.Interviewer);
 
                 interviewers = ApplyFacetFilter(null, InterviewerFacet.None, interviewers);
 
@@ -350,12 +353,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return interviewers;
         }
 
-        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy = "", bool showLocked = false, bool showArchived = false)
+        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
             {
                 bool? isArchivedShowed = showArchived ? (bool?)null : false;
-                var searchByToLower = searchBy.ToLower();
+                var searchByToLower = searchBy?.ToLower();
 
                 var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters && !user.IsLockedBySupervisor);
@@ -469,9 +472,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             public bool IsLockedBySupervisor { get; set; }
             public bool IsLockedByHQ { get; set; }
             public DateTime CreationDate { get; set; }
-            public string UserName { get; set; } = String.Empty;
+            public string UserName { get; set; }
             public Guid UserId { get; set; }
-            public string Email { get; set; } = String.Empty;
+            public string Email { get; set; }
             public bool IsArchived { get; set; }
         }
     }

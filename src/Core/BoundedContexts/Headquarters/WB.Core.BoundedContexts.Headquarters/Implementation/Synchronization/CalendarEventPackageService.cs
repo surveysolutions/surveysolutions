@@ -70,12 +70,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     bool shouldIgnorePackage = true;
                     var currentUser = userViewFactory.GetUser(currentResponsibleId.Value);
                     var packageUser = userViewFactory.GetUser(responsibleId);
-
-                    if (packageUser == null || currentUser == null)
-                    {
-                        throw new InvalidOperationException("User was not found");
-                    }
-
                     if (packageUser.IsSupervisor() 
                         && currentUser.IsInterviewer() 
                         && currentUser.Supervisor.Id == packageUser.PublicKey)
