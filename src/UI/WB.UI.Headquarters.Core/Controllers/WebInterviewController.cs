@@ -740,6 +740,8 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
             var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
+            if (interviewer == null)
+                throw new InvalidOperationException($"User was not found{assignment.ResponsibleId}");
 
             if (interviewer.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
                 throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
