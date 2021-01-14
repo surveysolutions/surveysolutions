@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Code.Authentication
 {
@@ -51,6 +52,11 @@ namespace WB.UI.Headquarters.Code.Authentication
             }
             else
             {
+                if (ctx.Properties.TryGetForbidReason(out var reason))
+                {
+                    ctx.RedirectUri += "&reason=" + reason.ToString();
+                }
+
                 ctx.Response.Redirect(ctx.RedirectUri);
             }
 

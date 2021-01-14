@@ -148,7 +148,9 @@ namespace WB.Tests.Web.TestFactories
         {
             workspaces ??= new List<WorkspaceContext> {WorkspaceContext.Default};
 
-            return Mock.Of<IWorkspacesCache>(x => x.AllEnabledWorkspaces() == workspaces.ToList());
+            return Mock.Of<IWorkspacesCache>(x => 
+                x.AllEnabledWorkspaces() == workspaces.ToList()
+                && x.AllWorkspaces() == workspaces.ToList());
         }
     }
 }

@@ -108,4 +108,10 @@ Are You sure that You want to delete workspace? All interviewers and supervisors
     <value>Я понимаю, что данная операция необратима</value>
   </data>
 
+  <data name="WorkspaceDisabledReason" xml:space="preserve">
+    <value>Рабочая область отключена, доступ ограничен. Если вы считаете что это ошибка, то обратитесь к администратору сервера.</value>
+  </data>
+    <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Ваш аккаунт не имеет доступа к рабочей области. Если вы считаете что это ошибка, то обратитесь к администратору сервера.</value>
+  </data>
 </root>
