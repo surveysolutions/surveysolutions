@@ -43,11 +43,17 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
                 targetWorkspace = HandleCookieRedirect(context);
-                
-                if (targetWorkspace == null)
+
+                // making sure that cookie do not return disabled workspace
+                if (targetWorkspace != null && authorizedUser.GetEnabledWorkspaces().All(a => a.Name != targetWorkspace))
                 {
-                    targetWorkspace = authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name;
+                    targetWorkspace = null;
                 }
+
+                // redirecting user to first enabled workspace if any
+                // or redirect to any workspace, even if it's disabled
+                targetWorkspace ??= authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name
+                                    ?? authorizedUser.Workspaces.FirstOrDefault();
 
                 if (targetWorkspace != null && authorizedUser.HasAccessToWorkspace(targetWorkspace))
                 {
