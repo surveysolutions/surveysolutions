@@ -1,6 +1,5 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Type;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -15,8 +14,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Id(x => x.Id);
             Property(x => x.QuestionnaireId);
             Property(x => x.Version);
-            Property(x => x.CreationDate,pm => pm.Type<UtcDateTimeType>());
-            Property(x => x.LastEntryDate,pm => pm.Type<UtcDateTimeType>());
+            Property(x => x.CreationDate);
+            Property(x => x.LastEntryDate);
             Property(x => x.ImportDate);
             Property(x => x.ImportedBy);
             Property(x => x.Title);
