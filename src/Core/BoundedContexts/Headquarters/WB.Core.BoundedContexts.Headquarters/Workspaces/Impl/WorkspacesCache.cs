@@ -22,6 +22,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.inScopeExecutor = serviceLocator;
         }
 
+        public WorkspaceContext? GetWorkspace(string workspace)
+        {
+            return AllWorkspaces().SingleOrDefault(w => w.Name.Equals(workspace, StringComparison.OrdinalIgnoreCase));
+        }
+
         public List<WorkspaceContext> AllEnabledWorkspaces() => GetAllWorkspaces().EnabledWorkspaces;
 
         public List<WorkspaceContext> AllWorkspaces() => GetAllWorkspaces().AllWorkspaces;

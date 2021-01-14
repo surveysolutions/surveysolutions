@@ -26,40 +26,48 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (context.HttpContext.User.Identity?.AuthenticationType == AuthType.TenantToken)
-                return;
-
-            var hasAuthorizedAttribute = context.ActionDescriptor.EndpointMetadata.Any(m => m is AuthorizeAttribute);
             var hasAnonymousAccess = context.ActionDescriptor.EndpointMetadata.Any(m => m is AllowAnonymousAttribute);
 
-            var targetWorkspace = workspaceContextAccessor.CurrentWorkspace();
+            var workspace = workspaceContextAccessor.CurrentWorkspace();
+
+            if (context.HttpContext.User.Identity?.AuthenticationType == AuthType.TenantToken)
+            {
+                if (workspace?.IsEnabled() != true)
+                {
+                    SetForbidResult(ForbidReason.WorkspaceDisabledReason);
+                    return;
+                }
+
+                return;
+            }
 
             if (context.HttpContext.User.Identity?.IsAuthenticated == true)
             {
                 var isUserAdmin = context.HttpContext.User.IsInRole(UserRoles.Administrator.ToString());
+                var hasAuthorizedAttribute = context.ActionDescriptor.EndpointMetadata.Any(m => m is AuthorizeAttribute);
 
                 if (hasAuthorizedAttribute)
                 {
-                    var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata
-                        .OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
-                    
-                    if (targetWorkspace != null)
+                    if (workspace != null)
                     {
-                        if (targetWorkspace.IsEnabled() == false)
+                        if (workspace.IsEnabled() == false)
                         {
                             SetForbidResult(ForbidReason.WorkspaceDisabledReason);
                             return;
                         }
 
-                        if (targetWorkspace.IsServerAdministration() && isUserAdmin)
+                        if (workspace.IsServerAdministration() && isUserAdmin)
                         {
                             // allow admin to access to server administration workspace
                             return;
                         }
 
-                        if (!authorizedUser.HasAccessToWorkspace(targetWorkspace.Name))
+                        if (!authorizedUser.HasAccessToWorkspace(workspace.Name))
                         {
-                            if (targetWorkspace.Name == WorkspaceConstants.DefaultWorkspaceName &&
+                            var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata
+                                .OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
+
+                            if (workspace.Name == WorkspaceConstants.DefaultWorkspaceName &&
                                 allowsFallbackToPrimaryWorkspace)
                             {
                                 return;
@@ -73,7 +81,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 // if there is anonymous access attribute, then show page even for disabled workspaces
                 // handles Error pages
-                if (!hasAnonymousAccess && targetWorkspace?.IsEnabled() != true)
+                if (!hasAnonymousAccess && workspace?.IsEnabled() != true)
                 {
                     SetForbidResult(ForbidReason.WorkspaceDisabledReason);
                     return;
@@ -81,7 +89,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             }
 
             // handling Web Interview over disabled workspace case
-            else if (!hasAnonymousAccess && targetWorkspace?.IsEnabled() != true)
+            else if (!hasAnonymousAccess && workspace?.IsEnabled() != true)
             {
                 SetForbidResult(ForbidReason.WorkspaceAccessDisabledReason);
             }

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.DirectoryServices.Protocols;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
@@ -26,7 +28,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var middleware = CreateMiddleware();
             var userWorkspace = "primary";
-            var httpContext = CreateHttpContext(requestPath, 
+            var httpContext = CreateHttpContext(requestPath,
                 userClaimWorkspaces: new[] {userWorkspace},
                 serverWorkspaces: new[] {userWorkspace});
 
@@ -81,26 +83,29 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
-        public async Task when_user_has_cookie_into_disabled_workspace_Should_not_redirect_into_it()
+        public async Task when_user_has_cookie_into_disabled_workspace_Should_redirect_to_enabled()
         {
             var cookieWorkspace = "2077";
 
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(cookieWorkspace));
 
             string requestPath = $"/Reports/SurveysAndStatuses";
-            
+
             var middleware = CreateMiddleware();
+
             var httpContext = CreateHttpContext(requestPath,
-                userClaimWorkspaces: new[] {"2077"},
-                serverWorkspaces: new[] { "primary"},
+                serverWorkspaces: new[] { "primary" },
+                userClaimWorkspaces: new[] { "primary", "2077" },
+                disabledWorkspaces: new[] { "2077" },
                 cookies: (WorkspaceInfoFilter.CookieName, base64));
 
             await middleware.Invoke(httpContext);
 
-            httpContext.Response.Headers.Should().NotContainKey(HeaderNames.Location);
-            httpContext.Response.StatusCode.Should().NotBe(StatusCodes.Status302Found);
+            httpContext.Response.Headers.Should().ContainKey(HeaderNames.Location);
+            var location = httpContext.Response.Headers[HeaderNames.Location];
+            StringAssert.StartsWith("/primary", location);
         }
-    
+
         [Test]
         public async Task when_executing_request_into_workspace_Should_not_redirect_anywhere()
         {
@@ -123,12 +128,13 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         private HttpContext CreateHttpContext(string requestPath = "/",
             string[] userClaimWorkspaces = null,
             string[] serverWorkspaces = null,
+            string[] disabledWorkspaces = null,
             string currentWorkspace = null,
             params (string name, string value)[] cookies)
         {
             serverWorkspaces ??= userClaimWorkspaces;
-            var workspacesCache = Create.Service.WorkspacesCache(serverWorkspaces?.ToList());
-            
+            var workspacesCache = Create.Service.WorkspacesCache(serverWorkspaces, disabledWorkspaces);
+
             var result = new DefaultHttpContext();
             result.Request.Path = requestPath;
 
@@ -137,13 +143,13 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                 result.Request.Headers["Cookie"] = cookies.Select(c => $"{c.name}={c.value}").ToArray();
             }
 
-            var workspaces = userClaimWorkspaces ?? new[] {WorkspaceConstants.DefaultWorkspaceName};
-            
+            var workspaces = userClaimWorkspaces ?? new[] { WorkspaceConstants.DefaultWorkspaceName };
+
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
             result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
 
             var authorizedUser = new AuthorizedUser(Mock.Of<IHttpContextAccessor>(x => x.HttpContext == result), workspacesCache);
-            
+
             var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() ==
                                                                              (currentWorkspace == null
                                                                                  ? null
@@ -151,8 +157,9 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                                                                                      currentWorkspace, String.Empty, null)));
 
             result.RequestServices = Mock.Of<IServiceProvider>(
-                x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor 
+                x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor
                 && x.GetService(typeof(IAuthorizedUser)) == authorizedUser
+                && x.GetService(typeof(IWorkspacesCache)) == workspacesCache
             );
 
             return result;
