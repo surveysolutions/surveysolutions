@@ -107,4 +107,10 @@ Following data associated with this workspace will be deleted:</value>
   <data name="AgreeToDelete" xml:space="preserve">
     <value>I understand that this operation cannot be reversed</value>
   </data>
+  <data name="WorkspaceDisabledReason" xml:space="preserve">
+    <value>Workspace disabled and cannot be accessed. If you believe that this is an error, please contact your server administrator.</value>
+  </data>
+  <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Your account in the workspace disabled by the system administrator, and as a result you can't use the functionality of this site. If you believe that this is an error, please contact your server administrator.</value>
+  </data>
 </root>
