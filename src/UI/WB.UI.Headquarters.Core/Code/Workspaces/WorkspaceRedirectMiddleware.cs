@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
 
             var currentWorkspace = contextAccessor.CurrentWorkspace();
-            
+
             if (currentWorkspace == null
                 && !NotScopedToWorkspacePaths
                     .Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
@@ -42,19 +42,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 string? targetWorkspace = null;
                 var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
-                targetWorkspace = HandleCookieRedirect(context);
-
-                // making sure that cookie do not return disabled workspace
-                if (targetWorkspace != null && authorizedUser.GetEnabledWorkspaces().All(a => a.Name != targetWorkspace))
-                {
-                    targetWorkspace = null;
-                }
-
-                // redirecting user to first enabled workspace if any
-                // or redirect to any workspace, even if it's disabled
-                targetWorkspace ??= authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name
-                                    ?? authorizedUser.Workspaces.FirstOrDefault();
-
+                targetWorkspace = HandleCookieRedirect(context) 
+                    // redirecting user to first enabled workspace if any
+                    ?? authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name
+                    // redirect to any workspace, even if it's disabled
+                    ?? authorizedUser.Workspaces.FirstOrDefault();
+                
                 if (targetWorkspace != null && authorizedUser.HasAccessToWorkspace(targetWorkspace))
                 {
                     context.Response.Redirect(
@@ -73,11 +66,16 @@ namespace WB.UI.Headquarters.Code.Workspaces
             {
                 try
                 {
-                    var workspace = dataProtector.Unprotect(cookieValue);
+                    var workspaceName = dataProtector.Unprotect(cookieValue);
 
-                    if (context.User.HasClaim(WorkspaceConstants.ClaimType, workspace))
+                    if (context.User.HasClaim(WorkspaceConstants.ClaimType, workspaceName))
                     {
-                        return workspace;
+                        var cache = context.RequestServices.GetRequiredService<IWorkspacesCache>();
+
+                        var workspace = cache.GetWorkspace(workspaceName);
+
+                        if (workspace?.IsEnabled() == true)
+                            return workspaceName;
                     }
                 }
                 catch
