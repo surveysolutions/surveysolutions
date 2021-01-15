@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { keyBy, map, find, filter } from 'lodash'
+import { keyBy, map, find, filter, escape } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
 import InterviewQuestionsFiltersVue from '../../Interviews/InterviewQuestionsFilters.vue'
@@ -236,7 +236,8 @@ export default {
                         title: this.$t('Pages.UsersManage_WorkspacesFilterTitle'),
                         sortable: false,
                         render(data, type, row) {
-                            return map(row.workspaces, w => w.disabled ? '<strike>'  + w.displayName + '</strike>' :  w.displayName).join(', ')
+                            return map(row.workspaces, w => w.disabled ? '<strike>'
+                                + $('<div>').text(w.displayName).html() + '</strike>' : $('<div>').text(w.displayName).html()).join(', ')
                         },
                     },
                     {
