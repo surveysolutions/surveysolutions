@@ -280,6 +280,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new InterviewersView
             {
+                Page = pageIndex,
+                PageSize = pageSize,
                 TotalCount = query.Count(),
                 Items = filteredUsers.ToList()
             };

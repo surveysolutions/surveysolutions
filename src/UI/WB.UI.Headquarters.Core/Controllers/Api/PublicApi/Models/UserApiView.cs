@@ -50,6 +50,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
                         item.CreationDate, 
                         item.IsLockedByHQ || item.IsLockedBySupervisor, 
                         item.DeviceId));
+            
+            this.Offset = userListView.Page;
+            this.Limit = userListView.PageSize;
         }
 
         public IEnumerable<UserApiItem> Users { get; private set; }
