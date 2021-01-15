@@ -280,7 +280,7 @@ export default {
                                 })
                                 if (data.comment) {
                                     createdText +=
-                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: data.Comment})
+                                        '<br/>' + self.$t('Assignments.Action_Created_Comment', {comment: escape(data.Comment)})
                                 }
                                 return createdText
                             }
@@ -297,7 +297,7 @@ export default {
                                 if (data.Comment) {
                                     result += '<br/>'
                                     result += self.$t('Assignments.Action_Reassigned_To_Comment', {
-                                        comment: data.Comment,
+                                        comment: escape(data.Comment),
                                     })
                                 }
                                 return result

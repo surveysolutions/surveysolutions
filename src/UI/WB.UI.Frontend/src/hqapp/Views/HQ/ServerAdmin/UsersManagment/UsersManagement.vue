@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { keyBy, map, find, filter } from 'lodash'
+import { keyBy, map, find, filter, escape } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
 import InterviewQuestionsFiltersVue from '../../Interviews/InterviewQuestionsFilters.vue'
@@ -167,11 +167,11 @@ export default {
     },
 
     mounted() {
-        this.$hq.Workspaces.List()
+        this.$hq.Workspaces.List(null, true)
             .then(data => {
                 this.workspaces = map(data.Workspaces, d => {
                     return {
-                        key: d.Name, value: d.DisplayName,
+                        key: d.Name, value: d.DisplayName, iconClass: d.DisabledAtUtc == null ? '' : 'disabled-item',
                     }
                 })
 
@@ -236,7 +236,8 @@ export default {
                         title: this.$t('Pages.UsersManage_WorkspacesFilterTitle'),
                         sortable: false,
                         render(data, type, row) {
-                            return map(row.workspaces, w => w.disabled ? '<strike>'  + w.displayName + '</strike>' :  w.displayName).join(', ')
+                            return map(row.workspaces, w => w.disabled ? '<strike>'
+                                + $('<div>').text(w.displayName).html() + '</strike>' : $('<div>').text(w.displayName).html()).join(', ')
                         },
                     },
                     {
@@ -329,8 +330,18 @@ export default {
                     case 'ApiUser': return InAdminWorkspace('Users/Manage')
                     case 'Headquarter': return InAdminWorkspace('Users/Manage')
                     case 'Observer': return InAdminWorkspace('Users/Manage')
-                    case 'Interviewer': return InUserWorkspace('Interviewer/Profile', false)
-                    case 'Supervisor': return InUserWorkspace('Users/Manage')
+                    case 'Interviewer': {
+                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
+                            return InAdminWorkspace('Users/Manage')
+                        }
+                        return InUserWorkspace('Interviewer/Profile', false)
+                    }
+                    case 'Supervisor': {
+                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
+                            return InAdminWorkspace('Users/Manage')
+                        }
+                        return InUserWorkspace('Users/Manage')
+                    }
                     default: return InAdminWorkspace('Users/Manage')
                 }
             }

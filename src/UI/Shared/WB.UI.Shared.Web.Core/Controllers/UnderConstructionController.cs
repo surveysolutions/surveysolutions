@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Attributes;
@@ -22,6 +23,7 @@ namespace WB.UI.Shared.Web.Controllers
             public string SubMessage { get; set; }
         }
         
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var status = underConstructionInfo;
@@ -44,6 +46,7 @@ namespace WB.UI.Shared.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Status()
         {
             return Ok(underConstructionInfo.Status);

@@ -101,11 +101,13 @@ class Workspaces {
     constructor(http) {
         this.http = http
     }
-    async List(userId) {
+
+    async List(userId, includeDisabled) {
         const response = await this.http.get('api/v1/workspaces',
             {
                 params: {
-                    userId: userId,
+                    userId,
+                    includeDisabled,
                     limit: 1000,
                 },
             })

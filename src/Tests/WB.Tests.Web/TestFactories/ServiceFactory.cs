@@ -72,11 +72,11 @@ namespace WB.Tests.Web.TestFactories
                 autoMapper ?? Mock.Of<IMapper>(),
                 enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
                 supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
-                Mock.Of<IWebNavigationService>(), 
+                Mock.Of<IWebNavigationService>(),
                 Create.Service.SubstitutionTextFactory());
         }
 
-        
+
         public WebNavigationService WebNavigationService()
         {
             var mockOfVirtualPathService = new Mock<IVirtualPathService>();
@@ -96,7 +96,7 @@ namespace WB.Tests.Web.TestFactories
             return new WebInterviewNotificationService(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker);
         }
 
-                
+
         public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
             IAuthorizedUser authorizedUser = null)
         {
@@ -107,8 +107,8 @@ namespace WB.Tests.Web.TestFactories
 
             return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-                new EnumeratorGroupGroupStateCalculationStrategy(), 
-                new SupervisorGroupStateCalculationStrategy(), 
+                new EnumeratorGroupGroupStateCalculationStrategy(),
+                new SupervisorGroupStateCalculationStrategy(),
                 Create.Service.WebNavigationService(),
                 Create.Service.SubstitutionTextFactory());
         }
@@ -129,26 +129,42 @@ namespace WB.Tests.Web.TestFactories
             var hqUserStore = new HqUserStore(Mock.Of<IUnitOfWork>(), new LocalizedIdentityErrorDescriber());
             return new UserManager<HqUser>(hqUserStore,
                 Mock.Of<IOptions<IdentityOptions>>(),
-                Mock.Of<IPasswordHasher<HqUser>>(), 
+                Mock.Of<IPasswordHasher<HqUser>>(),
                 new List<IUserValidator<HqUser>>(),
                 new List<IPasswordValidator<HqUser>>(),
                 Mock.Of<ILookupNormalizer>(),
-                new LocalizedIdentityErrorDescriber(), 
+                new LocalizedIdentityErrorDescriber(),
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<ILogger<UserManager<HqUser>>>());
         }
 
-        public IWorkspacesCache WorkspacesCache(List<string> workspaces = null)
+        public IWorkspacesCache WorkspacesCache(ICollection<string> workspaces = null, ICollection<string> disabledWorkspaces = null)
         {
-            workspaces ??= new List<string>{ WorkspaceConstants.DefaultWorkspaceName };
-            return WorkspacesCache(workspaces.Select(w => new WorkspaceContext(w, w)));
+            disabledWorkspaces ??= new List<string>();
+
+            if (workspaces == null)
+            {
+                return WorkspacesCache(new List<string> { WorkspaceConstants.DefaultWorkspaceName });
+            }
+
+            var result = workspaces?.Select(w
+                => new WorkspaceContext(w, w, disabledWorkspaces.Contains(w) ? DateTime.Now : null));
+
+            return WorkspacesCache(result);
         }
 
         public IWorkspacesCache WorkspacesCache(IEnumerable<WorkspaceContext> workspaces = null)
         {
-            workspaces ??= new List<WorkspaceContext> {WorkspaceContext.Default};
+            workspaces ??= new List<WorkspaceContext> { WorkspaceContext.Default };
 
-            return Mock.Of<IWorkspacesCache>(x => x.AllEnabledWorkspaces() == workspaces.ToList());
+            var wc = new WorkspacesCache(
+                new NoScopeInScopeExecutor<IWorkspacesService>(
+                    Mock.Of<IWorkspacesService>(w => w.GetAllWorkspaces() == workspaces.ToList())
+                ));
+
+            wc.InvalidateCache();
+
+            return wc;
         }
     }
 }
