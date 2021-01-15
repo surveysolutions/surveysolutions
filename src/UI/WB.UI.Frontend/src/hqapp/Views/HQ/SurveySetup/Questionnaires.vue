@@ -56,28 +56,18 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import parseInt from 'lodash'
 
-const interviewsQuestionnaireDeletionQuery = gql`query questionnaireList($workspace: String!, $questionnaireId: Uuid!, $questionnaireVersion: Long!) {
+const interviewsQuestionnaireDeletionQuery = gql`query interviewsList($workspace: String!, $where: InterviewsFilter) {
   interviews(
-      workspace: $workspace,
-      where: {
-       questionnaireId: $questionnaireId,
-       questionnaireVersion: $questionnaireVersion,
-       receivedByInterviewerAtUtc_not: null,
-    }) {
+      workspace: $workspace 
+      where: $where) {
     filteredCount
   }
 }`
 
-const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($workspace: String!, $questionnaireId: Uuid!, $version: Long!) {
+const assignmentsQuestionnaireDeletionQuery = gql`query assignmentsList($workspace: String!, $where: AssignmentsFilter) {
   assignments(
-       workspace: $workspace,
-       where: {
-    receivedByTabletAtUtc_not: null,
-    questionnaireId: {
-      id: $questionnaireId,
-      version: $version
-    }
-  }) {
+       workspace: $workspace 
+       where: $where) {
     filteredCount
   }
 }`
@@ -199,8 +189,10 @@ export default {
                         const interviewsQueryResult = await this.$apollo.query({
                             query: interviewsQuestionnaireDeletionQuery,
                             variables: {
-                                questionnaireId: questionnaireGuid,
-                                questionnaireVersion: parseInt(selectedRow.version),
+                                where : {and : [
+                                    {questionnaireId: {eq: questionnaireGuid.replaceAll('-','')}},
+                                    {questionnaireVersion: {eq: parseInt(selectedRow.version)}},
+                                    {receivedByInterviewerAtUtc : {neq: null}}]},
                                 workspace: this.$store.getters.workspace,
                             },
                             fetchPolicy: 'network-only',
@@ -209,8 +201,18 @@ export default {
                         const assignmentsQueryResult = await this.$apollo.query({
                             query: assignmentsQuestionnaireDeletionQuery,
                             variables: {
-                                questionnaireId: questionnaireGuid,
-                                version: parseInt(selectedRow.version),
+                                where : {
+                                    and : [
+                                        {
+                                            questionnaireId: {
+                                                id: {eq: questionnaireGuid.replaceAll('-','')},
+                                                version: {eq: parseInt(selectedRow.version)},
+                                            },
+                                        },
+                                        {
+                                            receivedByTabletAtUtc : {neq: null}},
+                                    ],
+                                },
                                 workspace: this.$store.getters.workspace,
                             },
                             fetchPolicy: 'network-only',
