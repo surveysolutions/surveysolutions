@@ -427,7 +427,7 @@ import * as toastr from 'toastr'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
-const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewFilter) {
+const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewsFilter) {
   interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
