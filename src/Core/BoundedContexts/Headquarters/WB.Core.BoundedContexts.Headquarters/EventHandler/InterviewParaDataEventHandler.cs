@@ -174,7 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> @event)
         {
 
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty,
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.Completed, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.CompleteTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestarted> @event)
         {
-            this.AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, Guid.Empty,
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.RestartTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
@@ -602,6 +602,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 case UserRoles.Interviewer: return "Interviewer";
                 case UserRoles.Supervisor: return "Supervisor";
                 case UserRoles.Headquarter: return "Headquarter";
+                case UserRoles.ApiUser: return "ApiUser";
+                case UserRoles.Administrator: return "Administrator";
             }
             return unknownUserRole;
         }
@@ -775,7 +777,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewPaused> @event)
         {
-            this.AddHistoricalRecord(state, InterviewHistoricalAction.Paused, null,
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.Paused, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
