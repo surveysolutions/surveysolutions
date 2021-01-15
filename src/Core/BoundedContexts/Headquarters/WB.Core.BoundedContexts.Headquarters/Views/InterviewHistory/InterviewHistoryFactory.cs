@@ -63,7 +63,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
                 }
             }
 
-            return interviewHistoryReader.Query(_ => _.ToArray());
+            var interviewsHistory = interviewHistoryReader.Query(_ => _.ToArray());
+            foreach (var history in interviewsHistory)
+            {
+                int i = 0;
+                foreach (var @record in history.Records)
+                {
+                    record.Index = i++;
+                }
+            }
+            return interviewsHistory;
         }
     }
 }
