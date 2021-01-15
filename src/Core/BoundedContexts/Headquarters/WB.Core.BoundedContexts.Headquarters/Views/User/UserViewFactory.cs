@@ -351,12 +351,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return interviewers;
         }
 
-        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy = "", bool showLocked = false, bool showArchived = false)
+        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
             {
                 bool? isArchivedShowed = showArchived ? (bool?)null : false;
-                var searchByToLower = searchBy.ToLower();
+                string searchByToLower = searchBy?.ToLower() ?? string.Empty;
 
                 var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Headquarter)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters && !user.IsLockedBySupervisor);
