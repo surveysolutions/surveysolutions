@@ -130,7 +130,7 @@ import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewFilter) {
+const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewsFilter) {
   interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
@@ -486,7 +486,7 @@ export default {
                         const delimiter = self.mode == 'dense'
 
                         var entitiesWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
-                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${sanitizeHtml(node.value)}</strong>`
                         })
 
                         const dom = join(entitiesWithTitles, ', ')

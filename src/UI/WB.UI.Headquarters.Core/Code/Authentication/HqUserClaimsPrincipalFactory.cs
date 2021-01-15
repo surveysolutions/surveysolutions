@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             this.inScopeExecutor.Execute(workspacesService =>
             {
                 var userWorkspaces = user.IsInRole(UserRoles.Administrator)
-                    ? workspacesService.AllEnabledWorkspaces()
+                    ? workspacesService.AllWorkspaces()
                     : user.Workspaces.Select(x => x.Workspace.AsContext());
 
                 if (principal.Identity is ClaimsIdentity principalIdentity)

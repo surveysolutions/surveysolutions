@@ -18,7 +18,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         string UserName { get; }
         bool HasNonDefaultWorkspace { get; }
         IEnumerable<string> Workspaces { get; }
-        bool HasAccessToWorkspace(string targetWorkspace);
+
+        /// <summary>
+        /// Check that Authorized User has access to specified workspace
+        /// </summary>
+        /// <param name="workspace">Workspace name to check against</param>
+        /// <returns>Return true if user assigned to workspace, even for disabled one</returns>
+        bool HasAccessToWorkspace(string workspace);
         IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
     }
 

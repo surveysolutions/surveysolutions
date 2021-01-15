@@ -59,7 +59,7 @@ type HeadquartersMutation {
 
 type HeadquartersQuery {
   assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
-  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
+  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewsFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
   maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
   questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: Uuid "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER)
@@ -341,29 +341,6 @@ input IdentifyEntityValueFilter {
   entity: QuestionnaireItemsFilter
 }
 
-input InterviewFilter {
-  and: [InterviewFilter!]
-  or: [InterviewFilter!]
-  status: InterviewStatusOperationFilterInput
-  questionnaireId: ComparableGuidOperationFilterInput
-  questionnaireVariable: StringOperationFilterInput
-  questionnaireVersion: ComparableInt64OperationFilterInput
-  key: StringOperationFilterInput
-  notAnsweredCount: ComparableNullableOfInt32OperationFilterInput
-  clientKey: StringOperationFilterInput
-  assignmentId: ComparableNullableOfInt32OperationFilterInput
-  createdDate: ComparableDateTimeOperationFilterInput
-  responsibleName: StringOperationFilterInput
-  responsibleNameLowerCase: StringOperationFilterInput
-  supervisorName: StringOperationFilterInput
-  supervisorNameLowerCase: StringOperationFilterInput
-  responsibleRole: UserRolesOperationFilterInput
-  updateDateUtc: ComparableDateTimeOperationFilterInput
-  receivedByInterviewerAtUtc: ComparableNullableOfDateTimeOperationFilterInput
-  errorsCount: ComparableInt32OperationFilterInput
-  identifyingData: ListFilterInputTypeOfIdentifyEntityValueFilterInput
-}
-
 input InterviewSort {
   key: SortEnumType
   createdDate: SortEnumType
@@ -385,6 +362,29 @@ input InterviewStatusOperationFilterInput {
   neq: InterviewStatus
   in: [InterviewStatus!]
   nin: [InterviewStatus!]
+}
+
+input InterviewsFilter {
+  and: [InterviewsFilter!]
+  or: [InterviewsFilter!]
+  status: InterviewStatusOperationFilterInput
+  questionnaireId: ComparableGuidOperationFilterInput
+  questionnaireVariable: StringOperationFilterInput
+  questionnaireVersion: ComparableInt64OperationFilterInput
+  key: StringOperationFilterInput
+  notAnsweredCount: ComparableNullableOfInt32OperationFilterInput
+  clientKey: StringOperationFilterInput
+  assignmentId: ComparableNullableOfInt32OperationFilterInput
+  createdDate: ComparableDateTimeOperationFilterInput
+  responsibleName: StringOperationFilterInput
+  responsibleNameLowerCase: StringOperationFilterInput
+  supervisorName: StringOperationFilterInput
+  supervisorNameLowerCase: StringOperationFilterInput
+  responsibleRole: UserRolesOperationFilterInput
+  updateDateUtc: ComparableDateTimeOperationFilterInput
+  receivedByInterviewerAtUtc: ComparableNullableOfDateTimeOperationFilterInput
+  errorsCount: ComparableInt32OperationFilterInput
+  identifyingData: ListFilterInputTypeOfIdentifyEntityValueFilterInput
 }
 
 input ListFilterInputTypeOfIdentifyEntityValueFilterInput {
