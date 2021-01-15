@@ -417,13 +417,18 @@ ul.typeahead.dropdown-menu {
 		}
    }
    .dropdown-menu > li{	
-   		&> a{
+   		&> a {
 	   		white-space: pre-wrap;
 	   		padding: 7px 10px;
 	   		color: $gray_text;
 			&:hover, &:focus{
 	   			background-color: $gray-super-light;
-   			}
+            }
+             
+            &.disabled-item {
+                    color: $gray-light;
+                    text-decoration: line-through;
+            }
   		}
    }
    	&.open {

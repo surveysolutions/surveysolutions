@@ -279,6 +279,10 @@ import moment from 'moment'
 import {DateFormats} from '~/shared/helpers'
 import {RoleNames} from '~/shared/constants'
 
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
+
 export default {
     data() {
         return {
@@ -464,7 +468,7 @@ export default {
                     searchable: false,
                     render(data) {
                         const questionsWithTitles = map(data, question => {
-                            return question.title + ': ' + question.answer
+                            return question.title + ': ' + sanitizeHtml(question.answer)
                         })
                         return join(questionsWithTitles, ', ')
                     },

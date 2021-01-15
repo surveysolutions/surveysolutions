@@ -1,6 +1,7 @@
-using System;
+#nullable enable
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -25,33 +26,77 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            var hasAnonymousAccess = context.ActionDescriptor.EndpointMetadata.Any(m => m is AllowAnonymousAttribute);
+
+            var workspace = workspaceContextAccessor.CurrentWorkspace();
+
             if (context.HttpContext.User.Identity?.AuthenticationType == AuthType.TenantToken)
-                return;
-
-            var hasAuthorizedAttribute = context.ActionDescriptor.EndpointMetadata.Any(m => m is AuthorizeAttribute);
-
-            if (hasAuthorizedAttribute && context.HttpContext.User.Identity?.IsAuthenticated == true)
             {
-                var targetWorkspace = workspaceContextAccessor.CurrentWorkspace();
-
-                if (targetWorkspace.IsServerAdministration()
-                    && context.HttpContext.User.IsInRole(UserRoles.Administrator.ToString()))
+                if (workspace?.IsEnabled() != true)
                 {
+                    SetForbidResult(ForbidReason.WorkspaceDisabledReason);
                     return;
                 }
 
-                var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata
-                    .OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
+                return;
+            }
 
-                if (targetWorkspace != null && !authorizedUser.HasAccessToWorkspace(targetWorkspace.Name))
+            if (context.HttpContext.User.Identity?.IsAuthenticated == true)
+            {
+                var isUserAdmin = context.HttpContext.User.IsInRole(UserRoles.Administrator.ToString());
+                var hasAuthorizedAttribute = context.ActionDescriptor.EndpointMetadata.Any(m => m is AuthorizeAttribute);
+
+                if (hasAuthorizedAttribute)
                 {
-                    if (targetWorkspace.Name == WorkspaceConstants.DefaultWorkspaceName && allowsFallbackToPrimaryWorkspace)
+                    if (workspace != null)
                     {
-                        return;
-                    }
+                        if (workspace.IsEnabled() == false)
+                        {
+                            SetForbidResult(ForbidReason.WorkspaceDisabledReason);
+                            return;
+                        }
 
-                    context.Result = new ForbidResult();
+                        if (workspace.IsServerAdministration() && isUserAdmin)
+                        {
+                            // allow admin to access to server administration workspace
+                            return;
+                        }
+
+                        if (!authorizedUser.HasAccessToWorkspace(workspace.Name))
+                        {
+                            var allowsFallbackToPrimaryWorkspace = context.ActionDescriptor.EndpointMetadata
+                                .OfType<AllowPrimaryWorkspaceFallbackAttribute>().Any();
+
+                            if (workspace.Name == WorkspaceConstants.DefaultWorkspaceName &&
+                                allowsFallbackToPrimaryWorkspace)
+                            {
+                                return;
+                            }
+
+                            SetForbidResult(ForbidReason.WorkspaceAccessDisabledReason);
+                            return;
+                        }
+                    }
                 }
+
+                // if there is anonymous access attribute, then show page even for disabled workspaces
+                // handles Error pages
+                if (!hasAnonymousAccess && workspace?.IsEnabled() != true)
+                {
+                    SetForbidResult(ForbidReason.WorkspaceDisabledReason);
+                    return;
+                }
+            }
+
+            // handling Web Interview over disabled workspace case
+            else if (!hasAnonymousAccess && workspace?.IsEnabled() != true)
+            {
+                SetForbidResult(ForbidReason.WorkspaceAccessDisabledReason);
+            }
+
+            void SetForbidResult(ForbidReason? reason)
+            {
+                context.Result = new ForbidResult(new AuthenticationProperties().WithReason(reason));
             }
         }
     }

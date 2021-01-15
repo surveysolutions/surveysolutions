@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         {
             var workspace = name == WorkspaceConstants.AdminWorkspaceName 
                 ? Workspace.Admin.AsContext() 
-                : workspacesService.AllEnabledWorkspaces()
+                : workspacesService.AllWorkspaces()
                     .FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             
             holder.Current = workspace ?? throw new MissingWorkspaceException { Data = {{"name", name}}};
