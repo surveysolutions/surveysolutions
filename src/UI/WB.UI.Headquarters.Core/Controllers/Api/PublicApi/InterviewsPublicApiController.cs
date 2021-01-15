@@ -378,10 +378,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var userInfo = this.userViewFactory.GetUser(responsibleId.Value);
 
             if(userInfo == null)
-                return StatusCode(StatusCodes.Status406NotAcceptable, "User was not found.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible was not found.");
 
-            if(!userInfo.Roles.Contains(UserRoles.Interviewer))
-                return StatusCode(StatusCodes.Status406NotAcceptable, "User is not an interviewer.");
+            if(!(userInfo.Roles.Contains(UserRoles.Interviewer) || userInfo.Roles.Contains(UserRoles.Supervisor)))
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible is not an interviewer or supervisor.");
 
             var resultToInter = this.TryExecuteCommand(new RejectInterviewToInterviewerCommand(this.authorizedUser.Id, 
                 id, userInfo.PublicKey, comment));
@@ -397,7 +397,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Approves interview as headquarters
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
-        /// <param name="comment">Rejection comment</param>
+        /// <param name="comment">Approve comment</param>
         /// <response code="200">Interview was approved</response>
         /// <response code="404">Interview was not found</response>
         /// <response code="406">Target interview was in status that was not ready to be approved</response>
@@ -451,7 +451,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Rejects interview from Approved by headquarters status
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests</param>
-        /// <param name="comment">Rejection comment</param>
+        /// <param name="comment">Approve comment</param>
         /// <response code="200">Interview was rejected</response>
         /// <response code="404">Interview was not found</response>
         /// <response code="406">Target interview was in status that was not ready to be rejected</response>
