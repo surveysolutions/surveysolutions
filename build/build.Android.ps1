@@ -3,6 +3,7 @@ param(
     [string]$KeystorePassword,
     [string]$BuildConfiguration = "Release",
     [string]$branch = "master",
+    [string]$AppCenterKey = $NULL,
     [switch]$noSupervisor,
     [switch]$noLiteInterviewer,
     [switch]$noExtInterviewer)
@@ -43,6 +44,7 @@ try {
             -BuildConfiguration $BuildConfiguration `
             -KeystorePassword $KeystorePassword `
             -KeystoreName 'WBCapi.keystore' `
+            -AppCenterKey $AppCenterKey `
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName "$artifactsFolder\$PackageName" `
@@ -57,7 +59,8 @@ try {
             -VersionCode $BuildNumber `
             -BuildConfiguration $BuildConfiguration `
             -KeystorePassword $KeystorePassword `
-            -KeystoreName 'WBCapi.keystore' `
+            -KeystoreName 'WBCapi.keystore' 
+            -AppCenterKey $AppCenterKey ``
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName "$artifactsFolder\$SuperPackageName" `
@@ -73,6 +76,7 @@ try {
             -BuildConfiguration $BuildConfiguration `
             -KeystorePassword $KeystorePassword `
             -KeystoreName 'WBCapi.keystore' `
+            -AppCenterKey $AppCenterKey `
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName "$artifactsFolder\$ExtPackageName" `
