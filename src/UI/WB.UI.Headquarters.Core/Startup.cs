@@ -274,6 +274,7 @@ namespace WB.UI.Headquarters
                     ContentSerializer = new DesignerContentSerializer()
                 });
             
+
             services.AddScoped<IDesignerUserCredentials, DesignerUserCredentials>();
 
             services.AddGraphQL();
@@ -334,7 +335,7 @@ namespace WB.UI.Headquarters
                 options.Password.RequiredUniqueChars = passwordOptions.RequiredUniqueChars;
             });
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup), typeof(HeadquartersBoundedContextModule));
         }
 
         private static void AddCompression(IServiceCollection services)
