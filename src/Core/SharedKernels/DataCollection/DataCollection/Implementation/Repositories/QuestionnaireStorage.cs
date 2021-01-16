@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             });
         }
 
-        private static string PlainQuestionnaireCacheKey(QuestionnaireIdentity identity, string language)
+        private static string PlainQuestionnaireCacheKey(QuestionnaireIdentity identity, string language = null)
         {
             return language != null ? $"qs:{identity}${language}" : $"qs:{identity}";
         }
@@ -122,6 +122,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     {
                         SlidingExpiration = QuestionnaireDocumentExpiration
                     });
+                this.memoryCache.Remove(PlainQuestionnaireCacheKey(identity));
             }
         }
 
