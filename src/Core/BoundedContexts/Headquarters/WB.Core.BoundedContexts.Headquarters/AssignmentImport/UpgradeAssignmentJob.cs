@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
@@ -7,37 +9,22 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     [DisallowConcurrentExecution]
-    public class UpgradeAssignmentJob : IJob
+    [RetryFailedJob]
+    [DisplayName("Upgrade assignments"), Category("Import")]
+    public class UpgradeAssignmentJob : IJob<AssignmentsUpgradeProcess>
     {
-        public UpgradeAssignmentJob(IAssignmentsUpgradeService assignmentsUpgradeService,
-            IAssignmentsUpgrader assignmentsUpgrader)
+        public UpgradeAssignmentJob(IAssignmentsUpgrader assignmentsUpgrader)
         {
-            this.assignmentsUpgradeService = assignmentsUpgradeService;
             this.assignmentsUpgrader = assignmentsUpgrader;
         }
 
-        private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
         private readonly IAssignmentsUpgrader assignmentsUpgrader;
 
-        public Task Execute(IJobExecutionContext context)
+        public Task Execute(AssignmentsUpgradeProcess data, IJobExecutionContext context)
         {
-            var processToRun = assignmentsUpgradeService.DequeueUpgrade();
-            if (processToRun != null)
-            {
-                assignmentsUpgrader.Upgrade(processToRun.ProcessId, processToRun.UserId, processToRun.From,
-                    processToRun.To,
-                    assignmentsUpgradeService.GetCancellationToken(processToRun.ProcessId));
-            }
+            assignmentsUpgrader.Upgrade(data, CancellationToken.None);
 
             return Task.CompletedTask;
-        }
-    }
-
-    public class UpgradeAssignmentJobScheduler : BaseTask
-    {
-        public UpgradeAssignmentJobScheduler(IScheduler scheduler) : base(scheduler, "Import",
-            typeof(UpgradeAssignmentJob))
-        {
         }
     }
 }
