@@ -59,8 +59,8 @@ try {
             -VersionCode $BuildNumber `
             -BuildConfiguration $BuildConfiguration `
             -KeystorePassword $KeystorePassword `
-            -KeystoreName 'WBCapi.keystore' 
-            -AppCenterKey $AppCenterKey ``
+            -KeystoreName 'WBCapi.keystore' `
+            -AppCenterKey $AppCenterKey `
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName "$artifactsFolder\$SuperPackageName" `
