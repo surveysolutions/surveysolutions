@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks
 {
     public class AssignmentsImportTask : BaseTask
     {
-        public AssignmentsImportTask(IScheduler scheduler) : base(scheduler, "Import assignments", typeof(AssignmentsImportJob)) { }
+        public AssignmentsImportTask(ISchedulerFactory schedulerFactory) : base(schedulerFactory, "Import assignments", typeof(AssignmentsImportJob)) { }
     }
 }

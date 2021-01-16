@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
 {
     public class InterviewDetailsBackgroundSchedulerTask : BaseTask
     {
-        public InterviewDetailsBackgroundSchedulerTask(IScheduler scheduler) : base(scheduler, "interview packages ", typeof(SyncPackagesReprocessorBackgroundJob))
+        public InterviewDetailsBackgroundSchedulerTask(ISchedulerFactory schedulerFactory) : base(schedulerFactory, "interview packages ", typeof(SyncPackagesReprocessorBackgroundJob))
         {
         }
     }
