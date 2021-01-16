@@ -70,7 +70,6 @@
       "node_modules/angular-ui-tree/dist/angular-ui-tree.js",
       "node_modules/angular-ui-utils/modules/highlight/highlight.js",
       "node_modules/angular-unsavedchanges/lib/unsavedChanges.js",
-      "node_modules/console-shim/console-shim.js",
       "node_modules/es5-shim/es5-shim.js",
       "node_modules/jquery-mousewheel/jquery.mousewheel.js",
       "node_modules/jquery-placeholder/jquery.placeholder.js",
