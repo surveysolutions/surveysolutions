@@ -1,0 +1,188 @@
+name: Survey Solutions Build
+
+on:
+  push:
+  workflow_dispatch:
+  
+jobs:
+
+  android_apps:
+    runs-on: windows-latest
+  
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+
+    steps:
+      - run: git config --system core.longpaths true
+      - uses: actions/checkout@v2
+
+      - uses: microsoft/setup-msbuild@v1.0.2
+      - name: build
+        shell: pwsh
+        env:
+          AndroidKeyStore: ${{ secrets.KEYSTORE }}
+          AndroidSigningKeyPass: ${{ secrets.ANDROID_KEY }}
+        run: ./build.ps1 android
+      - uses: actions/upload-artifact@v2
+        with:
+          name: android-apks
+          retention-days: 1
+          path: ./output/${{ matrix.image.name }}
+
+  android_storage:
+    runs-on: ubuntu-latest
+    needs: 
+      - android_apps
+      - tests
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: android-apks
+          path: output
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-${{ matrix.image.name }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-android-buildx-
+
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_AUTOMATION }}
+
+      - name: Build and push
+        run: bash ./build.sh DockerAndroidServer --push --docker --docker-skip-login --skip android
+
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        tests:
+        - name: RunTestsIntegration
+        - name: RunTestsUnit RunTestsExport
+
+    services:
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: P@$$w0rd
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - run: bash ./build.sh ${{ matrix.tests.name }}
+      - name: cancel workflow
+        if: failure()
+        uses: andymckay/cancel-action@0.2
+      - uses: actions/upload-artifact@v2
+        with:
+          name: tests-report
+          path: output
+
+  hq_webTester:
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('src/UI/WB.UI.Frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}- 
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-${{ matrix.image.name }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-android-buildx-
+
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_AUTOMATION }}
+
+      - name: Build
+        run: bash ./build.sh hq webtester --docker --push  --docker-skip-login
+
+  designer:
+    runs-on: ubuntu-latest
+
+    needs: tests
+
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-${{ matrix.image.name }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-android-buildx-
+
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_AUTOMATION }}
+
+      - name: Designer docker image
+        run: bash ./build.sh designer --docker --push --docker-skip-login

@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
+using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
+    [Ignore("Flacky in GhA")]
     internal class when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute
     {
         private class StoreNameFor5Seconds : ICommand

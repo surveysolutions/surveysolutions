@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "serve": "cross-env HOT_MODE=1 vue-cli-service serve",
-        "build": "vue-cli-service build",
+        "build": "vue-cli-service build --modern",
         "test:unit": "vue-cli-service test:unit",
         "lint": "vue-cli-service lint --fix --format stylish",
         "dev": "vue-cli-service build --mode development",

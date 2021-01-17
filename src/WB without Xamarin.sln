@@ -85,9 +85,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.WebTester", "UI\WB.UI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Headquarters", "UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj", "{0AA94CA9-0FEB-4014-A0FF-3C48BAB321DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Web", "Tests\WB.Tests.Web\WB.Tests.Web.csproj", "{48A7B1FC-AC89-4B7F-889B-137B879B8C5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Web", "Tests\WB.Tests.Web\WB.Tests.Web.csproj", "{48A7B1FC-AC89-4B7F-889B-137B879B8C5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Infrastructure.AspNetCore", "Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj", "{E518EF14-855E-4086-A294-294BC9D2DE98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Infrastructure.AspNetCore", "Core\Infrastructure\WB.Infrastructure.AspNetCore\WB.Infrastructure.AspNetCore.csproj", "{E518EF14-855E-4086-A294-294BC9D2DE98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\build\_build.csproj", "{0E26D269-7A08-4393-8F24-728A384EEB98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -305,6 +307,14 @@ Global
 		{E518EF14-855E-4086-A294-294BC9D2DE98}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{E518EF14-855E-4086-A294-294BC9D2DE98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E518EF14-855E-4086-A294-294BC9D2DE98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Debug-ESRI|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Debug-ESRI|Any CPU.Build.0 = Debug|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E26D269-7A08-4393-8F24-728A384EEB98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
