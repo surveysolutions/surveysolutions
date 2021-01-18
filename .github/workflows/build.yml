@@ -68,6 +68,7 @@ jobs:
 
       - name: binlog
         uses: actions/upload-artifact@v2 
+        if: ${{ always() }}
         with:
           name: binlogs
           retention-days: 3
