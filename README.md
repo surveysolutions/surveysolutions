@@ -26,7 +26,7 @@ Prerequesties:
 - Install PostgreSQL.
 - Install LTS version of node JS (we currently use version 12).
 - Install yarn package manager.
-- Install latest version of asp.net core SDK.
+- Install latest version of asp.net core SDK (currently Net 5.0).
 - Install Xamarin build tools for your platform.
 
 ## Building 

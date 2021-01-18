@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             }
         }
 
-        [Test]
+        [Test][Ignore("Flacky in GHA")]
         public void ensure_that_without_lock_test_will_fail()
         {
             Assert.ThrowsAsync<Exception>(async () =>
