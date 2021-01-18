@@ -20,7 +20,7 @@ jobs:
       - name: build
         shell: pwsh
         env:
-          AndroidKeyStore: ${{ secrets.KEYSTORE }}
+          AndroidKeyStore: ${{ secrets.ANDROID_KEYSTORE }}
           AndroidSigningKeyPass: ${{ secrets.ANDROID_KEY }}
         run: ./build.ps1 android
       - uses: actions/upload-artifact@v2
