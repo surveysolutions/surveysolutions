@@ -39,11 +39,6 @@ namespace WB.UI.Tester
     {
         public Setup()
         {
-            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
-            if (!string.IsNullOrEmpty(appcenterKey))
-            {
-                CrashReporting.Init(appcenterKey);
-            }
         }
 
         protected override IMvxIoCProvider CreateIocProvider()
@@ -54,6 +49,12 @@ namespace WB.UI.Tester
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
+
+            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
+            if (!string.IsNullOrEmpty(appcenterKey))
+            {
+                CrashReporting.Init(appcenterKey);
+            }
 
             var status = new UnderConstructionInfo();
             status.Run();
