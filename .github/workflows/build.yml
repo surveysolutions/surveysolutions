@@ -64,7 +64,14 @@ jobs:
           password: ${{ secrets.PAT_AUTOMATION }}
 
       - name: Build and push
-        run: bash ./build.sh DockerAndroidServer --push --docker --docker-skip-login --skip android
+        run: bash ./build.sh DockerAndroidServer --push --docker --docker-skip-login --skip 
+
+      - name: binlog
+        uses: actions/upload-artifact@v2 
+        with:
+          name: binlogs
+          retention-days: 3
+          path: output/*.binlog
 
   tests:
     runs-on: ubuntu-latest
