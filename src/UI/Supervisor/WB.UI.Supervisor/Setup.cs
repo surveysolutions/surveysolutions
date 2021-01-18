@@ -49,11 +49,6 @@ namespace WB.UI.Supervisor
 
         public Setup()
         {
-            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
-            if (!string.IsNullOrEmpty(appcenterKey))
-            {
-                CrashReporting.Init(appcenterKey);
-            }
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
@@ -107,7 +102,13 @@ namespace WB.UI.Supervisor
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
-        
+
+            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
+            if (!string.IsNullOrEmpty(appcenterKey))
+            {
+                CrashReporting.Init(appcenterKey);
+            }
+
             var status = new UnderConstructionInfo();
             status.Run();
 
