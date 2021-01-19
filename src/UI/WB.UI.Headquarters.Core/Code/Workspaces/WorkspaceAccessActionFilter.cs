@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         {
             var allowedDisabledWorkspace = ContextHasAttribute<AllowDisabledWorkspaceAccessAttribute>();
             var allowsFallbackToPrimaryWorkspace = ContextHasAttribute<AllowPrimaryWorkspaceFallbackAttribute>();
+            var allowAnonymous = ContextHasAttribute<AllowAnonymousAttribute>();
             var hasAuthorization = ContextHasAttribute<AuthorizeAttribute>() || ContextHasAttribute<AuthorizeByRoleAttribute>();
             
             var workspace = workspaceContextAccessor.CurrentWorkspace();
@@ -66,7 +67,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     return;
                 }
 
-                if (hasAuthorization && !authorizedUser.HasAccessToWorkspace(workspace.Name))
+                if (hasAuthorization && !allowAnonymous && !authorizedUser.HasAccessToWorkspace(workspace.Name))
                 {
                     SetForbidResult(ForbidReason.WorkspaceAccessDisabledReason);
                     return;
