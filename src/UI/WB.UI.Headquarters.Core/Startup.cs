@@ -215,6 +215,25 @@ namespace WB.UI.Headquarters
             services.AddUnderConstruction();
 
             services.AddOptions();
+            services.AddCors(options =>
+            {
+                var redirectUri = Configuration["ExternalStorages:OAuth2:RedirectUri"];
+                if (Uri.TryCreate(redirectUri, UriKind.Absolute, out var uri))
+                {
+                    options.AddPolicy("export", b => b
+                        .WithOrigins(redirectUri)
+                        .WithMethods("POST")
+                    );
+                }
+                else
+                {
+                    if(redirectUri == null) 
+                        Log.Warning("No ExternalStorages:OAuth2:RedirectUri configuration provided");
+                    else 
+                        Log.Warning("Cannot parse {redirectUri} from ExternalStorages:OAuth2:RedirectUri", redirectUri);
+                }
+            });
+
             services.AddControllersWithViews().AddNewtonsoftJson(j =>
             {
                 //j.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
@@ -424,6 +443,7 @@ namespace WB.UI.Headquarters
             
             app.UseMetrics(Configuration);
             app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
 
             app.UseRedirectIntoWorkspace();
