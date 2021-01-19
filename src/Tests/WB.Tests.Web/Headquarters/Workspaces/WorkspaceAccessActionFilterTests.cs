@@ -111,6 +111,20 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
+        public void non_authorized_user_to_anonymous_method_allowed()
+        {
+            Role = UserRoles.Headquarter;
+            Attributes.Clear();
+            Attributes.Add(new AllowAnonymousAttribute());
+            
+            // act
+            var context = Act();
+
+            // assert
+            Assert.Null(context.Result);
+        }
+
+        [Test]
         public void authorized_user_with_no_access_to_workspace_forbidden()
         {
             Role = UserRoles.Headquarter;
