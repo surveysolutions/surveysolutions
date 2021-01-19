@@ -47,7 +47,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="panel panel-default">
+                <!-- <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>
                             {{ $t("Diagnostics.Connectivity") }}
@@ -64,7 +64,7 @@
                             </li>
                         </ol>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </HqLayout>
@@ -114,6 +114,7 @@ export default {
                 isError: isError || false,
             })
         },
+
         async startSignalrDiag() {
             this.pushSignalrMessage('Building connection to server using `/signalrdiag` url')
             const connection = new signalR.HubConnectionBuilder()
@@ -140,6 +141,7 @@ export default {
                 this.pushSignalrMessage('Failed to invoke server method with error: ' + err.toString(), true)
             }
         },
+
         getHealth() {
             const self = this
             this.$hq.ControlPanel.getHealthResult().then(response => {
