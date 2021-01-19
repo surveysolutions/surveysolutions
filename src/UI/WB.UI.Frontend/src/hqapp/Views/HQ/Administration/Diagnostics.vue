@@ -47,7 +47,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="panel panel-default">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>
                             {{ $t("Diagnostics.Connectivity") }}
@@ -64,7 +64,7 @@
                             </li>
                         </ol>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </HqLayout>
@@ -118,7 +118,7 @@ export default {
         async startSignalrDiag() {
             this.pushSignalrMessage('Building connection to server using `/signalrdiag` url')
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl('/signalrdiag')
+                .withUrl(this.$config.basePath + 'signalrdiag')
                 .configureLogging(signalR.LogLevel.Debug)
                 .build()
 
@@ -131,7 +131,7 @@ export default {
                 await connection.start()
                 this.pushSignalrMessage('Started connection')
 
-                for(let i = 0; i < 30; i++) {
+                for(let i = 0; i < 10; i++) {
                     await connection.invoke('Ping')
                     this.pushSignalrMessage('Ping method called')
                     await new Promise(r => setTimeout(r, 2000))
