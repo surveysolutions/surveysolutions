@@ -129,8 +129,12 @@ export default {
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
 
-                    const query = gql`query ($workspace: String!, $fileName: String!) {
-                                        maps(workspace: $workspace, where: {fileName: $fileName}) {
+                    const query = gql`query MapDetailsQuery($workspace: String!,  $fileName: String!) {
+                                        maps(workspace: $workspace, where: {
+                                                fileName: {
+                                                    eq: $fileName
+                                                }
+                                                }) {
                                             nodes {
                                                 users {
                                                     userName
