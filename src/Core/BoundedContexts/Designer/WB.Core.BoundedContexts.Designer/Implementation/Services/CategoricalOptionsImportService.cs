@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     if (string.IsNullOrEmpty(text))
                         throw new CsvReaderException(row.Context.Row, memberMapData.Index, ExceptionMessages.ImportOptions_EmptyValue);
 
-                    var numberStyle = memberMapData.TypeConverterOptions.NumberStyle ?? NumberStyles.Integer;
+                    var numberStyle = memberMapData.TypeConverterOptions.NumberStyles ?? NumberStyles.Integer;
 
                     return int.TryParse(text, numberStyle, memberMapData.TypeConverterOptions.CultureInfo, out var i)
                         ? i
