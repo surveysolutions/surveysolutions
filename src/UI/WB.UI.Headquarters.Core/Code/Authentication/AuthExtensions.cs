@@ -33,7 +33,6 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .AddRequirements(new WorkspaceRequirement())
                     .Build();
             });
 
