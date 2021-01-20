@@ -69,8 +69,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 if (hasAuthorization && !allowAnonymous && !authorizedUser.HasAccessToWorkspace(workspace.Name))
                 {
-                    SetForbidResult(ForbidReason.WorkspaceAccessDisabledReason);
-                    return;
+                    var hasIgnoreWorkspacesLimitation = ContextHasAttribute<IgnoreWorkspacesLimitationAttribute>();
+                    if (!hasIgnoreWorkspacesLimitation)
+                    {
+                        SetForbidResult(ForbidReason.WorkspaceAccessDisabledReason);
+                        return;
+                    }
                 }
             }
             else

@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [Authorize(Roles = "Interviewer")]
         [Route("current")]
         [AllowPrimaryWorkspaceFallback]
+        [IgnoreWorkspacesLimitation]
         public override ActionResult<InterviewerApiView> Current() => base.Current();
 
         [HttpGet]
