@@ -3,6 +3,22 @@ import Vue from 'vue'
 
 /* eslint:disable:no-console */
 Vue.config.errorHandler = (error, vm) => {
+    if (error.response.data != null) {
+        var data = error.response.data
+
+        // handling asp net core validation errors
+        if (data.Type == 'https://tools.ietf.org/html/rfc7231#section-6.5.1') {
+            let message = ''
+            Object.keys(data.Errors).forEach(k => {
+                message += k + ':\r\n'
+                data.Errors[k].forEach(errMessage => message += '  ' + errMessage + '\r\n')
+            })
+
+            console.error(data)
+            toastr.error(message, data.Title)
+            return
+        }
+    }
     console.error(error, vm)
     toastr.error(error)
 }

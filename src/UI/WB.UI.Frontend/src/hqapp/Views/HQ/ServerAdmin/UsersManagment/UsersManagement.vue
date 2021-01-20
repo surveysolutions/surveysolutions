@@ -171,7 +171,9 @@ export default {
             .then(data => {
                 this.workspaces = map(data.Workspaces, d => {
                     return {
-                        key: d.Name, value: d.DisplayName, iconClass: d.DisabledAtUtc == null ? '' : 'disabled-item',
+                        key: d.Name,
+                        value: d.DisplayName,
+                        iconClass: d.DisabledAtUtc == null ? '' : 'disabled-item',
                     }
                 })
 

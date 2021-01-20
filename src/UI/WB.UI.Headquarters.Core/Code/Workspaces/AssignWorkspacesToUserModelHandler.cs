@@ -40,11 +40,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 var workspace = this.workspaces.GetById(modelWorkspace);
                 if (workspace == null)
                 {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} not found");
-                }
-                else if (workspace.IsDisabled())
-                {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} disabled");
+                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace '{modelWorkspace}' not found");
                 }
                 else
                 {
