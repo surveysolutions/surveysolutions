@@ -54,11 +54,7 @@ namespace WB.UI.Interviewer
         public Setup()
         {
             
-#if PRODUCTION
-            CrashReporting.Init("bd034ac8-bec5-41d7-83f7-e40c1300fd10");
-#else
-            CrashReporting.Init("1d21a663-e5fc-4535-9b25-4f22d6fa2b31");
-#endif
+         
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
@@ -111,7 +107,13 @@ namespace WB.UI.Interviewer
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
-            
+
+            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
+            if (!string.IsNullOrEmpty(appcenterKey))
+            {
+                CrashReporting.Init(appcenterKey);
+            }
+
             var status = new UnderConstructionInfo();
             status.Run();
 
