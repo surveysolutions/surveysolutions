@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         public async Task<WorkspaceStatusInformation> Handle(GetWorkspaceStatusInformation request,
             CancellationToken cancellationToken)
         {
-            var workspace = workspacesCache.AllEnabledWorkspaces().FirstOrDefault(w => w.Name == request.WorkspaceName)
+            var workspace = workspacesCache.AllWorkspaces().FirstOrDefault(w => w.Name == request.WorkspaceName)
                             ?? throw new MissingWorkspaceException(
                                 "Cannot find workspace with name: " + request.WorkspaceName);
             
@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 .Where(u => u.Workspace.Name == workspace.Name)
                 .Where(u => u.User.Roles.Any(r => r.Id == UserRoles.Supervisor.ToUserId())
                 ).CountAsync(cancellationToken: cancellationToken));
-
+            
             var response = new WorkspaceStatusInformation
             {
                 WorkspaceName = workspace.Name,

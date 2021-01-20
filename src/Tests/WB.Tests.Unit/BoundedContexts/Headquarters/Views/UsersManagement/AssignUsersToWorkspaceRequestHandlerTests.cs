@@ -17,6 +17,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 {
+    [TestOf(typeof(AssignWorkspacesToUserModelHandler))]
     public class AssignUsersToWorkspaceRequestHandlerTests
     {
         private HqUser[] Users = null;
@@ -129,7 +130,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 
         [TestCase(UserRoles.Interviewer)]
         [TestCase(UserRoles.Supervisor)]
-        [TestCase(UserRoles.Observer)]
         [TestCase(UserRoles.Administrator)]
         public async Task should_return_error_for_role(UserRoles role)
         {

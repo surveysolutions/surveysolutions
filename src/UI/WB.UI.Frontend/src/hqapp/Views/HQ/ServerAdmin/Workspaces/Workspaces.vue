@@ -284,6 +284,16 @@ export default {
                                 this.loadData()
                             })
                     },
+                },
+                {
+                    name: this.$t('Common.Delete'),
+                    className: 'suso-delete',
+                    callback: (_, opt) => {
+                        const parsedRowId = rowData.Name
+                        this.editedRowId = parsedRowId
+
+                        this.$refs.deleteWorkspaceModal.showModal(rowData.Name)
+                    },
                 })
             }
             else {
@@ -334,7 +344,10 @@ export default {
                             window.location = this.workspacePath(rowData.Name) + 'Administration/TabletInfos'
                         },
                     },
-                    {
+                ]
+
+                if(rowData.Name != 'primary') {
+                    items.push({
                         name: this.$t('Workspaces.Disable'),
                         className: 'suso-disable',
                         callback: (_, opt) => {
@@ -343,8 +356,9 @@ export default {
 
                             this.$refs.disableWorkspaceModal.modal('show')
                         },
-                    },
-                    {
+                    })
+
+                    items.push({
                         name: this.$t('Common.Delete'),
                         className: 'suso-delete',
                         callback: (_, opt) => {
@@ -353,8 +367,8 @@ export default {
 
                             this.$refs.deleteWorkspaceModal.showModal(rowData.Name)
                         },
-                    },
-                ]
+                    })
+                }
             }
 
             return items
