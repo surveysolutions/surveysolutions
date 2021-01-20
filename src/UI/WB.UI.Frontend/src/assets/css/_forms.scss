@@ -56,6 +56,12 @@ input.radio-row{
     position: absolute;
 	left: -999999px;
 }
+
+.disabled-item {
+    text-decoration: line-through;
+    color: $gray-light;
+}
+
 input.wb-checkbox{
     @extend %questionnaire-sprite;
 	& ~ label:hover .tick,
