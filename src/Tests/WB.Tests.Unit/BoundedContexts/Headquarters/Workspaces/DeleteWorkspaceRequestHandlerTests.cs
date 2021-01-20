@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             this.workspaces = Create.Storage.InMemoryPlainStorage<Workspace>();
 
             cache = new Mock<IWorkspacesCache>();
-            cache.Setup(c => c.AllEnabledWorkspaces()).Returns(() =>
+            cache.Setup(c => c.AllWorkspaces()).Returns(() =>
                 this.workspaces.Query(_ => _.Select(w => w.AsContext())
                 .ToList()));
 
@@ -86,7 +86,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
 
             Assert.That(response, Has.Property(nameof(DeleteWorkspaceResponse.Success)).False);
         }
-
 
         [Test]
         public async Task should_call_for_export_data_cleanup()
