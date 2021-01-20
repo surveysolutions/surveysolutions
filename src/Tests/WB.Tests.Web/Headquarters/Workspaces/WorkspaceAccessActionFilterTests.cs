@@ -111,6 +111,20 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         }
 
         [Test]
+        public void non_authorized_user_to_anonymous_method_allowed()
+        {
+            Role = UserRoles.Headquarter;
+            Attributes.Clear();
+            Attributes.Add(new AllowAnonymousAttribute());
+            
+            // act
+            var context = Act();
+
+            // assert
+            Assert.Null(context.Result);
+        }
+
+        [Test]
         public void authorized_user_with_no_access_to_workspace_forbidden()
         {
             Role = UserRoles.Headquarter;
@@ -156,6 +170,25 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         public void should_fallback_to_primary()
         {
             Role = UserRoles.Headquarter;
+            CurrentWorkspace = null;
+
+            Attributes.Add(new AllowPrimaryWorkspaceFallbackAttribute());
+            UserWorkspaces.Clear();
+            UserWorkspaces.Add(Workspace.Default.Name);
+            
+            // act
+            var context = Act();
+
+            // assert
+            Assert.Null(context.Result);
+        }
+
+        [Test]
+        public void should_not_fallback_to_primary_if_user_has_no_access_to_primary()
+        {
+            Role = UserRoles.Headquarter;
+            CurrentWorkspace = null;
+
             Attributes.Add(new AllowPrimaryWorkspaceFallbackAttribute());
             UserWorkspaces.Clear();
             
@@ -163,7 +196,8 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var context = Act();
 
             // assert
-            Assert.Null(context.Result);
+            Assert.That(context.Result, Is.InstanceOf<ForbidResult>());
+            Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceAccessDisabledReason));
         }
 
         [Test]
@@ -194,7 +228,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             // assert
             Assert.That(context.Result, Is.InstanceOf<ForbidResult>());
-            Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceAccessDisabledReason));
+            Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceDisabledReason));
         }
 
         [Test]

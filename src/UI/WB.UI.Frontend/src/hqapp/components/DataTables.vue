@@ -38,8 +38,7 @@
             </a>
             {{$t("Pages.Or")}}
             <a target="_blank"
-                v-bind:href="this.export
-                ">
+                v-bind:href="this.export.tab">
                 TAB
             </a>
         </div>
