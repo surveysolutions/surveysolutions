@@ -51,7 +51,6 @@ namespace WB.UI.Headquarters
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
-            registry.Bind<IAuthorizationHandler, WorkspaceRequirementHandler>();
 
             registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
 

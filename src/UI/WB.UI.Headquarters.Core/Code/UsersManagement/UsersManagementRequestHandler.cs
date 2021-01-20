@@ -88,13 +88,13 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         {
             if (request.Search?.Value != null)
             {
-                var search = request.Search.Value;
-                query = query.Where(u => u.UserName.Contains(search)
-                                         || u.FullName.Contains(search)
+                var search = request.Search.Value.ToLower();
+                query = query.Where(u => u.UserName.ToLower().Contains(search)
+                                         || u.FullName.ToLower().Contains(search)
                                          || u.PhoneNumber.Contains(search)
-                                         || u.Email.Contains(search)
+                                         || u.Email.ToLower().Contains(search)
                                          || u.Workspaces.Any(w
-                                             => (w.Workspace.Name + w.Workspace.DisplayName).Contains(search)));
+                                             => (w.Workspace.Name.ToLower() + w.Workspace.DisplayName.ToLower()).Contains(search)));
             }
 
             if (request.Role != null)
