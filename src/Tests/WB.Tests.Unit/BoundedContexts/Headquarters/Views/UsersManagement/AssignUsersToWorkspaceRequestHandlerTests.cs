@@ -76,20 +76,22 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         }
 
         [Test]
-        public async Task should_return_error_for_disabled_workspace()
+        public async Task should_not_return_error_for_disabled_workspace()
         {
             StoreWorkspaces(Create.Entity.Workspace("abra", disabled: true));
-            
+
+            Users = new[] { Create.Entity.HqUser(Id.g1,
+                role: UserRoles.Headquarter,
+                workspaces: new [] { "test" }) };
+
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
                     Workspaces = new [] { "abra" },
-                    UserIds = new [] { Guid.NewGuid()}
-                    
+                    UserIds = new[] { Id.g1 }
                 }));
             
-            Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(false));
-            Assert.That(modelState["Workspaces"].Errors[0].ErrorMessage.Contains("abra"));
+            Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(true));
         }
         
         [Test]
