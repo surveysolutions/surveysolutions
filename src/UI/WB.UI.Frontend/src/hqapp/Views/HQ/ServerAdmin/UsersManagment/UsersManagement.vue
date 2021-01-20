@@ -295,13 +295,13 @@ export default {
 
         filteredToAdd() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'
+                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
         filteredToRemove() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'
+                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
