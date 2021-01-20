@@ -114,10 +114,11 @@ export default {
                 isError: isError || false,
             })
         },
+
         async startSignalrDiag() {
             this.pushSignalrMessage('Building connection to server using `/signalrdiag` url')
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl('/signalrdiag')
+                .withUrl(this.$config.basePath + 'signalrdiag')
                 .configureLogging(signalR.LogLevel.Debug)
                 .build()
 
@@ -130,7 +131,7 @@ export default {
                 await connection.start()
                 this.pushSignalrMessage('Started connection')
 
-                for(let i = 0; i < 30; i++) {
+                for(let i = 0; i < 10; i++) {
                     await connection.invoke('Ping')
                     this.pushSignalrMessage('Ping method called')
                     await new Promise(r => setTimeout(r, 2000))
@@ -140,6 +141,7 @@ export default {
                 this.pushSignalrMessage('Failed to invoke server method with error: ' + err.toString(), true)
             }
         },
+
         getHealth() {
             const self = this
             this.$hq.ControlPanel.getHealthResult().then(response => {

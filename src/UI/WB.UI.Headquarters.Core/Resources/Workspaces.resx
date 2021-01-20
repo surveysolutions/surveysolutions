@@ -88,9 +88,10 @@
         <value>Delete workspace {{name}}</value>
     </data>
   <data name="DeleteExplanation" xml:space="preserve">
-        <value>Are You sure that You want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;? 
-All interviewers and supervisors connected to this workspace will be also deleted. All Interviewer and Supervisor application will require data reset.
-Following data associated with this workspace will be deleted:</value>
+        <value>Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
+All interviewer, supervisor, and observer accounts connected to this workspace will also be deleted. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this server and require a data reset. 
+
+The following data associated with this workspace will be deleted:</value>
     </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
         <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted. Following data associated with this workspace will be deleted:</value>

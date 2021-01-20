@@ -1,11 +1,13 @@
+#nullable enable
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -15,18 +17,25 @@ namespace WB.UI.Headquarters.Code.Authentication
     public class HqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<HqUser, HqRole>
     {
         private readonly IInScopeExecutor<IWorkspacesCache> inScopeExecutor;
+        private readonly IAuthorizedUser authorizedUser;
 
         public HqUserClaimsPrincipalFactory(UserManager<HqUser> userManager,
             RoleManager<HqRole> roleManager,
             IOptions<IdentityOptions> optionsAccessor,
-            IInScopeExecutor<IWorkspacesCache> inScopeExecutor) : base(userManager, roleManager, optionsAccessor)
+            IInScopeExecutor<IWorkspacesCache> inScopeExecutor, 
+            IAuthorizedUser authorizedUser) : base(userManager, roleManager, optionsAccessor)
         {
             this.inScopeExecutor = inScopeExecutor;
+            this.authorizedUser = authorizedUser;
         }
 
         public override async Task<ClaimsPrincipal> CreateAsync(HqUser user)
         {
             var principal = await base.CreateAsync(user);
+
+            HashSet<string>? workspaces = this.authorizedUser.IsAuthenticated && this.authorizedUser.IsObserver
+                ? this.authorizedUser.Workspaces.ToHashSet()
+                : null;
 
             this.inScopeExecutor.Execute(workspacesService =>
             {
@@ -38,6 +47,8 @@ namespace WB.UI.Headquarters.Code.Authentication
                 {
                     foreach (var workspace in userWorkspaces)
                     {
+                        if(workspaces != null && !workspaces.Contains(workspace.Name)) continue;
+
                         principalIdentity.AddClaims(new[]
                         {
                             new Claim(WorkspaceConstants.ClaimType, workspace.Name)

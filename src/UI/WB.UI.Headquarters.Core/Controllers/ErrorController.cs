@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Shared.Web.Attributes;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
-    [AllowAnonymous]
+    [AllowDisabledWorkspaceAccess]
+    [AllowPrimaryWorkspaceFallback]
     [NoTransaction]
     [Route("error")]
     public class ErrorController : Controller

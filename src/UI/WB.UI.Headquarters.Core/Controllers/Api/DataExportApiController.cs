@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -274,25 +275,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 fromDate: @from?.ToUniversalTime(),
                 toDate: to?.ToUniversalTime());
 
-        /// <summary>
-        /// Handle CORS preflight request
-        /// </summary>
-        /// <returns></returns>
-        [HttpOptions]
-        [AllowAnonymous]
-        [Localizable(false)]
-        public ActionResult ExportToExternalStorage()
-        {
-            var uri = new Uri(externalStoragesSettings.OAuth2.RedirectUri);
-            
-            // Define and add values to variables: origins, headers, methods (can be global)               
-            Response.Headers.Add("Access-Control-Allow-Origin", $"{uri.Scheme}://{uri.Host}");
-            Response.Headers.Add("Access-Control-Allow-Methods", "POST");
-            
-            return Ok();
-        }
-
         [HttpPost]
+        [EnableCors("export")]
         [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
@@ -317,7 +301,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     state.Type,
                     translation: state.TranslationId);
 
-                return ExportToExternalStorage();
+                return Ok();
             }
             catch (ApiException)
             {

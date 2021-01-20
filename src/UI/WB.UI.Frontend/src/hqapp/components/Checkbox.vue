@@ -8,7 +8,8 @@
             :name="name"
             :checked="checked"
             @change="checkedChange" />
-        <label :for="name">
+        <label :for="name"
+            :class="classes">
             <span class="tick"></span>{{ label }}</label>
     </div>
 </template>
@@ -30,6 +31,8 @@ export default {
         label: String,
 
         tooltip: String,
+
+        classes: String,
     },
 
     methods: {

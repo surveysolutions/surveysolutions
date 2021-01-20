@@ -40,11 +40,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 var workspace = this.workspaces.GetById(modelWorkspace);
                 if (workspace == null)
                 {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} not found");
-                }
-                else if (workspace.IsDisabled())
-                {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace {modelWorkspace} disabled");
+                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace '{modelWorkspace}' not found");
                 }
                 else
                 {
@@ -65,10 +61,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 if (user.IsArchivedOrLocked)
                 {
                     ModelState.AddModelError(nameof(model.UserIds), "User is locked");
-                 
                 }
 
-                if (!user.IsInRole(UserRoles.Headquarter) && !user.IsInRole(UserRoles.ApiUser))
+                if (!user.IsInRole(UserRoles.Headquarter) 
+                    && !user.IsInRole(UserRoles.ApiUser)
+                    && !user.IsInRole(UserRoles.Observer))
                 {
                     ModelState.AddModelError(nameof(model.UserIds),
                         "Only headquarter or api user workspaces can be edited");

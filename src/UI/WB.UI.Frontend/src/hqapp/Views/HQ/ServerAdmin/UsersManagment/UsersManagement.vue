@@ -171,7 +171,9 @@ export default {
             .then(data => {
                 this.workspaces = map(data.Workspaces, d => {
                     return {
-                        key: d.Name, value: d.DisplayName, iconClass: d.DisabledAtUtc == null ? '' : 'disabled-item',
+                        key: d.Name,
+                        value: d.DisplayName,
+                        iconClass: d.DisabledAtUtc == null ? '' : 'disabled-item',
                     }
                 })
 
@@ -295,13 +297,13 @@ export default {
 
         filteredToAdd() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'
+                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
         filteredToRemove() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'
+                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
