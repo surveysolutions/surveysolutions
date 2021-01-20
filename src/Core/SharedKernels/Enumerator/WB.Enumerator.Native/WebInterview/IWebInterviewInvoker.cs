@@ -12,5 +12,6 @@ namespace WB.Enumerator.Native.WebInterview
         void FinishInterview(Guid interviewId);
         void MarkAnswerAsNotSaved(string section, string questionId, string errorMessage);
         void ShutDown(Guid interviewId);
+        void ShutDownAllWebInterviews();
     }
 }

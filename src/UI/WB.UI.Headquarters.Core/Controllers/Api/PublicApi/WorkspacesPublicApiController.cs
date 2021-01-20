@@ -1,7 +1,6 @@
 #nullable enable
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Formats.Asn1;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,13 +13,13 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Workspace;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Models;
 
@@ -39,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ILogger<WorkspacesPublicApiController> logger;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISystemLog systemLog;
+        private readonly IInScopeExecutor<IWebInterviewInvoker> webInterviewNotification;
 
         public WorkspacesPublicApiController(IPlainStorageAccessor<Workspace> workspaces,
             IMapper mapper,
@@ -46,7 +46,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IWorkspacesCache workspacesCache,
             IMediator mediator,
             ILogger<WorkspacesPublicApiController> logger,
-            IAuthorizedUser authorizedUser, ISystemLog systemLog)
+            IAuthorizedUser authorizedUser, ISystemLog systemLog, 
+            IInScopeExecutor<IWebInterviewInvoker> webInterviewNotification)
         {
             this.workspaces = workspaces;
             this.mapper = mapper;
@@ -56,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.logger = logger;
             this.authorizedUser = authorizedUser;
             this.systemLog = systemLog;
+            this.webInterviewNotification = webInterviewNotification;
         }
 
         /// <summary>
@@ -227,6 +229,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 this.logger.LogInformation("Workspace {name} was disabled by {user}", name, this.authorizedUser.UserName);
                 this.workspacesCache.InvalidateCache();
                 this.systemLog.WorkspaceDisabled(name);
+                this.webInterviewNotification.Execute(_ => _.ShutDownAllWebInterviews());
                 return NoContent();
             }
 
