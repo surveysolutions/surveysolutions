@@ -33,6 +33,7 @@ namespace WB.UI.Headquarters.Code
                 c.ParameterFilter<XmsEnumParameterFilter>();
                 c.OperationFilter<XmsEnumOperationFilter>();
                 c.SchemaFilter<XmsEnumSchemaFilter>();
+                c.DocumentFilter<WorkspaceDocumentFilter>();
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {

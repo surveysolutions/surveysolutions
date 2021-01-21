@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.Modularity
 {
     public class UnderConstructionInfo
     {
         private static bool isOneInstanceCreated = false;
+        readonly TaskCompletionSource<bool> awaitingBlock = new TaskCompletionSource<bool>();
         
         public UnderConstructionInfo()
         {
@@ -14,6 +16,8 @@ namespace WB.Core.Infrastructure.Modularity
             isOneInstanceCreated = true;
         }
 
+        public Task WaitForFinish => awaitingBlock.Task;
+        
         public void Run(string message = null)
         {
            Status = UnderConstructionStatus.Running;
@@ -23,6 +27,7 @@ namespace WB.Core.Infrastructure.Modularity
         public void Finish()
         {
             Status = UnderConstructionStatus.Finished;
+            this.awaitingBlock.SetResult(true);
         }
 
         public void Error(string message, Exception exception)
@@ -30,7 +35,12 @@ namespace WB.Core.Infrastructure.Modularity
             Status = UnderConstructionStatus.Error;
             Message = message;
             Exception = exception;
-            //AwaitingBlock.SetException(exception);
+            this.awaitingBlock.SetException(exception);
+            
+            #if DEBUG
+            Message = exception.ToString();
+            #endif
+            
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;

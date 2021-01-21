@@ -73,7 +73,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 new QuestionnaireQuestionOptionsRepository(), 
                 Create.Service.SubstitutionService(),
                 Create.Service.ExpressionStatePrototypeProvider(),
-                new ReusableCategoriesFillerIntoQuestionnaire(new ReusableCategoriesStorage(reusableCategoriesStorage)));
+                new ReusableCategoriesFillerIntoQuestionnaire(new ReusableCategoriesStorage(reusableCategoriesStorage)),
+                Create.Storage.NewMemoryCache());
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
 
             var interviewSummaryEventHandler = new InterviewSummaryDenormalizer(Mock.Of<IUserViewFactory>(), questionnaireStorage, Create.Storage.NewMemoryCache());

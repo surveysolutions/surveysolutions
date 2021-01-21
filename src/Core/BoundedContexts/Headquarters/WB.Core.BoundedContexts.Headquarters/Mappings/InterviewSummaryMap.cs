@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 clm.Lazy(true);
                 clm.Formula(
-                    @"(SELECT COUNT(DISTINCT (c.summary_id, c.variable, c.rostervector)) FROM readside.commentaries c 
+                    @"(SELECT COUNT(DISTINCT (c.summary_id, c.variable, c.rostervector)) FROM commentaries c 
                                WHERE c.summary_id = id AND c.variable not like '@@%')");
             });
             Property(x => x.AssignmentId);

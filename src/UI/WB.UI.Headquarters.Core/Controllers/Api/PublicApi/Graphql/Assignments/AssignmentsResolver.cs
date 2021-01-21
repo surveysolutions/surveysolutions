@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using HotChocolate;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -7,7 +8,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
 {
     public class AssignmentsResolver
     {
-        public IQueryable<Core.BoundedContexts.Headquarters.Assignments.Assignment> Assignments([Service] IUnitOfWork unitOfWork, [Service] IAuthorizedUser user)
+        public IQueryable<Core.BoundedContexts.Headquarters.Assignments.Assignment> Assignments(
+            [Service] IUnitOfWork unitOfWork, [Service] IAuthorizedUser user)
         {
             unitOfWork.DiscardChanges();
 

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation
 {
@@ -27,13 +29,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             IOptions<FileStorageConfig> fileStorageOptions, 
             IFileSystemAccessor fileSystemAccessor,
             IArchiveUtils archiveUtils,
+            IWorkspaceContextAccessor contextAccessor,
             IEncryptionService encryptionService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.encryptionService = encryptionService;
 
-            this.basePath = fileSystemAccessor.CombinePath(fileStorageOptions.Value.TempData, TabletInformationFolderName);
+            var workspaceName = contextAccessor.CurrentWorkspace()?.Name; 
+            this.basePath = Path.Combine(fileStorageOptions.Value.TempData, TabletInformationFolderName,
+                workspaceName == WorkspaceConstants.DefaultWorkspaceName ? "" : workspaceName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
         }

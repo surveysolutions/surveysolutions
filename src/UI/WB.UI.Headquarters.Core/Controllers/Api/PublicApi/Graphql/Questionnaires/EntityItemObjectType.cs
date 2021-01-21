@@ -21,35 +21,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             descriptor.Name("Entity");
             
-            descriptor.Field(x => x.QuestionText)
-                .Description("Question text. May contain html tags.")
-                .Type<StringType>();
-
-            descriptor.Field(x => x.StataExportCaption)
-                .Name("variable")
-                .Type<StringType>();
-
-            descriptor.Field(x => x.QuestionScope)
-                .Name("scope")
-                .Type<EnumType<QuestionScope>>();
-
-            descriptor.Field(x => x.VariableLabel)
-                .Name("label")
-                .Type<StringType>();
-
-            descriptor.Field(x => x.QuestionType)
-                .Name("type")
-                .Type<NonNullType<QuestionTypeObjectType>>();
-
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
                 .Type<BooleanType>();
-
+            
+            descriptor.Field(x => x.VariableLabel)
+                .Name("label")
+                .Type<StringType>();
+            
             descriptor.Field("options")
                 .Name("options")
                 .Resolver(context =>
-                    context.BatchDataLoader<int, List<CategoricalOption>>
-                    ("optionsByQuestion", async keys =>
+                    context.BatchDataLoader<int, List<CategoricalOption>>(async (keys, token )  =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
                         var questions = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
@@ -82,8 +65,25 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                                     return new List<CategoricalOption>();
                                 });
                       
-                    }).LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
+                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default))
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
+            
+            descriptor.Field(x => x.QuestionText)
+                .Description("Question text. May contain html tags.")
+                .Type<StringType>();
+
+            descriptor.Field(x => x.QuestionScope)
+                .Name("scope")
+                .Type<EnumType<QuestionScope>>();
+            
+            descriptor.Field(x => x.QuestionType)
+                .Name("type")
+                .Type<NonNullType<QuestionTypeObjectType>>();
+
+            descriptor.Field(x => x.StataExportCaption)
+                .Name("variable")
+                .Type<StringType>();
         }
+        
     }
 }

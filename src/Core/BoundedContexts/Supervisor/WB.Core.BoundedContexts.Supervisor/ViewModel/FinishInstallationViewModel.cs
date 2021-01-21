@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -76,10 +78,17 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Email = supervisor.Email,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token,
-                TenantId = tenantId
+                TenantId = tenantId,
+                Workspace = supervisor.Workspaces.First().Name
             };
 
             this.supervisorsPlainStorage.Store(supervisorIdentity);
+        }
+
+        protected override async Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
+        {
+            var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
+            return supervisor.Workspaces;
         }
     }
 }

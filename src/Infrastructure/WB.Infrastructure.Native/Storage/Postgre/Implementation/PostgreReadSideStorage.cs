@@ -217,14 +217,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             Expression<Func<TEntity, TKey>> property, Func<TKey, Expression<Func<TEntity, bool>>> getter)
             where TEntity : class
         {
-            var memberInfo = TypeExtensions.DecodeMemberAccessExpressionOf(property);
-            map.Property(property);
-
-            var key = (memberInfo.DeclaringType, memberInfo.GetPropertyOrFieldType());
-
-            if (!aliasGetters.ContainsKey(key))
+            lock (aliasGetters)
             {
-                aliasGetters.Add(key, getter);
+                var memberInfo = TypeExtensions.DecodeMemberAccessExpressionOf(property);
+                map.Property(property);
+
+                var key = (memberInfo.DeclaringType, memberInfo.GetPropertyOrFieldType());
+
+                if (!aliasGetters.ContainsKey(key))
+                {
+                    aliasGetters.Add(key, getter);
+                }
             }
         }
 

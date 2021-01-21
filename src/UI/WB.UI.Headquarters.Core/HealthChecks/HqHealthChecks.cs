@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 .AddCheck<HeadquartersStartupCheck>("under_construction_check", tags: new[] { "ready" })
                 .AddCheck<ExportServiceVersionCheck>("export_service_check")
                 .AddCheck<ExportServiceConnectivityCheck>("export_service_connectivity_check")
-                .AddCheck<BrokenPackagesCheck>("broken_packages_check")
+                //.AddCheck<BrokenPackagesCheck>("broken_packages_check")
                 .AddCheck<DatabaseConnectionCheck>("database_connection_check");
         }
     }

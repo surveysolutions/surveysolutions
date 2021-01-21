@@ -1,0 +1,24 @@
+﻿@using WB.UI.Shared.Web.Extensions
+@using System.Globalization
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.Name">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Html.GenerateFavicon(Url.Static("/img/identity/favicon-hq"))
+    <title>@ViewBag.Title</title>
+    <partial name="GlobalSettings" />
+    <locale component="hq"></locale>
+    @RenderSection("scripts", false)
+</head>
+<body class='wide-navbar'>
+    <header>
+        <partial name="NavigationBar" />
+    </header>
+    <partial name="NoticeBar"/>
+    @RenderBody()
+    <partial name="Footer" />
+    <partial name="_Clickjacking"/>
+</body>
+</html>

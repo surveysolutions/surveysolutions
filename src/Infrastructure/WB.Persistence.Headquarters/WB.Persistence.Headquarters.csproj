@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>netstandard2.1</TargetFramework>
+      <TargetFramework>net5.0</TargetFramework>
       <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
       <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
       <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -16,6 +16,8 @@
       <Compile Remove="Migrations\ReadSide\M101-200\**" />
       <EmbeddedResource Remove="Migrations\ReadSide\M101-200\**" />
       <None Remove="Migrations\ReadSide\M101-200\**" />
+      <None Remove="Migrations\Workspace\Init.sql" />
+      <EmbeddedResource Include="Migrations\Workspace\Init.sql" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Migrations\Logs\M201904221727_AddErrorsTable.sql" />
@@ -34,10 +36,10 @@
       <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="2.0.35" />
+      <PackageReference Include="Dapper" Version="2.0.78" />
       <PackageReference Include="FluentMigrator" Version="3.2.9" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-      <PackageReference Include="Npgsql" Version="4.1.4" />
+      <PackageReference Include="Npgsql" Version="5.0.1.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -12,13 +11,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public sealed class TokenGenerator : RandomStringGenerator, ITokenGenerator
     {
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
-        private readonly IPlainKeyValueStorage<TenantSettings> tenantSettings;
+        private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
 
-        protected internal int tokenLength = 8;
+        internal int tokenLength = 8;
 
         public TokenGenerator(
             IPlainStorageAccessor<Invitation> invitationStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings)
+            IPlainStorageAccessor<ServerSettings> tenantSettings)
         {
             this.invitationStorage = invitationStorage;
             this.tenantSettings = tenantSettings;
@@ -41,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public string Generate(QuestionnaireIdentity identity)
         {
-            var exportKey = this.tenantSettings.GetById(AppSetting.TenantSettingsKey);
+            ServerSettings exportKey = this.tenantSettings.GetById(ServerSettings.PublicTenantIdKey);
             long hashCode;
 
             // cannot use identity.GetHashCode() as it return int value biased to the right side of long bit space
@@ -58,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 // as a note - TenantPublicId is a string - so it will return different hash code across application reboot
                 // this one line will ensure that different tenants do not receive same token
-                hashCode = hashCode ^ (exportKey.TenantPublicId.GetHashCode() * prime);
+                hashCode = hashCode ^ (exportKey.Value.GetHashCode() * prime);
             }
 
             return GenerateImpl(hashCode);

@@ -32,15 +32,7 @@ namespace WB.Services.Export.Host
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            var webConfig = Configuration["webConfigs"];
-
-            // should we go to web config for connection string?
-            if (webConfig != null)
-            {
-                WebConfigReader.Read(Configuration, webConfig);
-            }
-
+        {  
             services.AddTransient<TenantModelBinder>();
 
             services.AddControllers(opts =>

@@ -113,15 +113,11 @@
 import {map, isUndefined, isEmpty, filter} from 'lodash'
 import gql from 'graphql-tag'
 
-const query = gql`query ($responsibleIds: [Uuid!]) {
+const query = gql`query assignments($workspace: String!, $where: AssignmentsFilter) {
   assignments(
-    where: {
-          responsibleId_in: $responsibleIds,
-          webMode: true,
-          archived: false
-      },
-    take: 1
-    ) 
+      workspace: $workspace 
+      where: $where 
+      take: 1) 
   {
     filteredCount
   }
@@ -279,11 +275,18 @@ export default {
         async whatToDoWithAssignments(newValue) {
             const self = this
             if(newValue === 'ReassignToOriginalSupervisor'){
-                const interviewersArray = map(self.interviewersToMove, (i) => i.userId)
+                const interviewersArray = map(self.interviewersToMove, (i) => i.userId.replaceAll('-',''))
+
+                const where = {and :[
+                    {webMode: {eq: true}},
+                    {archived: {eq: false}},
+                    {responsibleId: {in: interviewersArray}}]}
+
                 const response = await self.$apollo.query({
                     query,
                     variables: {
-                        responsibleIds: interviewersArray,
+                        where: where,
+                        workspace: this.$store.getters.workspace,
                     },
                     fetchPolicy: 'network-only',
                 })

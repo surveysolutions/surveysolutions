@@ -111,8 +111,6 @@ Elmah/
 /src/UI/WB.UI.Frontend/styles/dist/
 /src/UI/WB.UI.Headquarters.Core/App_Data/
 /src/UI/WB.UI.Headquarters.Core/AppData
-/src/UI/WB.UI.Headquarters.Core/Views/Shared/_AdminLayout_Legacy.cshtml
-/src/UI/WB.UI.Headquarters.Core/Views/Shared/_AdminLayout.cshtml
 /src/UI/WB.UI.Headquarters.Core/Views/Shared/_EmptyLayout.cshtml
 /src/UI/WB.UI.Headquarters.Core/Views/Shared/_FinishInstallation.cshtml
 /src/UI/WB.UI.Headquarters.Core/Views/Shared/_Logon.cshtml

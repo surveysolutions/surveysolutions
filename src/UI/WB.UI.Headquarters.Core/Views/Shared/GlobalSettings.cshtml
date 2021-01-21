@@ -1,25 +1,32 @@
 ﻿@using System.Globalization
 @using WB.Core.BoundedContexts.Headquarters.Configs
 @using WB.Core.Infrastructure.Versions
-@using WB.UI.Headquarters.Configs
+@using WB.Infrastructure.Native.Workspaces
 @using WB.UI.Headquarters.Services
 
 @inject IOptions<GoogleMapsConfig> googleMapsConfig
 @inject IProductVersion productVersion
+@inject IWorkspaceContextAccessor workspaceName
 
 <script type="text/javascript">
     document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
+    @{
+        var workspace = workspaceName.CurrentWorkspace();
+        var name = workspace?.Name ?? string.Empty;
+    }
+    
     window.CONFIG = @( new {
-        verboseMode = false,
-        googleApiKey = googleMapsConfig.Value.ApiKey,
-        googleMapsApiBaseUrl = googleMapsConfig.Value.ApiBaseUrl,
-        googleMapsBaseUrl = googleMapsConfig.Value.BaseUrl,
-        basePath = Url.Content(@"~/"),
-        imageGetBase = Url.Content("~/api/WebInterviewResources"),
-        audioGet = Url.Content("~/Resource/AudioRecord"),
-        appVersion = productVersion.ToString(),
-        supportedTransports = new [] { "webSockets", "longPolling"}
-    }.AsJsonValue());
+                    verboseMode = false,
+                    googleApiKey = googleMapsConfig.Value.ApiKey,
+                    googleMapsApiBaseUrl = googleMapsConfig.Value.ApiBaseUrl,
+                    googleMapsBaseUrl = googleMapsConfig.Value.BaseUrl,
+                    basePath = "/" + name + "/" ,
+                    workspace = name,
+                    imageGetBase = Url.Content("~/api/WebInterviewResources"),
+                    audioGet = Url.Content("~/Resource/AudioRecord"),
+                    appVersion = productVersion.ToString(),
+                    supportedTransports = new [] { "webSockets", "longPolling"}
+                }.AsJsonValue());
 
     if (typeof moment !== 'undefined') {
         moment.locale('@CultureInfo.CurrentUICulture');

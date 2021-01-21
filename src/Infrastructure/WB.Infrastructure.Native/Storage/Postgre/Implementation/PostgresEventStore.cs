@@ -24,8 +24,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IEventTypeResolver eventTypeResolver;
 
-        private const string tableNameWithSchema = "events.events";
-        private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
+        private string tableNameWithSchema => $"events";
+        private readonly string[] obsoleteEvents = { "tabletregistered" };
 
         private readonly IUnitOfWork sessionProvider;
         private readonly ILogger<PostgresEventStore> logger;
@@ -323,7 +323,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public async Task<long> GetMaximumGlobalSequence()
         {
-            return await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>("SELECT max(globalsequence) FROM events.events") ?? 0;
+            return await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>(
+                "SELECT max(globalsequence) FROM events") ?? 0;
         }
 
         private IEnumerable<CommittedEvent> ToCommittedEvent(IEnumerable<RawEvent> rawEventsData)

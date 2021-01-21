@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         UnacceptableSSLCertificate,
         InterviewerFromDifferentTeam,
         SupervisorRequireOnlineSync,
-        UserLinkedToAnotherServer
+        UserLinkedToAnotherServer,
+        WorkspaceDisabled
     }
 }

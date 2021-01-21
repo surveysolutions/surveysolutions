@@ -3,8 +3,8 @@
         DATE_PART('day', (now() at time zone 'utc')::timestamp - ass.CreatedAtUtc::timestamp) + 1 as Days, 
 		ur."RoleId" as RoleId,
 		ass.Quantity as Quantity,
-		(select count(*) from readside.InterviewSummaries isum where ass.Id=isum.assignmentid) as Count
-	from readside.Assignments ass
+		(select count(*) from InterviewSummaries isum where ass.Id=isum.assignmentid) as Count
+	from Assignments ass
 		left outer join users.userroles ur on ass.ResponsibleId = ur."UserId"
 		left outer join users.users us on us."Id" = ass.ResponsibleId
 		left outer join users.userprofiles up on us."UserProfileId" = up."Id"

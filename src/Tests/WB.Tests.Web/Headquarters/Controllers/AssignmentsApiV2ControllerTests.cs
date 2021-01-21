@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor)
             });
             
-            var assignmentServiceImpl = new AssignmentsService(null, null);
+            var assignmentServiceImpl = new AssignmentsService(null, null, null, null);
 
             var assignment = assignmentServiceImpl.MapAssignment(assignmentEntity);
             

@@ -3,6 +3,7 @@
     public enum DbType
     {
         PlainStore,
-        ReadSide
+        ReadSide,
+        Users
     }
 }

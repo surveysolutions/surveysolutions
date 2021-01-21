@@ -2,15 +2,15 @@ import gql from 'graphql-tag'
 import * as toastr from 'toastr'
 
 const deleteCalendarEventMutation =
-    gql`mutation deleteCalendarEvent($publicKey: Uuid!) {
-            deleteCalendarEvent(publicKey: $publicKey) {
+    gql`mutation deleteCalendarEvent($workspace: String!, $publicKey: Uuid!) {
+            deleteCalendarEvent(workspace: $workspace, publicKey: $publicKey) {
                 publicKey
             }
         }`
 
 const addOrUpdateCalendarEventMutation =
-    gql`mutation addOrUpdateCalendarEvent($publicKey: Uuid, $interviewId: Uuid, $interviewKey: String, $assignmentId: Int!, $newStart: DateTime!, $comment: String, $startTimezone: String) {
-            addOrUpdateCalendarEvent(publicKey: $publicKey, interviewId: $interviewId, interviewKey: $interviewKey, assignmentId: $assignmentId, newStart: $newStart, comment: $comment, startTimezone:$startTimezone) {
+    gql`mutation addOrUpdateCalendarEvent($workspace: String!, $publicKey: Uuid, $interviewId: Uuid, $interviewKey: String, $assignmentId: Int!, $newStart: DateTime!, $comment: String, $startTimezone: String) {
+            addOrUpdateCalendarEvent(workspace: $workspace, publicKey: $publicKey, interviewId: $interviewId, interviewKey: $interviewKey, assignmentId: $assignmentId, newStart: $newStart, comment: $comment, startTimezone:$startTimezone) {
                 publicKey
             }
         }`

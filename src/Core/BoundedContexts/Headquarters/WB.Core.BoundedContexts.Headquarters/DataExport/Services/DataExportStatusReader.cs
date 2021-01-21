@@ -62,6 +62,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 };
             }
 
+            if (result.Content.Headers.ContentDisposition == null) return null;
+
             return new DataExportArchive
             {
                 FileName = result.Content.Headers.ContentDisposition.FileName,

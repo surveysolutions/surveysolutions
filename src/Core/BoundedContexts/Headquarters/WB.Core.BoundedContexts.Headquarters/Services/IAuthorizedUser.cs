@@ -1,5 +1,6 @@
 using System;
-using Main.Core.Entities.SubEntities;
+using System.Collections.Generic;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
@@ -15,6 +16,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         Guid Id { get; }
         string UserName { get; }
+        bool HasNonDefaultWorkspace { get; }
+        IEnumerable<string> Workspaces { get; }
+
+        /// <summary>
+        /// Check that Authorized User has access to specified workspace
+        /// </summary>
+        /// <param name="workspace">Workspace name to check against</param>
+        /// <returns>Return true if user assigned to workspace, even for disabled one</returns>
+        bool HasAccessToWorkspace(string workspace);
+        IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
     }
 
     public static class AuthorizedUserHelpers

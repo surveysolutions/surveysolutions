@@ -200,7 +200,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 
         public async Task<int> TrackQuestionnaireImportAsync(
             QuestionnaireDocument questionnaireDocument,
-            string userAgent,
+            string? userAgent,
             Guid userId)
         {
             var meta = FromUserAgent(userAgent);
@@ -246,8 +246,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             return record.Sequence;
         }
 
-        private QuestionnaireChangeRecordMetadata FromUserAgent(string userAgent)
+        private QuestionnaireChangeRecordMetadata FromUserAgent(string? userAgent)
         {
+            if (userAgent == null) return new QuestionnaireChangeRecordMetadata();
+
             var versionInfo = GetHqVersionFromUserAgent(userAgent);
 
             return new QuestionnaireChangeRecordMetadata

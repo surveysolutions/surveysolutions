@@ -53,11 +53,11 @@ namespace WB.UI.Designer.SupportTool
             {
                 using var scope = this.host.Services.CreateScope();
                 var locator = scope.ServiceProvider;
-                var db = locator.GetService<DesignerDbContext>();
+                var db = locator.GetRequiredService<DesignerDbContext>();
                 await using var tr = await db.Database.BeginTransactionAsync();
-                var loggerProvider = locator.GetService<ILoggerProvider>();
+                var loggerProvider = locator.GetRequiredService<ILoggerProvider>();
                 var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
-                var userManager = locator.GetService<UserManager<DesignerIdentityUser>>();
+                var userManager = locator.GetRequiredService<UserManager<DesignerIdentityUser>>();
                 var user = new DesignerIdentityUser
                 {
                     UserName = login,
@@ -105,12 +105,12 @@ namespace WB.UI.Designer.SupportTool
             {
                 using var scope = this.host.Services.CreateScope();
                 var locator = scope.ServiceProvider;
-                var db = locator.GetService<DesignerDbContext>();
+                var db = locator.GetRequiredService<DesignerDbContext>();
                 await using var tr = await db.Database.BeginTransactionAsync();
-                using var unitOfWork = locator.GetService<IUnitOfWork>();
-                var loggerProvider = locator.GetService<ILoggerProvider>();
+                using var unitOfWork = locator.GetRequiredService<IUnitOfWork>();
+                var loggerProvider = locator.GetRequiredService<ILoggerProvider>();
                 var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
-                var userManager = locator.GetService<UserManager<DesignerIdentityUser>>();
+                var userManager = locator.GetRequiredService<UserManager<DesignerIdentityUser>>();
                 var user = await userManager.FindByNameAsync(username);
                 if (user == null)
                 {

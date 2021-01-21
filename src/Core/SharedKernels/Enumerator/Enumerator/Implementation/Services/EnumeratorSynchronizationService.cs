@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -54,7 +53,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected readonly IRestService restService;
         protected readonly IDeviceSettings deviceSettings;
         protected readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
-        protected readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly ICheckVersionUriProvider checkVersionUriProvider;
         protected readonly ILogger logger;
         protected readonly IEnumeratorSettings enumeratorSettings;
@@ -63,14 +61,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             ? null
             : new RestCredentials {
                 Login = this.principal.CurrentUserIdentity.Name,
-                Token = this.principal.CurrentUserIdentity.Token };
+                Token = this.principal.CurrentUserIdentity.Token,
+                Workspace = this.principal.CurrentUserIdentity.Workspace
+            };
 
         protected EnumeratorSynchronizationService(
             IPrincipal principal, 
             IRestService restService,
             IDeviceSettings deviceSettings, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider,
-            IFileSystemAccessor fileSystemAccessor,
             ICheckVersionUriProvider checkVersionUriProvider,
             ILogger logger,
             IEnumeratorSettings enumeratorSettings)
@@ -79,7 +78,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.restService = restService;
             this.deviceSettings = deviceSettings;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
-            this.fileSystemAccessor = fileSystemAccessor;
             this.checkVersionUriProvider = checkVersionUriProvider;
             this.logger = logger;
             this.enumeratorSettings = enumeratorSettings;

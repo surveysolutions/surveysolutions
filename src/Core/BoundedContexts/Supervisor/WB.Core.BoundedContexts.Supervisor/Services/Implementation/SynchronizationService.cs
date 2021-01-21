@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
-            base(principal, restService, settings, syncProtocolVersionProvider, fileSystemAccessor,
+            base(principal, restService, settings, syncProtocolVersionProvider,
                 checkVersionUriProvider, logger, settings)
         {
         }

@@ -17,7 +17,7 @@ export default {
 
     beforeMount() {
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(`/interview?interviewId=${this.interviewId}&mode=${this.mode}`)
+            .withUrl(Vue.$config.basePath + `interview?interviewId=${this.interviewId}&mode=${this.mode}`)
             .build()
 
         const api = {

@@ -2,9 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -13,16 +14,11 @@ using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
@@ -35,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IInterviewsToDeleteFactory interviewsToDeleteFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
         private readonly ICommandService commandService;
-        private readonly ILogger logger;
+        private readonly ILogger<DeleteQuestionnaireService> logger;
         private readonly ITranslationManagementService translations;
         private readonly IAssignmentsImportService importService;
         private readonly ISystemLog auditLog;
@@ -54,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory,
             ICommandService commandService,
-            ILogger logger,
+            ILogger<DeleteQuestionnaireService> logger,
             ITranslationManagementService translations,
             IAssignmentsImportService importService,
             ISystemLog auditLog,
@@ -86,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         public async Task DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
-            this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
+            this.logger.LogWarning("Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user", questionnaireId, questionnaireVersion, userId);
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaire = this.questionnaireBrowseItemReader.GetById(questionnaireIdentity.ToString());
 
@@ -115,12 +111,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 DeleteInProcess.Add(questionnaireKey);
             }
+
+            var sw = Stopwatch.StartNew();
+            string? title = null;
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+
             try
             {
-                var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            
                 var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+                
                 if (questionnaireDocument == null)
                     throw new ArgumentException($"questionnaire not found {questionnaireIdentity}");
+                title = questionnaireDocument.Title;
+
+                this.logger.LogWarning("Deletion of questionnaire {title} {id} started",
+                    title, questionnaireIdentity);
 
                 await this.DeleteInterviewsAsync(questionnaireIdentity);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
@@ -130,8 +136,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 var assignmentsImportStatus = this.importService.GetImportStatus();
 
-                var isAssignmentImportIsGoing = assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
-                                                assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
+                var isAssignmentImportIsGoing =
+                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
+                    assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
 
                 if (!isAssignmentImportIsGoing)
                 {
@@ -142,7 +149,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
             catch (Exception e)
             {
-                this.logger.Error(e.Message, e);
+                this.logger.LogError(e, e.Message);
+            }
+            finally
+            {
+                sw.Stop();
+                this.logger.LogInformation("Questionnaire {title} {id} deleted in {seconds:0.00}s",
+                    title ?? string.Empty, questionnaireIdentity, sw.Elapsed.TotalSeconds);
             }
 
             lock (DeleteInProcessLockObject)

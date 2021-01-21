@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -16,6 +17,11 @@ namespace WB.Core.Infrastructure.Implementation
             if (this.inMemoryStorage.ContainsKey(id))
                 return this.inMemoryStorage[id];
             return null;
+        }
+
+        public Task<TEntity> GetByIdAsync(object id)
+        {
+            return Task.FromResult(GetById(id));
         }
 
         public void Remove(object id)

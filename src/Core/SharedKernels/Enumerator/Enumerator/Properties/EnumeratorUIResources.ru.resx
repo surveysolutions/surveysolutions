@@ -980,4 +980,7 @@
   <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
     <value>Время находится в прошлом</value>
   </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+      <value>Ваша учётная запись не активна на данном сервере т.к. рабочее простанство в котром она определена отключено админстратором. Пожалуйста, обратитесь к супервизору.</value>
+  </data>
 </root>

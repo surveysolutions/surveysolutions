@@ -1,12 +1,21 @@
 <template>
     <HqLayout :fixedWidth="true"
+        tag="email-providers-page"
         :title="$t('Pages.EmailProvidersTitle')">
-        <div slot="headers">
+        <template slot="headers">
+            <ol class="breadcrumb">
+                <li>
+                    <a :href=" this.$hq.basePath + 'Workspaces'">{{$t('MainMenu.Workspaces')}} - {{this.$hq.basePath.replaceAll('/', '')}}</a>
+                </li>
+                <li>
+                    <a :href=" this.$hq.basePath + 'Settings'">{{$t('Common.Settings')}}</a>
+                </li>
+            </ol>
             <h1>{{$t('Pages.EmailProvidersTitle')}}</h1>
             <div>
                 <p>{{$t('Settings.EmailProvider_PageDesc')}}</p>
             </div>
-        </div>
+        </template>
         <div class="mb-30">
             <div class="col-md-12">
                 <form class="form-container"

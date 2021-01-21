@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Type;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Services;
 
@@ -22,13 +23,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
 
             this.Property(x => x.Email);
 
-            this.Property(x => x.CreationDate);
+            this.Property(x => x.CreationDate,pm => pm.Type<UtcDateTimeType>());
 
             this.Property(x => x.EmailConfirmed);
 
             this.Property(x => x.LockoutEnabled);
 
-            this.Property(x => x.LockoutEndDateUtc);
+            this.Property(x => x.LockoutEndDateUtc,pm => pm.Type<UtcDateTimeType>());
 
             this.Property(x => x.PasswordHash);
 
@@ -105,6 +106,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                 oto.Cascade(Cascade.All);
                 oto.Column("\"UserProfileId\"");
             });
+            
+            Set(x => x.Workspaces, map =>
+            {
+                map.Key(k => k.Column("user_id"));
+                map.Cascade(Cascade.All|Cascade.DeleteOrphans);
+                map.Inverse(true);
+            }, rel => rel.OneToMany());
         }
     }
 }

@@ -1,0 +1,38 @@
+@using WB.Infrastructure.Native.Workspaces
+@using WB.UI.Shared.Web.Extensions
+@inject IWorkspaceContextAccessor workspaceContext
+
+@{
+    var workspaces = (IEnumerable<WorkspaceContext>)ViewData["UserWorkspacesList"];
+    var hasAnotherWorkspace = workspaces.Count() > 1;
+    var workspace = workspaceContext.CurrentWorkspace();
+    var isSystemWorkspace = workspace?.IsServerAdministration() ?? false;
+}
+
+@if (workspace != null || isSystemWorkspace)
+{
+    @if (hasAnotherWorkspace)
+    {
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="javascript:void(0);" @(workspace.IsEnabled() == false ? Html.Raw("style='text-decoration:line-through'") : "")
+                   class="dropdown-toggle" data-toggle="dropdown"
+                   title="@Workspaces.CurrentWorkspace">@workspace.DisplayName <span class="caret"></span></a>
+                <ul class="dropdown-menu" style="max-height: 400px; overflow: overlay;">
+                    @foreach (var w in workspaces.OrderBy(w => w.DisplayName))
+                    {
+                        <li class="@(workspace.Name == w.Name ? "active" : "")">
+                            <a href="@Url.ContentAtWorkspace(w, "/")">@w.DisplayName</a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav navbar-nav">
+            <li><a href="javascript:void(0)" title="Interviews">@workspace.DisplayName</a></li>
+        </ul>
+    }
+}

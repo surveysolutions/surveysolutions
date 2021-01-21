@@ -5,7 +5,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class AudioFileMap : ClassMapping<AudioFile>
     {
         public AudioFileMap()

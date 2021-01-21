@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
     class InterviewReportDataRepository : IInterviewReportDataRepository
     {
         private readonly IUnitOfWork sessionProvider;
-        
+
         public InterviewReportDataRepository(IUnitOfWork sessionProvider)
         {
             this.sessionProvider = sessionProvider;
@@ -22,12 +22,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public List<QuestionnaireItem> QuestionsForQuestionnaireWithData(string questionnaireId, long? version)
         {
             return this.sessionProvider.Session.Connection
-                .Query<QuestionnaireItem>(@"with questionnaires as (
-	                    select id, entityid, questionnaireidentity from readside.questionnaire_entities
+                .Query<QuestionnaireItem>($@"with questionnaires as (
+	                    select id, entityid, questionnaireidentity from questionnaire_entities
 	                    where questionnaireidentity like @Id)
                     select q.entityid as questionId, q.questionnaireidentity from questionnaires q
                     where exists (
-	                    select 1 from readside.report_statistics rd
+	                    select 1 from report_statistics rd
 	                    where rd.entity_id = q.id)",
                     new { Id = $"{questionnaireId}${(version == null ? "%" : version.ToString())}"})
                 .ToList();
@@ -36,16 +36,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public List<QuestionnaireIdentity> QuestionnairesWithData(Guid? teamLeadId)
         {
             return this.sessionProvider.Session.Connection
-                .Query<string>(@"with questionnaires as (
+                .Query<string>($@"with questionnaires as (
 	                select distinct questionnaireidentity
-	                from readside.interviewsummaries
+	                from interviewsummaries
 	                where @TeamLeadId is null or @TeamLeadId = teamleadid)
                 select q.questionnaireidentity
                 from questionnaires q
                 where exists (
 	                select 1
-	                from readside.report_statistics rd
-	                JOIN readside.questionnaire_entities qe ON qe.id = rd.entity_id
+	                from report_statistics rd
+	                JOIN questionnaire_entities qe ON qe.id = rd.entity_id
 	                where qe.questionnaireidentity = q.questionnaireidentity)", new { teamLeadId })
                 .Select(QuestionnaireIdentity.Parse).ToList();
         }
@@ -59,10 +59,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             string statuses = GetStatusesWhereExpression(interviewStatuses);
 
             return connection.Query<GetReportCategoricalPivotReportItem>($@"with
-                 vara as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableA),
-                 varb as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableB),
-                 rep_a as (select * from readside.report_statistics_categorical where entity_id in (select id from vara)),
-                 rep_b as (select * from readside.report_statistics_categorical where entity_id in (select id from varb)),
+                 vara as (select id from questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableA),
+                 varb as (select id from questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableB),
+                 rep_a as (select * from report_statistics_categorical where entity_id in (select id from vara)),
+                 rep_b as (select * from report_statistics_categorical where entity_id in (select id from varb)),
                  agg as (
 	                select v1.interview_id, v1.answer as a1, v2.answer as a2, s.questionnaireidentity
 	                from rep_a v1
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
 				                or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
 				                or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
 			                )
-	                join readside.interviewsummaries s on s.id = v1.interview_id
+	                join interviewsummaries s on s.id = v1.interview_id
 	                where (@teamLeadId is null or @teamLeadId = s.teamleadid) {statuses}
                 )
                 select  a1 as colvalue, a2 as rowvalue, count(interview_id)
@@ -104,13 +104,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             string statuses = GetStatusesWhereExpression(@params.Statuses);
 
             string SqlQuery = $@"with
-	        lookupVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
+	        lookupVariable as (select id from questionnaire_entities where questionnaireidentity like @questionnaireidentity 
                 and entityid = @variable),
-            rep_a as (select * from readside.report_statistics_categorical where entity_id in (select id from lookupVariable))
-            {IfWithCondition(@",
-            condVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
+            rep_a as (select * from report_statistics_categorical where entity_id in (select id from lookupVariable))
+            {IfWithCondition($@",
+            condVariable as (select id from questionnaire_entities where questionnaireidentity like @questionnaireidentity 
                 and entityid = @ConditionVariable),
-            rep_b as (select * from readside.report_statistics_categorical where entity_id in (select id from condVariable))
+            rep_b as (select * from report_statistics_categorical where entity_id in (select id from condVariable))
             ")}
             select agg.teamleadname, agg.responsiblename, agg.answer, count(interview_id)
             from (
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                         or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
                     )")
                 }
-                join readside.interviewsummaries s on s.id = v1.interview_id
+                join interviewsummaries s on s.id = v1.interview_id
                 where true = true {statuses}
                     {IfSupervisor(" and (@teamleadid is null or s.teamleadid = @teamleadid) ")}                    
                     {IfWithCondition(" and array[v2.answer] && @condition")}
@@ -154,9 +154,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                     select s.teamleadname,
                         case when @detailedView then s.responsiblename else null end as responsiblename, 
                         qe.entityid, qe.questionnaireidentity, rd.answer
-                    from readside.report_statistics_numeric rd
-                    inner join readside.questionnaire_entities qe on rd.entity_id = qe.id
-                    inner join readside.interviewsummaries s on s.id = rd.interview_id
+                    from report_statistics_numeric rd
+                    inner join questionnaire_entities qe on rd.entity_id = qe.id
+                    inner join interviewsummaries s on s.id = rd.interview_id
                     where 
                         qe.entityid = @questionId and
                         (@teamleadid is null or s.teamleadid = @teamleadid) and
@@ -165,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                 )
                 select c.teamleadname, c.responsiblename,
                     count(c.answer) as count, avg(c.answer) as average, 
-                    readside.median(c.answer) as median, 
+                    median(c.answer) as median, 
                     min(c.answer) as min, max(c.answer) as max, 
                     sum(c.answer) as sum, 
                     percentile_cont(0.05) within group (order by c.answer asc) as percentile05,
@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                 select null, null,
                     count(c.answer) as count, 
                     avg(c.answer) as average, 
-                    readside.median(c.answer) as median, 
+                    median(c.answer) as median, 
                     min(c.answer) as min, max(c.answer) as max, 
                     sum(c.answer) as sum, 
                     percentile_cont(0.05) within group (order by c.answer asc) as percentile05,

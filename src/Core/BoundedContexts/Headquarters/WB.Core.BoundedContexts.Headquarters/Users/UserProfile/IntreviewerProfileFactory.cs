@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
         private readonly IAuthorizedUser currentUser;
         private readonly IQRCodeHelper qRCodeHelper;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
+        private readonly IOptions<HeadquartersConfig> hqConfig;
 
         public InterviewerProfileFactory(
             IUserRepository userManager,
@@ -39,7 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             IInterviewFactory interviewFactory,
             IAuthorizedUser currentUser,
             IQRCodeHelper qRCodeHelper,
-            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage)
+            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage, 
+            IOptions<HeadquartersConfig> hqConfig)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
@@ -49,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             this.currentUser = currentUser;
             this.qRCodeHelper = qRCodeHelper;
             this.profileSettingsStorage = profileSettingsStorage;
+            this.hqConfig = hqConfig;
         }
 
         public InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId)
@@ -255,11 +259,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 
             profile.SupportQRCodeGeneration = qRCodeHelper.SupportQRCodeGeneration();
             profile.QRCodeAsBase64String = qRCodeHelper.GetQRCodeAsBase64StringSrc(
-                JsonConvert.SerializeObject((new FinishInstallationInfo()
+                JsonConvert.SerializeObject(new FinishInstallationInfo
                 {
-                    Url = qRCodeHelper.GetBaseUrl(),
+                    Url = hqConfig.Value.BaseUrl,
                     Login = profile.InterviewerName
-                })), 250, 250);
+                }), 250, 250);
 
             if (currentUser.IsInterviewer)
             {

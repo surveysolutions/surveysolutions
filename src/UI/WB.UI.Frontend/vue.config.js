@@ -22,7 +22,7 @@ const locales = {
         "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
         "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
         "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "OutdatedBrowser", "InterviewerAuditRecord"
-        , "Roles"],
+        , "Roles", "Workspaces"],
     webtester: ["WebInterviewUI", "WebInterview", "Common", "Details"],
     webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
 }
@@ -40,12 +40,6 @@ const pages = {
         template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml")
     },
 
-    hq_legacy: {
-        entry: "src/pages/hq_legacy.js",
-        filename: path.join(hqDist, "Views", "Shared", "_AdminLayout_Legacy.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout_Legacy.Template.cshtml")
-    },
-
     logon: {
         entry: "src/pages/logon.js",
         filename: path.join(hqDist, "Views", "Shared", "_Logon.cshtml"),
@@ -54,8 +48,8 @@ const pages = {
 
     hq_vue: {
         entry: "src/hqapp/main.js",
-        filename: path.join(hqDist, "Views", "Shared", "_AdminLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_AdminLayout.Template.cshtml")
+        filename: path.join(hqDist, "Views", "Shared", "_Layout.cshtml"),
+        template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.cshtml")
     },
 
     webinterview: {
@@ -120,6 +114,10 @@ module.exports = {
 
         config.devtool("source-map")
 
+        Object.keys(pages).forEach(name => {
+            config.plugins.delete('prefetch-' + name)
+        });
+
         config.plugin("fileManager").use(FileManagerPlugin, [{
             // verbose: true,
             onEnd: { copy: fileTargets }
@@ -151,18 +149,6 @@ module.exports = {
                 locales
             }])
 
-        config.plugin('stats')
-            .use(StatsPlugin, ['stats.json',
-                {
-                    chunks: true,
-                    assets: false,
-                    chunkModules: false,
-                    modules: false,
-                    children: false
-                }]);
-
-        config.plugin("notifier")
-            .use(WebpackBuildNotifierPlugin)
 
         config.plugin("livereload")
             .use(LiveReloadPlugin, [{ appendScriptTag: true, delay: 1000 }])
@@ -183,8 +169,10 @@ module.exports = {
         });
 
         config.plugin("provide").use(webpack.ProvidePlugin, [{
-            $: "jquery",
-            jQuery: "jquery",
+            $: 'jquery',
+            jquery: 'jquery',
+            'window.jQuery': 'jquery',
+            jQuery: 'jquery'
         }]);
 
         // config.module.rules.delete("eslint");

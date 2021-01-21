@@ -202,7 +202,7 @@
     <value>Password must contain at least one number, one upper case character and one lower case character.</value>
   </data>
   <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
-    <value>User name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol.</value>
+    <value>The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: 'A'..'Z' or 'a'..'z'. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names.</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>

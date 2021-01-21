@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.ReportTests
@@ -24,7 +25,7 @@ namespace WB.Tests.Integration.ReportTests
         [OneTimeSetUp]
         public void Init()
         {
-            DatabaseTestInitializer.InitializeDb(connectionStringBuilder.ConnectionString, DbType.ReadSide);
+            DatabaseTestInitializer.InitializeDb(connectionStringBuilder.ConnectionString, Create.Service.WorkspaceContextAccessor(), DbType.ReadSide, DbType.PlainStore);
         }
 
         protected PostgreReadSideStorage<InterviewSummary> SetupAndCreateInterviewSummaryRepository()
@@ -47,7 +48,7 @@ namespace WB.Tests.Integration.ReportTests
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
                     typeof(QuestionnaireCompositeItemMap)
-                }, true, "readside");
+                }, true, Create.Service.WorkspaceContextAccessor().CurrentWorkspace().SchemaName);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
         }

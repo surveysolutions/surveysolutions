@@ -45,14 +45,10 @@
                           true, new { id = "log-in", @class = "log-in" }))
                         {
                             <div class="retina headquarter">Survey Solutions Headquarters</div>
-                            if (ViewData.ModelState.Any(s => s.Value.Errors.Any()))
+                            if (!ViewData.ModelState.IsValid)
                             {
                                 <div class="form-group has-error">
-                                    <p>
-                                        <span class="help-block">
-                                            @Html.ValidationMessage(ViewData.ModelState.Keys.First(f => ViewData.ModelState[f].Errors.Any()))
-                                        </span>
-                                    </p>
+                                    @Html.ValidationSummary(false, "", new {@class = "help-block list-unstyled field-validation-error"})
                                 </div>
                             }
 

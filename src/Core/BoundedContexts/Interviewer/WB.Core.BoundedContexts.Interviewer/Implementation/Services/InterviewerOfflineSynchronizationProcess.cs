@@ -60,6 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override void OnSuccessfulSynchronization() => this.interviewerSettings.SetOfflineSynchronizationCompleted();
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
+            if(this.RestCredentials == null)
+                throw new NullReferenceException("Rest credentials not set");
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {

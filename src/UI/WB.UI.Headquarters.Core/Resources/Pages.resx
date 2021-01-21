@@ -132,6 +132,9 @@
   <data name="AccountManage_Role" xml:space="preserve">
     <value>Role</value>
   </data>
+  <data name="AccountManage_ShowUsers" xml:space="preserve">
+    <value>Show users</value>
+  </data>
   <data name="AccountManage_ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
@@ -606,7 +609,7 @@
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
       <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
-  </data>  
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
@@ -852,7 +855,7 @@
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>This action will create individual user with supervisor rights,
-        &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+        &lt;br&gt;to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
     <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
@@ -1549,5 +1552,38 @@
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Two factor authentication is currently </value>
+  </data>
+  <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
+    <value>All workspaces</value>
+  </data>
+  <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
+    <value>All roles</value>
+  </data>
+  <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+    <value>All users</value>
+  </data>
+  <data name="UserManagement_SubtitleAdd" xml:space="preserve">
+    <value>Select workspaces that need to be added to selected users</value>
+  </data>
+  <data name="UserManagement_SubtitleRemove" xml:space="preserve">
+    <value>Select workspaces that need to be removed from selected users</value>
+  </data>
+  <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
+    <value>Manage workspaces</value>
+  </data>
+  <data name="UserManagement_AddToWorkspace" xml:space="preserve">
+    <value>Add to workspaces</value>
+  </data>
+  <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
+    <value>Remove from workspaces</value>
+  </data>
+  <data name="UserManagement_UsersSelected" xml:space="preserve">
+    <value>User(s) selected</value>
+  </data>
+  <data name="Interviewer_CreateText" xml:space="preserve">
+    <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
   </data>
 </root>

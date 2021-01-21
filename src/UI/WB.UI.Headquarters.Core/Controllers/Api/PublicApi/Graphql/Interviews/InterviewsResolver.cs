@@ -1,3 +1,4 @@
+#nullable enable
 using System.Linq;
 using HotChocolate;
 using WB.Core.BoundedContexts.Headquarters.Services;

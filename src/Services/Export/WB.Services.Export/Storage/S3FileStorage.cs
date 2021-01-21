@@ -47,14 +47,10 @@ namespace WB.Services.Export.Storage
                 };
 
                 log.LogTrace("GetBinary: {bucketName}/{key}", S3Settings.BucketName, getObject.Key);
-                using (var response = await client.GetObjectAsync(getObject))
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        response.ResponseStream.CopyTo(ms);
-                        return ms.ToArray();
-                    }
-                }
+                using var response = await client.GetObjectAsync(getObject);
+                await using var ms = new MemoryStream();
+                await response.ResponseStream.CopyToAsync(ms);
+                return ms.ToArray();
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -101,9 +97,9 @@ namespace WB.Services.Export.Storage
 
         private void LogError(string message, Exception exception, params object[] args)
         {
-            log.LogError(exception, message + 
+            log.LogError(exception, message +
                 ". Bucket: {bucketName}. BasePath: {S3BasePath}",
-                args.Union(new []{S3Settings.BucketName, S3Settings.BasePath}).ToArray());
+                args.Union(new[] { S3Settings.BucketName, S3Settings.BasePath }).ToArray());
         }
 
         public bool IsEnabled() => true;
@@ -117,7 +113,7 @@ namespace WB.Services.Export.Storage
                 ? Protocol.HTTPS
                 : Protocol.HTTP;
 
-            log.LogTrace("GetDirectLink: {bucketName}/{key}", S3Settings.BucketName, key);
+            log.LogDebug("GetDirectLink: {bucketName}/{key}", S3Settings.BucketName, GetKey(key));
 
             var preSignedUrlRequest = new GetPreSignedUrlRequest
             {
@@ -125,15 +121,20 @@ namespace WB.Services.Export.Storage
                 BucketName = S3Settings.BucketName,
                 Key = GetKey(key),
                 Expires = DateTime.UtcNow.Add(expiration)
-             };
+            };
 
             if (!string.IsNullOrWhiteSpace(asFilename))
             {
                 asFilename = WebUtility.UrlEncode(asFilename)?.Replace('+', ' ');
                 preSignedUrlRequest.ResponseHeaderOverrides.ContentDisposition = $"attachment; filename =\"{asFilename}\"";
             }
-
-            return client.GetPreSignedURL(preSignedUrlRequest);
+            
+            var presignedURL =  client.GetPreSignedURL(preSignedUrlRequest);
+            
+            if(string.IsNullOrEmpty(presignedURL))
+                log.LogWarning($"GetDirectLink: Presigned URL was empty for {key}");
+            
+            return presignedURL;
         }
 
         public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType,
@@ -141,8 +142,6 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                log.LogDebug("Storing: {bucketName}/{key} [{contentType}]", S3Settings.BucketName, key, contentType);
-
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = S3Settings.BucketName,
@@ -152,6 +151,8 @@ namespace WB.Services.Export.Storage
                     AutoResetStreamPosition = false,
                     InputStream = inputStream
                 };
+                
+                log.LogDebug("Storing: {bucketName}/{key} [{contentType}]", uploadRequest.BucketName, uploadRequest.Key, contentType);
 
                 if (progress != null)
                 {
@@ -159,7 +160,9 @@ namespace WB.Services.Export.Storage
                 }
 
                 await transferUtility.UploadAsync(uploadRequest);
-
+                
+                progress?.Report(100);
+                
                 return new FileObject
                 {
                     Path = uploadRequest.Key,
@@ -188,6 +191,8 @@ namespace WB.Services.Export.Storage
                         Size = response.ContentLength,
                         LastModified = response.LastModified
                     };
+                
+                log.LogWarning($"GetObjectMetadata: metadata request for {key} returned status {response.HttpStatusCode}");
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -196,7 +201,7 @@ namespace WB.Services.Export.Storage
             }
             catch (Exception e)
             {
-                LogError("Unable to remove object in S3. Path: {key}", e, key);
+                LogError("Unable to get object metadata in S3. Path: {key}", e, key);
                 throw;
             }
 
@@ -209,7 +214,7 @@ namespace WB.Services.Export.Storage
             return (await GetObjectMetadataAsync(key)) != null;
         }
 
-        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, 
+        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType,
             ExportProgress? progress = null, CancellationToken cancellationToken = default)
         {
             using (var ms = new MemoryStream(data))

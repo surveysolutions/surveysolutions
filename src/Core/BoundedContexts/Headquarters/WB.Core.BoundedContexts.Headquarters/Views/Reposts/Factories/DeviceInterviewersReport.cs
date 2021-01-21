@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
@@ -21,14 +22,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IUnitOfWork unitOfWork;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
-        public DeviceInterviewersReport(IUnitOfWork unitOfWork,
+        public DeviceInterviewersReport(
+            IUnitOfWork unitOfWork,
             IInterviewerVersionReader interviewerVersionReader,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.unitOfWork = unitOfWork;
             this.interviewerVersionReader = interviewerVersionReader;
             this.userViewFactory = userViewFactory;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
 
         public async Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input)
@@ -37,6 +42,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var order = input.Orders.FirstOrDefault();
             if (order == null) throw new ArgumentNullException(nameof(order));
+
+            var workspace = workspaceContextAccessor.CurrentWorkspace();
+
+            if (workspace == null)
+                throw new MissingWorkspaceException("Cannot execute report against missing workspace");
 
             if (!order.IsSortedByOneOfTheProperties(typeof(DeviceInterviewersReportLine)))
             {
@@ -58,11 +68,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 limit = input.PageSize,
                 offset = input.Page,
                 filter = input.Filter + "%",
-                supervisorId = input.SupervisorId
+                supervisorId = input.SupervisorId,
+                workspace = workspace.Name
             });
-            int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
+
+            int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection, workspace);
             var totalRow = await GetTotalLine(fullQuery, input.SupervisorId, targetInterviewerVersion, input.Filter,
-                connection);
+                connection, workspace);
 
             return new DeviceInterviewersReportView
             {
@@ -72,7 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        private async Task<int> GetTotalRowsCountAsync(string sql, int? targetInterviewerVersion, DeviceByInterviewersReportInputModel input, IDbConnection connection)
+        private async Task<int> GetTotalRowsCountAsync(string sql, int? targetInterviewerVersion,
+            DeviceByInterviewersReportInputModel input, IDbConnection connection, WorkspaceContext workspace)
         {
             string summarySql = $@"SELECT COUNT(*) FROM ({sql}) as report";
 
@@ -85,13 +98,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 limit = (int?) null,
                 offset = 0,
                 filter = input.Filter + "%",
-                supervisorId = input.SupervisorId
+                supervisorId = input.SupervisorId,
+                workspace = workspace.Name
             });
 
             return row;
         }
 
-        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, Guid? supervisorId, int? targetInterviewerVersion, string filter, IDbConnection connection)
+        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, Guid? supervisorId,
+            int? targetInterviewerVersion, string filter, IDbConnection connection, WorkspaceContext workspace)
         {
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
@@ -111,7 +126,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 limit = (int?) null,
                 offset = 0,
                 filter = filter + "%",
-                supervisorId = supervisorId
+                supervisorId = supervisorId,
+                workspace = workspace.Name
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
@@ -124,11 +140,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             string result = null;
             var assembly = typeof(DeviceInterviewersReport).Assembly;
             var resourceName = $"WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.{reportName}.sql";
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                result = reader.ReadToEnd();
-            }
+            using Stream stream = assembly.GetManifestResourceStream(resourceName);
+            using StreamReader reader = new StreamReader(stream);
+            result = reader.ReadToEnd();
             return result;
         }
 

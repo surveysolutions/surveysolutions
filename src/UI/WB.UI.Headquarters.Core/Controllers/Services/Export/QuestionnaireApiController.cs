@@ -13,12 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
     [Localizable(false)]
     [Route("api/export/v1/questionnaire")]
-    [Authorize(AuthenticationSchemes = "TenantToken")]
+    [Authorize(AuthenticationSchemes = AuthType.TenantToken)]
     public class QuestionnaireApiController : Controller
     {
         private readonly IQuestionnaireStorage questionnaireStorage;

@@ -152,4 +152,7 @@
   <data name="InvalidRecoveryCode" xml:space="preserve">
     <value>Неправильный ключ восстановления.</value>
   </data>
+  <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+      <value>Api пользователю не разрешено входить через пользовательский интерфейс</value>
+  </data>
 </root>

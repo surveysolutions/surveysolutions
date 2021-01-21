@@ -211,6 +211,9 @@
     <value>Отклоненные</value>
     <comment>Отклоненные</comment>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Дешбоард с картой</value>
+  </data>
   <data name="DevicesInterviewers" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>
@@ -224,5 +227,11 @@
   <data name="Administration" xml:space="preserve">
       <value>Администрирование</value>
       <comment>Администрирование</comment>
+  </data>
+  <data name="Workspaces" xml:space="preserve">
+      <value>Рабочие области</value>
+  </data>
+  <data name="ServerAdministration">
+      <value>Администрирование Сервера</value>
   </data>
 </root>

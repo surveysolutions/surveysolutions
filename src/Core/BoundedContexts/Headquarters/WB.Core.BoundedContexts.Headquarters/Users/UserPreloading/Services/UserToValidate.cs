@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
@@ -10,5 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         public Guid? SupervisorId { get; set; }
         public bool IsSupervisor { get; set; }
         public bool IsInterviewer { get; set; }
+        public bool IsInCurrentWorkspace { get; set; }
     }
 }

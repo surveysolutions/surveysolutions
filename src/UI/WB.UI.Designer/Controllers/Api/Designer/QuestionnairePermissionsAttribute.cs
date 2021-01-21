@@ -36,10 +36,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return;
             }
 
-            var viewFactory = context.HttpContext.RequestServices.GetService<IQuestionnaireViewFactory>();
+            var viewFactory = context.HttpContext.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
             var httpContextUser = context.HttpContext.User;
 
-            if (!httpContextUser.Identity.IsAuthenticated)
+            if (!httpContextUser.Identity!.IsAuthenticated)
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
                 {

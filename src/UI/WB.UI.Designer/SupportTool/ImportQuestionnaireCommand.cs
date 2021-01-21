@@ -48,10 +48,10 @@ namespace WB.UI.Designer.SupportTool
         {
             using var scope = this.host.Services.CreateScope();
             var locator = scope.ServiceProvider;
-            await new DesignerBoundedContextModule().InitAsync(locator.GetService<IServiceLocator>(), new UnderConstructionInfo());
-            var loggerProvider = locator.GetService<ILoggerProvider>();
+            await new DesignerBoundedContextModule().InitAsync(locator.GetRequiredService<IServiceLocator>(), new UnderConstructionInfo());
+            var loggerProvider = locator.GetRequiredService<ILoggerProvider>();
             var logger = loggerProvider.CreateLogger(nameof(ImportQuestionnaireCommand));
-            var userManager = locator.GetService<UserManager<DesignerIdentityUser>>();
+            var userManager = locator.GetRequiredService<UserManager<DesignerIdentityUser>>();
             var user = await userManager.FindByNameAsync(username);
 
             if (user == null || !await userManager.IsInRoleAsync(user, "Administrator"))
@@ -59,7 +59,7 @@ namespace WB.UI.Designer.SupportTool
                 throw new Exception($"Cannot find user {username} or user is not Administrator");
             }
 
-            var restore = locator.GetService<IQuestionnaireRestoreService>();
+            var restore = locator.GetRequiredService<IQuestionnaireRestoreService>();
 
             if (!File.Exists(path))
             {

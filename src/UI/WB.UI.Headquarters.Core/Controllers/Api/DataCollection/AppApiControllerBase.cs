@@ -25,12 +25,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly Version LastSupportedVersion = new Version(19, 08, 0, 25531); 
 
         private readonly IPlainKeyValueStorage<InterviewerSettings> settingsStorage;
-        private readonly IPlainKeyValueStorage<TenantSettings> tenantSettings;
+        private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
         private readonly IUserViewFactory userViewFactory;
         private readonly ITabletInformationService tabletInformationService;
 
         public AppControllerBaseBase(IPlainKeyValueStorage<InterviewerSettings> settingsStorage, 
-            IPlainKeyValueStorage<TenantSettings> tenantSettings, 
+            IPlainStorageAccessor<ServerSettings> tenantSettings, 
             IUserViewFactory userViewFactory, 
             ITabletInformationService tabletInformationService)
         {
@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         {
             if (!string.IsNullOrEmpty(userTenantId))
             {
-                var serverTenantId = this.tenantSettings.GetById(AppSetting.TenantSettingsKey).TenantPublicId;
+                var serverTenantId = this.tenantSettings.GetById(ServerSettings.PublicTenantIdKey).Value;
                 if (!userTenantId.Equals(serverTenantId, StringComparison.Ordinal))
                 {
                     // https://httpstatuses.com/421

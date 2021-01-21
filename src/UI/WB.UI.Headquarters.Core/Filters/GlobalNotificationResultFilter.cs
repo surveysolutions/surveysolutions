@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Filters
@@ -19,8 +20,11 @@ namespace WB.UI.Headquarters.Filters
         {
             if (filterContext.Result is ViewResult)
             {
-                if (filterContext.Filters.OfType<NoTransactionAttribute>().Any())
-                    return;
+                if (filterContext.Filters.OfType<NoTransactionAttribute>().Any()) return;
+
+                var workspace = filterContext.HttpContext.RequestServices.GetWorkspaceContext();
+
+                if (workspace == null || workspace.IsServerAdministration()) return;
                 
                 //respect scope
                 var plainKeyValueStorage = filterContext.HttpContext.RequestServices.GetRequiredService<IPlainKeyValueStorage<GlobalNotice>>();

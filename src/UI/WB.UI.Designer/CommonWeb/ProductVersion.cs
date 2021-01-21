@@ -18,7 +18,7 @@ namespace WB.UI.Designer.CommonWeb
 
         public override string ToString()
         {
-            return productVersion ??= FileVersionInfo.GetVersionInfo(this.assembly.Location).ProductVersion;
+            return productVersion ??= FileVersionInfo.GetVersionInfo(this.assembly.Location).ProductVersion!;
         }
 
         public Version GetVersion() => new Version(this.ToString().Split(' ')[0]);

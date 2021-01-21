@@ -20,8 +20,9 @@ namespace WB.Services.Export.Host.Infra
             string baseUrl = headers["Referer"];
             string tenantId = headers["Authorization"].ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
             string name = headers["x-tenant-name"];
+            string space = headers["x-tenant-space"];
 
-            return new TenantInfo(baseUrl, tenantId, name);
+            return new TenantInfo(baseUrl, tenantId, name, space);
         }
     }
 }

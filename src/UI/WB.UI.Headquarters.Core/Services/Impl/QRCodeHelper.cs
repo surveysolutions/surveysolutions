@@ -16,19 +16,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public string BaseUrl => options.Value.BaseUrl;
-
-        public string GetBaseUrl() => BaseUrl;
-
-        public string GetFullUrl(string relativeUrl)
-        {
-            if (string.IsNullOrWhiteSpace(BaseUrl))
-                return string.Empty;
-
-            var fullUrl = new Url(BaseUrl, relativeUrl, null);
-
-            return fullUrl.ToString();
-        }
+        private string BaseUrl => options.Value.BaseUrl;
 
         public string GetQRCodeAsBase64StringSrc(string content, int height = 250, int width = 250, int margin = 0)
         {

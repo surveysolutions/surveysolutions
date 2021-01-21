@@ -161,7 +161,8 @@ namespace WB.UI.Shared.Enumerator.Services
                             ? new RestCredentials
                             {
                                 Login = this.principal.CurrentUserIdentity.Name,
-                                Token = this.principal.CurrentUserIdentity.Token
+                                Token = this.principal.CurrentUserIdentity.Token,
+                                Workspace = this.principal.CurrentUserIdentity.Workspace
                             }
                             : null,
                         token: token);
@@ -332,7 +333,8 @@ namespace WB.UI.Shared.Enumerator.Services
                             ? new RestCredentials
                             {
                                 Login = this.principal.CurrentUserIdentity.Name,
-                                Token = this.principal.CurrentUserIdentity.Token
+                                Token = this.principal.CurrentUserIdentity.Token,
+                                Workspace = this.principal.CurrentUserIdentity.Workspace
                             }
                             : null,
                         token: token).ConfigureAwait(false);
