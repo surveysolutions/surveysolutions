@@ -104,6 +104,9 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 query = query.Where(u => u.Roles.Any(r => r.Id == roleId));
             }
 
+            if (request.WorkspaceName != null)
+                query = query.Where(u => u.Workspaces.Any(w => w.Workspace.Name == request.WorkspaceName));
+
             query = request.Filter switch
             {
                 UserManagementFilter.AllUsers => query,
