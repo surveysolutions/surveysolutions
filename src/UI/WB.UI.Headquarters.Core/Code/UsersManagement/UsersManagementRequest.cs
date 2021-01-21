@@ -9,8 +9,15 @@ namespace WB.UI.Headquarters.Code.UsersManagement
     {
         public string? WorkspaceName { get; set; }
         public UserRoles? Role { get; set; }
-        public bool ShowArchived { get; set; }
-        public bool ShowLocked { get; set; }
-        public bool MissingWorkspace { get; set; }
+        public UserManagementFilter Filter { get; set; }
+    }
+
+    public enum UserManagementFilter
+    {
+        AllUsers,
+        WithMissingWorkspace,
+        WithDisabledWorkspaces,
+        Locked,
+        Archived
     }
 }
