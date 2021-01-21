@@ -5,7 +5,6 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class ReadonlyUserMap : ClassMapping<ReadonlyUser>
     {
         public ReadonlyUserMap()
@@ -33,19 +32,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 m.Element(el => el.Column("\"RoleId\""));
             });
-        }
-    }
-
-    [PlainStorage]
-    public class ProfileMap : ClassMapping<ReadonlyProfile>
-    {
-        public ProfileMap()
-        {
-            Id(x => x.Id, m => m.Column("\"Id\""));
-            Table("userprofiles");
-            Schema("users");
-
-            Property(x => x.SupervisorId, p => p.Column("\"SupervisorId\""));
         }
     }
 }

@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        protected override IUserIdentity GetUserByName(string userName)
+        protected override IUserIdentity? GetUserByName(string userName)
             => this.GetInterviewerByName(userName);
     }
 }

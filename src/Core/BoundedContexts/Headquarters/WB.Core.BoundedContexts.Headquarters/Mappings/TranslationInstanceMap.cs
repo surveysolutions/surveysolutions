@@ -5,7 +5,6 @@ using WB.Enumerator.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class TranslationInstanceMap : ClassMapping<TranslationInstance>
     {
         public TranslationInstanceMap()

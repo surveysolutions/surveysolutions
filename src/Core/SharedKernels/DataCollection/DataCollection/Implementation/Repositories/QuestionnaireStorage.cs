@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -19,21 +20,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         protected readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
-
-        protected static readonly ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
-        private static readonly ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
-
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider;
+        private readonly IMemoryCache memoryCache;
+
+        private static readonly TimeSpan QuestionnaireDocumentExpiration = TimeSpan.FromMinutes(5);
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
             IQuestionnaireTranslator translator,
             IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
-            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider
-            )
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider,
+            IMemoryCache memoryCache)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
@@ -41,13 +41,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
             this.expressionStatePrototypeProvider = expressionStatePrototypeProvider ?? throw new ArgumentNullException(nameof(expressionStatePrototypeProvider));
+            this.memoryCache = memoryCache;
         }
 
         public virtual IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
-            string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
+            var questionnaireCacheKey = PlainQuestionnaireCacheKey(identity, language);
 
-            return plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey, s => CreatePlainQuestionnaire(identity, language));
+            return this.memoryCache.GetOrCreate(questionnaireCacheKey, (entry) =>
+            {
+                entry.SetSlidingExpiration(QuestionnaireDocumentExpiration);
+                return CreatePlainQuestionnaire(identity, language);
+            });
+        }
+
+        private static string PlainQuestionnaireCacheKey(QuestionnaireIdentity identity, string language = null)
+        {
+            return language != null ? $"qs:{identity}${language}" : $"qs:{identity}";
         }
 
         public IQuestionnaire GetQuestionnaireOrThrow(QuestionnaireIdentity identity, string language)
@@ -97,29 +107,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
+            var identity = new QuestionnaireIdentity(id, version);
+            string repositoryId = GetRepositoryId(identity);
             this.repository.Store(questionnaireDocument, repositoryId);
-            questionnaireDocumentsCache[repositoryId] = questionnaireDocument.Clone();
-            plainQuestionnairesCache.Clear();
+
+            if (questionnaireDocument.IsDeleted)
+            {
+                RemoveDocumentFromCache(identity, questionnaireDocument);
+            }
+            else
+            {
+                this.memoryCache.Set(GetCacheKey(identity), questionnaireDocument.Clone(),
+                    new MemoryCacheEntryOptions
+                    {
+                        SlidingExpiration = QuestionnaireDocumentExpiration
+                    });
+                this.memoryCache.Remove(PlainQuestionnaireCacheKey(identity));
+            }
         }
 
         public virtual QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
-            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
+            var identity = new QuestionnaireIdentity(id, version);
+            string repositoryId = GetRepositoryId(identity);
 
-            if (!questionnaireDocumentsCache.ContainsKey(repositoryId))
+            return this.memoryCache.GetOrCreate(GetCacheKey(identity), (entry) =>
             {
-                var questionnaire = this.repository.GetById(repositoryId);
-
-                if (questionnaire == null)
-                {
-                    return null;
-                }
-
-                questionnaireDocumentsCache[repositoryId] = questionnaire;
-            }
-
-            return questionnaireDocumentsCache[repositoryId];
+                entry.SlidingExpiration = QuestionnaireDocumentExpiration;
+                return this.repository.GetById(repositoryId);
+            });
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
@@ -129,7 +145,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void DeleteQuestionnaireDocument(Guid id, long version)
         {
-            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
+            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+            
+            string repositoryId = GetRepositoryId(questionnaireIdentity);
             var document = this.repository.GetById(repositoryId);
 
             if (document == null)
@@ -137,10 +155,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
-
-            questionnaireDocumentsCache.TryRemove(repositoryId, out _);
-            plainQuestionnairesCache.Clear();
         }
+
+        private void RemoveDocumentFromCache(QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument document)
+        {
+            this.memoryCache.Remove(GetCacheKey(questionnaireIdentity));
+            foreach (var translation in document.Translations)
+            {
+                this.memoryCache.Remove(PlainQuestionnaireCacheKey(questionnaireIdentity, translation.Name));
+            }
+
+            this.memoryCache.Remove(PlainQuestionnaireCacheKey(questionnaireIdentity, null));
+        }
+
+        protected static string GetCacheKey(QuestionnaireIdentity questionnaireIdentity)
+            => "qdoc::" + questionnaireIdentity.ToString();
 
         protected static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)
             => questionnaireIdentity.ToString(); //$"{id.FormatGuid()}${version}";

@@ -6,6 +6,7 @@ using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -295,7 +296,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
         }
 
-        public IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations()
+        public IEnumerable<QuestionnaireBrowseItem> GetQuestionnairesWithInvitations()
         {
             return invitationStorage.Query(_ => _.Select(x => x.Assignment.Questionnaire).Distinct().ToList());
         }

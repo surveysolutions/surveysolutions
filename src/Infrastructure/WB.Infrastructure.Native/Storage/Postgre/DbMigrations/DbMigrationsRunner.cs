@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
@@ -15,7 +16,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         {
             var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             npgConnBuilder.CommandTimeout = 0;
-            
+            npgConnBuilder.SearchPath = schemaName;
+            npgConnBuilder.SetApplicationPostfix("migrations");
+            npgConnBuilder.Pooling = false;
+
             var serviceCollection = new ServiceCollection();
             if (loggerProvider != null)
             {
@@ -26,9 +30,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                 serviceCollection.AddLogging(l => { l.AddFluentMigratorConsole(); });
             }
 
-            var serviceProvider = serviceCollection
+            using var serviceProvider = serviceCollection
                 // Logging is the replacement for the old IAnnouncer
-                .AddSingleton<IServiceLocator>((s) => ServiceLocator.Current.GetInstance<IServiceLocator>())
                 .AddSingleton(new DefaultConventionSet(defaultSchemaName: null, workingDirectory: null))
                 .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })
                 .Configure<TypeFilterOptions>(opt => { opt.Namespace = dbUpgradeSettings.MigrationsNamespace; })
@@ -47,19 +50,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                         .For.EmbeddedResources())
                 .BuildServiceProvider();
 
-            var proc = serviceProvider.GetService<ILoggerProvider>();
-
             // Put the database update into a scope to ensure
             // that all resources will be disposed.
-            using (var scope = serviceProvider.CreateScope())
-            {
-                
-                // Instantiate the runner
-                var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+            using var scope = serviceProvider.CreateScope();
+            // Instantiate the runner
+            var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+            using var migrationLock = new MigrationLock(npgConnBuilder.ConnectionString, 1919);
 
-                // Execute the migrations
-                runner.MigrateUp();
-            }
+            // Execute the migrations
+            runner.MigrateUp();
         }
     }
 

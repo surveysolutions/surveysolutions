@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly SignInManager<HqUser> signInManager;
         private readonly UserManager<HqUser> userManager;
         private readonly IUserRepository userRepository;
-
+        
         public InstallController(ISupportedVersionProvider supportedVersionProvider,
                                  SignInManager<HqUser> identityManager,
                                  UserManager<HqUser> userManager,
@@ -60,9 +60,6 @@ namespace WB.UI.Headquarters.Controllers
                 if (creationResult.Succeeded)
                 {
                     await this.userManager.AddToRoleAsync(hqUser, UserRoles.Administrator.ToString());
-
-                    await this.signInManager.SignInAsync(hqUser, false);
-
                     this.supportedVersionProvider.RememberMinSupportedVersion();
 
                     return this.Redirect("~/");

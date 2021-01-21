@@ -1,5 +1,6 @@
 <template>
     <HqLayout :hasFilter="false"
+        tag="tablet-logs-page"
         :title="$t('TabletLogs.PageTitle')"
         :subtitle="$t('TabletLogs.PageSubTitle')">
         <DataTables ref="table"

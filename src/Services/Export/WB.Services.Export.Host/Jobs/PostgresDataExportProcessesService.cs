@@ -49,7 +49,7 @@ namespace WB.Services.Export.Host.Jobs
                 {
                     MaxRetryAttempts = this.jobSettings.Value.MaxRetryAttempts,
                     Tenant = args.ExportSettings.Tenant.ToString(),
-                    TenantName = args.ExportSettings.Tenant.Name ?? String.Empty,
+                    TenantName = args.ExportSettings.Tenant.ShortName,
                     Args = JsonConvert.SerializeObject(args),
                     Tag = args.NaturalId,
                     Type = ExportJobRunner.Name,

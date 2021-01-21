@@ -7,38 +7,40 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class QuestionnaireApiItem
     {
-        public QuestionnaireApiItem(Guid questionnaireId, long version, string title, string variable, DateTime lastEntryDate)
+        public QuestionnaireApiItem(Guid questionnaireId, long version)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, version).ToString();
             this.Version = version;
-            this.Title = title;
-            this.Variable = variable;
-            this.LastEntryDate = lastEntryDate;
         }
 
         [DataMember]
-        public string QuestionnaireIdentity { get; set; }
+        public string QuestionnaireIdentity { get; init; }
 
         [DataMember]
         [Required]
-        public Guid QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; init; }
 
         [DataMember]
         [Required]
-        public long Version { get; set; }
+        public long Version { get; init; }
 
         [DataMember]
         [Required]
-        public string Title { get; set; }
+        public string Title { get; init; }
 
         [DataMember]
         [Required]
-        public string Variable { get; set; }
+        public string Variable { get; init; }
 
         [DataMember]
         [Required]
-        public DateTime LastEntryDate { get; set; }
-        
+        public DateTime LastEntryDate { get; init; }
+
+        [DataMember]
+        public bool IsAudioRecordingEnabled { get; init; }
+
+        [DataMember]
+        public bool WebModeEnabled { get; set; }
     }
 }

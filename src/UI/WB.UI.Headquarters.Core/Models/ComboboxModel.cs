@@ -1,13 +1,21 @@
 ﻿namespace WB.UI.Headquarters.Models.ComponentModels
 {
-    public class ComboboxModel
+    public class ComboboxModel : ComboboxModel<ComboboxOptionModel>
     {
-        public ComboboxModel(ComboboxOptionModel[] options, int? total = null)
+        public ComboboxModel(ComboboxOptionModel[] options, int? total = null) 
+            : base(options, total)
         {
-            this.Options = options ?? new ComboboxOptionModel[0];
+        }
+    }
+
+    public class ComboboxModel<T>
+    {
+        public ComboboxModel(T[] options, int? total = null)
+        {
+            this.Options = options ?? new T[0];
             this.Total = total ?? Options.Length;
         }
-        public ComboboxOptionModel[] Options { get; private set; }
+        public T[] Options { get; private set; }
         public int Total { get; private set; }
     }
 

@@ -40,12 +40,12 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                     using (var scope = serviceProvider.CreateScope())
                     {
-                        var jobService = scope.ServiceProvider.GetService<IJobService>();
+                        var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
 
                         JobItem? job = await jobService.GetFreeJobAsync(token);
                         if (job != null)
                         {
-                            var executor = scope.ServiceProvider.GetService<IJobExecutor>();
+                            var executor = scope.ServiceProvider.GetRequiredService<IJobExecutor>();
                             await executor.ExecuteAsync(job, token);
                         }
                     }

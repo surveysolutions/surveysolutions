@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             this.Timestamp = timestamp;
             this.Offset = offset;
         }
-        public long  Index { get; private set; }
+        public long  Index { get; set; }
         public InterviewHistoricalAction Action { get; private set; }
         public string OriginatorName { get; private set; }
         public string OriginatorRole { get; private set; }

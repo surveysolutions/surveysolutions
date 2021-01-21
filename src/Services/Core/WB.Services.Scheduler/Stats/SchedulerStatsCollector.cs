@@ -39,7 +39,7 @@ namespace WB.Services.Scheduler.Stats
         {
             using var scope = serviceProvider.CreateScope();
 
-            var db = scope.ServiceProvider.GetService<JobContext>();
+            var db = scope.ServiceProvider.GetRequiredService<JobContext>();
                 
             var query = @"select j.tenant_name as ""tenant"", j.status, j.""type"", count(*) as ""count""
                 from scheduler.jobs j

@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             }
         }
         
-        private string ToUiString(UserRoles userRole) => 
+        private string? ToUiString(UserRoles userRole) => 
             PdfInterviewRes.ResourceManager.GetString($"UserRoles_{userRole.ToString()}");
     }
 }

@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
             
             if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.InProgress)
             {
-                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name, questionnaire.Title);
+                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, this.authorizedUser.UserName, questionnaire.Title);
             }
 
             await sendInvitationsTask.ScheduleRunAsync();

@@ -20,6 +20,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.BindFieldsExplicitly();
             descriptor.Name("Interview");
             
+            descriptor.Field<InterviewActionFlagsResolver>(f => 
+                    f.GetActionFlags(default, default))
+                .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
+                .Description("List of actions that can be applied to interview")
+                .Name("actionFlags");
+            
+            descriptor.Field(x => x.AssignmentId)
+                .Type<NonNullType<IntType>>()
+                .Description("Identifier for the assignment to which this interview belongs");
+            
             descriptor.Field(x => x.SummaryId)
                 .Name("id")
                 .Type<NonNullType<IdType>>();
@@ -40,9 +50,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Indicates if interview was ever completed by interviewer")
                 .Type<NonNullType<BooleanType>>();
             
-            descriptor.Field(x => x.AssignmentId).Type<IntType>()
-                  .Description("Identifier for the assignment to which this interview belongs");
-
             descriptor.Field(x => x.CreatedDate)
                 .Type<NonNullType<DateTimeType>>()
                 .Description("Date when interview was created");
@@ -54,13 +61,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Key that was generated on interviewer tablet when interview was created for the first time");
 
             descriptor.Field(x => x.UpdateDate)
+                .Name("updateDateUtc")
                 .Type<NonNullType<DateTimeType>>()
                 .Description("Represents date (UTC) when interview was changed last time");
             
-            descriptor
+            /*descriptor
                 .Field(x => x.ReceivedByInterviewer)
                 .Type<NonNullType<BooleanType>>()
-                .Description("Indicator for whether the interview is on the interviewer’s tablet now");
+                .Description("Indicator for whether the interview is on the interviewer’s tablet now");*/
                 
             descriptor.Field(x => x.ReceivedByInterviewerAtUtc)
                 .Type<DateTimeType>()
@@ -79,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
                 .Resolver(context => 
                     context.GroupDataLoader<string, IdentifyEntityValue>
-                        ("answersByInterview", async keys =>
+                        (async (keys, token) =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();
                         var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
@@ -92,15 +100,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                             .ToLookup(x => x.InterviewSummary.SummaryId);
 
                         return answers;
-                    }).LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
+                    },"answersByInterview")
+                        .LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
                 .Type<ListType<AnswerObjectType>>();
 
-            descriptor.Field<InterviewActionFlagsResolver>(f => 
-                    f.GetActionFlags(default, default))
-                    .Type<NonNullType<ListType<NonNullType<EnumType<InterviewActionFlags>>>>>()
-                    .Description("List of actions that can be applied to interview")
-                    .Name("actionFlags");
-
+            
             descriptor.Field(x => x.NotAnsweredCount)
                 .Description(
                     "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");

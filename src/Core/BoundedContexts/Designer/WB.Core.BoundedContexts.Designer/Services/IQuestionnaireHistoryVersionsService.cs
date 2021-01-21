@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             QuestionnaireChangeRecordMetadata? meta = null);
 
         Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment);
-        Task<int> TrackQuestionnaireImportAsync(QuestionnaireDocument questionnaireDocument, string userAgent, Guid userId);
+        Task<int> TrackQuestionnaireImportAsync(QuestionnaireDocument questionnaireDocument, string? userAgent, Guid userId);
         Task UpdateQuestionnaireMetadataAsync(Guid questionnaire, int revision, QuestionnaireRevisionMetaDataUpdate metaData);
     }
 }

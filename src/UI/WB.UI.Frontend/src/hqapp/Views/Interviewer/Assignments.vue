@@ -62,6 +62,9 @@ import {addOrUpdateCalendarEvent, deleteCalendarEvent } from './calendarEventsHe
 import moment from 'moment-timezone'
 import {map, join, escape } from 'lodash'
 
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
 export default {
     data() {
         return {
@@ -177,7 +180,7 @@ export default {
                     orderable: true,
                     searchable: true,
                     render(data, type, row) {
-                        return '(ver. ' + row.questionnaireId.version + ') ' + row.questionnaireTitle
+                        return '(ver. ' + row.questionnaireId.version + ') ' + escape(row.questionnaireTitle)
                     },
                 },
                 {
@@ -188,7 +191,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var questionsWithTitles = map(data, function(question) {
-                            return question.title + ': ' + question.answer
+                            return question.title + ': ' + sanitizeHtml(question.answer)
                         })
                         return join(questionsWithTitles, ', ')
                     },
@@ -249,7 +252,8 @@ export default {
             this.$refs.editCalendarModal.hide()
 
             deleteCalendarEvent(self.$apollo, {
-                'publicKey' : self.calendarEventId,
+                'publicKey' : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
+                workspace: self.$store.getters.workspace,
             }, self.reload)
         },
 
@@ -271,10 +275,11 @@ export default {
                 interviewId : self.calendarInterviewId,
                 interviewKey: self.calendarInterviewKey,
                 assignmentId : self.calendarAssinmentId,
-                publicKey : self.calendarEventId,
+                publicKey : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
                 newStart : startDate,
                 comment : self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
+                workspace: self.$store.getters.workspace,
             }
 
             addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)

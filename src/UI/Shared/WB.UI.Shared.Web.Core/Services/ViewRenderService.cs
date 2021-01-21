@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Shared.Web.Services
 {
@@ -36,7 +36,7 @@ namespace WB.UI.Shared.Web.Services
         public async Task<string> RenderToStringAsync(string viewName, object model, string webRoot = null,
             RouteData routeData = null)
         {
-            using var scope = serviceProvider.CreateScope();
+            using var scope = serviceProvider.CreateWorkspaceScope();
             var httpContext = new DefaultHttpContext
             {
                 RequestServices = scope.ServiceProvider

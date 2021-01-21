@@ -16,6 +16,9 @@ import UsersUpload from './Users/Upload'
 import ControlPanel from './ControlPanel'
 import Download from './Download'
 import WebInterview from './WebInterview'
+import Workspaces from './ServerAdmin/Workspaces'
+import MapDashboard from './MapDashboard'
+import UsersManagment from './ServerAdmin/UsersManagment'
 
 export default [
     Assignments,
@@ -36,4 +39,7 @@ export default [
     ControlPanel,
     Download,
     WebInterview,
+    Workspaces,
+    MapDashboard,
+    UsersManagment,
 ]

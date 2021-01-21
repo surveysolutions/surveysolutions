@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments.Validators
             if (command.WebMode == true)
             {
                 var user = userViewFactory.GetUser(command.ResponsibleId);
-                if (!user.IsInterviewer())
+
+                if (user == null || !user.IsInterviewer())
                 {
                     throw new AssignmentException(CommandValidatorsMessages.WebModeAssignmentShouldBeOnInterviewer, AssignmentDomainExceptionType.InvalidResponsible);
                 }

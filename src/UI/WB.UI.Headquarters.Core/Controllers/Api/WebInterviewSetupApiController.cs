@@ -5,20 +5,16 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Controllers.Services;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -30,25 +26,19 @@ namespace WB.UI.Headquarters.Controllers.Api
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IAssignmentsService assignmentsService;
         private readonly IInvitationService invitationService;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IArchiveUtils archiveUtils;
         
 
-        public WebInterviewSetupApiController(
-            ICommandService commandService, 
-            ILogger logger, 
-            IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IAssignmentsService assignmentsService,
+        public WebInterviewSetupApiController(IWebInterviewConfigProvider webInterviewConfigProvider,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInvitationService invitationService, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IArchiveUtils archiveUtils) 
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.assignmentsService = assignmentsService;
             this.invitationService = invitationService;
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
             this.archiveUtils = archiveUtils;
@@ -62,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound();
             }
 
-            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(questionnaireIdentity);
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaire == null)
             {
                 return NotFound();
@@ -97,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (status == null)
                 return NotFound();
 
-            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(status.QuestionnaireIdentity);
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
             if (questionnaire == null)
             {
                 return NotFound();
@@ -141,16 +131,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             invitationService.CancelEmailDistribution();
             return Ok();
-        }
-
-        private QuestionnaireBrowseItem FindQuestionnaire(string id)
-        {
-            return !QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity) ? null : FindQuestionnaire(questionnaireIdentity);
-        }
-        private QuestionnaireBrowseItem FindQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-        {
-            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            return questionnaire;
         }
     }
 }

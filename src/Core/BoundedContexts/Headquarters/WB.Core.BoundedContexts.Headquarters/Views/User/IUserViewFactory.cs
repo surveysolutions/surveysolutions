@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
@@ -19,8 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived = null);
         UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false);
 
-        UserView GetUser(UserViewInputModel input);
-        UserViewLite GetUser(Guid id);
+        UserView? GetUser(UserViewInputModel input);
+        UserViewLite? GetUser(Guid id);
 
         ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false);
         

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using Moq.Protected;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Tests.Unit
 {
@@ -23,6 +24,11 @@ namespace WB.Tests.Unit
         public static void SetupResponseFromResource(this HttpMessageHandler handler, string requestUrl, string resourceName)
         {
             Mock.Get(handler).SetupResponseFromResource(requestUrl, resourceName);
+        }
+
+        public static NoScopeInScopeExecutor<T> AsNoScopeExecutor<T>(this T service)
+        {
+            return new NoScopeInScopeExecutor<T>(service);
         }
     }
 }

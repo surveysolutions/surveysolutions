@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
             IUserViewFactory userViewFactory, 
             IPlainKeyValueStorage<InterviewerSettings> settingsStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IPlainStorageAccessor<ServerSettings> tenantSettings,
             IClientApkProvider clientApkProvider,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewFactory,

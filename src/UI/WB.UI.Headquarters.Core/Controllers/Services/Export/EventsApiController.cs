@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Amazon.Runtime.Internal.Util;
-using FluentMigrator.Runner;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +11,12 @@ using Microsoft.Extensions.Logging;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
     [Route("api/export/v1")]
-    [Authorize(AuthenticationSchemes = "TenantToken")]
+    [Authorize(AuthenticationSchemes = AuthType.TenantToken)]
     public class EventsApiController : Controller
     {
         private readonly IHeadquartersEventStore headquartersEventStore;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api
@@ -19,7 +20,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [HttpHead]
-        [AllowAnonymous]
+        [AllowPrimaryWorkspaceFallback]
         public Task<IActionResult> GetLatestVersion()
         {
             return clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
@@ -27,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [HttpHead]
-        [AllowAnonymous]
+        [AllowPrimaryWorkspaceFallback]
         public Task<IActionResult> GetLatestExtendedVersion()
         {
             return clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
@@ -35,7 +36,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [HttpHead]
-        [AllowAnonymous]
+        [AllowPrimaryWorkspaceFallback]
         public Task<IActionResult> GetLatestSupervisor()
         {
             return clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.SupervisorFileName, ClientApkInfo.SupervisorFileName);

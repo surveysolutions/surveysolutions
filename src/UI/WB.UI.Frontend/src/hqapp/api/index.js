@@ -3,7 +3,7 @@ import axios from 'axios'
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
-        this.base = 'api/v1/questionnaires/'
+        this.base = '/api/v1/questionnaires/'
         this.details = this.base + `${questionnaireId}/${version}`
         this.questionnaireId = questionnaireId
         this.version = version
@@ -97,6 +97,41 @@ class MapsReport {
     }
 }
 
+class Workspaces {
+    constructor(http) {
+        this.http = http
+    }
+
+    async List(userId, includeDisabled) {
+        const response = await this.http.get('api/v1/workspaces',
+            {
+                params: {
+                    userId,
+                    includeDisabled,
+                    limit: 1000,
+                },
+            })
+        return response.data
+    }
+
+    Assign(userIds, workspaces, mode = 'Assign') {
+        return this.http.post('api/v1/workspaces/assign',
+            {
+                userIds, workspaces, mode,
+            }
+        )
+    }
+
+    async Status(workspace) {
+        return await this.http.get('api/v1/workspaces/status/' + workspace)
+    }
+
+    async Delete(workspace) {
+        return await this.http.delete('api/v1/workspaces/' + workspace)
+    }
+
+}
+
 class Users {
     constructor(http) {
         this.http = http
@@ -114,6 +149,125 @@ class Users {
         return this.http.defaults.baseURL + 'api/v1/users/supervisors'
     }
 }
+
+class MapDashboard {
+    constructor(http) {
+        this.http = http
+    }
+
+    async GetMarkers(request) {
+        return await this.http.post('api/MapDashboardApi/Markers', request)
+    }
+
+    async InteriewSummaryUrl(interviewId) {
+        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', {
+            interviewId,
+        })
+
+        return response
+    }
+
+    async AssignmentUrl(assignmentId) {
+        var response = await this.http.post('api/AssignmentsApi/AssignmentMapPoint', {
+            assignmentId,
+        })
+
+        return response
+    }
+
+    GetInterviewDetailsUrl(interviewId) {
+        return `${this.http.defaults.baseURL}Interview/Review/${interviewId}`
+    }
+
+    GetAssignmentDetailsUrl(assignmentId) {
+        return `${this.http.defaults.baseURL}Assignments/${assignmentId}`
+    }
+}
+
+class InterviewsPublicApi {
+    constructor(http) {
+        this.http = http
+        this.base = 'api/v1/interviews'
+    }
+
+    async SvApprove(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/approve`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async SvReject(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/reject`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async HqApprove(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/hqapprove`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async HqReject(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/hqreject`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async HqUnapprove(interviewId, comment) {
+        var url = `${this.base}/${interviewId}/hqunapprove`
+
+        const response = await this.http.patch(url, {
+            comment,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async SvAssign(interviewId, responsibleId) {
+        var url = `${this.base}/${interviewId}/assignsupervisor`
+
+        const response = await this.http.patch(url, {
+            responsibleId,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+
+    async Assign(interviewId, responsibleId) {
+        var url = `${this.base}/${interviewId}/assign`
+
+        const response = await this.http.patch(url, {
+            responsibleId,
+        })
+        const responseData = response.data
+
+        return responseData
+    }
+}
+
 
 class Reports {
     constructor(http, basePath) {
@@ -375,9 +529,9 @@ class HttpUtil {
 }
 
 class HqApiClient {
-    constructor(basePath) {
+    constructor(basePath, workspace) {
         this.basePath = basePath
-
+        this.workspace = workspace
         this.http = axios.create({
             baseURL: basePath,
         })
@@ -399,6 +553,10 @@ class HqApiClient {
         return new AssignmentsApi(this.http)
     }
 
+    get MapDashboard() {
+        return new MapDashboard(this.http)
+    }
+
     get WebInterviewSettings() {
         return new WebInterviewSettingsApi(this.http)
     }
@@ -418,12 +576,33 @@ class HqApiClient {
     get Util() {
         return new HttpUtil()
     }
+
+    get Workspaces() {
+        return new Workspaces(this.http)
+    }
+
+    get InterviewsPublicApi() {
+        return new InterviewsPublicApi(this.http)
+    }
+
+    get UsersManagement() {
+        var self = this
+        return {
+            list() {
+                return self.basePath + 'UsersManagement/List'
+            },
+        }
+    }
+
+    workspacePath(workspace) {
+        return this.basePath.replace(this.workspace, workspace)
+    }
 }
 
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.basePath)
+        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath, vue.$config.workspace)
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, '$hq', {

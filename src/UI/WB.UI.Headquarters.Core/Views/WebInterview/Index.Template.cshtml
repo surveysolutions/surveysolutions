@@ -15,15 +15,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web interview</title>
-    <link rel='icon' sizes='192x192' href='~/img/identity/favicon-hq-192x192.png'>
-    <link rel='apple-touch-icon' sizes='180x180' href='~/img/identity/favicon-hq-180x180.png'>
-    <link rel='apple-touch-icon' sizes='152x152' href='~/img/identity/favicon-hq-152x152.png'>
-    <link rel='apple-touch-icon' sizes='144x144' href='~/img/identity/favicon-hq-144x144.png'>
-    <link rel='apple-touch-icon' sizes='120x120' href='~/img/identity/favicon-hq-120x120.png'>
-    <link rel='apple-touch-icon' sizes='114x114' href='~/img/identity/favicon-hq-114x114.png'>
-    <link rel='apple-touch-icon' sizes='76x76' href='~/img/identity/favicon-hq-76x76.png'>
-    <link rel='apple-touch-icon' sizes='72x72' href='~/img/identity/favicon-hq-72x72.png'>
-    <link rel='apple-touch-icon' href='~/img/identity/favicon-hq.png'>
+    <link rel='icon' sizes='192x192' href='/img/identity/favicon-hq-192x192.png'>
+    <link rel='apple-touch-icon' sizes='180x180' href='/img/identity/favicon-hq-180x180.png'>
+    <link rel='apple-touch-icon' sizes='152x152' href='/img/identity/favicon-hq-152x152.png'>
+    <link rel='apple-touch-icon' sizes='144x144' href='/img/identity/favicon-hq-144x144.png'>
+    <link rel='apple-touch-icon' sizes='120x120' href='/img/identity/favicon-hq-120x120.png'>
+    <link rel='apple-touch-icon' sizes='114x114' href='/img/identity/favicon-hq-114x114.png'>
+    <link rel='apple-touch-icon' sizes='76x76' href='/img/identity/favicon-hq-76x76.png'>
+    <link rel='apple-touch-icon' sizes='72x72' href='/img/identity/favicon-hq-72x72.png'>
+    <link rel='apple-touch-icon' href='/img/identity/favicon-hq.png'>
     <script>
         document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
 
@@ -33,7 +33,7 @@
             coverPageId: '@Model.CoverPageId',
             askForEmail: @(Model.AskForEmail ?? "false"),
             sendLinkUri: '@Url.Action("EmailLink", "WebInterview")',
-            virtualPath: '/WebInterview',
+            virtualPath: '@Url.Content("~/WebInterview")',
             imageUploadUri: '@Url.Action("Image", "WebInterviewBinary")',
             audioUploadUri: '@Url.Action("Audio", "WebInterviewBinary")',
             imageGetBase: '@Url.Content(@"~/api/WebInterviewResources")',

@@ -62,8 +62,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
 
-            synchronizationServiceMock.Setup(x => x.GetCensusQuestionnairesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
             synchronizationServiceMock.Setup(x => x.GetServerQuestionnairesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
             synchronizationServiceMock.Setup(x => x.GetInterviewsAsync(It.IsAny<CancellationToken>()))

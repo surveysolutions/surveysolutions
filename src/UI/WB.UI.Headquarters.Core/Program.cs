@@ -4,10 +4,13 @@ using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Npgsql.Logging;
 using Serilog;
 using Serilog.Events;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.AspNetCore;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Headquarters.Services.EmbeddedService;
 
 namespace WB.UI.Headquarters
@@ -22,10 +25,13 @@ namespace WB.UI.Headquarters
                 return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
             }
 
+            // NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug);
             var version = host.Services.GetRequiredService<IProductVersion>();
             var applicationVersion = version.ToString();
             var logger = host.Services.GetRequiredService<ILogger>();
             logger.Warning("HQ application starting. Version {version}", applicationVersion);
+
+            DatabaseManagement.CreateDatabase(host.Services.GetRequiredService<UnitOfWorkConnectionSettings>().ConnectionString);
 
             await host.RunAsync();
             return 0;

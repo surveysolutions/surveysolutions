@@ -58,7 +58,7 @@ namespace WB.Infrastructure.Native.Utils
 
         public static IEnumerable<OrderRequestItem> ParseSortExpression(string sortExpression)
         {
-            string[] orderFields = sortExpression.Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] orderFields = sortExpression.Trim().Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (!orderFields.Any())
                 return null;
 

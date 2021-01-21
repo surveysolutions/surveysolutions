@@ -203,7 +203,7 @@ namespace WB.Services.Export.Infrastructure
                 }
             }
 
-            foreach (var tables in tablesToDelete.Batch(30))
+            foreach (var tables in tablesToDelete.Batch(10))
             {
                 await using var tr = await db.BeginTransactionAsync(cancellationToken);
                 foreach (var table in tables)

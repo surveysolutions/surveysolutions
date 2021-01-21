@@ -81,17 +81,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
         public static Mock<IInvitationService> WithQuestionnaires(this Mock<IInvitationService> invitations, params QuestionnaireBrowseItem[] questionnaires)
         {
-            invitations.Setup(x => x.GetQuestionnairesWithInvitations()).Returns(questionnaires.Select(x => ToLite(x)));
+            invitations.Setup(x => x.GetQuestionnairesWithInvitations()).Returns(questionnaires);
             return invitations;
-        }
-
-        public static QuestionnaireLiteViewItem ToLite(this QuestionnaireBrowseItem questionnaire)
-        {
-            return new QuestionnaireLiteViewItem
-            {
-                Id = questionnaire.Identity().ToString(),
-                Title = questionnaire.Title
-            };
         }
 
     }

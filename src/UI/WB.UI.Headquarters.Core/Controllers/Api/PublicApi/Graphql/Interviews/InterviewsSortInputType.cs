@@ -1,4 +1,4 @@
-using HotChocolate.Types.Sorting;
+using HotChocolate.Data.Sorting;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
@@ -9,19 +9,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
         {
             descriptor.BindFieldsExplicitly();
             descriptor.Name("InterviewSort");
-            descriptor.Sortable(x => x.Key);
-            descriptor.Sortable(x => x.CreatedDate);
-            descriptor.Sortable(x => x.UpdateDate);
-            descriptor.Sortable(x => x.ResponsibleName);
-            descriptor.Sortable(x => x.ResponsibleRole);
-            descriptor.Sortable(x => x.AssignmentId);
-            descriptor.Sortable(x => x.ErrorsCount);
-            descriptor.Sortable(x => x.Status);
-            descriptor.Sortable(x => x.ReceivedByInterviewerAtUtc);
-            descriptor.Sortable(x => x.QuestionnaireId);
-            descriptor.Sortable(x => x.QuestionnaireVersion);
-            descriptor.Sortable(x => x.SummaryId).Name("id");
-            descriptor.Sortable(x => x.NotAnsweredCount);
+            descriptor.Field(x => x.Key);
+            descriptor.Field(x => x.CreatedDate);
+            descriptor.Field(x => x.UpdateDate).Name("updateDateUtc");
+            descriptor.Field(x => x.ResponsibleName);
+            descriptor.Field(x => x.ResponsibleRole);
+            descriptor.Field(x => x.AssignmentId);
+            descriptor.Field(x => x.ErrorsCount);
+            descriptor.Field(x => x.Status);
+            descriptor.Field(x => x.ReceivedByInterviewerAtUtc);
+            descriptor.Field(x => x.QuestionnaireId);
+            descriptor.Field(x => x.QuestionnaireVersion);
+            descriptor.Field(x => x.SummaryId).Name("id");
+            descriptor.Field(x => x.NotAnsweredCount);
         }
     }
 }

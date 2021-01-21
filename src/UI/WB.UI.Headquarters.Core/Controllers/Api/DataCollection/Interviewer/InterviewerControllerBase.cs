@@ -6,17 +6,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
+using NHibernate.Cfg.MappingSchema;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
@@ -26,14 +26,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
     [Route("api/interviewer")]
     public class InterviewerControllerBase : AppControllerBaseBase
     {
-        protected readonly ITabletInformationService tabletInformationService;
-        protected readonly IUserViewFactory userViewFactory;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IAssignmentsService assignmentsService;
         private readonly IClientApkProvider clientApkProvider;
-        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IInterviewInformationFactory interviewFactory;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserToDeviceService userToDeviceService;
 
@@ -48,23 +43,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IUserViewFactory userViewFactory,
             IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IInterviewInformationFactory interviewFactory,
-            IAssignmentsService assignmentsService,
             IClientApkProvider clientApkProvider,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            IPlainKeyValueStorage<TenantSettings> tenantSettings,
+            IPlainStorageAccessor<ServerSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService)
             : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
-            this.tabletInformationService = tabletInformationService;
-            this.userViewFactory = userViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
-            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.interviewFactory = interviewFactory;
-            this.assignmentsService = assignmentsService;
             this.clientApkProvider = clientApkProvider;
             this.interviewerVersionReader = interviewerVersionReader;
             this.userToDeviceService = userToDeviceService;
@@ -185,46 +172,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced)
             {
-                if (this.interviewFactory.HasAnyInterviewsInProgressWithResolvedCommentsForInterviewer(this.authorizedUser.Id))
-                {
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-            }
-
-            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced)
-            {
-                if (this.assignmentsService.HasAssignmentWithAudioRecordingEnabled(this.authorizedUser.Id))
-                {
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-            }
-
-            if (deviceSyncProtocolVersion == 7080 || deviceSyncProtocolVersion == InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced) 
-                // release previous to audio recording enabled that is allowed to be synchronized
-            {
-            }
-            else if (deviceSyncProtocolVersion == 7070) // KP-11462
-            {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
-            else if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
+
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.WorkspacesIntroduced)
             {
-                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced
-                    && this.assignmentsService.HasAssignmentWithProtectedVariables(this.authorizedUser.Id))
+                if (this.authorizedUser.HasNonDefaultWorkspace)
                 {
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-            }
-            else if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
-            {
-                var interviewerAssignments = this.assignmentsService.GetAssignments(this.authorizedUser.Id);
-                var assignedQuestionarries = this.questionnaireBrowseViewFactory.GetByIds(interviewerAssignments.Select(ia => ia.QuestionnaireId).ToArray());
-
-                if (assignedQuestionarries.Any(aq => aq.AllowAssignments))
-                {
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-                }
-
+                }   
             }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {

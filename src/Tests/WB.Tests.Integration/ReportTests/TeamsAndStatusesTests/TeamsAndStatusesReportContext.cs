@@ -39,7 +39,8 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            DatabaseTestInitializer.InitializeDb(ConnectionStringBuilder.ConnectionString, DbType.ReadSide);
+            var workspaceNameProvider = Create.Service.WorkspaceContextAccessor();
+            DatabaseTestInitializer.InitializeDb(ConnectionStringBuilder.ConnectionString, workspaceNameProvider, DbType.ReadSide, DbType.PlainStore);
 
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[]
             {
@@ -52,7 +53,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(InterviewGpsMap),
                 typeof(QuestionnaireCompositeItemMap)
                 
-            }, true, "readside");
+            }, true, workspaceNameProvider.CurrentWorkspace().SchemaName);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
             return IntegrationCreate.PostgresReadSideRepository<InterviewSummary>(UnitOfWork);

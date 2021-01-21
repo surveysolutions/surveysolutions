@@ -10,12 +10,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private readonly NpgsqlConnection db;
         private readonly NpgsqlTransaction tr;
 
-        public MigrationLock(string connectionString)
+        public MigrationLock(string connectionString, long id = 1818)
         {
             this.db = new NpgsqlConnection(connectionString);
             this.db.Open();
             this.tr = db.BeginTransaction();
-            this.db.Execute(@"select pg_advisory_xact_lock (1818, 20433)");
+            this.db.Execute(@$"select pg_advisory_xact_lock ({id}, 20433)");
         }
 
         public void Dispose()

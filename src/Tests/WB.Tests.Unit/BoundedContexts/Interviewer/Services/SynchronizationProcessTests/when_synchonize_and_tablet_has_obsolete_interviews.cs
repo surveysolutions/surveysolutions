@@ -32,8 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var syncService = new Mock<IInterviewerSynchronizationService>();
             syncService.Setup(x => x.CheckObsoleteInterviewsAsync(It.Is<List<ObsoletePackageCheck>>(y => y.Any(o => o.InterviewId == obsoleteInterviewId)), CancellationToken.None))
                 .ReturnsAsync(new List<Guid> {obsoleteInterviewId});
-            syncService.Setup(x => x.GetCensusQuestionnairesAsync(CancellationToken.None))
-                .ReturnsAsync(new List<QuestionnaireIdentity>());
             syncService.Setup(x => x.GetServerQuestionnairesAsync(CancellationToken.None))
                 .ReturnsAsync(new List<QuestionnaireIdentity>());
             syncService.Setup(x => x.GetInterviewsAsync(CancellationToken.None))

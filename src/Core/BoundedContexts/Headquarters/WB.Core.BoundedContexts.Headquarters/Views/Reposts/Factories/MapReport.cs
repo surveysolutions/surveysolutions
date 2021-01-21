@@ -24,15 +24,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IMemoryCache cache;
 
         public MapReport(IInterviewFactory interviewFactory,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor,
             IAuthorizedUser authorizedUser,
+            IMemoryCache cache,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.interviewFactory = interviewFactory;
             this.questionnairesAccessor = questionnairesAccessor;
             this.authorizedUser = authorizedUser;
+            this.cache = cache;
             this.questionnaireItems = questionnaireItems;
         }
 
@@ -59,20 +62,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return questions;
         }
 
-        protected static IMemoryCache Cache => new MemoryCache(new MemoryCacheOptions());
         protected static object locker = new object();
 
         public MapReportView Load(MapReportInputModel input)
         {
             var key = $"MapReport;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{input.Variable};{this.authorizedUser.Id}";
 
-            var cacheLine = Cache?.Get(key);
+            var cacheLine = cache.Get(key);
 
             if (cacheLine == null)
             {
                 lock (locker)
                 {
-                    cacheLine = Cache?.Get(key);
+                    cacheLine = cache.Get(key);
 
                     if (cacheLine == null)
                     {
@@ -83,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         // cache for up to 10 minute depending on how long it took to read out map data
                         var cacheTime = TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds * 5 + 1);
 
-                        Cache.Set(key, cacheLine, cacheTime);
+                        cache.Set(key, cacheLine, cacheTime);
                     }
                 }
             }

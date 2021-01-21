@@ -1,6 +1,17 @@
 <template>
     <HqLayout :title="title"
         :hasFilter="true">
+        <div slot="headers">
+            <a href="MapDashboard"
+                style="float:right; margin-right:320px; margin-top:14px;">
+                <img style="padding-top:2px;"
+                    height="26px;"
+                    src="/img/google-maps-markers/map.png"
+                    :title="$t('Common.MapDashboard')" />
+            </a>
+            <h1>{{title}}</h1>
+        </div>
+
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead
@@ -416,8 +427,8 @@ import * as toastr from 'toastr'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
-const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
-  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query hqInterviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewsFilter) {
+  interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     nodes {
@@ -431,7 +442,7 @@ const query = gql`query hqInterviews($order: InterviewSort, $skip: Int, $take: I
       responsibleRole
       errorsCount
       assignmentId
-      updateDate
+      updateDateUtc
       receivedByInterviewerAtUtc
       actionFlags
       questionnaireVersion
@@ -580,7 +591,7 @@ export default {
                         const delimiter = self.mode == 'dense'
 
                         var questionsWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
-                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${sanitizeHtml(node.value)}</strong>`
                         })
 
                         const dom = join(questionsWithTitles, ', ')
@@ -601,8 +612,8 @@ export default {
                     width: '100px',
                 },
                 {
-                    data: 'updateDate',
-                    name: 'UpdateDate',
+                    data: 'updateDateUtc',
+                    name: 'UpdateDateUtc',
                     title: this.$t('Assignments.UpdatedAt'),
                     className: 'date last-update',
                     searchable: false,
@@ -716,28 +727,27 @@ export default {
                         order: order,
                         skip: data.start,
                         take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
-                        AND: [...self.whereQuery],
+                        and: [...self.whereQuery],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push({ OR: [
-                            { key_starts_with: search.toLowerCase() },
-                            { clientKey_starts_with: search.toLowerCase() },
-                            { responsibleNameLowerCase_starts_with: search.toLowerCase() },
-                            { supervisorNameLowerCase_starts_with: search.toLowerCase() },
-                            { identifyingData_some: {
-                                valueLowerCase_starts_with: search.toLowerCase(),
-                            },
-                            }],
+                        where.and.push({ or: [
+                            { key: { startsWith: search.toLowerCase() }},
+                            { clientKey: { startsWith: search.toLowerCase() }},
+                            { responsibleNameLowerCase: { startsWith: search.toLowerCase() }},
+                            { supervisorNameLowerCase: { startsWith: search.toLowerCase() }},
+                            { identifyingData: { some: { valueLowerCase: { startsWith: search.toLowerCase()}}}},
+                        ],
                         })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 
@@ -799,8 +809,6 @@ export default {
             if (this.questionnaireVersion) data.questionnaireVersion = toNumber(this.questionnaireVersion.key)
             if (this.responsibleId) data.responsibleName = this.responsibleId.value
             if (this.assignmentId) data.assignmentId = toNumber(this.assignmentId)
-            if (this.unactiveDateStart) data.updateDate_gte = this.unactiveDateStart
-            if (this.unactiveDateEnd) data.updateDate_lte = this.unactiveDateEnd
 
             return data
         },
@@ -810,47 +818,54 @@ export default {
             const self = this
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                and.push({questionnaireId: {eq: this.where.questionnaireId.replaceAll('-','')}})
 
                 if(this.where.questionnaireVersion) {
-                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                    and.push({questionnaireVersion: {eq: this.where.questionnaireVersion}})
                 }
             }
 
             if(this.where.status) {
-                and.push({ status_in: JSON.parse(this.status.alias)})
+                and.push({ status: {in: JSON.parse(this.status.alias)}})
             }
 
             if(this.conditions != null && this.conditions.length > 0) {
+
+                var identifyingData = []
                 this.conditions.forEach(cond => {
                     if(cond.value == null) return
 
-                    let identifyingData_some = { entity: {variable: cond.variable}}
-
+                    const value_filter = { entity: {variable: {eq: cond.variable}}}
                     const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
-                    identifyingData_some[cond.field] = value
-                    and.push({ identifyingData_some })
+
+                    var field_values = cond.field.split('|')
+                    var value_part = {}
+                    value_part[field_values[1]] = value
+                    value_filter[field_values[0]] = value_part
+
+                    and.push({identifyingData : {some: value_filter}})
                 })
+
             }
 
             if(this.responsibleId) {
                 and.push({
-                    OR: [
-                        { responsibleName: this.responsibleId.value },
-                        { supervisorName: this.responsibleId.value },
+                    or: [
+                        { responsibleName: {eq: this.responsibleId.value }},
+                        { supervisorName: {eq: this.responsibleId.value }},
                     ]})
             }
 
             if(this.unactiveDateStart) {
-                and.push({ updateDate_gte: this.unactiveDateStart})
+                and.push({ updateDateUtc: {gte: this.unactiveDateStart}})
             }
 
             if(this.unactiveDateEnd) {
-                and.push({ updateDate_lte: this.unactiveDateEnd})
+                and.push({ updateDateUtc: {lte: this.unactiveDateEnd}})
             }
 
             if(this.assignmentId) {
-                and.push({ assignmentId: parseInt(this.assignmentId) })
+                and.push({ assignmentId: {eq: parseInt(this.assignmentId) }})
             }
 
             return and

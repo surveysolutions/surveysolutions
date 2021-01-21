@@ -14,15 +14,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public string Order
         {
-            get
-            {
-                return this.Orders.GetOrderRequestString();
-            }
+            get => this.Orders.GetOrderRequestString();
 
-            set
-            {
-                this.Orders = value.ParseOrderRequestString();
-            }
+            set => this.Orders = value.ParseOrderRequestString();
         }
 
         public IEnumerable<OrderRequestItem> Orders { get; set; }

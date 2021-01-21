@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
             this.CreationDate = userView.CreationDate;
             this.IsLocked = userView.IsLockedBySupervisor || userView.IsLockedByHQ;
             this.IsArchived = userView.IsArchived;
-            this.Roles = userView.Roles.ToList();
+            this.Role = userView.Roles.First();
             this.FullName = userView.PersonName;
             this.PhoneNumber = userView.PhoneNumber;
         }
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         [DataMember]
         [Required]
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
-        public IList<UserRoles> Roles { get; private set; }
+        public UserRoles Role { get; private set; }
 
         [DataMember]
         [Required]

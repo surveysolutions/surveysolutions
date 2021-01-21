@@ -189,6 +189,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
+        [Route("{controller}/{action}")]
         [ObservingNotAllowed]
         public IActionResult ImportStatus() => this.Ok(this.assignmentsImportService.GetImportStatus());
 
@@ -236,6 +237,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
+        [RequestSizeLimit(500 * 1024 * 1024)]
         public async Task<IActionResult> Upload(AssignmentUploadModel model)
         {
             if (!QuestionnaireIdentity.TryParse(model.QuestionnaireId, out QuestionnaireIdentity questionnaireIdentity))
@@ -354,6 +356,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [HttpGet]
         [ObservingNotAllowed]
+        [Route("{controller}/{action=Index}")]
         public IActionResult GetInvalidAssignmentsByLastImport()
         {
             var sb = new StringBuilder();

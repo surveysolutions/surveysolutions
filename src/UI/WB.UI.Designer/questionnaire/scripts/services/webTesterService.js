@@ -7,14 +7,14 @@
                 var webTesterWindow = window.open("about:blank", '_blank');
 
                 return $http.get('../../api/questionnaire/webTest/' + questionnaireId).then(function (response) {
-                    webTesterService.setLocation(webTesterWindow, response, !questionnaire.isReadOnlyForUser, scenarioId);
+                    webTesterService.setLocation(webTesterWindow, response, scenarioId);
                 });
             };
 
-            webTesterService.setLocation = function (webTesterWindow, response, saveScenarioAvailable, scenarioId) {
-                var url = response.data + "?saveScenarioAvailable=" + saveScenarioAvailable;
+            webTesterService.setLocation = function (webTesterWindow, response, scenarioId) {
+                var url = response.data;
                 if (!angular.isUndefined(scenarioId)) {
-                    url += "&scenarioId=" + scenarioId;
+                    url += "?scenarioId=" + scenarioId;
                 }
                 webTesterWindow.location.href = url;
             };

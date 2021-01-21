@@ -15,8 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void Delete(QuestionnaireIdentity questionnaireIdentity)
         {
-            var queryText = $"DELETE FROM plainstore.invitations as i " +
-                            $"USING readside.assignments as a " +
+            var queryText = $"DELETE FROM invitations as i " +
+                            $"USING assignments as a " +
                             $"WHERE i.assignmentid = a.id " +
                             $"  AND a.questionnaireid = :questionnaireId " +
                             $"  AND a.questionnaireversion = :questionnaireVersion ";

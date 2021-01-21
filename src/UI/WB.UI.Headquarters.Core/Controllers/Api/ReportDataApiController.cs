@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
             return new JsonResult(new TeamsAndStatusesReportResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = filter.Draw,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -171,6 +171,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             var reportView = ToDataTableResponse(this.quantityReport.Load(input));
+            reportView.Draw = data.Draw;
             return new JsonResult(reportView);
         }
 
@@ -203,6 +204,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             var reportView = ToDataTableResponse(this.quantityReport.Load(input));
+            reportView.Draw = data.Draw;
             return new JsonResult(reportView);
         }
 
@@ -213,7 +215,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 RecordsTotal = reportView.TotalCount,
                 Data = reportView.Items,
                 DateTimeRanges = reportView.DateTimeRanges,
-                TotalRow = reportView.TotalRow
+                TotalRow = reportView.TotalRow,
             };
         }
 
@@ -247,7 +249,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
             }
 
-            return new JsonResult(this.speedReport.Load(input));
+            var speedByResponsibleReportView = this.speedReport.Load(input);
+            speedByResponsibleReportView.Draw = data.Draw;
+            return new JsonResult(speedByResponsibleReportView);
         }
 
         public SpeedDataTableResponse ToDataTableResponse(SpeedByResponsibleReportView reportView)
@@ -289,7 +293,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
             }
 
-            return new JsonResult(this.speedReport.Load(input));
+            var speedByResponsibleReportView = this.speedReport.Load(input);
+            speedByResponsibleReportView.Draw = filter.Draw;
+            return new JsonResult(speedByResponsibleReportView);
         }
 
         [HttpGet]
@@ -321,7 +327,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
             }
 
-            return new JsonResult(this.speedReport.Load(input));
+            var speedByResponsibleReportView = this.speedReport.Load(input);
+            speedByResponsibleReportView.Draw = filter.Draw;
+            return new JsonResult(speedByResponsibleReportView);
         }
 
         [HttpGet]
@@ -352,13 +360,14 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
             }
 
-            return new JsonResult(this.speedReport.Load(input));
+            var speedByResponsibleReportView = this.speedReport.Load(input);
+            speedByResponsibleReportView.Draw = data.Draw;
+            return new JsonResult(speedByResponsibleReportView);
         }
 
         [HttpGet]
         public IActionResult HeadquarterSupervisorsAndStatusesReport([FromQuery]TeamsAndStatusesFilter filter, [FromQuery]string exportType = null)
         {
-
             var input = new TeamsAndStatusesByHqInputModel
             {
                 Orders = filter.GetSortOrderRequestItems(),
@@ -381,7 +390,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var view = this.teamsAndStatusesReport.GetBySupervisors(input);
             return new JsonResult(new TeamsAndStatusesReportResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = filter.Draw,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -417,7 +426,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return new JsonResult(new ReportDataApiController.SurveysAndStatusesDataTableResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = filter.Draw,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -451,7 +460,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return new JsonResult(new ReportDataApiController.SurveysAndStatusesDataTableResponse
             {
-                Draw = filter.Draw + 1,
+                Draw = filter.Draw,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
                 Data = view.Items,
@@ -488,7 +497,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return new JsonResult(new ReportDataApiController.DeviceInterviewersDataTableResponse
             {
-                Draw = request.Draw + 1,
+                Draw = request.Draw,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
                 Data = data.Items,
@@ -535,7 +544,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return new JsonResult(new ReportDataApiController.StatusDurationDataTableResponse
             {
-                Draw = request.Draw + 1,
+                Draw = request.Draw,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
                 Data = data.Items,
@@ -568,7 +577,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return new JsonResult(new ReportDataApiController.StatusDurationDataTableResponse
             {
-                Draw = request.Draw + 1,
+                Draw = request.Draw,
                 RecordsTotal = data.TotalCount,
                 RecordsFiltered = data.TotalCount,
                 Data = data.Items,

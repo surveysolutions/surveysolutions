@@ -29,15 +29,12 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public virtual async Task Schedule(int repeatIntervalInSeconds)
         {
-            if (!await this.scheduler.CheckExists(jobKey))
-            {
-                IJobDetail job = JobBuilder.Create(jobType)
-                    .WithIdentity(jobKey)
-                    .StoreDurably()
-                    .Build();
+            IJobDetail job = JobBuilder.Create(jobType)
+                .WithIdentity(jobKey)
+                .StoreDurably()
+                .Build();
 
-                await this.scheduler.AddJob(job, true);
-            }
+            await this.scheduler.AddJob(job, true);
 
             var trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
@@ -52,19 +49,15 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public virtual async Task ScheduleRunAsync(int startAtInSeconds = 1)
         {
-            if (!await this.scheduler.CheckExists(jobKey))
-            {
-                IJobDetail job = JobBuilder.Create(jobType)
-                    .WithIdentity(jobKey)
-                    .StoreDurably()
-                    .Build();
+            IJobDetail job = JobBuilder.Create(jobType)
+                .WithIdentity(jobKey)
+                .StoreDurably()
+                .Build();
 
-                await this.scheduler.AddJob(job, true);
-            }
+            await this.scheduler.AddJob(job, true);
 
-            var triggersOfJob = await this.scheduler.GetTriggersOfJob(jobKey);
             var trigger = TriggerBuilder.Create()
-                .WithIdentity(new TriggerKey($"{triggerKey.Name}{triggersOfJob?.Count + 1}", triggerKey.Group))
+                .WithDescription(jobKey.ToString())
                 .ForJob(jobKey)
                 .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second))
                 .Build();

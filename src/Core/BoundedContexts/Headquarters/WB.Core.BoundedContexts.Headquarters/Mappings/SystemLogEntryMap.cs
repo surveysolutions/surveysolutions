@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class SystemLogEntryMap : ClassMapping<SystemLogEntry>
     {
         public SystemLogEntryMap()

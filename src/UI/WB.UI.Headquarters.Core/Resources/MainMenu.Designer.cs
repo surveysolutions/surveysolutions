@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class MainMenu {
@@ -169,6 +169,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Map Dashboard.
+        /// </summary>
+        public static string MapDashboard {
+            get {
+                return ResourceManager.GetString("MapDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Report.
         /// </summary>
         public static string MapReport {
@@ -237,6 +246,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Reports {
             get {
                 return ResourceManager.GetString("Reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server Administration.
+        /// </summary>
+        public static string ServerAdministration {
+            get {
+                return ResourceManager.GetString("ServerAdministration", resourceCulture);
             }
         }
         
@@ -363,6 +381,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users {
             get {
                 return ResourceManager.GetString("Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspaces.
+        /// </summary>
+        public static string Workspaces {
+            get {
+                return ResourceManager.GetString("Workspaces", resourceCulture);
             }
         }
     }

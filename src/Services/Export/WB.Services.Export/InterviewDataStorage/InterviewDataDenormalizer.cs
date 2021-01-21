@@ -630,11 +630,17 @@ namespace WB.Services.Export.InterviewDataStorage
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
-
+            
             await using var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state);
             logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);
             sw.Restart();
 
+            if (string.IsNullOrWhiteSpace(command.CommandText))
+            {
+                logger.LogWarning("Save state is not applied. Nothing to apply.", sw.Elapsed);
+                return;
+            }
+            
             await commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
 
             logger.LogDebug("Save state command applied on DB in {time}", sw.Elapsed);

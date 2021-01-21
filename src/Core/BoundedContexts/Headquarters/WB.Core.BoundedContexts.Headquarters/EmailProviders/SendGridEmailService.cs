@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 var responseErrors = serializer.Deserialize<SendGridResponseErrors>(body);
                 if (responseErrors != null)
                 {
-                    var errors = responseErrors.Errors.Select(x => $"{x.Message} For more information go to: {x.Help}").ToArray();
+                    var errors = responseErrors.Errors!.Select(x => $"{x.Message} For more information go to: {x.Help}").ToArray();
                     throw new EmailServiceException(to, response.StatusCode, null, errors);
                 }
             }

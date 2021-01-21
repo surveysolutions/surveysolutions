@@ -2,19 +2,18 @@
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
     [Localizable(false)]
-    [AllowAnonymous]
+    [AllowPrimaryWorkspaceFallback]
     [Route("api/CompanyLogo")]
     public class CompanyLogoController : ControllerBase
     {

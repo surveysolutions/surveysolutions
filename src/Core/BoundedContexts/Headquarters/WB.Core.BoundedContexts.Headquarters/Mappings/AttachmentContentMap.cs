@@ -5,7 +5,6 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class AttachmentContentMap : ClassMapping<AttachmentContent>
     {
         public AttachmentContentMap()

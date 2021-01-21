@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
 
         public CalendarEvent? GetActiveCalendarEventForInterviewId(Guid id)
         {
-            return this.calendarEventsAccessor.Query<CalendarEvent>(
+            return this.calendarEventsAccessor.Query<CalendarEvent?>(
                 x => x.FirstOrDefault(y => 
                     y.InterviewId == id
                     && y.DeletedAtUtc == null
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.CalendarEvents
         
         public CalendarEvent? GetActiveCalendarEventForAssignmentId(int id)
         {
-            return this.calendarEventsAccessor.Query<CalendarEvent>(
+            return this.calendarEventsAccessor.Query<CalendarEvent?>(
                 x => x.FirstOrDefault(y => 
                     y.InterviewId == null 
                     && y.AssignmentId == id
