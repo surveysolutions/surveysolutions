@@ -840,6 +840,10 @@
     <value>Роль</value>
     <comment>Роль</comment>
   </data>
+  <data name="AccountManage_ShowUsers" xml:space="preserve">
+    <value>Отобразить пользователей</value>
+    <comment>Отобразить пользователей</comment>
+  </data>  
   <data name="AccountManage_Login" xml:space="preserve">
     <value>Логин</value>
     <comment>Логин</comment>
@@ -1618,6 +1622,9 @@
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>Все роли</value>
   </data>
+  <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+    <value>Все пользователи</value>
+  </data>  
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
       <value>Выберите к каким рабочим пронстранствам нужно добавить выбранных пользователей</value>
   </data>

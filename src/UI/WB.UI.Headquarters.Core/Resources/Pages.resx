@@ -132,6 +132,9 @@
   <data name="AccountManage_Role" xml:space="preserve">
     <value>Role</value>
   </data>
+  <data name="AccountManage_ShowUsers" xml:space="preserve">
+    <value>Show users</value>
+  </data>
   <data name="AccountManage_ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
@@ -1558,6 +1561,9 @@
   </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>All roles</value>
+  </data>
+  <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+    <value>All users</value>
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
     <value>Select workspaces that need to be added to selected users</value>

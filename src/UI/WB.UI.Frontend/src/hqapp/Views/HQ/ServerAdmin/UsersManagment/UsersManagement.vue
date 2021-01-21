@@ -15,6 +15,7 @@
             <FilterBlock
                 :title="$t('Pages.AccountManage_Role')">
                 <Typeahead
+                    no-search
                     control-id="roleSelector"
                     :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')"
                     :value="selectedRole"
@@ -22,11 +23,12 @@
                     v-on:selected="onRoleSelected" />
             </FilterBlock>
 
-            <FilterBlock>
+            <FilterBlock
+                :title="$t('Pages.AccountManage_ShowUsers')">
                 <Typeahead
-                    no-clear
                     no-search
                     control-id="filterSelector"
+                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
                     :values="filters"
                     :value="selectedFilter"
                     v-on:selected="onFilterSelected"/>
@@ -123,7 +125,6 @@ export default {
 
     data() {
         const filters = [
-            { key: 'AllUsers', value: this.$t('Users.Filter_AllUsers')},
             { key: 'WithMissingWorkspace', value: this.$t('Users.Filter_WithMissingWorkspace')},
             { key: 'WithDisabledWorkspaces', value: this.$t('Users.Filter_WithDisabledWorkspaces')},
             { key: 'Locked', value: this.$t('Users.Filter_Locked')},
@@ -145,7 +146,7 @@ export default {
 
             selectedWorkspace: null,
             selectedRole: null,
-            selectedFilter: filters[0],
+            selectedFilter: null,
             selectedRows: [],
         }
     },
@@ -186,7 +187,7 @@ export default {
         if(this.queryString.filter) {
             this.selectedFilter = find(this.filters, { key: this.queryString.filter})
         } else {
-            this.selectedFilter = this.filter[0]
+            this.selectedFilter = null
         }
     },
 
@@ -387,7 +388,9 @@ export default {
                 requestData.role = this.selectedRole.key
             }
 
-            requestData.filter = this.selectedFilter.key
+            if(this.selectedFilter) {
+                requestData.filter = this.selectedFilter.key
+            }
         },
 
 
@@ -413,8 +416,9 @@ export default {
 
         onFilterSelected(value) {
             this.selectedFilter = value
+
             this.onChange(query => {
-                query.filter = value.key
+                query.filter = value == null ? null : value.key
             })
         },
     },
