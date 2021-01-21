@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 
             var response = await Subject.Handle(new UsersManagementRequest
             {
-                ShowLocked = true,
+                Filter = UserManagementFilter.Locked,
                 Length = 10
             });
             
@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 
             var response = await Subject.Handle(new UsersManagementRequest
             {
-                MissingWorkspace = true,
+                Filter = UserManagementFilter.WithMissingWorkspace,
                 Length = 10
             });
             
