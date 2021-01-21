@@ -31,10 +31,10 @@
         <value>Имя должно быть уникальным</value>
     </data>
   <data name="EditWorkspace" xml:space="preserve">
-        <value>Редактирование рабочего пространства {{name}}</value>
+        <value>Редактирование рабочей области "{{name}}"</value>
     </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
-        <value>Каждое рабочее пространство содержит собственные опросники, интервью и задания.</value>
+        <value>Каждая рабочая область содержит собственные опросники, интервью и задания.</value>
     </data>
   <data name="AddNew" xml:space="preserve">
         <value>Создать новый</value>
@@ -43,10 +43,10 @@
         <value>Предоставленное имя недопустимо</value>
     </data>
   <data name="CurrentWorkspace" xml:space="preserve">
-        <value>Текущее рабочее пространство</value>
+        <value>Текущее рабочая область</value>
     </data>
   <data name="CreateWorkspace" xml:space="preserve">
-        <value>Создание рабочего пространства</value>
+        <value>Создание рабочего области</value>
     </data>
   <data name="CanNotBeChanged" xml:space="preserve">
         <value>Нельзя изменить после создания</value>
@@ -61,39 +61,39 @@
         <value>Редактировать</value>
     </data>
   <data name="AssignedWorkspaces" xml:space="preserve">
-        <value>Выберите рабочие пространства доступные для пользователя</value>
+        <value>Выберите рабочие области доступные для пользователя</value>
     </data>
   <data name="UserWorkspacesTab" xml:space="preserve">
-        <value>Рабочие пространства</value>
-    </data>
+        <value>Рабочие области</value>
+  </data>
   <data name="WorkspacesUpdated" xml:space="preserve">
-        <value>Список рабочих пространств обновлён</value>
+        <value>Список рабочих областей обновлён</value>
     </data>
   <data name="Disable" xml:space="preserve">
         <value>Отключить</value>
     </data>
   <data name="DisableWorkspacePopupTitle" xml:space="preserve">
-        <value>Подтвердите отключение {{name}}</value>
+        <value>Подтвердите отключение "{{name}}"</value>
     </data>
   <data name="DisableExplanation" xml:space="preserve">
-        <value>Отключение остановит возможность пользователей входить в это рабочее пространство и любой сбор данных.</value>
+        <value>Отключение остановит возможность пользователей входить в это рабочую область и любой сбор данных.</value>
     </data>
   <data name="Enable" xml:space="preserve">
         <value>Включить</value>
     </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
-        <value>Удаление рабочего пространства {{name}}</value>
+        <value>Удаление рабочей области "{{name}}"</value>
     </data>
   <data name="DeleteExplanation" xml:space="preserve">
-        <value>Вы уверены в том, что хотите удалить рабочее пространство &lt;strong&gt;{{name}}&lt;/strong&gt;? 
-Все связанные с этим пространство Интервьюеры и Супервизоры будут удалены, а используемые ими приложения будет необходимо инициализировать снова.
+        <value>Вы уверены в том, что хотите удалить рабочую область &lt;strong&gt;{{name}}&lt;/strong&gt;? 
+Все связанные с этой областью Интервьюеры и Супервизоры будут удалены, а используемые ими приложения будет необходимо инициализировать снова.
 Следующие данные будут удалены:<strong></strong>
 Are You sure that You want to delete workspace? All interviewers and supervisors connected to this workspace will be also deleted. All Interviewer and Supervisor application will require data reset. Following data associated with this workspace will be deleted:
 </value>
     </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
-    <value>Невозможно удаление рабочего пространства, пока существуют загруженные опросники. 
-Следующие данные будут удалены, при удалении рабочего пространства:</value>
+    <value>Невозможно удаление рабочей области, пока существуют загруженные опросники. 
+Следующие данные будут удалены, при удалении рабочей области:</value>
   </data>
   <data name="InterviewersCount" xml:space="preserve">
     <value>Интервьюеры: {{count}}</value>
