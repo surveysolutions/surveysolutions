@@ -94,7 +94,7 @@ All interviewer, supervisor, and observer accounts connected to this workspace w
 The following data associated with this workspace will be deleted:</value>
     </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
-        <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted. Following data associated with this workspace will be deleted:</value>
+        <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted.</value>
     </data>
   <data name="InterviewersCount" xml:space="preserve">
         <value>Interviewers: {{count}}</value>
