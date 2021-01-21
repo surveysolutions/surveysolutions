@@ -107,16 +107,19 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             if (request.WorkspaceName != null)
                 query = query.Where(u => u.Workspaces.Any(w => w.Workspace.Name == request.WorkspaceName));
 
-            query = request.Filter switch
-            {
-                UserManagementFilter.AllUsers => query,
-                UserManagementFilter.WithMissingWorkspace => query.Where(u => u.Workspaces.Count == 0),
-                UserManagementFilter.WithDisabledWorkspaces => query.Where(u => u.Workspaces.Any() && u.Workspaces.All(w => w.Workspace.DisabledAtUtc != null)),
-                UserManagementFilter.Locked => query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor),
-                UserManagementFilter.Archived => query.Where(u => u.IsArchived),
-                _ => query
-            };
 
+            if (request.Filter != null)
+            {
+                query = request.Filter switch
+                {
+                    UserManagementFilter.WithMissingWorkspace => query.Where(u => u.Workspaces.Count == 0),
+                    UserManagementFilter.WithDisabledWorkspaces => query.Where(u => u.Workspaces.Any() && u.Workspaces.All(w => w.Workspace.DisabledAtUtc != null)),
+                    UserManagementFilter.Locked => query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor),
+                    UserManagementFilter.Archived => query.Where(u => u.IsArchived),
+                    _ => query
+                };
+            }
+            
             return query;
         }
     }
