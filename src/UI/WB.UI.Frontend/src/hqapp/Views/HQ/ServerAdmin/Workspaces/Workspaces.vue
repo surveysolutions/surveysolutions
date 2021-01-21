@@ -3,7 +3,7 @@
         tag="workspaces-page">
         <div slot="headers">
             <div class="topic-with-button">
-                <h1 v-html="$t('Dashboard.Workspaces')"></h1>
+                <h1 v-html="$t('MainMenu.Workspaces')"></h1>
                 <button type="button"
                     class="btn btn-success"
                     data-suso="create-new-workspace"

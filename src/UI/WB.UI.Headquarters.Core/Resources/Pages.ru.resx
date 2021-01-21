@@ -1610,10 +1610,10 @@
     <value>Дата, когда интервьюер последний раз заходил в систему</value>
   </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
-      <value>Рабочие пронстранства</value>
+      <value>Рабочие области</value>
   </data>
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
-      <value>Все рабочие пространства</value>
+      <value>Все рабочие области</value>
   </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>Все роли</value>
@@ -1622,16 +1622,16 @@
       <value>Выберите к каким рабочим пронстранствам нужно добавить выбранных пользователей</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
-      <value>Выберите рабочие пространства из которых нужно убрать выбранных пользователей</value>
+      <value>Выберите рабочие области из которых нужно убрать выбранных пользователей</value>
   </data>
   <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
-      <value>Управление рабочими пространствами</value>
+      <value>Управление рабочими областями</value>
   </data>
   <data name="UserManagement_AddToWorkspace" xml:space="preserve">
-      <value>Добавить к рабочим пространствам</value>
+      <value>Добавить к рабочим областям</value>
   </data>
   <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
-      <value>Убрать из рабочего пространства</value>
+      <value>Убрать из рабочей области</value>
   </data>
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>Выбранных пользователей</value>
