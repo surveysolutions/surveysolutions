@@ -313,7 +313,7 @@
     <value>Без рабочей области</value>
   </data>
   <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
-    <value>С отключенными рабочими областями</value>
+    <value>Только с выключенными рабочими областями</value>
   </data>
   <data name="Filter_Locked" xml:space="preserve">
     <value>Заблокированные</value>
