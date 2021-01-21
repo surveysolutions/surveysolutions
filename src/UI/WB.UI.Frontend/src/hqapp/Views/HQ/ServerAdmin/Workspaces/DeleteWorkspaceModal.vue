@@ -7,15 +7,17 @@
 
         <form onsubmit="return false;"
             v-if="!loading">
-            <p v-if="canDelete"
-                v-html="$t('Workspaces.DeleteExplanation', { name: workspaceTitle } )">
+            <div v-if="canDelete">
+                <p
+                    v-html="$t('Workspaces.DeleteExplanation', { name: workspaceTitle } )">
+                </p>
                 <Checkbox v-for="c in consentsList"
                     :key="c.name + '_' + draw"
                     :enabled="canDelete"
                     :label="c.label"
                     :name="c.name"
                     v-model="consent[c.name]" />
-            </p>
+            </div>
             <p v-if="!canDelete">{{ $t("Workspaces.CantDeleteExplanation") }}</p>
         </form>
         <div class="modal-footer">
