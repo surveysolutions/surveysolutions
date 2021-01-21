@@ -39,7 +39,6 @@ namespace WB.UI.Tester
     {
         public Setup()
         {
-            CrashReporting.Init("e77a488d-d76b-4300-9a37-8716f5b2faa7");
         }
 
         protected override IMvxIoCProvider CreateIocProvider()
@@ -50,6 +49,12 @@ namespace WB.UI.Tester
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
+
+            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
+            if (!string.IsNullOrEmpty(appcenterKey))
+            {
+                CrashReporting.Init(appcenterKey);
+            }
 
             var status = new UnderConstructionInfo();
             status.Run();
