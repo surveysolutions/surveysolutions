@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInforma
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Infrastructure.Native.Workspaces;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTabletInformationServiceTests
 {
@@ -33,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
                 x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()) == new Dictionary<string, long>());
 
             return new FileBasedTabletInformationService(Options.Create(new FileStorageConfig()), fileSystemAccessorMock.Object,
-                archiveUtils, Mock.Of<IEncryptionService>());
+                archiveUtils, Create.Service.WorkspaceContextAccessor(), Mock.Of<IEncryptionService>());
         }
 
         protected static FileBasedTabletInformationService CreateFileBasedTabletInformationService(
@@ -44,6 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
                 Options.Create(new FileStorageConfig()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
+                Create.Service.WorkspaceContextAccessor(),
                 encryptionService ?? Mock.Of<IEncryptionService>());
     }
 }

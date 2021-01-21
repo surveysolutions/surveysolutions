@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -200,6 +202,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 restCredentials.Token = authToken;
 
+                var workspaces = await GetUserWorkspaces(restCredentials, cancellationTokenSource.Token);
+                restCredentials.Workspace = workspaces.First().Name;
+                
                 if (!await this.synchronizationService.HasCurrentUserDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false))
                 {
                     await this.synchronizationService.LinkCurrentUserToDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
@@ -275,6 +280,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
+        
+        protected abstract Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
+            CancellationToken token);
 
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
 

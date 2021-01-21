@@ -150,4 +150,7 @@
   <data name="PleaseFillCaptcha" xml:space="preserve">
     <value>Please fill in the captcha field</value>
   </data>
+  <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+      <value>Api user is not allowed to signin with user interface</value>
+  </data>
 </root>

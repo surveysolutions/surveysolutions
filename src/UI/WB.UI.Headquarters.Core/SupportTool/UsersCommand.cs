@@ -7,7 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.Domain;
+using WB.Infrastructure.Native.Workspaces;
 using Option = System.CommandLine.Option;
 
 namespace WB.UI.Headquarters.SupportTool
@@ -44,6 +46,11 @@ namespace WB.UI.Headquarters.SupportTool
                     Required = true,
                     Argument = new Argument<string>()
                 },
+                new Option(new [] { "--workspace", "-w" })
+                {
+                    Required = false,
+                    Argument = new Argument<string>()
+                },
                 new Option("--email")
                 {
                     Required = false,
@@ -51,23 +58,28 @@ namespace WB.UI.Headquarters.SupportTool
                 }
             };
 
-            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string>(async (role, password, login, email) =>
+            cmd.Handler = CommandHandler.Create<UserRoles, string, string, string, string>(async (role, password, login, workspace, email) =>
             {
                 var inScopeExecutor = this.host.Services.GetRequiredService<IInScopeExecutor>();
                 await inScopeExecutor.ExecuteAsync(async (locator, unitOfWork) =>
                 {
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
-                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var workspaceService = locator.GetInstance<IWorkspaceContextSetter>();
+                    workspaceService.Set(workspace ?? WorkspaceConstants.DefaultWorkspaceName);
+
+                    var userManager = locator.GetInstance<HqUserManager>();
                     var user = new HqUser
                     {
                         UserName = login,
                         Email = email
                     };
+
                     var creationResult = await userManager.CreateAsync(user, password);
                     if (creationResult.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, role.ToString());
+                        
                         logger.LogInformation("Created user {user} as {role}", login, role);
                     }
                     else

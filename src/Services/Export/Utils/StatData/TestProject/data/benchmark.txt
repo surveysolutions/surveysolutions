@@ -1,0 +1,7 @@
+id	txt	num
+1010	yes	1
+1011	yes	3
+1012	no	
+1013	yes	2
+1014	no	
+1015	yes	1

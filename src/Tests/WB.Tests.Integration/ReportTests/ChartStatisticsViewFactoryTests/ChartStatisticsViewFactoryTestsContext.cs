@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide);
+            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide, DbType.PlainStore);
 
             sessionFactory = IntegrationCreate.SessionFactory(
                 this.connectionString, 
@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(QuestionnaireCompositeItemMap),
                 }, 
-                true, schemaName: new UnitOfWorkConnectionSettings().ReadSideSchemaName);
+                true, Create.Service.WorkspaceContextAccessor().CurrentWorkspace().SchemaName);
 
             UnitOfWork = NewUnitOfWork();
             cumulativeReportStatusChangeStorage =

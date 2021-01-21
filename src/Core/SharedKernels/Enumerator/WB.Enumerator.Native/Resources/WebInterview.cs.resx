@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Complete" xml:space="preserve">
+    <value>Dokončeno</value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Dokončený rozhovor</value>
+  </data>
+  <data name="CompletionText" xml:space="preserve">
+    <value>Tento rozhovor byl dokončen</value>
+  </data>
+  <data name="DiscardAndStart" xml:space="preserve">
+    <value>Znovu otevřít</value>
+  </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Stáhněte si přepis rozhovoru</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Stáhněte si přepis rozhovoru ve formátu pdf</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>Vítejte v %SURVEYNAME%
+
+Chcete-li přejít na šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%
+
+Děkujeme za spolupráci!</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Pozvánka k účasti v %SURVEYNAME%</value>
+  </data>
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>Nezačali jste odpovídat na %SURVEYNAME%, proto posíláme toto upozornění.
+
+Pro zahájení šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%
+
+Děkujeme za spolupráci!</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Připomínáme, nezapomeňte se zúčastnit %SURVEYNAME%</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Začali jste odpovídat na %SURVEYNAME%, ale nedokončili, proto posíláme toto upozornění.
+
+Pro pokračování v šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%.
+
+Prosím odpovězte na všechny příslušné otázky a odešlete své odpovědi kliknutím na tlačítko ‘DOKONČIT’.
+
+Děkujeme za spolupráci!</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Připomínáme, vyplňte prosím odpovědi na %SURVEYNAME%</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>Děkujeme Vám za účast v %SURVEYNAME%!
+
+Při zpracování Vašich odpovědí našel tazatel několik nesrovnalostí. Žádáme Vás o kontrolu.
+
+Pro pokračování v šetření klikněte na následující odkaz: %SURVEYLINK% a zadejte Vaše heslo: %PASSWORD%.
+
+Budeme rádi, pokud se pokusíte vyřešit všechny nesrovnalosti označené v dotazníku a kliknutím na tlačítko ‘DOKONČIT’ odešlete své odpovědi.
+
+Děkujeme za spolupráci!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Je vyžadována akce %SURVEYNAME%</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Odkaz je chráněn heslem, které Vám bylo posláno. Zde prosím zadejte heslo</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Chyba</value>
+  </data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve">
+    <value>Ve vašem prohlížeči nejsou povoleny soubory cookie. Chcete-li pokračovat, povolte v předvolbách prohlížeče soubory cookie.</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>Zakázáno</value>
+  </data>
+  <data name="Error_InterviewExpired" xml:space="preserve">
+    <value>Platnost odkazu vypršela</value>
+  </data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve">
+    <value>Informace byly zaznamenány. Nejsou potřeba žádné další kroky.</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>Rozhovor nebyl nalezen</value>
+  </data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>Uživatel nemá oprávnění</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Odpovězeno</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Vymazat všechny filtry</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Označeno</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Pro tazatele</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Pro garanta</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Neplatný</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Nezodpovězeno</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Žádné označení</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Filtr otázky</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Platný</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>S poznámkou</value>
+  </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>Rozhovor byl dokončen</value>
+  </data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve">
+    <value>Zahájili jste rozhovor</value>
+  </data>
+  <data name="InProgressText" xml:space="preserve">
+    <value>V procesu</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{{value}} odpověď</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>jedna odpověď</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{{value}} chyba</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>jedna chyba</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Dokončené sekce: {{value}}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Sekce nebyla zahájena</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Zahájené sekce: {{value}}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{{value}} podsekce</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>jedna podsekce</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>žádné podsekce</value>
+  </data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
+    <value>Datum dokončení rozhovoru:</value>
+  </data>
+  <data name="InterviewIdFormatText" xml:space="preserve">
+    <value>IČ rozhovoru: {0}</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Nelze upravit rozhovor, který byl přijat zařízením</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>V dotazníku je překročen limit pro celkový počet seznamů a otázek.</value>
+  </data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve">
+    <value>Datum zahájení rozhovoru:</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Chybné heslo</value>
+  </data>
+  <data name="InvitationSmallText" xml:space="preserve">
+    <value>Šetření vyžaduje internetové připojení. Není potřeba další programové vybavení.</value>
+  </data>
+  <data name="InvitationText" xml:space="preserve">
+    <value>Byli jste pozváni k účasti v následujícím šetření: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Poznámka pro garanta</value>
+  </data>
+  <data name="NotStartedText" xml:space="preserve">
+    <value>Ještě nezačal</value>
+  </data>
+  <data name="Original_Language" xml:space="preserve">
+    <value>Původní</value>
+  </data>
+  <data name="OrStartInterview" xml:space="preserve">
+    <value>Nebo můžete zahájit nový rozhovor</value>
+  </data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve">
+    <value>Lze vložit pouze obrázkový soubor</value>
+  </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>Vyplňte prosím pole captcha </value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="RefreshPage" xml:space="preserve">
+    <value>Obnovit stránku</value>
+  </data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve">
+    <value>Šetření vyžaduje internetové připojení, není potřeba další programové vybavení</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+    <value>Může přejít k rozhovoru v následujícím šetření: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+    <value>Vítejte v Survey Solutions webovém šetření</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Pokračovat v rozhovoru</value>
+  </data>
+  <data name="ServerUnderLoad" xml:space="preserve">
+    <value>Omlouváme se, mnoho lidí se připojilo k této internetové stránce ve stejný čas. Pracujeme na odstranění tohoto problému. Zkuste to prosím později. </value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Začít nový rozhovor</value>
+  </data>
+  <data name="StartedInterviewText" xml:space="preserve">
+    <value>Tento rozhovor není hotový</value>
+  </data>
+  <data name="StartPageTitle" xml:space="preserve">
+    <value>Webové šetření</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Šetření: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="ToInterview" xml:space="preserve">
+    <value>K šetření</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Upozornění</value>
+  </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Survey Solutions webové šetření</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Vítejte v Survey Solutions webovém šetření</value>
+  </data>
+</root>

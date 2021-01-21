@@ -84,5 +84,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual QuestionnaireIdentity Identity() => new QuestionnaireIdentity(QuestionnaireId, Version);
 
         public virtual bool IsAudioRecordingEnabled { get; set; }
+        public virtual bool WebModeEnabled { get; set; }
     }
 }

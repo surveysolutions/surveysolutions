@@ -86,8 +86,8 @@ export default {
 
     apollo: {
         questionnaireItems:{
-            query :gql`query questionnaireItems($id: Uuid!, $version: Long!) {
-                questionnaireItems(id: $id, version: $version, where: { identifying: true }) {
+            query :gql`query questionnaireItems($workspace: String!, $id: Uuid!, $version: Long!) {
+                questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { identifying: {eq: true} }) {
                     title, type, variable, entityType
                     options { title, value, parentValue }
                 }
@@ -96,6 +96,7 @@ export default {
                 return {
                     id: (this.questionnaireId || '').replace(/-/g, ''),
                     version: this.questionnaireVersion,
+                    workspace: this.$store.getters.workspace,
                 }
             },
             skip() {

@@ -35,7 +35,6 @@
 </template>
 <script>
 
-import gql from 'graphql-tag'
 import { find, sortBy } from 'lodash'
 import sanitizeHtml  from 'sanitize-html'
 
@@ -113,23 +112,23 @@ export default {
         fieldOptions() {
             if (this.item.entityType == 'VARIABLE') {
                 return [
-                    { id: 'valueLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                    { id: 'valueLowerCase', value: this.$t('Common.Equals') },
+                    { id: 'valueLowerCase|startsWith', value: this.$t('Common.StartsWith') },
+                    { id: 'valueLowerCase|eq', value: this.$t('Common.Equals') },
                 ]
             }
 
             switch(this.item.type) {
                 case 'SINGLEOPTION': return [
-                    { id: 'answerCode', value: this.$t('Common.Equals') },
-                    { id: 'answerCode_not', value: this.$t('Common.NotEquals') },
+                    { id: 'answerCode|eq', value: this.$t('Common.Equals') },
+                    { id: 'answerCode|neq', value: this.$t('Common.NotEquals') },
                 ]
                 case 'TEXT': return [
-                    { id: 'valueLowerCase_starts_with', value: this.$t('Common.StartsWith') },
-                    { id: 'valueLowerCase', value: this.$t('Common.Equals') },
+                    { id: 'valueLowerCase|startsWith', value: this.$t('Common.StartsWith') },
+                    { id: 'valueLowerCase|eq', value: this.$t('Common.Equals') },
 
                 ]
                 case 'NUMERIC': return [
-                    { id: 'value', value: this.$t('Common.Equals')},
+                    { id: 'value|eq', value: this.$t('Common.Equals')},
                 ]}
             return null
         },

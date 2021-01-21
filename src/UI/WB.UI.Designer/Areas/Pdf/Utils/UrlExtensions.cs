@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Code
                 var urlHelperFactory = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
                 var actionContextAccessor = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IActionContextAccessor>();
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
-                root = urlHelper.Content("~");
+                root = urlHelper.Content("~")!;
             }
             return ConvertToAbsoluteUrl(root, contentPath);
         }

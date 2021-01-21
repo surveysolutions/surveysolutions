@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -12,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Questionnaire
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -71,7 +69,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 false, null);
         }
 
-
         public async Task<QuestionnaireImportResult> ImportAndMigrateAssignments(Guid questionnaireId, 
             string name,
             bool isCensusMode,
@@ -112,6 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                     try
                     {
+                        
                         designerServiceCredentials.SetTaskCredentials(designerCredentials);
 
                         var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
@@ -257,7 +255,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 logger.Verbose($"commandService.Execute.new ImportFromDesigner: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
-                await commandService.ExecuteAsync(new ImportFromDesigner(
+                commandService.Execute(new ImportFromDesigner(
                     userId,
                     questionnaire,
                     isCensusMode,

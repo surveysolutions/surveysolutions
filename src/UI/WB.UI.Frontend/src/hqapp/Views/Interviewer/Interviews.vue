@@ -130,15 +130,15 @@ import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($order: InterviewSort, $skip: Int, $take: Int, $where: InterviewFilter) {
-  interviews(order_by: $order, skip: $skip, take: $take, where: $where) {
+const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewsFilter) {
+  interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
     filteredCount
     nodes {
       id
       key
       assignmentId
-      updateDate
+      updateDateUtc
       status
       receivedByInterviewerAtUtc
       actionFlags
@@ -206,17 +206,17 @@ export default {
             const and = []
 
             if(this.where.questionnaireId) {
-                and.push({questionnaireId: this.where.questionnaireId})
+                and.push({questionnaireId: {eq : this.where.questionnaireId.replaceAll('-','')}})
 
                 if(this.where.questionnaireVersion) {
-                    and.push({questionnaireVersion: this.where.questionnaireVersion})
+                    and.push({questionnaireVersion: {eq : this.where.questionnaireVersion}})
                 }
             }
             if(this.where.assignmentId){
-                and.push({assignmentId: this.where.assignmentId})
+                and.push({assignmentId: {eq : this.where.assignmentId}})
             }
 
-            and.push({ status_in: this.$config.model.statuses})
+            and.push({ status : {in: this.$config.model.statuses}})
 
             return and
         },
@@ -240,27 +240,26 @@ export default {
                         order: order,
                         skip: data.start,
                         take: data.length,
+                        workspace: self.$store.getters.workspace,
                     }
 
                     const where = {
-                        AND: [...self.whereQuery],
+                        and: [...self.whereQuery],
                     }
 
                     const search = data.search.value
 
                     if(search && search != '') {
-                        where.AND.push(
+                        where.and.push(
                             {
-                                OR: [
-                                    { key_starts_with: search.toLowerCase() },
-                                    { identifyingData_some: {
-                                        valueLowerCase_starts_with: search.toLowerCase(),
-                                    },
-                                    }],
+                                or: [
+                                    { key: {startsWith: search.toLowerCase()}},
+                                    { identifyingData: {some: {valueLowerCase: {startsWith: search.toLowerCase()}}}},
+                                ],
                             })
                     }
 
-                    if(where.AND.length > 0) {
+                    if(where.and.length > 0) {
                         variables.where = where
                     }
 
@@ -354,10 +353,11 @@ export default {
                 interviewId : self.calendarInterviewId,
                 interviewKey: self.calendarInterviewKey,
                 assignmentId : self.calendarAssinmentId,
-                publicKey : self.calendarEventId,
+                publicKey : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
                 newStart : startDate,
                 comment : self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
+                workspace: self.$store.getters.workspace,
             }
 
             addOrUpdateCalendarEvent(self.$apollo, variables, self.reload)
@@ -368,7 +368,8 @@ export default {
             this.$refs.editCalendarModal.hide()
 
             deleteCalendarEvent(self.$apollo, {
-                'publicKey' : self.calendarEventId,
+                'publicKey' : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
+                workspace: self.$store.getters.workspace,
             }, self.reload)
 
         },
@@ -485,7 +486,7 @@ export default {
                         const delimiter = self.mode == 'dense'
 
                         var entitiesWithTitles = map(filter(data, d => d.value != null && d.value != ''), node => {
-                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${node.value}</strong>`
+                            return `${sanitizeHtml(node.entity.label || node.entity.questionText)}: <strong>${sanitizeHtml(node.value)}</strong>`
                         })
 
                         const dom = join(entitiesWithTitles, ', ')
@@ -494,7 +495,7 @@ export default {
                     responsivePriority: 4,
                 },
                 {
-                    data: 'updateDate',
+                    data: 'updateDateUtc',
                     title: this.$t('Assignments.UpdatedAt'),
                     searchable: false,
                     render(data) {

@@ -69,7 +69,9 @@
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
-            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
+            <li>
+                <a href="/Account/LogOff">@Common.Logoff</a>
+            </li>
         </ul>
     </li>
 </ul>

@@ -13,6 +13,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 using WB.Tests.Integration.InterviewFactoryTests;
 
@@ -23,7 +25,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         private QuestionnaireDocument questionnaireV1;
         private QuestionnaireDocument questionnaireV2;
 
-        private IQuestionnaire plainQuestionnaireV1;
         private IQuestionnaire plainQuestionnaireV2;
 
         Dictionary<int, QuestionnaireDocument> Questionnaires;
@@ -33,7 +34,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         private readonly Guid dwellingQuestion = Id.g3;
         private Guid questionnaireId;
 
-        private InterviewFactory factory;
         private SurveyStatisticsReport reporter;
         private const string teamLeadName = "teamLead";
 
@@ -55,7 +55,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                     Create.Entity.SingleOptionQuestion(sexQuestion,      variable: "sex",      answers: GetAnswersFromEnum<Sex>())
                 })
             );
-            this.plainQuestionnaireV1 = Create.Entity.PlainQuestionnaire(this.questionnaireV1, 1);
 
             PrepareQuestionnaire(questionnaireV1, 1);
             Questionnaires.Add(1, questionnaireV1);
@@ -73,8 +72,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             PrepareQuestionnaire(questionnaireV2, 2);
             Questionnaires.Add(2, questionnaireV2);
 
-            this.factory = CreateInterviewFactory();
-
             Because();
 
             this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
@@ -84,24 +81,24 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             // Creating 4 interviews with different members configuration
 
-            CreateInterview(1, Dwelling.House,
+            CreateInterview(1, Dwelling.House, workspace,
                 (Relation.Head, Sex.Male),
                 (Relation.Spouse, Sex.Female));
 
-            CreateInterview(1, Dwelling.House,
+            CreateInterview(1, Dwelling.House, workspace,
                 (Relation.Head, Sex.Human),
                 (Relation.Spouse, Sex.Human));
 
-            CreateInterview(1, Dwelling.Barrack,
+            CreateInterview(1, Dwelling.Barrack, workspace,
                 (Relation.Head, Sex.Female),
                 (Relation.Spouse, Sex.Male));
 
-            CreateInterview(2, Dwelling.Hole,
+            CreateInterview(2, Dwelling.Hole, workspace,
                 (Relation.Head, Sex.Male),
                 (Relation.Spouse, Sex.Female),
                 (Relation.Child, Sex.Male));
 
-            CreateInterview(2, Dwelling.House,
+            CreateInterview(2, Dwelling.House, workspace,
                 (Relation.Head, Sex.Female));
 
             // there is in total 8 members in survey
@@ -188,7 +185,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             return report.Data[0].Skip(2).ToArray();
         }
 
-        private void CreateInterview(int version, Dwelling dwelling, params (Relation rel, Sex sex)[] members)
+        private void CreateInterview(int version, Dwelling dwelling, IWorkspaceContextAccessor workspaceContextAccessor, params (Relation rel, Sex sex)[] members)
         {
             var interviewId = Guid.NewGuid();
             var questionnaire = Questionnaires[version];
@@ -221,7 +218,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             void SetIntAnswer(Guid questionId, int answer, params int[] rosterVector)
             {
                 this.UnitOfWork.Session.Connection.Execute(
-                    "INSERT INTO readside.report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
+                    $"INSERT INTO report_statistics(interview_id, entity_id, rostervector, answer, \"type\", " +
                     "is_enabled) VALUES(@interviewId, @entityId, @rosterVector, @answer, 0, @enabled); ", new
                     {
                         interviewId = summary.Id,

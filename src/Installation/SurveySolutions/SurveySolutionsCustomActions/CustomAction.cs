@@ -1,6 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text;
+using System.Xml.Linq;
+using System.Xml.Resolvers;
 using Microsoft.Deployment.WindowsInstaller;
 
 namespace SurveySolutionsCustomActions
@@ -14,7 +18,7 @@ namespace SurveySolutionsCustomActions
 
             try
             {
-                var filePath = ValidateTargetFileAndGetFilePath(session);
+                var filePath = ValidateTargetFileAndGetFilePath(session, "TargetFile");
                 if (string.IsNullOrEmpty(filePath))
                     return ActionResult.SkipRemainingActions;
 
@@ -51,10 +55,24 @@ namespace SurveySolutionsCustomActions
             return ActionResult.Success;
         }
 
-      
-        private static string ValidateTargetFileAndGetFilePath(Session session)
+        [CustomAction]
+        public static ActionResult UpdateWebConfig(Session session)
         {
-            var filePath = session.CustomActionData["TargetFile"];
+            var installFolder = session.CustomActionData["InstallFolder"];
+
+            var webConfig = Path.Combine(installFolder, "web.config");
+
+            if (File.Exists(webConfig))
+            {
+                UpdateWebConfigContent(webConfig);
+            }
+
+            return ActionResult.Success;
+        }
+      
+        private static string ValidateTargetFileAndGetFilePath(Session session, string data )
+        {
+            var filePath = session.CustomActionData[data];
 
             //FileInfo(filePath).Length returns not 0 for compressed FS and NTFS
             if (File.Exists(filePath) && File.ReadAllText(filePath).Length > 0)
@@ -63,6 +81,39 @@ namespace SurveySolutionsCustomActions
             }
 
             return filePath;
+        }
+
+        public static void UpdateWebConfigContent(string webConfigPath)
+        {
+            var info = new FileInfo(webConfigPath);
+
+            var xml = XDocument.Load(info.FullName);
+
+            var aspNetCore = xml.Descendants("aspNetCore").First();
+
+            var envVariables = aspNetCore.Element("environmentVariables");
+
+            if (envVariables == null)
+            {
+                envVariables = new XElement("environmentVariables");
+                aspNetCore.Add(envVariables);
+            }
+
+            var envVar = envVariables.Elements("environmentVariable")
+                .SingleOrDefault(x => x.Attribute("name")?.Value == "DOTNET_BUNDLE_EXTRACT_BASE_DIR");
+
+            if (envVar == null)
+            {
+                envVar = new XElement("environmentVariable",
+                    new XAttribute("name", "DOTNET_BUNDLE_EXTRACT_BASE_DIR"),
+                    new XAttribute("value", ""));
+
+                envVariables.Add(envVar);
+            }
+
+            envVar.SetAttributeValue("value", Path.Combine(info.Directory.FullName, ".net-app"));
+
+            xml.Save(info.FullName);
         }
     }
 }

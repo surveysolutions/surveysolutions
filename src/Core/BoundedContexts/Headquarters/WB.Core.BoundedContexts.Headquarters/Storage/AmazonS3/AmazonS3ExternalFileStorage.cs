@@ -220,7 +220,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 foreach (var path in paths)
                     deleteRequest.AddKey(BucketInfo.PathTo(path));
 
-                await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                if (deleteRequest.Objects.Any())
+                {
+                    await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                }
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {

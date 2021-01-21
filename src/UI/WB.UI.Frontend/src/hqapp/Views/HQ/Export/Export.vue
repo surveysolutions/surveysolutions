@@ -582,8 +582,8 @@ export default {
             else
                 this.resetDataAvalability()
 
-            const query = gql`query questionnaires ($id: Uuid, $version: Long) {
- questionnaires(id: $id, version: $version) {
+            const query = gql`query questionnaires ($workspace: String!, $id: Uuid, $version: Long) {
+ questionnaires(workspace: $workspace, id: $id, version: $version) {
   nodes {
     defaultLanguageName,
     translations {
@@ -598,6 +598,7 @@ export default {
                 variables: {
                     id: this.questionnaireId.key,
                     version: toNumber(newValue.key),
+                    workspace: this.$store.getters.workspace,
                 },
                 fetchPolicy: 'network-only',
             })

@@ -49,5 +49,9 @@
         Administration_ReevaluateInterview = 45,
         ChangePassword = 46,
         Administration_Diagnostics = 40,
+        Workspaces = 47,
+        ServerAdministration = 48,
+        UsersManagement = 49,
+        MapDashboard = 50,
     }
 }

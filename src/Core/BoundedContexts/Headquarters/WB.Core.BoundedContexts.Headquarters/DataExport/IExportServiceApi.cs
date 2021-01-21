@@ -79,5 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         [Get("/.connectivity")]
         Task<string> GetConnectivityStatus();
+
+        [Delete("/api/v1/deleteTenant")]
+        Task DeleteTenant();
     }
 }

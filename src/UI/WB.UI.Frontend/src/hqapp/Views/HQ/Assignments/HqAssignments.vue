@@ -4,6 +4,22 @@
         :hasFilter="true"
         :topicButton="$t('Assignments.NewAssignment')"
         :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
+        <div slot="headers"
+            :class="{'topic-with-button': !config.isSupervisor}">
+            <a href="MapDashboard"
+                style="float:right; margin-right:320px; margin-top:14px;">
+                <img style="padding-top:2px;"
+                    height="26px;"
+                    src="/img/google-maps-markers/map.png"
+                    :title="$t('Common.MapDashboard')" />
+            </a>
+            <h1 v-html='title'></h1>
+            <a v-if="!config.isSupervisor"
+                class="btn btn-success"
+                :href="config.isSupervisor ? null : config.api.surveySetup">
+                {{ $t('Assignments.NewAssignment') }}
+            </a>
+        </div>
         <Filters slot="filters">
             <FilterBlock
                 :title="$t('Common.Questionnaire')"
@@ -263,6 +279,10 @@ import moment from 'moment'
 import {DateFormats} from '~/shared/helpers'
 import {RoleNames} from '~/shared/constants'
 
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
+
 export default {
     data() {
         return {
@@ -448,7 +468,7 @@ export default {
                     searchable: false,
                     render(data) {
                         const questionsWithTitles = map(data, question => {
-                            return question.title + ': ' + question.answer
+                            return question.title + ': ' + sanitizeHtml(question.answer)
                         })
                         return join(questionsWithTitles, ', ')
                     },

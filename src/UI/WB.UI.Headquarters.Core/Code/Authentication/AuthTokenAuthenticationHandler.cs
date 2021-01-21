@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Authentication;
 
 namespace WB.UI.Headquarters.Code.Authentication
@@ -18,7 +17,9 @@ namespace WB.UI.Headquarters.Code.Authentication
     public class AuthTokenAuthenticationHandler : AuthenticationHandler<AuthTokenAuthenticationSchemeOptions>
     {
         private readonly IUserRepository userRepository;
+        private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IApiTokenProvider authTokenProvider;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private bool isUserLocked;
 
         public AuthTokenAuthenticationHandler(IOptionsMonitor<AuthTokenAuthenticationSchemeOptions> options, 
@@ -26,10 +27,14 @@ namespace WB.UI.Headquarters.Code.Authentication
             UrlEncoder encoder, 
             ISystemClock clock,
             IUserRepository userRepository,
-            IApiTokenProvider authTokenProvider) : base(options, logger, encoder, clock)
+            IUserClaimsPrincipalFactory<HqUser> claimFactory,
+            IApiTokenProvider authTokenProvider, 
+            IWorkspaceContextAccessor workspaceContextAccessor) : base(options, logger, encoder, clock)
         {
             this.userRepository = userRepository;
+            this.claimFactory = claimFactory;
             this.authTokenProvider = authTokenProvider;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -60,21 +65,22 @@ namespace WB.UI.Headquarters.Code.Authentication
             var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
             if (verificationResult)
             {
-                var claims = new ClaimsIdentity(new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.FormatGuid())
-                });
-
-                foreach (var userRole in user.Roles)
-                {
-                    claims.AddClaim(new Claim(ClaimTypes.Role, userRole.Name));
-                }
-
-                return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claims), Scheme.Name));
+                var claimsPrincipal = await this.claimFactory.CreateAsync(user);
+                return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name));
             }
 
             return AuthenticateResult.Fail("Invalid auth token");
+        }
+
+        protected override async Task HandleForbiddenAsync(AuthenticationProperties properties)
+        {
+            await base.HandleForbiddenAsync(properties);
+            var currentWorkspace = this.workspaceContextAccessor.CurrentWorkspace();
+            if (currentWorkspace?.DisabledAtUtc != null)
+            {
+                await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Workspace is disabled"}));
+            }
         }
 
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)

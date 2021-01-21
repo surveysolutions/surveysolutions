@@ -6,14 +6,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInvoker : IWebInterviewInvoker
     {
-        private readonly IHubContext<WebInterview> lazyHubContext;
-
         public WebInterviewInvoker(IHubContext<WebInterview> lazyHubContext)
         {
-            this.lazyHubContext = lazyHubContext;
+            this.HubClients = lazyHubContext;
         }
 
-        private IHubContext<WebInterview> HubClients => lazyHubContext;
+        private IHubContext<WebInterview> HubClients { get; }
 
         public void RefreshEntities(string interviewId, string[] identities)
         {
@@ -48,6 +46,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public void ShutDown(Guid interviewId)
         {
             this.HubClients.Clients.Group(interviewId.FormatGuid()).SendAsync("shutDown", Array.Empty<object>());
+        }
+
+        public void ShutDownAllWebInterviews()
+        {
+            this.HubClients.Clients.All.SendAsync("reloadInterview");
         }
     }
 }

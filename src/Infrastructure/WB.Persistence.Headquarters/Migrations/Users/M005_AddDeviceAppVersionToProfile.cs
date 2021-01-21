@@ -14,13 +14,16 @@ namespace WB.Persistence.Headquarters.Migrations.Users
                 this.Alter.Table("userprofiles").AddColumn("DeviceRegistrationDate").AsDate().Nullable();
             }
 
-            Execute.Sql($@"UPDATE users.userprofiles
+            if (Schema.Schema("readside").Table("tabletdocuments").Exists())
+            {
+                Execute.Sql($@"UPDATE users.userprofiles
                 SET (""DeviceRegistrationDate"") = (
                     SELECT registrationdate
                     FROM readside.tabletdocuments
                     WHERE readside.tabletdocuments.androidid = users.userprofiles.""DeviceId"")");
 
-            Execute.Sql("DROP TABLE readside.tabletdocuments");
+                Execute.Sql("DROP TABLE readside.tabletdocuments");
+            }
         }
 
         public override void Down()

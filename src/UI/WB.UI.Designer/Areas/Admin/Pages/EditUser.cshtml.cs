@@ -114,12 +114,13 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     {
                         if (existingFullName == null)
                         {
-                            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
+                            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, 
+                                Input.FullName!));
                         }
                         else
                         {
                             await userManager.ReplaceClaimAsync(user, existingFullName,
-                                new Claim(ClaimTypes.Name, Input.FullName));
+                                new Claim(ClaimTypes.Name, Input.FullName!));
                         }
                     }
                 }

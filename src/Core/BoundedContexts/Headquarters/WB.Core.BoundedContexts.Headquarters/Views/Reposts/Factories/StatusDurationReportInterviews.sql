@@ -2,8 +2,8 @@
 	SELECT isum.status, 
 		DATE_PART('day', (now() at time zone 'utc')::timestamp - timestamp::timestamp) + 1 as Days, 
 		row_number() over (partition by ics."interview_id" order by position desc) rnk
-	FROM readside.interviewcommentedstatuses ics
-		INNER JOIN readside.interviewsummaries isum ON ics.interview_id = isum.id
+	FROM interviewcommentedstatuses ics
+		INNER JOIN interviewsummaries isum ON ics.interview_id = isum.id
 	WHERE 
 		(
 		   (isum.status = 100 /*Completed*/ AND ics.status = 3 /*Completed*/ )

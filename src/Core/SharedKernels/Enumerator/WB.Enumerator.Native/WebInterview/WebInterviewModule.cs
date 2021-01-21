@@ -23,7 +23,7 @@ namespace WB.Enumerator.Native.WebInterview
             registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
 
             registry.Bind<InterviewLifecycleEventHandler>();
-            registry.BindAsSingleton<IWebInterviewInvoker, WebInterviewInvoker>();
+            registry.Bind<IWebInterviewInvoker, WebInterviewInvoker>();
             registry.Bind<IPipelineModule, WebInterviewConnectionsCounter>();
             registry.Bind<IPipelineModule, StatefulInterviewCachePinModule>();
             registry.Bind<IWebInterviewNotificationBuilder, WebInterviewNotificationBuilder>();

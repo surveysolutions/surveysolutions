@@ -9,11 +9,14 @@ namespace WB.Persistence.Headquarters.Migrations.Users
     {
         public override void Up()
         {
-            RemoveForeignKeyIfPossible("deviceinfos", "FK_deviceinfos_User_userdocuments_id");
-            RemoveForeignKeyIfPossible("deviceinfos", "FK_deviceinfos_userid_userdocuments_id");
-            
-            Execute.Sql($@"DROP TABLE IF EXISTS plainstore.roles CASCADE");
-            Execute.Sql($@"DROP TABLE IF EXISTS plainstore.userdocuments CASCADE");
+            if (Schema.Schema("plainstore").Table("userdocuments").Exists())
+            {
+                RemoveForeignKeyIfPossible("deviceinfos", "FK_deviceinfos_User_userdocuments_id");
+                RemoveForeignKeyIfPossible("deviceinfos", "FK_deviceinfos_userid_userdocuments_id");
+
+                Execute.Sql($@"DROP TABLE IF EXISTS plainstore.roles CASCADE");
+                Execute.Sql($@"DROP TABLE IF EXISTS plainstore.userdocuments CASCADE");
+            }
         }
 
         private void RemoveForeignKeyIfPossible(string table, string constraint, string schema = "plainstore")

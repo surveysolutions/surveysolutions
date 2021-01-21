@@ -1,6 +1,6 @@
 ﻿schema {
   query: HeadquartersQuery
-  mutation: HeadquartersMutations
+  mutation: HeadquartersMutation
 }
 
 type Assignment {
@@ -26,7 +26,7 @@ type CalendarEvent {
   "Id of Calendar Event"
   publicKey: Uuid!
   "Start Timezone of Event"
-  startTimezone: String
+  startTimezone: String!
   "Start of calendar Event"
   startUtc: DateTime!
   updateDateUtc: DateTime!
@@ -49,59 +49,59 @@ type Entity {
   variable: String
 }
 
-type HeadquartersMutations {
-  addOrUpdateCalendarEvent("Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(apply: BEFORE_RESOLVER, roles: [ "Interviewer" ])
-  addUserToMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
-  deleteCalendarEvent("Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(apply: BEFORE_RESOLVER, roles: [ "Interviewer" ])
-  deleteMap("Map file name" fileName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
-  deleteUserFromMap("Map file name" fileName: String! userName: String!): Map @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
+type HeadquartersMutation {
+  addOrUpdateCalendarEvent("Workspace name" workspace: String! = "primary" "Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
+  deleteCalendarEvent("Workspace name" workspace: String! = "primary" "Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
+  deleteMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
+  deleteUserFromMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ], apply: BEFORE_RESOLVER)
+  addUserToMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ], apply: BEFORE_RESOLVER)
 }
 
 type HeadquartersQuery {
-  assignments(skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
-  interviews(order_by: InterviewSort skip: Int take: Int where: InterviewFilter): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
-  maps(order_by: MapsSort skip: Int take: Int where: MapsFilter): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
-  questionnaireItems("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
+  assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize(apply: BEFORE_RESOLVER)
+  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewsFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize(apply: BEFORE_RESOLVER)
+  maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize(apply: BEFORE_RESOLVER)
   "Gets questionnaire details"
-  questionnaires("Questionnaire id" id: Uuid skip: Int take: Int "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER, roles: [ "Administrator", "Headquarter", "ApiUser" ])
-  questions("Questionnaire id" id: Uuid! "Questionnaire language" language: String "Questionnaire version" version: Long! where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
+  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: Uuid "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize(apply: BEFORE_RESOLVER)
+  questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
+  questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
 }
 
 type IPagedConnectionOfAssignment {
-  "Filtered count of nodes without paging"
-  filteredCount: Int!
   "A flattened list of the nodes."
   nodes: [Assignment]!
   "Total count of nodes without filtering applied"
   totalCount: Int!
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
 }
 
 type IPagedConnectionOfInterview {
-  "Filtered count of nodes without paging"
-  filteredCount: Int!
   "A flattened list of the nodes."
   nodes: [Interview]!
   "Total count of nodes without filtering applied"
   totalCount: Int!
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
 }
 
 type IPagedConnectionOfMap {
-  "Filtered count of nodes without paging"
-  filteredCount: Int!
   "A flattened list of the nodes."
   nodes: [Map]!
   "Total count of nodes without filtering applied"
   totalCount: Int!
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
 }
 
 type IPagedConnectionOfQuestionnaire {
-  "Filtered count of nodes without paging"
-  filteredCount: Int!
   "A flattened list of the nodes."
   nodes: [Questionnaire]!
   "Total count of nodes without filtering applied"
   totalCount: Int!
+  "Filtered count of nodes without paging"
+  filteredCount: Int!
 }
 
 "Identifying variable or question"
@@ -116,80 +116,78 @@ type Interview {
   "List of actions that can be applied to interview"
   actionFlags: [InterviewActionFlags!]!
   "Identifier for the assignment to which this interview belongs"
-  assignmentId: Int
-  "Active Calendar Event associated with interview"
-  calendarEvent: CalendarEvent
-  "Key that was generated on interviewer tablet when interview was created for the first time"
-  clientKey: String!
+  assignmentId: Int!
+  id: ID!
+  status: InterviewStatus!
+  "Login of current responsible user"
+  responsibleName: String!
+  responsibleId: Uuid!
+  responsibleRole: UserRoles!
+  "Supervisor login who is responsible for interview"
+  supervisorName: String
+  "Indicates if interview was ever completed by interviewer"
+  wasCompleted: Boolean!
   "Date when interview was created"
   createdDate: DateTime!
-  "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1"
-  errorsCount: Int!
-  id: ID!
-  "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer"
-  identifyingData: [IdentifyingEntity]
   "Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer"
   key: String!
-  "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release"
-  notAnsweredCount: Int
+  "Key that was generated on interviewer tablet when interview was created for the first time"
+  clientKey: String!
+  "Represents date (UTC) when interview was changed last time"
+  updateDateUtc: DateTime!
+  "Represents date (UTC) when the interview was received by the interviewer’s tablet"
+  receivedByInterviewerAtUtc: DateTime
+  "Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1"
+  errorsCount: Int!
   questionnaireId: Uuid!
   questionnaireVariable: String!
   questionnaireVersion: Long!
-  "Indicator for whether the interview is on the interviewer’s tablet now"
-  receivedByInterviewer: Boolean!
-  "Represents date (UTC) when the interview was received by the interviewer’s tablet"
-  receivedByInterviewerAtUtc: DateTime
-  responsibleId: Uuid!
-  "Login of current responsible user"
-  responsibleName: String!
-  responsibleRole: UserRoles!
-  status: InterviewStatus!
-  "Supervisor login who is responsible for interview"
-  supervisorName: String
-  "Represents date (UTC) when interview was changed last time"
-  updateDate: DateTime!
-  "Indicates if interview was ever completed by interviewer"
-  wasCompleted: Boolean!
+  "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer"
+  identifyingData: [IdentifyingEntity]
+  "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release"
+  notAnsweredCount: Int
+  "Active Calendar Event associated with interview"
+  calendarEvent: CalendarEvent
 }
 
 type Map {
   "Map file name"
   fileName: String!
-  "Utc date when map was imported on HQ"
-  importDate: DateTime
-  maxScale: Float!
-  minScale: Float!
   "Size of map in bytes"
   size: Long!
+  "Utc date when map was imported on HQ"
+  importDate: DateTime
   "List of users assigned to map"
   users: [UserMap]
-  wkid: Int!
   xMaxVal: Float!
-  xMinVal: Float!
   yMaxVal: Float!
+  xMinVal: Float!
   yMinVal: Float!
+  wkid: Int!
+  maxScale: Float!
+  minScale: Float!
 }
 
 type Questionnaire {
-  defaultLanguageName: String
-  id: ID
-  questionnaireId: Uuid!
-  title: String!
-  translations: [Translation!]!
   variable: String!
+  questionnaireId: Uuid!
   version: Long!
+  id: ID
+  title: String!
+  defaultLanguageName: String
+  translations: [Translation!]!
 }
 
 type QuestionnaireItem {
   entityType: EntityType
-  identifying: Boolean
-  label: String
-  options: [CategoricalOption!]!
-  scope: QuestionScope
   "Question text or Variable label. May contain html tags."
   title: String
-  type: QuestionType
   variable: String
+  scope: QuestionScope
+  label: String
+  type: QuestionType
+  identifying: Boolean
+  options: [CategoricalOption!]!
 }
 
 type Translation {
@@ -201,6 +199,7 @@ type User {
   id: ID!
   roles: [UserRoles!]!
   userName: String!
+  workspaces: [String!]!
 }
 
 type UserMap {
@@ -209,214 +208,288 @@ type UserMap {
 }
 
 input AssignmentsFilter {
-  AND: [AssignmentsFilter!]
-  archived: Boolean
-  OR: [AssignmentsFilter!]
+  and: [AssignmentsFilter!]
+  or: [AssignmentsFilter!]
+  id: ComparableInt32OperationFilterInput
   questionnaireId: QuestionnaireIdentity
-  receivedByTabletAtUtc: DateTime
-  receivedByTabletAtUtc_gt: DateTime
-  receivedByTabletAtUtc_lt: DateTime
-  receivedByTabletAtUtc_not: DateTime
-  responsibleId: Uuid
-  responsibleId_in: [Uuid!]
-  responsibleId_not: Uuid
-  responsibleId_not_in: [Uuid!]
-  webMode: Boolean
+  archived: BooleanOperationFilterInput
+  responsibleId: ComparableGuidOperationFilterInput
+  webMode: BooleanOperationFilterInput
+  receivedByTabletAtUtc: ComparableNullableOfDateTimeOperationFilterInput
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+input ComparableDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime!]
+  nin: [DateTime!]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ComparableGuidOperationFilterInput {
+  eq: Uuid
+  neq: Uuid
+  in: [Uuid!]
+  nin: [Uuid!]
+  gt: Uuid
+  ngt: Uuid
+  gte: Uuid
+  ngte: Uuid
+  lt: Uuid
+  nlt: Uuid
+  lte: Uuid
+  nlte: Uuid
+}
+
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input ComparableInt64OperationFilterInput {
+  eq: Long
+  neq: Long
+  in: [Long!]
+  nin: [Long!]
+  gt: Long
+  ngt: Long
+  gte: Long
+  ngte: Long
+  lt: Long
+  nlt: Long
+  lte: Long
+  nlte: Long
+}
+
+input ComparableNullableOfDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ComparableNullableOfDecimalOperationFilterInput {
+  eq: Decimal
+  neq: Decimal
+  in: [Decimal]
+  nin: [Decimal]
+  gt: Decimal
+  ngt: Decimal
+  gte: Decimal
+  ngte: Decimal
+  lt: Decimal
+  nlt: Decimal
+  lte: Decimal
+  nlte: Decimal
+}
+
+input ComparableNullableOfInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int]
+  nin: [Int]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
 }
 
 input IdentifyEntityValueFilter {
-  AND: [IdentifyEntityValueFilter!]
-  answerCode: Decimal
-  answerCode_in: [Decimal]
-  answerCode_not: Decimal
-  answerCode_not_in: [Decimal]
-  entity: QuestionFilter
-  OR: [IdentifyEntityValueFilter!]
-  "Allows case sensitive equals comparison of answer"
-  value: String
-  "Allows case insensitive equals comparison of answer"
-  valueLowerCase: String
-  "Allows case insensitive not equals comparison of answer"
-  valueLowerCase_not: String
-  "Allows case insensitive not starts with comparison of answer"
-  valueLowerCase_not_starts_with: String
-  "Allows case insensitive starts with comparison of answer"
-  valueLowerCase_starts_with: String
-  "Allows case sensitive not equals comparison of answer"
-  value_not: String
-  "Allows case sensitive not starts with comparison of answer"
-  value_not_starts_with: String
-  "Allows case sensitive starts with comparison of answer"
-  value_starts_with: String
-}
-
-input InterviewFilter {
-  AND: [InterviewFilter!]
-  assignmentId: Int
-  assignmentId_in: [Int]
-  assignmentId_not: Int
-  clientKey: String
-  clientKey_contains: String
-  clientKey_in: [String]
-  clientKey_starts_with: String
-  createdDate_gt: DateTime
-  createdDate_gte: DateTime
-  createdDate_lt: DateTime
-  createdDate_lte: DateTime
-  createdDate_not_gt: DateTime
-  createdDate_not_gte: DateTime
-  createdDate_not_lt: DateTime
-  createdDate_not_lte: DateTime
-  errorsCount: Int
-  errorsCount_gt: Int
-  identifyingData_some: IdentifyEntityValueFilter
-  key: String
-  key_contains: String
-  key_in: [String]
-  key_starts_with: String
-  notAnsweredCount: Int
-  notAnsweredCount_gt: Int
-  notAnsweredCount_gte: Int
-  notAnsweredCount_in: [Int]
-  notAnsweredCount_lt: Int
-  notAnsweredCount_lte: Int
-  notAnsweredCount_not: Int
-  notAnsweredCount_not_gt: Int
-  notAnsweredCount_not_gte: Int
-  notAnsweredCount_not_in: [Int]
-  notAnsweredCount_not_lt: Int
-  notAnsweredCount_not_lte: Int
-  OR: [InterviewFilter!]
-  questionnaireId: Uuid
-  questionnaireVariable: String
-  questionnaireVersion: Long
-  receivedByInterviewerAtUtc: DateTime
-  receivedByInterviewerAtUtc_gt: DateTime
-  receivedByInterviewerAtUtc_lt: DateTime
-  receivedByInterviewerAtUtc_not: DateTime
-  responsibleName: String
-  responsibleNameLowerCase: String
-  responsibleNameLowerCase_in: [String]
-  responsibleNameLowerCase_starts_with: String
-  responsibleName_in: [String]
-  responsibleName_starts_with: String
-  responsibleRole: UserRoles
-  status: InterviewStatus
-  status_in: [InterviewStatus!]
-  status_not: InterviewStatus
-  supervisorName: String
-  supervisorNameLowerCase: String
-  supervisorNameLowerCase_in: [String]
-  supervisorNameLowerCase_starts_with: String
-  supervisorName_in: [String]
-  supervisorName_starts_with: String
-  updateDate_gt: DateTime
-  updateDate_gte: DateTime
-  updateDate_lt: DateTime
-  updateDate_lte: DateTime
-  updateDate_not_gt: DateTime
-  updateDate_not_gte: DateTime
-  updateDate_not_lt: DateTime
-  updateDate_not_lte: DateTime
+  and: [IdentifyEntityValueFilter!]
+  or: [IdentifyEntityValueFilter!]
+  "Code of answer for categorical question"
+  answerCode: ComparableNullableOfDecimalOperationFilterInput
+  "Answer value, supports case sensitive operations"
+  value: StringOperationFilterInput
+  "Answer value in lower case, supports case insensitive operations"
+  valueLowerCase: StringOperationFilterInput
+  "Question or variable entity"
+  entity: QuestionnaireItemsFilter
 }
 
 input InterviewSort {
-  assignmentId: SortOperationKind
-  createdDate: SortOperationKind
-  errorsCount: SortOperationKind
-  id: SortOperationKind
-  key: SortOperationKind
-  notAnsweredCount: SortOperationKind
-  questionnaireId: SortOperationKind
-  questionnaireVersion: SortOperationKind
-  receivedByInterviewerAtUtc: SortOperationKind
-  responsibleName: SortOperationKind
-  responsibleRole: SortOperationKind
-  status: SortOperationKind
-  updateDate: SortOperationKind
+  key: SortEnumType
+  createdDate: SortEnumType
+  updateDateUtc: SortEnumType
+  responsibleName: SortEnumType
+  responsibleRole: SortEnumType
+  assignmentId: SortEnumType
+  errorsCount: SortEnumType
+  status: SortEnumType
+  receivedByInterviewerAtUtc: SortEnumType
+  questionnaireId: SortEnumType
+  questionnaireVersion: SortEnumType
+  id: SortEnumType
+  notAnsweredCount: SortEnumType
+}
+
+input InterviewStatusOperationFilterInput {
+  eq: InterviewStatus
+  neq: InterviewStatus
+  in: [InterviewStatus!]
+  nin: [InterviewStatus!]
+}
+
+input InterviewsFilter {
+  and: [InterviewsFilter!]
+  or: [InterviewsFilter!]
+  status: InterviewStatusOperationFilterInput
+  questionnaireId: ComparableGuidOperationFilterInput
+  questionnaireVariable: StringOperationFilterInput
+  questionnaireVersion: ComparableInt64OperationFilterInput
+  key: StringOperationFilterInput
+  notAnsweredCount: ComparableNullableOfInt32OperationFilterInput
+  clientKey: StringOperationFilterInput
+  assignmentId: ComparableNullableOfInt32OperationFilterInput
+  createdDate: ComparableDateTimeOperationFilterInput
+  responsibleName: StringOperationFilterInput
+  responsibleNameLowerCase: StringOperationFilterInput
+  supervisorName: StringOperationFilterInput
+  supervisorNameLowerCase: StringOperationFilterInput
+  responsibleRole: UserRolesOperationFilterInput
+  updateDateUtc: ComparableDateTimeOperationFilterInput
+  receivedByInterviewerAtUtc: ComparableNullableOfDateTimeOperationFilterInput
+  errorsCount: ComparableInt32OperationFilterInput
+  identifyingData: ListFilterInputTypeOfIdentifyEntityValueFilterInput
+}
+
+input ListFilterInputTypeOfIdentifyEntityValueFilterInput {
+  all: IdentifyEntityValueFilter
+  none: IdentifyEntityValueFilter
+  some: IdentifyEntityValueFilter
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserMapFilterInput {
+  all: UserMapFilterInput
+  none: UserMapFilterInput
+  some: UserMapFilterInput
+  any: Boolean
 }
 
 input MapsFilter {
-  AND: [MapsFilter!]
-  fileName: String
-  fileName_in: [String]
-  fileName_starts_with: String
-  importDate_gt: DateTime
-  importDate_gte: DateTime
-  importDate_lt: DateTime
-  importDate_lte: DateTime
-  importDate_not_gt: DateTime
-  importDate_not_gte: DateTime
-  importDate_not_lt: DateTime
-  importDate_not_lte: DateTime
-  OR: [MapsFilter!]
-  size_gt: Long
-  size_gte: Long
-  size_lt: Long
-  size_lte: Long
-  size_not_gt: Long
-  size_not_gte: Long
-  size_not_lt: Long
-  size_not_lte: Long
-  users_some: UserMapFilter
+  and: [MapsFilter!]
+  or: [MapsFilter!]
+  fileName: StringOperationFilterInput
+  importDateUtc: ComparableNullableOfDateTimeOperationFilterInput
+  size: ComparableInt64OperationFilterInput
+  users: ListFilterInputTypeOfUserMapFilterInput
 }
 
 input MapsSort {
-  fileName: SortOperationKind
-  importDate: SortOperationKind
-  size: SortOperationKind
+  fileName: SortEnumType
+  importDateUtc: SortEnumType
+  size: SortEnumType
+}
+
+input NullableOfQuestionScopeOperationFilterInput {
+  eq: QuestionScope
+  neq: QuestionScope
+  in: [QuestionScope]
+  nin: [QuestionScope]
 }
 
 input QuestionFilter {
-  AND: [QuestionFilter!]
+  and: [QuestionFilter!]
+  or: [QuestionFilter!]
+  variable: StringOperationFilterInput
+  scope: NullableOfQuestionScopeOperationFilterInput
   "Find only identifying questions"
-  identifying: Boolean
-  OR: [QuestionFilter!]
-  questionText: String
-  scope: QuestionScope
-  variable: String
+  identifying: BooleanOperationFilterInput
 }
 
 input QuestionnaireIdentity {
-  AND: [QuestionnaireIdentity!]
-  id: Uuid
-  id_not: Uuid
-  OR: [QuestionnaireIdentity!]
-  version: Long
-  version_gt: Long
-  version_gte: Long
-  version_in: [Long!]
-  version_lt: Long
-  version_lte: Long
-  version_not: Long
-  version_not_gt: Long
-  version_not_gte: Long
-  version_not_in: [Long!]
-  version_not_lt: Long
-  version_not_lte: Long
+  and: [QuestionnaireIdentity!]
+  or: [QuestionnaireIdentity!]
+  id: ComparableGuidOperationFilterInput
+  version: ComparableInt64OperationFilterInput
 }
 
 input QuestionnaireItemsFilter {
-  AND: [QuestionnaireItemsFilter!]
+  and: [QuestionnaireItemsFilter!]
+  or: [QuestionnaireItemsFilter!]
+  title: StringOperationFilterInput
+  variable: StringOperationFilterInput
+  scope: NullableOfQuestionScopeOperationFilterInput
   "Find only identifying entities"
-  identifying: Boolean
-  OR: [QuestionnaireItemsFilter!]
-  scope: QuestionScope
-  title: String
-  variable: String
+  identifying: BooleanOperationFilterInput
 }
 
-input UserMapFilter {
-  AND: [UserMapFilter!]
-  OR: [UserMapFilter!]
-  "Allows equals comparison of user"
-  userName: String
-  "Allows not equals comparison of username"
-  userName_not: String
-  "Allows not starts with comparison of username"
-  userName_not_starts_with: String
-  "Allows starts with comparison of username"
-  userName_starts_with: String
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input StringOperationFilterInputType {
+  and: [StringOperationFilterInputType!]
+  or: [StringOperationFilterInputType!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+}
+
+input UserMapFilterInput {
+  and: [UserMapFilterInput!]
+  or: [UserMapFilterInput!]
+  id: ComparableInt32OperationFilterInput
+  userName: StringOperationFilterInput
+  map: MapsFilter
+}
+
+input UserRolesOperationFilterInput {
+  eq: UserRoles
+  neq: UserRoles
+  in: [UserRoles!]
+  nin: [UserRoles!]
 }
 
 enum ApplyPolicy {
@@ -479,7 +552,7 @@ enum QuestionType {
   AUDIO
 }
 
-enum SortOperationKind {
+enum SortEnumType {
   ASC
   DESC
 }
@@ -493,30 +566,33 @@ enum UserRoles {
   APIUSER
 }
 
-directive @authorize("Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field." apply: ApplyPolicy! = BEFORE_RESOLVER "The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!]) repeatable on SCHEMA | OBJECT | FIELD_DEFINITION
+directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on SCHEMA | OBJECT | FIELD_DEFINITION
 
-"The `Boolean` scalar type represents `true` or `false`."
-scalar Boolean
+"The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`."
+directive @defer("If this argument label has a value other than null, it will be passed on to the result of this defer directive. This label is intended to give client applications a way to identify to which fragment a deferred result belongs to." label: String "Deferred when true." if: Boolean) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"The @deprecated directive is used within the type system definition language to indicate deprecated portions of a GraphQL service’s schema,such as deprecated fields on a type or deprecated enum values."
+directive @deprecated("Deprecations include a reason for why it is deprecated, which is formatted using Markdown syntax (as specified by CommonMark)." reason: String = "No longer supported") on FIELD_DEFINITION | ENUM_VALUE
+
+"Directs the executor to include this field or fragment only when the `if` argument is true."
+directive @include("Included when true." if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"Directs the executor to skip this field or fragment when the `if` argument is true."
+directive @skip("Skipped when true." if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+"The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
+directive @stream("If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to." label: String "The initial elements that shall be send down to the consumer." initialCount: Int! "Streamed when true." if: Boolean!) on FIELD
 
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."
-scalar DateTime
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
 
 "The built-in `Decimal` scalar type."
 scalar Decimal
 
-"The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http:\/\/en.wikipedia.org\/wiki\/IEEE_floating_point)."
-scalar Float
-
-"The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID."
-scalar ID
-
-"The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1."
-scalar Int
-
 "The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1."
 scalar Long
-
-"The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text."
-scalar String
 
 scalar Uuid

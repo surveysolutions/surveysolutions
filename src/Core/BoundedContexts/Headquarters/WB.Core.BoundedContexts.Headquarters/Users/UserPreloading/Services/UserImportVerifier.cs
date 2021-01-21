@@ -6,14 +6,13 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 {
     public class UserImportVerifier : IUserImportVerifier
     {
         private readonly UserPreloadingSettings userPreloadingSettings;
-        private readonly Regex loginValidatioRegex;
+        private readonly Regex loginValidationRegex;
         private readonly Regex emailValidationRegex;
         private readonly Regex phoneNumberValidationRegex;
         private readonly Regex fullNameRegex;
@@ -24,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.passwordValidator = passwordValidator;
-            this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
+            this.loginValidationRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
             this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             this.phoneNumberValidationRegex = new Regex(this.userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             this.fullNameRegex = new Regex(this.userPreloadingSettings.PersonNameFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -139,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             UserToValidate[] allInterviewersAndSupervisors, IList<UserToImport> usersToImport)
         {
             var activeSupervisorNames = allInterviewersAndSupervisors
-                .Where(u => !u.IsArchived && u.IsSupervisor)
+                .Where(u => !u.IsArchived && u.IsSupervisor && u.IsInCurrentWorkspace)
                 .Select(u => u.UserName.ToLower())
                 .ToImmutableHashSet();
 
@@ -181,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         }
 
         private bool LoginFormatVerification(UserToImport userPreloadingDataRecord)
-            => !this.loginValidatioRegex.IsMatch(userPreloadingDataRecord.Login);
+            => !this.loginValidationRegex.IsMatch(userPreloadingDataRecord.Login);
 
         private bool EmailFormatVerification(UserToImport userPreloadingDataRecord)
         {

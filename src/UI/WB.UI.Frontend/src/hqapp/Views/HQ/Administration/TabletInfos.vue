@@ -1,5 +1,5 @@
 <template>
-    <HqLayout>
+    <HqLayout tag="tablet-infos-page">
         <div class="row">
             <form
                 method="post"

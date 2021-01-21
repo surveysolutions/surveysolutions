@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -32,7 +31,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
@@ -742,6 +740,9 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
             var interviewer = this.usersRepository.GetUser(assignment.ResponsibleId);
+            
+            if (interviewer == null)
+                throw new InvalidOperationException($"User was not found{assignment.ResponsibleId}");
 
             if (interviewer.Roles.Any(x => x == UserRoles.Supervisor || x == UserRoles.Headquarter))
                 throw new InvalidOperationException(@"Web interview is not allowed to be completed by this role");
@@ -938,7 +939,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool IsAuthorizedUser(Guid responsibleId)
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 var isInterviewer = this.User.IsInRole(UserRoles.Interviewer.ToString());
 

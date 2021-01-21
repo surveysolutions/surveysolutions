@@ -8,17 +8,18 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Domain;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.HealthChecks
 {
     public class ExportServiceConnectivityCheck : IHealthCheck
     {
-        private readonly IInScopeExecutor scope;
+        private readonly IInScopeExecutor<IExportServiceApi> scope;
         private readonly IOptionsSnapshot<ExportServiceConfig> exportOptions;
 
         public ExportServiceConnectivityCheck(
-            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor scope)
+            IOptionsSnapshot<ExportServiceConfig> exportOptions, IInScopeExecutor<IExportServiceApi> scope)
         {
             this.exportOptions = exportOptions;
             this.scope = scope;
@@ -30,9 +31,8 @@ namespace WB.UI.Headquarters.HealthChecks
 
             try
             {
-                return await scope.ExecuteAsync(async sl =>
+                return await scope.ExecuteAsync(async api=>
                 {
-                    var api = sl.GetInstance<IExportServiceApi>();
                     var status = await api.GetConnectivityStatus();
 
                     if (string.IsNullOrWhiteSpace(status))
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.HealthChecks
                     return HealthCheckResult.Healthy(
                         Diagnostics.export_service_connectivity_check_Healthy
                             .FormatString(uri, status));
-                });
+                }, WorkspaceConstants.DefaultWorkspaceName);
             }
             catch (ApiException apiException)
             {

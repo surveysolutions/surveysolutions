@@ -12,7 +12,10 @@
             <div class="profile">
                 <div class="col-sm-7"
                     v-if="isInterviewer || isSupervisor">
-                    <p v-html="$t('Pages.Supervisor_CreateText', {link: '/Users/Upload'})"></p>
+                    <p v-if="isSupervisor"
+                        v-html="$t('Pages.Supervisor_CreateText', {link: uploadUri})"></p>
+                    <p v-if="isInterviewer"
+                        v-html="$t('Pages.Interviewer_CreateText', {link: uploadUri})"></p>
                 </div>
                 <div class="col-sm-12">
                     <form-group
@@ -168,6 +171,9 @@ export default {
     computed: {
         model() {
             return this.$config.model
+        },
+        uploadUri() {
+            return this.$hq.basePath + 'Users/Upload'
         },
         userInfo() {
             return this.model.userInfo

@@ -17,5 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         Guid UserId { get; }
 
         string Email { get; }
+        
+        string Workspace { get; }
     }
 }

@@ -1,163 +1,24 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.Infrastructure.Versions
-@using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Extensions
-@inject IAuthorizedUser authorizedUser
-@inject IProductVersion productVersion
-@inject IVersionCheckService versionCheckService
+@using System.Globalization
 <!DOCTYPE html>
-<html>
+<html lang="@CultureInfo.CurrentUICulture.Name">
 <head>
-    <title>@ViewBag.Title</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @Html.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
-    @RenderSection("styles", false)
-</head>
-<body>
-
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header hidden-print">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @if (authorizedUser.IsAdministrator)
-                {
-                    <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="">@Users.Admin</a>
-                }
-                else if (authorizedUser.IsHeadquarter)
-                {
-                    <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="">@Users.Headquarters</a>
-                }
-                else if (authorizedUser.IsSupervisor)
-                {
-                    <a class="navbar-brand"  asp-action="Index" asp-controller="Home" asp-area="">@Users.Supervisor</a>
-                }
-                else if (authorizedUser.IsObserver)
-                {
-                    <a class="navbar-brand"  asp-action="Index" asp-controller="Home" asp-area="">@Users.Observer</a>
-                }
-            </div>
-            <div class="collapse navbar-collapse">
-                @if (authorizedUser.IsAdministrator)
-                {
-                    <partial name="AdminMainMenu" />
-                }
-                else if (authorizedUser.IsHeadquarter)
-                {
-                    <partial name="HeadquartersMainMenu" />
-                }
-                else if (authorizedUser.IsSupervisor)
-                {
-                    <partial name="SupervisorMainMenu" />
-                }
-                else if (authorizedUser.IsObserver)
-                {
-                    <partial name="ObserverMainMenu" />
-                }
-                else if (authorizedUser.IsInterviewer)
-                {
-                    <partial name="InterviewerMainMenu" />
-                }
-            </div>
-
-        </div>
-    </div>
-    @if (authorizedUser.IsObserving)
-    {
-        <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
-            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name))
-            <a asp-action="ReturnToObserver" asp-controller="Account" asp-area="">@Users.ClickToReturn</a>
-        </div>
-    }
-    <div class="container-fluid">
-        <div class="row">
-            <div class="ui-pnotify notify" data-bind="visible: IsNotifyVisible()" style="display: none;">
-                <div class="alert ui-pnotify-container ui-pnotify-shadow">
-                    <div class="ui-pnotify-icon"><span class="icon-exclamation-sign"></span></div>
-                    <h4 class="ui-pnotify-title" data-bind="text: NotifyTitle()"></h4>
-                    <div class="ui-pnotify-text" data-bind="html: NotifyText()"></div>
-                </div>
-            </div>
-            <div id="umbrella">
-                <div id="umbrella-message">
-                    @Common.Loading
-                </div>
-            </div>
-            @RenderBody()
-            <div id="output">
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
-                        <span>@Common.ErrorsLog</span>
-                    </div>
-                    <div class="panel-body">
-                        <ul data-bind="foreach: Errors" class="list-group"><li class="list-group-item"><pre data-bind="html: error"></pre></li></ul>
-                        @RenderSection("output", false)
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid" id="footer-block">
-        <hr>
-        <footer>
-            <div class="text-center">
-                © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="https://www.worldbank.org/en/about/legal">@Common.Legal</a>.
-            </div>
-            <div class="text-center">
-                @(productVersion.ToString())
-
-                <text>|</text>
-                <a asp-action="Index" asp-controller="Download">@Common.GetInterviewerApp</a>
-
-                @if (versionCheckService.DoesNewVersionExist())
-                {
-                    <div>
-                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(versionCheckService.GetNewVersionString()) </span>
-                    </div>
-                }
-            </div>
-        </footer>
-    </div>
-    <partial name="_Clickjacking" />
-
-    @*@Scripts.Render("~/js/main")*@
+    @Html.GenerateFavicon(Url.Static("/img/identity/favicon-hq"))
+    <title>@ViewBag.Title</title>
     <partial name="GlobalSettings" />
-
-    <script type="text/javascript">
-        var setMinHeight = function () {
-            var windowHeight = $(window).height();
-            var navigationHeight = $('.navbar.navbar-fixed-top').height();
-            var bodyTopPadding = $('body').css('paddingTop').replace("px", "") * 1;
-            var footerHeight = $('#footer-block').outerHeight();
-            var minHeight = windowHeight - navigationHeight - footerHeight - bodyTopPadding;
-            $('#content').css('min-height', (minHeight > 1 ? minHeight : 1) + 'px');
-            $('#wrapper').css('margin-top', navigationHeight + 'px');
-            $('#umbrella').css('top', navigationHeight + 'px');
-        };
-        $(document)
-            .ready(function () {
-                setMinHeight();
-                $(window)
-                    .resize(function () {
-                        setMinHeight();
-                    });
-
-                @if (authorizedUser.IsObserver)
-            {
-                <text>
-                $('button[type="submit"]').attr("disabled", "disabled");
-                $('input[type="submit"]').attr("disabled", "disabled");
-                </text>
-            }
-            });
-    </script>
+    <locale component="hq"></locale>
     @RenderSection("scripts", false)
-</body>
+<link href="/js/chunk-common.js" rel="preload" as="script"><link href="/js/chunk-vendors.js" rel="preload" as="script"><link href="/js/hq_vue.js" rel="preload" as="script"></head>
+<body class='wide-navbar'>
+    <header>
+        <partial name="NavigationBar" />
+    </header>
+    <partial name="NoticeBar"/>
+    @RenderBody()
+    <partial name="Footer" />
+    <partial name="_Clickjacking"/>
+<script type="text/javascript" src="/js/chunk-vendors.js"></script><script type="text/javascript" src="/js/chunk-common.js"></script><script type="text/javascript" src="/js/hq_vue.js"></script></body>
 </html>

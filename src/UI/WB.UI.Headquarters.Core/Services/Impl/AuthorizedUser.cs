@@ -1,19 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
     public class AuthorizedUser : IAuthorizedUser
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IWorkspacesCache workspacesCache;
         public const string ObserverClaimType = "observer";
 
-        public AuthorizedUser(IHttpContextAccessor httpContextAccessor)
+        public AuthorizedUser(IHttpContextAccessor httpContextAccessor, IWorkspacesCache workspacesCache)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.workspacesCache = workspacesCache;
         }
 
         private ClaimsPrincipal User => httpContextAccessor.HttpContext?.User;
@@ -39,5 +44,24 @@ namespace WB.UI.Headquarters.Services.Impl
         }
 
         public string UserName => this.User?.Identity?.Name;
+
+        public bool HasNonDefaultWorkspace => User.Claims.Any(x =>
+            x.Type == WorkspaceConstants.ClaimType && x.Value != WorkspaceConstants.DefaultWorkspaceName);
+
+        public IEnumerable<string> Workspaces => User.Claims.Where(x =>
+            x.Type == WorkspaceConstants.ClaimType).Select(x => x.Value);
+
+        public bool HasAccessToWorkspace(string workspace)
+        {
+            return User.HasClaim(WorkspaceConstants.ClaimType, workspace);
+        }
+
+        public IEnumerable<WorkspaceContext> GetEnabledWorkspaces()
+        {
+            var workspaceNames = Workspaces;
+            var workspaces = workspacesCache.AllEnabledWorkspaces();
+            var userWorkspaces = workspaces.Where(w => workspaceNames.Contains(w.Name));
+            return userWorkspaces;
+        }
     }
 }

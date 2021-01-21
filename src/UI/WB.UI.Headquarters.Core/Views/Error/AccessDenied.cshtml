@@ -1,6 +1,21 @@
-﻿@{
+﻿@using WB.UI.Headquarters.Code
+@{
     ViewBag.Title = Pages.AccessDenied_Title;
     Layout = "_LayoutForErrorPage.cshtml";
 }
-
+@{
+    var reason = "";
+    var reasonKey = Context.Request.Query["reason"];
+    if (reasonKey.Any())
+    {
+        if (Enum.TryParse<ForbidReason>(reasonKey.First(), out var reasonEnum))
+        {
+            reason = Workspaces.ResourceManager.GetString(reasonEnum.ToString());
+        }
+    }
+}
 <h2>@ViewBag.Title</h2>
+@if (!string.IsNullOrWhiteSpace(reason))
+{
+    <p>@reason</p>
+}

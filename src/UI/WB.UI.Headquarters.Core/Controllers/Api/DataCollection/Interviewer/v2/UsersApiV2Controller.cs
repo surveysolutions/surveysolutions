@@ -8,8 +8,11 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 {
@@ -26,9 +29,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             SignInManager<HqUser> signInManager,
             IUserViewFactory userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,
+            IWorkspacesCache workspacesCache,
             IUserToDeviceService userToDeviceService) : base(
-                authorizedUser: authorizedUser,
-                userViewFactory: userViewFactory,
+                authorizedUser,
+                userViewFactory,
                 userToDeviceService)
         {
             this.userManager = userManager;
@@ -48,6 +52,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [HttpGet]
         [Authorize(Roles = "Interviewer")]
         [Route("current")]
+        [AllowPrimaryWorkspaceFallback]
+        [IgnoreWorkspacesLimitation]
         public override ActionResult<InterviewerApiView> Current() => base.Current();
 
         [HttpGet]

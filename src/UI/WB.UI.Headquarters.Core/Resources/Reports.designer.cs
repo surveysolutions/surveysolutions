@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Reports {
@@ -88,6 +88,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I understood this interview already received by tablet.
+        /// </summary>
+        public static string AssignReceivedConfirm {
+            get {
+                return ResourceManager.GetString("AssignReceivedConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current responsible interviewer will not be notified about the reassignment until the next synchronization. If he has started working on the interview already, all the data that he has entered before the next synchronization will be DISCARDED!.
+        /// </summary>
+        public static string AssignReceivedWarning {
+            get {
+                return ResourceManager.GetString("AssignReceivedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average.
         /// </summary>
         public static string Average {
@@ -102,6 +120,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ByAnswerValue {
             get {
                 return ResourceManager.GetString("ByAnswerValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This area contains.
+        /// </summary>
+        public static string ClusterInfo {
+            get {
+                return ResourceManager.GetString("ClusterInfo", resourceCulture);
             }
         }
         

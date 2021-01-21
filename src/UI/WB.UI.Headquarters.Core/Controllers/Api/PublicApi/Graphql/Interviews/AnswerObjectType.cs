@@ -18,10 +18,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Name("IdentifyingEntity").Description("Identifying variable or question");
             
-            descriptor.Field(x => x.Value)
-                .Name("value")
-                .Type<StringType>();
-
             descriptor.Field(x => x.AnswerCode)
                 .Type<IntType>()
                 .Name("answerValue")
@@ -32,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Resolver(context => {
                         var parent = context.Parent<IdentifyEntityValue>();
 
-                        return context.BatchDataLoader<int, QuestionnaireCompositeItem>("questionByAnswer", async keys =>
+                        return context.BatchDataLoader<int, QuestionnaireCompositeItem>(async (keys, token) =>
                         {
                             var unitOfWork = context.Service<IUnitOfWork>();
                             var items = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
@@ -40,10 +36,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                                 .ToListAsync()
                                 .ConfigureAwait(false);
                             return items.ToDictionary(x => x.Id);
-                        }).LoadAsync(parent.Entity.Id);
+                        },"questionByAnswer").LoadAsync(parent.Entity.Id);
                     }
                 )
                 .Type<NonNullType<EntityItemObjectType>>();
+            
+            descriptor.Field(x => x.Value)
+                .Name("value")
+                .Type<StringType>();
         }
     }
 }

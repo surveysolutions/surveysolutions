@@ -12,11 +12,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
     {
         public AutofacModuleAdapter(IModule<IIocRegistry> module) : base(module)
         {
-            
+
         }
     }
 
-    public abstract class AutofacModuleAdapter<TIoc> : Module, IIocRegistry where TIoc : class, IIocRegistry 
+    public abstract class AutofacModuleAdapter<TIoc> : Module, IIocRegistry where TIoc : class, IIocRegistry
     {
         protected readonly IModule<TIoc> module;
         protected ContainerBuilder containerBuilder;
@@ -57,7 +57,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public void Bind<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
         {
             var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
-            
+
             foreach (var constructorArgument in constructorArguments)
             {
                 //var value = constructorArgument.Value.Invoke(null);
@@ -66,8 +66,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 registrationBuilder.WithParameter(
                     new ResolvedParameter(
                         (pi, ctx) => pi.Name == constructorArgument.Name, //pi.ParameterType == typeof(string) &&
-                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>() )))
-                        //constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())) 
+                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())))
+                    //constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())) 
 
                     //constructorArgument.Name, constructorArgument.Value.Invoke()
                     );
@@ -174,9 +174,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             }
         }
 
-        public void BindToMethod<T>(Func<IModuleContext, T> func, string name = null)
+        public void BindToMethod<T>(Func<IModuleContext, T> func, string name = null, bool externallyOwned = false)
         {
-            containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p)));
+            var reg = containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p)));
+            if (externallyOwned) reg.ExternallyOwned();
         }
 
         public void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null)

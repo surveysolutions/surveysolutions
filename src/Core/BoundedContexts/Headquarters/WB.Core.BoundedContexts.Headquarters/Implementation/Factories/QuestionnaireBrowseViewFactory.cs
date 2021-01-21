@@ -3,6 +3,7 @@ using System.Linq;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Utils;
@@ -12,10 +13,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     public class QuestionnaireBrowseViewFactory : IQuestionnaireBrowseViewFactory
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> reader;
+        private readonly IWebInterviewConfigProvider interviewConfigProvider;
 
-        public QuestionnaireBrowseViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> reader)
+        public QuestionnaireBrowseViewFactory(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> reader,
+            IWebInterviewConfigProvider interviewConfigProvider)
         {
             this.reader = reader;
+            this.interviewConfigProvider = interviewConfigProvider;
         }
 
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
@@ -30,17 +35,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     {
                         query = query.Where(x => x.CreatedBy == input.CreatedBy);
                     }
+                }
 
-                    if (input.QuestionnaireId.HasValue)
-                    {
-                        query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId.Value);
-                    }
+                if (input.QuestionnaireId.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId.Value);
+                }
 
-                    if ((input.Version ?? 0) > 0)
-                    {
-                        query = query.Where(x => x.Version == input.Version.Value);
-                    }
-
+                if ((input.Version ?? 0) > 0)
+                {
+                    query = query.Where(x => x.Version == input.Version.Value);
                 }
 
                 if (!string.IsNullOrEmpty(input.SearchFor))
@@ -48,11 +52,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     var filterLowerCase = input.SearchFor.ToLower();
                     query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase) || 
                                              (x.Version.ToString().Contains(filterLowerCase) && input.QuestionnaireId != null));
-                }
-
-                if (input.OnlyCensus.HasValue)
-                {
-                    query = query.Where(x => x.AllowCensusMode == input.OnlyCensus);
                 }
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
@@ -69,6 +68,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                                            .OrderUsingSortExpression(input.Order)
                                            .Fetch(x => x.FeaturedQuestions)
                                            .ToList();
+
+                foreach (var actualItem in actualItems)
+                {
+                    var config = interviewConfigProvider.Get(actualItem.Identity());
+                    actualItem.WebModeEnabled = config?.Started ?? false;
+                }
 
                 return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), actualItems, input.Order);
             });

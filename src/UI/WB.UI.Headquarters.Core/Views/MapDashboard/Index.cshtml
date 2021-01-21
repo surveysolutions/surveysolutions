@@ -1,0 +1,18 @@
+﻿@using WB.UI.Headquarters.Code
+@using WB.Core.BoundedContexts.Headquarters.Configs
+@model WB.UI.Headquarters.Controllers.MapDashboard.MapDashboardModel
+
+@inject IOptions<GoogleMapsConfig> options
+
+@{
+    ViewBag.Title = Dashboard.MapDashboard;
+}
+
+@section Scripts{
+    <script type="text/javascript" 
+            src="@options.Value.BaseUrl/maps/api/js?key=@options.Value.ApiKey&sensor=false&libraries=visualization">
+    </script>
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>
+

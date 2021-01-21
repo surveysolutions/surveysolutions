@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
@@ -16,7 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
     }
 
     [Route("api/export/v1")]
-    [Authorize(AuthenticationSchemes = "TenantToken")]
+    [Authorize(AuthenticationSchemes = AuthType.TenantToken)]
     public class UserExportApiController : Controller
     {
         private readonly IUserRepository userRepository;

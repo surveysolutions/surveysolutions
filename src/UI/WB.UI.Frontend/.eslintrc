@@ -82,7 +82,8 @@
         "parser": "babel-eslint"
     },
     "globals": {
-        "$": "readonly",
+        "$": true,
+        "jQuery": true,
         "google": "readonly"
     },
     "ignorePatterns": [

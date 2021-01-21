@@ -8,10 +8,11 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.UI.Headquarters.Code.Authentication;
 
 namespace WB.UI.Headquarters.Controllers.Services.Export
 {
-    [Authorize(AuthenticationSchemes = "TenantToken")]
+    [Authorize(AuthenticationSchemes = AuthType.TenantToken)]
     public class InterviewsExportBinaryApiController : Controller
     {
         private readonly IExternalFileStorage fileStorage;

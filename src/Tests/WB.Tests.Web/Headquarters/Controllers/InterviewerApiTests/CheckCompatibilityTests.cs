@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,8 +34,12 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         [Test]
         public async Task when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
         {
-            var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
-            tenantSettings.Store(new TenantSettings{ TenantPublicId = "server id"}, AppSetting.TenantSettingsKey);
+            var tenantSettings = new TestPlainStorage<ServerSettings>();
+            tenantSettings.Store(new ServerSettings
+            { 
+                Id = ServerSettings.PublicTenantIdKey,
+                Value = "server id"
+            }, ServerSettings.PublicTenantIdKey);
 
             var controller = Create.Controller.InterviewerApiController(tenantSettings: tenantSettings);
 
@@ -62,7 +67,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                interviewInformationFactory: interviews,
                 authorizedUser: authorizedUser,
                 interviewerVersionReader: interviewerVersionReader.Object,
                 userToDeviceService: userToDeviceService);
@@ -76,43 +80,21 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         }
 
         [Test]
-        public async Task when_no_assignments_and_device_has_protocol_version_7060_Should_allow_to_synchronize()
+        public async Task when_user_has_non_primary_workspace_assigned_Should_not_allow_to_synchronize_old_interviewer_version()
         {
-            var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
-                x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.HasNonDefaultWorkspace == true);
 
-            //var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.08.0.0 (build 0)");
-            var interviewerVersionReader = new Mock<IInterviewerVersionReader>();
-            interviewerVersionReader.Setup(x => x.InterviewerBuildNumber())
-                .ReturnsAsync(0);
-
-            var assignments =
-                Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>());
-
-            var deviceId = "device";
-            var userid = Id.g1;
-            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.Id == userid);
-            var userToDeviceService = Mock.Of<IUserToDeviceService>(x => x.GetLinkedDeviceId(userid) == deviceId);
-            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
-            var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
-                m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
-
-            var interviewerApiController = Web.Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
-                assignmentsService: assignments,
-                authorizedUser: authorizedUser,
-                interviewerSettings: interviewerSettingsStorage,
-                interviewerVersionReader: interviewerVersionReader.Object,
-                userToDeviceService: userToDeviceService);
-            interviewerApiController.Request.Headers[HeaderNames.UserAgent] =
-                new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "19.08.0.0").ToString();
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                authorizedUser: authorizedUser);
 
             // Act
-            var httpResponseMessage = await interviewerApiController.CheckCompatibility(deviceId, 7060);
+            IActionResult httpResponseMessage = await interviewerApiController.CheckCompatibility("device", 7100);
 
-            Assert.That(httpResponseMessage, Is.InstanceOf<JsonResult>());
-            Assert.That(((JsonResult)httpResponseMessage).Value, Is.EqualTo("449634775"));
+            // Assert
+            AssertUpgradeRequired(httpResponseMessage);
         }
-
+        
         [Test]
         public async Task when_assignment_has_audio_recording_enabled_should_force_client_upgrade()
         {
@@ -130,7 +112,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 
             var interviewerApiController = Web.Create.Controller.InterviewerApiController(
                 syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                assignmentsService: assignments,
                 authorizedUser: authorizedUser,
                 interviewerVersionReader: interviewerVersionReader.Object,
                 userToDeviceService: userToDeviceService);
@@ -148,70 +129,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
             Assert.That(((StatusCodeResult) httpResponseMessage).StatusCode, Is.EqualTo(StatusCodes.Status426UpgradeRequired));
         }
 
-        [Test]
-        public async Task when_assignment_has_no_audio_recording_user_should_be_able_synchronize()
-        {
-            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.10.0.23853 (build 23853)");
-            var interviewerVersionReader = 
-                new Mock<IInterviewerVersionReader>();
-            interviewerVersionReader.Setup(x => x.InterviewerBuildNumber())
-                .ReturnsAsync(23853);
-
-            var synchronizedUserId = Id.gA;
-
-            var deviceId = "device";
-            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.Id == synchronizedUserId);
-            var userToDeviceService = Mock.Of<IUserToDeviceService>(x => x.GetLinkedDeviceId(synchronizedUserId) == deviceId);
-
-            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
-                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
-                authorizedUser: authorizedUser,
-                interviewerVersionReader: interviewerVersionReader.Object,
-                userToDeviceService: userToDeviceService);
-
-            // Act
-            var httpResponseMessage = await interviewerApiController.CheckCompatibility(deviceId, 7080);
-
-            // Assert
-            Assert.That(httpResponseMessage, Is.InstanceOf<JsonResult>());
-            Assert.That(((JsonResult)httpResponseMessage).Value, Is.EqualTo("449634775"));
-        }
-
-        [Test]
-        public async Task when_assignment_has_protected_questions_and_client_doesnt_support_Should_require_upgrade()
-        {
-            var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
-                x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
-
-            var interviewerVersionReader =new Mock<IInterviewerVersionReader>();
-            interviewerVersionReader.Setup(x => x.InterviewerBuildNumber())
-                .ReturnsAsync(0);
-
-            var assignments =
-                Mock.Of<IAssignmentsService>(x => x.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>() &&
-                                                  x.HasAssignmentWithProtectedVariables(It.IsAny<Guid>()) == true);
-
-            var deviceId = "device";
-            var userId = Id.g1;
-            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.Id == userId);
-            var userToDeviceService = Mock.Of<IUserToDeviceService>(x => x.GetLinkedDeviceId(userId) == deviceId);
-
-            var interviewerApiController = Web.Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
-                assignmentsService: assignments,
-                authorizedUser: authorizedUser,
-                interviewerVersionReader: interviewerVersionReader.Object,
-                userToDeviceService: userToDeviceService);
-            interviewerApiController.Request.Headers[HeaderNames.UserAgent] =
-                new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "18.04.0.0").ToString();
-
-            // Act
-            var httpResponseMessage = await interviewerApiController.CheckCompatibility(deviceId, 7060);
-
-            AssertUpgradeRequired(httpResponseMessage);
-        }
-
         [TestCase(24699, "19.07.0.0 (build 24689)", HttpStatusCode.UpgradeRequired)]
-        [TestCase(25689, "19.08.0.0 (build 25689)", HttpStatusCode.OK)]
+        [TestCase(25689, "19.08.0.0 (build 25689)", HttpStatusCode.UpgradeRequired)]
         [TestCase(25679, "20.09.2 (build 25689)", HttpStatusCode.NotAcceptable)]
         [TestCase(26876, "20.01.0 (build 26876)", HttpStatusCode.UpgradeRequired)]
         [TestCase(26886, "20.01.1 (build 26886)", HttpStatusCode.UpgradeRequired)]
@@ -288,7 +207,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
             interviewerApiController.Request.Headers[HeaderNames.UserAgent] = interviewerUserAgent;
 
             // Act
-            var httpResponseMessage = await interviewerApiController.CheckCompatibility(deviceId, 7060);
+            var httpResponseMessage = await interviewerApiController.CheckCompatibility(deviceId, InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced);
             var statusCodeResult = ((IStatusCodeActionResult) httpResponseMessage).StatusCode;
             if (statusCodeResult != null)
             {

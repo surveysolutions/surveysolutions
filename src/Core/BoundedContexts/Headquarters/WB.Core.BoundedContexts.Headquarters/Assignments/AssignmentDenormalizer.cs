@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Assignment;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -31,7 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.questionnaireStorage = questionnaireStorage;
         }
 
-
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentCreated> @event)
         {
             state = new Assignment(
@@ -46,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.WebMode,
                 @event.Payload.Comment);
 
-            var questionnaire = questionnaireStorage.GetQuestionnaire(state.QuestionnaireId, null);
+            var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();
 
             var identifyingAnswers = @event.Payload.Answers
@@ -61,7 +63,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             state.CreatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
             state.UpdatedAtUtc = @event.Payload.OriginDate.UtcDateTime;
 
+            FillGeoAnswers(state, @event, questionnaire);
+
             return state;
+        }
+
+        private void FillGeoAnswers(Assignment assignment, IPublishedEvent<AssignmentCreated> @event, IQuestionnaire questionnaire)
+        {
+            var gpsAnswers = @event.Payload.Answers
+                .Where(x => questionnaire.GetQuestionType(x.Identity.Id) == QuestionType.GpsCoordinates)
+                .ToList();
+
+            if (gpsAnswers.Count == 0)
+                return;
+
+            foreach (var interviewAnswer in gpsAnswers)
+            {
+                var gpsAnswer = (GpsAnswer) interviewAnswer.Answer;
+                assignment.GpsAnswers.Add(new AssignmentGps()
+                {
+                    AssignmentId = assignment.Id,
+                    Latitude = gpsAnswer.Value.Latitude,
+                    Longitude = gpsAnswer.Value.Longitude,
+                    Timestamp = gpsAnswer.Value.Timestamp,
+                    QuestionId = interviewAnswer.Identity.Id,
+                    RosterVector = interviewAnswer.Identity.RosterVector.ToString(),
+                });
+            }
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentArchived> @event)

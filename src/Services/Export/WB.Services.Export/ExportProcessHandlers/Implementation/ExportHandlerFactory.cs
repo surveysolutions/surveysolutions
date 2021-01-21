@@ -19,19 +19,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             switch (exportFormat)
             {
                 case DataExportFormat.Tabular:
-                    return serviceProvider.GetService<TabularFormatDataExportHandler>();
+                    return serviceProvider.GetRequiredService<TabularFormatDataExportHandler>();
                 case DataExportFormat.STATA:
-                    return serviceProvider.GetService<StataFormatExportHandler>();
+                    return serviceProvider.GetRequiredService<StataFormatExportHandler>();
                 case DataExportFormat.SPSS:
-                    return serviceProvider.GetService<SpssFormatExportHandler>();
+                    return serviceProvider.GetRequiredService<SpssFormatExportHandler>();
                 case DataExportFormat.DDI:
-                    return serviceProvider.GetService<DdiFormatExportHandler>();
+                    return serviceProvider.GetRequiredService<DdiFormatExportHandler>();
                 case DataExportFormat.Paradata:
-                    return serviceProvider.GetService<TabularFormatParaDataExportProcessHandler>();
+                    return serviceProvider.GetRequiredService<TabularFormatParaDataExportProcessHandler>();
                 case DataExportFormat.Binary:
                     return externalStorageType == null
-                        ? (IExportHandler)serviceProvider.GetService<BinaryDataIntoArchiveExportHandler>()
-                        : (IExportHandler)serviceProvider.GetService<BinaryDataExternalStorageDataExportHandler>();
+                        ? (IExportHandler)serviceProvider.GetRequiredService<BinaryDataIntoArchiveExportHandler>()
+                        : (IExportHandler)serviceProvider.GetRequiredService<BinaryDataExternalStorageDataExportHandler>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(exportFormat), exportFormat, null);
             }

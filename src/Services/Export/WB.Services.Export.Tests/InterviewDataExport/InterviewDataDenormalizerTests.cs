@@ -355,12 +355,11 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Approvals.Verify(command.CommandText);
         }
 
-
         private InterviewDataDenormalizer CreateInterviewDataDenormalizer(Action<DbCommand> funcToSaveCommand)
         {
             var questionnaireDocument = SetupQuestionnaireDocumentWithAllEntities();
 
-            ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == new TenantInfo("http://test","","tenant_name"));
+            ITenantContext tenantContext = Mock.Of<ITenantContext>(t => t.Tenant == new TenantInfo("http://test","","tenant_name", TenantInfo.DefaultWorkspace));
             IQuestionnaireStorage questionnaireStorage = 
                 Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireAsync(It.IsAny<QuestionnaireId>(), It.IsAny<Guid?>(), It.IsAny<CancellationToken>()) == Task.FromResult(questionnaireDocument));
             object value = questionnaireDocument.QuestionnaireId;

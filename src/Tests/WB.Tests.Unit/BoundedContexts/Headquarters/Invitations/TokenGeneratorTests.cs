@@ -76,9 +76,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
         string GenerateToken(QuestionnaireIdentity questionnaire, Guid tenantId)
         {
-            var tenantSettings = new TestInMemoryKeyValueStorage<TenantSettings>();
-            tenantSettings.Store(new TenantSettings { TenantPublicId = tenantId.ToString() },
-                AppSetting.TenantSettingsKey);
+            var tenantSettings = new TestPlainStorage<ServerSettings>();
+            tenantSettings.Store(new ServerSettings
+                {
+                    Value = tenantId.ToString(),
+                    Id = ServerSettings.PublicTenantIdKey
+                },
+                ServerSettings.PublicTenantIdKey);
 
             var generator = Create.Service.TokenGenerator(8, tenantSettingsStorage: tenantSettings);
             var token = generator.Generate(questionnaire);

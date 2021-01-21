@@ -957,4 +957,7 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
     <value>Logs are sent to HQ</value>
   </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+      <value>Your account is no longer active on this server, because the workspace in which it is defined was disabled by the administrator. Please contact your supervisor.</value>
+  </data>
 </root>

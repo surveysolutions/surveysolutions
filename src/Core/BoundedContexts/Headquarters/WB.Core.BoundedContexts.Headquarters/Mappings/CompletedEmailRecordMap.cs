@@ -4,7 +4,6 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
-    [PlainStorage]
     public class CompletedEmailRecordMap : ClassMapping<CompletedEmailRecord>
     {
         public CompletedEmailRecordMap()

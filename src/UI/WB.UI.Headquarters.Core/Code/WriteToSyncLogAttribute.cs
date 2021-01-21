@@ -246,11 +246,8 @@ namespace WB.UI.Headquarters.Code
 
                 messagesTotal.Labels(this.logAction.ToString()).Inc();
 
-                context.HttpContext.RequestServices.GetService<IInScopeExecutor>().Execute(locator =>
-                {
-                    var s = locator.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
-                    s.Store(logItem, Guid.NewGuid());
-                });
+                var s = currentContextScope.GetRequiredService<IPlainStorageAccessor<SynchronizationLogItem>>();
+                s.Store(logItem, Guid.NewGuid());
             }
             catch (Exception exception)
             {

@@ -157,7 +157,7 @@
     <value>User name is required</value>
   </data>
   <data name="UserNameErrorMessage" xml:space="preserve">
-    <value>Name needs to be between 3 and 15 characters, and may contain only letters, digits and the underscore symbol</value>
+    <value>The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: 'A'..'Z' or 'a'..'z'. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names.</value>
   </data>
   <data name="UserNameFieldName" xml:space="preserve">
     <value>User name</value>

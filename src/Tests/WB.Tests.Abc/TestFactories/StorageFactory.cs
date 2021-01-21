@@ -15,11 +15,13 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -27,6 +29,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc.Storage;
@@ -62,7 +65,8 @@ namespace WB.Tests.Abc.TestFactories
         public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(
             this.UserRepository(users),
             NewMemoryCache(),
-            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>());
+            Create.Storage.InMemoryPlainStorage<DeviceSyncInfo>(),
+            Create.Service.WorkspaceContextAccessor());
 
         public InMemoryEventStore InMemoryEventStore() => new InMemoryEventStore(NewAggregateRootCache());
         
@@ -154,9 +158,27 @@ namespace WB.Tests.Abc.TestFactories
             result.Setup(x => x.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()))
                 .Returns(questionnaire);
 
-            
-            
             return result.Object;
+        }
+
+        public IQuestionnaireStorage QuestionnaireStorage(
+            IPlainKeyValueStorage<QuestionnaireDocument> repository = null,
+            ITranslationStorage translationStorage = null,
+            IQuestionnaireTranslator translator = null,
+            IQuestionOptionsRepository questionOptionsRepository = null,
+            ISubstitutionService substitutionService = null,
+            IInterviewExpressionStatePrototypeProvider expressionStatePrototypeProvider = null,
+            IMemoryCache memoryCache = null)
+        {
+            return new QuestionnaireStorage(
+                repository ?? new TestInMemoryKeyValueStorage<QuestionnaireDocument>(),
+                translationStorage ?? new TranslationsStorage(new SqliteInmemoryStorage<TranslationInstance>()),
+                translator ?? Create.Service.QuestionnaireTranslator(),
+                questionOptionsRepository ?? QuestionOptionsRepository(new SqliteInmemoryStorage<OptionView, int?>()),
+                substitutionService ?? Create.Service.SubstitutionService(),
+                expressionStatePrototypeProvider ?? Create.Service.ExpressionStatePrototypeProvider(),
+                memoryCache ?? new MemoryCache(Options.Create(new MemoryCacheOptions()))
+                );            
         }
 
         public IQuestionOptionsRepository QuestionOptionsRepository(IOptionsRepository optionsRepository)

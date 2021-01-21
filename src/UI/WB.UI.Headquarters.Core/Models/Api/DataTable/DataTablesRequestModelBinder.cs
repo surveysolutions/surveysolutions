@@ -179,7 +179,7 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
         private bool TryParse<T>(ValueProviderResult value, out T result)
         {
             result = default(T);
-            if (value == null || value.FirstValue == null) return false;
+            if (value.FirstValue == null) return false;
 
             try
             {

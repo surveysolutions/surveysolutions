@@ -18,5 +18,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
         public string TenantId { get; set; }
         public Guid UserId { get; set; }
         public string Email { get; set; }
+        public string Workspace { get; }
     }
 }

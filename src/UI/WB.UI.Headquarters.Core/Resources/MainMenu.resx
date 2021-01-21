@@ -186,6 +186,9 @@
   <data name="Rejected" xml:space="preserve">
     <value>Rejected</value>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Map Dashboard</value>
+  </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Surveys and Statuses</value>
   </data>
@@ -218,5 +221,11 @@
   </data>
   <data name="Administration" xml:space="preserve">
     <value>Administration</value>
+  </data>
+  <data name="Workspaces" xml:space="preserve">
+      <value>Workspaces</value>
+  </data>
+  <data name="ServerAdministration">
+    <value>Server Administration</value>
   </data>
 </root>

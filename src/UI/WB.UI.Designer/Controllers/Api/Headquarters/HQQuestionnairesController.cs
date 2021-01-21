@@ -165,7 +165,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             var questionnaire = questionnaireView.Source.Clone();
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
-            questionnaire.Revision = await this.questionnaireHistoryVersionsService.TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId());
+            questionnaire.Revision = await this.questionnaireHistoryVersionsService
+                .TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId());
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
