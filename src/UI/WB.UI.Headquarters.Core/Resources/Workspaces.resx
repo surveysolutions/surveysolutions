@@ -34,7 +34,7 @@
         <value>Name should be unique</value>
     </data>
   <data name="EditWorkspace" xml:space="preserve">
-        <value>Edit workspace {{name}}</value>
+        <value>Edit workspace "{{name}}"</value>
     </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
         <value>Each workspace has isolated questionnaires, interviews, assignments and users.</value>
@@ -73,7 +73,7 @@
         <value>List of workspaces updated</value>
     </data>
   <data name="DisableWorkspacePopupTitle" xml:space="preserve">
-        <value>Confirm disabling {{name}}</value>
+        <value>Confirm disabling "{{name}}"</value>
     </data>
   <data name="Disable" xml:space="preserve">
         <value>Disable</value>
@@ -85,7 +85,7 @@
         <value>Enable</value>
     </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
-        <value>Delete workspace {{name}}</value>
+        <value>Delete workspace "{{name}}"</value>
     </data>
   <data name="DeleteExplanation" xml:space="preserve">
         <value>Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
