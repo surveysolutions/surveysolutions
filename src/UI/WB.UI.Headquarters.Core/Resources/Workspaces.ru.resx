@@ -87,8 +87,8 @@
   <data name="DeleteExplanation" xml:space="preserve">
         <value>Вы уверены в том, что хотите удалить рабочую область &lt;strong&gt;{{name}}&lt;/strong&gt;? 
 Все связанные с этой областью Интервьюеры и Супервизоры будут удалены, а используемые ими приложения будет необходимо инициализировать снова.
-Следующие данные будут удалены:<strong></strong>
-Are You sure that You want to delete workspace? All interviewers and supervisors connected to this workspace will be also deleted. All Interviewer and Supervisor application will require data reset. Following data associated with this workspace will be deleted:
+            
+Следующие данные будут удалены:
 </value>
     </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
