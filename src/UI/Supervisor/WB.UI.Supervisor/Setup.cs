@@ -49,11 +49,6 @@ namespace WB.UI.Supervisor
 
         public Setup()
         {
-#if PRODUCTION
-            CrashReporting.Init("6986daa4-3eb1-44df-a9b5-3bb2b5c264dc");
-#else
-            CrashReporting.Init("80bf6bc0-7188-4591-9213-0d4895a5e041");
-#endif
         }
 
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup)
@@ -107,7 +102,13 @@ namespace WB.UI.Supervisor
         protected override void InitializeApp(IMvxPluginManager pluginManager, IMvxApplication app)
         {
             base.InitializeApp(pluginManager, app);
-        
+
+            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
+            if (!string.IsNullOrEmpty(appcenterKey))
+            {
+                CrashReporting.Init(appcenterKey);
+            }
+
             var status = new UnderConstructionInfo();
             status.Run();
 

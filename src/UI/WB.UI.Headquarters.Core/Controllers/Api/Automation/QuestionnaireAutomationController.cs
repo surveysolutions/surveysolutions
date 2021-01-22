@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -60,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Automation
 
                     var processId = Guid.NewGuid();
                     var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
-                    this.upgradeService.Upgrade(processId, this.user.Id, sourceQuestionnaireId, result.Identity, CancellationToken.None);
+                    this.upgradeService.Upgrade(new AssignmentsUpgradeProcess(processId, this.user.Id, sourceQuestionnaireId, result.Identity), CancellationToken.None);
                 }
 
                 return result.Identity;

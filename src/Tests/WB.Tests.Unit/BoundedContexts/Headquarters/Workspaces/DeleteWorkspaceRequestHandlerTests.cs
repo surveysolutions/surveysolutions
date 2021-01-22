@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         private Mock<IQuestionnaireBrowseViewFactory> questionnaireViewFactory;
         private Mock<IMapStorageService> mapStorage;
         private Mock<IExportServiceApi> exportApi;
-        private Mock<IScheduler> scheduler;
+        private Mock<IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>> scheduler;
         private Mock<IWorkspacesService> workspaceService;
         private Mock<IWorkspacesCache> cache;
 
@@ -42,7 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             questionnaireViewFactory = new Mock<IQuestionnaireBrowseViewFactory>();
             mapStorage = new Mock<IMapStorageService>();
             exportApi = new Mock<IExportServiceApi>();
-            scheduler = new Mock<IScheduler>();
+            scheduler = new Mock<IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>>();
+            
             workspaceService = new Mock<IWorkspacesService>();
 
             this.workspaces = Create.Storage.InMemoryPlainStorage<Workspace>();
@@ -126,13 +128,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             // act
             var response = await Subject.Handle(new DeleteWorkspaceRequest(Workspace.Name));
 
-            scheduler.Verify(s => s.ScheduleJob(
-                It.Is<ITrigger>(d =>
-                        d.JobDataMap.Contains(new KeyValuePair<string, object>("workspace", Workspace.Name))
-                    && d.JobDataMap.Contains(
-                                             new KeyValuePair<string, object>("schema", Workspace.AsContext().SchemaName))),
-                    It.IsAny<CancellationToken>()), Times.Once);
-
+            scheduler.Verify(s => s.Schedule(
+                It.Is<DeleteWorkspaceJobData>(d => d.WorkspaceSchema == Workspace.AsContext().SchemaName)),
+                Times.Once);
+            
             Assert.That(response, Has.Property(nameof(DeleteWorkspaceResponse.Success)).True);
         }
 
