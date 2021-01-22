@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -41,9 +42,12 @@ using Microsoft.Extensions.Caching.Memory;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.UI.Headquarters.Code.WebInterview;
+using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [AllowPrimaryWorkspaceFallback]
+    [AllowAnonymousAttribute]
     [BrowsersRestriction]
     [TypeFilter(typeof(WebInterviewErrorFilterAttribute))]
     [Route("WebInterview")]
@@ -962,6 +966,9 @@ namespace WB.UI.Headquarters.Controllers
             if (this.memoryCache.TryGetValue(key, out object result)) return (Invitation?) result;
 
             var invitation = this.invitationService.GetInvitationByToken(invitationId);
+
+            // do not crash on non existing invitation id
+            if (invitation == null) return null;
 
             // only cache public web mode invitations
             if (invitation.Assignment.WebMode == true && invitation.Assignment.Quantity == null)
