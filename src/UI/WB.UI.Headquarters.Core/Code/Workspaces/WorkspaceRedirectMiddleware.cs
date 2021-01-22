@@ -2,8 +2,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
@@ -39,16 +41,16 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     .Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
             {
                 // Redirect into default workspace for old urls
-                string? targetWorkspace = null;
                 var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
-                targetWorkspace = HandleCookieRedirect(context) 
-                    // redirecting user to first enabled workspace if any
-                    ?? authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name
-                    // redirect to any workspace, even if it's disabled
-                    ?? authorizedUser.Workspaces.FirstOrDefault();
+                var targetWorkspace = HandleAnonymousPublicUrls(context) 
+                                      ?? HandleCookieRedirect(context, authorizedUser) 
+                                      // redirecting user to first enabled workspace if any
+                                      ?? authorizedUser.GetEnabledWorkspaces().FirstOrDefault()?.Name
+                                      // redirect to any workspace, even if it's disabled
+                                      ?? authorizedUser.Workspaces.FirstOrDefault();
                 
-                if (targetWorkspace != null && authorizedUser.HasAccessToWorkspace(targetWorkspace))
+                if (targetWorkspace != null)
                 {
                     context.Response.Redirect(
                         $"{context.Request.PathBase}/{targetWorkspace}/{context.Request.Path.Value!.TrimStart('/')}");
@@ -59,7 +61,22 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
 
-        private string? HandleCookieRedirect(HttpContext context)
+        private static string? HandleAnonymousPublicUrls(HttpContext context)
+        {
+            //redirect for public urls available before workspaces were introduced
+            var endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint;
+            var allowsFallbackToPrimaryWorkspace = endpoint?.Metadata.GetMetadata<AllowPrimaryWorkspaceFallbackAttribute>();
+            var allowAnonymous = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
+
+            if (allowAnonymous != null && allowsFallbackToPrimaryWorkspace != null)
+            {
+                return WorkspaceConstants.DefaultWorkspaceName;
+            }
+
+            return null;
+        }
+
+        private string? HandleCookieRedirect(HttpContext context, IAuthorizedUser authorizedUser)
         {
             if (context.Request.Cookies.TryGetValue(WorkspaceInfoFilter.CookieName, out var cookieValue)
                 && cookieValue != null)
@@ -75,7 +92,14 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         var workspace = cache.GetWorkspace(workspaceName);
 
                         if (workspace?.IsEnabled() == true)
+                        {
+                            if (authorizedUser.IsAuthenticated && !authorizedUser.HasAccessToWorkspace(workspaceName))
+                            {
+                                return null;
+                            }
+
                             return workspaceName;
+                        }
                     }
                 }
                 catch
