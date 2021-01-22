@@ -2,8 +2,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
@@ -38,6 +40,18 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 && !NotScopedToWorkspacePaths
                     .Any(w => context.Request.Path.StartsWithSegments(w, StringComparison.InvariantCultureIgnoreCase)))
             {
+                //redirect for public urls available before workspaces were introduced
+                var endpoint = context.Features.Get<IEndpointFeature>()?.Endpoint;
+                var allowsFallbackToPrimaryWorkspace = endpoint?.Metadata.GetMetadata<AllowPrimaryWorkspaceFallbackAttribute>();
+                var allowAnonymous = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
+
+                if ( allowAnonymous != null && allowsFallbackToPrimaryWorkspace != null)
+                {
+                    context.Response.Redirect(
+                        $"{context.Request.PathBase}/{WorkspaceContext.Default.Name}/{context.Request.Path.Value!.TrimStart('/')}");
+                    return;
+                }
+
                 // Redirect into default workspace for old urls
                 string? targetWorkspace = null;
                 var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
