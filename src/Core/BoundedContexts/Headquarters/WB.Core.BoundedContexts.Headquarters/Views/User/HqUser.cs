@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
@@ -37,6 +39,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
     public class HqUserClaim : IdentityUserClaim<Guid>
     {
+        public static HqUserClaim FromClaim(Claim claim)
+        {
+            var hqClaim = new HqUserClaim();
+            hqClaim.InitializeFromClaim(claim);
+            return hqClaim;
+        }
     }
 
     public class HqRole : IdentityRole<Guid>
