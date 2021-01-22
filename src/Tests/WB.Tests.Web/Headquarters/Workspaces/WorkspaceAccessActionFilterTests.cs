@@ -116,7 +116,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             Role = UserRoles.Headquarter;
             Attributes.Clear();
             Attributes.Add(new AllowAnonymousAttribute());
-            
+
             // act
             var context = Act();
 
@@ -175,7 +175,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             Attributes.Add(new AllowPrimaryWorkspaceFallbackAttribute());
             UserWorkspaces.Clear();
             UserWorkspaces.Add(Workspace.Default.Name);
-            
+
             // act
             var context = Act();
 
@@ -191,7 +191,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             Attributes.Add(new AllowPrimaryWorkspaceFallbackAttribute());
             UserWorkspaces.Clear();
-            
+
             // act
             var context = Act();
 
@@ -214,6 +214,22 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             // assert
             Assert.That(context.Result, Is.InstanceOf<ForbidResult>());
             Assert.That(GetForbidReason(context.Result), Is.EqualTo(ForbidReason.WorkspaceDisabledReason));
+        }
+
+        [Test]
+        public void should_allow_users_from_other_workspaces_if_ignore_attribute_present()
+        {
+            Role = UserRoles.Interviewer;
+
+            Attributes.Add(new IgnoreWorkspacesLimitationAttribute());
+
+            this.UserWorkspaces = new List<string> {"nonprimary"};
+
+            // act
+            var context = Act();
+
+            // assert
+            Assert.Null(context.Result);
         }
 
         [Test]
