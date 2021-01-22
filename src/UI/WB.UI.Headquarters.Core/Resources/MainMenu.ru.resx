@@ -229,7 +229,7 @@
       <comment>Администрирование</comment>
   </data>
   <data name="Workspaces" xml:space="preserve">
-      <value>Рабочие пространства</value>
+      <value>Рабочие области</value>
   </data>
   <data name="ServerAdministration">
       <value>Администрирование Сервера</value>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -103,21 +104,22 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 query = query.Where(u => u.Roles.Any(r => r.Id == roleId));
             }
 
-            query = query.Where(u => u.IsArchived == request.ShowArchived);
-
-            query = request.ShowLocked
-                ? query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor)
-                : query.Where(u => !u.IsLockedByHeadquaters && !u.IsLockedBySupervisor);
-
-            if (request.WorkspaceName != null && request.MissingWorkspace == false)
-            {
+            if (request.WorkspaceName != null)
                 query = query.Where(u => u.Workspaces.Any(w => w.Workspace.Name == request.WorkspaceName));
-            }
-            else if (request.MissingWorkspace)
-            {
-                query = query.Where(u => u.Workspaces.Count == 0);
-            }
 
+
+            if (request.Filter != null)
+            {
+                query = request.Filter switch
+                {
+                    UserManagementFilter.WithMissingWorkspace => query.Where(u => u.Workspaces.Count == 0),
+                    UserManagementFilter.WithDisabledWorkspaces => query.Where(u => u.Workspaces.Any() && u.Workspaces.All(w => w.Workspace.DisabledAtUtc != null)),
+                    UserManagementFilter.Locked => query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor),
+                    UserManagementFilter.Archived => query.Where(u => u.IsArchived),
+                    _ => query
+                };
+            }
+            
             return query;
         }
     }

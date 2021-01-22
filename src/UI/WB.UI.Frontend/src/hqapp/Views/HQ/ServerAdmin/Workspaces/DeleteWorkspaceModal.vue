@@ -2,21 +2,23 @@
     <ModalFrame
         ref="deleteWorkspaceModal"
         data-suso="workspaces-delete-dialog"
-        :title="$t('Workspaces.DeleteWorkspacePopupTitle', { name: workspace } )">
+        useHtmlInTitle
+        :title="$t('Workspaces.DeleteWorkspacePopupTitle', { name: '<strong>' + workspace + '</strong>' } )">
+
         <form onsubmit="return false;"
             v-if="!loading">
-            <p v-if="canDelete"
-                v-html="$t('Workspaces.DeleteExplanation', { name: workspaceTitle } )"></p>
-            <p>
+            <div v-if="canDelete">
+                <p
+                    v-html="$t('Workspaces.DeleteExplanation', { name: workspaceTitle } )">
+                </p>
+                <Checkbox v-for="c in consentsList"
+                    :key="c.name + '_' + draw"
+                    :enabled="canDelete"
+                    :label="c.label"
+                    :name="c.name"
+                    v-model="consent[c.name]" />
+            </div>
             <p v-if="!canDelete">{{ $t("Workspaces.CantDeleteExplanation") }}</p>
-
-            <Checkbox v-for="c in consentsList"
-                :key="c.name + '_' + draw"
-                :enabled="canDelete"
-                :label="c.label"
-                :name="c.name"
-                v-model="consent[c.name]" />
-
         </form>
         <div class="modal-footer">
             <button

@@ -132,6 +132,9 @@
   <data name="AccountManage_Role" xml:space="preserve">
     <value>Role</value>
   </data>
+  <data name="AccountManage_ShowUsers" xml:space="preserve">
+    <value>Show users</value>
+  </data>
   <data name="AccountManage_ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
@@ -1559,11 +1562,8 @@
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>All roles</value>
   </data>
-  <data name="UsersManage_MissingWorkspace" xml:space="preserve">
-    <value>Users with missing workspace</value>
-  </data>
-  <data name="UsersManage_LockedUsers" xml:space="preserve">
-    <value>Show Locked users</value>
+  <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+    <value>All users</value>
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
     <value>Select workspaces that need to be added to selected users</value>
@@ -1582,9 +1582,6 @@
   </data>
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>User(s) selected</value>
-  </data>
-  <data name="UsersManage_ArchivedUsers" xml:space="preserve">
-    <value>Show archived users</value>
   </data>
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
