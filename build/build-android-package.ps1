@@ -1,7 +1,8 @@
 param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='release',
-[string]$KeystorePassword = $null,
+[string]$KeystorePassword = $NULL,
+[string]$AppCenterKey = $NULL,
 [string]$KeystoreName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
@@ -79,6 +80,25 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
     }
 }
 
+function Set-AppcenterKey{
+    [CmdletBinding()]
+    param (  
+        $project,
+        [string] $keyValue
+    )    
+
+    $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
+    Log-Message "Updating app center key in $filePath"
+
+    [xml] $resourceFile = Get-Content -Path $filePath
+    $appCenterKey = Select-Xml -xml $resourceFile `
+        -Xpath '/resources/string[@name="appcenter_key"]'
+
+    $appCenterKey.Node.InnerText = $keyValue
+
+    $resourceFile.Save($filePath)
+} 
+
 # Main part
 $ErrorActionPreference = "Stop"
 
@@ -90,6 +110,8 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
         if (Test-Path $OutFileName) {
             Remove-Item $OutFileName -Force
         }
+
+        Set-AppcenterKey $CapiProject $AppCenterKey
 
         BuildAndroidApp $CapiProject $BuildConfiguration -ExcludeExtensions $ExcludeExtra -VersionCode "$VersionCode" -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
     }

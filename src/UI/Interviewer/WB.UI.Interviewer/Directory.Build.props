@@ -2,10 +2,6 @@
 <Project>
     <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-    <PropertyGroup>
-        <DefineConstants Condition="'$(GIT_BRANCH)' == 'release'" >$(DefineConstants);PRODUCTION</DefineConstants>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(ExcludeExtensions)' == ''">
         <ExcludeExtensions Condition="'$(Configuration)' == 'Debug'">True</ExcludeExtensions>
     </PropertyGroup>

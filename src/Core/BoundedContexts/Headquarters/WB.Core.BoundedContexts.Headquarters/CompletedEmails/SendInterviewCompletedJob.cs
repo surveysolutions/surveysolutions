@@ -257,7 +257,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
     public class SendInterviewCompletedTask : BaseTask
     {
-        public SendInterviewCompletedTask(IScheduler scheduler) 
-            : base(scheduler, "Send interview completed emails", typeof(SendInterviewCompletedJob)) { }
+        public SendInterviewCompletedTask(ISchedulerFactory schedulerFactory) 
+            : base(schedulerFactory, "Send interview completed emails", typeof(SendInterviewCompletedJob)) { }
     }
 }

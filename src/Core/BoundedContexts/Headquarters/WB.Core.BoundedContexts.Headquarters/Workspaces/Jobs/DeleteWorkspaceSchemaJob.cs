@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -13,14 +14,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
     [NoWorkspaceJob]
     [RetryFailedJob]
     [DisallowConcurrentExecution]
-    public class DeleteWorkspaceSchemaJob : IJob
+    [DisplayName("Delete Workspace Schema")]
+    [Category("Cleanup")]
+    public class DeleteWorkspaceSchemaJob : IJob<DeleteWorkspaceJobData>
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IPlainStorageAccessor<Workspace> workspaces;
         private readonly ILogger<DeleteWorkspaceSchemaJob> logger;
 
         public DeleteWorkspaceSchemaJob(
-            IUnitOfWork unitOfWork, 
+            IUnitOfWork unitOfWork,
             IPlainStorageAccessor<Workspace> workspaces,
             ILogger<DeleteWorkspaceSchemaJob> logger)
         {
@@ -29,21 +32,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
             this.logger = logger;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async Task Execute(DeleteWorkspaceJobData data, IJobExecutionContext context)
         {
-            if(!context.MergedJobDataMap.TryGetValue("workspace", out var workspace))
+            if (data == null || string.IsNullOrWhiteSpace(data.WorkspaceName))
             {
                 logger.LogWarning("Cannot execute delete workspace schema job. Missing workspace name");
                 return;
             }
 
-            if (!context.MergedJobDataMap.TryGetValue("schema", out var schema))
+            if (string.IsNullOrWhiteSpace(data.WorkspaceSchema))
             {
                 logger.LogWarning("Cannot execute delete workspace schema job. Missing workspace schema");
                 return;
             }
 
-            var dbWorkspace = workspaces.GetById(workspace.ToString());
+            var dbWorkspace = workspaces.GetById(data.WorkspaceName);
 
             if (dbWorkspace != null)
             {
@@ -51,36 +54,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
                 return;
             }
 
-            if (!schema.ToString().StartsWith(WorkspaceContext.SchemaPrefix))
+            if (!data.WorkspaceSchema.StartsWith(WorkspaceContext.SchemaPrefix))
             {
-                logger.LogError("Cannot delete schema {schema} that is not prefixed with {prefix}", 
-                    schema, WorkspaceContext.SchemaPrefix);
+                logger.LogError("Cannot delete schema {schema} that is not prefixed with {prefix}",
+                    data.WorkspaceSchema, WorkspaceContext.SchemaPrefix);
             }
 
-            logger.LogInformation("Deleting workspace {workspace} schema: {schema}", workspace, schema);
-            await unitOfWork.Session.Connection.ExecuteAsync($"drop schema if exists \"{schema}\" cascade");
-        }
-
-        public static IJobDetail JobDetail()
-        {
-            return JobBuilder.Create<DeleteWorkspaceSchemaJob>()
-                .WithIdentity("DeleteWorkspaceSchema", "Cleanup")
-                .StoreDurably()
-                .RequestRecovery()
-                .WithDescription($"Delete workspace schema")
-                .Build();
-        }
-        
-        public static async Task Schedule(IScheduler scheduler, WorkspaceContext workspace)
-        {
-            var trigger = TriggerBuilder.Create()
-                .ForJob(JobDetail().Key)
-                .WithIdentity($"Delete {workspace.Name} schema", "Cleanup")
-                .UsingJobData("workspace", workspace.Name)
-                .UsingJobData("schema", workspace.SchemaName)
-                .Build();
-
-            await scheduler.ScheduleJob(trigger);
+            logger.LogInformation("Deleting workspace {workspace} schema: {schema}", data.WorkspaceName, data.WorkspaceSchema);
+            await unitOfWork.Session.Connection.ExecuteAsync($"drop schema if exists \"{data.WorkspaceSchema}\" cascade");
         }
     }
 }
