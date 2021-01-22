@@ -241,9 +241,6 @@
   <data name="TypeQuestionnaireName" xml:space="preserve">
     <value>Please type '{{questionnaireTitle}}' to confirm</value> 
   </data>
-  <data name="Workspaces" xml:space="preserve">
-      <value>Workspaces</value>
-  </data>
   <data name="UsersManagement" xml:space="preserve">
       <value>Users Management</value>
   </data>

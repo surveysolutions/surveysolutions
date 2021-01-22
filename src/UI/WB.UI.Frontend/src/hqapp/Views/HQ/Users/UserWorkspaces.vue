@@ -18,7 +18,8 @@
                         v-model="workspace.Assigned"
                         :id="workspace.Name"
                         type="checkbox"/>
-                    <label :for="workspace.Name">
+                    <label :for="workspace.Name"
+                        :class="{ 'disabled-item' : workspace.DisabledAtUtc != null }">
                         <span class="tick"></span>
                         {{workspace.DisplayName}}
                     </label>
@@ -54,7 +55,7 @@ export default {
         }
     },
     mounted() {
-        this.$hq.Workspaces.List().then((data) => {
+        this.$hq.Workspaces.List(null, true).then((data) => {
             this.allWorkspaces = data.Workspaces.map(w =>
             {
                 return {
@@ -63,7 +64,7 @@ export default {
                 }
             })
 
-            this.$hq.Workspaces.List(this.userInfo.userId).then((data) => {
+            this.$hq.Workspaces.List(this.userInfo.userId, true).then((data) => {
                 this.userWorkspaces = data.Workspaces
                 this.allWorkspaces.forEach(w => {
                     if(this.userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0){

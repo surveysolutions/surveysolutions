@@ -20,6 +20,7 @@
                                 :label="workspace.value"
                                 :name="workspace.key"
                                 :value="selected[workspace.key]"
+                                :classes="workspace.iconClass"
                                 :checked="selected[workspace.key] || false"
                                 @input="v => selected[workspace.key] = v" />
 
