@@ -244,7 +244,6 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        
         [HttpGet]
         [Route("{invitationId}/Start")]
         [AntiForgeryFilter]
@@ -967,6 +966,9 @@ namespace WB.UI.Headquarters.Controllers
             if (this.memoryCache.TryGetValue(key, out object result)) return (Invitation?) result;
 
             var invitation = this.invitationService.GetInvitationByToken(invitationId);
+
+            // do not crash on non existing invitation id
+            if (invitation == null) return null;
 
             // only cache public web mode invitations
             if (invitation.Assignment.WebMode == true && invitation.Assignment.Quantity == null)
