@@ -41,6 +41,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         public void Setup()
         {
             this.cache = Create.Service.WorkspacesCache(new []{ "primary" });
+
             this.userRepository = new Mock<IUserRepository>();
             this.hqUserPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<HqUser>>();
             this.workspacesUsersCache = new Mock<IWorkspacesUsersCache>();
@@ -49,7 +50,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                 .Returns(() => Task.FromResult(UserWorkspaces));
 
             this.Subject = new HqCookieAuthenticationEvents(cache,
-                this.userRepository.Object,
+                this.userRepository.Object.AsNoScopeExecutor(),
                 this.hqUserPrincipalFactory.Object,
                 this.workspacesUsersCache.Object);
         }
