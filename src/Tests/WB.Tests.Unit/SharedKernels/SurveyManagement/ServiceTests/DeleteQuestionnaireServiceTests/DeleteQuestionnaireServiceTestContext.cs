@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                     lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
                     questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                    new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()),
+                    Mock.Of<IScheduledTask<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>>(),
                     Mock.Of<IInvitationsDeletionService>(),
                     Mock.Of<IAggregateRootCache>(),
                     assignmentsToDeleteFactory ?? Mock.Of<IAssignmentsToDeleteFactory>(),

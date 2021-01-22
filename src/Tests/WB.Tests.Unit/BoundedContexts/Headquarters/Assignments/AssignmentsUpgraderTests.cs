@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 importService: importService);
 
             // Act
-            service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
+            service.Upgrade(new AssignmentsUpgradeProcess(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo));
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 importService: importService);
 
             // Act
-            service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
+            service.Upgrade(new AssignmentsUpgradeProcess(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo));
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 commandService: commandService.Object);
 
             // Act
-            service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
+            service.Upgrade(new AssignmentsUpgradeProcess(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo));
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
@@ -217,7 +217,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 commandService: commandService.Object);
 
             // Act
-            service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
+            service.Upgrade(new AssignmentsUpgradeProcess(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo));
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(assignmentToMigrate.PublicKey);
@@ -249,7 +249,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService);
 
             // Act
-            service.Upgrade(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo, CancellationToken.None);
+            service.Upgrade(new AssignmentsUpgradeProcess(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo));
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
@@ -280,7 +280,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             cancellationTokenSource.Cancel();
 
             // Act
-            service.Upgrade(processId, Guid.NewGuid(), migrateFrom, migrateTo, cancellationToken);
+            service.Upgrade(new AssignmentsUpgradeProcess(processId, Guid.NewGuid(), migrateFrom, migrateTo), cancellationToken);
 
             // Assert
             upgradeServiceMock.Verify(x => x.ReportProgress(processId, It.Is<AssignmentUpgradeProgressDetails>(

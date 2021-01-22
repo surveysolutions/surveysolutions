@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -86,11 +88,13 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Questionnaires)]
         [HttpPost]
         [ActionName("UpgradeAssignments")]
-        public IActionResult UpgradeAssignmentsPost(Guid id, long version)
+        public async Task<IActionResult> UpgradeAssignmentsPost(Guid id, long version, CancellationToken token = default)
         {
             var processId = Guid.NewGuid();
             var sourceQuestionnaireId = QuestionnaireIdentity.Parse(Request.Form["sourceQuestionnaireId"]);
-            this.upgradeService.EnqueueUpgrade(processId, authorizedUser.Id, sourceQuestionnaireId, new QuestionnaireIdentity(id, version));
+            await this.upgradeService.EnqueueUpgrade(processId, 
+                authorizedUser.Id, sourceQuestionnaireId, new QuestionnaireIdentity(id, version), token);
+
             return RedirectToAction("UpgradeProgress", new {id = processId});
         }
 

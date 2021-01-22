@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         private IPlainStorageAccessor<Workspace> workspaces;
         private Mock<ILogger<DeleteWorkspaceSchemaJob>> logger;
         private DeleteWorkspaceSchemaJob Subject;
-        private JobDataMap jobDataMap;
+        private DeleteWorkspaceJobData jobData;
 
         [SetUp]
         public void Setup()
@@ -26,10 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             this.unitOfWork = new Mock<IUnitOfWork>();
             this.workspaces = Create.Storage.InMemoryPlainStorage<Workspace>();
             logger = new Mock<ILogger<DeleteWorkspaceSchemaJob>>();
-            jobDataMap = new JobDataMap();
-            jobDataMap["workspace"] = "test";
-            jobDataMap["schema"] = "ws_test";
-
+            jobData = new DeleteWorkspaceJobData(new WorkspaceContext("test", "test"));
             Subject = new DeleteWorkspaceSchemaJob(this.unitOfWork.Object, workspaces, logger.Object);
         }
 
@@ -39,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             var workspace = Create.Entity.Workspace("test");
             this.workspaces.Store(workspace, workspace.Name);
 
-            await Subject.Execute(Mock.Of<IJobExecutionContext>(j => j.MergedJobDataMap == jobDataMap));
+            await Subject.Execute(new DeleteWorkspaceJobData(), Mock.Of<IJobExecutionContext>());
 
             unitOfWork.Verify(u => u.Session, Times.Never);
         }
@@ -50,9 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             var workspace = Create.Entity.Workspace("test");
             this.workspaces.Store(workspace, workspace.Name);
 
-            jobDataMap["schema"] = "public";
-            
-            await Subject.Execute(Mock.Of<IJobExecutionContext>(j => j.MergedJobDataMap == jobDataMap));
+            jobData.WorkspaceSchema = "public";
+
+            await Subject.Execute(new DeleteWorkspaceJobData(), Mock.Of<IJobExecutionContext>());
 
             unitOfWork.Verify(u => u.Session, Times.Never);
         }
