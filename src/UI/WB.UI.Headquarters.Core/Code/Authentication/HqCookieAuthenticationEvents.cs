@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Services.Impl;
 
@@ -20,16 +21,19 @@ namespace WB.UI.Headquarters.Code.Authentication
         private readonly IWorkspacesCache workspacesCache;
         private readonly IUserRepository userRepository;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
+        private readonly IWorkspacesUsersCache workspacesUsersCache;
 
         public HqCookieAuthenticationEvents
         (
             IWorkspacesCache workspacesCache,
             IUserRepository userRepository,
-            IUserClaimsPrincipalFactory<HqUser> claimFactory)
+            IUserClaimsPrincipalFactory<HqUser> claimFactory,
+            IWorkspacesUsersCache workspacesUsersCache)
         {
             this.workspacesCache = workspacesCache;
             this.userRepository = userRepository;
             this.claimFactory = claimFactory;
+            this.workspacesUsersCache = workspacesUsersCache;
         }
 
         public override Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> ctx)
@@ -73,36 +77,47 @@ namespace WB.UI.Headquarters.Code.Authentication
             if (userIdentity == null) return;
 
             Claim? GetFirstClaim(string type) => userIdentity.Claims.FirstOrDefault(c => c.Type == type);
+            var id = GetFirstClaim(ClaimTypes.NameIdentifier)?.Value;
+
+            if (id == null || !Guid.TryParse(id, out var userId))
+            {
+                return;
+            }
 
             // Look for the LastChanged claim.
             var workspaceRevisionClaim = GetFirstClaim(WorkspaceConstants.RevisionClaimType);
 
-            if (workspaceRevisionClaim != null && workspacesCache.Revision().ToString() != workspaceRevisionClaim.Value)
+            var hasWorkspacesChanged = workspaceRevisionClaim == null ||
+                                       workspacesCache.Revision().ToString() != workspaceRevisionClaim?.Value;
+
+            var userWorkspaces = await this.workspacesUsersCache.GetUserWorkspaces(userId);
+
+            var claimedWorkspaces = userIdentity.Claims.Where(c => c.Type == WorkspaceConstants.ClaimType)
+                .Select(c => c.Value).OrderBy(o => o).ToList();
+
+            var userWorkspacesChanged = !userWorkspaces.SequenceEqual(claimedWorkspaces);
+
+            if (hasWorkspacesChanged || userWorkspacesChanged)
             {
-                var id = GetFirstClaim(ClaimTypes.NameIdentifier)?.Value;
+                var hqUser = await this.userRepository.FindByIdAsync(userId);
 
-                if (id != null && Guid.TryParse(id, out var userId))
+                var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
+
+                if (observerClaim != null)
                 {
-                    var hqUser = await this.userRepository.FindByIdAsync(userId);
+                    hqUser.Claims.Add(HqUserClaim.FromClaim(observerClaim));
 
-                    var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
-                    
-                    if (observerClaim != null)
+                    hqUser.Claims.Add(new HqUserClaim
                     {
-                        hqUser.Claims.Add(HqUserClaim.FromClaim(observerClaim));
-
-                        hqUser.Claims.Add(new HqUserClaim
-                        {
-                            ClaimType = ClaimTypes.Role,
-                            ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
-                        });
-                    }
-
-                    var newPrincipal = await claimFactory.CreateAsync(hqUser);
-                    
-                    context.ReplacePrincipal(newPrincipal);
-                    context.ShouldRenew = true;
+                        ClaimType = ClaimTypes.Role,
+                        ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+                    });
                 }
+
+                var newPrincipal = await claimFactory.CreateAsync(hqUser);
+
+                context.ReplacePrincipal(newPrincipal);
+                context.ShouldRenew = true;
             }
         }
     }
