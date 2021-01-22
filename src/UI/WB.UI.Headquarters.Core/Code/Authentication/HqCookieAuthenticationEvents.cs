@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
+using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Services.Impl;
 
@@ -19,14 +20,14 @@ namespace WB.UI.Headquarters.Code.Authentication
     public class HqCookieAuthenticationEvents : CookieAuthenticationEvents
     {
         private readonly IWorkspacesCache workspacesCache;
-        private readonly IUserRepository userRepository;
+        private readonly IInScopeExecutor<IUserRepository> userRepository;
         private readonly IUserClaimsPrincipalFactory<HqUser> claimFactory;
         private readonly IWorkspacesUsersCache workspacesUsersCache;
 
         public HqCookieAuthenticationEvents
         (
             IWorkspacesCache workspacesCache,
-            IUserRepository userRepository,
+            IInScopeExecutor<IUserRepository> userRepository,
             IUserClaimsPrincipalFactory<HqUser> claimFactory,
             IWorkspacesUsersCache workspacesUsersCache)
         {
@@ -99,22 +100,25 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             if (hasWorkspacesChanged || userWorkspacesChanged)
             {
-                var hqUser = await this.userRepository.FindByIdAsync(userId);
-
-                var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
-
-                if (observerClaim != null)
+                var newPrincipal = await this.userRepository.ExecuteAsync(async u =>
                 {
-                    hqUser.Claims.Add(HqUserClaim.FromClaim(observerClaim));
+                    var hqUser = await u.FindByIdAsync(userId);
+                    
+                    var observerClaim = GetFirstClaim(AuthorizedUser.ObserverClaimType);
 
-                    hqUser.Claims.Add(new HqUserClaim
+                    if (observerClaim != null)
                     {
-                        ClaimType = ClaimTypes.Role,
-                        ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
-                    });
-                }
+                        hqUser.Claims.Add(HqUserClaim.FromClaim(observerClaim));
 
-                var newPrincipal = await claimFactory.CreateAsync(hqUser);
+                        hqUser.Claims.Add(new HqUserClaim
+                        {
+                            ClaimType = ClaimTypes.Role,
+                            ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+                        });
+                    }
+
+                    return await claimFactory.CreateAsync(hqUser);
+                });
 
                 context.ReplacePrincipal(newPrincipal);
                 context.ShouldRenew = true;
