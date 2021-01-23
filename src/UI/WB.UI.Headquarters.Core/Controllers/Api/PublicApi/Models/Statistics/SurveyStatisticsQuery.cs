@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Models.Api;
@@ -10,6 +11,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
         /// <summary>
         /// Questionnaire Id
         /// </summary>
+        [Required]
         public string QuestionnaireId { get; set; }
 
         /// <summary>
