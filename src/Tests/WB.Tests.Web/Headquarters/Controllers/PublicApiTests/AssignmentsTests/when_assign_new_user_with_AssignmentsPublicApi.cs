@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.SetupAssignment(new Assignment());
             var result = await this.controller.Assign(101, null);
-            Assert.That(result.Result, Has.Property("StatusCode").EqualTo(StatusCodes.Status404NotFound));
+            Assert.That(result.Result, Has.Property("StatusCode").EqualTo(StatusCodes.Status400BadRequest));
         }
 
         [TestCase(UserRoles.Administrator)]
