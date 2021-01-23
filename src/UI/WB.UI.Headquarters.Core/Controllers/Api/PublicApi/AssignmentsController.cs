@@ -305,10 +305,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
             [FromBody, BindRequired] AssignmentAssignRequest assigneeRequest)
         {
+            if (assigneeRequest == null) return StatusCode(StatusCodes.Status400BadRequest, "User was not set");
+            
             if (!ModelState.IsValid)
                 return StatusCode(StatusCodes.Status400BadRequest, 
                     $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
-            
+
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
             {
