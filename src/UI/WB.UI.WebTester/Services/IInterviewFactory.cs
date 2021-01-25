@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.WebTester.Services
 {
@@ -11,7 +12,7 @@ namespace WB.UI.WebTester.Services
 
     public interface IInterviewFactory
     {
-        Task CreateInterview(Guid designerToken);
+        Task<QuestionnaireIdentity> ImportQuestionnaireAndCreateInterview(Guid designerToken);
 
         Task<CreationResult> CreateInterview(Guid designerToken, Guid originalInterviewId);
 

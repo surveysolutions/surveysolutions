@@ -26,7 +26,7 @@ namespace WB.UI.WebTester.Services
         Task<List<CategoriesDto>> GetCategoriesAsync(string token);
 
         [Get("/api/webtester/Scenarios/{token}/{scenarioId}")]
-        Task<string> GetScenario(string token, int scenarioId);
+        Task<ApiResponse<string>> GetScenario(string token, int scenarioId);
 
         [Get("/.hc")]
         Task<string> HealthCheck();
