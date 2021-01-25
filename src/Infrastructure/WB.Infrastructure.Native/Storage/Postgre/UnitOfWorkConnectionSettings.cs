@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -30,5 +31,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public string WorkspacesSchemaName => "workspaces";
         
         public DbUpgradeSettings SingleWorkspaceUpgradeSettings { get; set; }
+        public IConfiguration Configuration { get; set; }
     }
 }
