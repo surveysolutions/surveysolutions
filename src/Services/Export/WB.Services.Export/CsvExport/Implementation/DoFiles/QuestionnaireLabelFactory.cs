@@ -33,6 +33,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             {
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.String));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Interview key (identifier in XX-XX-XX-XX format)", null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.AssignmentId, "Assignment id (identifier in numeric format)", null, levelVariableValueLabel, ExportValueType.NumericInt));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Numeric));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.NumericInt));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null,
