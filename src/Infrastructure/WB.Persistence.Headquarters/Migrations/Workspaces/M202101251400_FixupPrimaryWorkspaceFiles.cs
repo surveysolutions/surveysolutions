@@ -37,11 +37,12 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                         if (directory != null)
                         {
                             Directory.CreateDirectory(directory);
+
                             File.Move(entry, target, true);
                         }
                     }
 
-                    Directory.Delete(primaryFolder);
+                    Directory.Delete(primaryFolder, true);
                 }
             }
         }
