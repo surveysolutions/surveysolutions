@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
             if (workspace.Name != WorkspaceConstants.DefaultWorkspaceName)
             {
-                tenantName += "_" + workspace.Name;
+                tenantName += "/" + workspace.Name;
             }
 
             bucketInfo = new AmazonBucketInfo(
