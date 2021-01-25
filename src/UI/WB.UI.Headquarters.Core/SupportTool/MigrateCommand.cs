@@ -47,7 +47,8 @@ namespace WB.UI.Headquarters.SupportTool
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var logger = host.Services.GetRequiredService<ILogger<MigrateCommand>>();
 
-            UnitOfWorkConnectionSettings unitOfWorkConnectionSettings = Startup.BuildUnitOfWorkSettings(connectionString);
+            UnitOfWorkConnectionSettings unitOfWorkConnectionSettings = Startup.BuildUnitOfWorkSettings(
+                connectionString, Configuration);
 
             if (waitForDb)
             {
