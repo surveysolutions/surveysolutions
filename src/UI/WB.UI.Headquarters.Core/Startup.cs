@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters
             });
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
+            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString, Configuration);
 
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
@@ -130,7 +130,8 @@ namespace WB.UI.Headquarters
                 );
         }
 
-        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString)
+        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString, 
+            IConfiguration configuration = null)
         {
             var mappingAssemblies = new List<Assembly>
             {
@@ -140,6 +141,7 @@ namespace WB.UI.Headquarters
 
             var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
             {
+                Configuration = configuration,
                 ConnectionString = connectionString,
                 ReadSideMappingAssemblies = mappingAssemblies,
                 PlainMappingAssemblies = new List<Assembly>
