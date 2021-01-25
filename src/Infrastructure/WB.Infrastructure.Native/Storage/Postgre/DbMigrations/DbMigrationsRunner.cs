@@ -1,10 +1,11 @@
-﻿using FluentMigrator.Runner;
+﻿using System.Configuration;
+using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
@@ -12,7 +13,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
     public static class DbMigrationsRunner
     {
         public static void MigrateToLatest(string connectionString, string schemaName,
-            DbUpgradeSettings dbUpgradeSettings, ILoggerProvider loggerProvider = null)
+            DbUpgradeSettings dbUpgradeSettings, ILoggerProvider loggerProvider = null, 
+            IConfiguration configuration = null)
         {
             var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             npgConnBuilder.CommandTimeout = 0;
@@ -30,7 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                 serviceCollection.AddLogging(l => { l.AddFluentMigratorConsole(); });
             }
 
-            using var serviceProvider = serviceCollection
+            var services = serviceCollection
                 // Logging is the replacement for the old IAnnouncer
                 .AddSingleton(new DefaultConventionSet(defaultSchemaName: null, workingDirectory: null))
                 .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })
@@ -47,8 +49,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                         // Specify the assembly with the migrations
                         .ScanIn(dbUpgradeSettings.MigrationsAssembly)
                         .For.Migrations()
-                        .For.EmbeddedResources())
-                .BuildServiceProvider();
+                        .For.EmbeddedResources());
+
+            if (configuration != null)
+            {
+                services.AddSingleton<IConfiguration>(configuration);
+            }
+
+            using var serviceProvider = services.BuildServiceProvider();
 
             // Put the database update into a scope to ensure
             // that all resources will be disposed.
