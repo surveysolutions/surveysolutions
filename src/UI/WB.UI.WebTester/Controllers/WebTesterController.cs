@@ -74,7 +74,7 @@ namespace WB.UI.WebTester.Controllers
                 }
                 else
                 {
-                    await this.interviewFactory.CreateInterview(id);
+                    await this.interviewFactory.ImportQuestionnaireAndCreateInterview(id);
                 }
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
