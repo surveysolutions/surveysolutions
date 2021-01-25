@@ -40,12 +40,14 @@ namespace WB.Infrastructure.AspNetCore
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
                 .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
+                
                 .MinimumLevel.Override("WB.UI.Designer.Code.Attributes.BasicAuthenticationHandler", LogEventLevel.Warning)
 #if !DEBUG
                 .MinimumLevel.Override("Serilog.AspNetCore.RequestLoggingMiddleware", LogEventLevel.Warning)
 #endif
                 .MinimumLevel.Override("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService", LogEventLevel.Error)
                 .MinimumLevel.Override("WB.UI.Headquarters.Code.Authentication.TenantTokenAuthenticationHandler", LogEventLevel.Information)
+                .MinimumLevel.Override("WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3.AmazonS3ExternalFileStorage", LogEventLevel.Verbose)
                 .WriteTo.File(logsFileLocation, rollingInterval: RollingInterval.Day, 
                     restrictedToMinimumLevel: LogEventLevel.Information)
                 .WriteTo
@@ -74,7 +76,7 @@ namespace WB.Infrastructure.AspNetCore
                     // To debug logitems source add {SourceContext} to output template
                     // outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}"
                     loggerConfig.WriteTo
-                        .Console(LogEventLevel.Debug,
+                        .Console(LogEventLevel.Verbose,
                         outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {AppType:w3} {Message:lj}{NewLine}{Exception}"
                     );
                 }

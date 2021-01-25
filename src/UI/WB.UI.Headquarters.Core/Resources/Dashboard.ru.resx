@@ -243,9 +243,6 @@
   <data name="TypeQuestionnaireName" xml:space="preserve">
     <value>Введите '{{questionnaireTitle}}' для подтверждения</value> 
   </data>
-  <data name="Workspaces" xml:space="preserve">
-      <value>Рабочие пространства</value>
-  </data>
   <data name="UsersManagement" xml:space="preserve">
       <value>Управление пользователями</value>
   </data>

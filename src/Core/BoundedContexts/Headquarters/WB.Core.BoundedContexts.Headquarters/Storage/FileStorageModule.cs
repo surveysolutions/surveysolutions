@@ -1,23 +1,26 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.IO;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Workspaces;
 
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage
 {
     public class FileStorageModule : IModule
     {
+        private static readonly object lockObject = new object();
+
         public static void Setup(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDefaultAWSOptions(configuration.GetAWSOptions());
@@ -63,6 +66,54 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             });
 
             registry.BindToMethod<ITransferUtility>(c => new TransferUtility(c.Get<IAmazonS3>()));
+
+            registry.BindToMethod<IOptions<FileStorageConfig>>(sp =>
+            {
+                var configuration = sp.Get<IConfiguration>();
+                var logger = sp.Get<ILogger<FileStorageModule>>();
+                var workspaceAccessor = sp.Get<IWorkspaceContextAccessor>();
+
+                var fileStorageConfig = configuration.GetSection("FileStorage").Get<FileStorageConfig>();
+                fileStorageConfig.AppData = fileStorageConfig.AppData.Replace("~", Directory.GetCurrentDirectory());
+                fileStorageConfig.TempData = fileStorageConfig.TempData.Replace("~", Directory.GetCurrentDirectory());
+
+                var workspace = workspaceAccessor.CurrentWorkspace();
+
+                if (workspace != null && workspace.Name != WorkspaceConstants.DefaultWorkspaceName)
+                {
+                    // only append workspace name to FileSystem.
+                    // AmazonS3Configuration will handle workspaces prefixing
+                    // fs and s3 has different scope model
+                    // fs: <data_site>/<workspace?>/data
+                    // s3: <bucketName>/hq/<tenant>/<workspace?>/data
+                    if (fileStorageConfig.GetStorageProviderType() == StorageProviderType.FileSystem)
+                    {
+                        fileStorageConfig.AppData = Path.Combine(fileStorageConfig.AppData, workspace.Name);
+                        fileStorageConfig.TempData = Path.Combine(fileStorageConfig.TempData, workspace.Name);
+                    }
+                }
+
+                void EnsureFolderExists(string folder)
+                {
+                    if (Directory.Exists(folder)) return;
+                    lock (lockObject)
+                    {
+                        if (Directory.Exists(folder)) return;
+
+                        Directory.CreateDirectory(folder);
+                        logger.LogInformation("Created {folder} folder", folder);
+                    }
+                }
+
+                if (fileStorageConfig.GetStorageProviderType() == StorageProviderType.FileSystem)
+                {
+                    EnsureFolderExists(fileStorageConfig.AppData);
+                }
+
+                EnsureFolderExists(fileStorageConfig.TempData);
+
+                return Options.Create(fileStorageConfig);
+            });
         }
     }
 

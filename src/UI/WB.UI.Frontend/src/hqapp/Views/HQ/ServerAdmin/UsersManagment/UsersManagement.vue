@@ -5,7 +5,6 @@
             <FilterBlock
                 :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
                 <Typeahead
-                    :disabled="selectedMissingWorkspace"
                     control-id="workspaceSelector"
                     :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
                     :value="selectedWorkspace"
@@ -16,6 +15,7 @@
             <FilterBlock
                 :title="$t('Pages.AccountManage_Role')">
                 <Typeahead
+                    no-search
                     control-id="roleSelector"
                     :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')"
                     :value="selectedRole"
@@ -23,25 +23,15 @@
                     v-on:selected="onRoleSelected" />
             </FilterBlock>
 
-            <FilterBlock>
-                <Checkbox
-                    :label="$t('Pages.UsersManage_MissingWorkspace')"
-                    name="missingWorkspace"
-                    :value="selectedMissingWorkspace"
-                    @input="onMissingWorkspaceSelected" />
-
-                <Checkbox
-                    :label="$t('Pages.UsersManage_LockedUsers')"
-                    name="lockedSelector"
-                    :value="selectedLocked"
-                    @input="onLockedSelected" />
-
-                <Checkbox
-                    :label="$t('Pages.UsersManage_ArchivedUsers')"
-                    name="archivedSelector"
-                    :value="selectedArchived"
-                    @input="onArchivedSelected" />
-
+            <FilterBlock
+                :title="$t('Pages.AccountManage_ShowUsers')">
+                <Typeahead
+                    no-search
+                    control-id="filterSelector"
+                    :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
+                    :values="filters"
+                    :value="selectedFilter"
+                    v-on:selected="onFilterSelected"/>
             </FilterBlock>
 
         </Filters>
@@ -134,6 +124,13 @@ export default {
     name: 'users-management',
 
     data() {
+        const filters = [
+            { key: 'WithMissingWorkspace', value: this.$t('Users.Filter_WithMissingWorkspace')},
+            { key: 'WithDisabledWorkspaces', value: this.$t('Users.Filter_WithDisabledWorkspaces')},
+            { key: 'Locked', value: this.$t('Users.Filter_Locked')},
+            { key: 'Archived', value: this.$t('Users.Filter_Archived')},
+        ]
+
         return {
             workspaces: [],
 
@@ -145,11 +142,11 @@ export default {
                 { key: 'Observer',     value: this.$t('Users.Observer') },
             ],
 
+            filters,
+
             selectedWorkspace: null,
             selectedRole: null,
-            selectedMissingWorkspace: null,
-            selectedLocked: null,
-            selectedArchived: null,
+            selectedFilter: null,
             selectedRows: [],
         }
     },
@@ -181,23 +178,17 @@ export default {
                     this.selectedWorkspace = find(this.workspaces, { key: this.queryString.workspace })
                 }
 
-                if(this.queryString.role) {
-                    this.selectedRole = find(this.roles, { key: this.queryString.role})
-                }
-
-                if(this.queryString.missingWorkspace) {
-                    this.selectedMissingWorkspace = true
-                }
-
-                if(this.queryString.locked) {
-                    this.selectedLocked = true
-                }
-
-                if(this.queryString.archived) {
-                    this.selectedArchived = true
-                }
-
             })
+
+        if(this.queryString.role) {
+            this.selectedRole = find(this.roles, { key: this.queryString.role})
+        }
+
+        if(this.queryString.filter) {
+            this.selectedFilter = find(this.filters, { key: this.queryString.filter})
+        } else {
+            this.selectedFilter = null
+        }
     },
 
     computed: {
@@ -289,9 +280,7 @@ export default {
             return {
                 workspace: this.query.workspace,
                 role: this.query.role,
-                missingWorkspace: this.query.missingWorkspace,
-                locked: this.query.locked,
-                archived: this.query.archived,
+                filter: this.query.filter,
             }
         },
 
@@ -356,7 +345,6 @@ export default {
         },
 
         removeFromWorkspace() {
-
             var wsMap = { }
 
             this.getFilteredItems().forEach(user => {
@@ -400,9 +388,9 @@ export default {
                 requestData.role = this.selectedRole.key
             }
 
-            requestData.missingWorkspace = this.selectedMissingWorkspace
-            requestData.ShowLocked = this.selectedLocked
-            requestData.ShowArchived = this.selectedArchived
+            if(this.selectedFilter) {
+                requestData.filter = this.selectedFilter.key
+            }
         },
 
 
@@ -426,27 +414,11 @@ export default {
             })
         },
 
-        onMissingWorkspaceSelected(value) {
-            this.selectedMissingWorkspace = value
+        onFilterSelected(value) {
+            this.selectedFilter = value
 
             this.onChange(query => {
-                query.missingWorkspace = value
-            })
-        },
-
-        onLockedSelected(value) {
-            this.selectedLocked = value
-
-            this.onChange(query => {
-                query.locked = value
-            })
-        },
-
-        onArchivedSelected(value) {
-            this.selectedArchived = value
-
-            this.onChange(query => {
-                query.archived = value
+                query.filter = value == null ? null : value.key
             })
         },
     },
