@@ -25,10 +25,5 @@ namespace WB.Tests.Unit
         {
             Mock.Get(handler).SetupResponseFromResource(requestUrl, resourceName);
         }
-
-        public static NoScopeInScopeExecutor<T> AsNoScopeExecutor<T>(this T service)
-        {
-            return new NoScopeInScopeExecutor<T>(service);
-        }
     }
 }

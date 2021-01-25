@@ -1,13 +1,12 @@
 ﻿using System;
-using System.DirectoryServices.Protocols;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
@@ -125,6 +124,72 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             httpContext.Response.StatusCode.Should().NotBe(StatusCodes.Status302Found);
         }
 
+        [Test]
+        public async Task should_not_redirect_UnderConstruction_requests()
+        {
+            var userWorkspace = "primary";
+
+            string requestPath = $"/UnderConstruction/request";
+
+            var middleware = CreateMiddleware();
+            var httpContext = CreateHttpContext(
+                requestPath,
+                userClaimWorkspaces: new[] { userWorkspace },
+                currentWorkspace: userWorkspace);
+
+            await middleware.Invoke(httpContext);
+
+            httpContext.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+            httpContext.Response.StatusCode.Should().NotBe(StatusCodes.Status302Found);
+        }
+
+        [Test]
+        public async Task when_executing_anonymous_request_to_public_url_should_redirect_default()
+        {
+            string requestPath = $"/WebInterview/Y6N4D3XY/Start";
+
+            var middleware = CreateMiddleware();
+            
+            var endpoint = new Endpoint(context => null, 
+                new EndpointMetadataCollection(
+                    new AllowPrimaryWorkspaceFallbackAttribute(),
+                    new AllowAnonymousAttribute()), null);
+
+            var httpContext = new DefaultHttpContext();
+
+            httpContext.Features[typeof(IEndpointFeature)] = new EndpointFeature()
+            {
+                Endpoint = endpoint
+            };
+
+            httpContext.Request.Path = requestPath;
+
+            var workspacesCache = Create.Service.WorkspacesCache(null);
+
+            var authorizedUser = new AuthorizedUser(
+                Mock.Of<IHttpContextAccessor>(x => x.HttpContext == httpContext),
+                workspacesCache);
+
+            var workspacesAccessor = Mock.Of<IWorkspaceContextAccessor>(x => x.CurrentWorkspace() == null);
+
+            httpContext.RequestServices = Mock.Of<IServiceProvider>(
+                x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor
+                     && x.GetService(typeof(IAuthorizedUser)) == authorizedUser
+                     && x.GetService(typeof(IWorkspacesCache)) == workspacesCache
+            );
+            
+            await middleware.Invoke(httpContext);
+
+            httpContext.Response.Headers.Should().ContainKey(HeaderNames.Location);
+            var location = httpContext.Response.Headers[HeaderNames.Location];
+            StringAssert.StartsWith("/primary", location);
+        }
+
+        class EndpointFeature : IEndpointFeature
+        {
+            public Endpoint Endpoint { get; set; }
+        }
+
         private HttpContext CreateHttpContext(string requestPath = "/",
             string[] userClaimWorkspaces = null,
             string[] serverWorkspaces = null,
@@ -158,8 +223,8 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             result.RequestServices = Mock.Of<IServiceProvider>(
                 x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor
-                && x.GetService(typeof(IAuthorizedUser)) == authorizedUser
-                && x.GetService(typeof(IWorkspacesCache)) == workspacesCache
+                     && x.GetService(typeof(IAuthorizedUser)) == authorizedUser
+                     && x.GetService(typeof(IWorkspacesCache)) == workspacesCache
             );
 
             return result;
@@ -180,32 +245,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             );
 
             return middleware;
-        }
-    }
-
-    public class MockDataProtectorProvider : IDataProtectionProvider
-    {
-        public IDataProtector CreateProtector(string purpose)
-        {
-            return new MockDataProtector();
-        }
-
-        class MockDataProtector : IDataProtector
-        {
-            public IDataProtector CreateProtector(string purpose)
-            {
-                return this;
-            }
-
-            public byte[] Protect(byte[] plaintext)
-            {
-                return plaintext;
-            }
-
-            public byte[] Unprotect(byte[] protectedData)
-            {
-                return protectedData;
-            }
         }
     }
 }

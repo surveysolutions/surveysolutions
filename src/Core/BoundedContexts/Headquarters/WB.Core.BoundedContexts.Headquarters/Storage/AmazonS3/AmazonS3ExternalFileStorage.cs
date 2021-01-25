@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using WB.Core.GenericSubdomains.Portable.Services;
+using Microsoft.Extensions.Logging;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
@@ -18,18 +18,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private readonly IAmazonS3Configuration s3Configuration;
         private readonly IAmazonS3 client;
         private readonly ITransferUtility transferUtility;
-        private readonly ILogger log;
+        private readonly ILogger<AmazonS3ExternalFileStorage> logger;
 
         public AmazonS3ExternalFileStorage(
             IAmazonS3Configuration s3Configuration,
             IAmazonS3 amazonS3Client,
             ITransferUtility transferUtility,
-            ILoggerProvider loggerProvider)
+            ILogger<AmazonS3ExternalFileStorage> logger)
         {
-            log = loggerProvider.GetForType(GetType());
             this.s3Configuration = s3Configuration;
             client = amazonS3Client;
             this.transferUtility = transferUtility;
+            this.logger = logger;
         }
 
         private AmazonBucketInfo? _bucketInfo;
@@ -37,42 +37,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public async Task<byte[]?> GetBinaryAsync(string key)
         {
+            var getObject = new GetObjectRequest
+            {
+                BucketName = BucketInfo.BucketName,
+                Key = BucketInfo.PathTo(key)
+            };
+
             try
             {
-                var getObject = new GetObjectRequest
-                {
-                    BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathTo(key)
-                };
-
                 using var response = await client.GetObjectAsync(getObject).ConfigureAwait(false);
                 await using var ms = new MemoryStream();
                 await response.ResponseStream.CopyToAsync(ms);
+                logger.LogTrace("Got object from S3. [{key}] {request_key}", key, getObject.Key);
                 return ms.ToArray();
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.Trace($"Cannot get object from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathTo(key)}");
+                logger.LogTrace("Cannot get object from S3: {statusCode} [{key}] {request_key}", e.StatusCode, key, getObject.Key);
                 return null;
             }
             catch (Exception e)
             {
-                LogError($"Unable to get binary from {key}", e);
+                LogError("Unable to get binary from ]{key}] {request_key}", e, key, getObject.Key);
                 throw;
             }
         }
 
         public async Task<List<FileObject>?> ListAsync(string prefix)
         {
+            var listObjects = new ListObjectsV2Request
+            {
+                BucketName = BucketInfo.BucketName,
+                Prefix = BucketInfo.PathTo(prefix)
+            };
+
             try
             {
-                var listObjects = new ListObjectsV2Request
-                {
-                    BucketName = BucketInfo.BucketName,
-                    Prefix = BucketInfo.PathTo(prefix)
-                };
-
                 ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
+                logger.LogTrace("Got list of objects from S3. Prefix: [{prefix}] {request_prefix}, Count: {count}",
+                    prefix, listObjects.Prefix, response.S3Objects.Count);
+
                 return response.S3Objects.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
@@ -82,28 +86,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.Trace($"Cannot list objects from S3. [{e.StatusCode.ToString()}] {BucketInfo.PathTo(prefix)}");
+                logger.LogTrace("Cannot list objects from S3. [{statusCode}] {prefix}", e.StatusCode, listObjects.Prefix);
                 return null;
             }
             catch (Exception e)
             {
-                LogError($"Unable to get list of object from S3 by prefix: {prefix}", e);
+                LogError("Unable to get list of object from S3 by prefix: {prefix}", e, prefix);
                 throw;
             }
         }
 
-        private void LogError(string message, Exception exception)
+        private void LogError(string message, Exception exception, params object[] args)
         {
-            log.Error($"{message}. " +
-                      $"BucketName: {BucketInfo.BucketName}. " +
-                      $"BasePath: {BucketInfo.PathPrefix} ", exception);
+            logger.LogError(exception, message + ". " +
+                      "BucketName: {BucketInfo.BucketName}. " +
+                      "BasePath: {BucketInfo.PathPrefix} ", new [] { BucketInfo.BucketName, BucketInfo.PathPrefix}
+                .Concat(args).ToArray());
         }
 
         public bool IsEnabled() => true;
 
         public string GetDirectLink(string key, TimeSpan expiration)
         {
-
             return client.GetPreSignedURL(new GetPreSignedUrlRequest
             {
                 Protocol = Protocol.HTTPS,
@@ -115,24 +119,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public FileObject Store(string key, Stream inputStream, string contentType, IProgress<int>? progress = null)
         {
+            var uploadRequest = new TransferUtilityUploadRequest
+            {
+                BucketName = BucketInfo.BucketName,
+                Key = BucketInfo.PathTo(key),
+                ContentType = contentType,
+                AutoCloseStream = false,
+                AutoResetStreamPosition = false,
+                InputStream = inputStream
+            };
+
             try
             {
-                var uploadRequest = new TransferUtilityUploadRequest
-                {
-                    BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathTo(key),
-                    ContentType = contentType,
-                    AutoCloseStream = false,
-                    AutoResetStreamPosition = false,
-                    InputStream = inputStream
-                };
-
                 if (progress != null)
                 {
                     uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
 
                 transferUtility.Upload(uploadRequest);
+
+                logger.LogTrace("Stored object to S3. [{key}] {request_key}", key, uploadRequest.Key);
 
                 return new FileObject
                 {
@@ -143,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (Exception e)
             {
-                LogError($"Unable to store object in S3. Path: {key}", e);
+                LogError("Unable to store object in S3. [{key}] {request_key}",e , key, uploadRequest.Key);
                 throw;
             }
         }
@@ -153,24 +159,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             string contentType,
             IProgress<int>? progress = null)
         {
+            var uploadRequest = new TransferUtilityUploadRequest
+            {
+                BucketName = BucketInfo.BucketName,
+                Key = BucketInfo.PathTo(key),
+                ContentType = contentType,
+                AutoCloseStream = false,
+                AutoResetStreamPosition = false,
+                InputStream = inputStream
+            };
+
             try
             {
-                var uploadRequest = new TransferUtilityUploadRequest
-                {
-                    BucketName = BucketInfo.BucketName,
-                    Key = BucketInfo.PathTo(key),
-                    ContentType = contentType,
-                    AutoCloseStream = false,
-                    AutoResetStreamPosition = false,
-                    InputStream = inputStream
-                };
-
                 if (progress != null)
                 {
                     uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
 
                 await transferUtility.UploadAsync(uploadRequest).ConfigureAwait(false);
+                logger.LogTrace("Stored object to S3. [{key}] {request_key}", key, uploadRequest.Key);
 
                 return new FileObject
                 {
@@ -197,6 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             try
             {
                 await client.DeleteObjectAsync(BucketInfo.BucketName, BucketInfo.PathTo(path)).ConfigureAwait(false);
+                logger.LogTrace("Deleted object from S3. [{path}] {request_path}", path, BucketInfo.PathTo(path));
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -223,12 +231,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 if (deleteRequest.Objects.Any())
                 {
                     await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                    var objects = string.Join(", ", deleteRequest.Objects.Select(kl => kl.Key));
+                    logger.LogTrace("Deleted object from S3. [{objects}]", objects);
                 }
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 // ignore
-                log.Info($"Unable to find object in S3. BucketName: {BucketInfo.BucketName}. BasePath: {BucketInfo.PathPrefix} ", e);
+                logger.LogInformation("Unable to find object in S3. " +
+                                      $"BucketName: {BucketInfo.BucketName}. BasePath: {BucketInfo.PathPrefix} ");
             }
             catch (Exception e)
             {
