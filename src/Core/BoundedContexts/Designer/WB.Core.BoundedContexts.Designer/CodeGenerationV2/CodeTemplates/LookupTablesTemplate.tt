@@ -16,8 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
     {
 #>
         private static Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #>;
-        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => <#= table.TableNameField #> ?? (<#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable());  
-        
+        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => <#= table.TableNameField #> ?? (<#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable());          
 <# 
     }
 #>
@@ -35,80 +34,30 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             //to avoid SO
             //generated method is too big
 
-            FillTableFirst1000(lookup__table);
-            FillTableSecond1000(lookup__table);
-            FillTableThird1000(lookup__table);
-            FillTableFourth1000(lookup__table);
-            FillTableFifth1000(lookup__table);
+            const string data = @"
+<#
+            foreach (var row in table.Rows) 
+            {
+#>
+<#= row.RowCode #>|<#= string.Join("|", row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>
+<# 
+            }
+#>";
+            var lines = System.Text.RegularExpressions.Regex.Split(data, "\r\n");// .Where(x => !string.IsNullOrWhiteSpace(x));
+            
+            foreach(var line in lines)
+            {
+                if(string.IsNullOrWhiteSpace(line)) continue;
+
+                var split = line.Split('|');
+                lookup__table.Add(int.Parse(split[0]), new <#= table.TypeName#>(int.Parse(split[0]), <#= string.Join(",", table.VariableNames.Select((x,i) => $"double.Parse(split[{i}+1])")) #>));                
+            }
             return lookup__table;
-        }
-
-        public static void FillTableFirst1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
-        {
-<#
-            foreach (var row in table.Rows.Take(1000)) 
-            {
-#>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
-<# 
-            }
-#>
-        }
-
-        public static void FillTableSecond1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
-        {
-<#
-            foreach (var row in table.Rows.Skip(1000).Take(1000)) 
-            {
-#>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
-<# 
-            }
-#>
-        }
-
-        public static void FillTableThird1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
-        {
-<#
-            foreach (var row in table.Rows.Skip(2000).Take(1000)) 
-            {
-#>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
-<# 
-            }
-#>
-
-        }
-        public static void FillTableFourth1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
-        {
-<#
-            foreach (var row in table.Rows.Skip(3000).Take(1000)) 
-            {
-#>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
-<# 
-            }
-#>
-
-        }
-        public static void FillTableFifth1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
-        {
-<#
-            foreach (var row in table.Rows.Skip(4000)) 
-            {
-#>
-                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>));
-<# 
-            }
-#>
-        }
+        }      
     }
-
 <#	
     }
 #>
-
-
 <#
     foreach (var table in LookupTables) 
     {
