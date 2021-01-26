@@ -73,7 +73,7 @@ namespace WB.UI.WebTester.Services.Implementation
             return questionnaire;
         }
 
-        public async Task<CreationResult> CreateInterview(Guid designerToken, int scenarioId)
+        public async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, int scenarioId)
         {
             var questionnaire = await ImportQuestionnaireAndCreateInterview(designerToken);
 
@@ -107,7 +107,7 @@ namespace WB.UI.WebTester.Services.Implementation
             }
         }
 
-        public async Task<CreationResult> CreateInterview(Guid designerToken, Guid originalInterviewId)
+        public async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, Guid originalInterviewId)
         {
             try
             {
