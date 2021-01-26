@@ -19,7 +19,7 @@ namespace WB.UI.WebTester.Infrastructure
         {
             hc.MaxResponseContentBufferSize = 2_000_000_000;
             hc.BaseAddress = new Uri(designerAddress);
-            hc.Timeout = TimeSpan.FromMinutes(3);
+            hc.Timeout = TimeSpan.FromMinutes(5);
         }
     }
 }
