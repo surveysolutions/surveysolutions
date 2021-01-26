@@ -14,8 +14,8 @@ namespace WB.UI.WebTester.Services
     {
         Task<QuestionnaireIdentity> ImportQuestionnaireAndCreateInterview(Guid designerToken);
 
-        Task<CreationResult> CreateInterview(Guid designerToken, Guid originalInterviewId);
+        Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, Guid originalInterviewId);
 
-        Task<CreationResult> CreateInterview(Guid designerToken, int scenarioId);
+        Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, int scenarioId);
     }
 }
