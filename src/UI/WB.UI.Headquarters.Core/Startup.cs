@@ -46,11 +46,9 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.AspNetCore.DataProtection;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Workspaces;
 using WB.Persistence.Headquarters.Migrations.Logs;
 using WB.Persistence.Headquarters.Migrations.MigrateToPrimaryWorkspace;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
@@ -107,7 +105,7 @@ namespace WB.UI.Headquarters
             });
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString);
+            var unitOfWorkConnectionSettings = BuildUnitOfWorkSettings(connectionString, Configuration);
 
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                 .Where(x => x?.Namespace?.Contains("Services.Impl") == true)
@@ -132,7 +130,8 @@ namespace WB.UI.Headquarters
                 );
         }
 
-        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString)
+        public static UnitOfWorkConnectionSettings BuildUnitOfWorkSettings(string connectionString, 
+            IConfiguration configuration = null)
         {
             var mappingAssemblies = new List<Assembly>
             {
@@ -142,6 +141,7 @@ namespace WB.UI.Headquarters
 
             var unitOfWorkConnectionSettings = new UnitOfWorkConnectionSettings
             {
+                Configuration = configuration,
                 ConnectionString = connectionString,
                 ReadSideMappingAssemblies = mappingAssemblies,
                 PlainMappingAssemblies = new List<Assembly>
