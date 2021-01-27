@@ -288,4 +288,21 @@
   <data name="PasswordChanged" xml:space="preserve">
     <value>Password for user {0} changed</value>
   </data>
+
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>All users</value>
+  </data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>Missing workspaces</value>
+  </data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>With disabled workspaces only</value>
+  </data>
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>Locked users</value>
+  </data>
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>Archived users</value>
+  </data>
+  
 </root>

@@ -34,7 +34,7 @@
         <value>Name should be unique</value>
     </data>
   <data name="EditWorkspace" xml:space="preserve">
-        <value>Edit workspace {{name}}</value>
+        <value>Edit workspace "{{name}}"</value>
     </data>
   <data name="WorkspacesSubtitle" xml:space="preserve">
         <value>Each workspace has isolated questionnaires, interviews, assignments and users.</value>
@@ -73,7 +73,7 @@
         <value>List of workspaces updated</value>
     </data>
   <data name="DisableWorkspacePopupTitle" xml:space="preserve">
-        <value>Confirm disabling {{name}}</value>
+        <value>Confirm disabling "{{name}}"</value>
     </data>
   <data name="Disable" xml:space="preserve">
         <value>Disable</value>
@@ -85,15 +85,16 @@
         <value>Enable</value>
     </data>
   <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
-        <value>Delete workspace {{name}}</value>
+        <value>Delete workspace "{{name}}"</value>
     </data>
   <data name="DeleteExplanation" xml:space="preserve">
-        <value>Are You sure that You want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;? 
-All interviewers and supervisors connected to this workspace will be also deleted. All Interviewer and Supervisor application will require data reset.
-Following data associated with this workspace will be deleted:</value>
+        <value>Are you sure that you want to delete workspace &lt;strong&gt;{{name}}&lt;/strong&gt;?
+All interviewer, supervisor, and observer accounts connected to this workspace will also be deleted. The Survey Solutions Interviewer and Supervisor applications installed on the tablets of these users will no longer be able to communicate with this server and require a data reset. 
+
+The following data associated with this workspace will be deleted:</value>
     </data>
   <data name="CantDeleteExplanation" xml:space="preserve">
-        <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted. Following data associated with this workspace will be deleted:</value>
+        <value>Workspace cannot be deleted. There is at least one questionnaire associated with this workspace. Only workspaces without questionnaires can be deleted.</value>
     </data>
   <data name="InterviewersCount" xml:space="preserve">
         <value>Interviewers: {{count}}</value>

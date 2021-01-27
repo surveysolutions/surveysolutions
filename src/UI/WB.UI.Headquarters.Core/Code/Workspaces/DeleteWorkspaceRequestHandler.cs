@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         public DeleteWorkspaceRequestHandler(
             IWorkspacesCache workspacesCache,
             IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory,
-            IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService, 
+            IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService,
             IInScopeExecutor<IExportServiceApi> exportService,
             IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask,
             ISystemLog systemLog)
@@ -40,10 +40,10 @@ namespace WB.UI.Headquarters.Code.Workspaces
         }
 
         public async Task<DeleteWorkspaceResponse> Handle(
-            DeleteWorkspaceRequest request, 
+            DeleteWorkspaceRequest request,
             CancellationToken cancellationToken = default)
         {
-            var workspace = workspacesCache.AllEnabledWorkspaces()
+            var workspace = workspacesCache.AllWorkspaces()
                                 .FirstOrDefault(w => w.Name == request.WorkspaceName)
                             ?? throw new MissingWorkspaceException(
                                 "Cannot find workspace with name: " + request.WorkspaceName);
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     ErrorMessage = "Cannot delete primary workspace"
                 };
             }
-            
+
             bool canDelete = false;
 
             questionnaireViewFactory.Execute(accessor =>
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     Success = false,
                     ErrorMessage = "Workspace cannot be deleted. There is questionnaire exists"
                 };
-            
+
             await exportService.ExecuteAsync(async export =>
             {
                 await export.DeleteTenant();

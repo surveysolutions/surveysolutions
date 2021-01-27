@@ -46,23 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             Assert.That(response.RecordsFiltered, Is.EqualTo(2)); // filtered to HQ users
         }
         
-        [Test]
-        public async Task should_not_return_locked_users_by_default()
-        {
-            Users = new[] {
-                Create.Entity.HqUser(role: UserRoles.Headquarter, lockedBySupervisor: true),
-                Create.Entity.HqUser(role: UserRoles.Headquarter, isLockedByHQ: true),
-                Create.Entity.HqUser(role: UserRoles.ApiUser)
-            };
-
-            var response = await Subject.Handle(new UsersManagementRequest
-            {
-                Length = 10
-            });
-            
-            Assert.That(response.RecordsFiltered, Is.EqualTo(1));
-        }
-
+ 
         [Test]
         public async Task should_return_locked_users_by_request()
         {
@@ -74,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 
             var response = await Subject.Handle(new UsersManagementRequest
             {
-                ShowLocked = true,
+                Filter = UserManagementFilter.Locked,
                 Length = 10
             });
             
@@ -92,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 
             var response = await Subject.Handle(new UsersManagementRequest
             {
-                MissingWorkspace = true,
+                Filter = UserManagementFilter.WithMissingWorkspace,
                 Length = 10
             });
             

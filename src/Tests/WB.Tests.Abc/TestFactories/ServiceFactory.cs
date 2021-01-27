@@ -50,6 +50,7 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -403,6 +404,21 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new AllInterviewsFactory(interviewSummarys ??
                                             Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+        }
+        
+        public InterviewHistoryFactory InterviewHistoryFactory(
+            IEventStore eventStore = null, 
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaries = null,
+            IUserViewFactory userReader = null,
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null,
+            IQuestionnaireStorage questionnaireStorage = null)
+        {
+            return new InterviewHistoryFactory(
+                eventStore ?? Mock.Of<IEventStore>(),
+                interviewSummaries ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
+                userReader ?? Mock.Of<IUserViewFactory>(),
+                questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
         public IRandomValuesSource RandomValuesSource(params int[] sequence)
@@ -1317,7 +1333,8 @@ namespace WB.Tests.Abc.TestFactories
                 new TestPlainStorage<WorkspacesUsers>(),
                 Mock.Of<IUserRepository>(),
                 Mock.Of<ILogger<WorkspacesService>>(),
-                Mock.Of<ISystemLog>()
+                Mock.Of<ISystemLog>(),
+                Mock.Of<IWorkspacesUsersCache>()
             );
         }
     }

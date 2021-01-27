@@ -28,7 +28,8 @@ namespace WB.Services.Infrastructure.Tenant
         public TenantId Id { get; set; }
         public string Name { get; }
         public string ShortName { get; set; }
-        public string Workspace { get; set; }
+        public string? Workspace { get; set; }
+
         public const string DefaultWorkspace = "primary";
 
         protected bool Equals(TenantInfo other)

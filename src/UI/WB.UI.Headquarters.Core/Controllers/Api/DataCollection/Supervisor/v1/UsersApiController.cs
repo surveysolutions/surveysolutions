@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Authorize(Roles = "Supervisor")]
         [Route("current")]
         [AllowPrimaryWorkspaceFallback]
+        [IgnoreWorkspacesLimitation]
         public virtual SupervisorApiView Current()
         {
             var user = this.userViewFactory.FindById(this.authorizedUser.Id);

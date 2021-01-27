@@ -7,6 +7,6 @@
   <bool name="AcceptUnsignedSslCertificate">false</bool>
   <string name="DesignerEndpoint">https://designer.mysurvey.solutions</string>
   <bool name="VibrateOnError">true</bool>
-  <string name="google_maps_api_key">AIzaSyBi_p1AvdpT0DH2fAY5ZAIt6p_qxTLqejw</string>
-    <string name="appcenter_key">e77a488d-d76b-4300-9a37-8716f5b2faa7</string>
+  <string name="google_maps_api_key"></string>
+    <string name="appcenter_key"></string>
 </resources>

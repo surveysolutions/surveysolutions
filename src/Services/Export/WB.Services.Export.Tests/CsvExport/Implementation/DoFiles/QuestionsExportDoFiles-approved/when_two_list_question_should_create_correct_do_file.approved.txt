@@ -5,6 +5,8 @@ label variable interview__id `"Unique 32-character long identifier of the interv
 
 label variable interview__key `"Interview key (identifier in XX-XX-XX-XX format)"'
 
+label variable assignment__id `"Assignment id (identifier in numeric format)"'
+
 label variable sssys_irnd `"Random number in the range 0..1 associated with interview"'
 
 label variable has__errors `"Errors count in the interview"'
