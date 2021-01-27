@@ -31,27 +31,18 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         public static Dictionary<int, <#= table.TypeName#>> GetTable()
         {            
             var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
-            //to avoid SO
-            //generated method is too big
-
-            const string data = @"
-<#
-            foreach (var row in table.Rows) 
-            {
-#>
-<#= row.RowCode #>|<#= string.Join("|", row.Variables.Select(x => x == null ? "null" : this.ToStringHelper.ToStringWithCulture(x) ) ) #>
-<# 
-            }
-#>";
-            var lines = System.Text.RegularExpressions.Regex.Split(data, "\r\n");// .Where(x => !string.IsNullOrWhiteSpace(x));
+            const string data = "<#= table.RenderLookupRowsData() #>";
+            var lines = data.Split('\n');
             
             foreach(var line in lines)
             {
                 if(string.IsNullOrWhiteSpace(line)) continue;
 
-                var split = line.Split('|');
-                lookup__table.Add(int.Parse(split[0]), new <#= table.TypeName#>(int.Parse(split[0]), <#= string.Join(",", table.VariableNames.Select((x,i) => $"double.Parse(split[{i}+1])")) #>));                
+                var split = line.Split('\t');
+                var rowCode = int.Parse(split[0]);
+                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select((x,i) => $"double.Parse(split[{i}+1])")) #>));                
             }
+
             return lookup__table;
         }      
     }
