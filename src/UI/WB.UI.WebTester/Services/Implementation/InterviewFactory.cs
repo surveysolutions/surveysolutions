@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Scenarios;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -49,11 +51,11 @@ namespace WB.UI.WebTester.Services.Implementation
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.aggregateRootCache = aggregateRootCache ?? throw new ArgumentNullException(nameof(aggregateRootCache));
         }
-
-        public async Task CreateInterview(Guid designerToken)
+       
+        public async Task<QuestionnaireIdentity> ImportQuestionnaireAndCreateInterview(Guid designerToken)
         {
             var questionnaire = await questionnaireImportService.ImportQuestionnaire(designerToken);
-
+            
             var createInterview = new CreateInterview(
                 interviewId: designerToken,
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
@@ -67,31 +69,21 @@ namespace WB.UI.WebTester.Services.Implementation
                 isAudioRecordingEnabled: false);
 
             this.commandService.Execute(createInterview);
+
+            return questionnaire;
         }
 
-        public async Task<CreationResult> CreateInterview(Guid designerToken, int scenarioId)
+        public async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, int scenarioId)
         {
-            var questionnaire = await questionnaireImportService.ImportQuestionnaire(designerToken);
-
-            var createInterview = new CreateInterview(
-                interviewId: designerToken,
-                userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                questionnaireId: questionnaire,
-                answers: new List<InterviewAnswer>(),
-                protectedVariables: new List<string>(),
-                supervisorId: Guid.NewGuid(),
-                interviewerId: Guid.NewGuid(),
-                interviewKey: new InterviewKey(new Random().Next(99999999)),
-                assignmentId: null,
-                isAudioRecordingEnabled: false);
-
-            this.commandService.Execute(createInterview);
+            var questionnaire = await ImportQuestionnaireAndCreateInterview(designerToken);
 
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
-            var scenario = this.serializer.Deserialize(scenarioSerialized);
-
+            if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound)
+                return CreationResult.EmptyCreated;
+            
+            var scenario = this.serializer.Deserialize(scenarioSerialized.Content);
             if (scenario == null)
-                throw new InvalidOperationException("Scenario must not be null.");
+                return CreationResult.EmptyCreated;
 
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaire, null);
 
@@ -110,30 +102,16 @@ namespace WB.UI.WebTester.Services.Implementation
             catch
             {
                 Evict(designerToken);
-                await this.CreateInterview(designerToken);
+                await this.ImportQuestionnaireAndCreateInterview(designerToken);
                 return CreationResult.EmptyCreated;
             }
         }
 
-        public async Task<CreationResult> CreateInterview(Guid designerToken, Guid originalInterviewId)
+        public async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, Guid originalInterviewId)
         {
             try
             {
-                var questionnaireId = await questionnaireImportService.ImportQuestionnaire(designerToken);
-
-                var createInterview = new CreateInterview(
-                    interviewId: designerToken,
-                    userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                    questionnaireId: questionnaireId,
-                    answers: new List<InterviewAnswer>(),
-                    protectedVariables: new List<string>(),
-                    supervisorId: Guid.NewGuid(),
-                    interviewerId: Guid.NewGuid(),
-                    interviewKey: new InterviewKey(new Random().Next(99999999)),
-                    assignmentId: null,
-                    isAudioRecordingEnabled: false);
-
-                this.commandService.Execute(createInterview);
+                var questionnaireId = await ImportQuestionnaireAndCreateInterview(designerToken);
 
                 var existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId) ??
                                                 new List<InterviewCommand>();
@@ -164,7 +142,7 @@ namespace WB.UI.WebTester.Services.Implementation
             catch (Exception ex)
             {
                 Evict(designerToken);
-                await this.CreateInterview(designerToken);
+                await this.ImportQuestionnaireAndCreateInterview(designerToken);
                 return CreationResult.EmptyCreated;
             }
         }
