@@ -470,3 +470,24 @@ function GetPackageName([string]$CapiProject) {
     $res = Select-Xml -xml $xam -Xpath '/manifest/@package' -namespace @{android='http://schemas.android.com/apk/res/android'}
     return ($res.Node.Value)
 }
+
+
+function Set-AndroidXmlResourceValue {
+    [CmdletBinding()]
+    param (  
+        $project,
+        [string] $keyName,
+        [string] $keyValue
+    )    
+
+    $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
+    Log-Message "Updating app resource key in $filePath"
+
+    [xml] $resourceFile = Get-Content -Path $filePath
+    $appCenterKey = Select-Xml -xml $resourceFile `
+        -Xpath "/resources/string[@name='$keyName']"
+
+    $appCenterKey.Node.InnerText = $keyValue
+
+    $resourceFile.Save($filePath)
+}

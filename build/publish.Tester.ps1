@@ -3,6 +3,8 @@ param([string]$VersionName = $null,
 [string]$BuildConfiguration='Release',
 [string]$KeystorePassword = $null,
 [string]$branch = "master",
+[string]$GoogleMapKey,
+[string]$AppCenterKey,
 [string]$KeystoreName = 'WBCapiTester.keystore',
 [string]$KeystoreAlias = 'Tester')
 
@@ -20,6 +22,8 @@ Log-Block "Update project version" {
     Write-Host "##teamcity[setParameter name='system.VersionString' value='$versionString']"
 }
 
+Set-AndroidXmlResourceValue $AndroidProject "google_maps_api_key" $GoogleMapKey
+Set-AndroidXmlResourceValue $AndroidProject "appcenter_key" $AppCenterKey
 
 & (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
     -p:Configuration=$BuildConfiguration `
