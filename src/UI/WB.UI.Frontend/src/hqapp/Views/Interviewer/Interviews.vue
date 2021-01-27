@@ -353,7 +353,7 @@ export default {
                 interviewId : self.calendarInterviewId,
                 interviewKey: self.calendarInterviewKey,
                 assignmentId : self.calendarAssinmentId,
-                publicKey : self.calendarEventId,
+                publicKey : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
                 newStart : startDate,
                 comment : self.editCalendarComment,
                 startTimezone: moment.tz.guess(),
@@ -368,7 +368,7 @@ export default {
             this.$refs.editCalendarModal.hide()
 
             deleteCalendarEvent(self.$apollo, {
-                'publicKey' : self.calendarEventId,
+                'publicKey' : self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-',''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)
 

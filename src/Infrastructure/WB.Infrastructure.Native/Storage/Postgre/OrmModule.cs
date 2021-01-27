@@ -157,7 +157,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     DbMigrationsRunner.MigrateToLatest(connectionString,
                         this.connectionSettings.WorkspacesSchemaName,
                         this.connectionSettings.WorkspacesMigrationSettings,
-                        loggerProvider);
+                        loggerProvider,
+                        this.connectionSettings.Configuration);
 
                     status.ClearMessage();
                 }

@@ -17,7 +17,11 @@
                         <span aria-hidden="true"></span>
                     </button>
                     <slot name="title">
-                        <h2 :id="titleId">
+                        <h2 v-if="useHtmlInTitle"
+                            :id="titleId"
+                            v-html="title" />
+                        <h2 v-else
+                            :id="titleId">
                             {{ title }}
                         </h2>
                     </slot>
@@ -38,6 +42,7 @@ export default {
     props: {
         id: String,
         title: String,
+        useHtmlInTitle: { type: Boolean, required: false, default: false },
         canClose: {
             type: Boolean,
             default() { return true },

@@ -4,6 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Main.Core.Documents;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 using Moq;
@@ -101,10 +102,9 @@ namespace WB.Tests.Abc.TestFactories
         public AmazonS3ExternalFileStorage AmazonS3ExternalFileStorage(
             IAmazonS3Configuration s3Settings, 
             IAmazonS3 client, 
-            ITransferUtility transferUtility, 
-            ILoggerProvider loggerProvider)
+            ITransferUtility transferUtility)
         { 
-            return new AmazonS3ExternalFileStorage(s3Settings, client, transferUtility, loggerProvider);
+            return new AmazonS3ExternalFileStorage(s3Settings, client, transferUtility, new NullLogger<AmazonS3ExternalFileStorage>());
         }
 
         public IPlainStorage<TEntity> SqliteInmemoryStorage<TEntity>(params TEntity[] items)

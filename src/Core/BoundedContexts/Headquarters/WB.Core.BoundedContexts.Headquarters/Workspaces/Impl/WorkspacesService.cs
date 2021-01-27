@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
         private readonly ILogger<WorkspacesService> logger;
         private readonly IUserRepository userRepository;
         private readonly ISystemLog systemLog;
+        private readonly IWorkspacesUsersCache usersCache;
 
         public WorkspacesService(UnitOfWorkConnectionSettings connectionSettings,
             ILoggerProvider loggerProvider, 
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             IPlainStorageAccessor<WorkspacesUsers> workspaceUsers,
             IUserRepository userRepository,
             ILogger<WorkspacesService> logger, 
-            ISystemLog systemLog)
+            ISystemLog systemLog, IWorkspacesUsersCache usersCache)
         {
             this.connectionSettings = connectionSettings;
             this.loggerProvider = loggerProvider;
@@ -42,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             this.workspaceUsers = workspaceUsers;
             this.logger = logger;
             this.systemLog = systemLog;
+            this.usersCache = usersCache;
             this.userRepository = userRepository;
         }
 
@@ -108,6 +110,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             {
                 this.systemLog.WorkspaceUserAssigned(user.UserName, workspacesAdded);
             }
+
+            this.usersCache.Invalidate(user.Id);
         }
 
         public async Task DeleteAsync(WorkspaceContext workspace, CancellationToken token = default)

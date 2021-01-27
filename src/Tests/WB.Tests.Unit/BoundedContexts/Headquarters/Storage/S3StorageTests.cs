@@ -48,7 +48,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
             this.client = new Mock<IAmazonS3>();
             this.transferUtility = new Mock<ITransferUtility>();
 
-            this.storage = Create.Storage.AmazonS3ExternalFileStorage(settings, client.Object, transferUtility.Object, Mock.Of<ILoggerProvider>(l => l.GetForType(It.IsAny<Type>()) == Mock.Of<ILogger>()));
+            this.storage = Create.Storage.AmazonS3ExternalFileStorage(settings, 
+                client.Object, transferUtility.Object);
         }
 
         [Test]

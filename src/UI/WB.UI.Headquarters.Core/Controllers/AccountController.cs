@@ -26,8 +26,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly SignInManager<HqUser> signInManager;
         private readonly UserManager<HqUser> userManager;
         protected readonly IAuthorizedUser authorizedUser;
-        
-        public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
+
+        public AccountController(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
-            
+
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     return Redirect(returnUrl);
                 }
-                
+
                 return Redirect(Url.Content("~/"));
             }
             if (signInResult.RequiresTwoFactor)
@@ -152,7 +152,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
-            
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -166,12 +166,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
             var signInResult = await signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, true, false);
-            
+
             if (signInResult.Succeeded)
             {
                 return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
-            
+
             if (signInResult.IsLockedOut)
             {
                 this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
@@ -237,12 +237,12 @@ namespace WB.UI.Headquarters.Controllers
 
             await this.signInManager.SignOutAsync();
             await this.signInManager.SignInAsync(observer, true);
-            
+
             return this.Redirect("~/");
         }
-        
+
         private static readonly Guid[] ObservableRoles = {UserRoles.Headquarter.ToUserId(), UserRoles.Supervisor.ToUserId()};
-        
+
         [Authorize(Roles = "Administrator, Observer")]
         public async Task<IActionResult> ObservePerson(string personName)
         {
@@ -263,20 +263,31 @@ namespace WB.UI.Headquarters.Controllers
 
         public async Task SignInAsObserverAsync(string userName)
         {
+            var observerName = User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;
+
+            if (observerName != null)
+            {
+                // do not allow observer to sign in twice.
+                // ignoring attempt to sign in
+                return;
+            }
+
             var userToObserve = await this.signInManager.UserManager.FindByNameAsync(userName);
+
             userToObserve.Claims.Add(new HqUserClaim
             {
                 UserId = userToObserve.Id,
                 ClaimType = AuthorizedUser.ObserverClaimType,
                 ClaimValue = authorizedUser.UserName
             });
+
             userToObserve.Claims.Add(new HqUserClaim
             {
                 UserId = userToObserve.Id,
                 ClaimType = ClaimTypes.Role,
                 ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
             });
-            
+
             await this.signInManager.SignOutAsync();
             await this.signInManager.SignInAsync(userToObserve, true);
         }

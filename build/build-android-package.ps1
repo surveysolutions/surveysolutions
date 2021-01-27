@@ -6,6 +6,7 @@ param([string]$VersionName = $null,
 [string]$KeystoreName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
+[string]$GoogleMapKey,
 [string]$OutFileName,
 [switch]$ExcludeExtra,
 [string]$PlatformsOverride,
@@ -80,24 +81,6 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
     }
 }
 
-function Set-AppcenterKey{
-    [CmdletBinding()]
-    param (  
-        $project,
-        [string] $keyValue
-    )    
-
-    $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
-    Log-Message "Updating app center key in $filePath"
-
-    [xml] $resourceFile = Get-Content -Path $filePath
-    $appCenterKey = Select-Xml -xml $resourceFile `
-        -Xpath '/resources/string[@name="appcenter_key"]'
-
-    $appCenterKey.Node.InnerText = $keyValue
-
-    $resourceFile.Save($filePath)
-} 
 
 # Main part
 $ErrorActionPreference = "Stop"
@@ -111,7 +94,8 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
             Remove-Item $OutFileName -Force
         }
 
-        Set-AppcenterKey $CapiProject $AppCenterKey
+        Set-AndroidXmlResourceValue $CapiProject "appcenter_key" $AppCenterKey
+        Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
 
         BuildAndroidApp $CapiProject $BuildConfiguration -ExcludeExtensions $ExcludeExtra -VersionCode "$VersionCode" -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
     }

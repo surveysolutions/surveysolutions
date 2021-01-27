@@ -335,7 +335,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IWorkspaceContextSetter, WorkspaceContextSetter>();
             registry.Bind<IWorkspacesService, WorkspacesService>();
             registry.Bind<IWorkspacesCache, WorkspacesCache>();
-
+            registry.Bind<IWorkspacesUsersCache, WorkspacesUsersCache>();
             registry.BindAsSingleton<IMemoryCacheSource, WorkspaceAwareMemoryCache>();
             registry.BindToMethod(ctx =>
             {
