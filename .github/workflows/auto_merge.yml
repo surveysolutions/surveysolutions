@@ -1,4 +1,4 @@
-name: automerge
+name: Pull Requests Automatic Merge
 on:
   pull_request:
     types:
@@ -17,6 +17,7 @@ on:
     types:
       - completed
   status: {}
+
 jobs:
   automerge:
     runs-on: ubuntu-latest

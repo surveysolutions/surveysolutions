@@ -1,4 +1,4 @@
-name: Auto approve
+name: Pull Requests Handling
 
 on:
   pull_request
@@ -17,3 +17,35 @@ jobs:
       if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'release' }}
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
+        
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/labeler@main
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        sync-labels: true
+
+  rc_label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.event.pull_request.base.ref == 'rc' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            rc
+        
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'rc' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            automerge
+            
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref == 'release' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            automerge
