@@ -7,6 +7,6 @@
   <integer name="EventChunkSize">1000</integer>
   <bool name="VibrateOnError">true</bool>
   <bool name="AllowSyncWithHq">true</bool>
-  <string name="google_maps_api_key">AIzaSyBi_p1AvdpT0DH2fAY5ZAIt6p_qxTLqejw</string>
+  <string name="google_maps_api_key"></string>
   <string name="appcenter_key"></string>
 </resources>
