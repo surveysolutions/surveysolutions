@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             CriticalForLookupTable(LookupTableHasEmptyContent, "WB0048", VerificationMessages.WB0048_LookupHasEmptyContent),
             CriticalForLookupTable(LookupTableHasInvalidHeaders, "WB0031", VerificationMessages.WB0031_LookupTableHasInvalidHeaders),
             CriticalForLookupTable(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
-            CriticalForLookupTable(LookupTableMoreThan15000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan15000Rows),
+            CriticalForLookupTable(LookupTableMoreThan500000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan15000Rows),
             CriticalForLookupTable(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
         };
 
@@ -77,9 +77,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return tableContent.VariableNames.Length > 10;
         }
 
-        private static bool LookupTableMoreThan15000Rows(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool LookupTableMoreThan500000Rows(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return tableContent.Rows.Length > 15000;
+            return tableContent.Rows.Length > LookupTableService.MAX_ROWS_COUNT;
         }
 
         private static bool LookupTableNotUniqueRowcodeValues(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)

@@ -6,11 +6,25 @@
 <#@ import namespace="System.Text.RegularExpressions" #> 
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
 using System.Collections.Generic;
+using System.Reflection;
+using System.IO;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
     public static class LookupTables
     {
+        internal static IEnumerable<string> ReadEmbeddedStream(string name)
+        {
+            using Stream stream = Assembly.GetEntryAssembly().GetManifestResourceStream(name);
+            using StreamReader reader = new StreamReader(stream);
+
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                yield return line;
+            }
+        }
+        
 <#
     foreach (var table in LookupTables) 
     {
@@ -31,8 +45,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         public static Dictionary<int, <#= table.TypeName#>> GetTable()
         {            
             var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
-            const string data = "<#= table.RenderLookupRowsData() #>";
-            var lines = data.Split('\n');
+            
+            var lines = LookupTables.ReadEmbeddedStream("RESOURCE__<#= table.TypeName #>");
             
             foreach(var line in lines)
             {
@@ -40,7 +54,10 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
                 var split = line.Split('\t');
                 var rowCode = int.Parse(split[0]);
-                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select((x,i) => $"double.Parse(split[{i}+1])")) #>));                
+<# for (int i = 0; i < table.VariableNames.Length; i++) {#>
+                var __<#= table.VariableNames[i] #> = double.Parse(split[<#= i + 1 #>]);
+<# } #>
+                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select(v => "__" + v)) #>));                
             }
 
             return lookup__table;

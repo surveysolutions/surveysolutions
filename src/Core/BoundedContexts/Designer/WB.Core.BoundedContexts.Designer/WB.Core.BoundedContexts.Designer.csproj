@@ -16,22 +16,16 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="ReferencedAssemblies\System.Collections.dll" />
-    <None Remove="ReferencedAssemblies\System.Linq.dll" />
-    <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.Extensions.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.Numerics.dll" />
-    <None Remove="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.Expressions.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Extensions.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Numerics.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime\4.3.0\ref\netstandard1.5\System.Runtime.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.extensions\4.3.0\ref\netstandard1.5\System.Runtime.Extensions.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.numerics\4.3.0\ref\netstandard1.1\System.Runtime.Numerics.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.reflection\4.3.0\ref\netstandard1.5\System.Reflection.dll" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.io\4.3.0\ref\netstandard1.5\System.IO.dll" />   
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.0\ref\netstandard1.3\System.Text.RegularExpressions.dll" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
@@ -223,7 +217,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
+  </ItemGroup> 
+  
 
- 
 </Project>

@@ -44,8 +44,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             
             foreach (KeyValuePair<string, string> keyValuePair in generated)
             {
-                resultBuilder.AppendLine(string.Format("//{0}", keyValuePair.Key));
-                resultBuilder.AppendLine(keyValuePair.Value);
+                resultBuilder.AppendLine($"//{keyValuePair.Key}");
+
+                if (keyValuePair.Key.StartsWith("RESOURCE__", StringComparison.OrdinalIgnoreCase))
+                {
+                    resultBuilder.AppendLine("/*");
+                    resultBuilder.AppendLine(keyValuePair.Value);
+                    resultBuilder.AppendLine("*/");
+                } else
+                    resultBuilder.AppendLine(keyValuePair.Value);
             }
 
             return Ok(resultBuilder.ToString());

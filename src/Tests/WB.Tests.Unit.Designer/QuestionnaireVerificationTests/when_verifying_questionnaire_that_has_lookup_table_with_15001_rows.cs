@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             questionnaire.LookupTables.Add(tableId, Create.LookupTable("hello"));
 
             var tableRows = new List<LookupTableRow>();
-            for (int i = 1; i <= 15001; i++)
+            for (int i = 1; i <= 500_001; i++)
             {
                 tableRows.Add(Create.LookupTableRow(i, new decimal?[] { i }));
             }

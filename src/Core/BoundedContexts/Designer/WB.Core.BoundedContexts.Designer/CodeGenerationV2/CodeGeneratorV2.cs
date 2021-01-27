@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -44,9 +47,27 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 { ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText }
             };
 
+            foreach (var lookup in model.LookupTables)
+            {
+                var sb = new StringBuilder();
+                
+                string ResourceRow(LookupTableRow row)
+                {
+                    var variables = row.Variables.Select(v => v == null ? "null" : v.Value.ToString(CultureInfo.InvariantCulture));
+                    return $"{row.RowCode}\t{string.Join("\t", variables)}";
+                }
+
+                foreach (var row in lookup.Rows)
+                {
+                    sb.AppendLine(ResourceRow(row));
+                }
+
+                generatedClasses.Add("RESOURCE__" + lookup.TableName, sb.ToString());
+            }
+
             var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables);
             generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
-
+            
             foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)
             {
                 var methodTemplate = new ConditionMethodTemplate(variableMethodModel)

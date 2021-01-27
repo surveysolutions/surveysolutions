@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$", RegexOptions.Compiled);
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
-        private const int MAX_ROWS_COUNT = 15000;
+        internal const int MAX_ROWS_COUNT = 500_000;
         private const int MAX_COLS_COUNT = 11;
 
         public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage,

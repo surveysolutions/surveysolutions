@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -21,25 +22,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             generatedAssembly = string.Empty;
 
-            IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
+            IEnumerable<SyntaxTree> syntaxTrees = generatedClasses
+                .Where(g => !g.Key.StartsWith("RESOURCE__", StringComparison.OrdinalIgnoreCase))
+                .Select(
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
 
             var metadataReferences = new List<MetadataReference>();
             metadataReferences.AddRange(referencedPortableAssemblies);
-            
-            CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
-            EmitResult compileResult;
-            
-            using (var stream = new MemoryStream())
-            {
-                compileResult = compilation.Emit(stream);
 
-                if (compileResult.Success)
-                {
-                    stream.Position = 0;
-                    generatedAssembly = Convert.ToBase64String(stream.ToArray());
-                }
+            CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
+
+            using var stream = new MemoryStream();
+
+            var resources = generatedClasses.Where(g => g.Key.StartsWith("RESOURCE__", StringComparison.OrdinalIgnoreCase)).Select(kv =>
+                new ResourceDescription(kv.Key,
+                    () => new MemoryStream(Encoding.UTF8.GetBytes(kv.Value)), true));
+
+            EmitResult compileResult = compilation.Emit(stream, manifestResources: resources);
+            
+            if (compileResult.Success)
+            {
+                stream.Position = 0;
+                generatedAssembly = Convert.ToBase64String(stream.ToArray());
             }
 
             return compileResult;

@@ -230,7 +230,7 @@
                     </div>
                     <form role="form" name="lookupTablesForm" novalidate>
                         <ul ng-model="lookupTables">
-                            <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                            <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="100MB" accept=".tab,.txt,.tsv" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="table.form">
                                     <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" ng-disabled="questionnaire.isReadOnlyForUser" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName"
@@ -248,7 +248,7 @@
                                         </div>
                                         <div class="permanent-actions clearfix">
                                             <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
-                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="2MB" type="file">
+                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt,.tsv" ngf-max-size="100MB" type="file">
                                                 <span ng-hide="table.hasUploadedFile" ng-i18next="SideBarLookupTableSelectFile">Select file</span>
                                                 <span ng-show="table.hasUploadedFile" ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
                                             </button>
