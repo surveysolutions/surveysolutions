@@ -126,6 +126,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.Tests.Abc.Storage;
+using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using IAuditLogService = WB.Core.SharedKernels.Enumerator.Services.IAuditLogService;
@@ -706,10 +707,8 @@ namespace WB.Tests.Abc.TestFactories
                 currentUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IQRCodeHelper>(),
                 Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(),
-                Options.Create(new HeadquartersConfig
-                {
-                    BaseUrl = "http://hq"
-                }));
+                Mock.Of<IVirtualPathService>(s => s.GetAbsolutePath(It.IsAny<string>()) == "path")
+                );
         }
 
         public InterviewPackagesService InterviewPackagesService(
