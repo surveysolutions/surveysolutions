@@ -1,10 +1,12 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -247,6 +249,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
+            if (questionnaire == null)
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Questionnaire was not found.");
+
             var questionId = questionnaire.GetQuestionIdByVariable(variable);
 
             if (questionId == null)
@@ -298,8 +303,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/assign")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
-        public ActionResult Assign(Guid id, [FromBody] AssignChangeApiModel request)
+        public ActionResult Assign(Guid id, [FromBody, BindRequired] AssignChangeApiModel request)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
 
@@ -325,7 +334,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/approve")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
-        public ActionResult Approve(Guid id, string comment = null)
+        public ActionResult Approve(Guid id, string? comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -359,7 +368,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/reject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
-        public ActionResult Reject(Guid id, string comment = null, Guid? responsibleId = null)
+        public ActionResult Reject(Guid id, string? comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -404,7 +413,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/hqapprove")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
-        public ActionResult HQApprove(Guid id, string comment = null)
+        public ActionResult HQApprove(Guid id, string? comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -425,7 +434,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/hqreject")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
-        public ActionResult HQReject(Guid id, string comment = null, Guid? responsibleId = null)
+        public ActionResult HQReject(Guid id, string? comment = null, Guid? responsibleId = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -458,7 +467,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/hqunapprove")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
-        public ActionResult HQUnapprove(Guid id, string comment = null)
+        public ActionResult HQUnapprove(Guid id, string? comment = null)
         {
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
@@ -477,8 +486,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("{id:guid}/assignsupervisor")]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter)]
-        public ActionResult PostAssignSupervisor(Guid id, [FromBody]  AssignChangeApiModel request)
+        public ActionResult PostAssignSupervisor(Guid id, [FromBody, BindRequired]  AssignChangeApiModel request)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var q = this.GetQuestionnaireIdForInterview(id);
             if (q == null) return NotFound();
 

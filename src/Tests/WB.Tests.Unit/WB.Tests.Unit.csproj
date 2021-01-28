@@ -62,7 +62,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
-    <PackageReference Include="Quartz" Version="3.2.3" />
+    <PackageReference Include="Quartz" Version="3.2.4" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="ReflectionMagic" Version="4.1.0" />

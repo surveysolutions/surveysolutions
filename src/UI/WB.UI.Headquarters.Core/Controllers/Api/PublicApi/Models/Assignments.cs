@@ -121,7 +121,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentAssignRequest
     {
-        [DataMember] public string Responsible { get; set; }
+        [DataMember]
+        [Required]
+        public string Responsible { get; set; }
     }
 
     public class AssignmentsListView : BaseApiView
