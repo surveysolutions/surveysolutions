@@ -17,6 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="ReferencedAssemblies\System.Collections.dll" />
+    <None Remove="ReferencedAssemblies\System.Globalization.dll" />
     <None Remove="ReferencedAssemblies\System.Linq.dll" />
     <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
     <None Remove="ReferencedAssemblies\System.Runtime.dll" />
@@ -26,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Globalization.dll" />
     <EmbeddedResource Include="ReferencedAssemblies\System.Linq.dll" />
     <EmbeddedResource Include="ReferencedAssemblies\System.Linq.Expressions.dll" />
     <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.dll" />
