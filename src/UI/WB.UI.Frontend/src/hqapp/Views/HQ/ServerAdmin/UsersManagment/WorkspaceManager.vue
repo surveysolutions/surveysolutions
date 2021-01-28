@@ -5,15 +5,18 @@
         <form onsubmit="return false;">
             <div class="action-container">
                 <p v-if="isAdding"
+                    data-suso="title-add"
                     v-html="$t('Pages.UserManagement_SubtitleAdd')"></p>
                 <p v-else
+                    data-suso="title-remove"
                     v-html="$t('Pages.UserManagement_SubtitleRemove')"></p>
 
                 <FilterInput v-model="search"
                     :placeholder="$t('Common.Search')"></FilterInput>
 
                 <div style="padding-top: 20px; padding-left: 12px; height: 380px; overflow: auto">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled"
+                        data-suso="workspaces-list">
                         <li v-for="workspace in workspacesList"
                             :key="'d' + draw + '__' + workspace.key">
                             <Checkbox
@@ -32,17 +35,20 @@
         <div slot="actions">
             <button v-if="isAdding"
                 type="button"
-                class="btn btn-primary"
+                data-suso="btn-add"
+                class="btn btn-primary "
                 @click="add"
                 role="confirm">{{ $t("Common.Add") }}</button>
             <button v-else
                 type="button"
                 class="btn btn-primary"
+                data-suso="btn-remove"
                 @click="remove"
                 role="confirm">{{ $t("Common.Remove") }}</button>
             <button
                 type="button"
                 class="btn btn-link"
+                data-suso="btn-cancel"
                 data-dismiss="modal"
                 role="cancel">{{ $t("Common.Cancel") }}</button>
         </div>
