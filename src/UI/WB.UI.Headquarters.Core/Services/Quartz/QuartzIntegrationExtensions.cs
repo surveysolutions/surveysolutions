@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using Npgsql;
 using Quartz;
 using Quartz.Listener;
+using Quartz.Logging;
+using Serilog;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -63,7 +65,7 @@ namespace WB.UI.Headquarters.Services.Quartz
                 });
             });
 
-            global::Quartz.Logging.LogProvider.IsDisabled = false;//.SetCurrentLogProvider(loggerFactory);
+            global::Quartz.Logging.LogProvider/*.IsDisabled = true;//*/.SetCurrentLogProvider(new QuartzLogProvider());
           
             if (configuration["no-quartz"].ToBool(false) == false)
             {
@@ -140,6 +142,30 @@ namespace WB.UI.Headquarters.Services.Quartz
             public Task StopAsync(CancellationToken cancellationToken)
             {
                 return Task.CompletedTask;
+            }
+        }
+        
+        private class QuartzLogProvider : ILogProvider
+        {
+            public Logger GetLogger(string name)
+            {
+                return (level, func, exception, parameters) =>
+                {
+                    Log.Error(exception, "QuartzLogProvider exception");
+                    //var messageTemplate = "[" + DateTime.Now.ToLongTimeString() + "] [" + level + "] " + func();
+                    //Log.Error(exception, messageTemplate, parameters);
+                    return true;
+                };
+            }
+
+            public IDisposable OpenNestedContext(string message)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IDisposable OpenMappedContext(string key, object value, bool destructure = false)
+            {
+                throw new NotImplementedException();
             }
         }
     }
