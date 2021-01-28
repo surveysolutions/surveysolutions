@@ -1,9 +1,12 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -177,8 +180,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
-        public ActionResult RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
+        public ActionResult RecordAudio(Guid id, long version, [FromBody, BindRequired]RecordAudioRequest requestData)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var questionnaire = 
                 this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
                     x => x.QuestionnaireId == id
