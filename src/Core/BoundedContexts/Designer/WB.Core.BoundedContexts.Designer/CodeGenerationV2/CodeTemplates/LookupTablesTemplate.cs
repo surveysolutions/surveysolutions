@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             this.Write("(rowCode, ");
             
             #line 46 "C:\Work\ss2\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", table.VariableNames.Select((x,i) => $"string.IsNullOrEmpty(split[{i}+1]) ? null: double.Parse(split[{i}+1], CultureInfo.InvariantCulture)"))));
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", table.VariableNames.Select((x,i) => $"string.IsNullOrEmpty(split[{i}+1]) ? (double?)null: double.Parse(split[{i}+1], CultureInfo.InvariantCulture)"))));
             
             #line default
             #line hidden
