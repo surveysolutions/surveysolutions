@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Runtime.Internal;
@@ -11,6 +12,7 @@ using Npgsql;
 using Quartz;
 using Quartz.Listener;
 using Quartz.Logging;
+using Quartz.Spi;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -41,7 +43,9 @@ namespace WB.UI.Headquarters.Services.Quartz
 
             services.AddQuartz(q =>
             {
-                q.SchedulerId = "AUTO";
+                q.SchedulerId = Environment.MachineName + "-" + Process.GetCurrentProcess().Id;
+                // q.SchedulerId = "AUTO"; - disabled because fail in prod environment on resolve DNS name
+
                 q.SchedulerName = "Headquarters Background Services";
                 
                 q.UseJobFactory<AsyncScopedJobFactory>();
@@ -65,7 +69,7 @@ namespace WB.UI.Headquarters.Services.Quartz
                 });
             });
 
-            global::Quartz.Logging.LogProvider/*.IsDisabled = true;//*/.SetCurrentLogProvider(new QuartzLogProvider());
+            global::Quartz.Logging.LogProvider.IsDisabled = false;//.SetCurrentLogProvider(new QuartzLogProvider());
           
             if (configuration["no-quartz"].ToBool(false) == false)
             {
