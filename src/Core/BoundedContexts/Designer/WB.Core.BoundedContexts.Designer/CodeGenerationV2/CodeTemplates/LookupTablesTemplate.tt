@@ -8,14 +8,22 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
+using System;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
     public static class LookupTables
     {
-        internal static IEnumerable<string> ReadEmbeddedStream(string name)
+        static Assembly assembly;
+
+        static LookupTables() 
         {
-            using Stream stream = Assembly.GetEntryAssembly().GetManifestResourceStream(name);
+            assembly = Assembly.Load(new AssemblyName(typeof(LookupTables).AssemblyQualifiedName));
+        }
+
+        static IEnumerable<string> ReadEmbeddedStream(string name)
+        {
+            using Stream stream = assembly.GetManifestResourceStream(name);
             using StreamReader reader = new StreamReader(stream);
 
             string line;
@@ -23,49 +31,44 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             {
                 yield return line;
             }
-        }
-        
+        }        
 <#
+
     foreach (var table in LookupTables) 
     {
 #>
-        private static Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #>;
-        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => <#= table.TableNameField #> ?? (<#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable());          
+        public static Lazy<Dictionary<int, <#= table.TypeName#>>> <#= table.TableName #> = new (() => GetLookup_<#= table.TypeName #>());
 <# 
     }
 #>
-    }
-
 <#
     foreach (var table in LookupTables) 
     {
-#>
-    public static class <#= table.TypeName#>_Generator
-    {
-        public static Dictionary<int, <#= table.TypeName#>> GetTable()
+    #>
+
+        private static Dictionary<int, <#= table.TypeName #>> GetLookup_<#= table.TypeName #>()
         {            
-            var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
+            var lookup__table = new Dictionary<int, <#= table.TypeName #>>(<#= table.Rows.Length #>);
             
             var lines = LookupTables.ReadEmbeddedStream("RESOURCE__<#= table.TypeName #>");
             
             foreach(var line in lines)
             {
-                if(string.IsNullOrWhiteSpace(line)) continue;
-
                 var split = line.Split('\t');
                 var rowCode = int.Parse(split[0]);
-<# for (int i = 0; i < table.VariableNames.Length; i++) {#>
+<# for (int i = 0; i < table.VariableNames.Length; i++) { #>
                 var __<#= table.VariableNames[i] #> = double.Parse(split[<#= i + 1 #>]);
 <# } #>
-                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select(v => "__" + v)) #>));                
+                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select(v => "__" + v)) #>));
             }
 
             return lookup__table;
         }      
-    }
+    
 <#	
     }
 #>
+    }
 <#
     foreach (var table in LookupTables) 
     {
@@ -84,12 +87,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         }
 #>
         }
-        public int rowcode { get; private set;}
+        public int rowcode { get; }
 <#
         foreach (var variableName in table.VariableNames) 
         {
 #>
-        public double? <#= variableName #> { get; private set;}	
+        public double? <#= variableName #> { get; }	
 <# 
         }
 #>

@@ -9,11 +9,11 @@
 <#@ import namespace="System.Text.RegularExpressions" #>
 
     internal partial class <#=Model.ClassName #> : LevelFunctions, <#=nameof(IInterviewLevel) #>
-     <# if (Model.RosterScope.Length > 0) 
+<# if (Model.RosterScope.Length > 0) 
     { 
         #> 
         , <#=nameof(IIndexedInterviewLevel) #>
-    <# } #>
+<# } #>
     {
         
         public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
@@ -26,9 +26,9 @@
 <#
     foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
-#>            
+#>
             enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
-<# 
+<#
     }
 #>
 <#
@@ -42,7 +42,7 @@
 <#
     foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
     {
-#>            
+#>
             variableExpressions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
     }
@@ -50,7 +50,7 @@
 <#
     foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
     {
-#>            
+#>
             categoricalFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
     }
@@ -58,7 +58,7 @@
 <#
     foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
     {
-#>            
+#>
             linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
     }
@@ -175,7 +175,7 @@
 <#
     foreach (var table in Storage.LookupTables) 
     {
-#>        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>;
+#>        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>.Value;
 <# 
     }
 #>
@@ -187,5 +187,4 @@
 <# 
     }
 #>
-
     }

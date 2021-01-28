@@ -49,20 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
             foreach (var lookup in model.LookupTables)
             {
-                var sb = new StringBuilder();
-                
-                string ResourceRow(LookupTableRow row)
-                {
-                    var variables = row.Variables.Select(v => v == null ? "null" : v.Value.ToString(CultureInfo.InvariantCulture));
-                    return $"{row.RowCode}\t{string.Join("\t", variables)}";
-                }
-
-                foreach (var row in lookup.Rows)
-                {
-                    sb.AppendLine(ResourceRow(row));
-                }
-
-                generatedClasses.Add("RESOURCE__" + lookup.TableName, sb.ToString());
+                generatedClasses.Add("RESOURCE__" + lookup.TableName, lookup.RenderLookupRowsData());
             }
 
             var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables);

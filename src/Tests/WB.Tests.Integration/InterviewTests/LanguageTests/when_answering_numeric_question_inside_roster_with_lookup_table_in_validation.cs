@@ -50,7 +50,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 };
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
+                    Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", 
+                        validationExpression: "a > price[1].min && a < price[1].max"),
                     Create.Entity.FixedRoster(rosterId, variable: "assets",fixedTitles: assetsTitles, children: new[]
                     {
                         Create.Entity.NumericRealQuestion(id: questionB, variable: "p", validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
