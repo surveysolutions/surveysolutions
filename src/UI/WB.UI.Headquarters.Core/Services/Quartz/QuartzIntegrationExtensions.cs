@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Services.Quartz
                 });
             });
 
-            global::Quartz.Logging.LogProvider.IsDisabled = true;//.SetCurrentLogProvider(loggerFactory);
+            global::Quartz.Logging.LogProvider.IsDisabled = false;//.SetCurrentLogProvider(loggerFactory);
           
             if (configuration["no-quartz"].ToBool(false) == false)
             {
