@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Threading;
 using Main.Core.Entities.Composite;
-using Microsoft.OpenApi.Services;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
