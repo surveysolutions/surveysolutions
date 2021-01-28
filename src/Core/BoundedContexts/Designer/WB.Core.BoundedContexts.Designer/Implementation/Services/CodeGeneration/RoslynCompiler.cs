@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             generatedAssembly = string.Empty;
 
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses
-                .Where(g => !g.Key.StartsWith("RESOURCE__", StringComparison.OrdinalIgnoreCase))
+                .Where(g => !g.Key.StartsWith(CodeGeneratorV2.ResourcePrefix, StringComparison.OrdinalIgnoreCase))
                 .Select(
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             using var stream = new MemoryStream();
 
-            var resources = generatedClasses.Where(g => g.Key.StartsWith("RESOURCE__", StringComparison.OrdinalIgnoreCase)).Select(kv =>
+            var resources = generatedClasses.Where(g => g.Key.StartsWith(CodeGeneratorV2.ResourcePrefix, StringComparison.OrdinalIgnoreCase)).Select(kv =>
                 new ResourceDescription(kv.Key,
                     () => new MemoryStream(Encoding.UTF8.GetBytes(kv.Value)), true));
 

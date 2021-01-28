@@ -30,12 +30,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             this.questionTypeMapper = questionTypeMapper;
         }
 
-        public ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
+        public ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire, int targetVersion)
         {
-            var codeGenerationModel = new ExpressionStorageModel
+            var codeGenerationModel = new ExpressionStorageModel(
+                questionnaire.PublicKey,
+                $"{CodeGeneratorV2.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
+                targetVersion
+            )
             {
-                Id = questionnaire.PublicKey,
-                ClassName = $"{CodeGeneratorV2.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
                 IdMap = this.CreateIdMap(questionnaire)
             };
 

@@ -32,25 +32,44 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
         {
             this.Write(" \r\n");
             this.Write(@" 
-using System.Collections.Generic;
-using System.Reflection;
-using System.IO;
 using System;
+using System.Globalization;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
     public static class LookupTables
     {
-        static Assembly assembly;
-
-        static LookupTables() 
-        {
-            assembly = Assembly.Load(new AssemblyName(typeof(LookupTables).AssemblyQualifiedName));
-        }
+        static Assembly assembly = null;
 
         static IEnumerable<string> ReadEmbeddedStream(string name)
         {
+            if(assembly == null) 
+            {
+                var info = typeof(");
+            
+            #line 24 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
+            
+            #line default
+            #line hidden
+            this.Write(@").GetTypeInfo();                 
+                assembly = info.Assembly;                
+            }
+
             using Stream stream = assembly.GetManifestResourceStream(name);
+            
+            if(stream == null) 
+            {  
+                throw new TypeLoadException(""Cannot find lookup data in:\r\n"" 
+                    + $""Assembly: {assembly}\r\n""
+                    + $""Requested resource name: {name}\r\n""
+                    + $""Available resource names: \r\n\t{string.Join(""\r\n\t"", assembly.GetManifestResourceNames())}""                  
+                );
+            }
+
             using StreamReader reader = new StreamReader(stream);
 
             string line;
@@ -58,10 +77,11 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             {
                 yield return line;
             }
-        }        
+        }
+
 ");
             
-            #line 35 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 48 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 
 
     foreach (var table in LookupTables) 
@@ -72,28 +92,28 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("        public static Lazy<Dictionary<int, ");
             
-            #line 40 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 53 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write(">> ");
             
-            #line 40 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 53 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
             
             #line default
             #line hidden
             this.Write(" = new (() => GetLookup_");
             
-            #line 40 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 53 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("());\r\n");
             
-            #line 41 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 54 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
  
     }
 
@@ -101,47 +121,47 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line default
             #line hidden
             
-            #line 44 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 57 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 
     foreach (var table in LookupTables) 
     {
+        var varNames = string.Join(",", table.VariableNames.Select(v => "__" + v));
     
             
             #line default
             #line hidden
             this.Write("\r\n        private static Dictionary<int, ");
             
-            #line 49 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 63 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("> GetLookup_");
             
-            #line 49 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 63 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("()\r\n        {            \r\n            var lookup__table = new Dictionary<int, ");
             
-            #line 51 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 65 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write(">(");
             
-            #line 51 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 65 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.Rows.Length));
             
             #line default
             #line hidden
-            this.Write(");\r\n            \r\n            var lines = LookupTables.ReadEmbeddedStream(\"RESOUR" +
-                    "CE__");
+            this.Write(");\r\n            \r\n            var lines = LookupTables.ReadEmbeddedStream(\"");
             
-            #line 53 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            #line 67 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.ResourceName));
             
             #line default
             #line hidden
@@ -149,49 +169,72 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                     "         var split = line.Split(\'\\t\');\r\n                var rowCode = int.Parse(" +
                     "split[0]);\r\n");
             
-            #line 59 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 73 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
  for (int i = 0; i < table.VariableNames.Length; i++) { 
+    var varName = "__" + table.VariableNames[i];
+
             
             #line default
             #line hidden
-            this.Write("                var __");
+            this.Write("                double? ");
             
-            #line 60 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(table.VariableNames[i]));
+            #line 76 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
-            this.Write(" = double.Parse(split[");
+            this.Write(" = null; if(double.TryParse(split[");
             
-            #line 60 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 76 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(i + 1));
             
             #line default
             #line hidden
-            this.Write("]);\r\n");
+            this.Write("], NumberStyles.Float, CultureInfo.InvariantCulture, out var _");
             
-            #line 61 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 76 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
+            
+            #line default
+            #line hidden
+            this.Write(")) ");
+            
+            #line 76 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
+            
+            #line default
+            #line hidden
+            this.Write(" = _");
+            
+            #line 76 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 77 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("                lookup__table.Add(rowCode, new ");
             
-            #line 62 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 78 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("(rowCode, ");
             
-            #line 62 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",", table.VariableNames.Select(v => "__" + v))));
+            #line 78 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varNames));
             
             #line default
             #line hidden
             this.Write("));\r\n            }\r\n\r\n            return lookup__table;\r\n        }      \r\n    \r\n");
             
-            #line 68 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 84 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 	
     }
 
@@ -200,7 +243,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("    }\r\n");
             
-            #line 72 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 88 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 
     foreach (var table in LookupTables) 
     {
@@ -210,28 +253,28 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("    public class ");
             
-            #line 76 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 92 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n    {\r\n        public ");
             
-            #line 78 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 94 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
             this.Write("(int rowcode, ");
             
-            #line 78 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 94 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName))));
             
             #line default
             #line hidden
             this.Write(")\r\n        {\r\n            this.rowcode = rowcode;\r\n");
             
-            #line 81 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 97 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 
         foreach (var variableName in table.VariableNames) 
         {
@@ -241,21 +284,21 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("            this.");
             
-            #line 85 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 101 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 85 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 101 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 86 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 102 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
  
         }
 
@@ -264,7 +307,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("        }\r\n        public int rowcode { get; }\r\n");
             
-            #line 91 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 107 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 
         foreach (var variableName in table.VariableNames) 
         {
@@ -274,14 +317,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("        public double? ");
             
-            #line 95 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 111 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
             
             #line default
             #line hidden
             this.Write(" { get; }\t\r\n");
             
-            #line 96 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 112 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
  
         }
 
@@ -290,7 +333,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("    }\r\n");
             
-            #line 100 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            #line 116 "C:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
  
     }
 

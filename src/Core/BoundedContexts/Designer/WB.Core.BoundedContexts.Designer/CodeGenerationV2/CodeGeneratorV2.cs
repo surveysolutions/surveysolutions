@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string StaticText = "text_";
         public const string LookupPrefix = "Lookup__";
         public const string PrivateFieldsPrefix = "__";
+        public const string ResourcePrefix = "RESOURCE__";
         
         private readonly ICodeGenerationModelsFactory modelsFactory;
 
@@ -37,9 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
-            ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
+            ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument, targetVersion);
             model.LookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
-            model.TargetVersion = targetVersion;
 
             var transformText = new InterviewExpressionStorageTemplate(model).TransformText();
             var generatedClasses = new Dictionary<string, string>
@@ -49,10 +49,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
             foreach (var lookup in model.LookupTables)
             {
-                generatedClasses.Add("RESOURCE__" + lookup.TableName, lookup.RenderLookupRowsData());
+                generatedClasses.Add(lookup.ResourceName, lookup.RenderLookupResource());
             }
 
-            var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables);
+            var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables, model.ClassName);
             generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
             
             foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)

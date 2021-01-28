@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 {
     public class ExpressionStorageModel
     {
+        public ExpressionStorageModel(Guid id, string className, int targetVersion)
+        {
+            Id = id;
+            ClassName = className;
+            TargetVersion = targetVersion;
+        }
+
         public Guid Id { set; get; }
 
-        public string? ClassName { get; set; }
+        public string ClassName { get; set; }
 
         public List<LevelModel> Levels { get; } = new List<LevelModel>();
 

@@ -6,11 +6,13 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 {
     public partial class LookupTablesTemplate
     {
-        public LookupTablesTemplate(List<LookupTableTemplateModel> lookupTables)
+        public LookupTablesTemplate(List<LookupTableTemplateModel> lookupTables, string className)
         {
             this.LookupTables = lookupTables;
+            this.ClassName = className;
         }
 
-        public List<LookupTableTemplateModel> LookupTables { get; private set; }
+        public List<LookupTableTemplateModel> LookupTables { get; }
+        public string ClassName { get; }
     }
 }

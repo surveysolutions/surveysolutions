@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly List<string> assemblies = new()
         {
+            "System.Globalization",
             "System.Reflection",
             "System.IO",
             "System.Collections",
@@ -33,9 +34,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         $"WB.Core.BoundedContexts.Designer.{assembly}.dll");
                 if (stream == null)
                 {
-                    var manifest = designerContextModule.GetManifestResourceNames();
                     throw new Exception(
-                        $"Cannot find {assembly} in WB.Core.BoundedContexts.Designer.ReferencedAssemblies`");
+                        $"Cannot find {assembly} in WB.Core.BoundedContexts.Designer.ReferencedAssemblies");
                 }
                 var assemblyMetadata = AssemblyMetadata.CreateFromStream(stream);
 
