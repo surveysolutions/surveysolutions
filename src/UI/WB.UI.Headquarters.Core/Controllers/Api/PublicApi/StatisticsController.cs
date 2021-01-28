@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -115,31 +117,32 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 select g.OrderByDescending(o => o.identity.Version).First();
 
             return sortedList
-                .Select<(Guid questionId, QuestionnaireIdentity identity), (Guid questionId, IQuestionnaire doc)>(item =>
+                .Select<(Guid questionId, QuestionnaireIdentity identity), (Guid questionId, IQuestionnaire? doc)>(item =>
                 {
                     var doc = this.questionnaireStorage.GetQuestionnaire(item.identity, null);
                     return (item.questionId, doc);
                 })
+                .Where(x=> x.doc != null)
                 .Select(item =>
                 {
-                    var questionType = item.doc.GetQuestionType(item.questionId);
+                    var questionType = item.doc!.GetQuestionType(item.questionId);
 
                     return new QuestionDto
                     {
-                        Answers = item.doc.GetOptionsForQuestion(item.questionId, null, null, null).Select(a => new QuestionAnswerView
+                        Answers = item.doc!.GetOptionsForQuestion(item.questionId, null, null, null).Select(a => new QuestionAnswerView
                         {
                             Answer = a.Value,
                             Text = a.Title,
                             Column = a.AsColumnName()
                         }).ToList(),
-                        Breadcrumbs = GetBreadcrumbs(item.questionId, item.doc),
+                        Breadcrumbs = GetBreadcrumbs(item.questionId, item.doc!),
                         Id = item.questionId,
                         Type = questionType.ToString(),
-                        VariableName = item.doc.GetQuestionVariableName(item.questionId),
-                        Label = item.doc.GetQuestionExportDescription(item.questionId),
+                        VariableName = item.doc!.GetQuestionVariableName(item.questionId),
+                        Label = item.doc!.GetQuestionExportDescription(item.questionId),
                         HasTotal = questionType == QuestionType.SingleOption || questionType == QuestionType.MultyOption,
                         SupportConditions = questionType == QuestionType.SingleOption || questionType == QuestionType.MultyOption,
-                        QuestionText = item.doc.GetQuestionTitle(item.questionId).RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
+                        QuestionText = item.doc!.GetQuestionTitle(item.questionId).RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
                     };
                 })
                 .ToList();
@@ -204,7 +207,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Localizable(false)]
         [HttpGet]
         [Route(@"")]
-        public ActionResult Report(SurveyStatisticsQuery query)
+        public ActionResult Report([BindRequired]SurveyStatisticsQuery query)
         {
             if (query.QuestionnaireId == null)
             {
@@ -227,7 +230,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-
+            
+            if (questionnaire == null)
+            {
+                return ReturnEmptyResult(query);
+            }
+            
             Guid? GetQuestionIdByGuidOrStataCaption(string inputVar)
             {
                 if (string.IsNullOrEmpty(inputVar))
@@ -266,9 +274,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 Condition = query.Condition,
                 ConditionalQuestionId = conditionalQuestionId,
                 Columns = query?.ColummnsList?.Select(c => c.Name)?.ToArray(),
-                Pivot = query.Pivot,
-                Orders = query.ToOrderRequestItems(),
-                Statuses = query.Statuses
+                Pivot = query?.Pivot??false,
+                Orders = query?.ToOrderRequestItems(),
+                Statuses = query?.Statuses
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -294,9 +302,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .Labels(reportTimeToMonitor)
                 .Set(stopwatch.Elapsed.TotalSeconds);
 
-            if (query.exportType == null)
+            if (query?.exportType == null)
             {
-                var reportJson = report.AsDataTablesJson(query.Draw);
+                var reportJson = report.AsDataTablesJson(query?.Draw);
                 return Content(reportJson.ToString(), "application/json", Encoding.UTF8);
             }
 
