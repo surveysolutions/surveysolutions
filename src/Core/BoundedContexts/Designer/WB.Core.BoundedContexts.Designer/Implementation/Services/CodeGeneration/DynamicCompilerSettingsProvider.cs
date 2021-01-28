@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private readonly List<string> assemblies = new List<string>
         {
             "System.Collections",
+            "System.Globalization",
             "System.Linq",
             "System.Linq.Expressions",
             "System.Runtime",
