@@ -3,6 +3,7 @@ param([string]$VersionName = $null,
 [string]$BuildConfiguration='release',
 [string]$KeystorePassword = $NULL,
 [string]$AppCenterKey = $NULL,
+[string]$ArcGisKey = $NULL,
 [string]$KeystoreName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
@@ -96,6 +97,7 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
 
         Set-AndroidXmlResourceValue $CapiProject "appcenter_key" $AppCenterKey
         Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
+		Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
 
         BuildAndroidApp $CapiProject $BuildConfiguration -ExcludeExtensions $ExcludeExtra -VersionCode "$VersionCode" -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
     }
