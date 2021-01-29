@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         {
             user.SecurityStamp = Guid.NewGuid().ToString();
             user.CreationDate = DateTime.UtcNow;
+            user.ForceChangePassword = true;
 
             await unitOfWork.Session.SaveAsync(user, cancellationToken);
             return Microsoft.AspNetCore.Identity.IdentityResult.Success;

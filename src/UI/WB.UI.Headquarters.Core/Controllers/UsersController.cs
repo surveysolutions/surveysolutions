@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
@@ -45,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
         public string[] RecoveryCodes { get; set; }
 
         public UsersController(IAuthorizedUser authorizedUser, 
-            UserManager<HqUser> userManager, 
+            HqUserManager userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
             IOptions<HeadquartersConfig> options)
@@ -202,6 +203,8 @@ namespace WB.UI.Headquarters.Controllers
                     UserName = user.UserName,
                     Role = userRole.ToString(),
                     IsOwnProfile = user.Id == this.authorizedUser.Id,
+                    ForceChangePassword = user.Id == this.authorizedUser.Id && user.ForceChangePassword,
+                    CanChangePassword = user.Id == this.authorizedUser.Id || authorizedUser.IsAdministrator,
                     IsLockedByHeadquarters = user.IsLockedByHeadquaters,
                     IsLockedBySupervisor = user.IsLockedBySupervisor,
                     IsObserving = this.authorizedUser.IsObserving,
@@ -515,6 +518,7 @@ namespace WB.UI.Headquarters.Controllers
             if (this.ModelState.IsValid)
             {
                 var passwordResetToken = await this.userManager.GeneratePasswordResetTokenAsync(currentUser);
+                currentUser.ForceChangePassword = model.UserId != this.authorizedUser.Id;
                 var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
 
                 if (!updateResult.Succeeded)
@@ -781,15 +785,13 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsAdministrator)
                 return true;
 
-            if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
+            if (this.authorizedUser.IsHeadquarter && user.Id == this.authorizedUser.Id)
                 return true;
 
-            if (this.authorizedUser.IsSupervisor && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)))
+            if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
                 return true;
 
-            if (this.authorizedUser.IsInterviewer 
-                && user.Id == this.authorizedUser.Id
-                && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+            if (this.authorizedUser.IsInterviewer && user.Id == this.authorizedUser.Id)
                 return true;
 
             if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)

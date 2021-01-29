@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         Guid Id { get; }
         string UserName { get; }
+        bool NeedChangePassword { get; }
         bool HasNonDefaultWorkspace { get; }
         IEnumerable<string> Workspaces { get; }
 

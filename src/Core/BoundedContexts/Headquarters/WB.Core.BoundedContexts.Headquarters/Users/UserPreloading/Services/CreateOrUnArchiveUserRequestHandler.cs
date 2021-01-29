@@ -81,6 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 user.Email = userToCreate.Email;
                 user.PhoneNumber = userToCreate.PhoneNumber;
                 user.IsArchived = false;
+                user.ForceChangePassword = true;
 
                 await userManager.UpdateAsync(user);
                 string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
