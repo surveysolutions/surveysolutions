@@ -53,6 +53,7 @@
     <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
     <Property Id="CONNPORT" Value="5432"></Property>
     <Property Id="CONNUSERNAME" Value="postgres"></Property>
+    <Property Id="CONNPASSWORD" Value=""></Property>
 
     <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
     <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">

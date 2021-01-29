@@ -13,7 +13,13 @@
         <bal:Condition Message="This application requires server operating system such as Windows Server 2012 R2 or newer.">
             (VersionNT64 &gt;= v6.3 AND MsiNTProductType &lt;&gt; 1)
         </bal:Condition>
-        
+
+        <Variable Name="Siteport" bal:Overridable="yes" Value="9700" />
+        <Variable Name="Connserver" bal:Overridable="yes" Value="127.0.0.1" />
+        <Variable Name="Connport" bal:Overridable="yes" Value="5432" />
+        <Variable Name="Connusername" bal:Overridable="yes" Value="postgres" />
+        <Variable Name="Connpassword" bal:Overridable="yes" Value="" />
+
         <!--Search for old product written with InstallSuit? (or something like that) -->
         <util:ProductSearch 
             Id="OldProductSearch" 
@@ -46,6 +52,13 @@
                         Vital="yes"
                         InstallCondition="VersionNT64"
                         SourceFile="$(var.SurveySolutions.TargetPath)" >
+
+              <MsiProperty Name="SITEPORT" Value="[Siteport]"/>
+              <MsiProperty Name="CONNSERVER" Value="[Connserver]"/>
+              <MsiProperty Name="CONNPORT" Value="[Connport]"/>
+              <MsiProperty Name="CONNUSERNAME" Value="[Connusername]"/>
+              <MsiProperty Name="CONNPASSWORD" Value="[Connpassword]"/>
+
             </MsiPackage>
         </Chain>
     </Bundle>
