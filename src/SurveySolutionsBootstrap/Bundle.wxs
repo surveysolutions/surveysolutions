@@ -19,6 +19,7 @@
         <Variable Name="Connport" bal:Overridable="yes" Value="5432" />
         <Variable Name="Connusername" bal:Overridable="yes" Value="postgres" />
         <Variable Name="Connpassword" bal:Overridable="yes" Value="" />
+        <Variable Name="Installfolder" bal:Overridable="yes" Value="C:\Survey Solutions" />
 
         <!--Search for old product written with InstallSuit? (or something like that) -->
         <util:ProductSearch 
@@ -58,6 +59,7 @@
               <MsiProperty Name="CONNPORT" Value="[Connport]"/>
               <MsiProperty Name="CONNUSERNAME" Value="[Connusername]"/>
               <MsiProperty Name="CONNPASSWORD" Value="[Connpassword]"/>
+              <MsiProperty Name="INSTALLFOLDER" Value="[Installfolder]"/>
 
             </MsiPackage>
         </Chain>

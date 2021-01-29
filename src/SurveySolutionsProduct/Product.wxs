@@ -56,7 +56,7 @@
     <Property Id="CONNPASSWORD" Value=""></Property>
 
     <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
-    <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions">
+    <Property Id="INSTALLFOLDER" Value="C:\Survey Solutions">
       <RegistrySearch Id="SurveySolutionsPath"
                       Type="raw"
                       Root="HKLM"
