@@ -7,7 +7,7 @@ on:
 jobs:
 
   android_apps:
-    name: Android Applications Build
+    name: Android
     runs-on: windows-latest
   
     strategy:
@@ -56,7 +56,7 @@ jobs:
     needs: 
       - android_apps
       - tests
-    
+
     steps:
       - uses: actions/checkout@v2
 
@@ -65,11 +65,8 @@ jobs:
           name: android-apks
           path: output
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
         uses: actions/cache@v2
@@ -98,7 +95,7 @@ jobs:
           path: output/*.binlog
 
   tests:
-    name: Unit and Integration Tests
+    name: Tests
     runs-on: ubuntu-latest
 
     strategy:
@@ -126,12 +123,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/cache@v2
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
       - run: bash ./build.sh ${{ matrix.tests.name }}
       - name: cancel workflow
         if: failure()
@@ -142,9 +141,15 @@ jobs:
           path: output
 
   docker:
-    name: Headquarters and Web Tester Docker build
+    name: Docker 
     runs-on: ubuntu-latest
     needs: tests
+    strategy:
+      fail-fast: true
+      matrix:
+        app: 
+          - 'docker-hq docker-webtester'
+          - 'docker-designer'
 
     env:
         DOCKER_BUILDX_CACHE: /tmp/.buildx-cache
@@ -161,7 +166,7 @@ jobs:
           path: ${{ env.DOCKER_BUILDX_CACHE }}
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-${{ github.sha }}
+            ${{ runner.os }}-buildx-
 
       - name: Login to GitHub Packages Docker Registry
         uses: docker/login-action@v1
@@ -170,11 +175,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PAT_AUTOMATION }}
 
-      - name: Headquarters
-        run: bash ./build.sh docker-hq --push
-
-      - name: WebTester
-        run: bash ./build.sh docker-webtester --push
-
-      - name: Designer
-        run: bash ./build.sh docker-designer --push
+      - name: Docker build
+        run: bash ./build.sh ${{ matrix.app }} --push
