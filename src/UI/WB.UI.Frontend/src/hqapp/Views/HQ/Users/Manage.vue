@@ -2,6 +2,7 @@
     <ProfileLayout ref="profile"
         :role="userInfo.role"
         :isOwnProfile="userInfo.isOwnProfile"
+        :forceChangePassword="userInfo.forceChangePassword"
         :userName="userInfo.userName"
         :userId="userInfo.userId"
         :currentTab="currentTab">

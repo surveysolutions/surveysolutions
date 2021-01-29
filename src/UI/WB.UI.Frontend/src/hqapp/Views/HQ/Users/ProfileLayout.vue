@@ -28,13 +28,14 @@
             <div class="profile">
                 <ul class="nav nav-tabs extra-margin-bottom">
                     <li class="nav-item"
+                        v-if="!forceChangePassword"
                         v-bind:class=" {'active': currentTab == 'account'}" >
                         <a class="nav-link"
                             id="profile"
                             v-bind:href="getUrl('../../Users/Manage')">{{$t('Pages.AccountManage_Profile')}}</a>
                     </li>
                     <li class="nav-item"
-                        v-if="showWorkspaces"
+                        v-if="showWorkspaces && !forceChangePassword"
                         v-bind:class=" {'active': currentTab == 'workspaces'}" >
                         <a class="nav-link"
                             id="profile"
@@ -47,6 +48,7 @@
                             v-bind:href="getUrl('../../Users/ChangePassword')">{{$t('Pages.AccountManage_ChangePassword')}}</a>
                     </li>
                     <li class="nav-item"
+                        v-if="!forceChangePassword"
                         v-bind:class="{'active': currentTab=='two-factor'}">
                         <a class="nav-link"
                             id="two-factor"
@@ -67,6 +69,16 @@ export default {
         role: String,
         successMessage: String,
         isOwnProfile: Boolean,
+        forceChangePassword: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        canChangePassword: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
         userName: String,
         userId: String,
         currentTab: {

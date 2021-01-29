@@ -14,6 +14,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IWorkspacesCache workspacesCache;
         public const string ObserverClaimType = "observer";
+        public const string ForceChangePasswordType = "forse-change-password";
 
         public AuthorizedUser(IHttpContextAccessor httpContextAccessor, IWorkspacesCache workspacesCache)
         {
@@ -44,6 +45,9 @@ namespace WB.UI.Headquarters.Services.Impl
         }
 
         public string UserName => this.User?.Identity?.Name;
+
+        public bool NeedChangePassword => User.HasClaim(claim => 
+            claim.Type == ForceChangePasswordType && claim.Value == "true");
 
         public bool HasNonDefaultWorkspace => User.Claims.Any(x =>
             x.Type == WorkspaceConstants.ClaimType && x.Value != WorkspaceConstants.DefaultWorkspaceName);
