@@ -10,16 +10,16 @@ jobs:
     name: Android
     runs-on: windows-latest
   
-    strategy:
-      fail-fast: true
-      matrix:
-        app: 
-          - name: Interviewer
-            cmd: interviewer
-          - name: Interviewer with maps
-            cmd: interviewer-with-maps
-          - name: Supervisor
-            cmd: supervisor
+    # strategy:
+    #   fail-fast: true
+    #   matrix:
+    #     app: 
+    #       - name: Interviewer
+    #         cmd: interviewer
+    #       - name: Interviewer with maps
+    #         cmd: interviewer-with-maps
+    #       - name: Supervisor
+    #         cmd: supervisor
 
     env:
         DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
@@ -40,9 +40,15 @@ jobs:
 
       - uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: ${{ matrix.app.name }}
-        run: ./build.ps1 ${{ matrix.app.cmd }}
-        
+      # - name: ${{ matrix.app.name }}
+      #   run: ./build.ps1 ${{ matrix.app.cmd }}
+      - name: Interviewer
+        run: ./build.ps1 interviewer
+      - name: Interviewer With Maps
+        run: ./build.ps1 interviewer-with-maps
+      - name: Supervisor
+        run: ./build.ps1 supervisor
+
       - uses: actions/upload-artifact@v2
         with:
           name: android-apks
@@ -98,12 +104,12 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: true
-      matrix:
-        tests:
-        - name: tests-integration
-        - name: tests-unit tests-export
+    # strategy:
+    #   fail-fast: true
+    #   matrix:
+    #     tests:
+    #     - name: tests-integration
+    #     - name: tests-unit tests-export
 
     services:
       postgres:
@@ -131,7 +137,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - run: bash ./build.sh ${{ matrix.tests.name }}
+      # - run: bash ./build.sh ${{ matrix.tests.name }}
+      - run: bash ./build.sh tests-unit 
+      - run: bash ./build.sh tests-export
+      - run: bash ./build.sh tests-integration
+
       - name: cancel workflow
         if: failure()
         uses: andymckay/cancel-action@0.2
