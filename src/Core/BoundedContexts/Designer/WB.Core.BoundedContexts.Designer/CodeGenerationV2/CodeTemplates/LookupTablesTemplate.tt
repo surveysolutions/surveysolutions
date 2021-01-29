@@ -3,8 +3,9 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="System.Text.RegularExpressions" #> 
-<#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection" #>
+ 
 using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
@@ -32,15 +33,22 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         {            
             var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
             const string data = "<#= table.RenderLookupRowsData() #>";
-            var lines = data.Split('\n');
-            
-            foreach(var line in lines)
+            var values = data.Split('|');
+            <# 
+            //System.Globalization
+            //System.Treading are removed by linker in old Interviewers
+            //Resulting assembly is loded directly and resolves references in runtime
+            #>
+
+            var separator = 0.1m.ToString().Substring(1,1);            
+
+            foreach(var line in values)
             {
                 if(string.IsNullOrWhiteSpace(line)) continue;
 
                 var split = line.Split('\t');
                 var rowCode = int.Parse(split[0]);
-                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select((x,i) => $"double.Parse(split[{i}+1])")) #>));                
+                lookup__table.Add(rowCode, new <#= table.TypeName#>(rowCode, <#= string.Join(",", table.VariableNames.Select((x,i) => $"string.IsNullOrEmpty(split[{i}+1]) ? (double?)null: double.Parse(split[{i}+1].Replace(\".\",separator))")) #>));                
             }
 
             return lookup__table;
