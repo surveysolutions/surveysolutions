@@ -26,12 +26,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var sb = new StringBuilder();
 
-            foreach (var row in Rows)
+            string GetStringRow(LookupTableRow row)
             {
-                var variables = row.Variables.Select(v => v == null ? "null" : v.Value.ToString(CultureInfo.InvariantCulture));
-                var rowData = $"{row.RowCode}\t{string.Join("\t", variables)}";
-                sb.AppendJoin('\n', rowData);
+                var variables = row.Variables.Select(v => v == null 
+                    ? "" 
+                    : v.Value.ToString(CultureInfo.InvariantCulture));
+                return $"{row.RowCode}\t{string.Join("\t", variables)}";
             }
+            sb.AppendJoin("|", Rows.Select(GetStringRow));
 
             return sb.ToString();
         }

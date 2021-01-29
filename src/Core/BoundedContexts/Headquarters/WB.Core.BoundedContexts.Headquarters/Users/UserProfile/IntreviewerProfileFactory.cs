@@ -18,6 +18,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Fetching;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 {
@@ -31,8 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
         private readonly IAuthorizedUser currentUser;
         private readonly IQRCodeHelper qRCodeHelper;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
-        private readonly IOptions<HeadquartersConfig> hqConfig;
-
+        private readonly IVirtualPathService pathService;
+        
         public InterviewerProfileFactory(
             IUserRepository userManager,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
@@ -42,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             IAuthorizedUser currentUser,
             IQRCodeHelper qRCodeHelper,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage, 
-            IOptions<HeadquartersConfig> hqConfig)
+            IVirtualPathService pathService)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             this.currentUser = currentUser;
             this.qRCodeHelper = qRCodeHelper;
             this.profileSettingsStorage = profileSettingsStorage;
-            this.hqConfig = hqConfig;
+            this.pathService = pathService;
         }
 
         public InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId)
@@ -261,7 +262,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
             profile.QRCodeAsBase64String = qRCodeHelper.GetQRCodeAsBase64StringSrc(
                 JsonConvert.SerializeObject(new FinishInstallationInfo
                 {
-                    Url = hqConfig.Value.BaseUrl,
+                    Url = pathService.GetAbsolutePath("/"),
                     Login = profile.InterviewerName
                 }), 250, 250);
 
