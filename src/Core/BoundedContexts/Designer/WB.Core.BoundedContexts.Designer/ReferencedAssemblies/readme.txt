@@ -8,4 +8,3 @@ for future the locations of assemblies
 .nuget\packages\system.runtime.extensions\4.3.0\ref\netstandard1.5\System.Runtime.Extensions.dll
 .nuget\packages\system.runtime.numerics\4.3.0\ref\netstandard1.1\System.Runtime.Numerics.dll
 .nuget\packages\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll
-.nuget\packages\system.globalization\4.3.0\ref\netstandard1.3

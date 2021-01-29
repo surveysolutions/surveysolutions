@@ -34,10 +34,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
             const string data = "<#= table.RenderLookupRowsData() #>";
             var values = data.Split('|');
-
+            <# 
             //System.Globalization
             //System.Treading are removed by linker in old Interviewers
             //Resulting assembly is loded directly and resolves references in runtime
+            #>
+
             var separator = 0.1m.ToString().Substring(1,1);            
 
             foreach(var line in values)
