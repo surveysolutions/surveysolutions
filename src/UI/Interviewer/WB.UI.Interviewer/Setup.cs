@@ -28,6 +28,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -114,6 +115,12 @@ namespace WB.UI.Interviewer
                 CrashReporting.Init(appcenterKey);
             }
 
+            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
+            if (!string.IsNullOrEmpty(arcgisruntimeKey))
+            {
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().Init(appcenterKey);
+            }
+            
             var status = new UnderConstructionInfo();
             status.Run();
 
