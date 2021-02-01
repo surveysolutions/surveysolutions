@@ -67,5 +67,12 @@ namespace WB.UI.Headquarters.Services.Impl
             var userWorkspaces = workspaces.Where(w => workspaceNames.Contains(w.Name));
             return userWorkspaces;
         }
+
+        public void ResetForceChangePasswordFlag()
+        {
+            var claim = User.Identity.Claims.FirstOrDefault(c => c.Type == AuthorizedUser.ForceChangePasswordType);
+            if (claim != null)
+                claim.Value.Remove() = "false";
+        }
     }
 }
