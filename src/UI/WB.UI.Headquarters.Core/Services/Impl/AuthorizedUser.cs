@@ -70,9 +70,12 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public void ResetForceChangePasswordFlag()
         {
-            var claim = User.Identity.Claims.FirstOrDefault(c => c.Type == AuthorizedUser.ForceChangePasswordType);
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var claim = claimsIdentity?.FindFirst(c => c.Type == ForceChangePasswordType);
             if (claim != null)
-                claim.Value.Remove() = "false";
+            {
+                claimsIdentity.TryRemoveClaim(claim);
+            }
         }
     }
 }

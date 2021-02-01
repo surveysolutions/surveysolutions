@@ -39,6 +39,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
+        private readonly SignInManager<HqUser> signInManager;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -49,13 +50,15 @@ namespace WB.UI.Headquarters.Controllers
             HqUserManager userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options)
+            IOptions<HeadquartersConfig> options,
+            SignInManager<HqUser> signInManager)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
+            this.signInManager = signInManager;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -126,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
         }
@@ -501,7 +504,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (currentUser == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            if (!HasPermissionsToChangeUserPassword(currentUser)) return this.Forbid();
 
             if (currentUser.IsArchived)
                 this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
@@ -523,9 +526,9 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (updateResult.Succeeded && model.UserId == this.authorizedUser.Id)
                 {
-                    //userManager.
                     this.authorizedUser.ResetForceChangePasswordFlag();
-                    //(HttpContext.User.Identity as ClaimsIdentity)?.TryRemoveClaim();
+                    await this.signInManager.SignOutAsync();
+                    return this.Redirect("~/");
                 }
 
                 if (!updateResult.Succeeded)
@@ -788,6 +791,28 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         private bool HasPermissionsToManageUser(HqUser user)
+        {
+            if (this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Profile?.SupervisorId == this.authorizedUser.Id)))
+                return true;
+
+            if (this.authorizedUser.IsInterviewer 
+                && user.Id == this.authorizedUser.Id
+                && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+                return true;
+
+            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+                return true;
+
+            return false;
+        }
+
+        private bool HasPermissionsToChangeUserPassword(HqUser user)
         {
             if (this.authorizedUser.IsAdministrator)
                 return true;
