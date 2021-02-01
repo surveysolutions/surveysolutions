@@ -42,6 +42,7 @@
                             v-bind:href="getUrl(`../../Users/Workspaces`)">{{$t('Workspaces.UserWorkspacesTab')}}</a>
                     </li>
                     <li class="nav-item"
+                        v-if="canChangePassword"
                         v-bind:class="{'active': currentTab=='password'}">
                         <a class="nav-link"
                             id="password"
