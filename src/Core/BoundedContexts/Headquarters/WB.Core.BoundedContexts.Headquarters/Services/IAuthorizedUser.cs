@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         /// <returns>Return true if user assigned to workspace, even for disabled one</returns>
         bool HasAccessToWorkspace(string workspace);
         IEnumerable<WorkspaceContext> GetEnabledWorkspaces();
+        void ResetForceChangePasswordFlag();
     }
 
     public static class AuthorizedUserHelpers

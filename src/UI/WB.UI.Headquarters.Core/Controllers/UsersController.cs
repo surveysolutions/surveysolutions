@@ -521,6 +521,13 @@ namespace WB.UI.Headquarters.Controllers
                 currentUser.ForceChangePassword = model.UserId != this.authorizedUser.Id;
                 var updateResult = await this.userManager.ResetPasswordAsync(currentUser, passwordResetToken, model.Password);
 
+                if (updateResult.Succeeded && model.UserId == this.authorizedUser.Id)
+                {
+                    //userManager.
+                    this.authorizedUser.ResetForceChangePasswordFlag();
+                    //(HttpContext.User.Identity as ClaimsIdentity)?.TryRemoveClaim();
+                }
+
                 if (!updateResult.Succeeded)
                     this.ModelState.AddModelError(nameof(ChangePasswordModel.Password), string.Join(@", ", updateResult.Errors.Select(x => x.Description)));
             }
