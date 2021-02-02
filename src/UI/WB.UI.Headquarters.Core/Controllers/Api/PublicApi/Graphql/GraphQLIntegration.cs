@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             }
             
             return GetExecutorBuilder(services)
-                .AddErrorFilter<GraphQLErrorFilter>()
+                .AddErrorFilter(x => new GraphQLErrorFilter(x.GetApplicationService<ILogger<GraphQLErrorFilter>>()))
                 .AddDiagnosticEventListener(x => 
                     new GraphqlDiagnosticEventListener(x.GetApplicationService<ILogger<GraphqlDiagnosticEventListener>>()));
         }

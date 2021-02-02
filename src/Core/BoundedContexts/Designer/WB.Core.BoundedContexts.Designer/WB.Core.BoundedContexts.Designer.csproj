@@ -223,7 +223,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
+  </ItemGroup> 
+  
 
- 
 </Project>
