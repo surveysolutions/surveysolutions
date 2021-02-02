@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
