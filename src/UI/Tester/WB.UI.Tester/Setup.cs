@@ -60,7 +60,7 @@ namespace WB.UI.Tester
             string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().Init(appcenterKey);
+                ServiceLocator.Current.GetInstance<IMapInteractionService>().Init(arcgisruntimeKey);
             }
 
             var status = new UnderConstructionInfo();
