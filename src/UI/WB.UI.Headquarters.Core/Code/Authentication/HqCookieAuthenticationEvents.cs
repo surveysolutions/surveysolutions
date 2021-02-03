@@ -85,6 +85,9 @@ namespace WB.UI.Headquarters.Code.Authentication
                 return;
             }
 
+            var forcePasswordClaim = GetFirstClaim(AuthorizedUser.ForceChangePasswordType);
+            bool forcePasswordChanged = forcePasswordClaim != null;
+
             // Look for the LastChanged claim.
             var workspaceRevisionClaim = GetFirstClaim(WorkspaceConstants.RevisionClaimType);
 
@@ -98,7 +101,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             var userWorkspacesChanged = !userWorkspaces.SequenceEqual(claimedWorkspaces);
 
-            if (hasWorkspacesChanged || userWorkspacesChanged)
+            if (forcePasswordChanged || hasWorkspacesChanged || userWorkspacesChanged)
             {
                 var newPrincipal = await this.userRepository.ExecuteAsync(async u =>
                 {

@@ -527,8 +527,6 @@ namespace WB.UI.Headquarters.Controllers
                 if (updateResult.Succeeded && model.UserId == this.authorizedUser.Id)
                 {
                     this.authorizedUser.ResetForceChangePasswordFlag();
-                    await this.signInManager.SignOutAsync();
-                    return this.Redirect("~/");
                 }
 
                 if (!updateResult.Succeeded)
