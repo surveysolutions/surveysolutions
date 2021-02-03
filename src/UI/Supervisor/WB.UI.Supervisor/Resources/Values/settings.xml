@@ -7,4 +7,5 @@
   <bool name="DownloadUpdatesForInterviewerApp">true</bool>
   <string name="google_maps_api_key"></string>
   <string name="appcenter_key"></string>
+  <string name="arcgisruntime_key"></string>
 </resources>
