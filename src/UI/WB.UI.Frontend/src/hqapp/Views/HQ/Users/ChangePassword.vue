@@ -7,7 +7,15 @@
         :userName="userInfo.userName"
         :userId="userInfo.userId"
         :currentTab="currentTab">
-        <div >
+        <div>
+            <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
+                class="alerts form-group"
+                style="margin-left:-10px">
+                <div class="alert">
+                    {{ $t('FieldsAndValidations.ForceChangePassword') }}
+                </div>
+                <br/>
+            </div>
             <form-group
                 v-if="isOwnProfile"
                 :label="$t('FieldsAndValidations.OldPasswordFieldName')"

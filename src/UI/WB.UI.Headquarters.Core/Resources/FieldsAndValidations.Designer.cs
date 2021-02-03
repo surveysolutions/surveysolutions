@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class FieldsAndValidations {
@@ -174,6 +174,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string EmailFieldName {
             get {
                 return ResourceManager.GetString("EmailFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You password has been reseted. You must change it to get access to site..
+        /// </summary>
+        public static string ForceChangePassword {
+            get {
+                return ResourceManager.GetString("ForceChangePassword", resourceCulture);
             }
         }
         
@@ -493,7 +502,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name needs to be between 3 and 15 characters, and may contain only letters, digits and the underscore symbol.
+        ///   Looks up a localized string similar to The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: &apos;A&apos;..&apos;Z&apos; or &apos;a&apos;..&apos;z&apos;. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names..
         /// </summary>
         public static string UserNameErrorMessage {
             get {
