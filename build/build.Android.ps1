@@ -5,6 +5,7 @@ param(
     [string]$branch = "master",
     [string]$AppCenterKey = $NULL,
     [string]$GoogleMapKey = $NULL,
+	[string]$ArcGisKey = $NULL,
     [switch]$noSupervisor,
     [switch]$noLiteInterviewer,
     [switch]$noExtInterviewer)
@@ -64,6 +65,7 @@ try {
             -KeystoreName 'WBCapi.keystore' `
             -AppCenterKey $AppCenterKey `
             -GoogleMapKey $GoogleMapKey `
+			-ArcGisKey $ArcGisKey `
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName "$artifactsFolder\$SuperPackageName" `
@@ -81,6 +83,7 @@ try {
             -KeystoreName 'WBCapi.keystore' `
             -AppCenterKey $AppCenterKey `
             -GoogleMapKey $GoogleMapKey `
+			-ArcGisKey $ArcGisKey `
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName "$artifactsFolder\$ExtPackageName" `

@@ -2,6 +2,7 @@ param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='Release',
 [string]$KeystorePassword = $null,
+[string]$ArcGisKey = $NULL,
 [string]$branch = "master",
 [string]$GoogleMapKey,
 [string]$AppCenterKey,
@@ -24,6 +25,7 @@ Log-Block "Update project version" {
 
 Set-AndroidXmlResourceValue $AndroidProject "google_maps_api_key" $GoogleMapKey
 Set-AndroidXmlResourceValue $AndroidProject "appcenter_key" $AppCenterKey
+Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_key" $ArcGisKey
 
 & (GetPathToMSBuild) -restore $AndroidProject -t:SignAndroidPackage `
     -p:Configuration=$BuildConfiguration `
