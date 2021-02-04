@@ -85,5 +85,40 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
 
             return Unauthorized();
         }
+
+        [HttpPost]
+        [Route("changePassword")]
+        [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
+        public async Task<ActionResult<string>> ChangePassword([FromBody]ChangePasswordInfo userChangePassword)
+        {
+            var user = await this.userManager.FindByNameAsync(userChangePassword.Username);
+
+            if (user == null)
+                return Unauthorized();
+            
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userChangePassword.Password, false);
+            if (signInResult.IsLockedOut)
+            {
+                return Unauthorized(new {Message = "User is locked"});
+            }
+
+            if (signInResult.Succeeded)
+            {
+                if (!user.ForceChangePassword)
+                    return Forbid();
+
+                user.ForceChangePassword = false;
+                var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await userManager.ResetPasswordAsync(user, resetToken, userChangePassword.NewPassword);
+
+                if (result.Succeeded)
+                {
+                    var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+                    return new JsonResult(authToken);
+                }
+            }
+
+            return Unauthorized();
+        }
     }
 }

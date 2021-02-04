@@ -61,6 +61,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                                 exceptionMessage = EnumeratorUIResources.AccountIsNotAnInterviewer;
                                 exceptionType = SynchronizationExceptionType.UserIsNotInterviewer;
                             }
+                            else if(restException.Message.Contains("Force change password"))
+                            {
+                                exceptionType = SynchronizationExceptionType.ShouldChangePassword;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+                            }
                             else
                             {
                                 exceptionMessage = EnumeratorUIResources.Unauthorized;
@@ -116,13 +121,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             if (restException.Message.Contains("relinked"))
                             {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
-                                exceptionMessage =
-                                    EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
                             }else if(restException.Message.Contains("Workspace is disabled"))
                             {
                                 exceptionType = SynchronizationExceptionType.WorkspaceDisabled;
-                                exceptionMessage =
-                                    EnumeratorUIResources.Synchronization_WorkspaceDisabled;
+                                exceptionMessage = EnumeratorUIResources.Synchronization_WorkspaceDisabled;
                             }
                             else
                             {

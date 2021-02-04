@@ -397,6 +397,9 @@ for further instructions</value>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
     <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
+  <data name="Synchronization_ForceChangeUserPassword" xml:space="preserve">
+    <value>You password has been reseted. You must change it to get access to site.</value>
+  </data>
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
     <value>User no longer belongs to this Supervisor team. Please contact your Headquarters for details.</value>
   </data>

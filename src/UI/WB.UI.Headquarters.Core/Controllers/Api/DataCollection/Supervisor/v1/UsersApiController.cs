@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
@@ -19,18 +21,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         protected readonly IUserRepository userViewFactory;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
+        private readonly UserManager<HqUser> userManager;
 
         public UserControllerBase(
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
             SignInManager<HqUser> signInManager, 
-            IApiTokenProvider apiAuthTokenProvider)
+            IApiTokenProvider apiAuthTokenProvider,
+            UserManager<HqUser> userManager)
         {
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
             this.apiAuthTokenProvider = apiAuthTokenProvider;
-            
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -87,6 +91,40 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
             return Unauthorized();
         }
+        
+        [HttpPost]
+        [Route("changePassword")]
+        [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
+        public async Task<ActionResult<string>> ChangePassword([FromBody]ChangePasswordInfo userChangePassword)
+        {
+            var user = await this.userManager.FindByNameAsync(userChangePassword.Username);
 
+            if (user == null)
+                return Unauthorized();
+            
+            var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userChangePassword.Password, false);
+            if (signInResult.IsLockedOut)
+            {
+                return Unauthorized(new {Message = "User is locked"});
+            }
+
+            if (signInResult.Succeeded)
+            {
+                if (!user.ForceChangePassword)
+                    return Forbid();
+
+                user.ForceChangePassword = false;
+                var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await userManager.ResetPasswordAsync(user, resetToken, userChangePassword.NewPassword);
+
+                if (result.Succeeded)
+                {
+                    var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+                    return new JsonResult(authToken);
+                }
+            }
+
+            return Unauthorized();
+        }
     }
 }

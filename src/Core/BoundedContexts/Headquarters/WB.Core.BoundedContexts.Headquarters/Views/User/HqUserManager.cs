@@ -51,6 +51,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return result;
         }
 
+        public override Task<bool> CheckPasswordAsync(HqUser user, string password)
+        {
+            return base.CheckPasswordAsync(user, password);
+        }
+
         public override Task<IdentityResult> ResetPasswordAsync(HqUser user, string token, string newPassword)
         {
             return base.ResetPasswordAsync(user, token, newPassword);

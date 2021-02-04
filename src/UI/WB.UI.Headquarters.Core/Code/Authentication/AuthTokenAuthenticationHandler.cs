@@ -21,6 +21,7 @@ namespace WB.UI.Headquarters.Code.Authentication
         private readonly IApiTokenProvider authTokenProvider;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private bool isUserLocked;
+        private bool forceChangePassword;
 
         public AuthTokenAuthenticationHandler(IOptionsMonitor<AuthTokenAuthenticationSchemeOptions> options, 
             ILoggerFactory logger,
@@ -61,6 +62,18 @@ namespace WB.UI.Headquarters.Code.Authentication
                 this.isUserLocked = true;
                 return AuthenticateResult.Fail("User is locked");
             }
+            
+            if (user.ForceChangePassword)
+            {
+                /*var changePasswordApi = Request.Path.HasValue 
+                                        && Request.Path.Value != null
+                                        && Request.Path.Value.EndsWith("/users/changePassword");
+                if (!changePasswordApi)*/
+                {
+                    this.forceChangePassword = true;
+                    return AuthenticateResult.Fail("User must change password");
+                }
+            }
 
             var verificationResult = await authTokenProvider.ValidateTokenAsync(user.Id, creds.Password);
             if (verificationResult)
@@ -90,6 +103,11 @@ namespace WB.UI.Headquarters.Code.Authentication
             {
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
                 await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "User is locked"}));
+            }
+            if (this.forceChangePassword)
+            {
+                await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Force change password"}));
             }
         }
     }
