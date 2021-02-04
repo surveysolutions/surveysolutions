@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
     public interface ISynchronizationService
     {
         Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken token = default);
+        Task<string> ChangePasswordAsync(ChangePasswordInfo info, RestCredentials credentials, CancellationToken token = default);
         Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken token = default);
         Task<string> GetTenantId(RestCredentials credentials = null, CancellationToken token = default);
 

@@ -349,6 +349,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm new password.
+        /// </summary>
+        public static string ConfirmNewPasswordHint {
+            get {
+                return ResourceManager.GetString("ConfirmNewPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No questionnaires yet
         ///
         ///You can create or edit your questionnaires in Survey Solutions Designer.
@@ -1593,6 +1602,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string NewPasswordHint {
+            get {
+                return ResourceManager.GetString("NewPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -1701,11 +1719,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current password.
+        /// </summary>
+        public static string OldPasswordHint {
+            get {
+                return ResourceManager.GetString("OldPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string PasswordHint {
             get {
                 return ResourceManager.GetString("PasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be the same.
+        /// </summary>
+        public static string PasswordMatchError {
+            get {
+                return ResourceManager.GetString("PasswordMatchError", resourceCulture);
             }
         }
         

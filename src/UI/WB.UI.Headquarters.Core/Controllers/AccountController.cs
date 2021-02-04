@@ -177,6 +177,13 @@ namespace WB.UI.Headquarters.Controllers
 
             if (signInResult.Succeeded)
             {
+                if (user!.ForceChangePassword)
+                {
+                    var controllerName = nameof(UsersController);
+                    var actionName = nameof(UsersController.ChangePassword);
+                    return RedirectToAction(actionName, controllerName);
+                }
+                
                 return Redirect(returnUrl ?? Url.Action("Index", "Home"));
             }
 

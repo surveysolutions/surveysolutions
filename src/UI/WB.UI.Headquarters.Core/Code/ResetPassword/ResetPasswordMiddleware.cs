@@ -24,6 +24,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
             {
                 if (!context.Request.Path.StartsWithSegments("/Users/ChangePassword")
                     && !context.Request.Path.StartsWithSegments("/Users/UpdatePassword")
+                    && !context.Request.Path.StartsWithSegments("/Account/LogOff")
                     && !context.Request.Path.StartsWithSegments("/.hc")
                     && !context.Request.Path.StartsWithSegments("/api"))
                 {

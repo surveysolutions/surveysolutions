@@ -325,6 +325,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult("offline sync token");
         }
 
+        public Task<string> ChangePasswordAsync(ChangePasswordInfo info, RestCredentials credentials, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> HasCurrentUserDeviceAsync(RestCredentials? credentials = null, CancellationToken token = default)
         {
             return Task.FromResult(true);
