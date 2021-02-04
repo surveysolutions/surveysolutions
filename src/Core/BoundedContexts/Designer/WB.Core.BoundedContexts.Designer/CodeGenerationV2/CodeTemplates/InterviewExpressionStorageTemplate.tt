@@ -3,6 +3,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Globalization" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>

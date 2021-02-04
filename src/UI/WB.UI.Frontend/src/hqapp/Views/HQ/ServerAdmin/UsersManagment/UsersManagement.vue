@@ -228,6 +228,7 @@ export default {
                         data: 'workspaces',
                         name: 'Workspaces',
                         title: this.$t('Pages.UsersManage_WorkspacesFilterTitle'),
+                        className: 'suso-workspaces',
                         sortable: false,
                         render(data, type, row) {
                             return map(row.workspaces, w => w.disabled ? '<strike>'
