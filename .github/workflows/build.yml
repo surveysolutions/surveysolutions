@@ -1,190 +1,190 @@
-name: Survey Solutions Build
+# name: Survey Solutions Build
 
-on:
-  push:
-  workflow_dispatch:
+# on:
+#   push:
+#   workflow_dispatch:
   
-jobs:
+# jobs:
 
-  android_apps:
-    name: Android
-    runs-on: windows-latest
+#   android_apps:
+#     name: Android
+#     runs-on: windows-latest
   
-    # strategy:
-    #   fail-fast: true
-    #   matrix:
-    #     app: 
-    #       - name: Interviewer
-    #         cmd: interviewer
-    #       - name: Interviewer with maps
-    #         cmd: interviewer-with-maps
-    #       - name: Supervisor
-    #         cmd: supervisor
+#     # strategy:
+#     #   fail-fast: true
+#     #   matrix:
+#     #     app: 
+#     #       - name: Interviewer
+#     #         cmd: interviewer
+#     #       - name: Interviewer with maps
+#     #         cmd: interviewer-with-maps
+#     #       - name: Supervisor
+#     #         cmd: supervisor
 
-    env:
-        DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
-        AndroidKeyStore: ${{ secrets.ANDROID_KEYSTORE }}
-        AndroidSigningKeyPass: ${{ secrets.ANDROID_KEY }}
+#     env:
+#         DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+#         AndroidKeyStore: ${{ secrets.ANDROID_KEYSTORE }}
+#         AndroidSigningKeyPass: ${{ secrets.ANDROID_KEY }}
 
-    steps:
-      - run: git config --system core.longpaths true
+#     steps:
+#       - run: git config --system core.longpaths true
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+#       - uses: actions/cache@v2
+#         with:
+#           path: ~/.nuget/packages
+#           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-nuget-
 
-      - uses: actions/checkout@v2
+#       - uses: actions/checkout@v2
 
-      - uses: microsoft/setup-msbuild@v1.0.2
+#       - uses: microsoft/setup-msbuild@v1.0.2
 
-      # - name: ${{ matrix.app.name }}
-      #   run: ./build.ps1 ${{ matrix.app.cmd }}
-      - name: Interviewer
-        run: ./build.ps1 interviewer
-      - name: Interviewer With Maps
-        run: ./build.ps1 interviewer-with-maps
-      - name: Supervisor
-        run: ./build.ps1 supervisor
+#       # - name: ${{ matrix.app.name }}
+#       #   run: ./build.ps1 ${{ matrix.app.cmd }}
+#       - name: Interviewer
+#         run: ./build.ps1 interviewer
+#       - name: Interviewer With Maps
+#         run: ./build.ps1 interviewer-with-maps
+#       - name: Supervisor
+#         run: ./build.ps1 supervisor
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: android-apks
-          retention-days: 1
-          path: ./output
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: android-apks
+#           retention-days: 1
+#           path: ./output
 
 
-  android_storage:
-    name: Docker Http Server with Apks
-    runs-on: ubuntu-latest
-    needs: 
-      - android_apps
-      - tests
-    env:
-        DOCKER_BUILDX_CACHE: /tmp/.buildx-cache
+#   android_storage:
+#     name: Docker Http Server with Apks
+#     runs-on: ubuntu-latest
+#     needs: 
+#       - android_apps
+#       - tests
+#     env:
+#         DOCKER_BUILDX_CACHE: /tmp/.buildx-cache
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - uses: actions/download-artifact@v2
-        with:
-          name: android-apks
-          path: output
+#       - uses: actions/download-artifact@v2
+#         with:
+#           name: android-apks
+#           path: output
 
-      - uses: docker/setup-qemu-action@v1
-      - uses: docker/setup-buildx-action@v1
+#       - uses: docker/setup-qemu-action@v1
+#       - uses: docker/setup-buildx-action@v1
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.DOCKER_BUILDX_CACHE }}
-          key: ${{ runner.os }}-buildx-{{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+#       - name: Cache Docker layers
+#         uses: actions/cache@v2
+#         with:
+#           path: ${{ env.DOCKER_BUILDX_CACHE }}
+#           key: ${{ runner.os }}-buildx-{{ github.sha }}
+#           restore-keys: |
+#             ${{ runner.os }}-buildx-
 
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.PAT_AUTOMATION }}
+#       - name: Login to GitHub Packages Docker Registry
+#         uses: docker/login-action@v1
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.PAT_AUTOMATION }}
 
-      - name: Docker Android Server
-        run: bash ./build.sh DockerAndroidServer --docker-push --skip 
+#       - name: Docker Android Server
+#         run: bash ./build.sh DockerAndroidServer --docker-push --skip 
 
-      - name: binlog
-        uses: actions/upload-artifact@v2 
-        if: ${{ always() }}
-        with:
-          name: binlogs
-          retention-days: 10
-          path: output/*.binlog
+#       - name: binlog
+#         uses: actions/upload-artifact@v2 
+#         if: ${{ always() }}
+#         with:
+#           name: binlogs
+#           retention-days: 10
+#           path: output/*.binlog
 
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
+#   tests:
+#     name: Tests
+#     runs-on: ubuntu-latest
 
-    # strategy:
-    #   fail-fast: true
-    #   matrix:
-    #     tests:
-    #     - name: tests-integration
-    #     - name: tests-unit tests-export
+#     # strategy:
+#     #   fail-fast: true
+#     #   matrix:
+#     #     tests:
+#     #     - name: tests-integration
+#     #     - name: tests-unit tests-export
 
-    services:
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: P@$$w0rd
-        ports:
-          - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+#     services:
+#       postgres:
+#         # Docker Hub image
+#         image: postgres
+#         # Provide the password for postgres
+#         env:
+#           POSTGRES_PASSWORD: P@$$w0rd
+#         ports:
+#           - 5432:5432
+#         # Set health checks to wait until postgres has started
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+#       - uses: actions/cache@v2
+#         with:
+#           path: ~/.nuget/packages
+#           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-nuget-
 
-      # - run: bash ./build.sh ${{ matrix.tests.name }}
-      - run: bash ./build.sh tests-unit 
-      - run: bash ./build.sh tests-export
-      - run: bash ./build.sh tests-integration
+#       # - run: bash ./build.sh ${{ matrix.tests.name }}
+#       - run: bash ./build.sh tests-unit 
+#       - run: bash ./build.sh tests-export
+#       - run: bash ./build.sh tests-integration
 
-      - name: cancel workflow
-        if: failure()
-        uses: andymckay/cancel-action@0.2
-      - uses: actions/upload-artifact@v2
-        with:
-          name: tests-report
-          path: output
+#       - name: cancel workflow
+#         if: failure()
+#         uses: andymckay/cancel-action@0.2
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: tests-report
+#           path: output
 
-  docker:
-    name: Docker 
-    runs-on: ubuntu-latest
-    needs: tests
-    strategy:
-      fail-fast: true
-      matrix:
-        app: 
-          - 'docker-hq docker-webtester'
-          - 'docker-designer'
-    env:
-        DOCKER_BUILDX_CACHE: /tmp/.buildx-cache
+#   docker:
+#     name: Docker 
+#     runs-on: ubuntu-latest
+#     needs: tests
+#     strategy:
+#       fail-fast: true
+#       matrix:
+#         app: 
+#           - 'docker-hq docker-webtester'
+#           - 'docker-designer'
+#     env:
+#         DOCKER_BUILDX_CACHE: /tmp/.buildx-cache
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v1
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.DOCKER_BUILDX_CACHE }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+#       - name: Cache Docker layers
+#         uses: actions/cache@v2
+#         with:
+#           path: ${{ env.DOCKER_BUILDX_CACHE }}
+#           key: ${{ runner.os }}-buildx-${{ github.sha }}
+#           restore-keys: |
+#             ${{ runner.os }}-buildx-
 
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.PAT_AUTOMATION }}
+#       - name: Login to GitHub Packages Docker Registry
+#         uses: docker/login-action@v1
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.PAT_AUTOMATION }}
 
-      - name: Docker build
-        run: bash ./build.sh ${{ matrix.app }} --docker-push
+#       - name: Docker build
+#         run: bash ./build.sh ${{ matrix.app }} --docker-push
