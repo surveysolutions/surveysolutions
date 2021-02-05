@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Пользователю не удалось изменить пароль.
+        /// </summary>
+        public static string FailToChangePassword {
+            get {
+                return ResourceManager.GetString("FailToChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Загрузка задания ({0})&lt;/br&gt;
         ///.
         /// </summary>
@@ -428,6 +437,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string NoNewInterviewPackagesToDownload {
             get {
                 return ResourceManager.GetString("NoNewInterviewPackagesToDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пароль изменет и ему выделен AuthToken.
+        /// </summary>
+        public static string PasswordChanged {
+            get {
+                return ResourceManager.GetString("PasswordChanged", resourceCulture);
             }
         }
         
