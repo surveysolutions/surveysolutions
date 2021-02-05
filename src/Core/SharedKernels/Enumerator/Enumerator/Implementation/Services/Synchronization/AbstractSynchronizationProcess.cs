@@ -552,7 +552,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
                 else
                 {
-                    this.shouldChangePassword = true;
                     this.newPassword = password;
 
                     await this.SynchronizeAsync(progress, cancellationToken).ConfigureAwait(false);
