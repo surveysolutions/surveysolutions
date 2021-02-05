@@ -2563,5 +2563,14 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You changed your current password. Try login again with new password..
+        /// </summary>
+        public static string YouChangeYouPasswordTryToLoginAgainWithNewPassword {
+            get {
+                return ResourceManager.GetString("YouChangeYouPasswordTryToLoginAgainWithNewPassword", resourceCulture);
+            }
+        }
     }
 }

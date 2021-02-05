@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private IMvxAsyncCommand signInCommand;
-        public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress);
+        public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(() => this.SignInAsync(this.Password), () => !IsInProgress);
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
@@ -167,7 +167,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private async Task SignInAsync()
+        private async Task SignInAsync(string userPassword, string token = null)
         {
             this.IsUserValid = true;
             this.ErrorMessage = null;
@@ -194,10 +194,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, EnumeratorUIResources.Login_WrongPassword);
                 }
 
-                var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
+                var authToken = token ?? await this.synchronizationService.LoginAsync(new LogonInfo
                 {
                     Username = this.UserName,
-                    Password = this.Password
+                    Password = userPassword
                 }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
 
                 restCredentials.Token = authToken;
@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 await this.SaveUserToLocalStorageAsync(restCredentials, cancellationTokenSource.Token);
 
-                this.Principal.SignIn(restCredentials.Login, this.Password, true);
+                this.Principal.SignIn(restCredentials.Login, userPassword, true);
 
                 this.auditLogService.Write(new FinishInstallationAuditLogEntity(this.Endpoint));
                 this.auditLogService.Write(new LoginAuditLogEntity(this.UserName));
@@ -242,6 +242,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
                         break;
+                    case SynchronizationExceptionType.ShouldChangePassword:
+                        await ChangePasswordAsync();
+                        break;
                     
                     case SynchronizationExceptionType.UpgradeRequired:
                         var targetVersionObj = ex.Data["target-version"];
@@ -262,6 +265,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.IsInProgress = false;
                 cancellationTokenSource = null;
+            }
+        }
+
+        private async Task ChangePasswordAsync()
+        {
+            var message = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+
+            var passwordDialogResult = await this.userInteractionService.ConfirmNewPasswordInputAsync(
+                message,
+                okButton: UIResources.Ok,
+                cancelButton: EnumeratorUIResources.Synchronization_Cancel).ConfigureAwait(false);
+
+            if (passwordDialogResult != null)
+            {
+                var changePasswordInfo = new ChangePasswordInfo
+                {
+                    Username = this.UserName,
+                    Password = passwordDialogResult.OldPassword,
+                    NewPassword = passwordDialogResult.NewPassword,
+                };
+
+                try
+                {
+                    var token = await this.synchronizationService.ChangePasswordAsync(changePasswordInfo)
+                        .ConfigureAwait(false);
+
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        this.ErrorMessage = EnumeratorUIResources.YouChangeYouPasswordTryToLoginAgainWithNewPassword;
+                        await SignInAsync(passwordDialogResult.NewPassword, token);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"Cant change password for user {UserName}", ex);
+                }
             }
         }
 
