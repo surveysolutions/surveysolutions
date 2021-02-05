@@ -38,6 +38,7 @@
 
         <DataTables
             ref="table"
+            data-suso="usermanagement-list"
             :tableOptions="tableOptions"
             :addParamsToRequest="addParamsToRequest"
             @selectedRowsChanged="rows => selectedRows = rows"
@@ -204,7 +205,7 @@ export default {
                         data: 'userName',
                         name: 'UserName',
                         title: this.$t('Pages.Interviewers_UserNameTitle'),
-                        className: 'nowrap',
+                        className: 'nowrap suso-username',
                         render: function(data, type, row) {
                             var tdHtml = !row.isArchived
                                 ? `<a href='${self.getUserProfileLink(row)}'>${data}</a>`
@@ -221,12 +222,13 @@ export default {
                         name: 'Role',
                         title: this.$t('Pages.AccountManage_Role'),
                         sortable: false,
-                        className: 'created-by',
+                        className: 'suso-created-by',
                     },
                     {
                         data: 'workspaces',
                         name: 'Workspaces',
                         title: this.$t('Pages.UsersManage_WorkspacesFilterTitle'),
+                        className: 'suso-workspaces',
                         sortable: false,
                         render(data, type, row) {
                             return map(row.workspaces, w => w.disabled ? '<strike>'
@@ -237,13 +239,13 @@ export default {
                         data: 'fullName',
                         name: 'FullName',
                         title: this.$t('Pages.Interviewers_FullNameTitle'),
-                        className: 'created-by',
+                        className: 'suso-full-name',
                         defaultContent: '',
                     },
                     {
                         data: 'email',
                         name: 'Email',
-                        className: 'changed-recently',
+                        className: 'suso-email',
                         title: this.$t('Assignments.Email'),
                         defaultContent: '',
                         render: function(data, type, row) {
@@ -255,7 +257,7 @@ export default {
                         name: 'Phone',
                         defaultContent: '',
                         title: this.$t('UploadUsers.Phone'),
-                        className: 'created-by',
+                        className: 'suso-phone',
                     },
                 ],
 

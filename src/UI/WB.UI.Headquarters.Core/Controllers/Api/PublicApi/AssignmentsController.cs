@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
@@ -135,7 +137,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             filter.Limit = filter.Limit == 0 ? 20 : Math.Min(filter.Limit, 100);
 
-            if (!QuestionnaireIdentity.TryParse(filter.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
+            if (!QuestionnaireIdentity.TryParse(filter.QuestionnaireId, out QuestionnaireIdentity? questionnaireId))
             {
                 questionnaireId = null;
             }
@@ -167,7 +169,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
-            string MapOrder(string input)
+            string? MapOrder(string? input)
             {
                 if (input == null) return null;
 
@@ -201,8 +203,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Administrator")]
         [Route("")]
         public ActionResult<CreateAssignmentResult> Create(
-            [FromBody] CreateAssignmentApiRequest createItem)
+            [FromBody, BindRequired] CreateAssignmentApiRequest createItem)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             if (createItem == null) return StatusCode(StatusCodes.Status400BadRequest, "Bad assignment info");
 
             if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
@@ -224,7 +230,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 .ToList();
 
             var unknownQuestions = assignmentAnswers
-                .Where(x => x.QuestionIdentity == null || string.IsNullOrEmpty(x.Variable))
+                .Where(x => x.IsUnknownQuestion)
                 .ToArray();
 
             if (unknownQuestions.Any())
@@ -297,16 +303,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:int}/assign")]
         [Authorize(Roles = "ApiUser, Administrator")]
         public async Task<ActionResult<AssignmentDetails>> Assign(int id,
-            [FromBody] AssignmentAssignRequest assigneeRequest)
+            [FromBody, BindRequired] AssignmentAssignRequest assigneeRequest)
         {
+            if (assigneeRequest == null) return StatusCode(StatusCodes.Status400BadRequest, "User was not set");
+            
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
             {
                 return NotFound();
             }
 
-            var responsibleUser = await this.GetResponsibleIdPersonFromRequestValueAsync(assigneeRequest?.Responsible);
-
+            var responsibleUser = await this.GetResponsibleIdPersonFromRequestValueAsync(assigneeRequest.Responsible);
+            if (responsibleUser == null)
+            {
+                return NotFound("User was not found");
+            }
+            
             try
             {
                 this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
@@ -337,7 +353,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return updatedDetails;
         }
 
-        private void VerifyAssigneeInRoles(HqUser responsibleUser, string providedValue, params UserRoles[] roles)
+        private void VerifyAssigneeInRoles(HqUser? responsibleUser, string? providedValue, params UserRoles[] roles)
         {
             if (responsibleUser == null)
             {
@@ -351,7 +367,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
         }
 
-        private async Task<HqUser> GetResponsibleIdPersonFromRequestValueAsync(string responsible)
+        private async Task<HqUser?> GetResponsibleIdPersonFromRequestValueAsync(string responsible)
         {
             if (string.IsNullOrWhiteSpace(responsible))
             {
@@ -475,6 +491,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
         public ActionResult AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, 
+                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+            
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null || assignment.Archived)
                 return NotFound();
@@ -740,40 +760,56 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         private class AssignmentAnswer
         {
-            public AssignmentIdentifyingDataItem Source { get; set; }
-            public Identity QuestionIdentity { get; set; }
-            public string Variable { get; set; }
+            public static AssignmentAnswer UnknownAssignmentAnswer(AssignmentIdentifyingDataItem source)
+            {
+                return new AssignmentAnswer(source, Identity.Create(Guid.Empty, RosterVector.Empty))
+                {
+                    IsUnknownQuestion = true
+                };
+            }
+
+            public AssignmentAnswer(AssignmentIdentifyingDataItem source, Identity questionIdentity)
+            {
+                Source = source;
+                QuestionIdentity = questionIdentity;
+            }
+
+            public AssignmentIdentifyingDataItem Source { get; }
+            public Identity QuestionIdentity { get; }
+            public string? Variable { get; set; }
 
             public QuestionType? QuestionType { get; set; }
+
+            public bool IsUnknownQuestion { get; private set; }
         }
 
         private AssignmentAnswer ToAssignmentAnswer(AssignmentIdentifyingDataItem item, IQuestionnaire questionnaire)
         {
-            var answer = new AssignmentAnswer {Source = item, QuestionType = null};
-
             if (!string.IsNullOrEmpty(item.Identity) && Identity.TryParse(item.Identity, out Identity identity))
             {
-                answer.QuestionIdentity = identity;
-
                 if (questionnaire.HasQuestion(identity.Id))
                 {
+                    var answer = new AssignmentAnswer(item, identity);
                     answer.Variable = questionnaire.GetQuestionVariableName(identity.Id);
                     answer.QuestionType = questionnaire.GetQuestionType(identity.Id);
+                    
+                    return answer;
                 }
             }
             else if (!string.IsNullOrEmpty(item.Variable))
             {
-                answer.Variable = item.Variable;
-
                 var questionId = questionnaire.GetQuestionIdByVariable(item.Variable);
                 if (questionId.HasValue)
                 {
-                    answer.QuestionIdentity = Identity.Create(questionId.Value, RosterVector.Empty);
+                    var answer = new AssignmentAnswer(item, Identity.Create(questionId.Value, RosterVector.Empty));
+                    answer.Variable = item.Variable;
                     answer.QuestionType = questionnaire.GetQuestionType(answer.QuestionIdentity.Id);
+                    
+                    return answer;
                 }
             }
 
-            return answer;
+            return AssignmentAnswer.UnknownAssignmentAnswer(item);
         }
     }
 }
