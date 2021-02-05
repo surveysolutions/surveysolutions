@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.StataExportCaption, p => p.Column("stata_export_caption"));
             Property(x => x.VariableLabel, p => p.Column("variable_label"));
             Property(x => x.QuestionText, p => p.Column("question_text"));
+            Property(x => x.UsedInReporting, p => p.Column("used_in_reporting"));
         }
     }
 

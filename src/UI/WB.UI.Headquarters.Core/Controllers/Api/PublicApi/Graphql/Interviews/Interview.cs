@@ -2,7 +2,6 @@
 using System.Linq;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
-using Humanizer;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
@@ -85,12 +84,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
-                .Resolver(context => 
+                .Resolve(async context => await
                     context.GroupDataLoader<string, IdentifyEntityValue>
                         (async (keys, token) =>
                     {
-                        var unitOfWork = context.Service<IUnitOfWork>();
-                        var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
+                        var unitOfWork = context.Service<IUnitOfWork>(); var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
                             .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
                             .OrderBy(a => a.Position)
                             .ToListAsync()
@@ -112,7 +110,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field("calendarEvent")
                 .Description("Active Calendar Event associated with interview")
                 .Type<CalendarEventObjectType>()
-                .Resolver(context =>
+                .Resolve(context =>
                 {
                     var interviewId = context.Parent<InterviewSummary>().InterviewId;
                     var unitOfWork = context.Service<IUnitOfWork>();

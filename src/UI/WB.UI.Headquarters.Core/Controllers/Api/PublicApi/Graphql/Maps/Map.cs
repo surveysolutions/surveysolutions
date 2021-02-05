@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             descriptor.Field(x => x.Users)
                 .Description("List of users assigned to map")
                 .Type<NonNullType<ListType<NonNullType<UserMapObjectType>>>>()
-                .Resolver(context =>
+                .Resolve(context =>
                 {
                     var mapId = context.Parent<MapBrowseItem>().Id;
 

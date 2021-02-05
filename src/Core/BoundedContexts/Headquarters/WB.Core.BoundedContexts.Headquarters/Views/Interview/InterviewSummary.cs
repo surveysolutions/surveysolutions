@@ -165,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).AnswerCode = optionCode;
         }
 
-        public virtual bool CanAnswerFeaturedQuestion(int questionId)
+        public virtual bool IsQuestionIdentifying(int questionId)
         {
             return this.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId);
         }

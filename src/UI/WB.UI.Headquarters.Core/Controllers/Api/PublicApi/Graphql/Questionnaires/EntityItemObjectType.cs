@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             
             descriptor.Field("options")
                 .Name("options")
-                .Resolver(context =>
+                .Resolve(async context => await
                     context.BatchDataLoader<int, List<CategoricalOption>>(async (keys, token )  =>
                     {
                         var unitOfWork = context.Service<IUnitOfWork>();

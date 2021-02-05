@@ -23,6 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual string StataExportCaption { get; set; }
         public virtual string QuestionText { get; set; }
         public virtual string VariableLabel { get; set; }
+
+        public virtual bool? UsedInReporting { get; set; }
     }
 
     public class QuestionnaireCompositeItemAnswer
