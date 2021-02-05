@@ -325,7 +325,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult("offline sync token");
         }
 
-        public Task<string> ChangePasswordAsync(ChangePasswordInfo info, RestCredentials credentials, CancellationToken token = default)
+        public Task<string> ChangePasswordAsync(ChangePasswordInfo info, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }

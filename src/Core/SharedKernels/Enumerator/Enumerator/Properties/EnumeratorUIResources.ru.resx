@@ -861,6 +861,9 @@
     <value>Пользователь больше не состоит в команде этого супервизора. Пожалуйста свяжитесь с Вашим Хедквотером.</value>
     <comment>Пользователь больше не состоит в команде супервизора {0}. Пожалуйста свяжитесь с Вашим Хедквотером</comment>
   </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Вы изменили ваш текущий пароль. Попробуйте залогинется с новым паролем.</value>
+  </data>
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
     <value>Отклонено хедквотером {0}</value>
   </data>

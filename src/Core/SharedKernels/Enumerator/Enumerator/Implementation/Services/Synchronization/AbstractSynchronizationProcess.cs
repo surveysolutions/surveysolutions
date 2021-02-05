@@ -262,7 +262,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     };
                     this.newPassword = null;
                     
-                    var token = await this.synchronizationService.ChangePasswordAsync(changePasswordInfo, this.RestCredentials, cancellationToken).ConfigureAwait(false);
+                    var token = await this.synchronizationService.ChangePasswordAsync(changePasswordInfo, cancellationToken).ConfigureAwait(false);
 
                     this.RestCredentials.Password = changePasswordInfo.NewPassword;
                     this.RestCredentials.Token = token;
