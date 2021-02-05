@@ -238,6 +238,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 if (this.remoteLoginRequired)
                 {
+                    this.remoteLoginRequired = false;
+
                     var token = await this.synchronizationService.LoginAsync(new LogonInfo
                     {
                         Username = this.RestCredentials.Login,
@@ -247,22 +249,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.RestCredentials.Password = this.RestCredentials.Password;
                     this.RestCredentials.Token = token;
 
-                    this.remoteLoginRequired = false;
                     shouldUpdateCredentialsInDb = true;
                 }
 
                 if (newPassword != null)
                 {
-                    var token = await this.synchronizationService.ChangePasswordAsync(new ChangePasswordInfo
+                    var changePasswordInfo = new ChangePasswordInfo
                     {
                         Username = this.RestCredentials.Login,
                         Password = newPassword.OldPassword,
                         NewPassword = newPassword.NewPassword,
-                    }, this.RestCredentials, cancellationToken).ConfigureAwait(false);
-
-                    this.RestCredentials.Password = newPassword.NewPassword;
-                    this.RestCredentials.Token = token;
+                    };
                     this.newPassword = null;
+                    
+                    var token = await this.synchronizationService.ChangePasswordAsync(changePasswordInfo, this.RestCredentials, cancellationToken).ConfigureAwait(false);
+
+                    this.RestCredentials.Password = changePasswordInfo.NewPassword;
+                    this.RestCredentials.Token = token;
 
                     shouldUpdateCredentialsInDb = true;
                 }
