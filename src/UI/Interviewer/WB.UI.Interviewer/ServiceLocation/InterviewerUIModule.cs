@@ -107,10 +107,6 @@ namespace WB.UI.Interviewer.ServiceLocation
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-#if !EXCLUDEEXTENSIONS
-            WB.UI.Shared.Extensions.CustomServices.MapInteractionService.RegisterLicense();
-#endif
-
             return Task.CompletedTask;
         }
     }
