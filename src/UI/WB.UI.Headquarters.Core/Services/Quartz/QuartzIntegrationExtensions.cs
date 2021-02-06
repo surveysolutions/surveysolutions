@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Npgsql;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -31,8 +29,6 @@ namespace WB.UI.Headquarters.Services.Quartz
             DbUpgradeSettings dbUpgradeSettings)
         {
             var schedulerSection = configuration.GetSection("Scheduler").Get<SchedulerConfig>();
-            services.AddHostedService<QuartzMigrator>();
-
             services.Configure<QuartzMigratorConfig>(c =>
             {
                 c.DbUpgradeSetting = dbUpgradeSettings;
@@ -41,6 +37,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             services.AddQuartz(q =>
             {
                 q.SchedulerId = "Headquarters";
+
                 q.UseJobFactory<AsyncScopedJobFactory>();
                 q.UseDefaultThreadPool();
 
@@ -119,36 +116,14 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
 
-            
+
             await scheduler.AddJob(DeleteWorkspaceSchemaJob.JobDetail(), true);
         }
 
-        private class QuartzMigratorConfig
+        public class QuartzMigratorConfig
         {
             public DbUpgradeSettings DbUpgradeSetting { get; set; }
         }
 
-        private class QuartzMigrator : IHostedService
-        {
-            private readonly IServiceProvider serviceProvider;
-            private readonly IOptions<QuartzMigratorConfig> schedulerConfig;
-
-            public QuartzMigrator(IServiceProvider serviceProvider, IOptions<QuartzMigratorConfig> schedulerConfig)
-            {
-                this.serviceProvider = serviceProvider;
-                this.schedulerConfig = schedulerConfig;
-            }
-
-            public async Task StartAsync(CancellationToken cancellationToken)
-            {
-                this.serviceProvider.RunQuartzMigrations(schedulerConfig.Value.DbUpgradeSetting);
-                await this.serviceProvider.InitQuartzJobs();
-            }
-
-            public Task StopAsync(CancellationToken cancellationToken)
-            {
-                return Task.CompletedTask;
-            }
-        }
     }
 }
