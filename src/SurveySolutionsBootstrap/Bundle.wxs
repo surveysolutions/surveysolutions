@@ -18,7 +18,7 @@
         <Variable Name="Connserver" bal:Overridable="yes" Value="127.0.0.1" />
         <Variable Name="Connport" bal:Overridable="yes" Value="5432" />
         <Variable Name="Connusername" bal:Overridable="yes" Value="postgres" />
-        <Variable Name="Connpassword" bal:Overridable="yes" Value="" />
+        <Variable Name="Connpassword" bal:Overridable="yes" />
         <Variable Name="Installfolder" bal:Overridable="yes" Value="C:\Survey Solutions" />
 
         <!--Search for old product written with InstallSuit? (or something like that) -->
