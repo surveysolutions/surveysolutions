@@ -23,8 +23,8 @@ if ($HQSourcePath -eq "") {
 	$sourceCleanup = $True
 }
 
-$InstallationProject = 'src\Installation\SurveySolutions\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
-$MainInstallationSolution = 'src\Installation\SurveySolutions\SurveySolutionsBootstrap.sln'
+$InstallationProject = 'src\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
+$MainInstallationSolution = 'src\SurveySolutionsBootstrap.sln'
 
 #Set-Location $HQSourcePath
 $sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "dist"}).FullName
