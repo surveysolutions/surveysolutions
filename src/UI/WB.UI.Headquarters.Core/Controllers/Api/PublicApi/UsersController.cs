@@ -315,59 +315,5 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             return BadRequest(result);
         }
         
-        /// <summary>
-        /// Change own password.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <response code="400">Password cannot be updated.</response>
-        /// <response code="200">Password updated.</response>
-        [HttpPatch]
-        [Route("users/{id}/changepassword")]
-        [ObservingNotAllowed]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Interviewer, UserRoles.Supervisor)]
-        public async Task<ActionResult<ChangePasswordResult>> ChangePassword(Guid id, [FromBody, BindRequired]ChangePasswordRequest model)
-        {
-            if (id != User.UserId())
-                return StatusCode(StatusCodes.Status403Forbidden, "You can change only own password");
-                
-            if (!ModelState.IsValid)
-                return StatusCode(StatusCodes.Status400BadRequest, 
-                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
-            
-            if (ModelState.IsValid)
-            {
-                var user = await userManager.GetUserAsync(User);
-                if (user.ForceChangePassword)
-                    user.ForceChangePassword = false;
-                string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-                var resetPasswordResult = await this.userManager.ResetPasswordAsync(user, passwordResetToken, model.NewPassword);
-
-                if (resetPasswordResult.Succeeded)
-                {
-                    return new ChangePasswordResult()
-                    {
-                        Success = true
-                    };
-                }
-                else
-                {
-                    unitOfWork.DiscardChanges();
-                    foreach (var resultError in resetPasswordResult.Errors)
-                    {
-                        ModelState.AddModelError(resultError.Code, resultError.Description);
-                    }
-                }
-            }
-            
-            var result = new ChangePasswordResult() { Success = false };
-
-            foreach (var modelState in ModelState.Values) {
-                foreach (ModelError error in modelState.Errors) {
-                    result.Errors.Add(error.ErrorMessage);
-                }
-            }
-
-            return BadRequest(result);
-        }
     }
 }
