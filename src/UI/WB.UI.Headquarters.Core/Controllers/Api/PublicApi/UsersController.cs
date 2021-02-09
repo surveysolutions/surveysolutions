@@ -320,7 +320,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="model"></param>
         /// <response code="400">Password cannot be updated.</response>
-        /// <response code="200">PAssword updated.</response>
+        /// <response code="200">Password updated.</response>
         [HttpPatch]
         [Route("users/{id}/changepassword")]
         [ObservingNotAllowed]
@@ -337,10 +337,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (ModelState.IsValid)
             {
                 var user = await userManager.GetUserAsync(User);
+                if (user.ForceChangePassword)
+                    user.ForceChangePassword = false;
                 string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-                var result = await this.userManager.ResetPasswordAsync(user, passwordResetToken, model.NewPassword);
+                var resetPasswordResult = await this.userManager.ResetPasswordAsync(user, passwordResetToken, model.NewPassword);
 
-                if (result.Succeeded)
+                if (resetPasswordResult.Succeeded)
                 {
                     return new ChangePasswordResult()
                     {
@@ -350,14 +352,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 else
                 {
                     unitOfWork.DiscardChanges();
-                    foreach (var resultError in result.Errors)
+                    foreach (var resultError in resetPasswordResult.Errors)
                     {
                         ModelState.AddModelError(resultError.Code, resultError.Description);
                     }
                 }
             }
+            
+            var result = new ChangePasswordResult() { Success = false };
 
-            return BadRequest(new ChangePasswordResult() { Success = false });
+            foreach (var modelState in ModelState.Values) {
+                foreach (ModelError error in modelState.Errors) {
+                    result.Errors.Add(error.ErrorMessage);
+                }
+            }
+
+            return BadRequest(result);
         }
     }
 }
