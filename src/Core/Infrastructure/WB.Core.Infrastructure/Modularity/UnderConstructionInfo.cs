@@ -35,7 +35,6 @@ namespace WB.Core.Infrastructure.Modularity
             Status = UnderConstructionStatus.Error;
             Message = message;
             Exception = exception;
-            this.awaitingBlock.SetException(exception);
             
             #if DEBUG
             Message = exception.ToString();
@@ -51,6 +50,7 @@ namespace WB.Core.Infrastructure.Modularity
         {
             if (Status != UnderConstructionStatus.Error)
                 Message = null;
+
         }
     }
 

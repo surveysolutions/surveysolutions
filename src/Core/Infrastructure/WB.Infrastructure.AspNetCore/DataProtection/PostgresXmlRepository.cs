@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Transactions;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.DataProtection.Repositories;
@@ -47,7 +48,7 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
             {
                 EnsureTableCreated();
                 using var db = new NpgsqlConnection(connectionString);
-                
+
                 var result = db.Query<string>($"select value from data_protection")
                     .Select(x => XElement.Parse(x))
                     .ToList();
@@ -59,12 +60,12 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
                 }
                 return result;
             }
-            catch (PostgresException pe)
+            catch (Exception pe)
             {
                 hasError = true;
-                Logger.LogWarning("Cannot read postgres data protection xml repository. Database not exists");
-                return new List<XElement>();
+                Serilog.Log.Warning(pe, "Cannot read postgres data protection xml repository. Database not exists");
             }
+            return new List<XElement>();
         }
 
         public void StoreElement(XElement element, string friendlyName)
@@ -85,10 +86,10 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
                     errorResolved = true;
                 }
             }
-            catch (PostgresException pe) 
+            catch (Exception pe)
             {
                 hasError = true;
-                Serilog.Log.Warning("Cannot store postgres data protection xml repository. Database not exists");
+                Serilog.Log.Warning(pe, "Cannot store postgres data protection xml repository. Database not exists");
             }
         }
     }
