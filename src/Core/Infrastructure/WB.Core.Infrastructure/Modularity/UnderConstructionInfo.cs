@@ -35,16 +35,11 @@ namespace WB.Core.Infrastructure.Modularity
             Status = UnderConstructionStatus.Error;
             Message = message;
             Exception = exception;
-            
-            #if DEBUG
-            Message = exception.ToString();
-            #endif
-            
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;
         public string Message { get; set; }
-        private Exception Exception { get; set; }
+        public Exception Exception { get; set; }
 
         public void ClearMessage()
         {

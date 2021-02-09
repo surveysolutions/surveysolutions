@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Web.Controllers
             {
                 Title = Resources.UnderConstruction.UnderConstructionTitle, 
                 MainMessage = isError ? status.Message : Resources.UnderConstruction.ServerInitializing,
-                SubMessage = isError ? null : status.Message
+                SubMessage = isError ? status.Exception?.Message : status.Message
             };
 
             return View(model);
