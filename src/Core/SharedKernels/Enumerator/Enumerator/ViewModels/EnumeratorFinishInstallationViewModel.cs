@@ -194,11 +194,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, EnumeratorUIResources.Login_WrongPassword);
                 }
 
-                var authToken = token ?? await this.synchronizationService.LoginAsync(new LogonInfo
-                {
-                    Username = this.UserName,
-                    Password = userPassword
-                }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
+                var authToken = token;
+                if (authToken == null)
+                    authToken = await this.synchronizationService.LoginAsync(new LogonInfo
+                    {
+                        Username = this.UserName,
+                        Password = userPassword
+                    }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
 
                 restCredentials.Token = authToken;
 

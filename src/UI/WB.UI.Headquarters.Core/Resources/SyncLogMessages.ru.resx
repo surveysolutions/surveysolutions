@@ -227,7 +227,7 @@
     <comment>Интервьюер залогинелся и ему выделен AuthToken</comment>
   </data>
   <data name="PasswordChanged" xml:space="preserve">
-    <value>Пароль изменет и ему выделен AuthToken</value>
+    <value>Пароль изменен и ему выделен AuthToken</value>
   </data>
   <data name="FailToChangePassword" xml:space="preserve">
     <value>Пользователю не удалось изменить пароль</value>
