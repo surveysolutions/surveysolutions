@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Utils;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
@@ -33,15 +37,19 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
+        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+
         public QuestionnairesApiController(IAuthorizedUser authorizedUser, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService,
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.questionnaireItems = questionnaireItems;
         }
 
         [HttpGet]
@@ -171,5 +179,92 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             return NotFound();
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public DataTableResponse<QuestionnaireExposableEntity> GetQuestionnaireVariables([Models.Api.DataTable.DataTablesRequest] DataTableRequest request,
+            [FromQuery] string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return null;
+            }
+
+            var variables = this.questionnaireItems.Query(q =>
+            {
+                q = q.Where(i => i.QuestionnaireIdentity == questionnaireIdentity.ToString());
+                q =  q.Where(item =>
+                    ((item.EntityType == EntityType.Question && (item.QuestionType == QuestionType.DateTime ||
+                                                                 item.QuestionType == QuestionType.Numeric ||
+                                                                 item.QuestionType == QuestionType.Text ||
+                                                                 item.QuestionType == QuestionType.SingleOption))
+                     || (item.EntityType == EntityType.Variable))
+                    && item.Featured != true
+                    //&& item.IsFilteredCombobox != true
+                );
+
+                var queryResult = q.OrderUsingSortExpression("Id"/*request.GetSortOrderRequestItems().GetOrderRequestString()*/);
+
+                IQueryable<QuestionnaireCompositeItem> pagedResults = q;
+
+
+                if (request.PageSize > 0)
+                {
+                    pagedResults = q.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
+                }
+
+                return new QuestionnaireExposableEntities()
+                {
+                    TotalCount = queryResult.Count(),
+                    Items = pagedResults.Select(x=> new QuestionnaireEntityItem()
+                    {
+                        Title = x.QuestionText,
+                        Id = x.Id,
+                        IsExposed = x.UsedInReporting,
+                        Label = x.VariableLabel
+                    }).ToList()
+                };
+            });
+
+            
+            return new DataTableResponse<QuestionnaireExposableEntity>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = variables.TotalCount,
+                RecordsFiltered = variables.TotalCount,
+                Data = variables.Items.Select(x => new QuestionnaireExposableEntity
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    IsExposed = x.IsExposed ?? false
+                })
+            };
+        }
+    }
+
+    public class QuestionnaireExposableEntities
+    {
+        public QuestionnaireExposableEntities()
+        {
+            Items = new List<QuestionnaireEntityItem>();
+        }
+        public IEnumerable<QuestionnaireEntityItem> Items { get; set; }
+        public int TotalCount { get; set; }
+    }
+
+    public class QuestionnaireExposableEntity
+    {
+        public int Id { get; set; }
+        public string Title { set; get; }
+        public string Label { set; get; }
+        public bool IsExposed { set; get; }
+    }
+
+    public class QuestionnaireEntityItem
+    {
+        public int Id { get; set; }
+        public string Title { set; get; }
+        public string Label { set; get; }
+        public bool? IsExposed { set; get; }
     }
 }

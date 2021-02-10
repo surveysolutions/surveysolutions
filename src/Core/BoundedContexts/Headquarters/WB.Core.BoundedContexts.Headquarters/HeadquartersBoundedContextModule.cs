@@ -187,7 +187,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentDenormalizer>();
             registry.Bind<CompletedEmailDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
-            
+            registry.Bind<InterviewDynamicReportAnswersDenormalizer>();
+
             registry.Bind<CalendarEventDenormalizer>();
           
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using HotChocolate.Data.Filters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
 {
@@ -32,6 +29,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ErrorsCount);
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData");
+
+            descriptor.Field(x => x.ReportAnswers);
         }
     }
 }

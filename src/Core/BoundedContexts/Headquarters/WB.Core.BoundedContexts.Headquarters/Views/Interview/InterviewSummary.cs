@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
             this.Comments = new HashSet<InterviewComment>();
             this.GpsAnswers = new HashSet<InterviewGps>();
-            
+
             this.GpsAnswersToRemove = new HashSet<InterviewGps>();
         }
 
@@ -135,6 +135,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
         public virtual ISet<InterviewGps> GpsAnswers { get; protected set; }
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
+
+        public virtual ISet<InterviewReportAnswer> ReportAnswers { get; protected set; } =
+            new HashSet<InterviewReportAnswer>();
 
         private IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow> statisticsReportCache;
 

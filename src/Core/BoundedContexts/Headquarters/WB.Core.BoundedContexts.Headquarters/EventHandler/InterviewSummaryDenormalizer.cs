@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Extensions.Caching.Memory;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;

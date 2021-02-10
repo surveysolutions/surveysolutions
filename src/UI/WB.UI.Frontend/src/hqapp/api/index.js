@@ -45,6 +45,14 @@ class QuestionnaireApi {
             enabled: enabled,
         })
     }
+    ChangeVariableExposedStatus(variableId, enabled){
+        const url = `${this.base}${this.questionnaireId}/${this.version}/changeVariableExposeStatus`
+        return this.http.post(url, {
+            variableId: variableId,
+            enabled: enabled,
+        })
+    }
+
 }
 
 class SurveyStatistics {

@@ -115,6 +115,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 },
                 rel => rel.OneToMany());
 
+            Set(x => x.ReportAnswers, set =>
+                {
+                    set.Key(key => key.Column("interview_id"));
+                    set.Lazy(CollectionLazy.Lazy);
+                    set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    set.Inverse(true);
+                },
+                rel => rel.OneToMany());
+
             Set(x => x.StatisticsReport, listMap =>
             {
                 listMap.Table("report_statistics");

@@ -1409,6 +1409,12 @@
   <data name="Questionnaire_Info" xml:space="preserve">
     <value>Questionnaire details</value>
   </data>
+  <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
+    <value>Questionnaire exposed variables</value>
+  </data>
+  <data name="Exposed_Variables_Description" xml:space="preserve">
+    <value>Selecting these variables will allow to use them in reporting. Newly created interviews will be available instantly. Previously collected interviews will be processed and it would take some time.</value>
+  </data>  
   <data name="Questionnaire_Stats" xml:space="preserve">
     <value>Questionnaire Information</value>
   </data>
