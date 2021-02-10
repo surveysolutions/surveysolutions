@@ -157,6 +157,9 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                     httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token)
                         .ConfigureAwait(false);
                 this.logger.Debug($"Executed web request url: {request.RequestUri}, response code: {httpResponseMessage.StatusCode}");
+                
+                if (!httpResponseMessage.Headers.TryGetValues(@"X-Generated-By", out var values) || values.First() != "SuSo")
+                    throw new RestException("Unknown response source", type: RestExceptionType.UnknownResponseSource);
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified

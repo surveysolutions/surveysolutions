@@ -652,6 +652,9 @@
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
   </data>
+  <data name="UnknownResponseSource" xml:space="preserve">
+    <value>Получены неожиданные данные. Либо указан неправильный адрес, либо на канал связи с сервером влияет брандмауэр или балансировщиком нагрузки. Удостоверьтесь, что вы используете совместимую версию. Свяжитесь с администратором сервера.</value>
+  </data>
   <data name="InterviewerFromDifferentTeam" xml:space="preserve">
     <value>Интервьюер принадлежит другой команде. Пожалуйста, синхронизируйтесь с Headquarters</value>
   </data>

@@ -741,6 +741,9 @@ do not exit this application</value>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has correct current date and time</value>
   </data>
+  <data name="UnknownResponseSource" xml:space="preserve">
+    <value>Received unexpected data. Either address is invalid or communication channel is affected by firewall, load balancer or other proxy. Please assure you are using compatible version of application. Please contact your server administrator.</value>
+  </data>
   <data name="InterviewerFromDifferentTeam" xml:space="preserve">
     <value>Interviewer is part of another team. Please synchronize with Headquarters.</value>
   </data>
