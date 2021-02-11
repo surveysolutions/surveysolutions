@@ -1,0 +1,138 @@
+ARG DOTNET_VERSION=5.0
+ARG DOTNET_CA_PATCH=
+ARG VERSION=21.01
+ARG INFO_VERSION=21.01
+ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
+ARG NODE=14
+
+FROM node:${NODE} as designer_js
+WORKDIR /app
+COPY src/UI/WB.UI.Designer/package*.json .
+RUN npm ci
+COPY src/UI/WB.UI.Designer .
+RUN npm run build
+RUN mkdir -p /dist/Areas && cp -r Areas /dist/
+RUN mkdir -p /dist/Views && cp -r Views /dist/
+RUN mkdir -p /dist/wwwroot && cp -r wwwroot /dist/
+RUN mkdir -p /dist/questionnaire &&cp questionnaire/index.cshtml /dist/questionnaire/index.cshtml
+
+FROM node:${NODE} as questionnaire-app
+WORKDIR /app
+
+COPY src/UI/WB.UI.Designer/questionnaire-app/package*.json questionnaire-app/
+RUN cd questionnaire-app && npm ci
+
+COPY src/UI/WB.UI.Designer/questionnaire-app questionnaire-app
+COPY src/UI/WB.UI.Designer/Resources Resources
+COPY src/UI/WB.UI.Designer/.editorconfig .editorconfig
+COPY src/UI/WB.UI.Designer/.prettierrc .prettierrc
+COPY src/UI/WB.UI.Designer/.jscsrc .jscsrc
+COPY src/UI/WB.UI.Designer/.jshintrc .jshintrc
+
+RUN cd questionnaire-app && npm run build
+
+
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
+ARG VERSION
+ARG INFO_VERSION
+
+COPY src/Directory.Build.props src/Directory.Build.props
+
+# DESIGNER_PROJECTS_START
+COPY [ "src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/WB.Core.BoundedContexts.Designer.csproj",\
+       "src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/WB.Core.BoundedContexts.Designer.csproj"]
+COPY [ "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/WB.Core.GenericSubdomains.Portable.csproj",\
+       "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/WB.Core.GenericSubdomains.Portable.csproj"]
+COPY [ "src/Core/Infrastructure/WB.Core.Infrastructure/WB.Core.Infrastructure.csproj",\
+       "src/Core/Infrastructure/WB.Core.Infrastructure/WB.Core.Infrastructure.csproj"]
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection.Portable/WB.Core.SharedKernels.DataCollection.Portable.csproj",\
+       "src/Core/SharedKernels/DataCollection/DataCollection.Portable/WB.Core.SharedKernels.DataCollection.Portable.csproj"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection/WB.Core.SharedKernels.DataCollection.csproj",\
+       "src/Core/SharedKernels/DataCollection/DataCollection/WB.Core.SharedKernels.DataCollection.csproj"]
+COPY [ "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/WB.Core.SharedKernels.Questionnaire.csproj",\
+       "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/WB.Core.SharedKernels.Questionnaire.csproj"]
+COPY [ "src/Infrastructure/WB.Infrastructure.Native/WB.Infrastructure.Native.csproj",\
+       "src/Infrastructure/WB.Infrastructure.Native/WB.Infrastructure.Native.csproj"]
+COPY [ "src/Infrastructure/WB.Persistence.Designer/WB.Persistence.Designer.csproj",\
+       "src/Infrastructure/WB.Persistence.Designer/WB.Persistence.Designer.csproj"]
+COPY [ "src/UI/Shared/WB.UI.Shared.Web.Core/WB.UI.Shared.Web.Core.csproj",\
+       "src/UI/Shared/WB.UI.Shared.Web.Core/WB.UI.Shared.Web.Core.csproj"]
+COPY [ "src/UI/WB.UI.Designer/WB.UI.Designer.csproj",\
+       "src/UI/WB.UI.Designer/WB.UI.Designer.csproj"]
+# DESIGNER_PROJECTS_END
+
+RUN dotnet restore src/UI/WB.UI.Designer
+
+# DESIGNER_FOLDERS_START
+COPY [ "src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer",\
+       "src/Core/BoundedContexts/Designer/WB.Core.BoundedContexts.Designer/"]
+COPY [ "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable",\
+       "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/"]
+COPY [ "src/Core/Infrastructure/WB.Core.Infrastructure",\
+       "src/Core/Infrastructure/WB.Core.Infrastructure/"]
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection.Portable",\
+       "src/Core/SharedKernels/DataCollection/DataCollection.Portable/"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection",\
+       "src/Core/SharedKernels/DataCollection/DataCollection/"]
+COPY [ "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire",\
+       "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/"]
+COPY [ "src/Infrastructure/WB.Infrastructure.Native",\
+       "src/Infrastructure/WB.Infrastructure.Native/"]
+COPY [ "src/Infrastructure/WB.Persistence.Designer",\
+       "src/Infrastructure/WB.Persistence.Designer/"]
+COPY [ "src/UI/Shared/WB.UI.Shared.Web.Core",\
+       "src/UI/Shared/WB.UI.Shared.Web.Core/"]
+COPY [ "src/UI/WB.UI.Designer",\
+       "src/UI/WB.UI.Designer/"]
+# DESIGNER_FOLDERS_END
+
+COPY --from=designer_js /dist src/UI/WB.UI.Designer
+COPY --from=questionnaire-app /app/questionnaire-app/dist src/UI/WB.UI.Designer/questionnaire-app/dist
+
+RUN dotnet publish src/UI/WB.UI.Designer --no-restore \
+    -c Release -o /designer -p:SkipSpaBuild=True -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
+
+
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
+RUN apt-get update && apt-get install unzip -y --no-install-recommends
+
+ARG FONTS
+ENV FONTS_LIST=$FONTS
+RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
+    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
+    && cd /raw_fonts && unzip -o $FONT ; done"]
+
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
+
+# should be empty
+ARG BUILD_DATE
+ARG VCS_REF
+ARG BUILD_VERSION
+ARG GIT_BRANCH
+
+RUN apt-get update && apt-get install -y --no-install-recommends libc6-dev xvfb wkhtmltopdf fontconfig\
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=fonts /raw_fonts /usr/share/fonts
+
+RUN fc-cache -f -v
+
+# Labels.
+LABEL org.opencontainers.image.title="Designer"
+LABEL org.opencontainers.image.description="Survey Solutions Designer"
+
+COPY --from=builder designer /app
+
+ENV DESIGNER_Pdf__WKHtmlToPdfExecutablePath="/usr/bin/wkhtmltopdf"
+ENV DESIGNER_Pdf__WkHtmlToPdfExeName="wkhtmltopdf"
+
+WORKDIR /app
+EXPOSE 80
+# HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
+
+ENTRYPOINT ["dotnet", "WB.UI.Designer.dll"]

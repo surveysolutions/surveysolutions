@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{18479762-ED0C-4CD5-918A-02C78C1F4239}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.UI.Shared.Web.Core</RootNamespace>
+    <AssemblyName>WB.UI.Shared.Web.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.Designer.cs">
+      <Link>Resources\Captcha.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.Designer.cs">
+      <Link>Resources\ErrorMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.Designer.cs">
+      <Link>Resources\UnderConstruction.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.ar.resx">
+      <Link>Resources\Captcha.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.es.resx">
+      <Link>Resources\Captcha.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.fr.resx">
+      <Link>Resources\Captcha.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.ka.resx">
+      <Link>Resources\Captcha.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.resx">
+      <Link>Resources\Captcha.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.ro.resx">
+      <Link>Resources\Captcha.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.ru.resx">
+      <Link>Resources\Captcha.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.sq.resx">
+      <Link>Resources\Captcha.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\Captcha.zh.resx">
+      <Link>Resources\Captcha.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.ar.resx">
+      <Link>Resources\ErrorMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.es.resx">
+      <Link>Resources\ErrorMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.fr.resx">
+      <Link>Resources\ErrorMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.ka.resx">
+      <Link>Resources\ErrorMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.pt.resx">
+      <Link>Resources\ErrorMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.resx">
+      <Link>Resources\ErrorMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.ro.resx">
+      <Link>Resources\ErrorMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.ru.resx">
+      <Link>Resources\ErrorMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.sq.resx">
+      <Link>Resources\ErrorMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\ErrorMessages.zh.resx">
+      <Link>Resources\ErrorMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.resx">
+      <Link>Resources\UnderConstruction.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.ru.resx">
+      <Link>Resources\UnderConstruction.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.sq.resx">
+      <Link>Resources\UnderConstruction.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web.Core\Resources\UnderConstruction.zh.resx">
+      <Link>Resources\UnderConstruction.zh.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
