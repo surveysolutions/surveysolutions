@@ -11,7 +11,7 @@ param(
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
-    [string] $dockerRegistry = "ghcr.io/surveysolutions",
+    [string] $dockerRegistry = "reg.app.alfeg.net/suso",
     [string] $releaseBranch = 'release', # Docker builds will push to release 
     [switch] $noDockerPush 
 )
@@ -32,27 +32,35 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     return
 }
 
-$tmp = $ENV:TEMP + "/.build"
+Enter-Build {
 
+    $tmp = $ENV:TEMP + "/.build"
 
-dotnet tool install gitversion.tool --tool-path $tmp | Out-Null
+    dotnet tool install gitversion.tool --tool-path $tmp | Out-Null
+    
+    & "$tmp/dotnet-gitversion" > .version
+    Write-Build 8 (Get-Content .version )
+    $gitversion = Get-Content .version | ConvertFrom-Json
+    
+    $isRelease = $gitversion.BranchName -eq $releaseBranch
+    
+    $version = Get-Content ./src/.version
+    if ($version.Split('.').Length -eq 2) {
+        $version += ".0"
+    }
+    $version += "." + $buildNumber
+    $infoVersion = $version + '-' + $gitversion.EscapedBranchName
+    
+    $output = "./artifacts"
+    New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
+    $output = Resolve-Path $output
+    
+# $gitversion | Out-Host
+    Write-Build 10 $version 
+    Write-Build 10 $infoversion
 
-& "$tmp/dotnet-gitversion" > .version
-Get-Content .version  | Out-Host
-$gitversion = Get-Content .version | ConvertFrom-Json
-
-$isRelease = $gitversion.BranchName -eq $releaseBranch
-
-$version = Get-Content ./src/.version
-if ($version.Split('.').Length -eq 2) {
-    $version += ".0"
 }
-$version += "." + $buildNumber
-$infoVersion = $version + '-' + $gitversion.EscapedBranchName
 
-$output = "./artifacts"
-New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
-$output = Resolve-Path $output
 
 function Compress($folder, $dest) {
     if (Test-Path $dest) {
@@ -62,10 +70,6 @@ function Compress($folder, $dest) {
     Compress-Archive $folder/* -DestinationPath $dest
 }
 
-
-# $gitversion | Out-Host
-$version | Out-Host
-$infoversion | Out-Host
 
 function Set-AndroidXmlResourceValue {
     [CmdletBinding()]
