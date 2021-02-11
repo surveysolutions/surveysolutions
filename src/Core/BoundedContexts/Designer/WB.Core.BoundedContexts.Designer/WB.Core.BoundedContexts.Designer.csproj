@@ -16,22 +16,18 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="ReferencedAssemblies\System.Collections.dll" />
-    <None Remove="ReferencedAssemblies\System.Linq.dll" />
-    <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.Extensions.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.Numerics.dll" />
-    <None Remove="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.Expressions.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Extensions.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Numerics.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
+    <!--Assemblies that are referenced during conditions assembly compilation-->
+    <EmbeddedResource Include="$(NuGetPackageRoot)\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime\4.3.0\ref\netstandard1.5\System.Runtime.dll" Visible="false"  />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.extensions\4.3.0\ref\netstandard1.5\System.Runtime.Extensions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.numerics\4.3.0\ref\netstandard1.1\System.Runtime.Numerics.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.reflection\4.3.0\ref\netstandard1.5\System.Reflection.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.io\4.3.0\ref\netstandard1.5\System.IO.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.0\ref\netstandard1.3\System.Text.RegularExpressions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.globalization\4.3.0\ref\netstandard1.3\System.Globalization.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
@@ -43,7 +39,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />    
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
@@ -121,109 +117,5 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-  </ItemGroup> 
-  
-
-  <ItemGroup>
-    <Compile Update="Resources\Common.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Common.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Country.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Country.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\ExceptionMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ExceptionMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\KindOfData.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>KindOfData.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\ModeOfDataCollection.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\PdfStrings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PdfStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Roster.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Roster.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\StudyType.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>StudyType.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\VerificationMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>VerificationMessages.resx</DependentUpon>
-    </Compile>
-  </ItemGroup> 
-  
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Common.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Common.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Country.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Country.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ExceptionMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\KindOfData.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\PdfStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PdfStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Roster.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\StudyType.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VerificationMessages.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup> 
-  
-
+  </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
-    [UseApprovalSubdirectory("QuestionsExportDoFiles-approved")]
+    [UseApprovalSubdirectory("../../QuestionsExportDoFiles-approved")]
     [IgnoreLineEndings(true)]
     [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
     [TestOf(typeof(InterviewsDoFilesExporter))]

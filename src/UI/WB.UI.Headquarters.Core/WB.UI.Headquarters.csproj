@@ -9,7 +9,6 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <LangVersion>latest</LangVersion>
     <PublishSingleFile>false</PublishSingleFile>
-    <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>

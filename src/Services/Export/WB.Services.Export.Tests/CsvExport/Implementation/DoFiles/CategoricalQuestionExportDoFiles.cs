@@ -13,7 +13,7 @@ using WB.Services.Export.Questionnaire.Services;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
-    [UseApprovalSubdirectory("CategoricalQuestionExportDoFiles-approved")]
+    [UseApprovalSubdirectory("../../CategoricalQuestionExportDoFiles-approved")]
     [IgnoreLineEndings(true)]
     [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
     [TestOf(typeof(InterviewsDoFilesExporter))]

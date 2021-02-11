@@ -6,7 +6,6 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>WB.UI.Designer</RootNamespace>
     <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
-    <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
     <SpaRoot>questionnaire-app\</SpaRoot>

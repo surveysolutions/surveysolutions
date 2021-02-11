@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4E2FEBB2-7476-4597-A459-F2D3E5EDE6BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Translations.Tester</RootNamespace>
+    <AssemblyName>Translations.Tester</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.Designer.cs">
+      <Link>AccountResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.Designer.cs">
+      <Link>ErrorMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.Designer.cs">
+      <Link>FindReplaceResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.Designer.cs">
+      <Link>NotificationResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.Designer.cs">
+      <Link>Paging.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.Designer.cs">
+      <Link>PdfMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.Designer.cs">
+      <Link>QuestionnaireController.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.Designer.cs">
+      <Link>QuestionnaireEditor.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.Designer.cs">
+      <Link>QuestionnaireHistoryResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.Designer.cs">
+      <Link>UnderConstruction.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.ar.resx">
+      <Link>AccountResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.es.resx">
+      <Link>AccountResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.fr.resx">
+      <Link>AccountResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.resx">
+      <Link>AccountResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.ru.resx">
+      <Link>AccountResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\AccountResources.zh.resx">
+      <Link>AccountResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.ar.resx">
+      <Link>ErrorMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.es.resx">
+      <Link>ErrorMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.fr.resx">
+      <Link>ErrorMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.resx">
+      <Link>ErrorMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.ru.resx">
+      <Link>ErrorMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\ErrorMessages.zh.resx">
+      <Link>ErrorMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.ar.resx">
+      <Link>FindReplaceResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.es.resx">
+      <Link>FindReplaceResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.fr.resx">
+      <Link>FindReplaceResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.resx">
+      <Link>FindReplaceResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.ru.resx">
+      <Link>FindReplaceResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\FindReplaceResources.zh.resx">
+      <Link>FindReplaceResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.ar.resx">
+      <Link>NotificationResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.es.resx">
+      <Link>NotificationResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.fr.resx">
+      <Link>NotificationResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.resx">
+      <Link>NotificationResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.ru.resx">
+      <Link>NotificationResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\NotificationResources.zh.resx">
+      <Link>NotificationResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.ar.resx">
+      <Link>Paging.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.es.resx">
+      <Link>Paging.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.fr.resx">
+      <Link>Paging.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.resx">
+      <Link>Paging.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.ru.resx">
+      <Link>Paging.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\Paging.zh.resx">
+      <Link>Paging.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.ar.resx">
+      <Link>PdfMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.es.resx">
+      <Link>PdfMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.fr.resx">
+      <Link>PdfMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.resx">
+      <Link>PdfMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.ru.resx">
+      <Link>PdfMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\PdfMessages.zh.resx">
+      <Link>PdfMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.ar.resx">
+      <Link>QuestionnaireController.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.es.resx">
+      <Link>QuestionnaireController.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.fr.resx">
+      <Link>QuestionnaireController.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.resx">
+      <Link>QuestionnaireController.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.ru.resx">
+      <Link>QuestionnaireController.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireController.zh.resx">
+      <Link>QuestionnaireController.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.ar.resx">
+      <Link>QuestionnaireEditor.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.es.resx">
+      <Link>QuestionnaireEditor.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.fr.resx">
+      <Link>QuestionnaireEditor.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.resx">
+      <Link>QuestionnaireEditor.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.ru.resx">
+      <Link>QuestionnaireEditor.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireEditor.zh.resx">
+      <Link>QuestionnaireEditor.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.ar.resx">
+      <Link>QuestionnaireHistoryResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.es.resx">
+      <Link>QuestionnaireHistoryResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.fr.resx">
+      <Link>QuestionnaireHistoryResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.resx">
+      <Link>QuestionnaireHistoryResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.ru.resx">
+      <Link>QuestionnaireHistoryResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\QuestionnaireHistoryResources.zh.resx">
+      <Link>QuestionnaireHistoryResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.resx">
+      <Link>UnderConstruction.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.ru.resx">
+      <Link>UnderConstruction.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\WB.UI.Designer\Resources\UnderConstruction.zh.resx">
+      <Link>UnderConstruction.zh.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,473 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7704B999-FD43-4B6E-AFA6-9090BDEE306F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.BoundedContexts.Headquarters</RootNamespace>
+    <AssemblyName>WB.Core.BoundedContexts.Headquarters</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.Designer.cs">
+      <Link>Resources\CommandValidatorsMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.Designer.cs">
+      <Link>Resources\DataExport.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.Designer.cs">
+      <Link>Resources\ErrorMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\InterviewerAuditRecord.Designer.cs">
+      <Link>Resources\InterviewerAuditRecord.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.Designer.cs">
+      <Link>Resources\Interviews.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PdfInterview.Designer.cs">
+      <Link>Resources\PdfInterview.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.Designer.cs">
+      <Link>Resources\PreloadingVerificationMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.Designer.cs">
+      <Link>Resources\Report.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.Designer.cs">
+      <Link>Resources\Strings.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.Designer.cs">
+      <Link>Resources\TroubleshootingMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.Designer.cs">
+      <Link>Resources\UserPreloadingServiceMessages.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\WebInterviewResources.Designer.cs">
+      <Link>Resources\WebInterviewResources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.ar.resx">
+      <Link>Resources\CommandValidatorsMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.es.resx">
+      <Link>Resources\CommandValidatorsMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.fr.resx">
+      <Link>Resources\CommandValidatorsMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.ka.resx">
+      <Link>Resources\CommandValidatorsMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.pt.resx">
+      <Link>Resources\CommandValidatorsMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.resx">
+      <Link>Resources\CommandValidatorsMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.ro.resx">
+      <Link>Resources\CommandValidatorsMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.ru.resx">
+      <Link>Resources\CommandValidatorsMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.sq.resx">
+      <Link>Resources\CommandValidatorsMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.zh.resx">
+      <Link>Resources\CommandValidatorsMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.ar.resx">
+      <Link>Resources\DataExport.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.es.resx">
+      <Link>Resources\DataExport.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.fr.resx">
+      <Link>Resources\DataExport.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.ka.resx">
+      <Link>Resources\DataExport.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.pt.resx">
+      <Link>Resources\DataExport.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.resx">
+      <Link>Resources\DataExport.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.ro.resx">
+      <Link>Resources\DataExport.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.ru.resx">
+      <Link>Resources\DataExport.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.sq.resx">
+      <Link>Resources\DataExport.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\DataExport.zh.resx">
+      <Link>Resources\DataExport.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.ar.resx">
+      <Link>Resources\ErrorMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.es.resx">
+      <Link>Resources\ErrorMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.fr.resx">
+      <Link>Resources\ErrorMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.ka.resx">
+      <Link>Resources\ErrorMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.pt.resx">
+      <Link>Resources\ErrorMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.resx">
+      <Link>Resources\ErrorMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.ro.resx">
+      <Link>Resources\ErrorMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.ru.resx">
+      <Link>Resources\ErrorMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.sq.resx">
+      <Link>Resources\ErrorMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.zh.resx">
+      <Link>Resources\ErrorMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.ar.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.es.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.ka.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.ro.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.sq.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx">
+      <Link>Resources\FileBasedDataExportRepositoryWriterMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.ar.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.es.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.fr.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.ka.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.pt.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.ro.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.ru.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.sq.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\HeadquarterUserCommandValidatorMessages.zh.resx">
+      <Link>Resources\HeadquarterUserCommandValidatorMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\InterviewerAuditRecord.resx">
+      <Link>Resources\InterviewerAuditRecord.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\InterviewerAuditRecord.ro.resx">
+      <Link>Resources\InterviewerAuditRecord.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\InterviewerAuditRecord.ru.resx">
+      <Link>Resources\InterviewerAuditRecord.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\InterviewerAuditRecord.zh.resx">
+      <Link>Resources\InterviewerAuditRecord.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.ar.resx">
+      <Link>Resources\Interviews.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.es.resx">
+      <Link>Resources\Interviews.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.fr.resx">
+      <Link>Resources\Interviews.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.ka.resx">
+      <Link>Resources\Interviews.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.resx">
+      <Link>Resources\Interviews.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.ro.resx">
+      <Link>Resources\Interviews.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.ru.resx">
+      <Link>Resources\Interviews.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.sq.resx">
+      <Link>Resources\Interviews.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.zh.resx">
+      <Link>Resources\Interviews.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PdfInterview.resx">
+      <Link>Resources\PdfInterview.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PdfInterview.ru.resx">
+      <Link>Resources\PdfInterview.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.ar.resx">
+      <Link>Resources\PreloadingVerificationMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.es.resx">
+      <Link>Resources\PreloadingVerificationMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.fr.resx">
+      <Link>Resources\PreloadingVerificationMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.ka.resx">
+      <Link>Resources\PreloadingVerificationMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.pt.resx">
+      <Link>Resources\PreloadingVerificationMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx">
+      <Link>Resources\PreloadingVerificationMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.ro.resx">
+      <Link>Resources\PreloadingVerificationMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.ru.resx">
+      <Link>Resources\PreloadingVerificationMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.sq.resx">
+      <Link>Resources\PreloadingVerificationMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.zh.resx">
+      <Link>Resources\PreloadingVerificationMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.ar.resx">
+      <Link>Resources\Report.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.es.resx">
+      <Link>Resources\Report.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.fr.resx">
+      <Link>Resources\Report.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.ka.resx">
+      <Link>Resources\Report.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.resx">
+      <Link>Resources\Report.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.ro.resx">
+      <Link>Resources\Report.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.ru.resx">
+      <Link>Resources\Report.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.sq.resx">
+      <Link>Resources\Report.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.zh.resx">
+      <Link>Resources\Report.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.ar.resx">
+      <Link>Resources\Strings.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.es.resx">
+      <Link>Resources\Strings.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.fr.resx">
+      <Link>Resources\Strings.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.ka.resx">
+      <Link>Resources\Strings.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.pt.resx">
+      <Link>Resources\Strings.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.resx">
+      <Link>Resources\Strings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.ro.resx">
+      <Link>Resources\Strings.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.ru.resx">
+      <Link>Resources\Strings.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.sq.resx">
+      <Link>Resources\Strings.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.zh.resx">
+      <Link>Resources\Strings.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.ar.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.es.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.fr.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.ka.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.ro.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.ru.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.sq.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx">
+      <Link>Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.ar.resx">
+      <Link>Resources\TroubleshootingMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.es.resx">
+      <Link>Resources\TroubleshootingMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.fr.resx">
+      <Link>Resources\TroubleshootingMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.ka.resx">
+      <Link>Resources\TroubleshootingMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.resx">
+      <Link>Resources\TroubleshootingMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.ro.resx">
+      <Link>Resources\TroubleshootingMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.ru.resx">
+      <Link>Resources\TroubleshootingMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.sq.resx">
+      <Link>Resources\TroubleshootingMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\TroubleshootingMessages.zh.resx">
+      <Link>Resources\TroubleshootingMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.ar.resx">
+      <Link>Resources\UserPreloadingServiceMessages.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.es.resx">
+      <Link>Resources\UserPreloadingServiceMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.fr.resx">
+      <Link>Resources\UserPreloadingServiceMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.ka.resx">
+      <Link>Resources\UserPreloadingServiceMessages.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.pt.resx">
+      <Link>Resources\UserPreloadingServiceMessages.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.resx">
+      <Link>Resources\UserPreloadingServiceMessages.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.ro.resx">
+      <Link>Resources\UserPreloadingServiceMessages.ro.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.ru.resx">
+      <Link>Resources\UserPreloadingServiceMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.sq.resx">
+      <Link>Resources\UserPreloadingServiceMessages.sq.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.zh.resx">
+      <Link>Resources\UserPreloadingServiceMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\WebInterviewResources.es.resx">
+      <Link>Resources\WebInterviewResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\WebInterviewResources.resx">
+      <Link>Resources\WebInterviewResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\WebInterviewResources.ru.resx">
+      <Link>Resources\WebInterviewResources.ru.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

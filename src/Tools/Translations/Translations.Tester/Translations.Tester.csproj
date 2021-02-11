@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8A0CD4F5-FACB-4F6A-9E8E-11CAF2201E79}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Translations.Tester</RootNamespace>
+    <AssemblyName>Translations.Tester</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ar.resx">
+      <Link>TesterUIResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.es.resx">
+      <Link>TesterUIResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.fr.resx">
+      <Link>TesterUIResources.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.id.resx">
+      <Link>TesterUIResources.id-ID.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ka.resx">
+      <Link>TesterUIResources.ka.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.km.resx">
+      <Link>TesterUIResources.km.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.pt.resx">
+      <Link>TesterUIResources.pt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.resx">
+      <Link>TesterUIResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ru.resx">
+      <Link>TesterUIResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.th.resx">
+      <Link>TesterUIResources.th-TH.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.vi.resx">
+      <Link>TesterUIResources.vi-VN.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.zh.resx">
+      <Link>TesterUIResources.zh.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
