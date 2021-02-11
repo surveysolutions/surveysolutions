@@ -1,0 +1,185 @@
+ARG DOTNET_VERSION=5.0
+ARG VERSION=21.01
+ARG INFO_VERSION=21.01
+ARG NODE=14
+ARG APK_FILES=build
+
+# Building WB.UI.Frontend application
+FROM --platform=amd64 node:$NODE as frontend
+
+WORKDIR /src/UI/WB.UI.Frontend
+COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
+
+RUN npm ci
+
+COPY [ "src/UI/WB.UI.Frontend", "/src/UI/WB.UI.Frontend/"]
+COPY [ "src/UI/WB.UI.Headquarters.Core/Resources", \
+       "/src/UI/WB.UI.Headquarters.Core/Resources/"]
+COPY [ "src/UI/WB.UI.Headquarters.Core/Views", \
+       "/src/UI/WB.UI.Headquarters.Core/Views/"]
+COPY [ "src/UI/WB.UI.WebTester/Views", \
+       "/src/UI/WB.UI.WebTester/Views/"]
+COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources", \
+       "/src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/"]
+COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources", \
+       "/src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/" ]
+
+RUN npm run build -- --package
+
+# Building export
+FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as export_builder
+ARG VERSION
+ARG INFO_VERSION
+
+COPY src/Directory.Build.props src/Directory.Build.props
+
+# EXPORT_PROJECTS_START
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj"]
+COPY [ "src/Services/Core/WB.Services.Infrastructure/WB.Services.Infrastructure.csproj",\
+       "src/Services/Core/WB.Services.Infrastructure/WB.Services.Infrastructure.csproj"]
+COPY [ "src/Services/Core/WB.Services.Scheduler/WB.Services.Scheduler.csproj",\
+       "src/Services/Core/WB.Services.Scheduler/WB.Services.Scheduler.csproj"]
+COPY [ "src/Services/Export/Utils/ddidotnet/ddidotnet/ddidotnet.csproj",\
+       "src/Services/Export/Utils/ddidotnet/ddidotnet/ddidotnet.csproj"]
+COPY [ "src/Services/Export/Utils/StatData/StatData/StatData.csproj",\
+       "src/Services/Export/Utils/StatData/StatData/StatData.csproj"]
+COPY [ "src/Services/Export/WB.Services.Export.Host/WB.Services.Export.Host.csproj",\
+       "src/Services/Export/WB.Services.Export.Host/WB.Services.Export.Host.csproj"]
+COPY [ "src/Services/Export/WB.Services.Export/WB.Services.Export.csproj",\
+       "src/Services/Export/WB.Services.Export/WB.Services.Export.csproj"]
+# EXPORT_PROJECTS_END
+
+RUN dotnet restore src/Services/Export/WB.Services.Export.Host
+
+# EXPORT_FOLDERS_START
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/"]
+COPY [ "src/Services/Core/WB.Services.Infrastructure",\
+       "src/Services/Core/WB.Services.Infrastructure/"]
+COPY [ "src/Services/Core/WB.Services.Scheduler",\
+       "src/Services/Core/WB.Services.Scheduler/"]
+COPY [ "src/Services/Export/Utils/ddidotnet/ddidotnet",\
+       "src/Services/Export/Utils/ddidotnet/ddidotnet/"]
+COPY [ "src/Services/Export/Utils/StatData/StatData",\
+       "src/Services/Export/Utils/StatData/StatData/"]
+COPY [ "src/Services/Export/WB.Services.Export.Host",\
+       "src/Services/Export/WB.Services.Export.Host/"]
+COPY [ "src/Services/Export/WB.Services.Export",\
+       "src/Services/Export/WB.Services.Export/"]
+# EXPORT_FOLDERS_END
+
+RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
+    -c Release -o /export -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
+
+# Building HQ 
+FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as builder
+ARG VERSION
+ARG INFO_VERSION
+
+COPY src/Directory.Build.props src/Directory.Build.props
+
+# HQ_PROJECTS_START
+COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/WB.Core.BoundedContexts.Headquarters.csproj",\
+       "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/WB.Core.BoundedContexts.Headquarters.csproj"]
+COPY [ "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/WB.Core.GenericSubdomains.Portable.csproj",\
+       "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/WB.Core.GenericSubdomains.Portable.csproj"]
+COPY [ "src/Core/Infrastructure/WB.Core.Infrastructure/WB.Core.Infrastructure.csproj",\
+       "src/Core/Infrastructure/WB.Core.Infrastructure/WB.Core.Infrastructure.csproj"]
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection.Portable/WB.Core.SharedKernels.DataCollection.Portable.csproj",\
+       "src/Core/SharedKernels/DataCollection/DataCollection.Portable/WB.Core.SharedKernels.DataCollection.Portable.csproj"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection/WB.Core.SharedKernels.DataCollection.csproj",\
+       "src/Core/SharedKernels/DataCollection/DataCollection/WB.Core.SharedKernels.DataCollection.csproj"]
+COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/WB.Enumerator.Native.Core.csproj",\
+       "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/WB.Enumerator.Native.Core.csproj"]
+COPY [ "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/WB.Core.SharedKernels.Questionnaire.csproj",\
+       "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/WB.Core.SharedKernels.Questionnaire.csproj"]
+COPY [ "src/Infrastructure/WB.Infrastructure.Native/WB.Infrastructure.Native.csproj",\
+       "src/Infrastructure/WB.Infrastructure.Native/WB.Infrastructure.Native.csproj"]
+COPY [ "src/Infrastructure/WB.Persistence.Headquarters/WB.Persistence.Headquarters.csproj",\
+       "src/Infrastructure/WB.Persistence.Headquarters/WB.Persistence.Headquarters.csproj"]
+COPY [ "src/UI/Shared/WB.UI.Shared.Web.Core/WB.UI.Shared.Web.Core.csproj",\
+       "src/UI/Shared/WB.UI.Shared.Web.Core/WB.UI.Shared.Web.Core.csproj"]
+COPY [ "src/UI/WB.UI.Headquarters.Core/WB.UI.Headquarters.csproj",\
+       "src/UI/WB.UI.Headquarters.Core/WB.UI.Headquarters.csproj"]
+# HQ_PROJECTS_END
+
+RUN dotnet restore src/UI/WB.UI.Headquarters.Core
+
+# HQ_FOLDERS_START
+COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters",\
+       "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/"]
+COPY [ "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable",\
+       "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/"]
+COPY [ "src/Core/Infrastructure/WB.Core.Infrastructure",\
+       "src/Core/Infrastructure/WB.Core.Infrastructure/"]
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection.Portable",\
+       "src/Core/SharedKernels/DataCollection/DataCollection.Portable/"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection",\
+       "src/Core/SharedKernels/DataCollection/DataCollection/"]
+COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native",\
+       "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/"]
+COPY [ "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire",\
+       "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/"]
+COPY [ "src/Infrastructure/WB.Infrastructure.Native",\
+       "src/Infrastructure/WB.Infrastructure.Native/"]
+COPY [ "src/Infrastructure/WB.Persistence.Headquarters",\
+       "src/Infrastructure/WB.Persistence.Headquarters/"]
+COPY [ "src/UI/Shared/WB.UI.Shared.Web.Core",\
+       "src/UI/Shared/WB.UI.Shared.Web.Core/"]
+COPY [ "src/UI/WB.UI.Headquarters.Core",\
+       "src/UI/WB.UI.Headquarters.Core/"]
+# HQ_FOLDERS_END
+
+COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headquarters.Core
+
+RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
+    -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
+
+
+# Copy APK files if any
+FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} as apks
+ARG APK_FILES
+COPY ${APK_FILES}/*.apk /apk/
+
+# Building runtime 
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    gdal-bin \
+    ffmpeg \
+    curl \
+    libfontconfig1 \
+    libgdiplus \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+LABEL org.opencontainers.image.title="Headquaters All in One"
+LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
+
+COPY --from=builder hq /app
+COPY --from=export_builder export /app/Export.Service
+COPY --from=apks /apk /app/Client
+
+# Remove empty apk marker. Copy will fail if no files copied
+RUN rm -f /app/Client/empty.apk
+
+ENV HQ_Headquarters__BaseUrl=http://localhost
+ENV HQ_Headquarters__TenantName=survey
+ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
+ENV HQ_Geospatial__GdalHome=/usr/bin
+ENV HQ_Apks__ClientApkPath=/app/Client
+ENV HQ_Logging__LogsLocation=/app/AppData/logs
+ENV HQ_Scheduler__InstanceId=AUTO
+ENV HQ_Scheduler__IsClustered=true
+
+WORKDIR /app
+EXPOSE 80
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
+
+ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll"]

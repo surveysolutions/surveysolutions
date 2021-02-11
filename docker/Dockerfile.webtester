@@ -1,0 +1,102 @@
+ARG DOTNET_VERSION=5.0
+ARG DOTNET_CA_PATCH=
+ARG VERSION=21.01
+ARG INFO_VERSION=21.01
+ARG NODE=14
+
+# Building WB.UI.Frontend application
+FROM node:$NODE as frontend
+
+WORKDIR /src/UI/WB.UI.Frontend
+COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
+
+RUN npm ci
+
+COPY [ "src/UI/WB.UI.Frontend", "/src/UI/WB.UI.Frontend/"]
+COPY [ "src/UI/WB.UI.Headquarters.Core/Resources", \
+       "/src/UI/WB.UI.Headquarters.Core/Resources/"]
+COPY [ "src/UI/WB.UI.Headquarters.Core/Views", \
+       "/src/UI/WB.UI.Headquarters.Core/Views/"]
+COPY [ "src/UI/WB.UI.WebTester/Views", \
+       "/src/UI/WB.UI.WebTester/Views/"]
+COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources", \
+       "/src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/"]
+COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources", \
+       "/src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/" ]
+
+RUN npm run build -- --package
+
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
+
+ARG VERSION
+ARG INFO_VERSION
+
+COPY src/Directory.Build.props src/Directory.Build.props
+
+# WEBTESTER_PROJECTS_START
+COPY [ "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/WB.Core.GenericSubdomains.Portable.csproj",\
+       "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/WB.Core.GenericSubdomains.Portable.csproj"]
+COPY [ "src/Core/Infrastructure/WB.Core.Infrastructure/WB.Core.Infrastructure.csproj",\
+       "src/Core/Infrastructure/WB.Core.Infrastructure/WB.Core.Infrastructure.csproj"]
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/WB.Infrastructure.AspNetCore.csproj"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection.Portable/WB.Core.SharedKernels.DataCollection.Portable.csproj",\
+       "src/Core/SharedKernels/DataCollection/DataCollection.Portable/WB.Core.SharedKernels.DataCollection.Portable.csproj"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection/WB.Core.SharedKernels.DataCollection.csproj",\
+       "src/Core/SharedKernels/DataCollection/DataCollection/WB.Core.SharedKernels.DataCollection.csproj"]
+COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/WB.Enumerator.Native.Core.csproj",\
+       "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/WB.Enumerator.Native.Core.csproj"]
+COPY [ "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/WB.Core.SharedKernels.Questionnaire.csproj",\
+       "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/WB.Core.SharedKernels.Questionnaire.csproj"]
+COPY [ "src/Infrastructure/WB.Infrastructure.Native/WB.Infrastructure.Native.csproj",\
+       "src/Infrastructure/WB.Infrastructure.Native/WB.Infrastructure.Native.csproj"]
+COPY [ "src/UI/Shared/WB.UI.Shared.Web.Core/WB.UI.Shared.Web.Core.csproj",\
+       "src/UI/Shared/WB.UI.Shared.Web.Core/WB.UI.Shared.Web.Core.csproj"]
+COPY [ "src/UI/WB.UI.WebTester/WB.UI.WebTester.csproj",\
+       "src/UI/WB.UI.WebTester/WB.UI.WebTester.csproj"]
+# WEBTESTER_PROJECTS_END
+
+RUN dotnet restore src/UI/WB.UI.WebTester
+
+# WEBTESTER_FOLDERS_START
+COPY [ "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable",\
+       "src/Core/GenericSubdomains/WB.Core.GenericSubdomains.Portable/"]
+COPY [ "src/Core/Infrastructure/WB.Core.Infrastructure",\
+       "src/Core/Infrastructure/WB.Core.Infrastructure/"]
+COPY [ "src/Core/Infrastructure/WB.Infrastructure.AspNetCore",\
+       "src/Core/Infrastructure/WB.Infrastructure.AspNetCore/"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection.Portable",\
+       "src/Core/SharedKernels/DataCollection/DataCollection.Portable/"]
+COPY [ "src/Core/SharedKernels/DataCollection/DataCollection",\
+       "src/Core/SharedKernels/DataCollection/DataCollection/"]
+COPY [ "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native",\
+       "src/Core/SharedKernels/Enumerator/WB.Enumerator.Native/"]
+COPY [ "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire",\
+       "src/Core/SharedKernels/Questionnaire/WB.Core.SharedKernels.Questionnaire/"]
+COPY [ "src/Infrastructure/WB.Infrastructure.Native",\
+       "src/Infrastructure/WB.Infrastructure.Native/"]
+COPY [ "src/UI/Shared/WB.UI.Shared.Web.Core",\
+       "src/UI/Shared/WB.UI.Shared.Web.Core/"]
+COPY [ "src/UI/WB.UI.WebTester",\
+       "src/UI/WB.UI.WebTester/"]
+# WEBTESTER_FOLDERS_END
+
+COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/webtester /src/UI/WB.UI.WebTester
+
+RUN dotnet publish /src/UI/WB.UI.WebTester \
+    -c Release -o /webtester -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
+
+# Labels.
+LABEL org.opencontainers.image.title="WebTester"
+LABEL org.opencontainers.image.description="Survey Solutions Web Tester for Designer"
+
+COPY --from=builder webtester /app
+
+WORKDIR /app
+EXPOSE 80
+# HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
+
+ENTRYPOINT ["dotnet", "WB.UI.WebTester.dll"]

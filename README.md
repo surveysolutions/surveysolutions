@@ -32,7 +32,7 @@ Prerequesties:
 
 ## Running locally
 
-First you need to build javascript UI. It Can be done by running either `build.all.deps.bat` or `build_deps.sh` scripts. Front end is built for Designer, Headquarters and Web Tester applications.
+First you need to build javascript UI. It Can be done by running either `.build.ps1`, `build.all.deps.bat` or `build_deps.sh` scripts. Front end is built for Designer, Headquarters and Web Tester applications.
 
 By default web applications use PostgreSQL installed locally. Review connection strings in `appsettings.ini` files to be able to run applications properly.
 
