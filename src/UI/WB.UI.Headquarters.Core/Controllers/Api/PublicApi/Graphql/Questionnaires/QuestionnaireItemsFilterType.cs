@@ -22,6 +22,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
                 .Description("Find only identifying entities");
+
+            descriptor.Field(x => x.UsedInReporting)
+                .Name("exposed")
+                .Description("Find only identifying entities");
         }
     }
 }

@@ -117,7 +117,28 @@ namespace WB.UI.Headquarters.Controllers.Api
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> ChangeVariableExposeStatus([FromBody] UpdateExposedVariablesRequestModel request)
         {
-            //update variables
+
+            if (!QuestionnaireIdentity.TryParse(request.QuestionnaireIdentity, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return null;
+            }
+
+            var variables = this.questionnaireItems.Query(q =>
+            {
+                q = q.Where(i => i.QuestionnaireIdentity == questionnaireIdentity.ToString());
+                //q = q.Where(i => i.UsedInReporting == true);
+                return q.ToList();
+            });
+
+            var top15Variables = request.Variables.Take(15).ToHashSet();
+
+            foreach (var questionnaireCompositeItem in variables)
+            {
+                questionnaireCompositeItem.UsedInReporting = top15Variables.Contains(questionnaireCompositeItem.Id);
+            }
+
+            this.questionnaireItems.Store(variables);
+
             //run rebuild or\and cleanup
 
             return Ok();
@@ -220,8 +241,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 var queryResult = q.OrderUsingSortExpression("Id"/*request.GetSortOrderRequestItems().GetOrderRequestString()*/);
 
                 IQueryable<QuestionnaireCompositeItem> pagedResults = q;
-
-
+                
                 if (request.PageSize > 0)
                 {
                     pagedResults = q.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
@@ -236,7 +256,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                         Id = x.Id,
                         VariableName = x.StataExportCaption,
                         IsExposed = x.UsedInReporting,
-                        Label = x.VariableLabel
+                        Label = x.VariableLabel,
+                        
                     }).ToList()
                 };
             });
@@ -251,7 +272,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    VariableName = x.VariableName,
+                    Variable = x.VariableName,
                     IsExposed = x.IsExposed ?? false
                 })
             };
@@ -274,7 +295,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public string Title { set; get; }
         public string Label { set; get; }
         public bool IsExposed { set; get; }
-        public string VariableName { get; set; }
+        public string Variable { get; set; }
     }
 
     public class QuestionnaireEntityItem

@@ -1592,4 +1592,13 @@
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
   </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Variable Name</value>
+  </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+    <value>You are changing the set of variables. It would take time to update reports</value>
+  </data>
 </root>

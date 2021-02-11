@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
         {
             descriptor.Name("HeadquartersQuery");
             
-            descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default!, default!, default!))
+            descriptor.Field<QuestionnaireItemResolver>(x => x.QuestionnaireItems(default, default, default!, default!, default!, default!))
                 .Authorize()
                 .HasWorkspace()
                 .Type<ListType<QuestionnaireItemObjectType>>()

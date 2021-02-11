@@ -39,13 +39,18 @@
                 </DataTables>
             </div>
             <div class="col-sm-6">
-
                 <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>{{this.$t('Pages.ExposedVariables_VariableName')}}</th>
+                            <th>{{this.$t('Pages.ExposedVariables_Title')}}</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr v-for="variable in exposedVariables"
                             :key="'id' + '__' + variable.id"
                             @click="cellExposedClicked(variable.id)">
-                            <td>{{variable.variableName}}</td>
+                            <td>{{variable.variable}}</td>
                             <td>{{variable.title}}</td>
                         </tr>
                     </tbody>
@@ -72,7 +77,7 @@
         <ModalFrame ref="exposedChangeModal"
             :title="$t('Pages.ConfirmationNeededTitle')"
             :canClose="false">
-            <p>{{ $t("Pages.ExposedChange" )}}</p>
+            <p>{{ $t("Pages.ExposedVariables_ChangeMessage" )}}</p>
             <div slot="actions">
                 <button
                     type="button"
@@ -113,15 +118,15 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: 'variableName',
-                        name: 'VariableName',
-                        title: 'Variable Name',
+                        data: 'variable',
+                        name: 'Variable',
+                        title: this.$t('Pages.ExposedVariables_VariableName'),
                         sortable: false,
                     },
                     {
                         data: 'title',
                         name: 'Title',
-                        title: this.$t('Pages.Title'),
+                        title: this.$t('Pages.ExposedVariables_Title'),
                         sortable: false,
                     },
                     // {
@@ -147,6 +152,7 @@ export default {
                     type: 'GET',
                     contentType: 'application/json',
                 },
+                bsort: false,
                 responsive: false,
                 order: [[0, 'asc']],
                 sDom: 'rf<"table-with-scroll"t>ip',
@@ -161,7 +167,7 @@ export default {
                     return {
                         id: d.id,
                         title: d.title,
-                        variableName : d.variableName,
+                        variable: d.variable,
                     }
                 })
             })
@@ -176,7 +182,7 @@ export default {
 
         async changeExposedStatusSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
-                .ChangeVariableExposedStatus( this.exposedVariables)
+                .ChangeVariableExposedStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s=>s.id))
             this.$refs.exposedChangeModal.modal('hide')
         },
 
@@ -185,12 +191,15 @@ export default {
 
             var rowData = this.$refs.table.table.row('#'+rowId).data()
 
+            if(this.exposedVariables.Length >= 15)
+                return
+
             var index = this.exposedVariables.findIndex(x => x.id == parsedRowId)
             if(index === -1)
                 this.exposedVariables.push({
                     id: parsedRowId,
-                    title : rowData.title,
-                    variableName : rowData.variableName,
+                    title: rowData.title,
+                    variable: rowData.variable,
                 })
         },
         cellExposedClicked(id)

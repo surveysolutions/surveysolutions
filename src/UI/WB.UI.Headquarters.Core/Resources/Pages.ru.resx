@@ -1646,4 +1646,13 @@
   <data name="Interviewer_CreateText" xml:space="preserve">
     <value>Это действие создаст индивидуального пользователя с правами интервьюера&lt;br&gt; Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
   </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
+  <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+    <value>Вы меняете список переменных. Перестройка репортов займет некоторое время</value>
+  </data>
 </root>

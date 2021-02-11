@@ -1024,6 +1024,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are changing the set of variables. It would take time to update reports.
+        /// </summary>
+        public static string ExposedVariables_ChangeMessage {
+            get {
+                return ResourceManager.GetString("ExposedVariables_ChangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ExposedVariables_VariableName {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment.
         /// </summary>
         public static string Filters_Assignment {
