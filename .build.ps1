@@ -76,20 +76,24 @@ function Set-AndroidXmlResourceValue {
     )    
 
     $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
-    # Log-Message "Updating app resource key in $filePath"
+    "Updating app resource key in $filePath" | Out-Host
 
-    [xml] $resourceFile = Get-Content -Path $filePath
-    $appCenterKey = Select-Xml -xml $resourceFile `
-        -Xpath "/resources/string[@name='$keyName']"
+    $doc = [System.Xml.Linq.XDocument]::Load($filePath);
+    $resources = $doc.Element("resources");    
+    $keyNode = $resources.Elements("string") | Where-Object { $_.Attribute("name").Value -eq $keyName}
 
-    $appCenterKey.Node.InnerText = $keyValue
-
-    $resourceFile.Save($filePath)
+    if($null -eq $keyNode) {
+        $nameAttr = New-Object System.Xml.Linq.XAttribute ([System.Xml.Linq.XName] "name",  $keyName)
+        $keyNode = New-OBject System.Xml.Linq.XElement ([System.Xml.Linq.XName]"string", $nameAttr)
+        $resources.Add($keyNode)
+    }
+    $keyNode.Value = $keyValue
+    $doc.Save($filePath)
 }
 
 function Build-Docker($dockerfile, $tags, $arguments = @()) {
-    $builderName = "tc_buildx_builder"
-    $builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
+    #$builderName = "tc_buildx_builder"
+    #$builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
 
     # if ($builder.Length -eq 0) {
     #     $create = @("buildx", "create", "--name", $builderName)
