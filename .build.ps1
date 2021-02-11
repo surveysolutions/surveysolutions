@@ -32,35 +32,27 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
     return
 }
 
+$tmp = $ENV:TEMP + "/.build"
+$gitBranch = $ENV:GIT_BRANCH
+if($null -eq $gitBranch) {
+    $gitBranch = (git branch --show-current)
+}
+$EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
+$isRelease = $gitBranch -eq $releaseBranch
+$version = Get-Content ./src/.version
+if ($version.Split('.').Length -eq 2) {
+    $version += ".0"
+}
+$version += "." + $buildNumber
+$infoVersion = $version + '-' + $EscapedBranchName
+$output = "./artifacts"
+New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
+$output = Resolve-Path $output
+
 Enter-Build {
-
-    $tmp = $ENV:TEMP + "/.build"
-
-    dotnet tool install gitversion.tool --tool-path $tmp | Out-Null
-    
-    & "$tmp/dotnet-gitversion" > .version
-    Write-Build 8 (Get-Content .version )
-    $gitversion = Get-Content .version | ConvertFrom-Json
-    
-    $isRelease = $gitversion.BranchName -eq $releaseBranch
-    
-    $version = Get-Content ./src/.version
-    if ($version.Split('.').Length -eq 2) {
-        $version += ".0"
-    }
-    $version += "." + $buildNumber
-    $infoVersion = $version + '-' + $gitversion.EscapedBranchName
-    
-    $output = "./artifacts"
-    New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
-    $output = Resolve-Path $output
-    
-# $gitversion | Out-Host
     Write-Build 10 $version 
     Write-Build 10 $infoversion
-
 }
-
 
 function Compress($folder, $dest) {
     if (Test-Path $dest) {
@@ -69,7 +61,6 @@ function Compress($folder, $dest) {
 
     Compress-Archive $folder/* -DestinationPath $dest
 }
-
 
 function Set-AndroidXmlResourceValue {
     [CmdletBinding()]
@@ -145,7 +136,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
 
 function Get-DockerTags($name, $registry = $dockerRegistry) {
     return @(
-        "$registry/$name`:$($gitversion.EscapedBranchName)"
+        "$registry/$name`:$($EscapedBranchName)"
         if ($isRelease) {
             $v = [System.Version]::Parse($version)
 
