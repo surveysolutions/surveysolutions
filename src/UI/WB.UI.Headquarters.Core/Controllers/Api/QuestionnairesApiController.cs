@@ -113,6 +113,16 @@ namespace WB.UI.Headquarters.Controllers.Api
             return Ok();
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> ChangeVariableExposeStatus([FromBody] UpdateExposedVariablesRequestModel request)
+        {
+            //update variables
+            //run rebuild or\and cleanup
+
+            return Ok();
+        }
+
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ComboboxModel QuestionnairesWithVersions(Guid? id = null, string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
@@ -183,7 +193,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         public DataTableResponse<QuestionnaireExposableEntity> GetQuestionnaireVariables([Models.Api.DataTable.DataTablesRequest] DataTableRequest request,
-            [FromQuery] string id)
+            [FromQuery] string id, [FromQuery]bool exposed = false)
         {
             if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
             {
@@ -200,8 +210,12 @@ namespace WB.UI.Headquarters.Controllers.Api
                                                                  item.QuestionType == QuestionType.SingleOption))
                      || (item.EntityType == EntityType.Variable))
                     && item.Featured != true
-                    //&& item.IsFilteredCombobox != true
+                    
+                //&& item.IsFilteredCombobox != true
                 );
+
+                if(exposed)
+                    q = q.Where(i => i.UsedInReporting == true);
 
                 var queryResult = q.OrderUsingSortExpression("Id"/*request.GetSortOrderRequestItems().GetOrderRequestString()*/);
 
@@ -220,6 +234,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     {
                         Title = x.QuestionText,
                         Id = x.Id,
+                        VariableName = x.StataExportCaption,
                         IsExposed = x.UsedInReporting,
                         Label = x.VariableLabel
                     }).ToList()
@@ -236,6 +251,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 {
                     Id = x.Id,
                     Title = x.Title,
+                    VariableName = x.VariableName,
                     IsExposed = x.IsExposed ?? false
                 })
             };
@@ -258,6 +274,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public string Title { set; get; }
         public string Label { set; get; }
         public bool IsExposed { set; get; }
+        public string VariableName { get; set; }
     }
 
     public class QuestionnaireEntityItem
@@ -266,5 +283,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         public string Title { set; get; }
         public string Label { set; get; }
         public bool? IsExposed { set; get; }
+        public string VariableName { get; set; }
     }
 }

@@ -45,11 +45,23 @@ class QuestionnaireApi {
             enabled: enabled,
         })
     }
-    ChangeVariableExposedStatus(variableId, enabled){
-        const url = `${this.base}${this.questionnaireId}/${this.version}/changeVariableExposeStatus`
-        return this.http.post(url, {
-            variableId: variableId,
-            enabled: enabled,
+
+    async ExposedVariables(id) {
+        const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireVariables?id=${id}&exposed=true`,
+            {
+                params: {
+                    limit: 100,
+                },
+            })
+        return response.data
+    }
+
+
+    ChangeVariableExposedStatus(variables ){
+        return this.http.post('api/QuestionnairesApi/changeVariableExposeStatus', {
+            questionnaireId: self.questionnaireId,
+            version: self.version,
+            variables: variables,
         })
     }
 

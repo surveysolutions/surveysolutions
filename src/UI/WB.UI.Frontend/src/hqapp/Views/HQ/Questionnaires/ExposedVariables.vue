@@ -25,15 +25,49 @@
             </div>
         </div>
 
-        <DataTables
-            ref="table"
-            data-suso="variables-list"
-            :tableOptions="tableOptions"
-            noSelect
-            noSearch
-            :noPaging="false">
-        </DataTables>
+        <div class="row">
+            <div class="col-sm-6">
 
+                <DataTables
+                    id="id-table"
+                    ref="table"
+                    :tableOptions="tableOptions"
+                    @cell-clicked="cellAllClicked"
+                    noSelect
+                    noSearch
+                    :noPaging="false">
+                </DataTables>
+            </div>
+            <div class="col-sm-6">
+
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr v-for="variable in exposedVariables"
+                            :key="'id' + '__' + variable.id"
+                            @click="cellExposedClicked(variable.id)">
+                            <td>{{variable.variableName}}</td>
+                            <td>{{variable.title}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- <DataTables
+                    id="id-table-exposed"
+                    ref="table-exposed"
+                    :tableOptions="tableOptionsExposed"
+                    noSelect
+                    noSearch
+                    :noPaging="false">
+                </DataTables> -->
+
+                <div class="action-buttons">
+                    <button
+                        @click="saveVariables"
+                        class="btn btn-success">
+                        {{$t('Common.Save')}}
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <ModalFrame ref="exposedChangeModal"
             :title="$t('Pages.ConfirmationNeededTitle')"
@@ -56,10 +90,18 @@
 </template>
 
 <script>
+import { keyBy, map, find, filter, escape } from 'lodash'
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
 
 export default {
+
+    data() {
+
+        return {
+            exposedVariables: [],
+        }
+    },
 
     computed: {
         model() {
@@ -71,9 +113,9 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
-                        data: 'id',
-                        name: 'Id',
-                        title: 'Id',
+                        data: 'variableName',
+                        name: 'VariableName',
+                        title: 'Variable Name',
                         sortable: false,
                     },
                     {
@@ -82,26 +124,26 @@ export default {
                         title: this.$t('Pages.Title'),
                         sortable: false,
                     },
-                    {
-                        data: 'isExposed',
-                        name: 'IsExposed',
-                        title: this.$t('Workspaces.Name'),
-                        sortable: false,
-                        'render': function (data, type, row) {
-                            if (data === true) {
-                                return '<input type="checkbox" id="chkadd_' + row.id + '" checked value="true">'
-                            }
-                            else {
-                                return '<input type="checkbox" id="chkadd_' + row.id + '" >'
-                            }
-                        },
-                    },
+                    // {
+                    //     data: 'isExposed',
+                    //     name: 'IsExposed',
+                    //     title: this.$t('Workspaces.Name'),
+                    //     sortable: false,
+                    //     'render': function (data, type, row) {
+                    //         if (data === true) {
+                    //             return '<input type="checkbox" id="chkadd_' + row.id + '" checked value="true">'
+                    //         }
+                    //         else {
+                    //             return '<input type="checkbox" id="chkadd_' + row.id + '" >'
+                    //         }
+                    //     },
+                    // },
                 ],
                 rowId: function(row) {
                     return row.id
                 },
                 ajax: {
-                    url: this.$config.model.dataUrl + '?id='+this.$config.model.questionnaireIdentity,
+                    url: this.$config.model.dataUrl + '?id=' + this.$config.model.questionnaireIdentity,
                     type: 'GET',
                     contentType: 'application/json',
                 },
@@ -111,20 +153,52 @@ export default {
             }
         },
     },
-    mounted() {},
-    methods: {
-        exposedVariableChanged() {
-            this.$refs.exposedChangeModal.modal({
-                backdrop: 'static',
-                keyboard: false,
+    mounted() {
+        this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
+            .ExposedVariables(this.$config.model.questionnaireIdentity)
+            .then(data => {
+                this.exposedVariables = map(data.data, d => {
+                    return {
+                        id: d.id,
+                        title: d.title,
+                        variableName : d.variableName,
+                    }
+                })
             })
+    },
+    methods: {
+
+
+        saveVariables(){
+            this.$refs.exposedChangeModal.modal({keyboard: false})
+
         },
 
         async changeExposedStatusSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
-                .ChangeVariableExposedStatus( 19, true)
+                .ChangeVariableExposedStatus( this.exposedVariables)
             this.$refs.exposedChangeModal.modal('hide')
         },
+
+        cellAllClicked(columnName, rowId, cellData) {
+            const parsedRowId = rowId.replace('id__', '')
+
+            var rowData = this.$refs.table.table.row('#'+rowId).data()
+
+            var index = this.exposedVariables.findIndex(x => x.id == parsedRowId)
+            if(index === -1)
+                this.exposedVariables.push({
+                    id: parsedRowId,
+                    title : rowData.title,
+                    variableName : rowData.variableName,
+                })
+        },
+        cellExposedClicked(id)
+        {
+            var index = this.exposedVariables.findIndex(x => x.id == id)
+            this.exposedVariables.splice(index,1)
+        },
+
     },
 }
 </script>
