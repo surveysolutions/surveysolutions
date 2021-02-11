@@ -90,7 +90,7 @@
     "i18next": "^17.3.1",
     "i18next-browser-languagedetector": "^3.0.3",
     "i18next-http-backend": "^1.0.18",
-    "jquery": "3.3.1",
+    "jquery": "3.5.0",
     "jquery-contextmenu": "^2.8.0",
     "jquery-mousewheel": "^3.1.13",
     "jquery-placeholder": "^2.3.1",
