@@ -74,7 +74,7 @@
       "node_modules/es5-shim/es5-shim.js",
       "node_modules/jquery-mousewheel/jquery.mousewheel.js",
       "node_modules/jquery-placeholder/jquery.placeholder.js",
-      "node_modules/jquery.scrollTo/jquery.scrollTo.js",
+      "node_modules/jquery.scrollto/jquery.scrollTo.js",
       "node_modules/json3/lib/json3.js",
       "questionnaire/scripts/modules/ng-context-menu.js",
       "node_modules/ng-file-upload/dist/ng-file-upload.js",
