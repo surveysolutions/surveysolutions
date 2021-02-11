@@ -213,7 +213,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
         [TestCase("", "PLU0021")] //empty
         [TestCase("Q12wzyt#", "PLU0015")]
-        [TestCase("P@$$w0rd5", "PLU0016")]
+        [TestCase("Qwerty12345", "PLU0016")]
         [TestCase("QwertyQW$werty", "PLU0017")]
         [TestCase("QWE1TYQWWE$RTY", "PLU0018")]
         [TestCase("qw1erty$qwerty", "PLU0019")]
@@ -421,7 +421,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         public void when_uploaded_file_contains_quot()
         {
             string data = @"login	password	email	fullname	phonenumber	role	supervisor
-            LmdYkeTihXA	P@$$w0rd	mytest@email.com	bPVEbCTaOiR""jZNdZgAAHUMcGOVNBFI	112233	supervisor";
+            LmdYkeTihXA	P@$$w0rdless	mytest@email.com	bPVEbCTaOiR""jZNdZgAAHUMcGOVNBFI	112233	supervisor";
 
             var service = Create.Service.UserImportService(csvReader: new CsvReader());
 
