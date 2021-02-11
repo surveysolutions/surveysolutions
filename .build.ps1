@@ -4,8 +4,7 @@
 #>
 
 param(
-    [string] $Tasks,
-    
+    [string] $Tasks,    
     [string] $buildNumber = '42',
     [string] $androidKeyStore = $ENV:ANDROID_KEY_STORE,
     [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS ,
@@ -18,6 +17,11 @@ param(
 )
 
 #region Bootstrap
+
+if(Get-Command Set-BuildHeader -ErrorAction SilentlyContinue) {
+    Set-BuildHeader {Write-Build 11 "##teamcity[blockOpened name='Task $($args[0])']" }
+    Set-BuildFooter {Write-Build 11 "##teamcity[blockClosed name='Task $($args[0])']"}
+}
 
 # self invoke as build script
 if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
@@ -59,7 +63,6 @@ function Compress($folder, $dest) {
 }
 
 
-
 # $gitversion | Out-Host
 $version | Out-Host
 $infoversion | Out-Host
@@ -85,18 +88,22 @@ function Set-AndroidXmlResourceValue {
 }
 
 function Build-Docker($dockerfile, $tags, $arguments = @()) {
-    $builder = docker buildx ls | Where-Object { $_.Contains("wb_buildx_builder") }
+    $builderName = "tc_buildx_builder"
+    $builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
 
-    if ($builder.Length -eq 0) {
-        docker buildx create wb_buildx_builder
-    }
+    # if ($builder.Length -eq 0) {
+    #     $create = @("buildx", "create", "--name", $builderName)
+    #     exec { docker $create }
+    # }
 
-    docker buildx use wb_buildx_builder
+    # exec { docker buildx ls } 
+
+    # exec { docker buildx use --builder $builderName }
 
     $params = @('buildx', 'build'
         '--build-arg', "VERSION=$version", 
         "--build-arg", "INFO_VERSION=$infoVersion"
-        # "--build-arg", "APK_FILES=artifacts"
+        "--build-arg", "APK_FILES=artifacts"
         "--file", $dockerfile
         "--iidfile", "$output\headquarters.id"
         "--label", "org.opencontainers.image.revision=$($ENV:BUILD_VCS_NUMBER)"
@@ -105,8 +112,8 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
         "--label", "org.opencontainers.image.source=https://github.com/surveysolutions/surveysolutions"
         "--label", "org.opencontainers.image.vendor=Survey Solutions"
         "--label", "org.opencontainers.image.created=$(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss')"
-        "--cache-from", "type=local,src=$tmp/docker"
-        "--cache-to", "type=local,dest=$tmp/docker"
+        #"--cache-from", "type=local,src=$tmp/docker"
+        #"--cache-to", "type=local,dest=$tmp/docker"
         "--progress", "plain"
         if ($noDockerPush.IsPresent) {
             "--load"
@@ -156,7 +163,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
 
     $params = @(
         $CapiProject
-        "/maxcpucount", "/restore", "/nologo"
+        "/maxcpucount", "/restore"
         "/p:Configuration=Release", "/p:DebugSymbols=False"
         "/p:ExcludeGeneratedDebugSymbol=True"
         "/p:VersionCode=$buildNumber"
@@ -176,11 +183,8 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         }
     )
     
-    exec {
-
-        $params | Join-String -Separator ', ' | Out-Host
-        msbuild $params
-    }
+    $params | Join-String -Separator ', ' | Out-Host
+    exec { msbuild $params }
 }
 
 #endregion
@@ -195,6 +199,7 @@ task frontend {
 task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
+            --no-self-contained `
             -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
@@ -272,11 +277,11 @@ task DockerHq {
         $tags += @("--tag", "surveysolutions/surveysolutions:latest")
     }
 
-    if (-not $noDockerPush.IsPresent) {
-        $arguments += @(
-            "--platform", "linux/amd64,linux/arm64"
-        )
-    }
+    # if (-not $noDockerPush.IsPresent) {
+    #     $arguments += @(
+    #         "--platform", "linux/amd64,linux/arm64"
+    #     )
+    # }
 
     Build-Docker ./docker/Dockerfile.hq $tags $arguments
 }
