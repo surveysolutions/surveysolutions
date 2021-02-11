@@ -37,7 +37,7 @@ $tmp = $ENV:TEMP + "/.build"
 
 dotnet tool install gitversion.tool --tool-path $tmp | Out-Null
 
-& "$tmp/dotnet-gitversion" /nofetch > .version
+& "$tmp/dotnet-gitversion" > .version
 Get-Content .version  | Out-Host
 $gitversion = Get-Content .version | ConvertFrom-Json
 
