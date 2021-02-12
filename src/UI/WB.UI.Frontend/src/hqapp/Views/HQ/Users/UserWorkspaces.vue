@@ -1,9 +1,9 @@
 <template>
     <ProfileLayout ref="profile"
         :role="userInfo.role"
-        :isOwnProfile="false"
         :forceChangePassword="false"
-        :canChangePassword="false"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName"
         :currentTab="currentTab"
         :userId="userInfo.userId">

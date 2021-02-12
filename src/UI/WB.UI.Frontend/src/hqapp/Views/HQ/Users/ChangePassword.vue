@@ -65,6 +65,7 @@
                     v-bind:disabled="userInfo.isObserving"
                     @click="updatePassword">{{$t('Pages.Update')}}</button>
                 <a class="btn btn-default"
+                    v-if="!userInfo.forceChangePassword"
                     v-bind:href="referrerUrl"
                     id="lnkCancelUpdatePassword">
                     {{$t('Common.Cancel')}}
