@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Transactions;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 
 namespace WB.Infrastructure.AspNetCore.DataProtection
@@ -22,10 +25,14 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
         }
 
         bool tableChecked = false;
+        private bool hasError = false;
+        private bool errorResolved = false;
+        public static ILogger<PostgresXmlRepository>? Logger { get; set; }
 
         private void EnsureTableCreated()
         {
             if (tableChecked) return;
+
             using var db = new NpgsqlConnection(connectionString);
             db.Execute($"create schema if not exists {schema}");
             db.Execute($@"CREATE TABLE if not exists data_protection (
@@ -37,22 +44,53 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
 
         public IReadOnlyCollection<XElement> GetAllElements()
         {
-            EnsureTableCreated();
-            using var db = new NpgsqlConnection(connectionString);
-            return db.Query<string>($"select value from data_protection")
-                .Select(x => XElement.Parse(x))
-                .ToList();
+            try
+            {
+                EnsureTableCreated();
+                using var db = new NpgsqlConnection(connectionString);
+
+                var result = db.Query<string>($"select value from data_protection")
+                    .Select(x => XElement.Parse(x))
+                    .ToList();
+
+                if (hasError && errorResolved == false)
+                {
+                    Logger.LogWarning("Postgres data protection xml repository functionality restored");
+                    errorResolved = true;
+                }
+                return result;
+            }
+            catch (Exception pe)
+            {
+                hasError = true;
+                Serilog.Log.Warning(pe, "Cannot read postgres data protection xml repository. Database not exists");
+            }
+            return new List<XElement>();
         }
 
         public void StoreElement(XElement element, string friendlyName)
         {
-            EnsureTableCreated();
-            using var db = new NpgsqlConnection(connectionString);
-            db.Execute("INSERT INTO data_protection (id, value) VALUES(@id, @value)", new
+            try
             {
-                id = Guid.NewGuid(),
-                value = element.ToString(SaveOptions.DisableFormatting)
-            });
+                EnsureTableCreated();
+                using var db = new NpgsqlConnection(connectionString);
+                db.Execute("INSERT INTO data_protection (id, value) VALUES(@id, @value)", new
+                {
+                    id = Guid.NewGuid(),
+                    value = element.ToString(SaveOptions.DisableFormatting)
+                });
+
+                if (hasError && errorResolved == false)
+                {
+                    Serilog.Log.Warning("Postgres data protection xml repository functionality restored");
+                    errorResolved = true;
+                }
+            }
+            catch (Exception pe)
+            {
+                hasError = true;
+                Serilog.Log.Warning(pe, "Cannot store postgres data protection xml repository. Database not exists");
+            }
         }
     }
 }

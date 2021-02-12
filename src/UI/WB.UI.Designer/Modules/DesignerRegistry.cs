@@ -32,7 +32,6 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IQuestionnaireInfoFactory, QuestionnaireInfoFactory>();
             registry.Bind<ICommentsService, CommentsService>();
             registry.Bind<IPdfFactory, PdfFactory>();
-            registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
             registry.Bind<ICommandsMonitoring, TraceCommandsMonitoring>();
         }
 

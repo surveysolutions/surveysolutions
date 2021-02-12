@@ -485,6 +485,11 @@ export default {
                 this.sendEmailResult = null
             }
         },
+        provider: function(val) {
+            if(val === 'none') {
+                this.$validator.validateAll('settings')
+            }
+        },
     },
     methods: {
         async sendTestEmail() {

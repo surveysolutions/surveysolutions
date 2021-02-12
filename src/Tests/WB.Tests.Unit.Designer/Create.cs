@@ -1441,11 +1441,6 @@ namespace WB.Tests.Unit.Designer
             );
 
 
-        public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
-        {
-            return new DeskAuthenticationService(Mock.Of<IOptions<DeskSettings>>(x => x.Value == new DeskSettings(multipassKey, returnUrlFormat, siteKey)));
-        }
-
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire", string defaultLanguageName = "Original")
             => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, defaultLanguageName, responsibleId, isResponsibleAdmin);
 

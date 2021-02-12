@@ -47,6 +47,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
+                if (string.IsNullOrWhiteSpace(this.connectionSettings.ConnectionString))
+                {
+                    throw new ApplicationException("Connection string to database is not configured. [ConnectionStrings] DefaultConnection value");
+                }
+
                 var connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString)
                 {
                     SearchPath = workspaceSchema,

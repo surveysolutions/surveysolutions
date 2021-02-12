@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Core;
 using Microsoft.Extensions.Logging;
 using Polly;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -119,12 +120,13 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 var init = Stopwatch.StartNew();
                 status.ClearMessage();
-                
+
                 try
                 {
                     await Policy.Handle<InitializationException>(e => e.IsTransient)
                         .WaitAndRetryForeverAsync(i => TimeSpan.FromSeconds(Math.Max(i, 5)),
-                            (exception, span) => status.Run($"Retry in {span.TotalSeconds:0}s due to error: {exception.Message}"))
+                            (exception, span) =>
+                                status.Run($"Retry in {span.TotalSeconds:0}s due to error: {exception.Message}"))
                         .ExecuteAsync(async () =>
                         {
                             await module.Init(serviceLocatorLocal, status);
@@ -136,6 +138,13 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                     status.Error(Modules.ErrorDuringRunningMigrations, ie);
                     log.LogCritical(ie.WithFatalType(FatalExceptionType.HqErrorDuringRunningMigrations),
                         "Exception during running migrations. Connection string: " + ie.Data["ConnectionString"]);
+                }
+                catch (DependencyResolutionException dre) when (dre.InnerException != null)
+                {
+                    status.Error(Modules.ErrorDuringSiteInitialization, dre.InnerException);
+
+                    log.LogCritical(dre.InnerException.WithFatalType(FatalExceptionType.HqErrorDuringSiteInitialization),
+                        "Exception during site initialization");
                 }
                 catch (Exception e)
                 {
