@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace WB.Infrastructure.AspNetCore.DataProtection
 {
@@ -13,6 +16,11 @@ namespace WB.Infrastructure.AspNetCore.DataProtection
                 k.XmlRepository = new PostgresXmlRepository(connectionString, schema);
                 k.XmlEncryptor = new NullXmlEncryptor();
             });
+        }
+
+        public static void EnablePostgresXmlRepositoryLogging(this IHost app)
+        {
+            PostgresXmlRepository.Logger = app.Services.GetRequiredService<ILogger<PostgresXmlRepository>>();
         }
     }
 }

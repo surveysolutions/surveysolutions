@@ -38,7 +38,7 @@ namespace WB.Infrastructure.AspNetCore
                 .MinimumLevel.Verbose()
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error)
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                .MinimumLevel.Override("Quartz.Core", LogEventLevel.Warning)
+                .MinimumLevel.Override("Quartz", LogEventLevel.Warning)
                 .MinimumLevel.Override("Anemonis.AspNetCore", LogEventLevel.Warning)
                 
                 .MinimumLevel.Override("WB.UI.Designer.Code.Attributes.BasicAuthenticationHandler", LogEventLevel.Warning)
