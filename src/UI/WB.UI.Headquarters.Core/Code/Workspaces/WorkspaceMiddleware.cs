@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
         
-        private static readonly WorkspaceContext[] AdministrationWorkspaces = { Workspace.Admin.AsContext() };
+        private static readonly WorkspaceContext[] AdministrationWorkspaces = { Workspace.Admin.AsContext(), Workspace.UsersWorkspace.AsContext() };
 
         public static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install", "/workspaces" };
     }

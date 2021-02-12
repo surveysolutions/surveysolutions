@@ -142,6 +142,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create User.
+        /// </summary>
+        public static string CreateUser {
+            get {
+                return ResourceManager.GetString("CreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created on.
         /// </summary>
         public static string CreationDate {
@@ -435,15 +444,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebMode {
             get {
                 return ResourceManager.GetString("WebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Workspaces.
-        /// </summary>
-        public static string Workspaces {
-            get {
-                return ResourceManager.GetString("Workspaces", resourceCulture);
             }
         }
     }

@@ -16,7 +16,8 @@ namespace WB.Infrastructure.Native.Workspaces
 
         public static bool IsServerAdministration(this WorkspaceContext? context)
         {
-            return context?.Name == WorkspaceConstants.AdminWorkspaceName;
+            return context?.Name == WorkspaceConstants.AdminWorkspaceName 
+                || context?.Name == WorkspaceConstants.UsersWorkspaceName;
         }
 
         public static void ForEachWorkspaceExecute(this IServiceLocator serviceLocator,

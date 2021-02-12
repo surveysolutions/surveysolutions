@@ -37,12 +37,12 @@
             @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Headquarters", "Users", @MainMenu.Headquarters, MenuItem.Headquarters)
-            @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
-            @Html.MainMenuItem("Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
-            @Html.MainMenuItem("Observers", "Users", @MainMenu.Observers, MenuItem.Observers)
-            @Html.MainMenuItem("ApiUsers", "Users", @MainMenu.ApiUsers, MenuItem.ApiUsers)
-            @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Headquarters", "Users", @MainMenu.Headquarters, MenuItem.Headquarters)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Observers", "Users", @MainMenu.Observers, MenuItem.Observers)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"ApiUsers", "Users", @MainMenu.ApiUsers, MenuItem.ApiUsers)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(),"Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
         </ul>
     </li>
     <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">

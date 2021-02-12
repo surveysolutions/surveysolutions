@@ -115,7 +115,13 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public static readonly string[] NotScopedToWorkspacePaths =
         {
-            "/graphql", "/Account", "/api", "/.hc", "/metrics", "/" + WorkspaceConstants.AdminWorkspaceName
+            "/graphql", 
+            "/Account", 
+            "/api", 
+            "/.hc", 
+            "/metrics", 
+            "/" + WorkspaceConstants.AdminWorkspaceName,
+            "/" + WorkspaceConstants.UsersWorkspaceName
         };
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MediatR;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Utils;
@@ -17,17 +18,27 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         IRequestHandler<UsersManagementRequest, DataTableResponse<UserManagementListItem>>
     {
         private readonly IUserRepository userRepository;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public UsersManagementRequestHandler(IUserRepository userRepository)
+        public UsersManagementRequestHandler(IUserRepository userRepository, IAuthorizedUser authorizedUser)
         {
             this.userRepository = userRepository;
+            this.authorizedUser = authorizedUser;
         }
 
         public async Task<DataTableResponse<UserManagementListItem>> Handle(
             UsersManagementRequest request, CancellationToken cancellationToken = default)
         {
             var query = this.userRepository.Users
-                .Where(u => u.Roles.All(r => r.Id != UserRoles.Administrator.ToUserId()));
+                .Where(u => 
+                    u.Roles.All(r => r.Id != UserRoles.Administrator.ToUserId())
+                );
+            
+            if (!authorizedUser.IsAdministrator)
+            {
+                var authorizedUserWorkspaces = authorizedUser.Workspaces;
+                query = query.Where(u => u.Workspaces.Any(w => authorizedUserWorkspaces.Contains(w.Workspace.Name)));
+            }
             
             var recordsTotal = await query.CountAsync(cancellationToken);
 

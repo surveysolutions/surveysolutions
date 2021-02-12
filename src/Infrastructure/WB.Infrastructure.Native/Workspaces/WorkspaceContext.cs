@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Native.Workspaces
         public string DisplayName { get; }
         public string? PathBase { get; set; }
 
-        public string SchemaName => Name == WorkspaceConstants.AdminWorkspaceName 
+        public string SchemaName => Name == WorkspaceConstants.AdminWorkspaceName || Name == WorkspaceConstants.UsersWorkspaceName
             ? WorkspaceConstants.SchemaName 
             : $"{SchemaPrefix}{Name}";
 

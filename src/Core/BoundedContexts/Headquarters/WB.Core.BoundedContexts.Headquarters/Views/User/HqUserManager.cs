@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     public class HqUserManager : UserManager<HqUser>
     {
         private readonly IWorkspacesService workspacesService;
-        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public HqUserManager(IUserStore<HqUser> store, 
             IOptions<IdentityOptions> optionsAccessor, 
@@ -26,25 +25,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             IdentityErrorDescriber errors, 
             IServiceProvider services, 
             ILogger<UserManager<HqUser>> logger,
-            IWorkspacesService workspacesService,
-            IWorkspaceContextAccessor workspaceContextAccessor) 
+            IWorkspacesService workspacesService) 
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
             this.workspacesService = workspacesService;
-            this.workspaceContextAccessor = workspaceContextAccessor;
         }
 
         public override async Task<IdentityResult> CreateAsync(HqUser user)
         {
-            var workspace = this.workspaceContextAccessor.CurrentWorkspace();
-
             var result = await base.CreateAsync(user);
 
             if (result.Succeeded && !user.IsInRole(UserRoles.Administrator))
             {
-                if (workspace != null)
+                foreach (var userWorkspace in user.Workspaces)
                 {
-                    this.workspacesService.AddUserToWorkspace(user, workspace.Name);
+                    this.workspacesService.AddUserToWorkspace(user, userWorkspace.Workspace.Name);
                 }
             }
 

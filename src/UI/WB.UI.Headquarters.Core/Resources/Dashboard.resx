@@ -244,4 +244,7 @@
   <data name="UsersManagement" xml:space="preserve">
       <value>Users Management</value>
   </data>
+  <data name="CreateUser" xml:space="preserve">
+      <value>Create User</value>
+  </data>
 </root>

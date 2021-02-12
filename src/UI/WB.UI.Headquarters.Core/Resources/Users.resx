@@ -304,5 +304,10 @@
   <data name="Filter_Archived" xml:space="preserve">
     <value>Archived users</value>
   </data>
-  
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>Add User</value>
+  </data>
 </root>

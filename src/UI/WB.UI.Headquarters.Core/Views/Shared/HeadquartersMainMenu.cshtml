@@ -1,7 +1,9 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.BoundedContexts.Headquarters.Workspaces
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Services
+@using WB.UI.Shared.Web.Extensions
 @inject IAuthorizedUser authorizedUser
 
 @{
@@ -38,11 +40,11 @@
             @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
-            @Html.MainMenuItem("Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "Supervisors", @MainMenu.Supervisors, MenuItem.Teams)
+            @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Interviewers", "Users", @MainMenu.Interviewers, MenuItem.Interviewers)
             @if (!authorizedUser.IsObserver)
             {
-                @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+                @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
             }
         </ul>
     </li>
@@ -62,6 +64,8 @@
     }
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
+    @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", 
+        @MainMenu.Users, MenuItem.UsersManagement)
     <li><a href="http://support.mysurvey.solutions/headquarters" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name">

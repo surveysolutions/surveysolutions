@@ -1,6 +1,7 @@
 #nullable enable
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -11,7 +12,7 @@ using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeByRole(Roles = "Administrator")]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
     public class UsersManagementController : Controller
     {
         private readonly IMediator mediator;
@@ -22,12 +23,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.UsersManagement)]
-        public IActionResult Index() => View();
+        public IActionResult Index() => View(new
+        {
+            CreateUrl = Url.Action(nameof(CreateUser)),
+        });
 
         public async Task<DataTableResponse<UserManagementListItem>?> List(UsersManagementRequest request, CancellationToken cancellationToken)
         {
             DataTableResponse<UserManagementListItem>? result = await this.mediator.Send(request, cancellationToken);
             return result;
         }
+
+        [ActivePage(MenuItem.UsersManagement)]
+        public IActionResult CreateUser() => View();
     }
 }

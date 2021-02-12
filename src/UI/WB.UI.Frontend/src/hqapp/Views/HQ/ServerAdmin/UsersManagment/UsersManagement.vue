@@ -1,5 +1,9 @@
 <template>
-    <HqLayout :hasFilter="true">
+    <HqLayout
+        :hasFilter="true"
+        :title="$t('Users.UsersTitle')"
+        :topicButtonRef="this.$config.model.createUrl"
+        :topicButton="$t('Users.AddUser')">
 
         <Filters slot="filters">
             <FilterBlock

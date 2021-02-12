@@ -38,7 +38,7 @@ export default class UsersComponent {
             path: '/ApiUsers', component: ApiUsers,
         },
         {
-            path: '/Supervisors', component: Supervisors,
+            path: '/Users/Supervisors', component: Supervisors,
         },
         {
             path: '/Users/Manage/:userId', component: Manage, name: 'usersManage',
