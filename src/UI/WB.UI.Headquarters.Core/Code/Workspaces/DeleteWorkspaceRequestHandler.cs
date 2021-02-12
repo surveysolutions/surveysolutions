@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         private readonly IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory;
         private readonly IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService;
         private readonly IInScopeExecutor<IExportServiceApi> exportService;
-        private readonly IScheduler scheduler;
+        private readonly IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask;
         private readonly IWorkspacesCache workspacesCache;
         private readonly ISystemLog systemLog;
 
@@ -28,13 +28,14 @@ namespace WB.UI.Headquarters.Code.Workspaces
             IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory,
             IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService,
             IInScopeExecutor<IExportServiceApi> exportService,
-            IScheduler scheduler, ISystemLog systemLog)
+            IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask,
+            ISystemLog systemLog)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.workspacesCache = workspacesCache;
             this.deleteService = deleteService;
             this.exportService = exportService;
-            this.scheduler = scheduler;
+            this.scheduledTask = scheduledTask;
             this.systemLog = systemLog;
         }
 
@@ -85,8 +86,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
             workspacesCache.InvalidateCache();
             this.systemLog.WorkspaceDeleted(workspace.Name);
 
-            await DeleteWorkspaceSchemaJob.Schedule(scheduler, workspace);
-
+            await scheduledTask.Schedule(new DeleteWorkspaceJobData(workspace));
+            
             return new DeleteWorkspaceResponse
             {
                 Success = true

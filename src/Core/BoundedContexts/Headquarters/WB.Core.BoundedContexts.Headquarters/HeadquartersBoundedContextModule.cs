@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Ncqrs.Eventing.Storage;
+﻿using Ncqrs.Eventing.Storage;
 using System.Threading.Tasks;
-using Ncqrs;
+using MediatR;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
@@ -28,14 +25,13 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Storage;
-using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
@@ -62,7 +58,6 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -165,8 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
             registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
-            registry.Bind<DeleteQuestionnaireJobScheduler>();
-
+            
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
@@ -363,24 +357,23 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<AssignmentsVerificationTask>();
             registry.Bind<AssignmentsImportTask>();
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
-            registry.Bind<UsersImportTask>();
-            registry.Bind<UpgradeAssignmentJobScheduler>();
             registry.Bind<SendInvitationsTask>();
             registry.Bind<SendRemindersTask>();
-            registry.Bind<UpgradeAssignmentJob>();
             registry.Bind<SyncPackagesReprocessorBackgroundJob>();
-            registry.Bind<UsersImportJob>();
-            registry.Bind<UsersImportJob>();
             registry.Bind<AssignmentsImportJob>();
             registry.Bind<SendInvitationsJob>();
             registry.Bind<AssignmentsVerificationJob>();
             registry.Bind<SendRemindersJob>();
-            registry.Bind<DeleteQuestionnaireJob>();
+                
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
-            registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<DeleteWorkspaceSchemaJob>();
             
+            registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
+            registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
+            registry.BindScheduledJob<UpgradeAssignmentJob, AssignmentsUpgradeProcess>();
+            registry.BindScheduledJob<UsersImportJob, Unit>();
+
             registry.Bind<CalendarEvent>();
 
             registry.Bind<IVirtualPathService, VirtualPathService>();

@@ -168,6 +168,23 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             // assert
             DataExportVariable questionnaireLevelLabels = structure[0]["singleOption"];
             Assert.That(questionnaireLevelLabels.Value.VariableValues, Is.Empty);
-        }   
+        }  
+        
+        [Test(Description = "KP-14433 Variable label missing")]
+        public void should_add_assignment_id_in_do_main_file()
+        {
+            var questionnaire = Create.QuestionnaireDocument(
+                children: Create.TextQuestion(variable:"textOption"));
+
+            var exportStructure = Create.QuestionnaireExportStructure(questionnaire);
+            var labelFactory = new QuestionnaireLabelFactory();
+            
+            // act
+            QuestionnaireLevelLabels[] structure = labelFactory.CreateLabelsForQuestionnaire(exportStructure);
+
+            // assert
+            DataExportVariable questionnaireLevelLabels = structure[0]["assignment__id"];
+            Assert.That(questionnaireLevelLabels.Value.VariableValues, Is.Empty);
+        }  
     }
 }

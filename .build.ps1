@@ -4,6 +4,10 @@
 #>
 
 param(
+    [ValidateSet('Docker', 'DockerHq', 'DockerDesigner', 'DockerWebTester', 
+        'Packages', 'PackageHq', 'PackageExport', 'PackageWebTester', 'PackageDesigner',
+        'PackageHqOffline', 
+        'Android', 'AndroidInterviewer', 'AndroidInterviewerWithMaps', 'AndroidSupervisor')]
     [string] $Tasks,    
     [string] $buildNumber = '42',
     [string] $androidKeyStore = $ENV:ANDROID_KEY_STORE,
@@ -198,7 +202,7 @@ task frontend {
 task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
-            --no-self-contained `
+            --self-contained  `
             -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
