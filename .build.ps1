@@ -15,7 +15,7 @@ param(
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
-    [string] $dockerRegistry,
+    [string] $dockerRegistry = $ENV:DOCKER_REGISTRY,
     [string] $releaseBranch = 'release', # Docker builds will push to release 
     [switch] $noDockerPush 
 )
@@ -42,6 +42,7 @@ if($null -eq $gitBranch) {
     $gitBranch = (git branch --show-current)
 }
 $EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
+$EscapedBranchName = $EscapedBranchName -replace '/|\\','-'
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
 if ($version.Split('.').Length -eq 2) {
