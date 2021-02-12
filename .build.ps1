@@ -136,13 +136,14 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
 
 function Get-DockerTags($name, $registry = $dockerRegistry) {
     return @(
-        "$registry/$name`:$($EscapedBranchName)"
         if ($isRelease) {
             $v = [System.Version]::Parse($version)
-
+            "$registry/$name`:latest"
             "$registry/$name`:$($v.Major).$($v.Minor)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build)"
             "$registry/$name`:$($v.Major).$($v.Minor).$($v.Build).$($v.Revision)"
+        } else {
+            "$registry/$name`:$($EscapedBranchName)"
         }
     )
 }
@@ -273,7 +274,6 @@ task DockerHq {
 
     if ($isRelease) {
         $tags += Get-DockerTags "surveysolutions" "surveysolutions"
-        $tags += @("--tag", "surveysolutions/surveysolutions:latest")
     }
 
     # if (-not $noDockerPush.IsPresent) {
