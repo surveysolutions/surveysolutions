@@ -39,7 +39,23 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 var authorizedUserWorkspaces = authorizedUser.Workspaces;
                 query = query.Where(u => u.Workspaces.Any(w => authorizedUserWorkspaces.Contains(w.Workspace.Name)));
             }
-            
+
+            if (authorizedUser.IsHeadquarter)
+            {
+                var hqAllowedRoles = new[] {UserRoles.Supervisor.ToUserId(), UserRoles.Interviewer.ToUserId()};
+                query = query.Where(u => u.Roles.Any(r => hqAllowedRoles.Contains(r.Id)));
+            }
+
+            if (authorizedUser.IsSupervisor)
+            {
+                query = query.Where(u => 
+                    u.Roles.Any(r => r.Id == UserRoles.Interviewer.ToUserId()
+                    && u.Profile.SupervisorId == authorizedUser.Id));
+            }
+
+            if (authorizedUser.IsInterviewer)
+                throw new ArgumentException("Interviewer can't see users");
+
             var recordsTotal = await query.CountAsync(cancellationToken);
 
             query = ApplyFiltering(request, query);
