@@ -11,7 +11,7 @@ param(
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
-    [string] $dockerRegistry = "reg.app.alfeg.net/suso",
+    [string] $dockerRegistry,
     [string] $releaseBranch = 'release', # Docker builds will push to release 
     [switch] $noDockerPush 
 )
