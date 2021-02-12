@@ -120,8 +120,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
             "/api", 
             "/.hc", 
             "/metrics", 
-            "/" + WorkspaceConstants.AdminWorkspaceName,
-            "/" + WorkspaceConstants.UsersWorkspaceName
+            "/" + WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
+            "/" + WorkspaceConstants.WorkspaceNames.UsersWorkspaceName
         };
     }
 }

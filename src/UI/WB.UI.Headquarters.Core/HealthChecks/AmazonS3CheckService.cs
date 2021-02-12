@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 }
 
                 logger.LogInformation("Amazon S3 file storage configuration check completed.");
-            }, WorkspaceConstants.AdminWorkspaceName);
+            }, WorkspaceConstants.WorkspaceNames.AdminWorkspaceName);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

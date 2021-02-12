@@ -24,9 +24,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
         public void Set(string name)
         {
-            var workspace = name == WorkspaceConstants.AdminWorkspaceName 
+            var workspace = name == WorkspaceConstants.WorkspaceNames.AdminWorkspaceName 
                 ? Workspace.Admin.AsContext() 
-                : name == WorkspaceConstants.UsersWorkspaceName 
+                : name == WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
                     ? Workspace.UsersWorkspace.AsContext() 
                     : workspacesService.AllWorkspaces()
                         .FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));

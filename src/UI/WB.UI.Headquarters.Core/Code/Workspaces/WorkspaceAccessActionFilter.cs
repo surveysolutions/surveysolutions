@@ -61,9 +61,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     return;
                 }
 
-                if (isUserAdmin && workspace.IsServerAdministration())
+                if (workspace.IsSpecialWorkspace())
                 {
-                    // allow admin to access to server administration workspace
+                    // allow user to access to special workspace
                     return;
                 }
 

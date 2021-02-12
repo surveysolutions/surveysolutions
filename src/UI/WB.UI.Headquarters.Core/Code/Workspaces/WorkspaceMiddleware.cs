@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 }
             }
             
-            foreach (var workspace in AdministrationWorkspaces.Concat(workspaces))
+            foreach (var workspace in SpecialWorkspaces.Concat(workspaces))
             {
                 var workspaceMatched = context.Request.Path.StartsWithSegments("/" + workspace.Name,
                     out var matchedPath,
@@ -100,7 +100,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await next(context).ConfigureAwait(false);
         }
         
-        private static readonly WorkspaceContext[] AdministrationWorkspaces = { Workspace.Admin.AsContext(), Workspace.UsersWorkspace.AsContext() };
+        private static readonly WorkspaceContext[] SpecialWorkspaces =
+        {
+            Workspace.Admin.AsContext(), 
+            Workspace.UsersWorkspace.AsContext()
+        };
 
         public static readonly string[] InfrastructureEndpoints = { "/.hc", "/metrics", "/api", "/.version", "/Account", "/Install", "/workspaces" };
     }

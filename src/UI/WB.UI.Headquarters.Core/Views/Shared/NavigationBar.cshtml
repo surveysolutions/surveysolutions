@@ -8,7 +8,7 @@
 
 @{
     var workspace = workspaceAccessor.CurrentWorkspace();
-    var isSystemWorkspace = workspace?.IsServerAdministration() ?? false;
+    var isSystemWorkspace = workspace?.IsAdministrationWorkspace() ?? false;
 
 }
 
@@ -38,7 +38,7 @@
         <div class="collapse navbar-collapse" id="navbar">
             <partial name="_WorkspaceSelector" />
 
-            @if (this.workspaceAccessor.CurrentWorkspace()?.IsServerAdministration() ?? false)
+            @if (this.workspaceAccessor.CurrentWorkspace()?.IsAdministrationWorkspace() ?? false)
             {
                 <partial name="ServerAdminMenu" />
             }
