@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -25,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.UsersManagement)]
         public IActionResult Index() => View(new
         {
-            CreateUrl = Url.Action(nameof(CreateUser)),
+            CreateUrl = Url.ActionAtWorkspace(Workspace.UsersWorkspace.AsContext(), "CreateUser", "UsersController"),
         });
 
         public async Task<DataTableResponse<UserManagementListItem>?> List(UsersManagementRequest request, CancellationToken cancellationToken)
