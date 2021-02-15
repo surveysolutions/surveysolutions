@@ -1,33 +1,4 @@
 <Project>
-   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
-
-   <PropertyGroup>
-      <!-- Reading version from .version file into ProductVersion -->
-      <WBVersionInfoFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)../'))</WBVersionInfoFile>
-      <ProductVersion>$([System.IO.File]::ReadAllText($(WBVersionInfoFile)))</ProductVersion>
-
-      <!-- Extending Product Version with 0 if needed -->
-      <_productVersionHas3Parts>$([System.Text.RegularExpressions.Regex]::Match($(ProductVersion),'\d+\.\d+\.\d+').Success)</_productVersionHas3Parts>
-      <ProductVersion Condition="'$(_productVersionHas3Parts)' == 'False'">$(ProductVersion).0</ProductVersion>
-
-      <!-- Setting default build number to zero for local dev builds -->
-      <BuildNumber Condition="'$(BuildNumber)' == ''">42</BuildNumber>
-      
-      <!-- Cleaning up branch name into more readable version info, removing ticket number from version
-      i.e, output will be like `18.12.0-remove-transaction.22345` -->
-      <_suffixCleanupRegex>(?:(?:k|K)(?:p|P)-\d+(?:-|_))?(?&lt;suffix&gt;[-_\w\d]+)</_suffixCleanupRegex>
-      <CleanSuffix>$([System.Text.RegularExpressions.Regex]::Match($(VersionSuffix), $(_suffixCleanupRegex)).Groups['suffix'].Value)</CleanSuffix>      
-      <CleanSuffix Condition=" '$(CleanSuffix)' == '' ">$(VersionSuffix)</CleanSuffix>
-
-      <!-- Combine version property. Leaving clean version for release branch -->
-      <Version>$(ProductVersion)-$(CleanSuffix).$(BuildNumber)</Version>
-
-      <!-- On local dev PC export service has `-dev` suffix -->
-      <Version Condition=" '$(CleanSuffix)' == '' ">$(ProductVersion)-dev.$(BuildNumber)</Version>
-      <Version Condition=" '$(CleanSuffix)' == 'release' Or '$(CleanSuffix)' == 'build-number-fix'">$(ProductVersion).$(BuildNumber)</Version>
-      <FileVersion>$(ProductVersion).$(BuildNumber)</FileVersion>
-   </PropertyGroup>
-
     <ItemGroup>
       <AssemblyAttribute Include="System.Reflection.AssemblyMetadata" Condition=" '$(BUILD_VCS_NUMBER)' != '' ">
         <_Parameter1>GIT_REV</_Parameter1>
