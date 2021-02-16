@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -137,7 +137,7 @@
     <value>Проверьте что на устройстве супервизора включен wifi и bluetooth и вы находитесь в нескольких шагах от него</value>
     <comment>Проверьте что на устройстве супервизора включен wifi и bluetooth и вы находитесь в нескольких шагах от него</comment>
   </data>
-    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
     <value>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</value>
     <comment>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</comment>
   </data>
@@ -188,9 +188,9 @@
     <comment>Соединение с супервизором установлено</comment>
   </data>
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Состояине Bluetooth передатчика не может быть корректно определено приложением. Пожалуйста перезагрузите оба приложения (Interviewer и Supervisor) и попробуйте синхронизировать</value>
+    <value>Состояние Bluetooth передатчика не может быть корректно определено приложением. Пожалуйста перезагрузите оба приложения (Interviewer и Supervisor) и попробуйте синхронизировать.</value>
   </data>
-    <data name="Synchronization_UpdateApp" xml:space="preserve">
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
     <value>Обновить</value>
     <comment>Обновить</comment>
   </data>
