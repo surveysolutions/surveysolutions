@@ -23,6 +23,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
@@ -31,6 +32,7 @@ using WB.UI.Headquarters.Resources;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize]
+    [Workspace(WorkspaceConstants.WorkspaceNames.UsersWorkspaceName)]
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -107,6 +109,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/Manage/{id?}")]
         public async Task<ActionResult> Manage(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -120,6 +123,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/ChangePassword/{id?}")]
         public async Task<ActionResult> ChangePassword(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -132,6 +136,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator)]
+        [Route("/Workspaces/{id?}")]
         public async Task<ActionResult> Workspaces(Guid id)
         {
             var user = await this.userManager.FindByIdAsync(id.FormatGuid());
@@ -145,6 +150,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/TwoFactorAuthentication/{id?}")]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -175,6 +181,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/ResetAuthenticator/{id?}")]
         public async Task<ActionResult> ResetAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -229,6 +236,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/ResetRecoveryCodes/{id?}")]
         public async Task<ActionResult> ResetRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -243,6 +251,7 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [ObservingNotAllowed]
         [AntiForgeryFilter]
+        [Route("/ShowRecoveryCodes/{id?}")]
         public async Task<ActionResult> ShowRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -296,6 +305,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [Route("/Disable2fa/{id?}")]
         public async Task<ActionResult> Disable2fa(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -313,6 +323,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObservingNotAllowed]
         [AntiForgeryFilter]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
+        [Route("/SetupAuthenticator/{id?}")]
         public async Task<ActionResult> SetupAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -379,8 +390,10 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObservingNotAllowed]
         [AntiForgeryFilter]
-        public ActionResult Create(string id)
+        [Route("/Create")]
+        public ActionResult Create()
         {
+            string id = null;
             if (!Enum.TryParse(id, true, out UserRoles role))
                 return BadRequest("Unknown user type");
 
@@ -401,6 +414,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.UserBatchUpload)]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObservingNotAllowed]
+        [Route("/Upload")]
         public ActionResult Upload() => View(new
         {
             Api = new

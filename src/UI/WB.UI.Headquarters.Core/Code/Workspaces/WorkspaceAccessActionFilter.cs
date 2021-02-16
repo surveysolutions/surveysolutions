@@ -50,9 +50,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 workspace = WorkspaceContext.Default;
             }
 
-            var isUserAdmin = context.HttpContext.User?.IsInRole(UserRoles.Administrator.ToString()) ?? false;
-
-
             if (workspace?.IsEnabled() == true || allowedDisabledWorkspace)
             {
                 if (workspace == null)
@@ -61,10 +58,19 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     return;
                 }
 
-                if (workspace.IsSpecialWorkspace())
+                if (hasAuthorization && !allowAnonymous && workspace.IsSpecialWorkspace())
                 {
-                    // allow user to access to special workspace
-                    return;
+                    if (workspace.IsAdministrationWorkspace())
+                    {
+                        var isUserAdmin = context.HttpContext.User?.IsInRole(UserRoles.Administrator.ToString()) ?? false;
+                        if (isUserAdmin)
+                            return;
+                    }
+                    else
+                    {
+                        // allow user to access to special workspace
+                        return;
+                    }
                 }
 
                 if (hasAuthorization && !allowAnonymous && !authorizedUser.HasAccessToWorkspace(workspace.Name))

@@ -311,39 +311,7 @@ export default {
          * @param {UserInfo} row - user info row
          */
         getUserProfileLink(row) {
-            const returnUrl = encodeURIComponent(this.$config.basePath + this.$route.fullPath.substring(1))
-            const userWorkspace = row.workspaces == null || row.workspaces.length == 0 ? null : row.workspaces[0].name
-
-            const InUserWorkspace = (path, includeReturnUrl = true) => {
-                return this.$hq.workspacePath(userWorkspace) + path + '/' + row.userId + (includeReturnUrl ? '?returnUrl=' + returnUrl : '')
-            }
-
-            const InAdminWorkspace = (path) => {
-                return this.$config.basePath + path + '/' + row.userId + '?returnUrl=' + returnUrl
-            }
-
-            const GetUrl = () => {
-                switch(row.role) {
-                    case 'ApiUser': return InAdminWorkspace('Users/Manage')
-                    case 'Headquarter': return InAdminWorkspace('Users/Manage')
-                    case 'Observer': return InAdminWorkspace('Users/Manage')
-                    case 'Interviewer': {
-                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
-                            return InAdminWorkspace('Users/Manage')
-                        }
-                        return InUserWorkspace('Interviewer/Profile', false)
-                    }
-                    case 'Supervisor': {
-                        if(row.workspaces && row.workspaces.length > 0 && row.workspaces[0].disabled) {
-                            return InAdminWorkspace('Users/Manage')
-                        }
-                        return InUserWorkspace('Users/Manage')
-                    }
-                    default: return InAdminWorkspace('Users/Manage')
-                }
-            }
-
-            return GetUrl()
+            return this.$config.basePath + 'Manage/' + row.userId //+ '?returnUrl=' + returnUrl
         },
 
         addToWorkspace() {
