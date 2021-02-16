@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -121,7 +121,7 @@
     <value>Llogaria juaj e përdoruesit është bllokuar. Ju lutemi, kontaktoni supervizorin tuaj.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Llogaria juaj nuk ka rol Intervistuesi </value>
+    <value>Llogaria juaj nuk ka rol Intervistuesi</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Llogaria juaj nuk është miratuar. Ju lutemi kontaktoni supervizorin tuaj.</value>
@@ -436,7 +436,7 @@
     <value>Intervista i takon një ekipi tjetër. Ju lutemi, sinkronizohuni me faqen e Zyrës Qendrore </value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Adresa e faqes së Supervizorit është e pavlefshme. Sigurohuni që keni vendosur adresën e saktë url</value>
+    <value>Adresa e faqes së Supervizorit është e pavlefshme. Sigurohuni që keni vendosur adresën e saktë url.</value>
   </data>
   <data name="LocationPermissionRequired" xml:space="preserve">
     <value>Kërkohet leja e vendndodhjes për sinkronizimin jashtë internetit</value>
