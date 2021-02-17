@@ -154,7 +154,8 @@
     <value>Algunas entrevistas se encuentran ahora en otro dispositivo.</value>
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>No se ha iniciado la transferencia. No se puede localizar el dispositivo del supervisor</value>
+    <value>No se ha iniciado la transferencia.
+No se puede localizar el dispositivo del supervisor</value>
   </data>
   <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
     <value>La transferencia se canceló en el segundo dispositivo.</value>
@@ -163,7 +164,7 @@
     <value>La transferencia ha finalizado. Todas las entrevistas completadas ahora están en otro dispositivo</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>La transferencia ha finalizado. {0} entrevistas(s) han fallado en ser sincronizadas.</value>
+    <value>La transferencia ha finalizado. {0} entrevistas(s) han fallado en ser sincronizadas</value>
   </data>
   <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
     <value>Transferencia en progreso</value>
