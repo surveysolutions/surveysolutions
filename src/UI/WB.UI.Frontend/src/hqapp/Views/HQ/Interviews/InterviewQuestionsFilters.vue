@@ -15,6 +15,17 @@
             </button>
         </div>
 
+        <div class="block-filter">
+            <button type="button"
+                id="btnExposedQuestionsFilter"
+                class="btn"
+                :disabled="isDisabled"
+                :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
+                @click="$refs.questionsExposedSelector.modal()">
+                {{$t("Interviews.AdvancedFilterSelector")}}
+            </button>
+        </div>
+
         <ModalFrame ref="questionsSelector"
             id="modalQuestionsSelector"
             :title="$t('Interviews.ChooseQuestionsTitle')">
@@ -43,6 +54,39 @@
             </div>
         </ModalFrame>
 
+        <ModalFrame ref="questionsExposedSelector"
+            id="modalQuestionsExposedSelector"
+            :title="$t('Interviews.AdvancedFilter')">
+            <vue-query-builder
+                :rules="rules"
+                :maxDepth="5"
+                :labels="labels"
+                v-model="queryExposedVariables"></vue-query-builder>
+            <!-- <div>
+                <p>
+                    {{queryExposedVariables}}
+                </p>
+            </div>
+            <div>
+                <p>
+                    {{transformQuery}}
+                </p>
+            </div> -->
+            <div slot="actions">
+                <button
+                    id="btnQuestionsExposedSelectorOk"
+                    type="button"
+                    class="btn btn-primary"
+                    @click="saveExposedVariablesFilter">{{ $t("Common.Save") }}</button>
+
+                <button
+                    id="btnQuestionsExposedSelectorOk1"
+                    type="button"
+                    class="btn btn-primary"
+                    @click="saveExposedVariablesFilter">{{ $t("Common.Save") }}</button>
+            </div>
+        </ModalFrame>
+
         <InterviewFilter
 
             v-for="condition in conditions"
@@ -57,6 +101,9 @@
 </template>
 <script>
 
+import VueQueryBuilder from 'vue-query-builder'
+import 'vue-query-builder/dist/VueQueryBuilder.css'
+
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
@@ -66,10 +113,24 @@ const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttr
 export default {
     data() {
         return {
+            queryExposedVariables:{},
             conditions: [], /** { } */
-            questionnaireItems: null,
+            questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
+
+            labels:{
+                'matchType': 'Match Type',
+                'matchTypes': [
+                    {'id': 'all', 'label': 'AND'},
+                    {'id': 'any', 'label': 'OR'},
+                ],
+                'addRule': 'Add Rule',
+                'removeRule': '&times;',
+                'addGroup': 'Add Group',
+                'removeGroup': '&times;',
+                'textInputPlaceholder': 'value',
+            },
         }
     },
 
@@ -82,6 +143,7 @@ export default {
         },
         questionsFilter:{ type: Object},
         value: {type: Array},
+        exposedValuesFilter: {type: Object},
     },
 
     apollo: {
@@ -169,8 +231,56 @@ export default {
                 this.$emit('change', [...this.conditions])
             }
         },
+        saveExposedVariablesFilter(){
+            //this.exposedValuesFilter = this.transformQuery
+            this.$emit('changeFilter', this.transformQuery)
+            this.$refs.questionsExposedSelector.hide()
+        },
 
         sanitizeHtml: sanitizeHtml,
+
+        handleGroup(group){
+            var result = {}
+
+            if(group.logicalOperator == 'any')
+            {
+                result.or = []
+                group.children.forEach(element => {
+                    if(element.type == 'query-builder-rule')
+                        result.or.push(this.handleRule(element))
+                    else if(element.type == 'query-builder-group')
+                    {
+                        result.or.push(this.handleGroup(element))
+                    }
+                })
+            }
+            else if (group.logicalOperator == 'all')
+            {
+                result.and = []
+                group.children.forEach(element => {
+                    if(element.type == 'query-builder-rule')
+                        result.and.push(this.handleRule(element))
+                    else if(element.type == 'query-builder-group')
+                    {
+                        result.and.push(this.handleGroup(element))
+                    }
+                })
+            }
+
+            return result
+        },
+        handleRule(rule){
+            var result = {
+                reportAnswers :
+                {
+                    some:
+                    {
+                        entity: {variable: {eq: rule.query.operand}},
+                        value: {eq: rule.query.value},
+                        isEnabled: {eq: true}}}}
+
+            return result
+        },
     },
 
     computed: {
@@ -191,10 +301,45 @@ export default {
                 || this.questionnaireItemsList == null
                 || this.questionnaireItemsList.length == 0
         },
+
+        rules(){
+
+            return this.questionnaireItems.filter(i=>!i.identifying).map(i => {
+
+                var type = 'text'
+
+                if(i.entityType == 'VARIABLE')
+                    type = 'text'
+                if (i.type == 'NUMERIC')
+                    type = 'numeric'
+                else if(i.type == 'SINGLEOPTION')
+                    type = 'select'
+                else
+                    type = 'text'
+
+                var rule = {
+                    type: type,
+                    id:i.variable,
+                    label: i.entityType == 'VARIABLE' ? i.variable :  sanitizeHtml(i.title),
+                }
+
+                if(type == 'select')
+                {
+                    rule.choices = i.options.map(o=>({label:o.title, value:o.value}))
+                }
+
+                return rule
+            })
+
+        },
+        transformQuery(){
+            return this.handleGroup(this.queryExposedVariables)
+        },
     },
 
     components: {
         InterviewFilter,
+        VueQueryBuilder,
     },
 }
 </script>

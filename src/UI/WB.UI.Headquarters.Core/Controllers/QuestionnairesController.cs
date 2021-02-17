@@ -90,8 +90,9 @@ namespace WB.UI.Headquarters.Controllers
                 Comment = browseItem.Comment,
                 Variable = browseItem.Variable,
                 IsObserving = this.authorizedUser.IsObserving,
-                DefaultLanguageName = questionnaire.DefaultLanguageName
-            };
+                DefaultLanguageName = questionnaire.DefaultLanguageName,
+                ExposedVariablesUrl = Url.Action("ExposedVariables", "Questionnaires")
+        };
 
             if (browseItem.ImportedBy.HasValue && browseItem.ImportedBy != Guid.Empty)
             {

@@ -235,7 +235,15 @@ namespace WB.UI.Headquarters.Controllers.Api
                 //&& item.IsFilteredCombobox != true
                 );
 
-                if(exposed)
+                if (request.Search?.Value != null)
+                {
+                    var search = request.Search.Value.ToLower();
+                    q = q.Where(i => i.QuestionText.Contains(search)
+                                     || i.StataExportCaption.ToLower().Contains(search)
+                                     || i.VariableLabel.Contains(search));
+                }
+
+                if (exposed)
                     q = q.Where(i => i.UsedInReporting == true);
 
                 var queryResult = q.OrderUsingSortExpression("Id"/*request.GetSortOrderRequestItems().GetOrderRequestString()*/);

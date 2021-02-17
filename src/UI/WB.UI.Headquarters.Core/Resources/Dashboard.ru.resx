@@ -246,4 +246,7 @@
   <data name="UsersManagement" xml:space="preserve">
       <value>Управление пользователями</value>
   </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Открытые переменные</value>
+  </data>
 </root>

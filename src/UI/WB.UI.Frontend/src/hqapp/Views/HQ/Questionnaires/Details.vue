@@ -81,6 +81,13 @@
                                 </ul>
                             </td>
                         </tr>
+                        <tr>
+                            <td><a :href="model.exposedVariablesUrl + '/' + model.questionnaireId + '$' + model.version">
+                                {{$t('Dashboard.ExposedVariables')}}</a></td>
+                            <td>
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

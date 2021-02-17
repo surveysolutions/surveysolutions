@@ -27,6 +27,11 @@
 
         <div class="row">
             <div class="col-sm-6">
+                <div>
+                    <p>
+                        {{$t('Pages.Exposed_Variables_AvailableVariablesTitle')}}
+                    </p>
+                </div>
 
                 <DataTables
                     id="id-table"
@@ -34,11 +39,15 @@
                     :tableOptions="tableOptions"
                     @cell-clicked="cellAllClicked"
                     noSelect
-                    noSearch
                     :noPaging="false">
                 </DataTables>
             </div>
             <div class="col-sm-6">
+                <div>
+                    <p>
+                        {{$t('Pages.Exposed_Variables_SelectedVariablesTitle')}}
+                    </p>
+                </div>
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -98,6 +107,8 @@
 import { keyBy, map, find, filter, escape } from 'lodash'
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
+import _sanitizeHtml from 'sanitize-html'
+const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
 
 export default {
 
@@ -128,6 +139,9 @@ export default {
                         name: 'Title',
                         title: this.$t('Pages.ExposedVariables_Title'),
                         sortable: false,
+                        'render': function (data, type, row) {
+                            return sanitizeHtml(data)
+                        },
                     },
                     // {
                     //     data: 'isExposed',
@@ -166,14 +180,14 @@ export default {
                 this.exposedVariables = map(data.data, d => {
                     return {
                         id: d.id,
-                        title: d.title,
+                        title: sanitizeHtml(d.title),
                         variable: d.variable,
                     }
                 })
             })
     },
     methods: {
-
+        sanitizeHtml: sanitizeHtml,
 
         saveVariables(){
             this.$refs.exposedChangeModal.modal({keyboard: false})
@@ -191,14 +205,14 @@ export default {
 
             var rowData = this.$refs.table.table.row('#'+rowId).data()
 
-            if(this.exposedVariables.Length >= 15)
+            if(this.exposedVariables.length >= 15)
                 return
 
             var index = this.exposedVariables.findIndex(x => x.id == parsedRowId)
             if(index === -1)
                 this.exposedVariables.push({
                     id: parsedRowId,
-                    title: rowData.title,
+                    title: sanitizeHtml(rowData.title),
                     variable: rowData.variable,
                 })
         },

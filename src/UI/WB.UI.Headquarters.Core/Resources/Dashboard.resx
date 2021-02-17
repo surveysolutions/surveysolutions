@@ -244,4 +244,7 @@
   <data name="UsersManagement" xml:space="preserve">
       <value>Users Management</value>
   </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Exposed Variables</value>
+  </data>
 </root>

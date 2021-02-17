@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Dashboard {
@@ -201,6 +201,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ExportQuestionnaire {
             get {
                 return ResourceManager.GetString("ExportQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exposed Variables.
+        /// </summary>
+        public static string ExposedVariables {
+            get {
+                return ResourceManager.GetString("ExposedVariables", resourceCulture);
             }
         }
         
@@ -435,15 +444,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebMode {
             get {
                 return ResourceManager.GetString("WebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Workspaces.
-        /// </summary>
-        public static string Workspaces {
-            get {
-                return ResourceManager.GetString("Workspaces", resourceCulture);
             }
         }
     }
