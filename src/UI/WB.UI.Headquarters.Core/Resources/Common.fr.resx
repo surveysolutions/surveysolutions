@@ -295,7 +295,7 @@
     <value>Toutes les questions GPS</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>En cours de traitement...</value>
+    <value>En cours de traitement…</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Sélectionner un questionnaire</value>
