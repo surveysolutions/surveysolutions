@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -139,7 +139,7 @@
     <value>មិនអាចបើកកម្រងសំនួរ "{0}"។ កម្រងសំនួរមិនអាចរកបាន។ សូមចុច Refresh ក្នុងតារាងកម្រងសំនួរ។​</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>មិនអាចបើកកម្រងសំនួរ  "{0}"។ កម្រងសំនួរមានខុស។ សូមកែនេះក្នុង Designer</value>
+    <value>មិនអាចបើកកម្រងសំនួរ "{0}"។ កម្រងសំនួរមានខុស។ សូមកែនេះក្នុង Designer</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>រក្សាទុកកម្រងសំនួរក្នុងកន្លែងstorage</value>
