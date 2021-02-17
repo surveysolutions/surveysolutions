@@ -47,7 +47,7 @@ export default class UsersComponent {
             path: '/Manage/', component: Manage,
         },
         {
-            path: '/Create/:role', component: Create,
+            path: '/Create', component: Create,
         },
         {
             path: '/TwoFactorAuthentication', component: TwoFactorAuthentication,

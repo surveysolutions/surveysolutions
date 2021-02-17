@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.UsersManagement)]
         public IActionResult Index() => View(new
         {
-            CreateUrl = Url.ActionAtWorkspace(Workspace.UsersWorkspace.AsContext(), "CreateUser", "UsersController"),
+            CreateUrl = Url.Action("Create", "Users"),
         });
 
         public async Task<DataTableResponse<UserManagementListItem>?> List(UsersManagementRequest request, CancellationToken cancellationToken)
@@ -36,8 +36,5 @@ namespace WB.UI.Headquarters.Controllers
             DataTableResponse<UserManagementListItem>? result = await this.mediator.Send(request, cancellationToken);
             return result;
         }
-
-        [ActivePage(MenuItem.UsersManagement)]
-        public IActionResult CreateUser() => View();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -28,6 +29,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Impl;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -36,10 +38,11 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthorizedUser authorizedUser;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private UrlEncoder urlEncoder;
         private IOptions<HeadquartersConfig> options;
+        private readonly IPlainStorageAccessor<Workspace> workspaces;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -47,16 +50,18 @@ namespace WB.UI.Headquarters.Controllers
         public string[] RecoveryCodes { get; set; }
 
         public UsersController(IAuthorizedUser authorizedUser, 
-            UserManager<HqUser> userManager, 
+            HqUserManager userManager, 
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
             UrlEncoder urlEncoder,
-            IOptions<HeadquartersConfig> options)
+            IOptions<HeadquartersConfig> options,
+            IPlainStorageAccessor<Workspace> workspaces)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
             this.profileSettingsStorage = profileSettingsStorage;
             this.urlEncoder = urlEncoder;
             this.options = options;
+            this.workspaces = workspaces;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -393,22 +398,48 @@ namespace WB.UI.Headquarters.Controllers
         [Route("/Create")]
         public ActionResult Create()
         {
-            string id = null;
-            if (!Enum.TryParse(id, true, out UserRoles role))
-                return BadRequest("Unknown user type");
+            // string id = null;
+            // if (!Enum.TryParse(id, true, out UserRoles role))
+            //     return BadRequest("Unknown user type");
 
-            if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
-                return Forbid();
+            // if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
+            //     return Forbid();
 
             return View(new
             {
-                UserInfo = new {Role = role.ToString()},
+                //UserInfo = new {Role = role.ToString()},
                 Api = new
                 {
                     CreateUserUrl = Url.Action("CreateUser"),
-                    ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead")
-                }
+                    ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead"),
+                    WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
+                },
+                Roles = GetRolesForCreate(),
             });
+        }
+
+        private ComboboxViewItem[] GetRolesForCreate()
+        {
+            var items = new List<ComboboxViewItem>();
+            
+            void addUserRole(UserRoles useRole)
+                => items.Add(new ComboboxViewItem()
+                {
+                    Key = useRole.ToString(), 
+                    Value = useRole.ToUiString()
+                });
+
+            addUserRole(UserRoles.Interviewer);
+            addUserRole(UserRoles.Supervisor);
+
+            if (authorizedUser.IsAdministrator)
+            {
+                addUserRole(UserRoles.Headquarter);
+                addUserRole(UserRoles.Observer);
+                addUserRole(UserRoles.ApiUser);
+            }
+
+            return items.ToArray();
         }
 
         [ActivePage(MenuItem.UserBatchUpload)]
@@ -446,6 +477,9 @@ namespace WB.UI.Headquarters.Controllers
             if (!Enum.TryParse(model.Role, true, out UserRoles role))
                 return BadRequest("Unknown user type");
 
+            if (string.IsNullOrEmpty(model.Workspace))
+                return BadRequest("Unknown user workspace");
+            
             if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
                 return Forbid();
 
@@ -455,6 +489,10 @@ namespace WB.UI.Headquarters.Controllers
             if(await this.userManager.FindByNameAsync(model.UserName) != null)
                 this.ModelState.AddModelError(nameof(CreateUserModel.UserName), FieldsAndValidations.UserName_Taken);
 
+            var workspace = await workspaces.GetByIdAsync(model.Workspace);
+            if (workspace == null)
+                this.ModelState.AddModelError(nameof(CreateUserModel.Workspace), FieldsAndValidations.WorkspaceMissing);
+            
             if (model.SupervisorId.HasValue)
             {
                 var supervisor = await this.userManager.FindByIdAsync(model.SupervisorId.FormatGuid());
@@ -473,8 +511,10 @@ namespace WB.UI.Headquarters.Controllers
                     Email = model.Email,
                     UserName = model.UserName,
                     PhoneNumber = model.PhoneNumber,
-                    Profile = model.SupervisorId.HasValue ? new HqUserProfile {SupervisorId = model.SupervisorId} : null
+                    Profile = model.SupervisorId.HasValue ? new HqUserProfile {SupervisorId = model.SupervisorId} : null,
                 };
+
+                user.Workspaces.Add(new WorkspacesUsers(workspace!, user));
 
                 var identityResult = await this.userManager.CreateAsync(user, model.Password);
                 if (!identityResult.Succeeded)

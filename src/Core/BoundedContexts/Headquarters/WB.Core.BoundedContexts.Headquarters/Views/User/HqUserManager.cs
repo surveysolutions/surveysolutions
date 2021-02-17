@@ -34,15 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public override async Task<IdentityResult> CreateAsync(HqUser user)
         {
             var result = await base.CreateAsync(user);
-
-            if (result.Succeeded && !user.IsInRole(UserRoles.Administrator))
-            {
-                foreach (var userWorkspace in user.Workspaces)
-                {
-                    this.workspacesService.AddUserToWorkspace(user, userWorkspace.Workspace.Name);
-                }
-            }
-
             return result;
         }
     }

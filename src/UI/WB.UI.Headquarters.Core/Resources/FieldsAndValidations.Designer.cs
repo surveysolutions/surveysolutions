@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class FieldsAndValidations {
@@ -493,7 +493,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name needs to be between 3 and 15 characters, and may contain only letters, digits and the underscore symbol.
+        ///   Looks up a localized string similar to The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: &apos;A&apos;..&apos;Z&apos; or &apos;a&apos;..&apos;z&apos;. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names..
         /// </summary>
         public static string UserNameErrorMessage {
             get {
@@ -511,11 +511,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User role is required.
+        /// </summary>
+        public static string UserRoleRequired {
+            get {
+                return ResourceManager.GetString("UserRoleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verification code.
         /// </summary>
         public static string VerificationCodeFieldName {
             get {
                 return ResourceManager.GetString("VerificationCodeFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace don&apos;t found.
+        /// </summary>
+        public static string WorkspaceMissing {
+            get {
+                return ResourceManager.GetString("WorkspaceMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace is required.
+        /// </summary>
+        public static string WorkspaceRequired {
+            get {
+                return ResourceManager.GetString("WorkspaceRequired", resourceCulture);
             }
         }
     }

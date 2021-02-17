@@ -19,6 +19,34 @@
                 </div>
                 <div class="col-sm-12">
                     <form-group
+                        :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
+                        :error="modelState['Workspace']"
+                        :mandatory="true">
+                        <div class="field"
+                            :class="{answered: workspace != null}">
+                            <Typeahead
+                                control-id="workspace"
+                                :value="workspace"
+                                :ajax-params="{ }"
+                                :fetch-url="model.api.workspacesUrl"
+                                @selected="workspaceSelected"></Typeahead>
+                        </div>
+                    </form-group>
+                    <form-group
+                        :label="$t('Pages.Pages.UsersManage_RoleFilterPlaceholder')"
+                        :error="modelState['Role']"
+                        :mandatory="true">
+                        <div class="field"
+                            :class="{answered: role != null}">
+                            <Typeahead
+                                control-id="role"
+                                no-search
+                                :value="role"
+                                :values="model.roles"
+                                @selected="roleSelected"></Typeahead>
+                        </div>
+                    </form-group>
+                    <form-group
                         :label="$t('FieldsAndValidations.UserNameFieldName')"
                         :error="modelState['UserName']"
                         :mandatory="true">
@@ -166,6 +194,8 @@ export default {
             isLockedBySupervisor: false,
             successMessage: null,
             supervisor: null,
+            workspace: null,
+            role: null,
         }
     },
     computed: {
@@ -179,22 +209,22 @@ export default {
             return this.model.userInfo
         },
         isAdmin() {
-            return this.userInfo.role == 'Administrator'
+            return this.role && this.role.key == 'Administrator'
         },
         isHeadquarters() {
-            return this.userInfo.role == 'Headquarter'
+            return this.role && this.role.key == 'Headquarter'
         },
         isSupervisor() {
-            return this.userInfo.role == 'Supervisor'
+            return this.role && this.role.key == 'Supervisor'
         },
         isInterviewer() {
-            return this.userInfo.role == 'Interviewer'
+            return this.role && this.role.key == 'Interviewer'
         },
         isObserver() {
-            return this.userInfo.role == 'Observer'
+            return this.role && this.role.key == 'Observer'
         },
         isApiUser() {
-            return this.userInfo.role == 'ApiUser'
+            return this.role && this.role.key == 'ApiUser'
         },
         lockMessage() {
             if (this.isHeadquarters) return this.$t('Pages.HQ_LockWarning')
@@ -221,7 +251,9 @@ export default {
             return '/'
         },
         title(){
-            return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.userInfo.role}`)}`
+            if (this.role)
+                return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.role.key}`)}`
+            return this.$t('Pages.Create')
         },
     },
     watch: {
@@ -246,10 +278,22 @@ export default {
         supervisor: function(val) {
             delete this.modelState['SupervisorId']
         },
+        workspace: function(val) {
+            delete this.modelState['Workspace']
+        },
+        role: function(val) {
+            delete this.modelState['Role']
+        },
     },
     methods: {
         supervisorSelected(newValue) {
             this.supervisor = newValue
+        },
+        workspaceSelected(newValue) {
+            this.workspace = newValue
+        },
+        roleSelected(newValue) {
+            this.role = newValue
         },
         createAccount: function(event) {
             this.successMessage = null
@@ -262,7 +306,7 @@ export default {
                 method: 'post',
                 url: this.model.api.createUserUrl,
                 data: {
-                    supervisorId: self.supervisor != null ? self.supervisor.key : null,
+                    supervisorId: (self.supervisor || {}).key,
                     userName: self.userName,
                     personName: self.personName,
                     email: self.email,
@@ -271,7 +315,8 @@ export default {
                     isLockedBySupervisor: self.isLockedBySupervisor,
                     password: self.password,
                     confirmPassword: self.confirmPassword,
-                    role: self.userInfo.role,
+                    role: (self.role || {}).key,
+                    workspace: (self.workspace || {}).key,
                 },
                 headers: {
                     'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),

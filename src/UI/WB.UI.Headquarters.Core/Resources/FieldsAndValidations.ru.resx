@@ -237,6 +237,15 @@
   <data name="ConfirmPasswordRequired" xml:space="preserve">
     <value>Укажите подтверждение пароля</value>
   </data>
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Укажите рабочую область</value>
+  </data>
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Рабочая область не найдена</value>
+  </data>
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>Укажите роль пользователя</value>
+  </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>Заблокирован Администратором или Хедквотером</value>
   </data>
