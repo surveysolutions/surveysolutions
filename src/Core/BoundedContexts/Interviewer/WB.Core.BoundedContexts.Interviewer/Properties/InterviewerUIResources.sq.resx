@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Aplikacioni nuk mund të përcaktojë gjendjen e bluetooth-it. Ju lutemi, rindizni pajisjet e Intervistuesit dhe Supervizorit dhe provoni t’i sinkronizoni prapë</value>
+    <value>Aplikacioni nuk mund të përcaktojë gjendjen e bluetooth-it. Ju lutemi, rindizni pajisjet e Intervistuesit dhe Supervizorit dhe provoni t’i sinkronizoni prapë.</value>
   </data>
   <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
     <value>Sigurohuni që pajisja e supervizorit të ketë të ndezur wifi dhe bluetooth të ndezura dhe që ju jeni disa metra larg saj</value>
@@ -145,16 +145,17 @@
     <value>Kalimi i të gjitha intervistave të përfunduara në '{0}'</value>
   </data>
   <data name="SendToSupervisor_Note" xml:space="preserve">
-    <value>Shënim: Ky veprim do të kërkojë më shumë kohë se zakonisht, mos e fikni pajisjen </value>
+    <value>Shënim: Ky veprim do të kërkojë më shumë kohë se zakonisht, mos e fikni pajisjen</value>
   </data>
   <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Provojeni sërish</value>
   </data>
   <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
-    <value>Tani, disa intervista janë një pajisje tjetër </value>
+    <value>Tani, disa intervista janë një pajisje tjetër</value>
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Transferimi nuk ka nisur.                             Pajisja e Supervizorit nuk mund të gjendet</value>
+    <value>Transferimi nuk ka nisur.
+Pajisja e Supervizorit nuk mund të gjendet</value>
   </data>
   <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
     <value>Transferimi u ndërpre në pajisjen e dytë.</value>
