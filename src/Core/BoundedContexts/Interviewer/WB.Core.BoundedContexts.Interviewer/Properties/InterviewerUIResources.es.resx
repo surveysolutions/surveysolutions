@@ -124,7 +124,7 @@
     <value>Verifique que el dispositivo del Supervisor tenga WiFi y Bluetooth activados y que se encuentre cerca</value>
   </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Asegúrese que ambos dispositivos se encuentran cerca. Tanto el WIFI como el Bluetooth deben estar encendidos en ambos dispositivos. La aplicación del Supervisor debe estar abierta en el dispositivo. </value>
+    <value>Asegúrese que ambos dispositivos se encuentran cerca. Tanto el WIFI como el Bluetooth deben estar encendidos en ambos dispositivos. La aplicación del Supervisor debe estar abierta en el dispositivo.</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
     <value>Conectado al dispositivo del supervisor</value>
