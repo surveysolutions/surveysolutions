@@ -100,6 +100,24 @@
             </div>
         </ModalFrame>
 
+
+        <ModalFrame ref="exposedRemoveModal"
+            :title="$t('Pages.ConfirmationNeededTitle')"
+            :canClose="false">
+            <p>{{ $t("Pages.ExposedVariables_RemoveMessage" )}}</p>
+            <div slot="actions">
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    v-bind:disabled="model.isObserving"
+                    @click="removeExposedVariable">{{ $t("Common.Ok") }}</button>
+                <button
+                    type="button"
+                    class="btn btn-link"
+                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
+
     </HqLayout>
 </template>
 
@@ -116,6 +134,7 @@ export default {
 
         return {
             exposedVariables: [],
+            idToRemove: null,
         }
     },
 
@@ -196,7 +215,7 @@ export default {
 
         async changeExposedStatusSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
-                .ChangeVariableExposedStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s=>s.id))
+                .ChangeVariableExposeStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s=>s.id))
             this.$refs.exposedChangeModal.modal('hide')
         },
 
@@ -218,8 +237,14 @@ export default {
         },
         cellExposedClicked(id)
         {
-            var index = this.exposedVariables.findIndex(x => x.id == id)
+            this.idToRemove = id
+            this.$refs.exposedRemoveModal.modal({keyboard: false})
+
+        },
+        removeExposedVariable(){
+            var index = this.exposedVariables.findIndex(x => x.id == this.idToRemove)
             this.exposedVariables.splice(index,1)
+            this.$refs.exposedRemoveModal.modal('hide')
         },
 
     },

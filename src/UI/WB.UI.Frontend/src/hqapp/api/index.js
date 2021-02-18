@@ -56,7 +56,7 @@ class QuestionnaireApi {
         return response.data
     }
 
-    ChangeVariableExposedStatus(questionnaireIdentity, variables){
+    ChangeVariableExposeStatus(questionnaireIdentity, variables){
         return this.http.post('api/QuestionnairesApi/changeVariableExposeStatus', {
             questionnaireIdentity: questionnaireIdentity,
             variables: variables,

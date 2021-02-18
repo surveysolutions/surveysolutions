@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Services.DynamicReporting;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -37,19 +39,22 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
+        private readonly IExposedVariablesService exposedVariablesService;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
 
         public QuestionnairesApiController(IAuthorizedUser authorizedUser, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
+            IExposedVariablesService exposedVariablesService)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireItems = questionnaireItems;
+            this.exposedVariablesService = exposedVariablesService;
         }
 
         [HttpGet]
@@ -117,30 +122,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> ChangeVariableExposeStatus([FromBody] UpdateExposedVariablesRequestModel request)
         {
-
             if (!QuestionnaireIdentity.TryParse(request.QuestionnaireIdentity, out QuestionnaireIdentity questionnaireIdentity))
             {
-                return null;
+                return this.BadRequest();
             }
 
-            var variables = this.questionnaireItems.Query(q =>
-            {
-                q = q.Where(i => i.QuestionnaireIdentity == questionnaireIdentity.ToString());
-                //q = q.Where(i => i.UsedInReporting == true);
-                return q.ToList();
-            });
-
-            var top15Variables = request.Variables.Take(15).ToHashSet();
-
-            foreach (var questionnaireCompositeItem in variables)
-            {
-                questionnaireCompositeItem.UsedInReporting = top15Variables.Contains(questionnaireCompositeItem.Id);
-            }
-
-            this.questionnaireItems.Store(variables);
-
-            //run rebuild or\and cleanup
-
+            await exposedVariablesService.UpdateExposedVariables(questionnaireIdentity, request.Variables, this.authorizedUser.Id);
             return Ok();
         }
 

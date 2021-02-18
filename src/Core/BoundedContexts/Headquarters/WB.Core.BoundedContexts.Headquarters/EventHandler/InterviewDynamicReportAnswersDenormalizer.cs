@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -34,13 +36,49 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         //TODO: add cache
-        private readonly INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader;
+        private IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
 
         public InterviewDynamicReportAnswersDenormalizer(IQuestionnaireStorage questionnaireStorage,
-            INativeReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsReader)
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireItemsReader = questionnaireItemsReader;
+            this.questionnaireItems = questionnaireItems;
+        }
+
+
+        static readonly ConcurrentDictionary<Type, MethodInfo> MethodsCache = new ConcurrentDictionary<Type, MethodInfo>();
+
+        public void Handle(InterviewSummary state, IEnumerable<IPublishableEvent> evts)
+        {
+
+            var newState = state;
+
+            foreach (var evt in evts)
+            {
+                var payloadType = evt.Payload.GetType();
+
+                var updateMethod = MethodsCache.GetOrAdd(payloadType, t =>
+                {
+                    var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+
+                    return this
+                        .GetType()
+                        .GetMethod("Update", new[] { typeof(InterviewSummary), eventType });
+                });
+
+                if (updateMethod == null)
+                    continue;
+
+                newState = (InterviewSummary)updateMethod
+                    .Invoke(this, new object[] { newState, this.CreatePublishedEvent(evt) });
+
+            }
+        }
+
+        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
+        {
+            var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+            return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
@@ -86,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private HashSet<Guid> GetDynamicReportEntityIds(InterviewSummary interview)
         {
-            return this.questionnaireItemsReader.Query(_ => _
+            return this.questionnaireItems.Query(_ => _
                 .Where(x => x.QuestionnaireIdentity == interview.QuestionnaireIdentity && x.UsedInReporting == true)
                 .Select(x => x.EntityId)
                 .ToHashSet());
