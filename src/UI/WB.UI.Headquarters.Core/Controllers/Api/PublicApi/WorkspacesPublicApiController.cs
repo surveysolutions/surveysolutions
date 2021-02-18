@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         [HttpGet]
         [SwaggerResponse(200, Type = typeof(WorkspaceApiView))]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer)]
         public WorkspacesApiView Index([FromQuery] WorkspacesListFilter filter)
         {
             IEnumerable<WorkspaceApiView> result =

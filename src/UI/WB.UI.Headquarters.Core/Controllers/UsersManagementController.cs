@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers
         public IActionResult Index() => View(new
         {
             CreateUrl = Url.Action("Create", "Users"),
+            WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
         });
 
         public async Task<DataTableResponse<UserManagementListItem>?> List(UsersManagementRequest request, CancellationToken cancellationToken)

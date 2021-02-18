@@ -12,7 +12,8 @@
                     control-id="workspaceSelector"
                     :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
                     :value="selectedWorkspace"
-                    :values="workspaces"
+                    :ajax-params="{ }"
+                    :fetch-url="this.$config.model.workspacesUrl"
                     v-on:selected="onWorkspaceSelected" />
             </FilterBlock>
 
@@ -292,13 +293,13 @@ export default {
 
         filteredToAdd() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
+                return true //item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 
         filteredToRemove() {
             return this.getFilteredItems(item => {
-                return item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
+                return true //item.role == 'Headquarter' || item.role == 'ApiUser'|| item.role == 'Observer'
             })
         },
 

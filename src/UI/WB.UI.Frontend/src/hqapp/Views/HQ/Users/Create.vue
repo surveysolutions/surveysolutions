@@ -242,13 +242,7 @@ export default {
             return this.$t('Pages.Home')
         },
         referrerUrl() {
-            if (this.isHeadquarters) return '../../Headquarters'
-            if (this.isSupervisor) return '../../Supervisors'
-            if (this.isInterviewer) return '../../Interviewers'
-            if (this.isObserver) return '../../Observers'
-            if (this.isApiUser) return '../../ApiUsers'
-
-            return '/'
+            return '/users/UsersManagement'
         },
         title(){
             if (this.role)
