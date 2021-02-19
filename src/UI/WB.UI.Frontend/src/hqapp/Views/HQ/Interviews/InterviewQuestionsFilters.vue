@@ -289,10 +289,10 @@ export default {
                 || this.questionnaireItemsList.length == 0
         },
         isDynamicDisabled() {
-            return (this.questionnaireId == null
+            return this.questionnaireId == null
                 || this.questionnaireVersion == null
-                || this.questionnaireItemsList == null)
-                && this.rules.length == 0
+                || this.questionnaireItemsList == null
+                || this.rules.length == 0
         },
 
         rules(){
