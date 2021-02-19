@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -26,6 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             var questionnaireStorage1 = questionnaireStorage ?? 
                                         Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
                                                                                  && _.GetQuestionnaireOrThrow(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            
+            var questionnaireItems = Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>();
+            Mock.Get(questionnaireItems)
+                .Setup(reader => reader.Query(It.IsAny<Func<IQueryable<QuestionnaireCompositeItem>, List<QuestionnaireCompositeItem>>>()))
+                .Returns(new List<QuestionnaireCompositeItem>());
+
             return new InterviewSummaryCompositeDenormalizer(new EventBusSettings(),
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage1, Create.Storage.NewMemoryCache()),
@@ -34,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage1), 
                 new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage1),
-                Mock.Of<InterviewDynamicReportAnswersDenormalizer>());
+                new InterviewDynamicReportAnswersDenormalizer(questionnaireStorage1, questionnaireItems));
         }
     }
 }

@@ -126,8 +126,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.questionnaireItems.Query(_ => _
                 .Where(x => x.QuestionnaireIdentity == interview.QuestionnaireIdentity && x.UsedInReporting == true)
-                .Select(x => x.EntityId)
-                .ToHashSet());
+                .Select(x => x.EntityId))
+                    .ToHashSet();
         }
 
         private HashSet<Guid> GetQuestionsForReportsIdentities(InterviewSummary interview, IEnumerable<Identity> allQuestionIdentities)
