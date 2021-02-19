@@ -186,6 +186,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
+            
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ResetPasswordIntroduced 
+                && authorizedUser.NeedChangePassword)
+            {
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
 
             return this.userToDeviceService.GetLinkedDeviceId(this.authorizedUser.Id) != deviceId
                 ? (IActionResult)StatusCode(StatusCodes.Status403Forbidden, new {Message = "relinked"})

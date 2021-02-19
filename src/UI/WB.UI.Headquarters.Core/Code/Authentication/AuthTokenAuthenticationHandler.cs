@@ -66,10 +66,14 @@ namespace WB.UI.Headquarters.Code.Authentication
             
             if (user.ForceChangePassword)
             {
-                var changePasswordApi = Request.Path.HasValue 
-                                        && Request.Path.Value != null
-                                        && Request.Path.Value.EndsWith("/users/changePassword");
-                if (!changePasswordApi)
+                var allowedUrlToAccess = Request.Path.HasValue 
+                    && Request.Path.Value != null
+                    && (
+                        Request.Path.Value.EndsWith("/users/changePassword")
+                        || Request.Path.Value.Contains("api/interviewer/compatibility")
+                        || Request.Path.Value.Contains("api/supervisor/compatibility")
+                    );
+                if (!allowedUrlToAccess)
                 {
                     this.forceChangePassword = true;
                     return AuthenticateResult.Fail("User must change password");
