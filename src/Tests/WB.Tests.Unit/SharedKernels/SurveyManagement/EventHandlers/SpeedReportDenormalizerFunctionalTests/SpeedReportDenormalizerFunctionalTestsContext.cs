@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
                 new InterviewStatusTimeSpanDenormalizer(),
                 Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 new InterviewGeoLocationAnswersDenormalizer(questionnaireStorage1), 
-                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage1));
+                new InterviewExportedCommentariesDenormalizer(userViewFactory, questionnaireStorage1),
+                Mock.Of<InterviewDynamicReportAnswersDenormalizer>());
         }
     }
 }
