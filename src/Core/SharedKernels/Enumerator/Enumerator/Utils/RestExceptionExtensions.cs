@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Mime;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
@@ -41,6 +43,23 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 case RestExceptionType.UnacceptableCertificate:
                     exceptionMessage = EnumeratorUIResources.UnacceptableSSLCertificate;
                     exceptionType = SynchronizationExceptionType.UnacceptableSSLCertificate;
+                    break;
+                case RestExceptionType.ServerErrorResponse:
+                    switch (restException.ServerErrorCode)
+                    {
+                        case ServerErrorCodes.ForceChangePassword: 
+                            exceptionType = SynchronizationExceptionType.ShouldChangePassword;
+                            exceptionMessage = EnumeratorUIResources.Synchronization_ForceChangeUserPassword;
+                            break;        
+                        case ServerErrorCodes.ChangePasswordError: 
+                            exceptionType = SynchronizationExceptionType.ShouldChangePassword;
+                            exceptionMessage = restException.Message;
+                            break;
+                        default:
+                            exceptionType = SynchronizationExceptionType.UpgradeRequired;
+                            exceptionMessage = restException.Message;
+                            break;
+                    }
                     break;
                 case RestExceptionType.Unexpected:
                     switch (restException.StatusCode)
@@ -122,7 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             {
                                 exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
                                 exceptionMessage = EnumeratorUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
-                            }else if(restException.Message.Contains("Workspace is disabled"))
+                            }
+                            else if(restException.Message.Contains("Workspace is disabled"))
                             {
                                 exceptionType = SynchronizationExceptionType.WorkspaceDisabled;
                                 exceptionMessage = EnumeratorUIResources.Synchronization_WorkspaceDisabled;

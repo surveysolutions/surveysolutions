@@ -2,12 +2,14 @@
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
@@ -113,17 +115,33 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 if (!user.ForceChangePassword)
                     return Forbid();
 
-                user.ForceChangePassword = false;
                 var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await userManager.ResetPasswordAsync(user, resetToken, userChangePassword.NewPassword);
 
                 if (result.Succeeded)
                 {
-                    var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
-                    return new JsonResult(authToken);
-                }
-            }
+                    user.ForceChangePassword = false;
+                    var updateResult = await userManager.UpdateAsync(user);
 
+                    if (updateResult.Succeeded)
+                    {
+                        var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+                        return new JsonResult(authToken);
+                    }
+                    return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
+                    {
+                        Code = ServerErrorCodes.ChangePasswordError,
+                        Message = string.Join("\r\n", updateResult.Errors.Select(e => e.Description))
+                    });
+                }
+
+                return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
+                {
+                    Code = ServerErrorCodes.ChangePasswordError,
+                    Message = string.Join("\r\n", result.Errors.Select(e => e.Description))
+                });
+            }
+            
             return Unauthorized();
         }
     }

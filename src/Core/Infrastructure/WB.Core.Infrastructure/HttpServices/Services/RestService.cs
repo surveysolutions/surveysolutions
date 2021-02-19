@@ -23,6 +23,13 @@ namespace WB.Core.Infrastructure.HttpServices.Services
         {
             public string Message { get; set; }
         }
+        
+        private class ResponseWithServerError
+        {
+            public string Code { get; set; }
+            public string Message { get; set; }
+        }
+        
         private readonly IRestServiceSettings restServiceSettings;
         private readonly INetworkService networkService;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
@@ -192,8 +199,23 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                 }
                 else if (ex.Call.Response != null)
                 {
-                    var reasonPhrase = GetReasonPhrase(ex);
-                    var restException = new RestException(reasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                    string errorCode = null;
+                    string message = null;
+                    var type = RestExceptionType.ServerErrorResponse;
+                    
+                    var responseWithServerError = GetReasonObject<ResponseWithServerError>(ex);
+                    if (responseWithServerError == null)
+                    {
+                        type = RestExceptionType.Unexpected;
+                        message = GetReasonPhrase(ex);
+                    }
+                    else
+                    {
+                        errorCode = responseWithServerError.Code;
+                        message = responseWithServerError.Message;
+                    }
+                    
+                    var restException = new RestException(errorCode, message, type: type, statusCode: ex.Call.Response.StatusCode, innerException: ex);
 
                     if (ex.Call.Response.Headers.Contains("version"))
                         restException.Data["target-version"] = ex.Call.Response.Headers.GetValues("version").FirstOrDefault();

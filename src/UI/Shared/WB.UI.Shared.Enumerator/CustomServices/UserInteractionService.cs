@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Gms.Common;
 using Android.Text;
 using Android.Text.Format;
+using Android.Views;
 using Android.Widget;
 using Google.Android.Material.DatePicker;
 using Google.Android.Material.Dialog;
@@ -83,16 +85,19 @@ namespace WB.UI.Shared.Enumerator.CustomServices
            string message,
            string title = "",
            string okButton = null,
-           string cancelButton = null)
+           string cancelButton = null,
+           Func<ChangePasswordDialogOkCallback, Task> okCallback = null)
         {
             var tcs = new TaskCompletionSource<ChangePasswordDialogResult>();
             okButton ??= UIResources.Ok;
             cancelButton ??= UIResources.Cancel;
 
-            this.ConfirmPasswordInputImpl(message, (oldPass, newPass) => 
-                    tcs.TrySetResult(new ChangePasswordDialogResult() { OldPassword = oldPass, NewPassword = newPass }),
+            this.ConfirmPasswordInputImpl(message, 
+                (dialogResult) => tcs.TrySetResult(dialogResult),
+                okCallback,
                 () => tcs.TrySetResult(null), title,
-                okButton, cancelButton);
+                okButton, 
+                cancelButton);
             return tcs.Task;
         }
 
@@ -303,7 +308,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         }
 
         private void ConfirmPasswordInputImpl(string message, 
-            Action<string, string> okCallback, 
+            Action<ChangePasswordDialogResult> okCallback, 
+            Func<ChangePasswordDialogOkCallback, Task> canClose,
             Action cancelCallBack, 
             string title, 
             string okButton, 
@@ -333,22 +339,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                         inflatedView.FindViewById<TextInputLayout>(Resource.Id.oldPasswordEditTextWrapper).Hint = UIResources.OldPasswordHint;
                         inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper).Hint = UIResources.NewPasswordHint;
-                        var error = inflatedView.FindViewById<TextInputLayout>(Resource.Id.reconfirmationEditTextWrapper);
-                        error.Hint = UIResources.ConfirmNewPasswordHint;
+                        var passError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper);
+                        var confirmPassError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.reconfirmationEditTextWrapper);
+                        confirmPassError.Hint = UIResources.ConfirmNewPasswordHint;
                         //confirmPasswordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         var dialogBuilder = new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
-                            .SetPositiveButton(okButton,
-                                delegate
-                                {
-                                    HandleDialogClose(userInteractionId, () =>
-                                    {
-                                        okCallback?.Invoke(oldPasswordText.Text, passwordText.Text);
-                                    });
-
-                                    this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
-                                })
+                            .SetPositiveButton(okButton, (IDialogInterfaceOnClickListener)null)
                             .SetNegativeButton(cancelButton,
                                 delegate
                                 {
@@ -363,8 +361,33 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         var dialog = dialogBuilder.Create();
                         dialog.Show();
                         Button button = dialog.GetButton((int)DialogButtonType.Positive);
+                        button.SetOnClickListener(new OnClickListener(async delegate
+                        {
+                            var dialogCallback = new ChangePasswordDialogOkCallback()
+                            {
+                                DialogResult = new ChangePasswordDialogResult()
+                                {
+                                    NewPassword = passwordText.Text,
+                                    OldPassword = oldPasswordText.Text,
+                                }
+                            };
+                            if (canClose != null)
+                                await canClose.Invoke(dialogCallback);
+                            if (!dialogCallback.NeedClose)
+                            {
+                                passError.Error = dialogCallback.Error;
+                                return;
+                            }
+                                    
+                            HandleDialogClose(userInteractionId, () =>
+                            {
+                                okCallback?.Invoke(dialogCallback.DialogResult);
+                            });
+
+                            this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
+                        }));
                         
-                        var passwordTextWatcher = new PasswordTextWatcher(passwordText, confirmPasswordText, button, error);
+                        var passwordTextWatcher = new PasswordTextWatcher(passwordText, confirmPasswordText, button, confirmPassError);
                         passwordText.AddTextChangedListener(passwordTextWatcher);
                         confirmPasswordText.AddTextChangedListener(passwordTextWatcher);
                     },
@@ -409,6 +432,21 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             public void OnTextChanged(ICharSequence s, int start, int before, int count)
             {
+            }
+        }
+        
+        private class OnClickListener : Java.Lang.Object, View.IOnClickListener
+        {
+            private readonly Action action;
+
+            public OnClickListener(Action action)
+            {
+                this.action = action;
+            }
+
+            public void OnClick(View v)
+            {
+                action();
             }
         }
         

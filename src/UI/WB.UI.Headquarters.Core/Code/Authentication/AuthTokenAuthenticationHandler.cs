@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Shared.Web.Authentication;
 
@@ -107,7 +108,13 @@ namespace WB.UI.Headquarters.Code.Authentication
             if (this.forceChangePassword)
             {
                 await using StreamWriter bodyWriter = new StreamWriter(Response.Body);
-                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Force change password"}));
+                var serverError = new ServerError()
+                {
+                    Code = ServerErrorCodes.ForceChangePassword,
+                    Message = "Your must change your password for access to server"
+                };
+                await bodyWriter.WriteAsync(JsonConvert.SerializeObject(serverError));
+                //await bodyWriter.WriteAsync(JsonConvert.SerializeObject(new {Message = "Force change password"}));
             }
         }
     }

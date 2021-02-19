@@ -276,16 +276,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var passwordDialogResult = await this.userInteractionService.ConfirmNewPasswordInputAsync(
                 message,
+                okCallback: ChangePasswordCallback,
                 okButton: UIResources.Ok,
                 cancelButton: EnumeratorUIResources.Synchronization_Cancel).ConfigureAwait(false);
+        }
 
-            if (passwordDialogResult != null)
+        private async Task ChangePasswordCallback(ChangePasswordDialogOkCallback callback)
+        {
+            if (callback.DialogResult != null)
             {
                 var changePasswordInfo = new ChangePasswordInfo
                 {
                     Username = this.UserName,
-                    Password = passwordDialogResult.OldPassword,
-                    NewPassword = passwordDialogResult.NewPassword,
+                    Password = callback.DialogResult.OldPassword,
+                    NewPassword = callback.DialogResult.NewPassword,
                 };
 
                 try
@@ -296,14 +300,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     if (!string.IsNullOrWhiteSpace(token))
                     {
                         this.ErrorMessage = EnumeratorUIResources.YouChangeYouPasswordTryToLoginAgainWithNewPassword;
-                        await SignInAsync(passwordDialogResult.NewPassword, token);
+                        await SignInAsync(callback.DialogResult.NewPassword, token);
+                        return;
                     }
                 }
-                catch (Exception ex)
+                catch (SynchronizationException ex)
                 {
+                    callback.Error = ex.Message;
+                    
                     logger.Error($"Cant change password for user {UserName}", ex);
                 }
             }
+
+            callback.NeedClose = false;
         }
 
         public string PasswordError

@@ -51,13 +51,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (ModelState.IsValid)
             {
                 var user = await userManager.GetUserAsync(User);
-                if (user.ForceChangePassword)
-                    user.ForceChangePassword = false;
                 string passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
                 var resetPasswordResult = await this.userManager.ResetPasswordAsync(user, passwordResetToken, model.NewPassword);
 
                 if (resetPasswordResult.Succeeded)
                 {
+                    if (user.ForceChangePassword)
+                    {
+                        user.ForceChangePassword = false;
+                        await userManager.UpdateAsync(user);
+                    }
                     return new ChangePasswordResult()
                     {
                         Success = true
