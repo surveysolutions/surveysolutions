@@ -27,10 +27,12 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <div>
-                    <p>
-                        {{$t('Pages.Exposed_Variables_AvailableVariablesTitle')}}
-                    </p>
+                <div class="page-header">
+                    <div class="neighbor-block-to-search">
+                        <h3>
+                            {{$t('Pages.Exposed_Variables_AvailableVariablesTitle')}}
+                        </h3>
+                    </div>
                 </div>
 
                 <DataTables
@@ -43,35 +45,32 @@
                 </DataTables>
             </div>
             <div class="col-sm-6">
-                <div>
-                    <p>
-                        {{$t('Pages.Exposed_Variables_SelectedVariablesTitle')}}
-                    </p>
+                <div class="page-header">
+                    <div class="neighbor-block-to-search">
+                        <h3>
+                            {{$t('Pages.Exposed_Variables_SelectedVariablesTitle')}}
+                        </h3>
+                    </div>
                 </div>
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>{{this.$t('Pages.ExposedVariables_VariableName')}}</th>
-                            <th>{{this.$t('Pages.ExposedVariables_Title')}}</th>
+                            <th>{{this.$t('Pages.ExposedVariables_VariableLabel')}}</th>
+                            <th>{{this.$t('Pages.ExposedVariables_VariableTitle')}}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="variable in exposedVariables"
+                        <tr
+                            v-for="variable in exposedVariables"
                             :key="'id' + '__' + variable.id"
-                            @click="cellExposedClicked(variable.id)">
+                            @click="rowExposedClicked(variable.id)">
                             <td>{{variable.variable}}</td>
+                            <td>{{variable.label}}</td>
                             <td>{{variable.title}}</td>
                         </tr>
                     </tbody>
                 </table>
-                <!-- <DataTables
-                    id="id-table-exposed"
-                    ref="table-exposed"
-                    :tableOptions="tableOptionsExposed"
-                    noSelect
-                    noSearch
-                    :noPaging="false">
-                </DataTables> -->
 
                 <div class="action-buttons">
                     <button
@@ -147,6 +146,7 @@ export default {
             return {
                 deferLoading: 0,
                 columns: [
+                    {},
                     {
                         data: 'variable',
                         name: 'Variable',
@@ -154,28 +154,20 @@ export default {
                         sortable: false,
                     },
                     {
+                        data: 'label',
+                        name: 'label',
+                        title: this.$t('Pages.ExposedVariables_VariableLabel'),
+                        sortable: false,
+                    },
+                    {
                         data: 'title',
                         name: 'Title',
-                        title: this.$t('Pages.ExposedVariables_Title'),
+                        title: this.$t('Pages.ExposedVariables_VariableTitle'),
                         sortable: false,
                         'render': function (data, type, row) {
                             return sanitizeHtml(data)
                         },
                     },
-                    // {
-                    //     data: 'isExposed',
-                    //     name: 'IsExposed',
-                    //     title: this.$t('Workspaces.Name'),
-                    //     sortable: false,
-                    //     'render': function (data, type, row) {
-                    //         if (data === true) {
-                    //             return '<input type="checkbox" id="chkadd_' + row.id + '" checked value="true">'
-                    //         }
-                    //         else {
-                    //             return '<input type="checkbox" id="chkadd_' + row.id + '" >'
-                    //         }
-                    //     },
-                    // },
                 ],
                 rowId: function(row) {
                     return row.id
@@ -187,8 +179,12 @@ export default {
                 },
                 bsort: false,
                 responsive: false,
-                order: [[0, 'asc']],
+                'ordering': false,
                 sDom: 'rf<"table-with-scroll"t>ip',
+                createdRow: function(row, data) {
+                    if(self.exposedVariables.findIndex(v => v.id === data.id) != -1)
+                        $(row).addClass('disabled')
+                },
             }
         },
     },
@@ -222,20 +218,25 @@ export default {
         cellAllClicked(columnName, rowId, cellData) {
             const parsedRowId = rowId.replace('id__', '')
 
-            var rowData = this.$refs.table.table.row('#'+rowId).data()
-
+            var row = this.$refs.table.table.row('#'+rowId)
             if(this.exposedVariables.length >= 15)
                 return
 
             var index = this.exposedVariables.findIndex(x => x.id == parsedRowId)
-            if(index === -1)
-                this.exposedVariables.push({
+            if(index === -1){
+                for (var i = 0; i < this.exposedVariables.length && this.exposedVariables[i].id < parsedRowId; i++) {/**/}
+
+                var rowData = row.data()
+                this.exposedVariables.splice(i, 0, {
                     id: parsedRowId,
-                    title: sanitizeHtml(rowData.title),
+                    title: rowData.title,
+                    label: rowData.label,
                     variable: rowData.variable,
                 })
+                row.nodes().to$().addClass('disabled')
+            }
         },
-        cellExposedClicked(id)
+        rowExposedClicked(id)
         {
             this.idToRemove = id
             this.$refs.exposedRemoveModal.modal({keyboard: false})
@@ -244,9 +245,12 @@ export default {
         removeExposedVariable(){
             var index = this.exposedVariables.findIndex(x => x.id == this.idToRemove)
             this.exposedVariables.splice(index,1)
+
+            var row = this.$refs.table.table.row('#'+this.idToRemove)
+            if(row != null)
+                row.nodes().to$().removeClass('disabled')
             this.$refs.exposedRemoveModal.modal('hide')
         },
-
     },
 }
 </script>

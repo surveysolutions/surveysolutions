@@ -1413,8 +1413,17 @@
     <value>Questionnaire exposed variables</value>
   </data>
   <data name="Exposed_Variables_Description" xml:space="preserve">
-    <value>Selecting these variables will allow to use them in reporting. Newly created interviews will be available instantly. Previously collected interviews will be processed and it would take some time.</value>
-  </data>  
+    <value>Selecting these variables will allow to use them in reporting. Newly created interviews will be available instantly. Previously collected interviews will be processed and it would take some time. You may select up to 15 variables.</value>
+  </data>
+  <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
+    <value>Available variables</value>
+  </data>
+  <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
+    <value>Exposed variables</value>
+  </data>
+  <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
+    <value>Do you want to remove variable from the list?</value>
+  </data>
   <data name="Questionnaire_Stats" xml:space="preserve">
     <value>Questionnaire Information</value>
   </data>
@@ -1595,8 +1604,11 @@
   <data name="ExposedVariables_VariableName" xml:space="preserve">
     <value>Variable Name</value>
   </data>
-  <data name="ExposedVariables_VariableName" xml:space="preserve">
+  <data name="ExposedVariables_VariableTitle" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="ExposedVariables_VariableLabel" xml:space="preserve">
+    <value>Label</value>
   </data>
   <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
     <value>You are changing the set of variables. It would take time to update reports</value>

@@ -217,9 +217,12 @@ namespace WB.UI.Headquarters.Controllers.Api
                                                                  item.QuestionType == QuestionType.Text ||
                                                                  item.QuestionType == QuestionType.SingleOption))
                      || (item.EntityType == EntityType.Variable))
-                    && item.Featured != true
+                     && item.Featured != true
                     
-                //&& item.IsFilteredCombobox != true
+                     && item.IsFilteredCombobox == false
+                     && item.LinkedToRosterId == null
+                     && item.LinkedToQuestionId == null
+                     && item.CascadeFromQuestionId == null
                 );
 
                 if (request.Search?.Value != null)
@@ -233,7 +236,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 if (exposed)
                     q = q.Where(i => i.UsedInReporting == true);
 
-                var queryResult = q.OrderUsingSortExpression("Id"/*request.GetSortOrderRequestItems().GetOrderRequestString()*/);
+                q = q.OrderUsingSortExpression("Id Asc");
 
                 IQueryable<QuestionnaireCompositeItem> pagedResults = q;
                 
@@ -244,7 +247,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 return new QuestionnaireExposableEntities()
                 {
-                    TotalCount = queryResult.Count(),
+                    TotalCount = q.Count(),
                     Items = pagedResults.Select(x=> new QuestionnaireEntityItem()
                     {
                         Title = x.QuestionText,

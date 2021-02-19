@@ -19,8 +19,8 @@
             <button type="button"
                 id="btnExposedQuestionsFilter"
                 class="btn"
-                :disabled="isDisabled"
-                :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
+                :disabled="isDynamicDisabled"
+                :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable'):''"
                 @click="$refs.questionsExposedSelector.modal()">
                 {{$t("Interviews.AdvancedFilterSelector")}}
             </button>
@@ -75,12 +75,6 @@
             <div slot="actions">
                 <button
                     id="btnQuestionsExposedSelectorOk"
-                    type="button"
-                    class="btn btn-primary"
-                    @click="saveExposedVariablesFilter">{{ $t("Common.Save") }}</button>
-
-                <button
-                    id="btnQuestionsExposedSelectorOk1"
                     type="button"
                     class="btn btn-primary"
                     @click="saveExposedVariablesFilter">{{ $t("Common.Save") }}</button>
@@ -300,6 +294,13 @@ export default {
                 || this.questionnaireVersion == null
                 || this.questionnaireItemsList == null
                 || this.questionnaireItemsList.length == 0
+        },
+        isDynamicDisabled() {
+            return this.questionnaireId == null
+                || this.questionnaireVersion == null
+                || this.questionnaireItemsList == null
+                || this.questionnaireItemsList.length == 0
+                || this.rules.length == 0
         },
 
         rules(){

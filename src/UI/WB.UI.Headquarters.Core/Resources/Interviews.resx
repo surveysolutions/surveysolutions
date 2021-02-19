@@ -241,8 +241,14 @@
   <data name="QuestionsSelector" xml:space="preserve">
     <value>Questions selector</value>
   </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
     <value>Filters by questions is only available when specific questionnaire version is selected</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>No data available</value>
   </data>
   <data name="ApproveConfirmMessage_plural" xml:space="preserve">
       <value>{{count}} interviews will be approved.</value>

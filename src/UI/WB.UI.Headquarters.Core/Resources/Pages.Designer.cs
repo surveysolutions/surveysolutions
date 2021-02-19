@@ -1015,11 +1015,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selecting these variables will allow to use them in reporting. Newly created interviews will be available instantly. Previously collected interviews will be processed and it would take some time..
+        ///   Looks up a localized string similar to Available variables.
+        /// </summary>
+        public static string Exposed_Variables_AvailableVariablesTitle {
+            get {
+                return ResourceManager.GetString("Exposed_Variables_AvailableVariablesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selecting these variables will allow to use them in reporting. Newly created interviews will be available instantly. Previously collected interviews will be processed and it would take some time. You may select up to 15 variables..
         /// </summary>
         public static string Exposed_Variables_Description {
             get {
                 return ResourceManager.GetString("Exposed_Variables_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exposed variables.
+        /// </summary>
+        public static string Exposed_Variables_SelectedVariablesTitle {
+            get {
+                return ResourceManager.GetString("Exposed_Variables_SelectedVariablesTitle", resourceCulture);
             }
         }
         
@@ -1033,11 +1051,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title.
+        ///   Looks up a localized string similar to Do you want to remove variable from the list?.
+        /// </summary>
+        public static string ExposedVariables_RemoveMessage {
+            get {
+                return ResourceManager.GetString("ExposedVariables_RemoveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Label.
+        /// </summary>
+        public static string ExposedVariables_VariableLabel {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable Name.
         /// </summary>
         public static string ExposedVariables_VariableName {
             get {
                 return ResourceManager.GetString("ExposedVariables_VariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ExposedVariables_VariableTitle {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableTitle", resourceCulture);
             }
         }
         
