@@ -194,7 +194,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     AnswerCode = @event.Payload.SelectedValue,
                     InterviewSummary = state,
                     IsEnabled = true
-
                 });
             }
 
@@ -225,6 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     },
                     Value = @event.Payload.Answer.ToString(CultureInfo.InvariantCulture),
                     InterviewSummary = state,
+                    IsEnabled = true
                 });
             }
 
@@ -255,6 +255,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     },
                     Value = @event.Payload.Answer.ToString(),
                     InterviewSummary = state,
+                    IsEnabled = true
                 });
             }
 
@@ -287,6 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     },
                     Value = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat),
                     InterviewSummary = state,
+                    IsEnabled = true
                 });
             }
 
