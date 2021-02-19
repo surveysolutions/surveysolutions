@@ -15,6 +15,9 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .WithColumn("value").AsString().Nullable()
                 .WithColumn("value_lower_case").AsString().Nullable()
                 .WithColumn("answer_code").AsInt32().Nullable()
+                .WithColumn("value_date").AsDateTime().Nullable()
+                .WithColumn("value_double").AsDouble().Nullable()
+                .WithColumn("value_bool").AsBoolean().Nullable()
                 .WithColumn("enabled").AsBoolean().WithDefaultValue(true);
 
             Create.ForeignKey("fk_interview_report_answers_to_interviewsummaries")
@@ -26,6 +29,13 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .FromTable("interview_report_answers").ForeignColumn("entity_id")
                 .ToTable("questionnaire_entities").PrimaryColumn("id")
                 .OnDelete(Rule.None);
+
+            Create.Index().OnTable("interview_report_answers").OnColumn("interview_id");
+            Create.Index().OnTable("interview_report_answers").OnColumn("value");
+            Create.Index().OnTable("interview_report_answers").OnColumn("value_lower_case");
+            Create.Index().OnTable("interview_report_answers").OnColumn("value_date");
+            Create.Index().OnTable("interview_report_answers").OnColumn("value_double");
+            Create.Index().OnTable("interview_report_answers").OnColumn("answer_code");
         }
     }
 }

@@ -30,7 +30,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 
             IQueryable<QuestionnaireCompositeItem> compositeItem = unitOfWork.Session.Query<QuestionnaireCompositeItem>();
 
-            var exposed = compositeItem.Where(x=> x.UsedInReporting == true && x.QuestionnaireIdentity == questionnaireIdentity.ToString())
+            var exposed = compositeItem.Where(x=> x.UsedInReporting == true 
+                                                  && x.QuestionnaireIdentity == questionnaireIdentity.ToString())
                 .Select(x => x.EntityId).ToHashSet();
             
             resolverContext.ScopedContextData = resolverContext.ScopedContextData.SetItem("language", language);

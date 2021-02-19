@@ -15,17 +15,6 @@
             </button>
         </div>
 
-        <div class="block-filter">
-            <button type="button"
-                id="btnExposedQuestionsFilter"
-                class="btn"
-                :disabled="isDynamicDisabled"
-                :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable'):''"
-                @click="$refs.questionsExposedSelector.modal()">
-                {{$t("Interviews.AdvancedFilterSelector")}}
-            </button>
-        </div>
-
         <ModalFrame ref="questionsSelector"
             id="modalQuestionsSelector"
             :title="$t('Interviews.ChooseQuestionsTitle')">
@@ -56,22 +45,13 @@
 
         <ModalFrame ref="questionsExposedSelector"
             id="modalQuestionsExposedSelector"
-            :title="$t('Interviews.AdvancedFilter')">
+            :title="$t('Interviews.DynamicFilter')">
             <vue-query-builder
                 :rules="rules"
                 :maxDepth="5"
                 :labels="labels"
                 v-model="queryExposedVariables"></vue-query-builder>
-            <!-- <div>
-                <p>
-                    {{queryExposedVariables}}
-                </p>
-            </div>
-            <div>
-                <p>
-                    {{transformQuery}}
-                </p>
-            </div> -->
+
             <div slot="actions">
                 <button
                     id="btnQuestionsExposedSelectorOk"
@@ -90,6 +70,18 @@
             :condition="condition"
             @change="conditionChanged">
         </InterviewFilter>
+
+        <div class="block-filter">
+            <button type="button"
+                id="btnExposedQuestionsFilter"
+                class="btn"
+                :disabled="isDynamicDisabled"
+                :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable'):''"
+                @click="$refs.questionsExposedSelector.modal()">
+                {{$t("Interviews.AdvancedFilterSelector")}}
+            </button>
+        </div>
+
     </div>
 
 </template>
@@ -280,10 +272,11 @@ export default {
     computed: {
         questionnaireItemsList() {
             const array = filter([...(this.questionnaireItems || [])], q => {
-                return q.type == 'SINGLEOPTION'
+                return (q.type == 'SINGLEOPTION'
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
-                    || q.entityType == 'VARIABLE'
+                    || q.entityType == 'VARIABLE')
+                    && q.identifying
             })
 
             return array
@@ -296,11 +289,10 @@ export default {
                 || this.questionnaireItemsList.length == 0
         },
         isDynamicDisabled() {
-            return this.questionnaireId == null
+            return (this.questionnaireId == null
                 || this.questionnaireVersion == null
-                || this.questionnaireItemsList == null
-                || this.questionnaireItemsList.length == 0
-                || this.rules.length == 0
+                || this.questionnaireItemsList == null)
+                && this.rules.length == 0
         },
 
         rules(){

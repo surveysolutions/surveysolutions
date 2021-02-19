@@ -236,6 +236,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dynamic filter.
+        /// </summary>
+        public static string DynamicFilter {
+            get {
+                return ResourceManager.GetString("DynamicFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No data available.
         /// </summary>
         public static string DynamicFilterNotAvailable {

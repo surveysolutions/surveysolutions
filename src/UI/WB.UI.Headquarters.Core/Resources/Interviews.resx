@@ -235,6 +235,9 @@
   <data name="ChooseQuestionsTitle" xml:space="preserve">
     <value>Choose identifying questions to use in the filter</value>
   </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
   <data name="FiltersByQuestions" xml:space="preserve">
     <value>Filters by questions</value>
   </data>

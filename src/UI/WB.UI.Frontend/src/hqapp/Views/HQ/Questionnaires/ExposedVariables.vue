@@ -229,7 +229,7 @@ export default {
                 var rowData = row.data()
                 this.exposedVariables.splice(i, 0, {
                     id: parsedRowId,
-                    title: rowData.title,
+                    title: sanitizeHtml(rowData.title),
                     label: rowData.label,
                     variable: rowData.variable,
                 })

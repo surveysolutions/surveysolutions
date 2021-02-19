@@ -24,6 +24,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual QuestionnaireCompositeItem Entity { get; set; }
 
         public virtual decimal? AnswerCode { get; set; }
+        public virtual DateTime? ValueDate { get; set; }
+        public virtual bool? ValueBool { get; set; }
+        public virtual double? ValueDouble { get; set; }
+
         public virtual bool IsEnabled { get; set; }
     }
 }
