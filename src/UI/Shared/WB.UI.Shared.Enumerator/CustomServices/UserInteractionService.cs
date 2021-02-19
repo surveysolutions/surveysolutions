@@ -95,7 +95,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.ConfirmPasswordInputImpl(message, 
                 (dialogResult) => tcs.TrySetResult(dialogResult),
                 okCallback,
-                () => tcs.TrySetResult(null), title,
+                () => tcs.TrySetResult(null), 
+                title,
                 okButton, 
                 cancelButton);
             return tcs.Task;
@@ -383,6 +384,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             {
                                 okCallback?.Invoke(dialogCallback.DialogResult);
                             });
+                            
+                            dialog.Hide();
 
                             this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
                         }));
