@@ -17,6 +17,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .WithColumn("answer_code").AsInt32().Nullable()
                 .WithColumn("value_date").AsDateTime().Nullable()
                 .WithColumn("value_double").AsDouble().Nullable()
+                .WithColumn("value_int").AsInt32().Nullable()
                 .WithColumn("value_bool").AsBoolean().Nullable()
                 .WithColumn("enabled").AsBoolean().WithDefaultValue(true);
 
@@ -35,6 +36,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
             Create.Index().OnTable("interview_report_answers").OnColumn("value_lower_case");
             Create.Index().OnTable("interview_report_answers").OnColumn("value_date");
             Create.Index().OnTable("interview_report_answers").OnColumn("value_double");
+            Create.Index().OnTable("interview_report_answers").OnColumn("value_int");
             Create.Index().OnTable("interview_report_answers").OnColumn("answer_code");
         }
     }

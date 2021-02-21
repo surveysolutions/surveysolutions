@@ -51,6 +51,13 @@
                 :maxDepth="5"
                 :labels="labels"
                 v-model="queryExposedVariables"></vue-query-builder>
+            <!-- <div>
+                {{queryExposedVariables}}
+            </div>
+
+            <div>
+                {{transformQuery}}
+            </div> -->
 
             <div slot="actions">
                 <button
@@ -136,7 +143,7 @@ export default {
         questionnaireItems:{
             query :gql`query questionnaireItems($workspace: String!, $id: Uuid!, $version: Long!) {
                 questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}} , {exposed: {eq: true}}]}) {
-                    title, type, variable, entityType, identifying
+                    title, type, variable, entityType, variableType, identifying
                     options { title, value, parentValue }
                 }
             }`,
@@ -256,14 +263,18 @@ export default {
             return result
         },
         handleRule(rule){
-            var result = {
-                reportAnswers :
-                {
-                    some:
-                    {
-                        entity: {variable: {eq: rule.query.operand}},
-                        value: {eq: rule.query.value},
-                        isEnabled: {eq: true}}}}
+
+            var some = {
+                entity: {variable: {eq: rule.query.operand}},
+                isEnabled: {eq: true},
+            }
+
+            if(rule.query.operator == undefined)
+                some.answerCode = {eq: rule.query.value}
+            else
+                some.value = {eq: rule.query.value}
+
+            var result = {reportAnswers : { some: some }}
 
             return result
         },

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -12,7 +11,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -31,7 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
         IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
 
-        IUpdateHandler<InterviewSummary, VariablesChanged>
+        IUpdateHandler<InterviewSummary, VariablesChanged>,
+        IUpdateHandler<InterviewSummary, VariablesEnabled>,
+        IUpdateHandler<InterviewSummary, VariablesDisabled>
 
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
         {
-            var reportQuestionIdentities = GetQuestionsForReportsIdentities(state, @event.Payload.Questions);
+            var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
             
             foreach (var answer in state.ReportAnswers.Where(g =>
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsEnabled> @event)
         {
-            var reportQuestionIdentities = GetQuestionsForReportsIdentities(state, @event.Payload.Questions);
+            var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
 
             foreach (var answer in state.ReportAnswers.Where(g =>
@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsDisabled> @event)
         {
-            var reportQuestionIdentities = GetQuestionsForReportsIdentities(state, @event.Payload.Questions);
+            var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
 
             foreach (var answer in state.ReportAnswers.Where(g =>
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return state;
         }
 
-        private HashSet<Guid> GetDynamicReportEntityIds(InterviewSummary interview)
+        private HashSet<Guid> GetDynamicReportEntitiesIds(InterviewSummary interview)
         {
             return this.questionnaireItems.Query(_ => _
                 .Where(x => x.QuestionnaireIdentity == interview.QuestionnaireIdentity && x.UsedInReporting == true)
@@ -130,17 +130,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     .ToHashSet();
         }
 
-        private HashSet<Guid> GetQuestionsForReportsIdentities(InterviewSummary interview, IEnumerable<Identity> allQuestionIdentities)
+        private HashSet<Guid> GetExposedEntitiesIdentities(InterviewSummary interview, IEnumerable<Identity> allEntitiesIdentities)
         {
-            return allQuestionIdentities
-                .Where(x => GetDynamicReportEntityIds(interview).Contains(x.Id))
+            return allEntitiesIdentities
+                .Where(x => GetDynamicReportEntitiesIds(interview).Contains(x.Id))
                 .Select(x => x.Id)
                 .ToHashSet();
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntityIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntityIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -202,14 +202,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntityIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
-                answer.Value = @event.Payload.Answer.ToString(CultureInfo.InvariantCulture);
+                answer.ValueInt = (int)@event.Payload.Answer;
                 answer.IsEnabled = true;
             }
             else
@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     {
                         Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
                     },
-                    Value = @event.Payload.Answer.ToString(CultureInfo.InvariantCulture),
+                    ValueInt = (int)@event.Payload.Answer,
                     InterviewSummary = state,
                     IsEnabled = true
                 });
@@ -233,14 +233,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntityIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
-                answer.Value = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat);
+                answer.ValueDouble = @event.Payload.Answer;
                 answer.IsEnabled = true;
             }
             else
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     {
                         Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
                     },
-                    Value = @event.Payload.Answer.ToString(),
+                    ValueDouble = @event.Payload.Answer,
                     InterviewSummary = state,
                     IsEnabled = true
                 });
@@ -264,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            var reportQuestionIdentities = GetDynamicReportEntityIds(state);
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
             var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
@@ -273,7 +273,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             if (answer != null)
             {
-                answer.Value = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat);
+                answer.ValueDate = @event.Payload.Answer;
                 answer.IsEnabled = true;
             }
             else
@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     {
                         Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
                     },
-                    Value = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat),
+                    ValueDate = @event.Payload.Answer,
                     InterviewSummary = state,
                     IsEnabled = true
                 });
@@ -295,18 +295,68 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return state;
         }
 
-
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<VariablesChanged> @event)
         {
-            var reportQuestionIdentities = GetQuestionsForReportsIdentities(state, @event.Payload.ChangedVariables.Select(x=>x.Identity));
+            var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
+            if (reportQuestionIdentities.Count == 0) return state;
+
+            foreach (var variable in @event.Payload.ChangedVariables.Where(x=> reportQuestionIdentities.Contains(x.Identity.Id)))
+            {
+                var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == variable.Identity.Id);
+
+                if (answer != null)
+                {
+                    answer.IsEnabled = true;
+
+                    //TODO: set property value depending of the type
+
+                    answer.Value = variable.NewValue.ToString();
+                    
+                }
+                else
+                {
+                    var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+
+                    state.ReportAnswers.Add(new InterviewReportAnswer
+                    {
+                        Entity = new QuestionnaireCompositeItem
+                        {
+                            Id = questionnaire.GetEntityIdMapValue(variable.Identity.Id)
+                        },
+                        Value = variable.NewValue.ToString(),//TODO: set correspondent property value depending of the type
+                        InterviewSummary = state,
+                        IsEnabled = true
+                    });
+                }
+            }
+
+            return state;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<VariablesEnabled> @event)
+        {
+
+            var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Variables);
+            if (reportQuestionIdentities.Count == 0) return state;
+
+            foreach (var answer in state.ReportAnswers.Where(g =>
+                reportQuestionIdentities.Contains((g.Entity.EntityId))))
+            {
+                answer.IsEnabled = false;
+            }
+
+            return state;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<VariablesDisabled> @event)
+        {
+            var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Variables);
             if (reportQuestionIdentities.Count == 0) return state;
 
             foreach (var answer in state.ReportAnswers.Where(g =>
                 reportQuestionIdentities.Contains((g.Entity.EntityId))))
             {
                 answer.IsEnabled = true;
-                answer.Value = @event.Payload.ChangedVariables.Select(x => x.Identity.Id == answer.Entity.EntityId)
-                    .ToString();
             }
 
             return state;

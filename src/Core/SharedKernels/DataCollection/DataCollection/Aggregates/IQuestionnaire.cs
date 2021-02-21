@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -33,6 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasGroup(Guid groupId);
 
         QuestionType GetQuestionType(Guid questionId);
+
+        VariableType GetVariableType(Guid questionId);
 
         QuestionScope GetQuestionScope(Guid questionId);
 

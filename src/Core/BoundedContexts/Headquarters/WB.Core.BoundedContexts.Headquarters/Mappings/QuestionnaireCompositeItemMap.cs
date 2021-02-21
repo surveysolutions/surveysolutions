@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.VariableLabel, p => p.Column("variable_label"));
             Property(x => x.QuestionText, p => p.Column("question_text"));
             Property(x => x.UsedInReporting, p => p.Column("used_in_reporting"));
+            Property(x => x.VariableType, p => p.Column("variable_type"));
             Property(x => x.IsFilteredCombobox, p=>p.Column("is_filtered_combobox"));
         }
     }

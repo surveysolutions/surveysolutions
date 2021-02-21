@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ValueBool, col => col.Column("value_bool"));
             Property(x => x.ValueDate, col => col.Column("value_date"));
             Property(x => x.ValueDouble, col => col.Column("value_double"));
+            Property(x => x.ValueInt, col => col.Column("value_int"));
 
 
             Property(x => x.IsEnabled, col => col.Column("enabled"));

@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual DateTime? ValueDate { get; set; }
         public virtual bool? ValueBool { get; set; }
         public virtual double? ValueDouble { get; set; }
+        public virtual int? ValueInt { get; set; }
 
         public virtual bool IsEnabled { get; set; }
     }

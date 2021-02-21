@@ -83,6 +83,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             descriptor.Field(x => x.StataExportCaption)
                 .Name("variable")
                 .Type<StringType>();
+
+            descriptor.Field(x => x.VariableType)
+                .Name("variableType")
+                .Type<NonNullType<VariableTypeObjectType>>();
         }
         
     }

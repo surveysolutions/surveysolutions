@@ -45,6 +45,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Name("type")
                 .Type<QuestionTypeObjectType>();
 
+            descriptor.Field(x => x.VariableType)
+                .Name("variableType")
+                .Type<VariableTypeObjectType>();
+
             descriptor.Field(x => x.Featured)
                 .Name("identifying")
                 .Type<BooleanType>();

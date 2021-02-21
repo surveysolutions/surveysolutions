@@ -246,6 +246,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public QuestionType GetQuestionType(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionType;
 
+        public VariableType GetVariableType(Guid variableId) => this.GetVariable(variableId).Type;
+
         public QuestionScope GetQuestionScope(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionScope;
 
         public AnswerType GetAnswerType(Guid questionId)
@@ -1799,6 +1801,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
         private IVariable GetVariable(Guid variableId) => GetVariable(this.VariablesCache, variableId);
+        private IVariable GetVariableOrThrow(Guid variableId) => GetVariableOrThrow(this.VariablesCache, variableId);
 
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
@@ -1821,6 +1824,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 };
 
             return question;
+        }
+
+        private static IVariable GetVariableOrThrow(Dictionary<Guid, IVariable> variables, Guid variableId)
+        {
+            IVariable variable = GetVariable(variables, variableId);
+
+            if (variable == null)
+                throw new QuestionnaireException("Variable is not found.")
+                {
+                    Data = {{"VariableId", variableId}}
+                };
+
+            return variable;
         }
 
         private static IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)

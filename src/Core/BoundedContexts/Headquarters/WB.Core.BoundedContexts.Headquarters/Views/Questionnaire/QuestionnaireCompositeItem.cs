@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual string QuestionText { get; set; }
         public virtual string VariableLabel { get; set; }
 
+        public virtual VariableType? VariableType { get; set; }
         public virtual bool? UsedInReporting { get; set; }
     }
 

@@ -12,6 +12,11 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 .OnTable("questionnaire_entities")
                 .AsBoolean()
                 .Nullable();
+
+            Create.Column("variable_type")
+                .OnTable("questionnaire_entities")
+                .AsInt32()
+                .Nullable();
         }
     }
 }
