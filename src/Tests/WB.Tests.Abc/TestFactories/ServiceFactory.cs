@@ -361,17 +361,14 @@ namespace WB.Tests.Abc.TestFactories
         public VariableToUIStringService VariableToUIStringService()
             => new VariableToUIStringService();
 
-        public IInterviewExpressionStatePrototypeProvider ExpressionStatePrototypeProvider(
-            ILatestInterviewExpressionState expressionState = null)
+        public IInterviewExpressionStorageProvider ExpressionStatePrototypeProvider()
         {
-            var expressionStatePrototypeProvider = new Mock<IInterviewExpressionStatePrototypeProvider>();
-            ILatestInterviewExpressionState latestInterviewExpressionState =
-                expressionState ?? new InterviewExpressionStateStub();
-            expressionStatePrototypeProvider.SetReturnsDefault(latestInterviewExpressionState);
-
+            var expressionStatePrototypeProvider = new Mock<IInterviewExpressionStorageProvider>();
+            
             return expressionStatePrototypeProvider.Object;
         }
 
+        
         public ISubstitutionTextFactory SubstitutionTextFactory()
         {
             return new SubstitutionTextFactory(Create.Service.SubstitutionService(),

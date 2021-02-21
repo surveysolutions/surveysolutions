@@ -57,11 +57,10 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             return Create.QuestionnaireDocumentWithCoverPage(children: chapterChildren);
         }
 
-        public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
+        public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(IDynamicCompiler dynamicCompiler = null)
         {
             return new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    Create.CodeGenerator(),
                     Create.CodeGeneratorV2(),
                     Create.DynamicCompilerSettingsProvider());
         }

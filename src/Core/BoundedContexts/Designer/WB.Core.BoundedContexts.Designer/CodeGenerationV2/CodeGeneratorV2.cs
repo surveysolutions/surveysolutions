@@ -23,12 +23,19 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string StaticText = "text_";
         public const string LookupPrefix = "Lookup__";
         public const string PrivateFieldsPrefix = "__";
-        
+        public const string IdSuffix = "__id";
+        public const string StateSuffix = "__state";
+
         private readonly ICodeGenerationModelsFactory modelsFactory;
 
         public CodeGeneratorV2(ICodeGenerationModelsFactory modelsFactory)
         {
             this.modelsFactory = modelsFactory;
+        }
+
+        public static string GetQuestionIdName(string? variableName)
+        {
+            return PrivateFieldsPrefix + variableName + IdSuffix;
         }
 
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)

@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc.Storage;
+using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Abc
 {
@@ -65,12 +66,29 @@ namespace WB.Tests.Abc
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument = null)
         {
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaire.EnsureQuestionnaireMockSetup();
+            
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireOrThrow(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())).Returns(questionnaireDocument);
 
             return questionnaireMockStorage.Object;// Stub<IQuestionnaireStorage>.Returning(questionnaire);
+        }
+
+        public static void EnsureQuestionnaireMockSetup(this IQuestionnaire questionnaire)
+        {
+            if (questionnaire is PlainQuestionnaire)
+            {
+                return;
+
+            }
+            var mocked = Mock.Get(questionnaire);
+            if (mocked != null)
+            {
+                mocked.Setup(q => q.ExpressionStorageType).Returns(typeof(DummyInterviewExpressionStorage));
+                mocked.Setup(q => q.GetExpressionsPlayOrder()).Returns(new List<Guid>());
+            }
         }
 
         public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)
