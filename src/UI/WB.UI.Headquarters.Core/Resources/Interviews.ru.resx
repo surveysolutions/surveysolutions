@@ -252,4 +252,13 @@
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>Вы можете утвердить интервью имеющие следующие статусы: {{status1}}, {{status2}} и {{status3}}</value>
   </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Динамический фильтр</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>Нет данных</value>
+  </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Динамический фильтр</value>
+  </data>
 </root>
