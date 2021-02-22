@@ -21,11 +21,6 @@ namespace WB.Core.Infrastructure.HttpServices.Services
     {
         private class ResponseWithErrorMessage
         {
-            public string Message { get; set; }
-        }
-        
-        private class ResponseWithServerError
-        {
             public string Code { get; set; }
             public string Message { get; set; }
         }
@@ -199,21 +194,13 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                 }
                 else if (ex.Call.Response != null)
                 {
-                    string errorCode = null;
-                    string message = null;
-                    var type = RestExceptionType.ServerErrorResponse;
-                    
-                    var responseWithServerError = GetReasonObject<ResponseWithServerError>(ex);
-                    if (responseWithServerError == null)
-                    {
-                        type = RestExceptionType.Unexpected;
-                        message = GetReasonPhrase(ex);
-                    }
-                    else
-                    {
-                        errorCode = responseWithServerError.Code;
-                        message = responseWithServerError.Message;
-                    }
+                    var responseWithServerError = GetReasonPhrase(ex);
+
+                    var type = responseWithServerError.Code != null
+                        ? RestExceptionType.ServerErrorResponse
+                        : RestExceptionType.Unexpected;
+                    var errorCode = responseWithServerError.Code;
+                    var message = responseWithServerError.Message;
                     
                     var restException = new RestException(errorCode, message, type: type, statusCode: ex.Call.Response.StatusCode, innerException: ex);
 
@@ -261,13 +248,13 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             } 
         }
         
-        private string GetReasonPhrase(ExtendedMessageHandlerException ex)
+        private ResponseWithErrorMessage GetReasonPhrase(ExtendedMessageHandlerException ex)
         {
             var reasonObject = GetReasonObject<ResponseWithErrorMessage>(ex);
             if (reasonObject != null)
-                return reasonObject.Message;
+                return reasonObject;
 
-            return ex.Call.Response.ReasonPhrase;
+            return new ResponseWithErrorMessage() {Message = ex.Call.Response.ReasonPhrase};
         }
 
         public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache,
