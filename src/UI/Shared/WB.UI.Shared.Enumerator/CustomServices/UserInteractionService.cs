@@ -340,6 +340,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
                         inflatedView.FindViewById<TextInputLayout>(Resource.Id.oldPasswordEditTextWrapper).Hint = UIResources.OldPasswordHint;
                         inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper).Hint = UIResources.NewPasswordHint;
+                        var oldPassError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.oldPasswordEditTextWrapper);
                         var passError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper);
                         var confirmPassError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.reconfirmationEditTextWrapper);
                         confirmPassError.Hint = UIResources.ConfirmNewPasswordHint;
@@ -376,7 +377,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                                 await canClose.Invoke(dialogCallback);
                             if (!dialogCallback.NeedClose)
                             {
-                                passError.Error = dialogCallback.Error;
+                                oldPassError.Error = dialogCallback.OldPasswordError;
+                                passError.Error = dialogCallback.NewPasswordError;
                                 return;
                             }
                                     
@@ -390,7 +392,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
                         }));
                         
-                        var passwordTextWatcher = new PasswordTextWatcher(passwordText, confirmPasswordText, button, confirmPassError);
+                        var passwordTextWatcher = new PasswordTextWatcher(() =>
+                        {
+                            button.Enabled = !string.IsNullOrWhiteSpace(passwordText.Text) &&
+                                             passwordText.Text == confirmPasswordText.Text;
+
+                            oldPassError.Error = null;
+                            passError.Error = null;
+                            confirmPassError.Error = !string.IsNullOrWhiteSpace(confirmPasswordText.Text) && !button.Enabled
+                                ? UIResources.PasswordMatchError
+                                : null;
+                        }));
                         passwordText.AddTextChangedListener(passwordTextWatcher);
                         confirmPasswordText.AddTextChangedListener(passwordTextWatcher);
                     },
@@ -405,28 +417,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         
         private class PasswordTextWatcher : Java.Lang.Object, ITextWatcher
         {
-            private readonly EditText passwordText;
-            private readonly EditText confirmPasswordText;
-            private readonly Button okButton;
-            private readonly TextInputLayout error;
+            private readonly Action action;
 
-            public PasswordTextWatcher(EditText passwordText, EditText confirmPasswordText, Button okButton,
-                TextInputLayout error)
+            public PasswordTextWatcher(Action action)
             {
-                this.passwordText = passwordText;
-                this.confirmPasswordText = confirmPasswordText;
-                this.okButton = okButton;
-                this.error = error;
+                this.action = action;
             }
 
             public void AfterTextChanged(IEditable s)
             {
-                okButton.Enabled = !string.IsNullOrWhiteSpace(passwordText.Text) &&
-                                   passwordText.Text == confirmPasswordText.Text;
-                
-                error.Error = !string.IsNullOrWhiteSpace(confirmPasswordText.Text) && !okButton.Enabled
-                    ? UIResources.PasswordMatchError
-                    : null;
+                action.Invoke();
             }
 
             public void BeforeTextChanged(ICharSequence s, int start, int count, int after)
