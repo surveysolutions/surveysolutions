@@ -82,6 +82,9 @@
             @addWorkspacesSelected="addWorkspacesSelected"
             @removeWorkspacesSelected="removeWorkspacesSelected"  />
 
+        <AddInterviewerToWorkspace ref="addInterviewerToWorkspace"
+            @addInterviewerWorkspace="addInterviewerWorkspace" />
+
     </HqLayout>
 </template>
 
@@ -89,6 +92,7 @@
 import { keyBy, map, find, filter, escape } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
+import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'
 import InterviewQuestionsFiltersVue from '../../Interviews/InterviewQuestionsFilters.vue'
 
 var arrayFilter = function(array, predicate) {
@@ -126,7 +130,7 @@ var arrayFilter = function(array, predicate) {
  * Users management page
  */
 export default {
-    components: { WorkspaceManager },
+    components: { WorkspaceManager, AddInterviewerToWorkspace },
     name: 'users-management',
 
     data() {
@@ -303,6 +307,12 @@ export default {
             })
         },
 
+        isAnyInterviewerSelected() {
+            return this.getFilteredItems(item => {
+                return item.role == 'Interviewer'
+            })
+        },
+
     },
 
     methods: {
@@ -316,7 +326,11 @@ export default {
         },
 
         addToWorkspace() {
-            this.$refs.manageWorkspaces.addToWorkspace(this.workspaces)
+            let isSelectedAnyInterviewer = this.isAnyInterviewerSelected
+            if (isSelectedAnyInterviewer)
+                this.$refs.addInterviewerToWorkspace.addToWorkspace()
+            else
+                this.$refs.manageWorkspaces.addToWorkspace(this.workspaces)
         },
 
         removeFromWorkspace() {
@@ -335,6 +349,11 @@ export default {
 
         async addWorkspacesSelected(workspaces) {
             const response = await this.$hq.Workspaces.Assign(map(this.filteredToAdd, 'userId'), workspaces, 'Add')
+            this.$refs.table.reload()
+        },
+
+        async addInterviewerWorkspace(workspace, supervisor) {
+            const response = await this.$hq.Workspaces.AssignInterviewer(map(this.filteredToAdd, 'userId'), workspace, supervisor, 'Add')
             this.$refs.table.reload()
         },
 

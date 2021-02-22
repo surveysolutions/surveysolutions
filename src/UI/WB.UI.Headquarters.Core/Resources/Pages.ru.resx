@@ -1619,6 +1619,12 @@
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
       <value>Все рабочие области</value>
   </data>
+  <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+    <value>Супервизор (Интервьбверы будут добавлены в команду этого супервизора)</value>
+  </data>
+  <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+    <value>Выберите супервизора</value>
+  </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>Все роли</value>
   </data>
@@ -1627,6 +1633,9 @@
   </data>  
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
       <value>Выберите к каким рабочим пронстранствам нужно добавить выбранных пользователей</value>
+  </data>
+  <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+    <value>Выберите к какому рабочему пронстранству и супервизору (необходим для добавления интервьюверов) нужно добавить выбранных пользователей</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
       <value>Выберите рабочие области из которых нужно убрать выбранных пользователей</value>

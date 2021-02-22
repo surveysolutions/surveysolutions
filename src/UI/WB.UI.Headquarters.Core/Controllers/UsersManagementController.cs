@@ -30,6 +30,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             CreateUrl = Url.Action("Create", "Users"),
             WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
+            SupervisorWorkspaceUrl = Url.Action("WorkspaceSupervisors", "UsersTypeahead"),
         });
 
         public async Task<DataTableResponse<UserManagementListItem>?> List(UsersManagementRequest request, CancellationToken cancellationToken)

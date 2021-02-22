@@ -125,9 +125,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 }).ToArray();
         }
 
-        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role)
+        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null)
         {
-            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, archived, role)
+            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, archived, workspace, role)
                 .Select(x => new InterviewersItem
                 {
                     UserId = x.Id,
@@ -447,14 +447,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, bool? archived, params UserRoles[] role)
+            => ApplyFilter(_, searchBy, archived, null, role);
+        
+        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, bool? archived, string? workspace = null, params UserRoles[] role)
         {
             var selectedRoleId = role.Select(x => x.ToUserId()).ToArray();
             
-            var currentWorkspace = workspaceContextAccessor.CurrentWorkspace() ?? 
+            var currentWorkspace = workspace ??
+                                   workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
                                    throw new MissingWorkspaceException();
             
             var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)))
-                .Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace.Name));
+                .Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace));
 
             if (archived.HasValue)
                 allUsers = allUsers.Where(x => x.IsArchived == archived.Value);

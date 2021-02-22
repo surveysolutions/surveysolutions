@@ -122,6 +122,14 @@ class Workspaces {
         )
     }
 
+    AssignInterviewer(userIds, workspace, supervisor, mode = 'Assign') {
+        return this.http.post('api/v1/workspaces/assignInterviewer',
+            {
+                userIds, workspace, supervisor, mode,
+            }
+        )
+    }
+
     async Status(workspace) {
         return await this.http.get('api/v1/workspaces/status/' + workspace)
     }

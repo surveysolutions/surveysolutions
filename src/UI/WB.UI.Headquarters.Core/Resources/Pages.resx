@@ -1559,6 +1559,12 @@
   <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
     <value>All workspaces</value>
   </data>
+  <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+    <value>Supervisor (Interviewers will add to team of this supervisor)</value>
+  </data>
+  <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+    <value>Select supervisor</value>
+  </data>
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>All roles</value>
   </data>
@@ -1567,6 +1573,9 @@
   </data>
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
     <value>Select workspaces that need to be added to selected users</value>
+  </data>
+  <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+    <value>Select workspace and supervisor (need to assign interviewer) that need to be added to selected users</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
     <value>Select workspaces that need to be removed from selected users</value>
