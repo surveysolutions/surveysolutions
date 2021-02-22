@@ -63,7 +63,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewFlagMap),
                     typeof(InterviewGpsMap),
-                    typeof(InterviewCommentMap)
+                    typeof(InterviewCommentMap),
+                    typeof(InterviewReportAnswerMap)
                 }, true, workspace.CurrentWorkspace().SchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());

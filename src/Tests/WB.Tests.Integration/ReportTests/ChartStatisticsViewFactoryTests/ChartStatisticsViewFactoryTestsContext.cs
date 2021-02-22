@@ -48,6 +48,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                     typeof(InterviewGpsMap),
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(QuestionnaireCompositeItemMap),
+                    typeof(InterviewReportAnswerMap)
                 }, 
                 true, Create.Service.WorkspaceContextAccessor().CurrentWorkspace().SchemaName);
 

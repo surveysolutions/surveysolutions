@@ -37,7 +37,8 @@ namespace WB.Tests.Integration.AudioAudit
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
-                    typeof(AudioAuditFileMap)
+                    typeof(AudioAuditFileMap),
+                    typeof(InterviewReportAnswerMap)
               }, true, workspaceName.SchemaName);
         }
 

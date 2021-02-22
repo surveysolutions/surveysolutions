@@ -51,7 +51,8 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(InterviewCommentedStatusMap),
                 typeof(InterviewCommentMap),
                 typeof(InterviewGpsMap),
-                typeof(QuestionnaireCompositeItemMap)
+                typeof(QuestionnaireCompositeItemMap),
+                typeof(InterviewReportAnswerMap)
                 
             }, true, workspaceNameProvider.CurrentWorkspace().SchemaName);
 
