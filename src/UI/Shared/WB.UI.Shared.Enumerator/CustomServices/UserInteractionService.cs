@@ -365,6 +365,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         Button button = dialog.GetButton((int)DialogButtonType.Positive);
                         button.SetOnClickListener(new OnClickListener(async delegate
                         {
+                            oldPassError.Error = null;
+                            passError.Error = null;
+                            confirmPassError.Error = null;
+
+                            if (!string.IsNullOrWhiteSpace(passwordText.Text) &&
+                                passwordText.Text != confirmPasswordText.Text)
+                            {
+                                confirmPassError.Error = UIResources.PasswordMatchError;
+                                return;
+                            }
+                                
                             var dialogCallback = new ChangePasswordDialogOkCallback()
                             {
                                 DialogResult = new ChangePasswordDialogResult()
@@ -392,19 +403,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
                         }));
                         
-                        var passwordTextWatcher = new PasswordTextWatcher(() =>
-                        {
-                            button.Enabled = !string.IsNullOrWhiteSpace(passwordText.Text) &&
-                                             passwordText.Text == confirmPasswordText.Text;
-
-                            oldPassError.Error = null;
-                            passError.Error = null;
-                            confirmPassError.Error = !string.IsNullOrWhiteSpace(confirmPasswordText.Text) && !button.Enabled
-                                ? UIResources.PasswordMatchError
-                                : null;
-                        });
-                        passwordText.AddTextChangedListener(passwordTextWatcher);
-                        confirmPasswordText.AddTextChangedListener(passwordTextWatcher);
+                        oldPasswordText.AddTextChangedListener(new PasswordTextWatcher(() => { oldPassError.Error = null; }));
+                        passwordText.AddTextChangedListener(new PasswordTextWatcher(() => { passError.Error = null; }));
+                        confirmPasswordText.AddTextChangedListener(new PasswordTextWatcher(() => { confirmPassError.Error = null; }));
                     },
                     null);
             }
