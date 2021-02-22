@@ -214,13 +214,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!QuestionnaireIdentity.TryParse(createItem.QuestionnaireId, out QuestionnaireIdentity questionnaireId))
             {
                 return StatusCode(StatusCodes.Status404NotFound,
-                    $"Questionnaire not found: {createItem?.QuestionnaireId}");
+                    $"Questionnaire not found: {createItem.QuestionnaireId}");
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
             if (questionnaire == null)
                 return StatusCode(StatusCodes.Status404NotFound,
-                    $"Questionnaire not found: {createItem?.QuestionnaireId}");
+                    $"Questionnaire not found: {createItem.QuestionnaireId}");
 
             if (string.IsNullOrEmpty(createItem.Responsible))
                 return StatusCode(StatusCodes.Status400BadRequest, "Responsible is required");
@@ -450,8 +450,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             commandService.Execute(new UnarchiveAssignment(assignment.PublicKey, authorizedUser.Id));
 
-            var updatedDetails = GetUpdatedAssignment(id);
-
             return GetUpdatedAssignment(id);
         }
 
@@ -526,18 +524,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             };
         }
 
-        /// <summary>
-        /// Closes assignment by setting Size to the amount of collected interviews
-        /// </summary>
-        /// <param name="id">Assignment id</param>
-        /// <response code="200">Assignment closed</response>
-        /// <response code="404">Assignment not found</response>
-        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
         [HttpPost]
+        [Obsolete("Use PATCH method instead")]
         [Route("{id:int}/close")]
         [ObservingNotAllowed]
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
-        public ActionResult Close(int id)
+        public ActionResult ClosePost(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
@@ -550,6 +542,32 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 assignment.InterviewSummaries.Count));
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Closes assignment by setting Size to the amount of collected interviews
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200">Assignment closed</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
+        [HttpPatch]
+        [Route("{id:int}/close")]
+        [ObservingNotAllowed]
+        [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
+        public ActionResult<AssignmentDetails> Close(int id)
+        {
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+                return NotFound();
+            if (!assignment.QuantityCanBeChanged)
+                return Conflict();
+
+            this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
+                this.authorizedUser.Id,
+                assignment.InterviewSummaries.Count));
+
+            return GetUpdatedAssignment(id);
         }
 
         /// <summary>
