@@ -240,10 +240,10 @@ export default {
                 result.or = []
                 group.children.forEach(element => {
                     if(element.type == 'query-builder-rule')
-                        result.or.push(this.handleRule(element))
+                        result.or.push(this.handleRule(element.query))
                     else if(element.type == 'query-builder-group')
                     {
-                        result.or.push(this.handleGroup(element))
+                        result.or.push(this.handleGroup(element.query))
                     }
                 })
             }
@@ -252,27 +252,27 @@ export default {
                 result.and = []
                 group.children.forEach(element => {
                     if(element.type == 'query-builder-rule')
-                        result.and.push(this.handleRule(element))
+                        result.and.push(this.handleRule(element.query))
                     else if(element.type == 'query-builder-group')
                     {
-                        result.and.push(this.handleGroup(element))
+                        result.and.push(this.handleGroup(element.query))
                     }
                 })
             }
 
             return result
         },
-        handleRule(rule){
+        handleRule(query){
 
             var some = {
-                entity: {variable: {eq: rule.query.operand}},
+                entity: {variable: {eq: query.operand}},
                 isEnabled: {eq: true},
             }
 
-            if(rule.query.operator == undefined)
-                some.answerCode = {eq: rule.query.value}
+            if(query.operator == undefined)
+                some.answerCode = {eq: query.value}
             else
-                some.value = {eq: rule.query.value}
+                some.value = {eq: query.value}
 
             var result = {reportAnswers : { some: some }}
 
