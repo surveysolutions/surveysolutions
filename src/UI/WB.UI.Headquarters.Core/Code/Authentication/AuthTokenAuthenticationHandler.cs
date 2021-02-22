@@ -70,8 +70,12 @@ namespace WB.UI.Headquarters.Code.Authentication
                     && Request.Path.Value != null
                     && (
                         Request.Path.Value.EndsWith("/users/changePassword")
-                        || Request.Path.Value.Contains("api/interviewer/compatibility")
-                        || Request.Path.Value.Contains("api/supervisor/compatibility")
+                        || Request.Path.Value.StartsWith("/api/interviewer/compatibility")
+                        || Request.Path.Value.StartsWith("/api/supervisor/compatibility")
+                        || Request.Path.Value.EndsWith("/users/current")
+                        || Request.Path.Value.EndsWith("/users/hasdevice")
+                        || Request.Path.Value.EndsWith("/autoupdate")
+                        //|| Request.Path.Value.EndsWith("/latestversion")
                     );
                 if (!allowedUrlToAccess)
                 {
