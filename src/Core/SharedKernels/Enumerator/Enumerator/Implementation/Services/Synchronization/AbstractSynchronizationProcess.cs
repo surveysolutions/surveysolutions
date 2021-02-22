@@ -615,7 +615,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
                 catch (SynchronizationException ex)
                 {
-                    callback.Error = ex.Message;
+                    if (ex.Type == SynchronizationExceptionType.ShouldChangePassword)
+                        callback.NewPasswordError = ex.Message;
+                    else
+                        callback.OldPasswordError = ex.Message;
                     
                     logger.Error($"Cant change password for user {username}", ex);
                 }

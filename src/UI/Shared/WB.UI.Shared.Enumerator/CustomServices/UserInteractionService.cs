@@ -402,7 +402,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             confirmPassError.Error = !string.IsNullOrWhiteSpace(confirmPasswordText.Text) && !button.Enabled
                                 ? UIResources.PasswordMatchError
                                 : null;
-                        }));
+                        });
                         passwordText.AddTextChangedListener(passwordTextWatcher);
                         confirmPasswordText.AddTextChangedListener(passwordTextWatcher);
                     },
