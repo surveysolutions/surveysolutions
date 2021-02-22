@@ -1,6 +1,4 @@
 import UsersManagement from './UsersManagement'
-import CreateUser from './CreateUser'
-
 
 export default class UsersManagementComponent {
     get routes() {
