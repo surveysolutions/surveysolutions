@@ -47,8 +47,7 @@ namespace WB.Tests.Integration.ReportTests
                     typeof(InterviewStatisticsReportRowMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewCommentMap),
-                    typeof(QuestionnaireCompositeItemMap),
-                    typeof(InterviewReportAnswerMap)
+                    typeof(QuestionnaireCompositeItemMap)
                 }, true, Create.Service.WorkspaceContextAccessor().CurrentWorkspace().SchemaName);
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);

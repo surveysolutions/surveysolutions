@@ -187,9 +187,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
         }
 
-        public virtual bool IsEntityIdentifying(IQuestionnaire questionnaire, int questionId)
+        public virtual bool IsEntityIdentifying(int questionId)
         {
-            return questionnaire.GetIdentifyingMappedEntities().Contains(questionId);
+            return this.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId && x.Identifying);
         }
 
         protected bool Equals(InterviewSummary other)

@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
-                if (interview.IsEntityIdentifying(questionnaire, questionCompositeId))
+                if (interview.IsEntityIdentifying(questionCompositeId))
                 {
                     interview.AnswerFeaturedQuestion(questionCompositeId, AnswerUtils.AnswerToString(answer));
                 }
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
-                if (interview.IsEntityIdentifying(questionnaire, questionCompositeId))
+                if (interview.IsEntityIdentifying(questionCompositeId))
                 {
                     var optionStrings = questionnaire.GetOptionsForQuestion(questionId, null, null, null)
                         .Where(x => answers.Contains(x.Value)).Select(x => x.Title);
@@ -544,7 +544,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     var variableId = questionnaire.GetEntityIdMapValue(changedVariable.Identity.Id);
                     var varType = questionnaire.GetVariableType(changedVariable.Identity.Id);
-                    if (interview.IsEntityIdentifying(questionnaire, variableId))
+                    if (interview.IsEntityIdentifying(variableId))
                     {
                         interview.AnswerFeaturedVariable(variableId, changedVariable.NewValue, varType);
                     }
