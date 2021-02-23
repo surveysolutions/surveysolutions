@@ -111,6 +111,7 @@ type IdentifyingEntity {
   answerValue: Int
   entity: Entity!
   value: String
+  isEnabled: Boolean
 }
 
 type Interview {
@@ -316,21 +317,6 @@ input ComparableNullableOfDecimalOperationFilterInput {
   nlte: Decimal
 }
 
-input ComparableNullableOfDoubleOperationFilterInput {
-  eq: Float
-  neq: Float
-  in: [Float]
-  nin: [Float]
-  gt: Float
-  ngt: Float
-  gte: Float
-  ngte: Float
-  lt: Float
-  nlt: Float
-  lte: Float
-  nlte: Float
-}
-
 input ComparableNullableOfInt32OperationFilterInput {
   eq: Int
   neq: Int
@@ -357,22 +343,8 @@ input IdentifyEntityValueFilter {
   valueLowerCase: StringOperationFilterInput
   "Question or variable entity"
   entity: QuestionnaireItemsFilter
-}
-
-input InterviewReportAnswerFilterInput {
-  and: [InterviewReportAnswerFilterInput!]
-  or: [InterviewReportAnswerFilterInput!]
-  interviewSummary: InterviewsFilter
-  value: StringOperationFilterInput
-  valueLowerCase: StringOperationFilterInput
-  entity: QuestionnaireItemsFilter
-  answerCode: ComparableNullableOfDecimalOperationFilterInput
-  valueDate: ComparableNullableOfDateTimeOperationFilterInput
-  valueBool: BooleanOperationFilterInput
-  valueDouble: ComparableNullableOfDoubleOperationFilterInput
-  valueInt: ComparableNullableOfInt32OperationFilterInput
+  "Shows if this value enabled"
   isEnabled: BooleanOperationFilterInput
-  id: ComparableInt32OperationFilterInput
 }
 
 input InterviewSort {
@@ -419,20 +391,12 @@ input InterviewsFilter {
   receivedByInterviewerAtUtc: ComparableNullableOfDateTimeOperationFilterInput
   errorsCount: ComparableInt32OperationFilterInput
   identifyingData: ListFilterInputTypeOfIdentifyEntityValueFilterInput
-  reportAnswers: ListFilterInputTypeOfInterviewReportAnswerFilterInput
 }
 
 input ListFilterInputTypeOfIdentifyEntityValueFilterInput {
   all: IdentifyEntityValueFilter
   none: IdentifyEntityValueFilter
   some: IdentifyEntityValueFilter
-  any: Boolean
-}
-
-input ListFilterInputTypeOfInterviewReportAnswerFilterInput {
-  all: InterviewReportAnswerFilterInput
-  none: InterviewReportAnswerFilterInput
-  some: InterviewReportAnswerFilterInput
   any: Boolean
 }
 
@@ -489,7 +453,7 @@ input QuestionnaireItemsFilter {
   scope: NullableOfQuestionScopeOperationFilterInput
   "Find only identifying entities"
   identifying: BooleanOperationFilterInput
-  "Find only identifying entities"
+  "Is this entity exposed"
   exposed: BooleanOperationFilterInput
 }
 
