@@ -43,6 +43,9 @@ if($null -eq $gitBranch) {
 }
 $EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
 $EscapedBranchName = $EscapedBranchName -replace '/|\\','-'
+$EscapedBranchName = $EscapedBranchName -replace '^[^\d\w]+' # tab should not start with non numeric non word character
+$EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
+
 $isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
 if ($version.Split('.').Length -eq 2) {
