@@ -82,7 +82,7 @@
     "autoprefixer": "^9.5.1",
     "axios": "^0.21.1",
     "bootbox": "^5.5.2",
-    "bootstrap": "3.4.0",
+    "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.9",
     "es5-shim": "^4.5.9",
     "es6-promise": "^4.2.8",
