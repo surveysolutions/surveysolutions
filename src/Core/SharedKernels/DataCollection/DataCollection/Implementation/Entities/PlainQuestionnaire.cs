@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private HashSet<string> questionVariableNamesCache = null;
         private HashSet<string> rosterVariableNamesCache = null;
         private Dictionary<string, IVariable> variableNamesCache = null;
-
+        private HashSet<int> identifyingMappedEntitiesCache = null;
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -584,6 +584,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return GetPrefilledQuestions();
             }
         }
+
+        public HashSet<int> GetIdentifyingMappedEntities()
+            => this.identifyingMappedEntitiesCache 
+               ?? (this.identifyingMappedEntitiesCache = 
+                   this.GetPrefilledEntities()
+                       .Where(x => (this.IsQuestion(x) && this.GetQuestionType(x) != QuestionType.GpsCoordinates) || this.IsVariable(x))
+                       .Select(GetEntityIdMapValue)
+                       .ToHashSet());
 
         public ReadOnlyCollection<Guid> GetHiddenQuestions()
             => this

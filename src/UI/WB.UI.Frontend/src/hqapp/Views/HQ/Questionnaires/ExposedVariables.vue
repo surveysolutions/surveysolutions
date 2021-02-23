@@ -146,7 +146,8 @@ export default {
             return {
                 deferLoading: 0,
                 columns: [
-                    {},
+                    {
+                    },
                     {
                         data: 'variable',
                         name: 'Variable',
@@ -192,7 +193,7 @@ export default {
         this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
             .ExposedVariables(this.$config.model.questionnaireIdentity)
             .then(data => {
-                this.exposedVariables = map(data.data, d => {
+                this.exposedVariables = map(data, d => {
                     return {
                         id: d.id,
                         title: sanitizeHtml(d.title),

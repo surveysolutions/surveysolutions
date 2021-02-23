@@ -47,6 +47,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.Value)
                 .Name("value")
                 .Type<StringType>();
+
+            descriptor.Field(x => x.IsEnabled)
+                .Name("isEnabled")
+                .Type<BooleanType>();
         }
     }
 }

@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -36,7 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         //TODO: add cache
-        private IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        
 
         public InterviewDynamicReportAnswersDenormalizer(IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
@@ -86,10 +88,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
             
-            foreach (var answer in state.ReportAnswers.Where(g =>
-                reportQuestionIdentities.Contains((g.Entity.EntityId))))
+            foreach (var answer in state.IdentifyEntitiesValues
+                .Where(g => reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
-                state.ReportAnswers.Remove(answer);
+                state.IdentifyEntitiesValues.Remove(answer);
             }
             return state;
         }
@@ -99,8 +101,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
 
-            foreach (var answer in state.ReportAnswers.Where(g =>
-                reportQuestionIdentities.Contains((g.Entity.EntityId))))
+            foreach (var answer in state.IdentifyEntitiesValues.Where(g =>
+                reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
                 answer.IsEnabled = true;
             }
@@ -113,8 +115,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Questions);
             if (reportQuestionIdentities.Count == 0) return state;
 
-            foreach (var answer in state.ReportAnswers.Where(g =>
-                reportQuestionIdentities.Contains((g.Entity.EntityId))))
+            foreach (var answer in state.IdentifyEntitiesValues.Where(g =>
+                reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
                 answer.IsEnabled = false;
             }
@@ -143,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
-            var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
+            var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
@@ -153,16 +155,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             else
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
-                state.ReportAnswers.Add(new InterviewReportAnswer
+                state.IdentifyEntitiesValues.Add(new IdentifyEntityValue
                 {
                     Entity = new QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
+                        Id = id
                     },
                     Value = @event.Payload.Answer,
                     InterviewSummary = state,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    Position = id
                 });
             }
 
@@ -174,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
-            var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
+            var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
@@ -184,16 +188,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             else
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
-                state.ReportAnswers.Add(new InterviewReportAnswer
+                state.IdentifyEntitiesValues.Add(new IdentifyEntityValue
                 {
                     Entity = new QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
+                        Id = id
                     },
                     AnswerCode = @event.Payload.SelectedValue,
                     InterviewSummary = state,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    Position = id
                 });
             }
 
@@ -205,26 +211,28 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
-            var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
+            var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
-                answer.ValueInt = (int)@event.Payload.Answer;
+                answer.ValueDouble = Convert.ToDouble(@event.Payload.Answer);
                 answer.IsEnabled = true;
             }
             else
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
-                state.ReportAnswers.Add(new InterviewReportAnswer
+                state.IdentifyEntitiesValues.Add(new IdentifyEntityValue()
                 {
                     Entity = new QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
+                        Id = id
                     },
-                    ValueInt = (int)@event.Payload.Answer,
+                    ValueDouble = Convert.ToDouble(@event.Payload.Answer),
                     InterviewSummary = state,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    Position = id
                 });
             }
 
@@ -236,26 +244,28 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
-            var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
+            var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
-                answer.ValueDouble = @event.Payload.Answer;
+                answer.ValueLong = @event.Payload.Answer;
                 answer.IsEnabled = true;
             }
             else
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
-                state.ReportAnswers.Add(new InterviewReportAnswer
+                state.IdentifyEntitiesValues.Add(new IdentifyEntityValue()
                 {
                     Entity = new QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId)
+                        Id = id
                     },
-                    ValueDouble = @event.Payload.Answer,
+                    ValueLong = @event.Payload.Answer,
                     InterviewSummary = state,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    Position = id
                 });
             }
 
@@ -267,9 +277,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetDynamicReportEntitiesIds(state);
             if (!reportQuestionIdentities.Contains(@event.Payload.QuestionId)) return state;
 
-            var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
-
-            //TODO: support datetime operations
+            var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == @event.Payload.QuestionId);
 
             if (answer != null)
             {
@@ -279,8 +287,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             else
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                var id = questionnaire.GetEntityIdMapValue(@event.Payload.QuestionId);
 
-                state.ReportAnswers.Add(new InterviewReportAnswer
+                state.IdentifyEntitiesValues.Add(new IdentifyEntityValue()
                 {
                     Entity = new QuestionnaireCompositeItem
                     {
@@ -288,7 +297,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     },
                     ValueDate = @event.Payload.Answer,
                     InterviewSummary = state,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    Position = id
                 });
             }
 
@@ -302,31 +312,51 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             foreach (var variable in @event.Payload.ChangedVariables.Where(x=> reportQuestionIdentities.Contains(x.Identity.Id)))
             {
-                var answer = state.ReportAnswers.FirstOrDefault(x => x.Entity.EntityId == variable.Identity.Id);
+                var answer = state.IdentifyEntitiesValues.FirstOrDefault(x => x.Entity.EntityId == variable.Identity.Id);
 
                 if (answer != null)
                 {
                     answer.IsEnabled = true;
-
                     //TODO: set property value depending of the type
-
                     answer.Value = variable.NewValue.ToString();
-                    
                 }
                 else
                 {
                     var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(state.QuestionnaireIdentity), null);
+                    var id = questionnaire.GetEntityIdMapValue(variable.Identity.Id);
+                    var varType = questionnaire.GetVariableType(variable.Identity.Id);
 
-                    state.ReportAnswers.Add(new InterviewReportAnswer
+                    var identifyingValue = new IdentifyEntityValue()
                     {
                         Entity = new QuestionnaireCompositeItem
                         {
-                            Id = questionnaire.GetEntityIdMapValue(variable.Identity.Id)
+                            Id = id
                         },
-                        Value = variable.NewValue.ToString(),//TODO: set correspondent property value depending of the type
                         InterviewSummary = state,
-                        IsEnabled = true
-                    });
+                        IsEnabled = true,
+                        Position = id
+                    };
+
+                    switch (varType)
+                    {
+                        case VariableType.Boolean:
+                            identifyingValue.ValueBool = Convert.ToBoolean(variable.NewValue);
+                            break;
+                        case VariableType.DateTime:
+                            identifyingValue.ValueDate = variable.NewValue as DateTime?;
+                            break;
+                        case VariableType.Double:
+                            identifyingValue.ValueDouble = Convert.ToDouble(variable.NewValue);
+                            break;
+                        case VariableType.LongInteger:
+                            identifyingValue.ValueLong = Convert.ToInt64(variable.NewValue);
+                            break;
+                        case VariableType.String:
+                            identifyingValue.Value = variable.NewValue as string;
+                            break;
+                    }
+
+                    state.IdentifyEntitiesValues.Add(identifyingValue);
                 }
             }
 
@@ -335,12 +365,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<VariablesEnabled> @event)
         {
-
             var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Variables);
             if (reportQuestionIdentities.Count == 0) return state;
 
-            foreach (var answer in state.ReportAnswers.Where(g =>
-                reportQuestionIdentities.Contains((g.Entity.EntityId))))
+            foreach (var answer in state.IdentifyEntitiesValues.Where(g =>
+                reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
                 answer.IsEnabled = false;
             }
@@ -353,8 +382,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var reportQuestionIdentities = GetExposedEntitiesIdentities(state, @event.Payload.Variables);
             if (reportQuestionIdentities.Count == 0) return state;
 
-            foreach (var answer in state.ReportAnswers.Where(g =>
-                reportQuestionIdentities.Contains((g.Entity.EntityId))))
+            foreach (var answer in state.IdentifyEntitiesValues.Where(g =>
+                reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
                 answer.IsEnabled = true;
             }

@@ -29,8 +29,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.ErrorsCount);
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData");
-
-            descriptor.Field(x => x.ReportAnswers);
         }
     }
 }

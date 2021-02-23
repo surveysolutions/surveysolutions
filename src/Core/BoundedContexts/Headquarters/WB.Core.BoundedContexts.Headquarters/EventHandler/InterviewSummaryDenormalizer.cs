@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
-                if (interview.IsQuestionIdentifying(questionCompositeId))
+                if (interview.IsEntityIdentifying(questionnaire, questionCompositeId))
                 {
                     interview.AnswerFeaturedQuestion(questionCompositeId, AnswerUtils.AnswerToString(answer));
                 }
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
             {
                 var questionCompositeId = questionnaire.GetEntityIdMapValue(questionId);
-                if (interview.IsQuestionIdentifying(questionCompositeId))
+                if (interview.IsEntityIdentifying(questionnaire, questionCompositeId))
                 {
                     var optionStrings = questionnaire.GetOptionsForQuestion(questionId, null, null, null)
                         .Where(x => answers.Contains(x.Value)).Select(x => x.Title);
@@ -307,7 +307,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var question in @event.Payload.Questions)
                 {
                     var questionId = questionnaire.GetEntityIdMapValue(question.Id);
-                    if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId))
+                    if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId && x.Identifying == true))
                     {
                         interview.AnswerFeaturedQuestion(questionId, string.Empty);
                     }
@@ -386,7 +386,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         foreach (var questionFromDto in @event.Payload.FeaturedQuestionsMeta)
                         {
                             var questionId = questionnaire.GetEntityIdMapValue(questionFromDto.Id);
-                            if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId))
+                            if (interview.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId && x.Identifying == true))
                             {
                                 var questionnaire = GetQuestionnaire(interview);
                                 var questionType = questionnaire.GetQuestionType(questionFromDto.Id);
@@ -543,9 +543,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var changedVariable in @event.Payload.ChangedVariables)
                 {
                     var variableId = questionnaire.GetEntityIdMapValue(changedVariable.Identity.Id);
-                    if (interview.IsQuestionIdentifying(variableId))
+                    var varType = questionnaire.GetVariableType(changedVariable.Identity.Id);
+                    if (interview.IsEntityIdentifying(questionnaire, variableId))
                     {
-                        interview.AnswerFeaturedQuestion(variableId, AnswerUtils.AnswerToString(changedVariable.NewValue));
+                        interview.AnswerFeaturedVariable(variableId, changedVariable.NewValue, varType);
                     }
                 }
             });

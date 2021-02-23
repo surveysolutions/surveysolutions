@@ -17,6 +17,8 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Utils;
 using WB.UI.Headquarters.Filters;
@@ -35,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private const int DEFAULTPAGESIZE = 12;
         private const string DEFAULTEMPTYQUERY = "";
 
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
@@ -47,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IDeleteQuestionnaireService deleteQuestionnaireService,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
-            IExposedVariablesService exposedVariablesService)
+            IExposedVariablesService exposedVariablesService,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -55,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireItems = questionnaireItems;
             this.exposedVariablesService = exposedVariablesService;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpGet]
@@ -200,30 +205,66 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public DataTableResponse<QuestionnaireExposableEntity> GetQuestionnaireVariables([Models.Api.DataTable.DataTablesRequest] DataTableRequest request,
-            [FromQuery] string id, [FromQuery]bool exposed = false)
+        public List<QuestionnaireExposableEntity> GetQuestionnaireExposedVariables([FromQuery] string id)
         {
             if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
             {
                 return null;
             }
 
+            return this.questionnaireItems.Query(_ => _
+                    .Where(x => x.QuestionnaireIdentity == questionnaireIdentity.ToString() && x.UsedInReporting == true)
+                    .OrderUsingSortExpression("Id Asc")
+                    .Select(x => new QuestionnaireExposableEntity
+                    {
+                        Id = x.Id,
+                        Title = x.QuestionText,
+                        Variable = x.StataExportCaption,
+                        Label = x.VariableLabel,
+                        IsExposed = x.UsedInReporting ?? false
+                    }))
+                .ToList();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public DataTableResponse<QuestionnaireExposableEntity> GetQuestionnaireVariables([Models.Api.DataTable.DataTablesRequest] DataTableRequest request,
+            [FromQuery] string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return null;
+            }
+
+            var document = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            var variablesNotInRostersIds = document.Children
+                .Where(y=>(y as Group)?.IsRoster != true)
+                .TreeToEnumerable(x => x.Children.Where(y=>(y as Group)?.IsRoster != true))
+                .Where(x =>x is IVariable)
+                .Select(x => x.PublicKey);
+
+            var questionsNotInRosters = document.Children
+                .Where(y => (y as Group)?.IsRoster != true)
+                .TreeToEnumerable(x =>x.Children.Where(y=>(y as Group)?.IsRoster != true))
+                .OfType<IQuestion>()
+                .Where(x=>x.QuestionType == QuestionType.DateTime ||
+                          x.QuestionType == QuestionType.Numeric ||
+                          x.QuestionType == QuestionType.Text ||
+                          (x.QuestionType == QuestionType.SingleOption 
+                           && !x.LinkedToQuestionId.HasValue 
+                           && !x.LinkedToRosterId.HasValue 
+                           && x.CascadeFromQuestionId == null
+                           && x.IsFilteredCombobox != true))
+                .Select(x => x.PublicKey);
+
+            var permittedEntities = questionsNotInRosters.Union(variablesNotInRostersIds).Except(questionnaire.GetPrefilledEntities()).ToList();
+
             var variables = this.questionnaireItems.Query(q =>
             {
                 q = q.Where(i => i.QuestionnaireIdentity == questionnaireIdentity.ToString());
-                q =  q.Where(item =>
-                    ((item.EntityType == EntityType.Question && (item.QuestionType == QuestionType.DateTime ||
-                                                                 item.QuestionType == QuestionType.Numeric ||
-                                                                 item.QuestionType == QuestionType.Text ||
-                                                                 item.QuestionType == QuestionType.SingleOption))
-                     || (item.EntityType == EntityType.Variable))
-                     && item.Featured != true
-                    
-                     && item.IsFilteredCombobox == false
-                     && item.LinkedToRosterId == null
-                     && item.LinkedToQuestionId == null
-                     && item.CascadeFromQuestionId == null
-                );
+                q = q.Where(i => permittedEntities.Contains(i.EntityId));
 
                 if (request.Search?.Value != null)
                 {
@@ -232,9 +273,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                                      || i.StataExportCaption.ToLower().Contains(search)
                                      || i.VariableLabel.Contains(search));
                 }
-
-                if (exposed)
-                    q = q.Where(i => i.UsedInReporting == true);
 
                 q = q.OrderUsingSortExpression("Id Asc");
 

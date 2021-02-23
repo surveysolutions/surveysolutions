@@ -266,7 +266,7 @@ export default {
 
             var some = {
                 entity: {variable: {eq: query.operand}},
-                isEnabled: {eq: true},
+                //isEnabled: {eq: true},
             }
 
             if(query.operator == undefined)
@@ -274,7 +274,7 @@ export default {
             else
                 some.value = {eq: query.value}
 
-            var result = {reportAnswers : { some: some }}
+            var result = {identifyingData : { some: some }}
 
             return result
         },
@@ -308,7 +308,7 @@ export default {
 
         rules(){
 
-            return this.questionnaireItems.filter(i=>!i.identifying).map(i => {
+            return this.questionnaireItems.map(i => {
 
                 var type = 'text'
 

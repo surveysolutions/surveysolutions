@@ -112,6 +112,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         ReadOnlyCollection<Guid> GetPrefilledEntities();
 
+        HashSet<int> GetIdentifyingMappedEntities();
+
         ReadOnlyCollection<Guid> GetHiddenQuestions();
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);

@@ -115,15 +115,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 },
                 rel => rel.OneToMany());
 
-            Set(x => x.ReportAnswers, set =>
-                {
-                    set.Key(key => key.Column("interview_id"));
-                    set.Lazy(CollectionLazy.Lazy);
-                    set.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    set.Inverse(true);
-                },
-                rel => rel.OneToMany());
-
             Set(x => x.StatisticsReport, listMap =>
             {
                 listMap.Table("report_statistics");
@@ -189,7 +180,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Value, col => col.Column("value"));
             Property(x => x.AnswerCode, col => col.Column("answer_code"));
             Property(x => x.ValueLowerCase, col => col.Column("value_lower_case"));
+
+            Property(x => x.ValueBool, col => col.Column("value_bool"));
+            Property(x => x.ValueDate, col => col.Column("value_date"));
+            Property(x => x.ValueDouble, col => col.Column("value_double"));
+            Property(x => x.ValueLong, col => col.Column("value_long"));
             
+            Property(x=> x.Identifying, col => col.Column("identifying"));
+
             ManyToOne(x => x.Entity, mtm =>
             {
                 mtm.Lazy(LazyRelation.Proxy);

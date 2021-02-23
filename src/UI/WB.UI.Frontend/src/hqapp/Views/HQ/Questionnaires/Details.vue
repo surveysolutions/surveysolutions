@@ -82,9 +82,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><a :href="model.exposedVariablesUrl + '/' + model.questionnaireId + '$' + model.version">
-                                {{$t('Dashboard.ExposedVariables')}}</a></td>
+                            <td>{{$t('Dashboard.ExposedVariables')}}</td>
                             <td>
+                                <a :href="model.exposedVariablesUrl + '/' + model.questionnaireId + '$' + model.version">
+                                    {{$t('Dashboard.Edit')}}</a>
                             </td>
                         </tr>
 

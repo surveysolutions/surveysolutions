@@ -96,6 +96,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
 
             try
             {
+                //TODO: handle only variable removal
+                //no need to rebuild
+                
                 //clean up old records
                 await RemoveAllDynamicReportDataAsync(questionnaireIdentity);
 
@@ -154,9 +157,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DynamicRe
         {
             this.logger.LogWarning("Removing all dynamic report data for {questionnaireId}", questionnaireIdentity);
             
-            var queryText = $"DELETE FROM interview_report_answers as ira " +
+            var queryText = $"DELETE FROM identifyingentityvalue as ira " +
                                   $"USING questionnaire_entities as qe " +
                                   $"WHERE ira.entity_id = qe.id " +
+                                  $"AND ira.identifying != true " +
                                   $"AND qe.questionnaireidentity = :questionnaireIdentity ";
 
             var query = sessionFactory.Session.CreateSQLQuery(queryText);

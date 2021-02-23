@@ -47,7 +47,7 @@ class QuestionnaireApi {
     }
 
     async ExposedVariables(id) {
-        const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireVariables?id=${id}&exposed=true`,
+        const response = await this.http.get(`api/QuestionnairesApi/GetQuestionnaireExposedVariables?id=${id}`,
             {
                 params: {
                     limit: 100,

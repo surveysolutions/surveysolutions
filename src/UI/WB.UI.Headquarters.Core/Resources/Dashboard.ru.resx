@@ -249,4 +249,7 @@
   <data name="ExposedVariables" xml:space="preserve">
     <value>Открытые переменные</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
 </root>

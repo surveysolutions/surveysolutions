@@ -88,8 +88,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     context.GroupDataLoader<string, IdentifyEntityValue>
                         (async (keys, token) =>
                     {
-                        var unitOfWork = context.Service<IUnitOfWork>(); var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
-                            .Where(a => keys.Contains(a.InterviewSummary.SummaryId))
+                        var unitOfWork = context.Service<IUnitOfWork>(); 
+                        var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
+                            .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
                             .OrderBy(a => a.Position)
                             .ToListAsync()
                             .ConfigureAwait(false);

@@ -5,6 +5,8 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -30,20 +32,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary(IQuestionnaire questionnaire) : this()
         {
             int position = 0;
-            foreach (var entityId in questionnaire.GetPrefilledEntities()
-                .Where(x =>
-                    (questionnaire.IsQuestion(x) && questionnaire.GetQuestionType(x) != QuestionType.GpsCoordinates)
-                    || questionnaire.IsVariable(x)))
+            foreach (var entityId in questionnaire.GetIdentifyingMappedEntities())
             {
                 var result = new IdentifyEntityValue
                 {
                     Entity = new Questionnaire.QuestionnaireCompositeItem
                     {
-                        Id = questionnaire.GetEntityIdMapValue(entityId)
+                        Id = entityId
                     },
                     Value = string.Empty,
                     InterviewSummary = this,
-                    Position = position
+                    Position = position,
+                    Identifying = true
                 };
                 position++;
 
@@ -136,9 +136,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual ISet<InterviewGps> GpsAnswers { get; protected set; }
         public virtual ISet<InterviewStatisticsReportRow> StatisticsReport { get; set; } = new HashSet<InterviewStatisticsReportRow>();
 
-        public virtual ISet<InterviewReportAnswer> ReportAnswers { get; protected set; } =
-            new HashSet<InterviewReportAnswer>();
-
         private IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow> statisticsReportCache;
 
         public virtual IDictionary<(int entityId, string rosterVector), InterviewStatisticsReportRow>
@@ -162,15 +159,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasSmallSubstitutions { get; set; }
         public virtual int? NotAnsweredCount { get; set; }
 
-        public virtual void AnswerFeaturedQuestion(int questionId, string answer, decimal? optionCode = null)
+        public virtual void AnswerFeaturedQuestion(int entityId, string answer, decimal? optionCode = null)
         {
-            this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).Value = answer;
-            this.IdentifyEntitiesValues.First(x => x.Entity.Id == questionId).AnswerCode = optionCode;
+            this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).Value = answer;
+            this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).AnswerCode = optionCode;
         }
 
-        public virtual bool IsQuestionIdentifying(int questionId)
+        public virtual void AnswerFeaturedVariable(int entityId, object value, VariableType variableType)
         {
-            return this.IdentifyEntitiesValues.Any(x => x.Entity.Id == questionId);
+            switch (variableType)
+            {
+                case VariableType.Boolean:
+                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueBool = Convert.ToBoolean(value);
+                    break;
+                case VariableType.DateTime:
+                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueDate = value as DateTime?;
+                    break;
+                case VariableType.Double:
+                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueDouble = Convert.ToDouble(value);
+                    break;
+                case VariableType.LongInteger:
+                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueLong = Convert.ToInt64(value);
+                    break;
+                case VariableType.String:
+                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).Value = AnswerUtils.AnswerToString(value);
+                    break;
+            }
+        }
+
+        public virtual bool IsEntityIdentifying(IQuestionnaire questionnaire, int questionId)
+        {
+            return questionnaire.GetIdentifyingMappedEntities().Contains(questionId);
         }
 
         protected bool Equals(InterviewSummary other)
