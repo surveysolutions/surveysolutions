@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var savedInterviewSummary = CreateInterviewSummaryQuestions(new IdentifyEntityValue
             {
-                Entity = new QuestionnaireCompositeItem { EntityId = questionId}
+                Entity = new QuestionnaireCompositeItem { EntityId = questionId},
+                Identifying = true
             });
 
             savedInterviewSummary.QuestionnaireId = questionnaireIdentity.QuestionnaireId;
