@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
         {
             var defaultUserView = Create.Entity.UserViewLite(supervisorId: Guid.NewGuid());
             var userViewFactory = Mock.Of<IUserViewFactory>(_ => _.GetUser(Moq.It.IsAny<Guid>()) == defaultUserView);
-            var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetPrefilledEntities() == new ReadOnlyCollection<Guid>(Array.Empty<Guid>()));
+            var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetPrefilledEntities() == new ReadOnlyCollection<Guid>(Array.Empty<Guid>()) && x.GetIdentifyingMappedEntities() == new HashSet<int>());
+            
             var questionnaireStorage1 = questionnaireStorage ?? 
                                         Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire
                                                                                  && _.GetQuestionnaireOrThrow(Moq.It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
