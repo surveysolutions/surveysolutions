@@ -166,9 +166,6 @@ COPY --from=builder hq /app
 COPY --from=export_builder export /app/Export.Service
 COPY --from=apks /apk /app/Client
 
-# Remove empty apk marker. Copy will fail if no files copied
-RUN rm -f /app/Client/empty.apk
-
 ENV HQ_Headquarters__BaseUrl=http://localhost
 ENV HQ_Headquarters__TenantName=survey
 ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
