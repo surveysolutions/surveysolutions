@@ -19,6 +19,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Filters
             descriptor.Field(x => x.Entity)
                 .Description("Question or variable entity");
 
+            descriptor.Field(x => x.ValueBool)
+                .Description("Boolean answer value");
+            descriptor.Field(x => x.ValueDate)
+                .Description("Date answer value");
+            descriptor.Field(x => x.ValueDouble)
+                .Description("Double answer value");
+            descriptor.Field(x => x.ValueLong)
+                .Description("Long answer value");
+
+            
+            
             descriptor.Field(x => x.IsEnabled)
                 .Description("Shows if this value enabled");
         }

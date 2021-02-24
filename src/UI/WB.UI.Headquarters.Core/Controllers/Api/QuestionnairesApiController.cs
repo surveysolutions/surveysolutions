@@ -220,8 +220,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                         Id = x.Id,
                         Title = x.QuestionText,
                         Variable = x.StataExportCaption,
-                        Label = x.VariableLabel,
-                        IsExposed = x.UsedInReporting ?? false
+                        Label = x.VariableLabel ?? "",
+                        IsExposed = x.UsedInReporting ?? false,
+                        EntityType = x.EntityType
                     }))
                 .ToList();
         }
@@ -293,6 +294,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         VariableName = x.StataExportCaption,
                         IsExposed = x.UsedInReporting,
                         Label = x.VariableLabel,
+                        EntityType = x.EntityType
                         
                     }).ToList()
                 };
@@ -309,7 +311,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                     Id = x.Id,
                     Title = x.Title,
                     Variable = x.VariableName,
-                    IsExposed = x.IsExposed ?? false
+                    IsExposed = x.IsExposed ?? false,
+                    EntityType = x.EntityType,
+                    Label = x.Label ?? ""
                 })
             };
         }
@@ -332,6 +336,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public string Label { set; get; }
         public bool IsExposed { set; get; }
         public string Variable { get; set; }
+        public EntityType EntityType { get; set; }
     }
 
     public class QuestionnaireEntityItem
@@ -341,5 +346,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         public string Label { set; get; }
         public bool? IsExposed { set; get; }
         public string VariableName { get; set; }
+        public EntityType EntityType { get; set; }
     }
 }

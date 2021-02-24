@@ -55,6 +55,7 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{{this.$t('Pages.ExposedVariables_VariableName')}}</th>
                             <th>{{this.$t('Pages.ExposedVariables_VariableLabel')}}</th>
                             <th>{{this.$t('Pages.ExposedVariables_VariableTitle')}}</th>
@@ -65,9 +66,10 @@
                             v-for="variable in exposedVariables"
                             :key="'id' + '__' + variable.id"
                             @click="rowExposedClicked(variable.id)">
-                            <td>{{variable.variable}}</td>
-                            <td>{{variable.label}}</td>
-                            <td>{{variable.title}}</td>
+                            <td>{{ getEntityDisplayType(variable.entityType) }}</td>
+                            <td>{{ variable.variable }}</td>
+                            <td>{{ variable.label }}</td>
+                            <td>{{ variable.title }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -147,6 +149,13 @@ export default {
                 deferLoading: 0,
                 columns: [
                     {
+                        data: 'entityType',
+                        name: 'EntityType',
+                        sortable: false,
+                        'render': function (data, type, row) {
+                            return self.getEntityDisplayType(data)
+                        },
+
                     },
                     {
                         data: 'variable',
@@ -166,7 +175,7 @@ export default {
                         title: this.$t('Pages.ExposedVariables_VariableTitle'),
                         sortable: false,
                         'render': function (data, type, row) {
-                            return sanitizeHtml(data)
+                            return self.replaceSubstitutions(self.sanitizeHtml(data))
                         },
                     },
                 ],
@@ -196,17 +205,35 @@ export default {
                 this.exposedVariables = map(data, d => {
                     return {
                         id: d.id,
-                        title: sanitizeHtml(d.title),
+                        title: this.replaceSubstitutions(this.sanitizeHtml(d.title)),
                         variable: d.variable,
+                        label: d.label,
+                        entityType: d.entityType,
                     }
                 })
             })
     },
     methods: {
         sanitizeHtml: sanitizeHtml,
+        replaceSubstitutions(value){
+            if(value == null)
+                return null
+            return value.replace(/%[\w_]+%/g, '[..]')
+        },
+
 
         saveVariables(){
             this.$refs.exposedChangeModal.modal({keyboard: false})
+
+        },
+
+        getEntityDisplayType(type){
+            if(type == 'Question')
+                return 'Q'
+            if(type == 'Variable')
+                return 'V'
+
+            return ''
 
         },
 
@@ -230,9 +257,10 @@ export default {
                 var rowData = row.data()
                 this.exposedVariables.splice(i, 0, {
                     id: parsedRowId,
-                    title: sanitizeHtml(rowData.title),
+                    title: this.replaceSubstitutions(sanitizeHtml(rowData.title)),
                     label: rowData.label,
                     variable: rowData.variable,
+                    entityType: rowData.entityType,
                 })
                 row.nodes().to$().addClass('disabled')
             }

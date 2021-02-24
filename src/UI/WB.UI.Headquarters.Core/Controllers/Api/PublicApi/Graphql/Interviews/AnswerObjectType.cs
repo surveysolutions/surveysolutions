@@ -48,6 +48,27 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Name("value")
                 .Type<StringType>();
 
+
+            descriptor.Field(x => x.ValueBool)
+                .Type<BooleanType>()
+                .Name("valueBool")
+                .Description("Bool answer value");
+
+            descriptor.Field(x => x.ValueDate)
+                .Type<DateType>()
+                .Name("valueDate")
+                .Description("Date answer value");
+
+            descriptor.Field(x => x.ValueLong)
+                .Type<LongType>()
+                .Name("valueLong")
+                .Description("Long answer value");
+
+            descriptor.Field(x => x.ValueDouble)
+                .Type<FloatType>()
+                .Name("valueDouble")
+                .Description("Double answer value");
+
             descriptor.Field(x => x.IsEnabled)
                 .Name("isEnabled")
                 .Type<BooleanType>();

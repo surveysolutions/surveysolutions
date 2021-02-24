@@ -51,13 +51,13 @@
                 :maxDepth="5"
                 :labels="labels"
                 v-model="queryExposedVariables"></vue-query-builder>
-            <!-- <div>
+            <div>
                 {{queryExposedVariables}}
             </div>
 
             <div>
                 {{transformQuery}}
-            </div> -->
+            </div>
 
             <div slot="actions">
                 <button
@@ -269,10 +269,17 @@ export default {
                 //isEnabled: {eq: true},
             }
 
-            if(query.operator == undefined)
-                some.answerCode = {eq: query.value}
-            else
-                some.value = {eq: query.value}
+            if(query.operator == undefined){
+                var entity = this.questionnaireItems.find(i =>  i.variable === query.rule)
+                if(entity.entityType === 'QUESTION' && entity.type === 'SINGLEOPTION')
+                    some.answerCode = {eq: query.value}
+                else
+                    some.valueBool = {eq: query.value}
+            }
+            else{
+
+                some.value = {eq: query.value} //map operators
+            }
 
             var result = {identifyingData : { some: some }}
 
@@ -282,12 +289,17 @@ export default {
 
     computed: {
         questionnaireItemsList() {
+            const array = filter([...(this.questionnaireAllItemsList || [])], q => {
+                return  q.identifying})
+            return array
+        },
+
+        questionnaireAllItemsList() {
             const array = filter([...(this.questionnaireItems || [])], q => {
                 return (q.type == 'SINGLEOPTION'
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
                     || q.entityType == 'VARIABLE')
-                    && q.identifying
             })
 
             return array
@@ -308,28 +320,61 @@ export default {
 
         rules(){
 
-            return this.questionnaireItems.map(i => {
+            return this.questionnaireAllItemsList.map(i => {
+
 
                 var type = 'text'
-
-                if(i.entityType == 'VARIABLE')
-                    type = 'text'
-                if (i.type == 'NUMERIC')
-                    type = 'numeric'
-                else if(i.type == 'SINGLEOPTION')
-                    type = 'select'
-                else
-                    type = 'text'
+                if(i.entityType =='QUESTION')
+                {
+                    switch(i.type) {
+                        case 'NUMERIC':
+                            type = 'numeric'
+                            break
+                        case 'SINGLEOPTION':
+                            type = 'select'
+                            break
+                        case 'DATETIME':
+                            type = 'text'
+                            break
+                        case 'TEXT':
+                            type = 'text'
+                            break
+                    }
+                }
+                else if(i.entityType == 'VARIABLE')
+                {
+                    switch(i.variableType) {
+                        case 'DOUBLE':
+                            type = 'numeric'
+                            break
+                        case 'LONGINTEGER':
+                            type = 'numeric'
+                            break
+                        case 'BOOLEAN':
+                            type = 'radio'
+                            break
+                        case 'DATETIME':
+                            type = 'text'
+                            break
+                        case 'STRING' :
+                            type = 'text'
+                            break
+                    }
+                }
 
                 var rule = {
                     type: type,
                     id:i.variable,
-                    label: i.entityType == 'VARIABLE' ? i.variable :  sanitizeHtml(i.title),
+                    label: i.entityType == 'VARIABLE' ? i.variable : sanitizeHtml(i.title).replace(/%[\w_]+%/g, '[..]').substring(0,60),
                 }
 
                 if(type == 'select')
                 {
                     rule.choices = i.options.map(o=>({label:o.title, value:o.value}))
+                }
+                else if(type == 'radio')
+                {
+                    rule.choices = [{label: 'True', value: 'true'}, {label: 'False', value: 'false'}]
                 }
 
                 return rule
