@@ -143,7 +143,7 @@ export default {
         questionnaireItems:{
             query :gql`query questionnaireItems($workspace: String!, $id: Uuid!, $version: Long!) {
                 questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}} , {exposed: {eq: true}}]}) {
-                    title, type, variable, entityType, variableType, identifying
+                    title, label, type, variable, entityType, variableType, identifying
                     options { title, value, parentValue }
                 }
             }`,
@@ -233,57 +233,116 @@ export default {
         sanitizeHtml: sanitizeHtml,
 
         handleGroup(group){
-            var result = {}
 
+            if(group.children === undefined || group.children.length == 0){
+                return null
+            }
+
+            var conditions = []
+            group.children.forEach(element => {
+                if(element.type == 'query-builder-rule')
+                    conditions.push(this.handleRule(element.query))
+                else if(element.type == 'query-builder-group')
+                {
+                    var group = this.handleGroup(element.query)
+                    if(group != null)
+                        conditions.push(group)
+                }
+            })
+
+            if(conditions.length == 0)
+                return null
+
+            var result = {}
             if(group.logicalOperator == 'any')
             {
-                result.or = []
-                group.children.forEach(element => {
-                    if(element.type == 'query-builder-rule')
-                        result.or.push(this.handleRule(element.query))
-                    else if(element.type == 'query-builder-group')
-                    {
-                        result.or.push(this.handleGroup(element.query))
-                    }
-                })
+                result.or = conditions
             }
             else if (group.logicalOperator == 'all')
             {
-                result.and = []
-                group.children.forEach(element => {
-                    if(element.type == 'query-builder-rule')
-                        result.and.push(this.handleRule(element.query))
-                    else if(element.type == 'query-builder-group')
-                    {
-                        result.and.push(this.handleGroup(element.query))
-                    }
-                })
+                result.and = conditions
             }
 
             return result
+
         },
         handleRule(query){
 
             var some = {
-                entity: {variable: {eq: query.operand}},
-                //isEnabled: {eq: true},
+                entity: {variable: {eq: query.rule}},
+                isEnabled: {neq: false},
             }
 
+            var entity = this.questionnaireItems.find(i =>  i.variable === query.rule)
+
             if(query.operator == undefined){
-                var entity = this.questionnaireItems.find(i =>  i.variable === query.rule)
                 if(entity.entityType === 'QUESTION' && entity.type === 'SINGLEOPTION')
                     some.answerCode = {eq: query.value}
                 else
-                    some.valueBool = {eq: query.value}
+                    some.valueBool = {eq: query.value == '1' ? true : false}
             }
             else{
+                var ruleMap = this.getRuleMap(entity)
 
-                some.value = {eq: query.value} //map operators
+                var condition = {}
+                condition[this.getOperatorMap(query.operator)] = ruleMap.ruleType == 'numeric'? Number(query.value) : query.value
+
+                some[ruleMap.valueName] = condition
             }
 
             var result = {identifyingData : { some: some }}
 
             return result
+        },
+        getRuleMap(entity){
+
+            if(entity.entityType =='QUESTION')
+            {
+                switch(entity.type) {
+                    case 'NUMERIC':
+                        return {ruleType: 'numeric', valueName: 'valueLong' }
+                    case 'SINGLEOPTION':
+                        return {ruleType: 'select', valueName: 'answerCode'}
+                    case 'DATETIME':
+                        return {ruleType: 'date', valueName: 'valueDate', operators: ['=','<>','<','<=','>','>='] }
+                    case 'TEXT':
+                        return {ruleType:'text', valueName: 'value' , operators: ['equals','not equals','contains','not contains','starts with','not starts with']}
+                }
+            }
+            else if(entity.entityType == 'VARIABLE')
+            {
+                switch(entity.variableType) {
+                    case 'DOUBLE':
+                        return {ruleType: 'numeric', valueName: 'valueDouble'}
+                    case 'LONGINTEGER':
+                        return {ruleType: 'numeric', valueName: 'valueLong'}
+                    case 'BOOLEAN':
+                        return {ruleType: 'radio',valueName: 'valueBool'}
+                    case 'DATETIME':
+                        return {ruleType: 'date', valueName: 'valueDate', operators: ['=','<>','<','<=','>','>=']}
+                    case 'STRING' :
+                        return {ruleType:'text', valueName: 'value', operators: ['equals','not equals','contains','not contains','starts with','not starts with']}
+                }
+            }
+            return 'text'
+        },
+        //move it into ruleMap
+        getOperatorMap(operator){
+            switch(operator){
+                case '=': return 'eq'
+                case '<>': return 'neq'
+                case '<': return 'lt'
+                case '<=': return 'lte'
+                case '>': return 'gt'
+                case '>=': return 'gte'
+
+                case 'equals': return 'eq'
+                case 'not equals': return 'neq'
+                case 'contains': return 'contains'
+                case 'not contains': return 'ncontains'
+                case 'starts with': return 'startsWith'
+                case 'not starts with': return 'nstartsWith'
+            }
         },
     },
 
@@ -312,60 +371,20 @@ export default {
                 || this.questionnaireItemsList.length == 0
         },
         isDynamicDisabled() {
-            return this.questionnaireId == null
-                || this.questionnaireVersion == null
-                || this.questionnaireItemsList == null
-                || this.rules.length == 0
+            return this.rules.length == 0
         },
 
         rules(){
 
             return this.questionnaireAllItemsList.map(i => {
 
-
-                var type = 'text'
-                if(i.entityType =='QUESTION')
-                {
-                    switch(i.type) {
-                        case 'NUMERIC':
-                            type = 'numeric'
-                            break
-                        case 'SINGLEOPTION':
-                            type = 'select'
-                            break
-                        case 'DATETIME':
-                            type = 'text'
-                            break
-                        case 'TEXT':
-                            type = 'text'
-                            break
-                    }
-                }
-                else if(i.entityType == 'VARIABLE')
-                {
-                    switch(i.variableType) {
-                        case 'DOUBLE':
-                            type = 'numeric'
-                            break
-                        case 'LONGINTEGER':
-                            type = 'numeric'
-                            break
-                        case 'BOOLEAN':
-                            type = 'radio'
-                            break
-                        case 'DATETIME':
-                            type = 'text'
-                            break
-                        case 'STRING' :
-                            type = 'text'
-                            break
-                    }
-                }
+                var map =this.getRuleMap(i)
+                var type = map.ruleType
 
                 var rule = {
                     type: type,
-                    id:i.variable,
-                    label: i.entityType == 'VARIABLE' ? i.variable : sanitizeHtml(i.title).replace(/%[\w_]+%/g, '[..]').substring(0,60),
+                    id: i.variable,
+                    label: sanitizeHtml(i.title).replace(/%[\w_]+%/g, '[..]').substring(0,60),
                 }
 
                 if(type == 'select')
@@ -374,8 +393,15 @@ export default {
                 }
                 else if(type == 'radio')
                 {
-                    rule.choices = [{label: 'True', value: 'true'}, {label: 'False', value: 'false'}]
+                    rule.choices = [{label: 'True', value: '1'}, {label: 'False', value: '0'}]
                 }
+                else if(type == 'date')
+                {
+                    rule.inputType = 'date'
+                }
+
+                if(map.operators !== undefined)
+                    rule.operators = map.operators
 
                 return rule
             })

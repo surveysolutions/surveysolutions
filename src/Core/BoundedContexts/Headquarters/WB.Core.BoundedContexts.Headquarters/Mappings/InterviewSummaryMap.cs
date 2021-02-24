@@ -185,7 +185,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ValueDate, col => col.Column("value_date"));
             Property(x => x.ValueDouble, col => col.Column("value_double"));
             Property(x => x.ValueLong, col => col.Column("value_long"));
-            
+            Property(x => x.IsEnabled, col => col.Column("enabled"));
+
             Property(x=> x.Identifying, col => col.Column("identifying"));
 
             ManyToOne(x => x.Entity, mtm =>
