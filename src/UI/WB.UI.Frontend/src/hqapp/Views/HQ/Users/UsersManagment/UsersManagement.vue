@@ -310,7 +310,7 @@ export default {
         isAnyInterviewerSelected() {
             return this.getFilteredItems(item => {
                 return item.role == 'Interviewer'
-            })
+            }).length > 0
         },
 
     },

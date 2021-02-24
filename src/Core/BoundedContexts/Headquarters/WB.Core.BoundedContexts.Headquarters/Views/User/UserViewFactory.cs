@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsLockedByHQ = x.IsLockedByHeadquaters,
                     UserName = x.UserName,
                     FullName = x.FullName,
-                    DeviceId = x.Profile.DeviceId
+                    DeviceId = x.WorkspacesProfile.DeviceId
                 });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;

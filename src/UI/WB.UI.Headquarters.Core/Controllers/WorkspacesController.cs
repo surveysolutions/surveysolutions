@@ -10,6 +10,7 @@ namespace WB.UI.Headquarters.Controllers
     public class WorkspacesController : Controller
     {
         [ActivePage(MenuItem.Workspaces)]
+        [Route("/Workspaces")]
         public IActionResult Index() => View(new WorkspacesModel
         {
             DataUrl = Url.Action("Index", "WorkspacesPublicApi")

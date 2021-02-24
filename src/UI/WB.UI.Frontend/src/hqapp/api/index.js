@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { map } from 'lodash'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -115,23 +116,34 @@ class Workspaces {
     }
 
     Assign(userIds, workspaces, mode = 'Assign') {
+        var assignWorkspaces = map(workspaces, w => {
+            return {
+                workspace: w,
+                supervisorId: null,
+            }
+        })
+
         return this.http.post('api/v1/workspaces/assign',
             {
-                userIds, workspaces, mode,
+                userIds, workspaces: assignWorkspaces, mode,
             }
         )
     }
 
-    AssignInterviewer(userIds, workspace, supervisor, mode = 'Assign') {
-        return this.http.post('api/v1/workspaces/assignInterviewer',
+    AssignInterviewer(userIds, workspace, supervisor, mode = 'Add') {
+        var assignWorkspaces = [{
+            workspace: workspace,
+            supervisorId: supervisor,
+        }]
+
+        return this.http.post('api/v1/workspaces/assign',
             {
-                userIds, workspace, supervisor, mode,
+                userIds, workspaces: assignWorkspaces, mode,
             }
         )
     }
 
     async Status(workspace) {
-        return await this.http.get('api/v1/workspaces/status/' + workspace)
     }
 
     async Delete(workspace) {
