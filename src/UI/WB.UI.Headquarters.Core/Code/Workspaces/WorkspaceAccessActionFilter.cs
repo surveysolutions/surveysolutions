@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Code.Workspaces
 {
@@ -52,11 +53,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             if (workspace?.IsEnabled() == true || allowedDisabledWorkspace)
             {
-                if (workspace == null)
-                {
-                    SetForbidResult(ForbidReason.WorkspaceDisabledReason);
-                    return;
-                }
 
                 if (hasAuthorization && !allowAnonymous && workspace.IsSpecialWorkspace())
                 {
@@ -73,7 +69,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     }
                 }
 
-                if (hasAuthorization && !allowAnonymous && !authorizedUser.HasAccessToWorkspace(workspace.Name))
+                if (hasAuthorization && !allowAnonymous && !(workspace != null && authorizedUser.HasAccessToWorkspace(workspace.Name)))
                 {
                     var hasIgnoreWorkspacesLimitation = ContextHasAttribute<IgnoreWorkspacesLimitationAttribute>();
                     if (!hasIgnoreWorkspacesLimitation)

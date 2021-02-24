@@ -26,6 +26,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var databaseName = masterDbConnectionString.Database;
             masterDbConnectionString.Database = "postgres"; // System DB name.
 
+            using var @lock = new MigrationLock(masterDbConnectionString.ConnectionString);
             using var connection = new NpgsqlConnection(masterDbConnectionString.ConnectionString);
             connection.Open();
             var checkDbExistsCommand = connection.CreateCommand();

@@ -4,6 +4,10 @@
 #>
 
 param(
+    [ValidateSet('Docker', 'DockerHq', 'DockerDesigner', 'DockerWebTester', 
+        'Packages', 'PackageHq', 'PackageExport', 'PackageWebTester', 'PackageDesigner',
+        'PackageHqOffline', 
+        'Android', 'AndroidInterviewer', 'AndroidInterviewerWithMaps', 'AndroidSupervisor')]
     [string] $Tasks,    
     [string] $buildNumber = '42',
     [string] $androidKeyStore = $ENV:ANDROID_KEY_STORE,
@@ -11,7 +15,7 @@ param(
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
     [string] $ArcGisKey = $NULL,
-    [string] $dockerRegistry = "ghcr.io/surveysolutions",
+    [string] $dockerRegistry = $ENV:DOCKER_REGISTRY,
     [string] $releaseBranch = 'release', # Docker builds will push to release 
     [switch] $noDockerPush 
 )
@@ -33,26 +37,30 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
 }
 
 $tmp = $ENV:TEMP + "/.build"
+$gitBranch = $ENV:GIT_BRANCH
+if($null -eq $gitBranch) {
+    $gitBranch = (git branch --show-current)
+}
+$EscapedBranchName = $gitBranch -replace '([Kk][Pp]-?[\d]+)|_|\+'
+$EscapedBranchName = $EscapedBranchName -replace '/|\\','-'
+$EscapedBranchName = $EscapedBranchName -replace '^[^\d\w]+' # tab should not start with non numeric non word character
+$EscapedBranchName =  $EscapedBranchName.Substring(0, [System.Math]::Min($EscapedBranchName.Length, 128))
 
-
-dotnet tool install gitversion.tool --tool-path $tmp | Out-Null
-
-& "$tmp/dotnet-gitversion" /nofetch > .version
-Get-Content .version  | Out-Host
-$gitversion = Get-Content .version | ConvertFrom-Json
-
-$isRelease = $gitversion.BranchName -eq $releaseBranch
-
+$isRelease = $gitBranch -eq $releaseBranch
 $version = Get-Content ./src/.version
 if ($version.Split('.').Length -eq 2) {
     $version += ".0"
 }
 $version += "." + $buildNumber
-$infoVersion = $version + '-' + $gitversion.EscapedBranchName
-
+$infoVersion = $version + '-' + $EscapedBranchName
 $output = "./artifacts"
 New-Item -Type Directory $output -ErrorAction SilentlyContinue | Out-Null
 $output = Resolve-Path $output
+
+Enter-Build {
+    Write-Build 10 $version 
+    Write-Build 10 $infoversion
+}
 
 function Compress($folder, $dest) {
     if (Test-Path $dest) {
@@ -61,11 +69,6 @@ function Compress($folder, $dest) {
 
     Compress-Archive $folder/* -DestinationPath $dest
 }
-
-
-# $gitversion | Out-Host
-$version | Out-Host
-$infoversion | Out-Host
 
 function Set-AndroidXmlResourceValue {
     [CmdletBinding()]
@@ -76,20 +79,24 @@ function Set-AndroidXmlResourceValue {
     )    
 
     $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/values/settings.xml"
-    # Log-Message "Updating app resource key in $filePath"
+    "Updating app resource key in $filePath" | Out-Host
 
-    [xml] $resourceFile = Get-Content -Path $filePath
-    $appCenterKey = Select-Xml -xml $resourceFile `
-        -Xpath "/resources/string[@name='$keyName']"
+    $doc = [System.Xml.Linq.XDocument]::Load($filePath);
+    $resources = $doc.Element("resources");    
+    $keyNode = $resources.Elements("string") | Where-Object { $_.Attribute("name").Value -eq $keyName}
 
-    $appCenterKey.Node.InnerText = $keyValue
-
-    $resourceFile.Save($filePath)
+    if($null -eq $keyNode) {
+        $nameAttr = New-Object System.Xml.Linq.XAttribute ([System.Xml.Linq.XName] "name",  $keyName)
+        $keyNode = New-OBject System.Xml.Linq.XElement ([System.Xml.Linq.XName]"string", $nameAttr)
+        $resources.Add($keyNode)
+    }
+    $keyNode.Value = $keyValue
+    $doc.Save($filePath)
 }
 
 function Build-Docker($dockerfile, $tags, $arguments = @()) {
-    $builderName = "tc_buildx_builder"
-    $builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
+    #$builderName = "tc_buildx_builder"
+    #$builder = docker buildx ls | Where-Object { $_.Contains($builderName) }
 
     # if ($builder.Length -eq 0) {
     #     $create = @("buildx", "create", "--name", $builderName)
@@ -137,7 +144,7 @@ function Build-Docker($dockerfile, $tags, $arguments = @()) {
 
 function Get-DockerTags($name, $registry = $dockerRegistry) {
     return @(
-        "$registry/$name`:$($gitversion.EscapedBranchName)"
+        "$registry/$name`:$($EscapedBranchName)"
         if ($isRelease) {
             $v = [System.Version]::Parse($version)
 
@@ -199,7 +206,7 @@ task frontend {
 task PackageHq frontend, {
     exec {
         dotnet publish ./src/UI/WB.UI.Headquarters.Core `
-            --no-self-contained `
+            --self-contained  `
             -c Release -r win-x64 -p:Version=$VERSION -p:InformationalVersion=$INFO_VERSION -o $tmp/hq
     }
     Compress $tmp/hq $output/WB.UI.Headquarters.zip
