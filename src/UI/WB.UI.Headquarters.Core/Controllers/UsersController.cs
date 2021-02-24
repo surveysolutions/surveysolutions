@@ -511,10 +511,9 @@ namespace WB.UI.Headquarters.Controllers
                     Email = model.Email,
                     UserName = model.UserName,
                     PhoneNumber = model.PhoneNumber,
-                    Profile = model.SupervisorId.HasValue ? new HqUserProfile {SupervisorId = model.SupervisorId} : null,
                 };
 
-                user.Workspaces.Add(new WorkspacesUsers(workspace!, user));
+                user.Workspaces.Add(new WorkspacesUsers(workspace!, user, model.SupervisorId));
 
                 var identityResult = await this.userManager.CreateAsync(user, model.Password);
                 if (!identityResult.Succeeded)

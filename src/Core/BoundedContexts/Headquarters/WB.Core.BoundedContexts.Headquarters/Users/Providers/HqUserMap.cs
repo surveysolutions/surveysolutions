@@ -106,6 +106,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
                 oto.Cascade(Cascade.All);
                 oto.Column("\"UserProfileId\"");
             });
+            ManyToOne(x => x.WorkspacesProfile, oto =>
+            {
+                oto.Cascade(Cascade.All);
+                oto.Column("\"UserProfileId\"");
+            });
             
             Set(x => x.Workspaces, map =>
             {

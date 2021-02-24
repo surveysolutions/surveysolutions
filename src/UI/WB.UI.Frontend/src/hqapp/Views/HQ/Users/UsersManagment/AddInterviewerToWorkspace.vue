@@ -89,7 +89,7 @@ export default {
         },
 
         add() {
-            this.$emit('addInterviewerWorkspace', this.workspace, this.supervisor)
+            this.$emit('addInterviewerWorkspace', this.workspace.key, this.supervisor.key)
             this.$refs.manageWorkspaces.hide()
         },
     },

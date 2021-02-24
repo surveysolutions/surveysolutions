@@ -33,18 +33,18 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var model = request.AssignModel;
             var ModelState = request.ModelState;
 
-            List<Workspace> dbWorkspaces = new();
+            List<AssignUserWorkspace> dbWorkspaces = new();
 
             foreach (var modelWorkspace in model.Workspaces)
             {
-                var workspace = this.workspaces.GetById(modelWorkspace);
+                var workspace = this.workspaces.GetById(modelWorkspace.Workspace);
                 if (workspace == null)
                 {
-                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace '{modelWorkspace}' not found");
+                    ModelState.AddModelError(nameof(model.Workspaces), $"Workspace '{modelWorkspace.Workspace}' not found");
                 }
                 else
                 {
-                    dbWorkspaces.Add(workspace);
+                    dbWorkspaces.Add(new AssignUserWorkspace() { Workspace = workspace, SupervisorId = modelWorkspace.SupervisorId});
                 }
             }
 
@@ -63,14 +63,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     ModelState.AddModelError(nameof(model.UserIds), "User is locked");
                 }
 
-                if (!user.IsInRole(UserRoles.Headquarter) 
-                    && !user.IsInRole(UserRoles.ApiUser)
-                    && !user.IsInRole(UserRoles.Observer))
-                {
-                    ModelState.AddModelError(nameof(model.UserIds),
-                        "Only headquarter or api user workspaces can be edited");
-                }
-
                 if (ModelState.IsValid)
                 {
                     switch (request.AssignModel.Mode)
@@ -80,13 +72,25 @@ namespace WB.UI.Headquarters.Code.Workspaces
                             break;
                         case AssignWorkspacesMode.Add:
                         {
-                            var resultWorkspaces = user.Workspaces.Select(u => u.Workspace).Union(dbWorkspaces);
+                            var userWorkspaces = user.Workspaces.Select(u => u.Workspace);
+                            var newWorkspaces = dbWorkspaces.Where(aw => !userWorkspaces.Contains(aw.Workspace));
+                            var resultWorkspaces = user.Workspaces.Select(u => new AssignUserWorkspace()
+                            {
+                                Workspace = u.Workspace,
+                                SupervisorId = u.SupervisorId
+                            }).Concat(newWorkspaces);
                             workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
                             break;
                         }
                         case AssignWorkspacesMode.Remove:
                         {
-                            var resultWorkspaces = user.Workspaces.Select(u => u.Workspace).Except(dbWorkspaces);
+                            var workspacesToRemove = dbWorkspaces.Select(d => d.Workspace);
+                            var workspacesAfterRemove = user.Workspaces.Where(uw => !workspacesToRemove.Contains(uw.Workspace));
+                            var resultWorkspaces = workspacesAfterRemove.Select(u => new AssignUserWorkspace()
+                            {
+                                Workspace = u.Workspace,
+                                SupervisorId = u.SupervisorId
+                            });
                             workspacesService.AssignWorkspaces(user, resultWorkspaces.ToList());
                             break;
                         }

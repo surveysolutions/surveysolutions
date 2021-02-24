@@ -31,10 +31,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             if(user.Profile == null)
-                user.Profile = new HqUserProfile();
+                user.WorkspacesProfile = new HqUserProfile();
 
-            user.Profile.DeviceId = deviceId;
-            user.Profile.DeviceRegistrationDate = DateTime.UtcNow;
+            user.WorkspacesProfile.DeviceId = deviceId;
+            user.WorkspacesProfile.DeviceRegistrationDate = DateTime.UtcNow;
         }
     }
 }

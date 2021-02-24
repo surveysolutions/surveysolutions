@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
-                    Workspaces = new [] { "abra" },
+                    Workspaces = new [] { new AssignWorkspaceInfo("abra") },
                     UserIds = new [] { Guid.NewGuid()}
                     
                 }));
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
-                    Workspaces = new [] { "abra" },
+                    Workspaces = new [] { new AssignWorkspaceInfo("abra") },
                     UserIds = new[] { Id.g1 }
                 }));
             
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
-                    Workspaces = new [] { "abra" },
+                    Workspaces = new [] { new AssignWorkspaceInfo("abra") },
                     UserIds = new [] { Id.g1}
                 }));
             
@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
-                    Workspaces = new[] { "abra" },
+                    Workspaces = new[] { new AssignWorkspaceInfo("abra") },
                     UserIds = new[] { Id.g1 }
                 }));
 
@@ -142,7 +142,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
-                    Workspaces = new[] { "abra" },
+                    Workspaces = new[] { new AssignWorkspaceInfo("abra") },
                     UserIds = new[] { Id.g1 }
                 }));
 
@@ -164,7 +164,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
                 new AssignWorkspacesToUserModel
                 {
-                    Workspaces = new[] { "cyber", "puckl" },
+                    Workspaces = new[] { new AssignWorkspaceInfo("cyber"), new AssignWorkspaceInfo("puckl") },
                     UserIds = new[] { Id.g1 }
                 }));
 
@@ -195,7 +195,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 new AssignWorkspacesToUserModel
                 {
                     Mode = AssignWorkspacesMode.Add,
-                    Workspaces = new[] { "cyber" },
+                    Workspaces = new[] { new AssignWorkspaceInfo("cyber") },
                     UserIds = new[] { Id.g1 }
                 }));
 
@@ -225,7 +225,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 new AssignWorkspacesToUserModel
                 {
                     Mode = AssignWorkspacesMode.Remove,
-                    Workspaces = new[] { "cyber" },
+                    Workspaces = new[] { new AssignWorkspaceInfo("cyber") },
                     UserIds = new[] { Id.g1 }
                 }));
 

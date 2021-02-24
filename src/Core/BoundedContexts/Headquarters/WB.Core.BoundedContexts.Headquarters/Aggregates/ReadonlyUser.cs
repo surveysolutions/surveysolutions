@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Aggregates
 
         public virtual string Name { get; protected set; }
 
-        public virtual HqUserProfile ReadonlyProfile { get; protected set; }
+        public virtual WorkspaceUserProfile ReadonlyProfile { get; protected set; }
 
         public virtual ISet<Guid> RoleIds { get; protected set; }
     }

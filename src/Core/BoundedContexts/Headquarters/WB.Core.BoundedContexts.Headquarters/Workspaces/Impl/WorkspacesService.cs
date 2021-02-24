@@ -71,13 +71,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
             return workspaces.Query(_ => _.Select(w => w.AsContext()).ToList());
         }
 
-        public void AssignWorkspaces(HqUser user, List<Workspace> workspacesList)
+        public void AssignWorkspaces(HqUser user, List<AssignUserWorkspace> workspacesList)
         {
             List<string> workspacesRemoved = new ();
 
             foreach (var userWorkspace in user.Workspaces.ToList())
             {
-                var workspaceExists = workspacesList.Any(w => Equals(w, userWorkspace.Workspace));
+                var workspaceExists = workspacesList.Any(w => Equals(w.Workspace, userWorkspace.Workspace));
                 
                 if(!workspaceExists)
                 {
@@ -97,12 +97,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
             foreach (var workspace in workspacesList)
             {
-                var workspaceExists = user.Workspaces.Any(uw => Equals(uw.Workspace, workspace));
+                var workspaceExists = user.Workspaces.Any(uw => Equals(uw.Workspace, workspace.Workspace));
                 
                 if (!workspaceExists)
                 {
-                    AddUserToWorkspace(user, workspace.Name);
-                    workspacesAdded.Add(workspace.Name);
+                    AddUserToWorkspace(user, workspace.Workspace.Name, workspace.SupervisorId);
+                    workspacesAdded.Add(workspace.Workspace.Name);
                 }
             }
 
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                 .DeleteAsync(cancellationToken: token);
         }
 
-        public void AddUserToWorkspace(HqUser user, string workspace)
+        public void AddUserToWorkspace(HqUser user, string workspace, Guid? supervisorId)
         {
             Workspace workspaceEntity = workspaces.GetById(workspace) ?? 
                                         throw new ArgumentException(@"Workspace not found", nameof(workspace))
@@ -154,8 +154,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
                                                 {"name", workspace}
                                             }
                                         };
+
+            if (user.IsInRole(UserRoles.Interviewer) && !supervisorId.HasValue)
+                throw new ArgumentException(@"Supervisor should be set for interviewer", nameof(supervisorId))
+                {
+                    Data =
+                    {
+                        {"supervisorId", supervisorId}
+                    }
+                };
             
-            var workspaceUser = new WorkspacesUsers(workspaceEntity, user);
+            var workspaceUser = new WorkspacesUsers(workspaceEntity, user, supervisorId);
             
             this.workspaceUsers.Store(workspaceUser, workspaceUser.Id);
             
