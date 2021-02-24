@@ -130,8 +130,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             Assert.That(modelState["UserIds"].Errors[0].ErrorMessage.Contains("User is locked"));
         }
 
-        [TestCase(UserRoles.Interviewer)]
-        [TestCase(UserRoles.Supervisor)]
         [TestCase(UserRoles.Administrator)]
         public async Task should_return_error_for_role(UserRoles role)
         {

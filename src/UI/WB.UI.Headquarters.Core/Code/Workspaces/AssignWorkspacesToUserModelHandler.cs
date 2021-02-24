@@ -62,6 +62,16 @@ namespace WB.UI.Headquarters.Code.Workspaces
                 {
                     ModelState.AddModelError(nameof(model.UserIds), "User is locked");
                 }
+                
+                if (!user.IsInRole(UserRoles.Headquarter)
+                    && !user.IsInRole(UserRoles.Supervisor)
+                    && !user.IsInRole(UserRoles.Interviewer)
+                    && !user.IsInRole(UserRoles.ApiUser)
+                    && !user.IsInRole(UserRoles.Observer))
+                {
+                    ModelState.AddModelError(nameof(model.UserIds),
+                        "Only headquarter, supervisor, interviewer, observer or api user workspaces can be edited");
+                }
 
                 if (ModelState.IsValid)
                 {
