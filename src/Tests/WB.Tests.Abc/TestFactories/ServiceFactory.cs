@@ -720,7 +720,7 @@ namespace WB.Tests.Abc.TestFactories
 
             var userRepositoryMock = new Mock<IUserRepository>();
 
-            var hqUserProfile = Mock.Of<HqUserProfile>(_ => _.SupervisorId == Id.gB);
+            var hqUserProfile = Mock.Of<WorkspaceUserProfile>(_ => _.SupervisorId == Id.gB);
 
             var hqUser = Mock.Of<HqUser>(_ => _.Id == Id.gA
                                            && _.Profile == hqUserProfile);

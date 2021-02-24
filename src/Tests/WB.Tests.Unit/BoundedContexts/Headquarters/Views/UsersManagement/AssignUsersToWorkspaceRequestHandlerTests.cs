@@ -45,10 +45,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                 
             workspacesService = new Mock<IWorkspacesService>();
             workspacesService.Setup(w => w.AssignWorkspaces(It.IsAny<HqUser>(),
-                It.IsAny<List<Workspace>>()
-            )).Callback((HqUser user, List<Workspace> workspaces) =>
+                It.IsAny<List<AssignUserWorkspace>>()
+            )).Callback((HqUser user, List<AssignUserWorkspace> workspaces) =>
             {
-                assignedWorkspaces = workspaces;
+                assignedWorkspaces = workspaces.Select(s => s.Workspace).ToList();
             });
 
             Subject = new AssignWorkspacesToUserModelHandler(
@@ -171,7 +171,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(true));
             
             this.workspacesService.Verify(w => w.AssignWorkspaces(It.IsAny<HqUser>(),
-                It.IsAny<List<Workspace>>()), Times.Once);
+                It.IsAny<List<AssignUserWorkspace>>()), Times.Once);
             
             Assert.That(assignedWorkspaces.Select(w => w.Name).OrderBy(n => n), Is.EqualTo(new []
             {
@@ -202,7 +202,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(true));
             
             this.workspacesService.Verify(w => w.AssignWorkspaces(It.IsAny<HqUser>(),
-                It.IsAny<List<Workspace>>()), Times.Once);
+                It.IsAny<List<AssignUserWorkspace>>()), Times.Once);
             
             Assert.That(assignedWorkspaces.Select(w => w.Name).OrderBy(n => n), Is.EqualTo(new []
             {
@@ -232,7 +232,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(true));
             
             this.workspacesService.Verify(w => w.AssignWorkspaces(It.IsAny<HqUser>(),
-                It.IsAny<List<Workspace>>()), Times.Once);
+                It.IsAny<List<AssignUserWorkspace>>()), Times.Once);
             
             Assert.That(assignedWorkspaces.Select(w => w.Name), Is.EqualTo(new []
             {

@@ -122,7 +122,7 @@ namespace WB.Tests.Integration.TeamViewFactoryTests
             var supervisorUser = new HqUser()
             {
                 Id = supervisorId,
-                Profile = new HqUserProfile() { SupervisorId = Guid.NewGuid() },
+                Profile = new WorkspaceUserProfile() { SupervisorId = Guid.NewGuid() },
             };
             supervisorUser.Roles.Add(supervisorRole);
             usersRepository.Setup(x => x.FindByIdAsync(supervisorId, It.IsAny<CancellationToken>())).Returns(Task.FromResult(supervisorUser));

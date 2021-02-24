@@ -99,7 +99,7 @@ namespace WB.Tests.Web.TestFactories
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
                 IsLockedBySupervisor = lockedBySupervisor,
-                Profile = new HqUserProfile
+                Profile = new WorkspaceUserProfile()
                 {
                     SupervisorId = supervisorId,
                     DeviceId = deviceId,

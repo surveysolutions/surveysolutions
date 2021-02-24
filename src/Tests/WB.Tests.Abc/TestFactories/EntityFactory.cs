@@ -1305,9 +1305,15 @@ namespace WB.Tests.Abc.TestFactories
                 IsLockedByHeadquaters = isLockedByHQ,
                 FullName = string.Empty,
                 IsLockedBySupervisor = lockedBySupervisor,
-                Profile = new HqUserProfile
+                Profile = new WorkspaceUserProfile()
                 {
                     SupervisorId = supervisorId,
+                    DeviceId = deviceId,
+                    DeviceAppBuildVersion = interviewerBuild,
+                    DeviceAppVersion = interviewerVersion
+                },
+                WorkspacesProfile = new HqUserProfile
+                {
                     DeviceId = deviceId,
                     DeviceAppBuildVersion = interviewerBuild,
                     DeviceAppVersion = interviewerVersion
@@ -1324,7 +1330,7 @@ namespace WB.Tests.Abc.TestFactories
             foreach (var workspace in workspaces)
             {
                 var ws = new Workspace(workspace, workspace);
-                user.Workspaces.Add(new WorkspacesUsers(ws, user));
+                user.Workspaces.Add(new WorkspacesUsers(ws, user, supervisorId));
             }
             
             return user;

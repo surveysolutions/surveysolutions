@@ -260,7 +260,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             var supervisorId = Id.gC;
             
             var responsible = new ReadonlyUser();
-            var profile = new HqUserProfile();
+            var profile = new WorkspaceUserProfile();
             profile.SupervisorId = supervisorId;
             responsible.AsDynamic().ReadonlyProfile = profile;
             

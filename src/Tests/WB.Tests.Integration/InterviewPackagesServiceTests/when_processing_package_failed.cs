@@ -78,7 +78,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             Guid supervisorId = Id.g9;
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { SupervisorId = supervisorId } }));
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new HqUser() { Profile = new WorkspaceUserProfile() { SupervisorId = supervisorId } }));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(UnitOfWork);
