@@ -1815,7 +1815,7 @@ namespace WB.Tests.Abc.TestFactories
             };
             readonlyUser.RoleIds.Add(UserRoles.Interviewer.ToUserId());
 
-            var readonlyProfile = new HqUserProfile();
+            var readonlyProfile = new WorkspaceUserProfile();
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
             result.AsDynamic().Responsible = readonlyUser;
 
