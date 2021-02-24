@@ -10,6 +10,9 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
+            if (!this.Schema.Schema("users").Exists())
+                return;
+            
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(ConnectionString);
             var name = connectionStringBuilder.SearchPath!.Remove(0, "ws_".Length);
             
