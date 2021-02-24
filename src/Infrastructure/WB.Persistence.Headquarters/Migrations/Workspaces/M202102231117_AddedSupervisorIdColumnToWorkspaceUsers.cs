@@ -14,11 +14,11 @@ namespace WB.Persistence.Headquarters.Migrations.Workspaces
                 .AsGuid().Nullable();
             
             this.Execute.Sql(@"
-                UPDATE workspaces.workspace_users ws
-                SET ws.supervisor_id=subquery.SupervisorId
-                FROM (select Id, SupervisorId
-                FROM  users.userprofiles) AS subquery
-                WHERE ws.user_id = subquery.Id;");
+                UPDATE workspaces.workspace_users
+                SET supervisor_id=subquery.""SupervisorId""
+                FROM (select uu.""Id"", up.""SupervisorId""
+                    FROM  users.userprofiles up INNER JOIN users.users uu ON uu.""UserProfileId"" = up.""Id"") AS subquery
+                WHERE user_id = subquery.""Id"";");
         }
 
         public override void Down()

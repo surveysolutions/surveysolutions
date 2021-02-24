@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings
             Schema(WorkspaceConstants.SchemaName);
             Table("workspace_users");
             Id(x => x.Id, idMap => idMap.Generator(Generators.Identity));
-            Property(x => x.SupervisorId);
+            Property(x => x.SupervisorId, pm => pm.Column("supervisor_id"));
 
             ManyToOne(x => x.Workspace);
             ManyToOne(x => x.User, ptp => ptp.Column("user_id"));

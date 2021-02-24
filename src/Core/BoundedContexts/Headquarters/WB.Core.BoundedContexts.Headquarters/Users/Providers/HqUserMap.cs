@@ -103,7 +103,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
 
             ManyToOne(x => x.Profile, oto =>
             {
-                oto.Cascade(Cascade.All);
+                oto.Cascade(Cascade.None);
+                oto.Insert(false);
+                oto.Update(false);
+                oto.Lazy(LazyRelation.Proxy);
                 oto.Column("\"UserProfileId\"");
             });
             ManyToOne(x => x.WorkspacesProfile, oto =>
