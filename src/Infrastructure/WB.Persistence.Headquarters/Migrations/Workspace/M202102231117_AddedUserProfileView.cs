@@ -10,7 +10,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            if (!this.Schema.Schema("users").Exists())
+            if (!this.Schema.Schema("users").Exists() || !this.Schema.Schema("workspaces").Exists())
                 return;
             
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(ConnectionString);
