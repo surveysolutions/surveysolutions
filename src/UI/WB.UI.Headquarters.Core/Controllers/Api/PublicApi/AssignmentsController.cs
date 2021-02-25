@@ -462,7 +462,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:int}/recordAudio")]
         [Authorize(Roles = "ApiUser, Headquarter, Administrator")]
-        public ActionResult<AssignmentAudioRecordingEnabled> AudioRecoding(int id)
+        public ActionResult<AudioRecordingEnabled> AudioRecoding(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null || assignment.Archived)
@@ -470,7 +470,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            return new AssignmentAudioRecordingEnabled
+            return new AudioRecordingEnabled
             {
                 Enabled = assignment.AudioRecording
             };
