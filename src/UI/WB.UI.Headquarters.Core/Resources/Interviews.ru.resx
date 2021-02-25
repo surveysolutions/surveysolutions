@@ -261,4 +261,22 @@
   <data name="DynamicFilter" xml:space="preserve">
     <value>Динамический фильтр</value>
   </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Тип соответствия</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>И</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>ИЛИ</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Добавить правило</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Добавить группу</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>значение</value>
+  </data>
 </root>

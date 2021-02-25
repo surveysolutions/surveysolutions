@@ -51,14 +51,6 @@
                 :maxDepth="5"
                 :labels="labels"
                 v-model="queryExposedVariables"></vue-query-builder>
-            <div>
-                {{queryExposedVariables}}
-            </div>
-
-            <div>
-                {{transformQuery}}
-            </div>
-
             <div slot="actions">
                 <button
                     id="btnQuestionsExposedSelectorOk"
@@ -111,19 +103,6 @@ export default {
             questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
-
-            labels:{
-                'matchType': 'Match Type',
-                'matchTypes': [
-                    {'id': 'all', 'label': 'AND'},
-                    {'id': 'any', 'label': 'OR'},
-                ],
-                'addRule': 'Add Rule',
-                'removeRule': '&times;',
-                'addGroup': 'Add Group',
-                'removeGroup': '&times;',
-                'textInputPlaceholder': 'value',
-            },
         }
     },
 
@@ -296,32 +275,35 @@ export default {
         },
         getRuleMap(entity){
 
+            const comparableOperators = ['=','<>','<','<=','>','>=']
+            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with']
+
             if(entity.entityType =='QUESTION')
             {
                 switch(entity.type) {
                     case 'NUMERIC':
-                        return {ruleType: 'numeric', valueName: 'valueLong' }
+                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
                     case 'SINGLEOPTION':
                         return {ruleType: 'select', valueName: 'answerCode'}
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: ['=','<>','<','<=','>','>='] }
+                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators }
                     case 'TEXT':
-                        return {ruleType:'text', valueName: 'value' , operators: ['equals','not equals','contains','not contains','starts with','not starts with']}
+                        return {ruleType:'text', valueName: 'value' , operators: textOperators}
                 }
             }
             else if(entity.entityType == 'VARIABLE')
             {
                 switch(entity.variableType) {
                     case 'DOUBLE':
-                        return {ruleType: 'numeric', valueName: 'valueDouble'}
+                        return {ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators}
                     case 'LONGINTEGER':
-                        return {ruleType: 'numeric', valueName: 'valueLong'}
+                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators}
                     case 'BOOLEAN':
                         return {ruleType: 'radio',valueName: 'valueBool'}
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: ['=','<>','<','<=','>','>=']}
+                        return {ruleType: 'date', valueName: 'valueDate', operators: comparableOperators}
                     case 'STRING' :
-                        return {ruleType:'text', valueName: 'value', operators: ['equals','not equals','contains','not contains','starts with','not starts with']}
+                        return {ruleType:'text', valueName: 'value', operators: textOperators}
                 }
             }
             return 'text'
@@ -409,6 +391,20 @@ export default {
         },
         transformQuery(){
             return this.handleGroup(this.queryExposedVariables)
+        },
+        labels(){
+            return {
+                'matchType': this.$t('Interviews.DynamicFilter_MatchType'),
+                'matchTypes': [
+                    {'id': 'all', 'label': this.$t('Interviews.DynamicFilter_MatchTypes_And')},
+                    {'id': 'any', 'label': this.$t('Interviews.DynamicFilter_MatchTypes_Or')},
+                ],
+                'addRule': this.$t('Interviews.DynamicFilter_MatchTypes_AddRule'),
+                'removeRule': '&times;',
+                'addGroup': this.$t('Interviews.DynamicFilter_MatchTypes_AddGroup'),
+                'removeGroup': '&times;',
+                'textInputPlaceholder': this.$t('Interviews.DynamicFilter_MatchTypes_ValuePlaceholder'),
+            }
         },
     },
 
