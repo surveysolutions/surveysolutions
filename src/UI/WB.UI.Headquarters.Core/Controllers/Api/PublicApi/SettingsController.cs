@@ -37,14 +37,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("globalnotice")]
         [HttpPut]
         [SwaggerResponse(204, "Global notice set")]
-        [SwaggerResponse(400, "Message text missing")]
+        [SwaggerResponse(400, "Message text missing", type: typeof(ValidationProblemDetails))]
         public ActionResult PutGlobalNotice([FromBody, BindRequired]SetGlobalNoticeApiModel request)
         {
             if (!ModelState.IsValid)
-                return StatusCode(StatusCodes.Status400BadRequest, 
-                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+                return ValidationProblem();
             
-            if (string.IsNullOrEmpty(request?.Message))
+            if (string.IsNullOrEmpty(request.Message))
                 return BadRequest();
 
             this.appSettingsStorage.Store(new GlobalNotice { Message = request.Message }, AppSetting.GlobalNoticeKey);
