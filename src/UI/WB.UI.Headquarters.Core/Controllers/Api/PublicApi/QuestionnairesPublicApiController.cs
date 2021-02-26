@@ -141,7 +141,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:guid}/{version:long}/document")]
         [Authorize(Roles = "ApiUser, Administrator")]
-        [Obsolete("Use /graphql endpoint instead")]
         public ActionResult QuestionnaireDocument(Guid id, long version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
