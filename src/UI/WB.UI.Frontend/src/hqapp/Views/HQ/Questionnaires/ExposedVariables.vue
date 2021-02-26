@@ -85,13 +85,12 @@
         </div>
 
         <ModalFrame ref="exposedChangeModal"
-            :title="$t('Pages.ConfirmationNeededTitle')"
-            :canClose="false">
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Pages.ExposedVariables_ChangeMessage" )}}</p>
             <div slot="actions">
                 <button
                     type="button"
-                    class="btn btn-danger"
+                    class="btn btn-success"
                     v-bind:disabled="model.isObserving"
                     @click="changeExposedStatusSend">{{ $t("Common.Ok") }}</button>
                 <button
@@ -103,8 +102,7 @@
 
 
         <ModalFrame ref="exposedRemoveModal"
-            :title="$t('Pages.ConfirmationNeededTitle')"
-            :canClose="false">
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Pages.ExposedVariables_RemoveMessage" )}}</p>
             <div slot="actions">
                 <button
