@@ -1138,6 +1138,12 @@
   <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус архивирования</value>
   </data>
+  <data name="Users_ActiveUsers" xml:space="preserve">
+    <value>Активные пользователи</value>
+  </data>
+  <data name="Users_ArchivedUsers" xml:space="preserve">
+    <value>Архивные пользователи</value>
+  </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>

@@ -799,6 +799,12 @@
   <data name="Supervisors_ArchivedUsers" xml:space="preserve">
     <value>Archived supervisors</value>
   </data>
+  <data name="Users_ActiveUsers" xml:space="preserve">
+    <value>Active users</value>
+  </data>
+  <data name="Users_ArchivedUsers" xml:space="preserve">
+    <value>Archived users</value>
+  </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connected</value>
   </data>

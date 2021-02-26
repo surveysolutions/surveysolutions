@@ -246,6 +246,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var userId = this.authorizedUser.Id;
             var result = await this.moveUserToAnotherTeamService.Move(
                 userId,
+                moveRequest.Workspace,
                 moveRequest.InterviewerId,
                 moveRequest.NewSupervisorId, 
                 moveRequest.OldSupervisorId, 
@@ -391,6 +392,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
     public class MoveUserToAnotherTeamRequest
     {
+        public string Workspace { get; set; }
         public Guid InterviewerId { get; set; }
         public Guid OldSupervisorId { get; set; }
         public Guid NewSupervisorId { get; set; }

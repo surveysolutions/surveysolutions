@@ -142,10 +142,12 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                     UserManagementFilter.WithMissingWorkspace => query.Where(u => u.Workspaces.Count == 0),
                     UserManagementFilter.WithDisabledWorkspaces => query.Where(u => u.Workspaces.Any() && u.Workspaces.All(w => w.Workspace.DisabledAtUtc != null)),
                     UserManagementFilter.Locked => query.Where(u => u.IsLockedByHeadquaters || u.IsLockedBySupervisor),
-                    UserManagementFilter.Archived => query.Where(u => u.IsArchived),
+                    //UserManagementFilter.Archived => query.Where(u => u.IsArchived),
                     _ => query
                 };
             }
+
+            query = query.Where(u => u.IsArchived == request.Archive);
             
             return query;
         }

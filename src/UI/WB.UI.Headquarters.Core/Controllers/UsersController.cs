@@ -398,20 +398,12 @@ namespace WB.UI.Headquarters.Controllers
         [Route("/Create")]
         public ActionResult Create()
         {
-            // string id = null;
-            // if (!Enum.TryParse(id, true, out UserRoles role))
-            //     return BadRequest("Unknown user type");
-
-            // if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
-            //     return Forbid();
-
             return View(new
             {
-                //UserInfo = new {Role = role.ToString()},
                 Api = new
                 {
                     CreateUserUrl = Url.Action("CreateUser"),
-                    ResponsiblesUrl = Url.Action("Supervisors", "UsersTypeahead"),
+                    SupervisorWorkspaceUrl = Url.Action("WorkspaceSupervisors", "UsersTypeahead"),
                     WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
                 },
                 Roles = GetRolesForCreate(),

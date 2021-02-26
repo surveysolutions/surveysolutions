@@ -38,22 +38,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             this.interviewsReader = interviewsReader;
         }
 
-        public async Task<MoveInterviewerToAnotherTeamResult> Move(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
+        public async Task<MoveInterviewerToAnotherTeamResult> Move(Guid userId, string workspace,
+            Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
             MoveUserToAnotherTeamMode moveRequestMode)
         {
             if (moveRequestMode == MoveUserToAnotherTeamMode.MoveAllToNewTeam)
             {
-                return await MoveUserWithAllDataToANewTeam(userId, interviewerId, newSupervisorId, previousSupervisorId);
+                return await MoveUserWithAllDataToANewTeam(workspace, userId, interviewerId, newSupervisorId, previousSupervisorId);
             }
 
-            return await MoveUserAndAssignDataToOriginalSupervisor(userId, interviewerId, newSupervisorId, previousSupervisorId);
+            return await MoveUserAndAssignDataToOriginalSupervisor(workspace, userId, interviewerId, newSupervisorId, previousSupervisorId);
         }
 
-        private async Task<MoveInterviewerToAnotherTeamResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        private async Task<MoveInterviewerToAnotherTeamResult> MoveUserAndAssignDataToOriginalSupervisor(string workspace, Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
             var result = new MoveInterviewerToAnotherTeamResult();
             
-            var interviewIds = GetInterviewIds(interviewerId);
+            var interviewIds = GetInterviewIds(workspace, interviewerId);
             foreach (var interviewId in interviewIds)
             {
                 var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, previousSupervisorId, null);
@@ -75,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
                 }
             }
 
-            var updateResult = await MoveToAnotherTeamAsync(interviewerId, newSupervisorId, previousSupervisorId);
+            var updateResult = await MoveToAnotherTeamAsync(workspace, interviewerId, newSupervisorId, previousSupervisorId);
 
             if (!updateResult.Succeeded)
                 result.Errors.AddRange(updateResult.Errors.Select(x => x.Description));
@@ -83,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             return result;
         }
 
-        private async Task<Microsoft.AspNetCore.Identity.IdentityResult> MoveToAnotherTeamAsync(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        private async Task<Microsoft.AspNetCore.Identity.IdentityResult> MoveToAnotherTeamAsync(string workspace, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
             var interviewer = await this.userManager.FindByIdAsync(interviewerId);
             var newSupervisor = await this.userManager.FindByIdAsync(newSupervisorId);
@@ -97,11 +98,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
             return updateResult;
         }
 
-        private async Task<MoveInterviewerToAnotherTeamResult> MoveUserWithAllDataToANewTeam(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        private async Task<MoveInterviewerToAnotherTeamResult> MoveUserWithAllDataToANewTeam(string workspace, Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
             var result = new MoveInterviewerToAnotherTeamResult();
 
-            var interviewIds = GetInterviewIds(interviewerId);
+            var interviewIds = GetInterviewIds(workspace, interviewerId);
             foreach (var interviewId in interviewIds)
             {
                 var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, newSupervisorId, interviewerId);
@@ -110,14 +111,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam
 
             // there is no information about supervisor in assignment. no need to update anything
 
-            var moveUserResult = await MoveToAnotherTeamAsync(interviewerId, newSupervisorId, previousSupervisorId);
+            var moveUserResult = await MoveToAnotherTeamAsync(workspace, interviewerId, newSupervisorId, previousSupervisorId);
             if (!moveUserResult.Succeeded)
                 result.Errors.AddRange(moveUserResult.Errors.Select(x => x.Description));
 
             return result;
         }
 
-        private List<Guid> GetInterviewIds(Guid interviewerId)
+        private List<Guid> GetInterviewIds(string workspace, Guid interviewerId)
         {
             return interviewsReader.Query(_ => _.Where(x => x.ResponsibleId == interviewerId).Select(x => x.InterviewId).ToList());
         }

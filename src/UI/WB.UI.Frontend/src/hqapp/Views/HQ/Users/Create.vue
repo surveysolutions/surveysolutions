@@ -33,7 +33,7 @@
                         </div>
                     </form-group>
                     <form-group
-                        :label="$t('Pages.Pages.UsersManage_RoleFilterPlaceholder')"
+                        :label="$t('Pages.UsersManage_RoleFilterPlaceholder')"
                         :error="modelState['Role']"
                         :mandatory="true">
                         <div class="field"
@@ -65,8 +65,8 @@
                             <Typeahead
                                 control-id="supervisor"
                                 :value="supervisor"
-                                :ajax-params="{ }"
-                                :fetch-url="model.api.responsiblesUrl"
+                                :ajax-params="{ workspace: (this.workspace || {}).key }"
+                                :fetch-url="$config.model.supervisorWorkspaceUrl"
                                 @selected="supervisorSelected"></Typeahead>
                         </div>
                     </form-group>

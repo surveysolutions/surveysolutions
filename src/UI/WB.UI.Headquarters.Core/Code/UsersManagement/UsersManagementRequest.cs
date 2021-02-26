@@ -10,6 +10,7 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         public string? WorkspaceName { get; set; }
         public UserRoles? Role { get; set; }
         public UserManagementFilter? Filter { get; set; }
+        public bool Archive { get; set; }
     }
 
     public enum UserManagementFilter
@@ -17,6 +18,6 @@ namespace WB.UI.Headquarters.Code.UsersManagement
         WithMissingWorkspace,
         WithDisabledWorkspaces,
         Locked,
-        Archived
+        //Archived
     }
 }

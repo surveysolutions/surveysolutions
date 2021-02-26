@@ -4301,6 +4301,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active users.
+        /// </summary>
+        public static string Users_ActiveUsers {
+            get {
+                return ResourceManager.GetString("Users_ActiveUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Press Add API button to create a new API user..
         /// </summary>
         public static string Users_API_Instruction1 {
@@ -4315,6 +4324,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Users_API_Instruction2 {
             get {
                 return ResourceManager.GetString("Users_API_Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived users.
+        /// </summary>
+        public static string Users_ArchivedUsers {
+            get {
+                return ResourceManager.GetString("Users_ArchivedUsers", resourceCulture);
             }
         }
         
