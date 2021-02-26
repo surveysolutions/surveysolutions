@@ -103,6 +103,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var questionnaire = this.GetQuestionnaireOrThrow(this.Language);
+
+            if (!questionnaire.IsUsingExpressionStorage())
+                throw new InterviewException("Questionnaire is not supported. Please update questionnaire from Designer.", InterviewDomainExceptionType.QuestionnaireOutdated);
+
             var initialExpressionState = Activator.CreateInstance(questionnaire.ExpressionStorageType) as IInterviewExpressionStorage;
             expressionStorageCached = initialExpressionState;
 

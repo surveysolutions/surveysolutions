@@ -86,6 +86,7 @@ namespace WB.Tests.Abc
             var mocked = Mock.Get(questionnaire);
             if (mocked != null)
             {
+                mocked.Setup(q => q.IsUsingExpressionStorage()).Returns(true);
                 mocked.Setup(q => q.ExpressionStorageType).Returns(typeof(DummyInterviewExpressionStorage));
                 mocked.Setup(q => q.GetExpressionsPlayOrder()).Returns(new List<Guid>());
             }

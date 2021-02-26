@@ -307,6 +307,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestionOrThrow(linkedQuestionId.Value).QuestionType == QuestionType.TextList;
         }
 
+        public bool IsUsingExpressionStorage() => this.QuestionnaireDocument.IsUsingExpressionStorage;
+
         public Guid[] GetQuestionsLinkedToRoster()
         {
             return this.QuestionCache.Values.Where(x => x.LinkedToRosterId.HasValue).Select(x => x.PublicKey).ToArray();
