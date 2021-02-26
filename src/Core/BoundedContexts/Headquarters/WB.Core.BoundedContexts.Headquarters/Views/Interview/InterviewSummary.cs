@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Value = string.Empty,
                     InterviewSummary = this,
                     Position = position,
+                    IsEnabled = true,
                     Identifying = true
                 };
                 position++;
@@ -161,8 +162,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual void AnswerFeaturedQuestion(int entityId, string answer, decimal? optionCode = null)
         {
-            this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).Value = answer;
-            this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).AnswerCode = optionCode;
+            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            entity.Value = answer;
+            entity.AnswerCode = optionCode;
         }
 
         public virtual void AnswerFeaturedVariable(int entityId, object value, VariableType variableType)
