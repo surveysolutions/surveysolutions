@@ -476,13 +476,9 @@ export default {
         },
 
         async archiveUsersAsync(isArchive) {
-            let selectedInterviewers = this.getFilteredItems(item => {
-                return item.role == 'Interviewer'
-            })
-
             var response = await this.$http.post(this.model.archiveUsersUrl, {
                 archive: isArchive,
-                userIds: selectedInterviewers,
+                userIds: this.selectedRows,
             })
 
             if(!response.data.isSuccess)
