@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// Create new assignment
         /// </summary>
         /// <param name="createItem">New assignments options</param>
-        /// <response code="200">Created assignment with details</response>
+        /// <response code="201">Created assignment with details</response>
         /// <response code="400">Bad parameters provided or identifying data incorrect. See response details for more info</response>
         /// <response code="404">Questionnaire not found</response>
         [HttpPost]
@@ -288,7 +288,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
-            return result;
+            return Created(Url.Action("Details", new {id = result.Assignment.Id}), result);
         }
 
         /// <summary>
