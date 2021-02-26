@@ -13,18 +13,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
     public class InterviewExpressionStorageProvider : IInterviewExpressionStorageProvider
     {
-        private ILogger _logger;
-        private ILogger logger => _logger ??= loggerProvider.GetFor<InterviewExpressionStorageProvider>();
-        
-        private readonly ILoggerProvider loggerProvider;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
+        private readonly ILogger logger;
 
         public InterviewExpressionStorageProvider(
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             ILoggerProvider loggerProvider)
         {
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-            this.loggerProvider = loggerProvider;
+            this.logger = loggerProvider.GetForType(GetType());
         }
 
         public IInterviewExpressionStorage GetExpressionStorage(QuestionnaireIdentity questionnaireIdentity)
