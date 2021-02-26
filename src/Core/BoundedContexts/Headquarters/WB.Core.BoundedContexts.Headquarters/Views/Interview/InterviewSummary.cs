@@ -169,23 +169,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual void AnswerFeaturedVariable(int entityId, object value, VariableType variableType)
         {
+            var entity = this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId);
+            entity.Value = AnswerUtils.AnswerToString(value);
+
             switch (variableType)
             {
                 case VariableType.Boolean:
-                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueBool = Convert.ToBoolean(value);
+                    entity.ValueBool = Convert.ToBoolean(value);
                     break;
                 case VariableType.DateTime:
-                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueDate = value as DateTime?;
+                    entity.ValueDate = value as DateTime?;
                     break;
                 case VariableType.Double:
-                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueDouble = Convert.ToDouble(value);
+                    entity.ValueDouble = Convert.ToDouble(value);
                     break;
                 case VariableType.LongInteger:
-                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).ValueLong = Convert.ToInt64(value);
+                    entity.ValueLong = Convert.ToInt64(value);
                     break;
                 case VariableType.String:
-                    this.IdentifyEntitiesValues.First(x => x.Entity.Id == entityId).Value = AnswerUtils.AnswerToString(value);
+                    entity.Value = AnswerUtils.AnswerToString(value);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(variableType), variableType, null);
             }
         }
 

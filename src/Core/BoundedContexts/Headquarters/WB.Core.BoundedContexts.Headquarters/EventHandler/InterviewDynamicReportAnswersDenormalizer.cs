@@ -371,7 +371,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var answer in state.IdentifyEntitiesValues.Where(g =>
                 reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
-                answer.IsEnabled = false;
+                answer.IsEnabled = true;
             }
 
             return state;
@@ -385,7 +385,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var answer in state.IdentifyEntitiesValues.Where(g =>
                 reportQuestionIdentities.Contains(g.Entity.EntityId) && g.Identifying != true))
             {
-                answer.IsEnabled = true;
+                answer.IsEnabled = false;
             }
 
             return state;
