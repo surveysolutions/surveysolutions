@@ -76,10 +76,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
         {
             if (userToUnarchive.IsInRole(UserRoles.Interviewer))
             {
-                var supervisor = await this.userRepository.FindByIdAsync(userToUnarchive.Profile.SupervisorId.Value);
-                if (supervisor.IsArchived)
-                    throw new UserArchiveException(string.Format(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat,
-                        userToUnarchive.UserName));
+                var supervisorIds = userToUnarchive.Workspaces
+                    .Where(w => w.SupervisorId.HasValue)
+                    .Select(w => w.SupervisorId.Value);
+                foreach (var supervisorId in supervisorIds)
+                {
+                    var supervisor = await this.userRepository.FindByIdAsync(supervisorId);
+                    if (supervisor.IsArchived)
+                        throw new UserArchiveException(string.Format(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat,
+                            userToUnarchive.UserName));
+                }
             }
 
             userToUnarchive.IsArchived = false;
