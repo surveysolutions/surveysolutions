@@ -66,7 +66,7 @@
                                 control-id="supervisor"
                                 :value="supervisor"
                                 :ajax-params="{ workspace: (this.workspace || {}).key }"
-                                :fetch-url="$config.model.supervisorWorkspaceUrl"
+                                :fetch-url="$config.model.api.supervisorWorkspaceUrl"
                                 @selected="supervisorSelected"></Typeahead>
                         </div>
                     </form-group>
