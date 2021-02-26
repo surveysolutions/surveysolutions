@@ -224,9 +224,10 @@ export default {
 
             interviewer.inProgress = true
 
-            var moveResult = await self.$http.post(self.$config.model.moveUserToAnotherTeamUrl, {
+            let url = '/' + this.workspace + '/' + this.model.moveUserToAnotherTeamUrl.slice('/users/'.length)
+
+            var moveResult = await self.$http.post(url, {
                 interviewerId: interviewer.userId,
-                oldSupervisorId: interviewer.supervisorId,
                 newSupervisorId: self.supervisor.key,
                 mode: self.whatToDoWithAssignments,
             })

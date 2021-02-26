@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             else if (!string.IsNullOrEmpty(input.UserEmail))
                 query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
             else if (!string.IsNullOrEmpty(input.DeviceId))
-                query = query.Where(x => x.Profile.DeviceId == input.DeviceId);
+                query = query.Where(x => x.WorkspacesProfile.DeviceId == input.DeviceId);
 
             var dbUser =
                 (from user in query

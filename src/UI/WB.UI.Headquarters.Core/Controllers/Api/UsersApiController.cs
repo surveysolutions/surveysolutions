@@ -241,18 +241,25 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam([FromBody] MoveUserToAnotherTeamRequest moveRequest)
+        public async Task<IActionResult> MoveUserToAnotherTeam([FromBody] MoveUserToAnotherTeamRequest moveRequest)
         {
             var userId = this.authorizedUser.Id;
+
+            var interviewer = userManager.FindById(moveRequest.InterviewerId);
+            if (interviewer == null)
+                return NotFound();
+            
+            if (!interviewer.IsInRole(UserRoles.Interviewer))
+                return NotFound();
+
             var result = await this.moveUserToAnotherTeamService.Move(
                 userId,
-                moveRequest.Workspace,
                 moveRequest.InterviewerId,
                 moveRequest.NewSupervisorId, 
-                moveRequest.OldSupervisorId, 
+                interviewer.Profile.SupervisorId!.Value, 
                 moveRequest.Mode);
 
-            return result;
+            return Ok(result);
         }
 
         [HttpPost]
@@ -392,9 +399,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
     public class MoveUserToAnotherTeamRequest
     {
-        public string Workspace { get; set; }
         public Guid InterviewerId { get; set; }
-        public Guid OldSupervisorId { get; set; }
         public Guid NewSupervisorId { get; set; }
         public MoveUserToAnotherTeamMode Mode { get; set; }
     }

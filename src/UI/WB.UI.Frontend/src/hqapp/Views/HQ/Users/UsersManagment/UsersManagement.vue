@@ -129,7 +129,6 @@
 
         <InterviewersMoveToOtherTeam
             ref="interviewersMoveToOtherTeam"
-            :moveUserToAnotherTeamUrl="model.moveUserToAnotherTeamUrl"
             @moveInterviewersCompleted="loadData"></InterviewersMoveToOtherTeam>
 
     </HqLayout>

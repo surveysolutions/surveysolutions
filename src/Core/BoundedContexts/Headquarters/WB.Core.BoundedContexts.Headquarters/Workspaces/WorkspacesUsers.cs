@@ -23,5 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces
         public virtual Guid? SupervisorId { get; protected set; }
         public virtual Workspace Workspace { get; protected set; }
         public virtual HqUser User { get; protected set; }
+
+        public virtual void ChangeSupervisorId(Guid supervisorId)
+            => SupervisorId = supervisorId;
     }
 }
