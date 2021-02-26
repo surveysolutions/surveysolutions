@@ -38,7 +38,8 @@
         <div class="collapse navbar-collapse" id="navbar">
             <partial name="_WorkspaceSelector" />
 
-            @if (this.workspaceAccessor.CurrentWorkspace()?.IsAdministrationWorkspace() ?? false)
+            @if (authorizedUser.IsAdministrator 
+                && (this.workspaceAccessor.CurrentWorkspace()?.IsSpecialWorkspace() ?? false))
             {
                 <partial name="ServerAdminMenu" />
             }

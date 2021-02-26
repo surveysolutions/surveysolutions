@@ -11,8 +11,8 @@
         @*<li class="@(workspace.Name == w.Name ? "active" : "")">
                 <a href="@Url.Content(w.PathBase + "/" + w.Name)">@w.DisplayName</a>
             </li>*@
-        @Html.MainMenuItem("Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
-        @Html.MainMenuItem("Index", "UsersManagement", Dashboard.UsersManagement, MenuItem.UsersManagement)
+        @Html.MainMenuItem(Workspace.Admin.AsContext(),"Index", "Workspaces", @MainMenu.Workspaces, MenuItem.Workspaces)
+        @Html.MainMenuItem(Workspace.UsersWorkspace.AsContext(), "Index", "UsersManagement", Dashboard.UsersManagement, MenuItem.UsersManagement)
     }
 </ul>
 <ul class="nav navbar-nav navbar-right">
