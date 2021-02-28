@@ -1,4 +1,7 @@
 .vue-query-builder{
+  .vqb-group{
+	margin-top: 15px !important;
+  }
   .vqb-group.depth-4{
     .vqb-rule{
         border-left:2px solid #ffff00 !important;
@@ -25,6 +28,4 @@
   .vqb-group.depth-8{
       border-left:2px solid #999900;
     }  
-}
-
-  
+}  

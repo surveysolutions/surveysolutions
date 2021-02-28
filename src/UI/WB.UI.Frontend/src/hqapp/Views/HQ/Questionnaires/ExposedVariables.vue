@@ -155,7 +155,7 @@ export default {
                     {
                         data: 'entityType',
                         name: 'EntityType',
-                        'width': '5%',
+                        'width': '10%',
                         sortable: false,
                         'render': function (data, type, row) {
                             return self.getEntityDisplayType(data)
@@ -164,22 +164,22 @@ export default {
                     {
                         data: 'variable',
                         name: 'Variable',
-                        'width': '20%',
+                        'width': '30%',
                         title: this.$t('Pages.ExposedVariables_VariableName'),
                         sortable: false,
                     },
-                    {
-                        data: 'label',
-                        name: 'label',
-                        'width': '15%',
-                        title: this.$t('Pages.ExposedVariables_VariableLabel'),
-                        sortable: false,
-                    },
+                    // {
+                    //     data: 'label',
+                    //     name: 'label',
+                    //     'width': '15%',
+                    //     title: this.$t('Pages.ExposedVariables_VariableLabel'),
+                    //     sortable: false,
+                    // },
                     {
                         data: 'title',
                         name: 'Title',
-                        'width': '50%',
-                        title: this.$t('Pages.ExposedVariables_VariableTitle'),
+                        'width': '60%',
+                        title: this.$t('Pages.ExposedVariables_VariableDisplayTitle'),
                         sortable: false,
                         'render': function (data, type, row) {
                             return self.replaceSubstitutions(self.sanitizeHtml(data))

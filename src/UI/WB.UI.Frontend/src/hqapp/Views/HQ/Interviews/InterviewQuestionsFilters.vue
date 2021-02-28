@@ -355,9 +355,7 @@ export default {
         isDynamicDisabled() {
             return this.rules.length == 0
         },
-
         rules(){
-
             return this.questionnaireAllItemsList.map(i => {
 
                 var map =this.getRuleMap(i)
