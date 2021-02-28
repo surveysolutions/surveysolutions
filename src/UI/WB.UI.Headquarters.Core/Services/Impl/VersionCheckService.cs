@@ -4,10 +4,10 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
-using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Models.VersionCheck;
 
@@ -27,16 +27,19 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IProductVersion productVersion;
         private readonly IOptions<VersionCheckConfig> versionCheckConfig;
         private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IRestServiceSettings serviceSettings;
 
         public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage,
             IProductVersion productVersion,
             IOptions<VersionCheckConfig> versionCheckConfig,
-            IInScopeExecutor inScopeExecutor)
+            IInScopeExecutor inScopeExecutor,
+            IRestServiceSettings serviceSettings)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.productVersion = productVersion;
             this.versionCheckConfig = versionCheckConfig;
             this.inScopeExecutor = inScopeExecutor;
+            this.serviceSettings = serviceSettings;
         }
 
         public bool DoesNewVersionExist()
@@ -106,6 +109,7 @@ namespace WB.UI.Headquarters.Services.Impl
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Add("User-Agent", serviceSettings.UserAgent);
 
                 var jsonData = await httpClient.GetStringAsync(uri);
                 return JsonConvert.DeserializeObject<T>(jsonData);
