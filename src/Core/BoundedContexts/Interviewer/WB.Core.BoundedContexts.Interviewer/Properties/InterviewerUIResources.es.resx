@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -124,7 +124,7 @@
     <value>Verifique que el dispositivo del Supervisor tenga WiFi y Bluetooth activados y que se encuentre cerca</value>
   </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Asegúrese que ambos dispositivos se encuentran cerca. Tanto el WIFI como el Bluetooth deben estar encendidos en ambos dispositivos. La aplicación del Supervisor debe estar abierta en el dispositivo. </value>
+    <value>Asegúrese que ambos dispositivos se encuentran cerca. Tanto el WIFI como el Bluetooth deben estar encendidos en ambos dispositivos. La aplicación del Supervisor debe estar abierta en el dispositivo.</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
     <value>Conectado al dispositivo del supervisor</value>
@@ -139,7 +139,7 @@
     <value>Buscando el dispositivo del supervisor</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Trasladando todas las entrevistas completadas al dispositivo del Supervisor.</value>
+    <value>Trasladando todas las entrevistas completadas al dispositivo del Supervisor</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
     <value>Trasladar todas las entrevistas completadas a "{0}"</value>
@@ -154,7 +154,8 @@
     <value>Algunas entrevistas se encuentran ahora en otro dispositivo.</value>
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>No se ha iniciado la transferencia. No se puede localizar el dispositivo del supervisor</value>
+    <value>No se ha iniciado la transferencia.
+No se puede localizar el dispositivo del supervisor</value>
   </data>
   <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
     <value>La transferencia se canceló en el segundo dispositivo.</value>
@@ -163,7 +164,7 @@
     <value>La transferencia ha finalizado. Todas las entrevistas completadas ahora están en otro dispositivo</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>La transferencia ha finalizado. {0} entrevistas(s) han fallado en ser sincronizadas.</value>
+    <value>La transferencia ha finalizado. {0} entrevistas(s) han fallado en ser sincronizadas</value>
   </data>
   <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
     <value>Transferencia en progreso</value>

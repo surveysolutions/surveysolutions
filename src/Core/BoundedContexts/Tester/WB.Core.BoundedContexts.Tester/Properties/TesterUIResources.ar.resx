@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -133,7 +133,7 @@
     <value>تنزيل الاستبيان - {0}٪</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>لا يمكن فتح الاستبيان "{0}". حساب المستخدم المصمم غير مصرح به يرجى التحقق من تسجيل الدخول وكلمة المرور</value>
+    <value>لا يمكن فتح الاستبيان "{0}". حساب المستخدم المصمم غير مصرح به يرجى التحقق من تسجيل الدخول وكلمة المرور.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>لا يمكن فتح الاستبيان "{0}". لا يمكن العثور على الاستبيان. يرجى تحديث قائمة الاستبيانات.</value>
@@ -169,7 +169,7 @@
     <value>تسجيل خروج</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>تعطيل التحقق من صحة شهادة SSL.</value>
+    <value>تعطيل التحقق من صحة شهادة SSL</value>
   </data>
   <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
     <value>قبول جميع شهادات SSL</value>

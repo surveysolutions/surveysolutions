@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -238,7 +238,7 @@
     <value>Întrebări de identificare</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>În curs de procesare...</value>
+    <value>În curs de procesare…</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Chestionar</value>
@@ -305,6 +305,9 @@
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Selectează chestionarul</value>
-      <comment>Selectează chestionarul</comment>
+    <comment>Selectează chestionarul</comment>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Misiuni</value>
   </data>
 </root>
