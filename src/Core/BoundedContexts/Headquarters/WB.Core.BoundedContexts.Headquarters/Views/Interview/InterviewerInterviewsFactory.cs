@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -20,7 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IHeadquartersEventStore eventStore;
 
@@ -33,7 +31,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.statefulInterviewRepository = statefulInterviewRepository;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.eventStore = eventStore;
         }

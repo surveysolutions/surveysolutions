@@ -282,4 +282,7 @@
   <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>User is not authorized to execute provided action</value>
   </data>
+  <data name="InterviewStatus.WebInterviewRequested" xml:space="preserve">
+    <value>Web Interview</value>
+  </data>
 </root>

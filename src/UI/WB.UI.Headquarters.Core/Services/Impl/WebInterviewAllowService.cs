@@ -23,14 +23,13 @@ namespace WB.UI.Headquarters.Services.Impl
             InterviewStatus.SupervisorAssigned,
             InterviewStatus.InterviewerAssigned,
             InterviewStatus.Restarted,
-            InterviewStatus.RejectedBySupervisor
+            InterviewStatus.RejectedBySupervisor,
+            InterviewStatus.WebInterview
         };
 
         private static readonly List<InterviewStatus> AnonymousUserAllowedStatuses = new List<InterviewStatus>
         {
-            InterviewStatus.SupervisorAssigned,
-            InterviewStatus.InterviewerAssigned,
-            InterviewStatus.RejectedBySupervisor
+            InterviewStatus.WebInterview
         };
 
         public WebInterviewAllowService(

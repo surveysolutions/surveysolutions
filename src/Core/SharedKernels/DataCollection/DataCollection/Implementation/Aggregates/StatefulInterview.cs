@@ -214,7 +214,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
 
         #region Command handlers
+        
+        public void RequestWebInterview(Guid userId, DateTimeOffset originDate)
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.SupervisorAssigned, 
+                InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.Restarted, 
+                InterviewStatus.RejectedBySupervisor);
+            
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.WebInterview,
+                comment: null, previousStatus: this.properties.Status, originDate: originDate));
+
+            this.ApplyEvent(new InterviewPaused(userId, originDate));
+        }
 
         public void Complete(Guid userId, string comment, DateTimeOffset originDate)
         {
@@ -232,7 +248,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
-                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+                InterviewStatus.SupervisorAssigned, 
+                InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.Restarted, 
+                InterviewStatus.RejectedBySupervisor,
+                InterviewStatus.WebInterview);
 
             if (isNeedFirePassiveEvents)
             {
@@ -252,6 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : new InterviewDeclaredInvalid(originDate) as IEvent);
             }
         }
+
         //Obsolete. Is used only in tests. Remove
         public void Synchronize(SynchronizeInterviewCommand command)
         {

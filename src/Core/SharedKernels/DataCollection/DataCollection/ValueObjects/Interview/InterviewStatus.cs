@@ -17,6 +17,8 @@
         ApprovedBySupervisor = 120,
 
         RejectedByHeadquarters = 125,
-        ApprovedByHeadquarters = 130
+        ApprovedByHeadquarters = 130,
+
+        WebInterview = 140
     }
 }

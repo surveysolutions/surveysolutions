@@ -151,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
             this.promoterService = promoterService;
             this.memoryCache = memoryCache;
             this.calendarEventService = calendarEventService;
-
         }
 
         [Route("Error")]
@@ -163,7 +162,6 @@ namespace WB.UI.Headquarters.Controllers
                 ErrorMessage = errorMessage
             });
         }
-
 
         [WebInterviewAuthorize]
         [Route("{id:Guid}/Section/{sectionId}")]
@@ -277,12 +275,13 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.WebMode == false)
             {
-                // Compatibility issue. Every time users will use link,   they will create a new interview. All links will be bounced back
+                // Compatibility issue. Every time users will use link, they will create a new interview. All links will be bounced back
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
             }
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
+
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
@@ -296,7 +295,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         if (IsInterviewExists(invitation.InterviewId))
                         {
-                            if (invitation.Interview.Status >= InterviewStatus.Completed)
+                            if (invitation.Interview.Status != InterviewStatus.WebInterview)
                                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
                                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
                             
@@ -418,6 +417,7 @@ namespace WB.UI.Headquarters.Controllers
             var assignment = invitation.Assignment;
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
+
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
@@ -765,7 +765,8 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?)null,
                 interviewKey,
                 assignment.Id,
-                assignment.AudioRecording);
+                assignment.AudioRecording,
+                webInterviewMode: true);
 
             this.commandService.Execute(createInterviewCommand);
             

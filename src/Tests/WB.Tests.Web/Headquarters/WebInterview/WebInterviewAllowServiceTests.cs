@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
         private void ArrangeTest(
             UserRoles? loggedInUserRole = null, 
-            InterviewStatus? interviewStatus = InterviewStatus.InterviewerAssigned, 
+            InterviewStatus? interviewStatus = InterviewStatus.WebInterview, 
             bool webInterviewEnabled = true, 
             Guid? loggedInUserId = null, 
             Guid? responsibleId = null,
@@ -95,12 +95,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             }
         }
 
-        [TestCase(InterviewStatus.InterviewerAssigned, ExpectedResult = true)]
+        [TestCase(InterviewStatus.InterviewerAssigned, ExpectedResult = false)]
         [TestCase(InterviewStatus.Restarted, ExpectedResult = false)]
         [TestCase(InterviewStatus.Completed, ExpectedResult = false)]
         [TestCase(InterviewStatus.ApprovedByHeadquarters, ExpectedResult = false)]
         [TestCase(InterviewStatus.RejectedByHeadquarters, ExpectedResult = false)]
-        [TestCase(InterviewStatus.RejectedBySupervisor, ExpectedResult = true)]
+        [TestCase(InterviewStatus.RejectedBySupervisor, ExpectedResult = false)]
+        [TestCase(InterviewStatus.WebInterview, ExpectedResult = true)]
         public bool should_only_allow_interviews_in_state(InterviewStatus interviewStatus)
         {
             ArrangeTest(interviewStatus: interviewStatus, webInterviewEnabled: true);

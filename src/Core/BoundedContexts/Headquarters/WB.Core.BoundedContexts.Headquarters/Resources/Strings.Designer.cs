@@ -475,6 +475,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web Interview.
+        /// </summary>
+        public static string InterviewStatus_WebInterviewRequested {
+            get {
+                return ResourceManager.GetString("InterviewStatus.WebInterviewRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User is not authorized to execute provided action.
         /// </summary>
         public static string NoPermissionsToExecute {

@@ -293,4 +293,7 @@
   <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
     <value>Не назначенные на интервьюера</value>
   </data>
+  <data name="InterviewStatus.WebInterviewRequested" xml:space="preserve">
+    <value>Веб Интервью</value>
+  </data>
 </root>

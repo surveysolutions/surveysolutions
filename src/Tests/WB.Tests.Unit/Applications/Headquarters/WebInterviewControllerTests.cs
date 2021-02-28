@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 i.InterviewId == interviewId
                 && i.Assignment == assignment
                 && i.IsWithAssignmentResolvedByPassword() == true
-                && i.Interview == Mock.Of<InterviewSummary>(s => s.Status == InterviewStatus.InterviewerAssigned));
+                && i.Interview == Mock.Of<InterviewSummary>(s => s.Status == InterviewStatus.WebInterview));
 
             var o = (object)invitation;
 

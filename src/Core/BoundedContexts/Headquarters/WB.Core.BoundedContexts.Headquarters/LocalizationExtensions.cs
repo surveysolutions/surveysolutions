@@ -8,50 +8,24 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public static string ToLocalizeString(this InterviewStatus status)
         {
-            string returnValue = string.Empty;
-            switch (status)
+            return status switch
             {
-                case InterviewStatus.Created:
-                    returnValue = Strings.InterviewStatus_Created;
-                    break;
-                case InterviewStatus.SupervisorAssigned:
-                    returnValue = Strings.InterviewStatus_SupervisorAssigned;
-                    break;
-                case InterviewStatus.Deleted:
-                    returnValue = Strings.InterviewStatus_Deleted;
-                    break;
-                case InterviewStatus.Restored:
-                    returnValue = Strings.InterviewStatus_Restored;
-                    break;
-                case InterviewStatus.InterviewerAssigned:
-                    returnValue = Strings.InterviewStatus_InterviewerAssigned;
-                    break;
-                case InterviewStatus.ReadyForInterview:
-                    returnValue = Strings.InterviewStatus_ReadyForInterview;
-                    break;
-                case InterviewStatus.SentToCapi:
-                    returnValue = Strings.InterviewStatus_SentToCapi;
-                    break;
-                case InterviewStatus.Completed:
-                    returnValue = Strings.InterviewStatus_Completed;
-                    break;
-                case InterviewStatus.Restarted:
-                    returnValue = Strings.InterviewStatus_Restarted;
-                    break;
-                case InterviewStatus.ApprovedBySupervisor:
-                    returnValue = Strings.InterviewStatus_ApprovedBySupervisor;
-                    break;
-                case InterviewStatus.RejectedBySupervisor:
-                    returnValue = Strings.InterviewStatus_RejectedBySupervisor;
-                    break;
-                case InterviewStatus.ApprovedByHeadquarters:
-                    returnValue = Strings.InterviewStatus_ApprovedByHeadquarters;
-                    break;
-                case InterviewStatus.RejectedByHeadquarters:
-                    returnValue = Strings.InterviewStatus_RejectedByHeadquarters;
-                    break;
-            }
-            return returnValue;
+                InterviewStatus.Created => Strings.InterviewStatus_Created,
+                InterviewStatus.SupervisorAssigned => Strings.InterviewStatus_SupervisorAssigned,
+                InterviewStatus.Deleted => Strings.InterviewStatus_Deleted,
+                InterviewStatus.Restored => Strings.InterviewStatus_Restored,
+                InterviewStatus.InterviewerAssigned => Strings.InterviewStatus_InterviewerAssigned,
+                InterviewStatus.ReadyForInterview => Strings.InterviewStatus_ReadyForInterview,
+                InterviewStatus.SentToCapi => Strings.InterviewStatus_SentToCapi,
+                InterviewStatus.Completed => Strings.InterviewStatus_Completed,
+                InterviewStatus.Restarted => Strings.InterviewStatus_Restarted,
+                InterviewStatus.ApprovedBySupervisor => Strings.InterviewStatus_ApprovedBySupervisor,
+                InterviewStatus.RejectedBySupervisor => Strings.InterviewStatus_RejectedBySupervisor,
+                InterviewStatus.ApprovedByHeadquarters => Strings.InterviewStatus_ApprovedByHeadquarters,
+                InterviewStatus.RejectedByHeadquarters => Strings.InterviewStatus_RejectedByHeadquarters,
+                InterviewStatus.WebInterview => Strings.InterviewStatus_WebInterviewRequested,
+                _ => string.Empty
+            };
         }
 
         public static string ToLocalizeJavaScriptString(this InterviewStatus status)
