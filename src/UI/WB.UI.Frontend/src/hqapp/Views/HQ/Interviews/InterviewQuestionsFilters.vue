@@ -48,7 +48,7 @@
             :title="$t('Interviews.DynamicFilter')">
             <vue-query-builder
                 :rules="rules"
-                :maxDepth="5"
+                :maxDepth="6"
                 :labels="labels"
                 v-model="queryExposedVariables"></vue-query-builder>
             <div slot="actions">
