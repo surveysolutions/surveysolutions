@@ -366,7 +366,7 @@ export default {
                 var rule = {
                     type: type,
                     id: i.variable,
-                    label: sanitizeHtml(i.title).replace(/%[\w_]+%/g, '[..]').substring(0,60),
+                    label: i.title ? sanitizeHtml(i.title).replace(/%[\w_]+%/g, '[..]').substring(0,60) : (i.label ? i.label : i.variable),
                 }
 
                 if(type == 'select')

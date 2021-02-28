@@ -1060,6 +1060,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display title.
+        /// </summary>
+        public static string ExposedVariables_VariableDisplayTitle {
+            get {
+                return ResourceManager.GetString("ExposedVariables_VariableDisplayTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Label.
         /// </summary>
         public static string ExposedVariables_VariableLabel {

@@ -1607,6 +1607,9 @@
   <data name="ExposedVariables_VariableTitle" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
+    <value>Display title</value>
+  </data>
   <data name="ExposedVariables_VariableLabel" xml:space="preserve">
     <value>Label</value>
   </data>

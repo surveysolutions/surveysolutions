@@ -55,10 +55,14 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>{{this.$t('Pages.ExposedVariables_VariableName')}}</th>
-                            <th>{{this.$t('Pages.ExposedVariables_VariableLabel')}}</th>
-                            <th>{{this.$t('Pages.ExposedVariables_VariableTitle')}}</th>
+                            <th style="width: 10%"></th>
+                            <th style="width: 30%">
+                                {{this.$t('Pages.ExposedVariables_VariableName')}}
+                            </th>
+                            <!-- <th>{{this.$t('Pages.ExposedVariables_VariableLabel')}}</th> -->
+                            <th style="width: 60%">
+                                {{this.$t('Pages.ExposedVariables_VariableDisplayTitle')}}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,8 +72,8 @@
                             @click="rowExposedClicked(variable.id)">
                             <td>{{ getEntityDisplayType(variable.entityType) }}</td>
                             <td>{{ variable.variable }}</td>
-                            <td>{{ variable.label }}</td>
-                            <td>{{ variable.title }}</td>
+                            <!-- <td>{{ variable.label }}</td> -->
+                            <td>{{ getVariableLabel(variable) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -77,6 +81,7 @@
                 <div class="action-buttons">
                     <button
                         @click="saveVariables"
+                        :disabled="saveDisabled"
                         class="btn btn-success">
                         {{$t('Common.Save')}}
                     </button>
@@ -133,6 +138,7 @@ export default {
 
         return {
             exposedVariables: [],
+            initialSet: [],
             idToRemove: null,
         }
     },
@@ -149,27 +155,30 @@ export default {
                     {
                         data: 'entityType',
                         name: 'EntityType',
+                        'width': '5%',
                         sortable: false,
                         'render': function (data, type, row) {
                             return self.getEntityDisplayType(data)
                         },
-
                     },
                     {
                         data: 'variable',
                         name: 'Variable',
+                        'width': '20%',
                         title: this.$t('Pages.ExposedVariables_VariableName'),
                         sortable: false,
                     },
                     {
                         data: 'label',
                         name: 'label',
+                        'width': '15%',
                         title: this.$t('Pages.ExposedVariables_VariableLabel'),
                         sortable: false,
                     },
                     {
                         data: 'title',
                         name: 'Title',
+                        'width': '50%',
                         title: this.$t('Pages.ExposedVariables_VariableTitle'),
                         sortable: false,
                         'render': function (data, type, row) {
@@ -195,6 +204,18 @@ export default {
                 },
             }
         },
+        saveDisabled(){
+            if(this.initialSet.length !== this.exposedVariables.length)
+                return false
+            else{
+                for(var i = 0; i< this.initialSet.length; i++ )
+                {
+                    if(this.initialSet[i].id !== this.exposedVariables[i].id)
+                        return false
+                }
+            }
+            return true
+        },
     },
     mounted() {
         this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
@@ -209,6 +230,8 @@ export default {
                         entityType: d.entityType,
                     }
                 })
+
+                this.initialSet = [...this.exposedVariables]
             })
     },
     methods: {
@@ -219,20 +242,20 @@ export default {
             return value.replace(/%[\w_]+%/g, '[..]')
         },
 
-
         saveVariables(){
             this.$refs.exposedChangeModal.modal({keyboard: false})
 
         },
 
         getEntityDisplayType(type){
-            if(type == 'Question')
-                return 'Q'
-            if(type == 'Variable')
-                return 'V'
-
-            return ''
-
+            switch(type){
+                case 'Question':
+                    return 'Q'
+                case 'Variable':
+                    return 'V'
+                default:
+                    return ''
+            }
         },
 
         async changeExposedStatusSend() {
@@ -254,7 +277,7 @@ export default {
 
                 var rowData = row.data()
                 this.exposedVariables.splice(i, 0, {
-                    id: parsedRowId,
+                    id: rowData.id,
                     title: this.replaceSubstitutions(sanitizeHtml(rowData.title)),
                     label: rowData.label,
                     variable: rowData.variable,
@@ -277,6 +300,9 @@ export default {
             if(row != null)
                 row.nodes().to$().removeClass('disabled')
             this.$refs.exposedRemoveModal.modal('hide')
+        },
+        getVariableLabel(variable){
+            return variable.title ? sanitizeHtml(variable.title).replace(/%[\w_]+%/g, '[..]').substring(0,60) : (variable.label ? variable.label : variable.variable)
         },
     },
 }
