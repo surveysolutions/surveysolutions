@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters
             
             services.Configure<MetricsConfig>(configuration.MetricsConfiguration());
 
-           
+            services.Configure<VersionCheckConfig>(configuration.GetSection("VersionCheck"));
         }
 
     public static IConfigurationSection MetricsConfiguration(this IConfiguration conf)
