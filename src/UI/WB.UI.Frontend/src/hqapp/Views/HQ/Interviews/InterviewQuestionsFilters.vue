@@ -326,12 +326,21 @@ export default {
                 case 'not starts with': return 'nstartsWith'
             }
         },
+        getDisplayTitle(title){
+            var transformedTitle = sanitizeHtml(title).replace(/%[\w_]+%/g, '[..]')
+            return transformedTitle.length  >= 57 ? transformedTitle.substring(0,54) + '...' : transformedTitle
+        },
     },
 
     computed: {
         questionnaireItemsList() {
-            const array = filter([...(this.questionnaireAllItemsList || [])], q => {
-                return  q.identifying})
+            const array = filter([...(this.questionnaireItems || [])], q => {
+                return (q.type == 'SINGLEOPTION'
+                    || q.type == 'TEXT'
+                    || q.type == 'NUMERIC'
+                    || q.entityType == 'VARIABLE')
+                    && q.identifying
+            })
             return array
         },
 
@@ -341,6 +350,8 @@ export default {
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
                     || q.entityType == 'VARIABLE')
+                    ||
+                    (!q.identifying && q.type == 'DATETIME')
             })
 
             return array
@@ -358,18 +369,20 @@ export default {
         rules(){
             return this.questionnaireAllItemsList.map(i => {
 
-                var map =this.getRuleMap(i)
+                var map = this.getRuleMap(i)
                 var type = map.ruleType
 
                 var rule = {
                     type: type,
                     id: i.variable,
-                    label: i.title ? sanitizeHtml(i.title).replace(/%[\w_]+%/g, '[..]').substring(0,60) : (i.label ? i.label : i.variable),
+                    label: i.title
+                        ? this.getDisplayTitle(i.title)
+                        : (i.label ? i.label : i.variable),
                 }
 
                 if(type == 'select')
                 {
-                    rule.choices = i.options.map(o=>({label:o.title, value:o.value}))
+                    rule.choices = i.options.map(o=>({label:this.getDisplayTitle(o.title), value: o.value}))
                 }
                 else if(type == 'radio')
                 {

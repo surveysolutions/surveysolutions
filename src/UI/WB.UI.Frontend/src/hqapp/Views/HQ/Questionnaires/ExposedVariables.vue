@@ -39,8 +39,8 @@
                     id="id-table"
                     ref="table"
                     :tableOptions="tableOptions"
-                    @cell-clicked="cellAllClicked"
                     noSelect
+                    @cell-clicked="cellAllClicked"
                     :noPaging="false">
                 </DataTables>
             </div>
@@ -55,25 +55,29 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th style="width: 10%"></th>
-                            <th style="width: 30%">
+                            <th style="width: 5%"></th>
+                            <th style="width: 35%">
                                 {{this.$t('Pages.ExposedVariables_VariableName')}}
                             </th>
                             <!-- <th>{{this.$t('Pages.ExposedVariables_VariableLabel')}}</th> -->
                             <th style="width: 60%">
                                 {{this.$t('Pages.ExposedVariables_VariableDisplayTitle')}}
                             </th>
+
                         </tr>
                     </thead>
                     <tbody>
                         <tr
                             v-for="variable in exposedVariables"
-                            :key="'id' + '__' + variable.id"
-                            @click="rowExposedClicked(variable.id)">
+                            :key="'id' + '__' + variable.id">
                             <td>{{ getEntityDisplayType(variable.entityType) }}</td>
                             <td>{{ variable.variable }}</td>
                             <!-- <td>{{ variable.label }}</td> -->
                             <td>{{ getVariableLabel(variable) }}</td>
+                            <td>
+                                <button class="close"
+                                    @click="removeExposedClicked(variable.id)">&times;</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -97,7 +101,7 @@
                     type="button"
                     class="btn btn-success"
                     v-bind:disabled="model.isObserving"
-                    @click="changeExposedStatusSend">{{ $t("Common.Ok") }}</button>
+                    @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
@@ -126,11 +130,12 @@
 </template>
 
 <script>
-import { keyBy, map, find, filter, escape } from 'lodash'
+import { template, map, find, filter, escape } from 'lodash'
 import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+
 
 export default {
 
@@ -155,7 +160,7 @@ export default {
                     {
                         data: 'entityType',
                         name: 'EntityType',
-                        'width': '10%',
+                        'width': '5%',
                         sortable: false,
                         'render': function (data, type, row) {
                             return self.getEntityDisplayType(data)
@@ -164,7 +169,7 @@ export default {
                     {
                         data: 'variable',
                         name: 'Variable',
-                        'width': '30%',
+                        'width': '35%',
                         title: this.$t('Pages.ExposedVariables_VariableName'),
                         sortable: false,
                     },
@@ -178,13 +183,14 @@ export default {
                     {
                         data: 'title',
                         name: 'Title',
-                        'width': '60%',
+                        'width': '55%',
                         title: this.$t('Pages.ExposedVariables_VariableDisplayTitle'),
                         sortable: false,
                         'render': function (data, type, row) {
                             return self.replaceSubstitutions(self.sanitizeHtml(data))
                         },
                     },
+
                 ],
                 rowId: function(row) {
                     return row.id
@@ -261,6 +267,7 @@ export default {
         async changeExposedStatusSend() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
                 .ChangeVariableExposeStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s=>s.id))
+            this.initialSet = [...this.exposedVariables]
             this.$refs.exposedChangeModal.modal('hide')
         },
 
@@ -286,7 +293,7 @@ export default {
                 row.nodes().to$().addClass('disabled')
             }
         },
-        rowExposedClicked(id)
+        removeExposedClicked(id)
         {
             this.idToRemove = id
             this.$refs.exposedRemoveModal.modal({keyboard: false})
@@ -302,7 +309,13 @@ export default {
             this.$refs.exposedRemoveModal.modal('hide')
         },
         getVariableLabel(variable){
-            return variable.title ? sanitizeHtml(variable.title).replace(/%[\w_]+%/g, '[..]').substring(0,60) : (variable.label ? variable.label : variable.variable)
+            return variable.title
+                ? this.getDisplayTitle(variable.title)
+                : (variable.label ? variable.label : variable.variable)
+        },
+        getDisplayTitle(title){
+            var transformedTitle = sanitizeHtml(title).replace(/%[\w_]+%/g, '[..]')
+            return transformedTitle.length  >= 57 ? transformedTitle.substring(0,54) + '...' : transformedTitle
         },
     },
 }
