@@ -288,7 +288,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
-            return Created(Url.Action("Details", new {id = result.Assignment.Id}), result);
+            return CreatedAtAction("Details", new {id = result.Assignment.Id}, result);
         }
 
         /// <summary>
