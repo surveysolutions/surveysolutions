@@ -41,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers
             ArchiveUsersUrl = Url.Action("ArchiveUsers", "UsersApi"),
             MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
             
+            CanAddUsers = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
             CanArchiveUnarchive = authorizedUser.IsAdministrator,
             CanArchiveMoveToOtherTeam = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
             CanAddRemoveWorkspaces = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,

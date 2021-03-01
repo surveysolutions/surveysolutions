@@ -1,9 +1,21 @@
 <template>
     <HqLayout
-        :hasFilter="true"
-        :title="$t('Users.UsersTitle')"
-        :topicButtonRef="this.$config.model.createUrl"
-        :topicButton="$t('Users.AddUser')">
+        :hasFilter="true">
+        <slot me="headers">
+            <div class="topic-with-button">
+                <h1 v-html="$t('Users.UsersTitle')"></h1>
+                <a class="btn btn-success"
+                    v-if="model.canAddUsers"
+                    :href="this.$config.model.createUrl">
+                    {{ $t('Users.AddUser') }}
+                </a>
+                <a class="btn btn-success"
+                    v-if="model.canAddUsers"
+                    :href="this.$hq.basePath + 'Upload'">
+                    {{ $t('Users.UploadUsers') }}
+                </a>
+            </div>
+        </slot>
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
