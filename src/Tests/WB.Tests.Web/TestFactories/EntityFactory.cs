@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection;
@@ -99,16 +100,15 @@ namespace WB.Tests.Web.TestFactories
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
                 IsLockedBySupervisor = lockedBySupervisor,
-                Profile = new WorkspaceUserProfile()
-                {
-                    SupervisorId = supervisorId,
-                    DeviceId = deviceId,
-                    DeviceAppBuildVersion = interviewerBuild,
-                    DeviceAppVersion = interviewerVersion
-                },
+                Profile = new WorkspaceUserProfile(),
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1
             };
+            user.Profile.AsDynamic().SupervisorId = supervisorId;
+            user.Profile.AsDynamic().DeviceId = deviceId;
+            user.Profile.AsDynamic().DeviceAppBuildVersion = interviewerBuild;
+            user.Profile.AsDynamic().DeviceAppVersion = interviewerVersion;
+
             user.Roles.Add(new HqRole { Id = role.ToUserId() });
 
             return user;

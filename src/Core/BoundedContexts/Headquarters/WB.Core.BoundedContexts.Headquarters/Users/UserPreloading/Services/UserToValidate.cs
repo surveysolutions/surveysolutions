@@ -12,6 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         public Guid? SupervisorId { get; set; }
         public bool IsSupervisor { get; set; }
         public bool IsInterviewer { get; set; }
-        public bool IsInCurrentWorkspace { get; set; }
+        public List<string> InWorkspaces { get; set; }
     }
 }

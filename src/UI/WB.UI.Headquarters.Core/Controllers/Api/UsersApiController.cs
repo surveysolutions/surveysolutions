@@ -317,7 +317,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 var importUserErrors = (await this.mediator.Send(new UserImportRequest
                 {
                     FileStream = openReadStream,
-                    Filename = request.File.FileName
+                    Filename = request.File.FileName,
+                    Workspace = request.Workspace,
                 })).Select(ToImportError).ToArray();
 
                 return this.Ok(importUserErrors);
@@ -389,6 +390,7 @@ namespace WB.UI.Headquarters.Controllers.Api
     public class ImportUsersRequest
     {
         public IFormFile File { get; set; }
+        public string Workspace { get; set; }
     }
 
     public class ArchiveUsersRequest

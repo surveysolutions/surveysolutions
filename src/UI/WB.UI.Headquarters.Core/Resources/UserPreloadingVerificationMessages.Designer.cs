@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UserPreloadingVerificationMessages {
@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It should be between 3 and 15 characters, and can contain only letters, digits and the underscore symbol.
+        ///   Looks up a localized string similar to The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: &apos;A&apos;..&apos;Z&apos; or &apos;a&apos;..&apos;z&apos;. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names..
         /// </summary>
         public static string PLU0005Recomendation {
             get {
@@ -624,6 +624,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string PLU0021Recomendation {
             get {
                 return ResourceManager.GetString("PLU0021Recomendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace don&apos;t found.
+        /// </summary>
+        public static string PLU0022 {
+            get {
+                return ResourceManager.GetString("PLU0022", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workspace must exists and be enabled.
+        /// </summary>
+        public static string PLU0022Description {
+            get {
+                return ResourceManager.GetString("PLU0022Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check workspace name.
+        /// </summary>
+        public static string PLU0022Recomendation {
+            get {
+                return ResourceManager.GetString("PLU0022Recomendation", resourceCulture);
             }
         }
     }

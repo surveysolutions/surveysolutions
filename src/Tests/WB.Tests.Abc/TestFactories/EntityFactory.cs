@@ -1319,7 +1319,7 @@ namespace WB.Tests.Abc.TestFactories
                 SecurityStamp = securityStamp ?? Guid.NewGuid().ToString()
             };
 
-            var userProfile = user.Profile as dynamic;
+            var userProfile = user.Profile.AsDynamic();
             userProfile.SupervisorId = supervisorId;
             userProfile.DeviceId = deviceId;
             userProfile.DeviceAppBuildVersion = interviewerBuild;
@@ -1359,7 +1359,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public UserToImport UserToImport(
             string login = "test", string supervisor = "", string password = "P@$$w0rd$less", string email = "", string phoneNumber = "",
-            string role = null, string fullName = null)
+            string role = null, string fullName = null, string workspace = null)
             => new UserToImport
             {
                 Login = login,
@@ -1368,7 +1368,8 @@ namespace WB.Tests.Abc.TestFactories
                 Password = password,
                 Email = email,
                 PhoneNumber = phoneNumber,
-                FullName = fullName 
+                FullName = fullName,
+                Workspace = workspace,
             };
 
         public UserPreloadingSettings UserPreloadingSettings()

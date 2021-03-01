@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
         public virtual string PhoneNumber { get; set; }
         public virtual string Role { get; set; }
         public virtual string Supervisor { get; set; }
+        public virtual string Workspace { get; set; }
 
         [IgnoreDataMember]
         public virtual UserRoles UserRole

@@ -450,7 +450,8 @@ namespace WB.UI.Headquarters.Controllers
                 ImportUsersCompleteStatusUrl = Url.Action("ImportCompleteStatus", "UsersApi"),
                 ImportUsersCancelUrl = Url.Action("CancelToImportUsers", "UsersApi"),
                 SupervisorCreateUrl = Url.Action("Create", new {id = UserRoles.Supervisor}),
-                InterviewerCreateUrl = Url.Action("Create", new {id = UserRoles.Interviewer})
+                InterviewerCreateUrl = Url.Action("Create", new {id = UserRoles.Interviewer}),
+                WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
             },
             Config = new
             {

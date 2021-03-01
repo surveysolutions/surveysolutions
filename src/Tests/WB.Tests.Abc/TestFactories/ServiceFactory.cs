@@ -649,7 +649,7 @@ namespace WB.Tests.Abc.TestFactories
             IAuthorizedUser authorizedUser = null,
             IUnitOfWork sessionProvider = null,
             PasswordOptions passwordOptions = null,
-            IWorkspaceContextAccessor workspaceContextAccessor = null)
+            IWorkspacesService workspacesService = null)
         {
             PasswordOptions defaultPasswordOptions = passwordOptions ?? new PasswordOptions
             {
@@ -672,7 +672,7 @@ namespace WB.Tests.Abc.TestFactories
                     Mock.Of<IOptions<IdentityOptions>>(x => x.Value == new IdentityOptions {Password = defaultPasswordOptions} )),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
-                workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor());
+                workspacesService ?? Create.Service.WorkspacesService(Mock.Of<IPlainStorageAccessor<Workspace>>()));
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)

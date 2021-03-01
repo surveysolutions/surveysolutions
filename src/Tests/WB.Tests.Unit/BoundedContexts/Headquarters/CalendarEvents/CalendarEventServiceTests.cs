@@ -261,7 +261,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
             
             var responsible = new ReadonlyUser();
             var profile = new WorkspaceUserProfile();
-            profile.SupervisorId = supervisorId;
+            profile.AsDynamic().SupervisorId = supervisorId;
             responsible.AsDynamic().ReadonlyProfile = profile;
             
             var assidnmentInTeam = new Assignment()
