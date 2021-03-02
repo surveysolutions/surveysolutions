@@ -53,8 +53,8 @@
 
     <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.3" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
@@ -63,7 +63,7 @@
     <PackageReference Include="UAParser" Version="3.1.44" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.4.1" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.3" />
   </ItemGroup>
 
   <ItemGroup>

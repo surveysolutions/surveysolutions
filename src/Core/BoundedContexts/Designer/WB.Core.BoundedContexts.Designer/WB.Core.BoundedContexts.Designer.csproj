@@ -20,7 +20,7 @@
     <EmbeddedResource Include="$(NuGetPackageRoot)\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime\4.3.0\ref\netstandard1.5\System.Runtime.dll" Visible="false"  />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime\4.3.0\ref\netstandard1.5\System.Runtime.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.extensions\4.3.0\ref\netstandard1.5\System.Runtime.Extensions.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.numerics\4.3.0\ref\netstandard1.1\System.Runtime.Numerics.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll" Visible="false" />
@@ -37,7 +37,7 @@
     <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
     <PackageReference Include="Markdig" Version="0.22.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
