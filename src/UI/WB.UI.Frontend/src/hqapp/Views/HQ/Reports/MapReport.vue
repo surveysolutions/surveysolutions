@@ -62,6 +62,15 @@
                         style="width: 100%"></div>
                 </div>
             </FilterBlock>
+
+            <InterviewFilter slot="additional"
+                :questionnaireId="where.questionnaireId"
+                :questionnaireVersion="where.questionnaireVersion"
+                :value="conditions"
+                :exposedValuesFilter="exposedValuesFilter"
+                @change="questionFilterChanged"
+                @changeFilter="changeexposedValuesFilter" />
+
             <div class="preset-filters-container">
                 <div class="center-block"
                     style="margin-left: 0">
@@ -145,8 +154,9 @@
 import * as toastr from 'toastr'
 import Vue from 'vue'
 import gql from 'graphql-tag'
-import {isNull, chain, debounce, delay, forEach, find } from 'lodash'
+import {isNull, chain, debounce, delay, forEach, find, toNumber } from 'lodash'
 import routeSync from '~/shared/routeSync'
+import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 
 const mapStyles = [
     {
@@ -198,6 +208,9 @@ $variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: F
 }`
 
 export default {
+    components: {
+        InterviewFilter,
+    },
     mixins: [routeSync],
 
     data() {
@@ -221,6 +234,9 @@ export default {
                 maxIntensity: null,
             },
             totalAnswers: 0,
+
+            conditions: [],
+            exposedValuesFilter: null,
         }
     },
 
@@ -308,6 +324,14 @@ export default {
             if (this.query.question == null || this.gpsQuestions == null) return null
             return find(this.gpsQuestions, {key: this.query.question})
         },
+        where() {
+            const data = {}
+
+            if (this.selectedQuestionnaireId) data.questionnaireId = this.selectedQuestionnaireId.key
+            if (this.selectedVersionValue) data.questionnaireVersion = toNumber(this.selectedVersionValue)
+
+            return data
+        },
     },
 
     mounted() {
@@ -322,6 +346,14 @@ export default {
     },
 
     methods: {
+        questionFilterChanged(conditions) {
+            this.conditions = conditions
+            this.reloadMarkersInBounds()
+        },
+        changeexposedValuesFilter(exposedValuesFilter) {
+            this.exposedValuesFilter = exposedValuesFilter
+            this.reloadMarkersInBounds()
+        },
         setMapCanvasStyle() {
             $('body').addClass('map-report')
             var windowHeight = $(window).height()
@@ -550,7 +582,7 @@ export default {
             var request = {
                 variable: this.selectedQuestion.key,
                 questionnaireId: this.selectedQuestionnaireId.key.replaceAll('-',''),
-                questionnaireVersion: Number(this.selectedVersionValue) ,
+                questionnaireVersion: toNumber(this.selectedVersionValue),
                 zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
                 north,
