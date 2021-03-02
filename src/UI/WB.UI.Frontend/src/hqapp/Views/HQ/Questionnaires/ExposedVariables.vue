@@ -118,7 +118,7 @@
                     type="button"
                     class="btn btn-danger"
                     v-bind:disabled="model.isObserving"
-                    @click="removeExposedVariable">{{ $t("Common.Ok") }}</button>
+                    @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
                 <button
                     type="button"
                     class="btn btn-link"
