@@ -13,8 +13,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
             descriptor.Name("HeadquartersMutation");
 
             descriptor.Field<CalendarEventResolver>(t => 
-                    t.AddOrUpdateCalendarEvent(default, default, default, default, 
-                        default, default!, default!,default!,
+                    t.AddOrUpdateCalendarEvent(default,default, default, default, default, 
+                        default!, default!, default!, default!,default!,
                         default!, default!))
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
@@ -33,11 +33,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
 
             
             descriptor.Field<CalendarEventResolver>(t => 
-                    t.DeleteCalendarEvent(default, default!, default!, default!))
+                    t.DeleteCalendarEvent(default,default!, default!, default!,default!, default!))
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
                 {
-                    nameof(UserRoles.Interviewer)
+                    nameof(UserRoles.Interviewer), nameof(UserRoles.ApiUser)
                 })
                 .HasWorkspace()
                 .Type<CalendarEventObjectType>()
