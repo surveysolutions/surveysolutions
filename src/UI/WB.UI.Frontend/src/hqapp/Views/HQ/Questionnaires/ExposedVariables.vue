@@ -309,9 +309,8 @@ export default {
             this.$refs.exposedRemoveModal.modal('hide')
         },
         getVariableLabel(variable){
-            return variable.title
-                ? this.getDisplayTitle(variable.title)
-                : (variable.label ? variable.label : variable.variable)
+            return variable.label ? variable.label
+                : (variable.title ? this.getDisplayTitle(variable.title) : variable.variable)
         },
         getDisplayTitle(title){
             var transformedTitle = sanitizeHtml(title).replace(/%[\w_]+%/g, '[..]')

@@ -375,9 +375,9 @@ export default {
                 var rule = {
                     type: type,
                     id: i.variable,
-                    label: i.title
-                        ? this.getDisplayTitle(i.title)
-                        : (i.label ? i.label : i.variable),
+                    label: i.label
+                        ? i.label
+                        : (i.title ? this.getDisplayTitle(i.title) : i.variable),
                 }
 
                 if(type == 'select')
