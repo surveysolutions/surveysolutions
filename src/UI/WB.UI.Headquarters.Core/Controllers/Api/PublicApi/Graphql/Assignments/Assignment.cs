@@ -1,5 +1,10 @@
+using System.Linq;
 using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
 {
@@ -19,6 +24,22 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
                 .Description("Will return `null` when assignment is not received by tablet");
             descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
             descriptor.Field(x => x.WebMode).Type<NonNullType<BooleanType>>();
+
+            descriptor.Field("calendarEvent")
+                .Description("Active Calendar Event associated with interview")
+                .Type<CalendarEventObjectType>()
+                .Resolver(context =>
+                {
+                    var assinmentId = context.Parent<Core.BoundedContexts.Headquarters.Assignments.Assignment>().Id;
+                    var unitOfWork = context.Service<IUnitOfWork>();
+                  
+                    var calendarEvent = unitOfWork.Session
+                        .Query<CalendarEvent>()
+                        .FirstOrDefault(x => x.AssignmentId== assinmentId 
+                                             && x.CompletedAtUtc == null
+                                             && x.DeletedAtUtc == null);
+                    return calendarEvent;
+                });
         }
     }
 }
