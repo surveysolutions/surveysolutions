@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Mutations
                 .Use<TransactionMiddleware>()
                 .Authorize(roles: new[]
                 {
-                    nameof(UserRoles.Interviewer)
+                    nameof(UserRoles.Interviewer), nameof(UserRoles.ApiUser)
                 })
                 .HasWorkspace()
                 .Type<CalendarEventObjectType>()
