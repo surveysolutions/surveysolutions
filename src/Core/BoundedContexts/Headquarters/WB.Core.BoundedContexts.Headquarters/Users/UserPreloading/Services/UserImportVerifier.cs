@@ -83,7 +83,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             if (string.IsNullOrWhiteSpace(userPreloadingDataRecord.Workspace))
                 return false;
 
-            return workspaces.All(w => w != userPreloadingDataRecord.Workspace);
+            var userWorkspaces = userPreloadingDataRecord.GetWorkspaces();
+            foreach (var userWorkspace in userWorkspaces)
+            {
+                if (workspaces.All(w => w != userWorkspace))
+                    return true;
+            }
+            return false;
         }
         
         private bool PasswordLength(UserToImport userPreloadingDataRecord)
@@ -221,14 +227,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(loginName))
                 return false;
 
-            var archivedInterviewerInWorkspace = archivedInterviewerNamesMappedOnSupervisorName[loginName]
-                .InWorkspaces
-                .FirstOrDefault(w => w.WorkspaceName == userPreloadingDataRecord.Workspace);
-            if (archivedInterviewerInWorkspace?.SupervisorId != null 
-                && allInterviewersAndSupervisors
-                    .FirstOrDefault(u => u.UserId == archivedInterviewerInWorkspace.SupervisorId.Value)?
-                    .UserName.ToLower() == userPreloadingDataRecord.Supervisor.ToLower())
-                return true;
+            var userWorkspaces = userPreloadingDataRecord.GetWorkspaces();
+            foreach (var userWorkspace in userWorkspaces)
+            {
+                var archivedInterviewerInWorkspace = archivedInterviewerNamesMappedOnSupervisorName[loginName]
+                    .InWorkspaces
+                    .FirstOrDefault(w => w.WorkspaceName == userWorkspace);
+                if (archivedInterviewerInWorkspace?.SupervisorId != null 
+                    && allInterviewersAndSupervisors
+                        .FirstOrDefault(u => u.UserId == archivedInterviewerInWorkspace.SupervisorId.Value)?
+                        .UserName.ToLower() == userPreloadingDataRecord.Supervisor.ToLower())
+                    return true;
+            }
 
             return false;
         }
@@ -269,8 +279,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             var supervisorNameLowerCase = userPreloadingDataRecord.Supervisor.ToLower();
             if (activeSupervisors.ContainsKey(supervisorNameLowerCase))
             {
-                var svWorkspaces = activeSupervisors[supervisorNameLowerCase].InWorkspaces;
-                return svWorkspaces.All(w => w.WorkspaceName != userPreloadingDataRecord.Workspace);
+                var userWorkspaces = userPreloadingDataRecord.GetWorkspaces();
+                var svWorkspaces = activeSupervisors[supervisorNameLowerCase].InWorkspaces.Select(w => w.WorkspaceName).ToArray();
+                return !userWorkspaces.All(uw => svWorkspaces.Contains(uw));
             }
 
             var supervisorsToPreload =
@@ -282,8 +293,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             foreach (var supervisorToPreload in supervisorsToPreload)
             {
                 var possibleSupervisorRole = supervisorToPreload.UserRole;
-                if (possibleSupervisorRole == UserRoles.Supervisor
-                    && supervisorToPreload.Workspace == userPreloadingDataRecord.Workspace)
+                var svWorkspaces = supervisorToPreload.GetWorkspaces();
+                var userWorkspaces = userPreloadingDataRecord.GetWorkspaces();
+                var userInSvWorkspaces = userWorkspaces.All(uw => svWorkspaces.Contains(uw));
+                if (possibleSupervisorRole == UserRoles.Supervisor && userInSvWorkspaces)
                     return false;
             }
 

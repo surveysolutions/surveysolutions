@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         public bool IsArchived { get; set; }
         public bool IsSupervisor { get; set; }
         public bool IsInterviewer { get; set; }
-        public List<InWorkspace> InWorkspaces { get; set; }
+        public InWorkspace[] InWorkspaces { get; set; }
     }
 
     public class InWorkspace

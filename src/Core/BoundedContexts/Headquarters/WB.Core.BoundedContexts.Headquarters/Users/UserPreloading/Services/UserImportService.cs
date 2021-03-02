@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     {
                         WorkspaceName = w.Workspace.Name,
                         SupervisorId = w.SupervisorId,
-                    }).ToList()
+                    }).ToArray()
                 }).ToArray();
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors, allWorkspace);
