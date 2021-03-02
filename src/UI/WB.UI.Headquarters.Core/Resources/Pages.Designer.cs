@@ -4238,6 +4238,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user,
+        ///        &lt;br&gt;to create several interviewers and supervisors you can use &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;.
+        /// </summary>
+        public static string User_CreateText {
+            get {
+                return ResourceManager.GetString("User_CreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to workspaces.
         /// </summary>
         public static string UserManagement_AddToWorkspace {

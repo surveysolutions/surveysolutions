@@ -868,6 +868,10 @@
 Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
       <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
   </data>
+  <data name="User_CreateText" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя
+        &lt;br&gt;Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+  </data>
   <data name="FilterTitle" xml:space="preserve">
     <value>Фильтры</value>
   </data>

@@ -10,20 +10,17 @@
         </div>
         <div class="extra-margin-bottom">
             <div class="profile">
-                <div class="col-sm-7"
-                    v-if="isInterviewer || isSupervisor">
-                    <p v-if="isSupervisor"
-                        v-html="$t('Pages.Supervisor_CreateText', {link: uploadUri})"></p>
-                    <p v-if="isInterviewer"
-                        v-html="$t('Pages.Interviewer_CreateText', {link: uploadUri})"></p>
+                <div class="col-sm-7">
+                    <p v-html="$t('Pages.User_CreateText', {link: uploadUri})"></p>
                 </div>
                 <div class="col-sm-12">
                     <form-group
                         :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
                         :error="modelState['Workspace']"
                         :mandatory="true">
-                        <div class="field"
-                            :class="{answered: workspace != null}">
+                        <div class="field form-control"
+                            :class="{answered: workspace != null}"
+                            style="padding:0 10px">
                             <Typeahead
                                 control-id="workspace"
                                 :value="workspace"
@@ -36,8 +33,9 @@
                         :label="$t('Pages.UsersManage_RoleFilterPlaceholder')"
                         :error="modelState['Role']"
                         :mandatory="true">
-                        <div class="field"
-                            :class="{answered: role != null}">
+                        <div class="field form-control"
+                            :class="{answered: role != null}"
+                            style="padding:0 10px">
                             <Typeahead
                                 control-id="role"
                                 no-search
@@ -203,7 +201,7 @@ export default {
             return this.$config.model
         },
         uploadUri() {
-            return this.$hq.basePath + 'Users/Upload'
+            return this.$hq.basePath + 'Upload'
         },
         userInfo() {
             return this.model.userInfo

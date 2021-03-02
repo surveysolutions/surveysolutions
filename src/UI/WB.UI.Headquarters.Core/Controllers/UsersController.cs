@@ -115,6 +115,7 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         [Route("/Manage/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> Manage(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -128,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [ActivePage(MenuItem.ManageAccount)]
         [Route("/ChangePassword/{id?}")]
         public async Task<ActionResult> ChangePassword(Guid? id)
         {
@@ -141,6 +143,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator)]
+        [ActivePage(MenuItem.ManageAccount)]
         [Route("/Workspaces/{id?}")]
         public async Task<ActionResult> Workspaces(Guid id)
         {
@@ -155,6 +158,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
+        [ActivePage(MenuItem.ManageAccount)]
         [Route("/TwoFactorAuthentication/{id?}")]
         public async Task<ActionResult> TwoFactorAuthentication(Guid? id)
         {
@@ -187,6 +191,7 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         [Route("/ResetAuthenticator/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> ResetAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -242,6 +247,7 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         [Route("/ResetRecoveryCodes/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> ResetRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -257,6 +263,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObservingNotAllowed]
         [AntiForgeryFilter]
         [Route("/ShowRecoveryCodes/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> ShowRecoveryCodes(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -311,6 +318,7 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [AntiForgeryFilter]
         [Route("/Disable2fa/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> Disable2fa(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -329,6 +337,7 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Interviewer, UserRoles.Observer)]
         [Route("/SetupAuthenticator/{id?}")]
+        [ActivePage(MenuItem.ManageAccount)]
         public async Task<ActionResult> SetupAuthenticator(Guid? id)
         {
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
@@ -396,6 +405,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObservingNotAllowed]
         [AntiForgeryFilter]
         [Route("/Create")]
+        [ActivePage(MenuItem.UsersManagement)]
         public ActionResult Create()
         {
             return View(new
@@ -434,7 +444,7 @@ namespace WB.UI.Headquarters.Controllers
             return items.ToArray();
         }
 
-        [ActivePage(MenuItem.UserBatchUpload)]
+        [ActivePage(MenuItem.UsersManagement)]
         [Authorize(Roles = "Administrator, Headquarter")]
         [ObservingNotAllowed]
         [Route("/Upload")]
@@ -463,6 +473,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
+        [ActivePage(MenuItem.UsersManagement)]
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();

@@ -1,7 +1,7 @@
 <template>
     <HqLayout
         :hasFilter="true">
-        <slot me="headers">
+        <div slot="headers">
             <div class="topic-with-button">
                 <h1 v-html="$t('Users.UsersTitle')"></h1>
                 <a class="btn btn-success"
@@ -10,12 +10,13 @@
                     {{ $t('Users.AddUser') }}
                 </a>
                 <a class="btn btn-success"
+                    style="margin-left:10px"
                     v-if="model.canAddUsers"
                     :href="this.$hq.basePath + 'Upload'">
                     {{ $t('Users.UploadUsers') }}
                 </a>
             </div>
-        </slot>
+        </div>
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">

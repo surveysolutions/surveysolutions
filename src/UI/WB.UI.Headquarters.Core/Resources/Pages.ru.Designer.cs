@@ -4238,6 +4238,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Это действие создаст индивидуального пользователя
+        ///        &lt;br&gt;Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией &lt;a href=&quot;{{link}}&quot; target=&quot;_blank&quot;&gt;массового создания пользователей&lt;/a&gt;.
+        /// </summary>
+        public static string User_CreateText {
+            get {
+                return ResourceManager.GetString("User_CreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Добавить к рабочим областям.
         /// </summary>
         public static string UserManagement_AddToWorkspace {
