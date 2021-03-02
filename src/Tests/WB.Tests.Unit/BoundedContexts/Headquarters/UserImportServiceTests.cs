@@ -171,7 +171,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 new[]
                 {
                     Create.Entity.HqUser(userName: userName, supervisorId: Guid.NewGuid(), isArchived: true),
-                    Create.Entity.HqUser(userName: supervisorName, role: UserRoles.Supervisor)
+                    Create.Entity.HqUser(userName: supervisorName, role: UserRoles.Supervisor, workspaces: new []{ "space" })
                 },
                 Create.Entity.UserToImport(login: userName, supervisor: supervisorName));
 
