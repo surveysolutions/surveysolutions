@@ -1,4 +1,5 @@
 ﻿using System;
+using GeoJSON.Net;
 using HotChocolate;
 using HotChocolate.Types.Descriptors;
 
@@ -13,8 +14,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             {
                 throw new ArgumentNullException(nameof(value));
             }
-
-            return value.ToString().ToUpperInvariant();
+            
+            return value is GeoJSONObjectType 
+                ? value.ToString() 
+                : value.ToString().ToUpperInvariant();
         }
     }
 }

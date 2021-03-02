@@ -50,6 +50,35 @@ type Entity {
   variableType: VariableType!
 }
 
+type Feature {
+  "Type of the feature"
+  type: GeoJSONObjectType!
+  "Id of the feature"
+  id: String
+  "Geometry of the feature"
+  geometry: Any
+  "Properties of the feature"
+  properties: Any
+}
+
+type FeatureCollection {
+  "List of the features"
+  features: [Feature]
+  "List of the features"
+  type: GeoJSONObjectType!
+}
+
+type GeoBounds {
+  "North bound"
+  north: Float!
+  "South bound"
+  south: Float!
+  "East bound"
+  east: Float!
+  "West bound"
+  west: Float!
+}
+
 type HeadquartersMutation {
   addOrUpdateCalendarEvent("Workspace name" workspace: String! = "primary" "Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
   deleteCalendarEvent("Workspace name" workspace: String! = "primary" "Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
@@ -67,6 +96,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
+  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: Uuid! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float!): MapReport @authorize(apply: BEFORE_RESOLVER)
 }
 
 type IPagedConnectionOfAssignment {
@@ -176,6 +206,15 @@ type Map {
   wkid: Int!
   maxScale: Float!
   minScale: Float!
+}
+
+type MapReport {
+  "Total number of points"
+  totalPoint: Int!
+  "Bounds of the area"
+  initialBounds: GeoBounds
+  "Collection of features"
+  featureCollection: FeatureCollection
 }
 
 type Questionnaire {
@@ -559,6 +598,18 @@ enum EntityType {
   ROSTER
 }
 
+enum GeoJSONObjectType {
+  Point
+  MultiPoint
+  LineString
+  MultiLineString
+  Polygon
+  MultiPolygon
+  GeometryCollection
+  Feature
+  FeatureCollection
+}
+
 enum InterviewActionFlags {
   CANBEREASSIGNED
   CANBEDELETED
@@ -647,6 +698,8 @@ directive @specifiedBy("The specifiedBy URL points to a human-readable specifica
 
 "The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
 directive @stream("If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to." label: String "The initial elements that shall be send down to the consumer." initialCount: Int! "Streamed when true." if: Boolean!) on FIELD
+
+scalar Any
 
 "The `Date` scalar represents an ISO-8601 compliant date type."
 scalar Date

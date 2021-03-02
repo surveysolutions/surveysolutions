@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
@@ -166,4 +167,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             public int Total { get; set; }
         }
     }
+
+    /*public class CustomPoint : Point
+    {
+        public List<double> coordinates;
+
+        public CustomPoint(Position position):base(position) 
+        {
+            coordinates = new List<double> {position.Latitude, position.Longitude};
+        }
+    }*/
 }

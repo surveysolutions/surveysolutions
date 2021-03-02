@@ -144,6 +144,7 @@
 <script>
 import * as toastr from 'toastr'
 import Vue from 'vue'
+import gql from 'graphql-tag'
 import {isNull, chain, debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 
@@ -169,6 +170,32 @@ const mapStyles = [
         dark: true,
     },
 ]
+
+const query = gql`query mapReport($workspace: String!, $questionnaireId: Uuid!, $questionnaireVersion: Long, 
+$variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: Float!, $east: Float!, $west: Float!) {
+  mapReport(workspace: $workspace, questionnaireId:$questionnaireId, questionnaireVersion: $questionnaireVersion, 
+  variable: $variable, zoom:$zoom , clientMapWidth: $clientMapWidth ,north: $north, south: $south, east: $east, west:$west ) {    
+    featureCollection
+    {
+        type
+        features
+        {
+            id
+            type
+            geometry            
+            properties            
+        }
+    }
+    totalPoint    
+    initialBounds
+    {
+        north
+        south
+        east
+        west
+    }
+  }
+}`
 
 export default {
     mixins: [routeSync],
@@ -518,19 +545,20 @@ export default {
                 return
             }
 
+            const self = this
+
             var request = {
-                Variable: this.selectedQuestion.key,
-                QuestionnaireId: this.selectedQuestionnaireId.key,
-                QuestionnaireVersion: this.selectedVersionValue,
-                Zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
+                variable: this.selectedQuestion.key,
+                questionnaireId: this.selectedQuestionnaireId.key.replaceAll('-',''),
+                questionnaireVersion: Number(this.selectedVersionValue) ,
+                zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
                 north,
                 west,
                 south,
                 clientMapWidth: this.map.getDiv().clientWidth,
+                workspace: self.$store.getters.workspace,
             }
-
-            const self = this
 
             let stillLoading = true
 
@@ -538,9 +566,24 @@ export default {
                 if (stillLoading == true) this.isLoading = true
             }, 5000)
 
-            const response = await this.api.Report(request)
+            //const response = await this.api.Report(request)
 
-            this.setMapData(response.data, extendBounds)
+            const report = await this.$apollo.query({
+                query,
+                variables: request,
+                fetchPolicy: 'network-only',
+            })
+
+            var mapReport = report.data.mapReport
+            forEach(mapReport.featureCollection.features, feature => {
+                if(!Array.isArray(feature.geometry.coordinates))
+                {
+                    var coordinates = feature.geometry.coordinates
+                    feature.geometry.coordinates = [coordinates.longitude, coordinates.latitude]
+                }
+            })
+
+            this.setMapData(mapReport, extendBounds)
 
             stillLoading = false
             this.isLoading = false
