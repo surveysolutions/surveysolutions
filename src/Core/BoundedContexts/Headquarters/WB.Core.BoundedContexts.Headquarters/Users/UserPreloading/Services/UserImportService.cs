@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 ? this.workspaces.GetEnabledWorkspaces().Select(w => w.Name).ToList()
                 : authorizedUser.Workspaces.ToList();
                 
-            if (!string.IsNullOrWhiteSpace(workspace) && allWorkspace.All(w => w != workspace))
+            if (string.IsNullOrWhiteSpace(workspace) || allWorkspace.All(w => w != workspace))
                 throw new MissingWorkspaceException("Cannot preload users outside of workspace");
 
             var usersToImport = new List<UserToImport>();
@@ -91,10 +91,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     UserId = x.Id,
                     UserName = x.UserName,
                     IsArchived = x.IsArchived,
-                    SupervisorId = x.Profile.SupervisorId,
                     IsSupervisor = x.Roles.Any(role => role.Id == supervisorRoleId),
                     IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId),
-                    InWorkspaces = x.Workspaces.Select(w => w.Workspace.Name).ToList()
+                    InWorkspaces = x.Workspaces.Select(w => new InWorkspace()
+                    {
+                        WorkspaceName = w.Workspace.Name,
+                        SupervisorId = w.SupervisorId,
+                    }).ToList()
                 }).ToArray();
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors, allWorkspace);

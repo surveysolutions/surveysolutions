@@ -9,9 +9,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         public Guid UserId { get; set; }
         public string UserName { get; set; }
         public bool IsArchived { get; set; }
-        public Guid? SupervisorId { get; set; }
         public bool IsSupervisor { get; set; }
         public bool IsInterviewer { get; set; }
-        public List<string> InWorkspaces { get; set; }
+        public List<InWorkspace> InWorkspaces { get; set; }
+    }
+
+    public class InWorkspace
+    {
+        public string WorkspaceName { get; set; }
+        public Guid?  SupervisorId { get; set; }
     }
 }

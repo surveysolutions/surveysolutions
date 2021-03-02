@@ -45,19 +45,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
 
             var archivedInterviewerNamesMappedOnSupervisorName = allInterviewersAndSupervisors
                 .Where(u => u.IsArchived && u.IsInterviewer)
-                .Select(u =>
-                    new
-                    {
-                        u.UserName,
-                        SupervisorName = allInterviewersAndSupervisors
-                                             .FirstOrDefault(user => user.UserId == u.SupervisorId)?.UserName ?? ""
-                    })
-                .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
+                .ToDictionary(u => u.UserName.ToLower(), u => u);
 
             return new[]
             {
                 new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row), "PLU0001", u => u.Login),
-                new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003", u => u.Login),
+                new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, allInterviewersAndSupervisors, row), "PLU0003", u => u.Login),
                 new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames, row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
                 new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
@@ -216,7 +209,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             UserToImport userPreloadingDataRecord) => data[userPreloadingDataRecord.Login.ToLower()] > 1;
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
-            Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
+            Dictionary<string, UserToValidate> archivedInterviewerNamesMappedOnSupervisorName,
+            UserToValidate[] allInterviewersAndSupervisors,
             UserToImport userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingDataRecord.UserRole;
@@ -227,15 +221,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(loginName))
                 return false;
 
-            if (archivedInterviewerNamesMappedOnSupervisorName[loginName] !=
-                userPreloadingDataRecord.Supervisor.ToLower())
+            var archivedInterviewerInWorkspace = archivedInterviewerNamesMappedOnSupervisorName[loginName]
+                .InWorkspaces
+                .FirstOrDefault(w => w.WorkspaceName == userPreloadingDataRecord.Workspace);
+            if (archivedInterviewerInWorkspace?.SupervisorId != null 
+                && allInterviewersAndSupervisors
+                    .FirstOrDefault(u => u.UserId == archivedInterviewerInWorkspace.SupervisorId.Value)?
+                    .UserName.ToLower() == userPreloadingDataRecord.Supervisor.ToLower())
                 return true;
 
             return false;
         }
 
         bool LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(
-            Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
+            Dictionary<string, UserToValidate> archivedInterviewerNamesMappedOnSupervisorName,
             ICollection<string> archivedSupervisorNames, UserToImport userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingDataRecord.UserRole;
@@ -271,7 +270,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             if (activeSupervisors.ContainsKey(supervisorNameLowerCase))
             {
                 var svWorkspaces = activeSupervisors[supervisorNameLowerCase].InWorkspaces;
-                return !svWorkspaces.Contains(userPreloadingDataRecord.Workspace);
+                return svWorkspaces.All(w => w.WorkspaceName != userPreloadingDataRecord.Workspace);
             }
 
             var supervisorsToPreload =

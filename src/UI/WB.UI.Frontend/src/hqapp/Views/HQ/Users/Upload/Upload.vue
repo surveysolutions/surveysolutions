@@ -90,7 +90,7 @@
                         class="btn btn-default btn-lg btn-action-questionnaire" />
                     <button type="button"
                         class="btn btn-success"
-                        @click="$refs.uploader.click()">
+                        @click="upload">
                         {{$t('UploadUsers.UploadBtn')}}
                     </button>
                 </div>
@@ -147,13 +147,17 @@ export default {
     },
     methods: {
         setErrorByWorkspace() {
-            if (this.responsible == null)
+            if (this.workspace == null)
                 this.errorByWorkspace = this.$t('BatchUpload.RequiredField')
             else this.errorByWorkspace = undefined
         },
         workspaceSelected(newValue) {
             this.workspace = newValue
             this.setErrorByWorkspace()
+        },
+        upload() {
+            this.setErrorByWorkspace()
+            if (!this.errorByWorkspace) this.$refs.uploader.click()
         },
         onFileChange(e) {
             const files = e.target.files || e.dataTransfer.files
@@ -165,6 +169,7 @@ export default {
             var file = files[0]
             var formData = new FormData()
             formData.append('file', file)
+            formData.append('workspace', this.workspace.key)
 
             var self = this
 
