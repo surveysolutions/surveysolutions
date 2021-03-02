@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field(x => x.WebMode).Type<NonNullType<BooleanType>>();
 
             descriptor.Field("calendarEvent")
-                .Description("Active Calendar Event associated with interview")
+                .Description("Active Calendar Event associated with assignment")
                 .Type<CalendarEventObjectType>()
                 .Resolver(context =>
                 {
