@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -99,6 +100,11 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 return CreationResult.DataRestored;
             }
+            catch (InterviewException ie)
+            {
+                Evict(designerToken);
+                return CreationResult.DataPartialRestored;
+            }
             catch
             {
                 Evict(designerToken);
@@ -109,23 +115,20 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken, Guid originalInterviewId)
         {
+            List<InterviewCommand>? existingInterviewCommands = null;
+            int lastCommandIndex = 0;
+            
             try
             {
                 var questionnaireId = await ImportQuestionnaireAndCreateInterview(designerToken);
 
-                var existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId) ??
-                                                new List<InterviewCommand>();
+                existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId) ??
+                                                                    new List<InterviewCommand>();
                 var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
 
                 var scenario = this.scenarioService.ConvertFromInterview(questionnaireDocument,
                     existingInterviewCommands.Cast<InterviewCommand>());
                 var commands = this.scenarioService.ConvertFromScenario(questionnaireDocument, scenario);
-
-                foreach (var existingInterviewCommand in commands)
-                {
-                    existingInterviewCommand.InterviewId = designerToken;
-                    this.commandService.Execute(existingInterviewCommand);
-                }
 
                 foreach (var image in await this.imageFileStorage.GetBinaryFilesForInterview(originalInterviewId))
                 {
@@ -136,8 +139,30 @@ namespace WB.UI.WebTester.Services.Implementation
 
                     await this.imageFileStorage.RemoveInterviewBinaryData(originalInterviewId, image.FileName);
                 }
+                
+                foreach (var existingInterviewCommand in commands)
+                {
+                    existingInterviewCommand.InterviewId = designerToken;
+                    this.commandService.Execute(existingInterviewCommand);
+                    lastCommandIndex++;
+                }
 
                 return CreationResult.DataRestored;
+            }
+            catch (InterviewException ie)
+            {
+                Evict(designerToken);
+
+                if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 && lastCommandIndex > 0)
+                {
+                    int count = existingInterviewCommands.Count - lastCommandIndex;
+                    existingInterviewCommands.RemoveRange(lastCommandIndex, count);
+                    this.executedCommandsStorage.Store(existingInterviewCommands, originalInterviewId, originalInterviewId);
+                    return CreationResult.DataPartialRestored;
+                }
+
+                await this.ImportQuestionnaireAndCreateInterview(designerToken);
+                return CreationResult.EmptyCreated;
             }
             catch (Exception ex)
             {

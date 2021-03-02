@@ -144,4 +144,7 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Interview data can't be applied to new version of questionnaire. Empty interview created</value>
   </data>
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
+    <value>Interview data can't be applied to new version of questionnaire. We apply same data only</value>
+  </data>
 </root>
