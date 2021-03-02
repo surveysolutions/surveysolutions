@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor &apos;{0}&apos; is not found.
+        ///   Looks up a localized string similar to Supervisor &apos;{0}&apos; is not found in workspace.
         /// </summary>
         public static string PLU0010Description {
             get {

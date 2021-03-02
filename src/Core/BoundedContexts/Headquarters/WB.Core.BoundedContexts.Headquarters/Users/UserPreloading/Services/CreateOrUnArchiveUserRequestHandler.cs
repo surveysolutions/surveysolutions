@@ -75,8 +75,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                 hqUser.Roles.Add(role);
                 
                 await userManager.CreateAsync(hqUser, userToCreate.Password);
-                var workspace = WorkspaceConstants.DefaultWorkspaceName; //TODO
-                workspacesService.AddUserToWorkspace(hqUser, workspace, supervisorId);
+
+                var userWorkspaces = userToCreate.GetWorkspaces();
+                foreach (var userWorkspace in userWorkspaces)
+                {
+                    workspacesService.AddUserToWorkspace(hqUser, userWorkspace, supervisorId);
+                }
             }
             else
             {
