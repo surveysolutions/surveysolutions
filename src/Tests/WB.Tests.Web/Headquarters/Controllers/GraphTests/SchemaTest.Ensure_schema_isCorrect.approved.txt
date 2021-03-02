@@ -53,7 +53,7 @@ type Entity {
 
 type HeadquartersMutation {
   addOrUpdateCalendarEvent("Workspace name" workspace: String! = "primary" "Assignment Id" assignmentId: Int "Comment" comment: String "Interview id" interviewId: Uuid "Interview Key" interviewKey: String "Start of event" newStart: DateTime "Calendar event publicKey" publicKey: Uuid "Start timezone" startTimezone: String): CalendarEvent @authorize(roles: [ "Interviewer", "ApiUser" ], apply: BEFORE_RESOLVER)
-  deleteCalendarEvent("Workspace name" workspace: String! = "primary" "Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(roles: [ "Interviewer" ], apply: BEFORE_RESOLVER)
+  deleteCalendarEvent("Workspace name" workspace: String! = "primary" "Calendar event publicKey" publicKey: Uuid!): CalendarEvent @authorize(roles: [ "Interviewer", "ApiUser" ], apply: BEFORE_RESOLVER)
   deleteMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ], apply: BEFORE_RESOLVER)
   deleteUserFromMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ], apply: BEFORE_RESOLVER)
   addUserToMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ], apply: BEFORE_RESOLVER)
