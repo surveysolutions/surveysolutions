@@ -610,6 +610,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload Users.
+        /// </summary>
+        public static string UploadUsers {
+            get {
+                return ResourceManager.GetString("UploadUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login name.
         /// </summary>
         public static string UserName {

@@ -39,8 +39,8 @@
 
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
-                <h3>{{$t('BatchUpload.Select_Workspace')}}</h3>
-                <p>{{$t('BatchUpload.Select_Workspace_Description')}}</p>
+                <h3>{{$t('UploadUsers.SelectWorkspace')}}</h3>
+                <p>{{$t('UploadUsers.SelectWorkspaceDescription')}}</p>
                 <form-group :error="errorByWorkspace">
                     <div
                         class="field form-control"

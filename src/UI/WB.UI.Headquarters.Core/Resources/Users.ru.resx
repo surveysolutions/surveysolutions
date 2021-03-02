@@ -327,5 +327,7 @@
   <data name="AddUser" xml:space="preserve">
     <value>Добавить пользователя</value>
   </data>
-
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
 </root>
