@@ -309,7 +309,7 @@ export default {
             this.$refs.exposedRemoveModal.modal('hide')
         },
         getVariableLabel(variable){
-            return variable.label ? variable.label
+            return variable.label ? this.getDisplayTitle(variable.label)
                 : (variable.title ? this.getDisplayTitle(variable.title) : variable.variable)
         },
         getDisplayTitle(title){

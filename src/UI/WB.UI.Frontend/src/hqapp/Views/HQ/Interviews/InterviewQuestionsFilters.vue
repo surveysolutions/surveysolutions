@@ -376,7 +376,7 @@ export default {
                     type: type,
                     id: i.variable,
                     label: i.label
-                        ? i.label
+                        ? this.getDisplayTitle(i.label)
                         : (i.title ? this.getDisplayTitle(i.title) : i.variable),
                 }
 
