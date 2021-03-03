@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
 
-                await this.SaveUserToLocalStorageAsync(restCredentials, cancellationTokenSource.Token);
+                await this.SaveUserToLocalStorageAsync(restCredentials, userPassword, cancellationTokenSource.Token);
 
                 this.Principal.SignIn(restCredentials.Login, userPassword, true);
 
@@ -332,7 +332,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
         protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
-        protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
+        protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token);
         
         protected abstract Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token);
