@@ -65,21 +65,26 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
         /// 
         /// <response code="201">Export started</response>
         /// <response code="400">Request is malformed</response>
-        /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ExportProcess))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult<ExportProcess>> PostExports([FromBody, BindRequired]CreateExportProcess requestBody)
         {
             if (!ModelState.IsValid)
-                return StatusCode(StatusCodes.Status400BadRequest, 
-                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
-            
+                return ValidationProblem();
+
             if (!QuestionnaireIdentity.TryParse(requestBody.QuestionnaireId, out var questionnaireIdentity))
-                return StatusCode(StatusCodes.Status400BadRequest, @"Invalid questionnaire identity");
+            {
+                ModelState.AddModelError(nameof(requestBody.QuestionnaireId), "Invalid questionnaire identity");
+                return ValidationProblem();
+            }
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
-                return StatusCode(StatusCodes.Status404NotFound, @"Questionnaire not found");
+            {
+                ModelState.AddModelError(nameof(requestBody.QuestionnaireId), "Questionnaire not found");
+                return ValidationProblem();
+            }
 
             var password = this.exportSettings.EncryptionEnforced()
                 ? this.exportSettings.GetPassword()
@@ -91,17 +96,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
                 if (questionnaire == null)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, @"Questionnaire not found");
+                    ModelState.AddModelError(nameof(requestBody.QuestionnaireId), "Questionnaire not found");
+                    return ValidationProblem();
                 }
 
                 if (questionnaire.Translations.All(t => t.Id != requestBody.TranslationId))
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, @"Translation not found");
+                    ModelState.AddModelError(nameof(requestBody.TranslationId), "Translation not found");
+                    return ValidationProblem();
                 }
             }
 
             var interviewStatus = requestBody.InterviewStatus == ExportInterviewType.All
-                ? (InterviewStatus?) null
+                ? null
                 : (InterviewStatus?) requestBody.InterviewStatus;
 
             var exportFormat = (DataExportFormat) requestBody.ExportType!;

@@ -136,6 +136,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [AuthorizeByRole(UserRoles.Administrator)]
         [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult> Create([FromBody] WorkspaceCreateApiView request)
         {
             if (ModelState.IsValid)

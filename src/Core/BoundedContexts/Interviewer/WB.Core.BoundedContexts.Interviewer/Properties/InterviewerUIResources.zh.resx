@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>蓝牙的状态服务不由app决定。请同时重启调研员和督导员app并重新尝试同步</value>
+    <value>蓝牙的状态服务不由app决定。请同时重启调研员和督导员app并重新尝试同步。</value>
   </data>
   <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
     <value>请检查督导员的设备的WiFi和蓝牙已打开，并确保您离该设备在数米范围之内。</value>
   </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>请确认两个设备距离较近；两个设备的WiFi和蓝牙都处于启用状态；督导员的app应该由督导员的设备启动。</value>
+    <value>请确认两个设备距离较近；两个设备的WiFi和蓝牙都处于启用状态；督导员的app应该由督导员的设备启动</value>
   </data>
   <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
     <value>已连接至督导员的设备</value>
@@ -161,7 +161,7 @@
     <value>转移被第二个设备放弃。</value>
   </data>
   <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>转移已完成。所有已完成的面访现在已经位于另外一个设备。</value>
+    <value>转移已完成。所有已完成的面访现在已经位于另外一个设备</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
     <value>转移已完成。 {0} 个面访同步失败</value>
@@ -172,5 +172,4 @@
   <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
     <value>转换已被终止</value>
   </data>
-  
 </root>

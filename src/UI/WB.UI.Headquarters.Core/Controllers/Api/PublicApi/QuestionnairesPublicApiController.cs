@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("")]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Obsolete("Use /graphql endpoint instead")]
         public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1 /* in v2 rename to page number or use as real offset */)
         {
             var input = new QuestionnaireBrowseInputModel
@@ -75,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Obsolete("Use /graphql endpoint instead")]
         public QuestionnaireApiView Questionnaires([FromRoute] Guid id, int limit = 10, int offset = 1)
         {
             var input = new QuestionnaireBrowseInputModel
@@ -97,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:guid}/{version}")]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Obsolete("Use /graphql endpoint instead")]
         public ActionResult<QuestionnaireApiItem> Questionnaires([FromRoute] Guid id, [FromRoute] long version)
         {
             var input = new QuestionnaireBrowseInputModel
@@ -129,6 +132,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("statuses")]
         [ProducesResponseType(typeof(InterviewStatus), 200)]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Obsolete("Use /graphql endpoint instead")]
         public ActionResult<IEnumerable<string>> QuestionnairesStatuses()
         {
             return Enum.GetNames(typeof(InterviewStatus));
@@ -153,6 +157,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpGet]
         [Route("{id:guid}/{version:long}/interviews")]
         [Authorize(Roles = "ApiUser, Administrator")]
+        [Obsolete("Use /graphql endpoint instead")]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
@@ -209,13 +214,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">Questionnaire guid</param>
         /// <param name="version">Questionnaire version</param>
-        /// <response code="204">Questionnaire setting updated</response>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpGet]
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
         [Authorize(Roles = "ApiUser, Administrator, Headquarter")]
         [ObservingNotAllowed]
-        public ActionResult GetRecordAudio(Guid id, long version)
+        public ActionResult<AudioRecordingEnabled> GetRecordAudio(Guid id, long version)
         {
             var questionnaire = 
                 this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
@@ -230,9 +234,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            return new JsonResult(new
+            return new JsonResult(new AudioRecordingEnabled
             {
-               questionnaire.IsAudioRecordingEnabled
+               Enabled = questionnaire.IsAudioRecordingEnabled
             });
         }
     }
