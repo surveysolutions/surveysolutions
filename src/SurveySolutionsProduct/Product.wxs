@@ -168,7 +168,7 @@
     <CustomAction Id="SetSiteSettingsDataValue"
                   Return="check"
                   Property="WriteSiteSettings"
-                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
+                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;SitePort=[SITEPORT];SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
 
     <CustomAction Id="WriteSiteSettings"
                   BinaryKey="CustomActionBinary"

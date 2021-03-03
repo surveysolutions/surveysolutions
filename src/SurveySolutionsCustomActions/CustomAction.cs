@@ -24,9 +24,10 @@ namespace SurveySolutionsCustomActions
 
                 var config = new SettingsExtractor().GetPreviousConfiguration(session);
 
+                var sitePort = session.CustomActionData["SitePort"];
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("[Headquarters]");
-                var baseUrl = config?.BaseURL ?? "http://localhost:9700";
+                var baseUrl = config?.BaseURL ?? $"http://localhost:{sitePort}" ;
                 sb.AppendLine($"BaseUrl={baseUrl}");
                 var tenantName = config?.TenantName ?? "hq";
                 sb.AppendLine($"TenantName={tenantName}");
