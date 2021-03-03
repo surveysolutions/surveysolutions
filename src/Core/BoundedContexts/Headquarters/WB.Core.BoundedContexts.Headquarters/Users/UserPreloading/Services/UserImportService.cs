@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -35,7 +36,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUnitOfWork sessionProvider;
         private readonly IWorkspacesService workspaces;
-        private readonly IPlainStorageAccessor<WorkspacesUsers> workspaceUsers;
 
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
@@ -49,8 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             IUserImportVerifier userImportVerifier,
             IAuthorizedUser authorizedUser,
             IUnitOfWork sessionProvider,
-            IWorkspacesService workspaces,
-            IPlainStorageAccessor<WorkspacesUsers> workspaceUsers)
+            IWorkspacesService workspaces)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.csvReader = csvReader;
@@ -61,7 +60,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             this.authorizedUser = authorizedUser;
             this.sessionProvider = sessionProvider;
             this.workspaces = workspaces;
-            this.workspaceUsers = workspaceUsers;
         }
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(Stream data, string fileName, string workspace)
@@ -89,6 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
             var usersToImport = new List<UserToImport>();
 
             var allInterviewersAndSupervisors = this.userStorage.Users
+                .QueryAll()
                 .Select(x => new UserToValidate
                 {
                     UserId = x.Id,
@@ -96,35 +95,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
                     IsArchived = x.IsArchived,
                     IsSupervisor = x.Roles.Any(role => role.Id == supervisorRoleId),
                     IsInterviewer = x.Roles.Any(role => role.Id == interviewerRoleId),
-                    //InWorkspaces = new List<InWorkspace>(), 
-                    // InWorkspaces = x.Workspaces.Select(w => new InWorkspace()
-                    // {
-                    //     WorkspaceName = w.Workspace.Name,
-                    //     SupervisorId = w.SupervisorId,
-                    // }).ToArray(),
+                    InWorkspaces = x.Workspaces.Select(w => new InWorkspace()
+                    {
+                        WorkspaceName = w.Workspace.Name,
+                        SupervisorId = w.SupervisorId,
+                    }).ToList(),
                 })
                 .ToArray();
-
-            var userWorkspaces = workspaceUsers.Query(q =>
-                q.Select(uw =>
-                new
-                {
-                    UserId = uw.User.Id,
-                    Workspace = uw.Workspace.Name,
-                    SupervisorId = uw.SupervisorId,
-                })).ToList();
-            
-            foreach (var userWorkspace in userWorkspaces)
-            {
-                var uw = allInterviewersAndSupervisors.First(u => u.UserId == userWorkspace.UserId);
-                if (uw.InWorkspaces == null)
-                    uw.InWorkspaces = new List<InWorkspace>();
-                uw.InWorkspaces.Add(new InWorkspace()
-                {
-                    WorkspaceName = userWorkspace.Workspace,
-                    SupervisorId = userWorkspace.SupervisorId,
-                });
-            }
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors, allWorkspace);
 
