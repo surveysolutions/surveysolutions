@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<IActionResult> ChangeVariableExposeStatus([FromBody] UpdateExposedVariablesRequestModel request)
         {
             if (!QuestionnaireIdentity.TryParse(request.QuestionnaireIdentity, out QuestionnaireIdentity questionnaireIdentity))

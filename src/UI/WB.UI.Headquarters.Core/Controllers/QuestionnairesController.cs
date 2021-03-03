@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AntiForgeryFilter]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Headquarters")]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult ExposedVariables(string id)
         {
@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Headquarters")]
         [ActivePage(MenuItem.Questionnaires)]
         public IActionResult ExposedVariables(QuestionnaireExposedVariablesModel model)
         {
