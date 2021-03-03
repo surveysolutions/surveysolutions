@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -340,7 +340,7 @@
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>календарные события</value>
   </data>
-    <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} законченных интервью отправлено</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
@@ -957,7 +957,7 @@
     <value>{0} интервью было обновлено</value>
   </data>
   <data name="Synchronization_PartialInterviews" xml:space="preserve">
-    <value>изменения по интервью </value>
+    <value>изменения по интервью</value>
   </data>
   <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
     <value>{0} интервью частично отправлено</value>

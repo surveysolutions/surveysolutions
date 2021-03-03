@@ -133,11 +133,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("users/{id}/archive")]
         [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult> Archive(string id)
         {
             if (!Guid.TryParse(id, out var userGuid))
             {
-                return this.BadRequest();
+                ModelState.AddModelError("id", "user id malformed");
+                return ValidationProblem();
             }
 
             var user = this.usersFactory.GetUser(new UserViewInputModel(userGuid));
@@ -158,6 +160,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 await this.archiveService.ArchiveUsersAsync(new[] { userGuid });
             }
+
             return this.Ok();
         }
 
@@ -173,11 +176,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPatch]
         [Route("users/{id}/unarchive")]
         [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult> UnArchive(string id)
         {
             if (!Guid.TryParse(id, out var userGuid))
             {
-                return this.BadRequest();
+                ModelState.AddModelError("id", "user id malformed");
+                return ValidationProblem();
             }
 
             var user = this.usersFactory.GetUser(new UserViewInputModel(userGuid));
@@ -234,11 +239,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [HttpPost]
         [Route("users")]
         [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<ActionResult<UserCreationResult>> Register([FromBody, BindRequired]RegisterUserModel model)
         {
             if (!ModelState.IsValid)
-                return StatusCode(StatusCodes.Status400BadRequest, 
-                    $@"Invalid parameter or property: {string.Join(',',ModelState.Keys.ToList())}");
+                return ValidationProblem();
             
             if (!Enum.IsDefined(typeof(UserRoles), (UserRoles)model.Role))
             {
@@ -258,7 +263,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 if (createdUserRole == UserRoles.Interviewer && string.IsNullOrWhiteSpace(model.Supervisor))
                 {
                     ModelState.AddModelError(nameof(model.Supervisor), "Supervisor name is required for interviewer creation");
-                    return BadRequest(ModelState);
+                    return ValidationProblem();
                 }
 
                 var createdUser = new HqUser
@@ -306,13 +311,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
-            foreach (var modelState in ModelState.Values) {
-                foreach (ModelError error in modelState.Errors) {
-                    result.Errors.Add(error.ErrorMessage);
-                }
-            }
-
-            return BadRequest(result);
+            return ValidationProblem();
         }
         
     }

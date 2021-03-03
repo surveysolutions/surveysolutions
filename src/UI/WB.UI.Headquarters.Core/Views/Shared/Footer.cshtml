@@ -1,5 +1,7 @@
 ﻿@using WB.Core.Infrastructure.Versions
+@using WB.UI.Headquarters.Services
 @inject IProductVersion productVersion
+@inject IVersionCheckService versionCheckService
 
 <footer class="footer">
     <div class="container-fluid">
@@ -10,12 +12,12 @@
             <span id="appVersion">@(productVersion.ToString())</span>
             <span>|</span>
             <a href="@Url.Action("Index", "Download")">@Common.GetInterviewerApp</a>
-            @*if (versionCheckService.DoesNewVersionExist())
+            @if (versionCheckService.DoesNewVersionExist())
             {
             <div>
                 <span style="background-color: #ff8;">@Common.NewVersionAvailable @(versionCheckService.GetNewVersionString()) </span>
             </div>
-            }*@
+            }
         </div>
         <div class="text-right">
             @*<partial name="_PoweredBy" />*@

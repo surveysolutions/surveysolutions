@@ -135,14 +135,18 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             this.mapper
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
+            this.mapper
+                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
+                .Returns(new AssignmentDetails());
 
-             this.controller.Create(new CreateAssignmentApiRequest
+            var result = this.controller.Create(new CreateAssignmentApiRequest
             {
                 QuestionnaireId = qid.ToString(),
                 Responsible = hqUser.UserName
             });
 
             this.commandService.Verify(ass => ass.Execute(It.IsAny<CreateAssignment>(), null), Times.Once);
+            Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
         }
 
         [Test]
@@ -160,8 +164,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             this.mapper
                 .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
                 .Returns(assignment);
+            this.mapper
+                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
+                .Returns(new AssignmentDetails());
 
-            this.controller.Create(new CreateAssignmentApiRequest
+            var result = this.controller.Create(new CreateAssignmentApiRequest
             {
                 QuestionnaireId = qid.ToString(),
                 Responsible = hqUser.UserName,
@@ -169,6 +176,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             });
 
             this.commandService.Verify(ass => ass.Execute(It.Is<CreateAssignment>(x=>x.Quantity == null), null), Times.Once);
+            Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
         }
         
         [Test]
