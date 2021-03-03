@@ -173,12 +173,12 @@ namespace WB.UI.Headquarters.Controllers.Api
                 LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate),
                 InterviewId = interviewSummaryView.InterviewId,
                 IdentifyingData = interviewSummaryView.IdentifyEntitiesValues
-                    .Where( x=> x.Identifying)
+                    .Where(x=> x.Identifying && x.Entity.EntityType == EntityType.Question)
                     .Select(d =>
                         new AnswerView()
                         {
                             Title = questionnaire.GetQuestionTitle(d.Entity.EntityId).RemoveHtmlTags(),
-                            Answer = d.Value.RemoveHtmlTags(),
+                            Answer = d.Value?.RemoveHtmlTags(),
                         })
                     .ToList(),
                 IsReceivedByTablet = interviewSummaryView.ReceivedByInterviewer,

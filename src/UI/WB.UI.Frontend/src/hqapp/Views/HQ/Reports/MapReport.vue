@@ -154,7 +154,7 @@
 import * as toastr from 'toastr'
 import Vue from 'vue'
 import gql from 'graphql-tag'
-import {isNull, chain, debounce, delay, forEach, find, toNumber } from 'lodash'
+import {isNull, chain, debounce, delay, forEach, find, toNumber, isNumber} from 'lodash'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 
@@ -182,9 +182,10 @@ const mapStyles = [
 ]
 
 const query = gql`query mapReport($workspace: String!, $questionnaireId: Uuid!, $questionnaireVersion: Long, 
-$variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: Float!, $east: Float!, $west: Float!) {
+$variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: Float!, $east: Float!, $west: Float!, $where: MapReportFilter) {
   mapReport(workspace: $workspace, questionnaireId:$questionnaireId, questionnaireVersion: $questionnaireVersion, 
-  variable: $variable, zoom:$zoom , clientMapWidth: $clientMapWidth ,north: $north, south: $south, east: $east, west:$west ) {    
+  variable: $variable, zoom:$zoom , clientMapWidth: $clientMapWidth ,north: $north, south: $south, east: $east, west:$west, where:$where) {
+      report{    
     featureCollection
     {
         type
@@ -204,6 +205,7 @@ $variable: String, $zoom: Int!, $clientMapWidth: Int!, $north: Float!, $south: F
         east
         west
     }
+  }
   }
 }`
 
@@ -332,6 +334,34 @@ export default {
 
             return data
         },
+        whereQuery() {
+            const and = []
+            if(this.conditions != null && this.conditions.length > 0) {
+
+                var identifyingData = []
+                this.conditions.forEach(cond => {
+                    if(cond.value == null) return
+
+                    const value_filter = { entity: {variable: {eq: cond.variable}}}
+                    const value = isNumber(cond.value) ? cond.value : cond.value.toLowerCase()
+
+                    var field_values = cond.field.split('|')
+                    var value_part = {}
+                    value_part[field_values[1]] = value
+                    value_filter[field_values[0]] = value_part
+
+                    and.push({identifyingData : {some: value_filter}})
+                })
+
+            }
+
+            if(this.exposedValuesFilter != null) {
+                and.push(this.exposedValuesFilter)
+            }
+
+            return and
+        },
+
     },
 
     mounted() {
@@ -582,7 +612,7 @@ export default {
             var request = {
                 variable: this.selectedQuestion.key,
                 questionnaireId: this.selectedQuestionnaireId.key.replaceAll('-',''),
-                questionnaireVersion: toNumber(this.selectedVersionValue),
+                questionnaireVersion: this.selectedVersionValue ? toNumber(this.selectedVersionValue) : null,
                 zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
                 north,
@@ -600,13 +630,21 @@ export default {
 
             //const response = await this.api.Report(request)
 
+            const where = {
+                and: [...self.whereQuery],
+            }
+
+            if(where.and.length > 0) {
+                request.where = {interviewFilter : where}
+            }
+
             const report = await this.$apollo.query({
                 query,
                 variables: request,
                 fetchPolicy: 'network-only',
             })
 
-            var mapReport = report.data.mapReport
+            var mapReport = report.data.mapReport.report
             forEach(mapReport.featureCollection.features, feature => {
                 if(!Array.isArray(feature.geometry.coordinates))
                 {

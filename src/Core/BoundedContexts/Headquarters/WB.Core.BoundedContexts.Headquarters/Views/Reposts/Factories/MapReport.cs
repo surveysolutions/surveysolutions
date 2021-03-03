@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
@@ -148,6 +147,49 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
+        public MapReportView GetReport(List<PositionPoint> gpsAnswers, int zoom, int clientMapWidth, double south, double north, double east, double west)
+        {
+            var cluster = new SuperCluster();
+            var bounds = GeoBounds.Closed;
+
+            cluster.Load(gpsAnswers.Select(g =>
+            {
+                bounds.Expand(g.Latitude, g.Longitude);
+                return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
+                    new Dictionary<string, object> { ["interviewId"] = g.InterviewId.ToString() });
+            }));
+
+            if (zoom == -1)
+            {
+                zoom = bounds.ApproximateGoogleMapsZoomLevel(clientMapWidth);
+            }
+
+            var result = cluster.GetClusters(new GeoBounds(south, west, north, east), zoom);
+
+            var collection = new FeatureCollection();
+            collection.Features.AddRange(result.Select(p =>
+            {
+                var props = p.UserData.Props ?? new Dictionary<string, object>();
+
+                if (p.UserData.NumPoints > 1)
+                {
+                    props["count"] = p.UserData.NumPoints;
+                    props["expand"] = cluster.GetClusterExpansionZoom(p.UserData.Index);
+                }
+
+                return new Feature(
+                    new Point(new Position(p.Latitude, p.Longitude)),
+                    props, id: p.UserData.Index.ToString("X"));
+            }));
+
+            return new MapReportView
+            {
+                FeatureCollection = collection,
+                InitialBounds = bounds,
+                TotalPoint = gpsAnswers.Count
+            };
+        }
+
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithGpsQuestions()
         {
             var questionnaireIds = this.questionnaireItems.Query(q =>
@@ -167,14 +209,4 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             public int Total { get; set; }
         }
     }
-
-    /*public class CustomPoint : Point
-    {
-        public List<double> coordinates;
-
-        public CustomPoint(Position position):base(position) 
-        {
-            coordinates = new List<double> {position.Latitude, position.Longitude};
-        }
-    }*/
 }

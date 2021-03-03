@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map
 
             descriptor.Field(x=> x.Type)
                 .Type<NonNullType<EnumType<GeoJSONObjectType>>>()
-                .Description("List of the features");
+                .Description("Feature collection type");
         }
     }
 }

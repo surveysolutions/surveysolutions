@@ -364,7 +364,10 @@ export default {
                 || this.questionnaireItemsList.length == 0
         },
         isDynamicDisabled() {
-            return this.rules.length == 0
+            return this.questionnaireId == null
+                || this.questionnaireVersion == null
+                || this.questionnaireItemsList == null
+                || this.rules.length == 0
         },
         rules(){
             return this.questionnaireAllItemsList.map(i => {

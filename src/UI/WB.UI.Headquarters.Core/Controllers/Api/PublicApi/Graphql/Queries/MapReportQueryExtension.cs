@@ -1,5 +1,6 @@
 ﻿using HotChocolate.Types;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map;
+using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map.MapReportHolder;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
 {
@@ -9,11 +10,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
         {
             descriptor.Name("HeadquartersQuery");
 
-            descriptor.Field<MapReportResolver>(x => x.GetMapReport(default, default,default,
-                    default,default,default,default,default,default,default!))
+            descriptor.Field<MapReportResolver>(x => x.GetMapReport(default, 
+                    default,default, default,default,default,
+                    default,default,default,default!,default!))
                 .Authorize()
                 .HasWorkspace()
-                .Type<MapReportType>()
+                .WrapIntoHolder<MapReportType, GpsAnswerQuery>()
+                .UseFiltering<GpsAnswerFilterInputType>()
                 .Argument("questionnaireId", a => a.Description("Questionnaire id").Type<NonNullType<UuidType>>())
                 .Argument("questionnaireVersion", a => a.Description("Questionnaire version").Type<LongType>())
                 .Argument("variable", a => a.Description("Variable name for question").Type<StringType>())
@@ -23,7 +26,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                 .Argument("west", a => a.Description("West coordinate").Type<NonNullType<FloatType>>())
                 .Argument("north", a => a.Description("North coordinate").Type<NonNullType<FloatType>>())
                 .Argument("south", a => a.Description("South coordinate").Type<NonNullType<FloatType>>());
-
         }
     }
 }

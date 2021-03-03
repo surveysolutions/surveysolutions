@@ -64,7 +64,7 @@ type Feature {
 type FeatureCollection {
   "List of the features"
   features: [Feature]
-  "List of the features"
+  "Feature collection type"
   type: GeoJSONObjectType!
 }
 
@@ -96,7 +96,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize(apply: BEFORE_RESOLVER)
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: Uuid! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize(apply: BEFORE_RESOLVER)
   viewer: User @authorize(apply: BEFORE_RESOLVER)
-  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: Uuid! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float!): MapReport @authorize(apply: BEFORE_RESOLVER)
+  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: Uuid! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize(apply: BEFORE_RESOLVER)
 }
 
 type IPagedConnectionOfAssignment {
@@ -215,6 +215,11 @@ type MapReport {
   initialBounds: GeoBounds
   "Collection of features"
   featureCollection: FeatureCollection
+}
+
+type MapReportHolder {
+  "Map report"
+  report: MapReport!
 }
 
 type Questionnaire {
@@ -490,6 +495,12 @@ input ListFilterInputTypeOfUserMapFilterInput {
   none: UserMapFilterInput
   some: UserMapFilterInput
   any: Boolean
+}
+
+input MapReportFilter {
+  and: [MapReportFilter!]
+  or: [MapReportFilter!]
+  interviewFilter: InterviewsFilter
 }
 
 input MapsFilter {
