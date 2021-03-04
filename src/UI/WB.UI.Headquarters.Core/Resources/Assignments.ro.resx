@@ -283,7 +283,7 @@
     <value>Creat</value>
   </data>
   <data name="Action_Created_Comment" xml:space="preserve">
-    <value>Comentariu: {{comentariu}}</value>
+    <value>Comentariu: {{comment}}</value>
   </data>
   <data name="Action_Created_Responsible" xml:space="preserve">
     <value>Atribuit către {{responsable}}</value>
