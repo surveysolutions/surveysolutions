@@ -51,9 +51,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                    + Environment.NewLine + string.Format(EnumeratorUIResources.InterviewerVersion, appVersion);
         }
 
-        protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
+        protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token)
         {
-            var identity = await GenerateInterviewerIdentity(credentials, token);
+            var identity = await GenerateInterviewerIdentity(credentials, password, token);
 
             await this.ViewModelNavigationService
                 .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(

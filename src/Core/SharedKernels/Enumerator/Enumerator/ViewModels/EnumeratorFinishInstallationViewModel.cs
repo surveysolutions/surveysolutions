@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
-                        await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
+                        await this.RelinkUserToAnotherDeviceAsync(restCredentials, userPassword, cancellationTokenSource.Token);
                         break;
                     case SynchronizationExceptionType.ShouldChangePassword:
                         await ChangePasswordAsync();
@@ -331,13 +331,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         protected abstract string GetRequiredUpdateMessage(string targetVersion, string appVersion);
-        protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token);
+        protected abstract Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token);
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token);
         
         protected abstract Task<List<WorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials,
             CancellationToken token);
 
-        public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
+        public void CancelInProgressTask() => this.cancellationTokenSource?.Cancel();
 
         private IMvxAsyncCommand scanAsyncCommand;
         private string endpointValidationError;

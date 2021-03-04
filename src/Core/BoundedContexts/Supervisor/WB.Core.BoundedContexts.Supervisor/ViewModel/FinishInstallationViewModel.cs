@@ -63,7 +63,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                    + Environment.NewLine + string.Format(EnumeratorUIResources.SupervisorVersion, appVersion);
         }
 
-        protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token) => throw new NotImplementedException();
+        protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token) 
+            => throw new NotImplementedException();
 
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token)
         {
