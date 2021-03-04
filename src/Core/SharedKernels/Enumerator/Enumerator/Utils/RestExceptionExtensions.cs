@@ -42,10 +42,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     exceptionMessage = EnumeratorUIResources.UnacceptableSSLCertificate;
                     exceptionType = SynchronizationExceptionType.UnacceptableSSLCertificate;
                     break;
-                case RestExceptionType.UnknownResponseSource:
-                    exceptionMessage = EnumeratorUIResources.UnknownResponseSource;
-                    exceptionType = SynchronizationExceptionType.UnknownResponseSource;
-                    break;
                 case RestExceptionType.Unexpected:
                     switch (restException.StatusCode)
                     {

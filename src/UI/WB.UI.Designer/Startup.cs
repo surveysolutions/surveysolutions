@@ -239,12 +239,6 @@ namespace WB.UI.Designer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("X-Generated-By", "SuSo");
-                await next.Invoke();
-            });
-
             app.UseExceptional();
 
             if (!env.IsDevelopment())
