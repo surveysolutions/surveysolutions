@@ -13,9 +13,7 @@ namespace WB.Tests.Abc.TestFactories
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             this.ExecutedRequests.Add(request);
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
-            result.Headers.Add("X-Generated-By", "SuSo");
-            return Task.FromResult(result);
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
         }
     }
 }
