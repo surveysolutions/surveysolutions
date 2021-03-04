@@ -614,4 +614,10 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
     <value>Sigur doriți să elliminați rândul(urile) {0} din fiecare listă asociată?</value>
   </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Suprafața: {0:0.00} m2</value>
+  </data>
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>A apărut o eroare la încărcare. Fișierul de tip shapefile nu poate fi deschis</value>
+  </data>
 </root>

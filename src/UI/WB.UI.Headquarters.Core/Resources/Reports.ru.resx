@@ -347,15 +347,6 @@
   <data name="MapDataLoading" xml:space="preserve">
     <value>Данные карты загружаются</value>
   </data>
-  <data name="ClusterInfo" xml:space="preserve">
-    <value>Эта область содержит</value>
-  </data>
-  <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Я понимаю что интервью уже получено планшетом</value>
-  </data>
-  <data name="AssignReceivedWarning" xml:space="preserve">
-    <value>Текущий интервьюер не будут уведомлен о смене ответственного. Данные, которые он начал собирать, будут удалены.</value>
-  </data>
   <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
     <value>Имеются проблемы совместимости между разными версиями опросника. Некоторые ответы в прошлых версиях опросника больше не присутствуют в последней версии опросника. Такие ответы были проигнорированы.</value>
   </data>

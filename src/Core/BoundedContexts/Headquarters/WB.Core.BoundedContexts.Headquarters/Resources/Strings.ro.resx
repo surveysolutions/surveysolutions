@@ -133,7 +133,7 @@
     <value>orice RINS</value>
   </data>
   <data name="Assignments" xml:space="preserve">
-    <value>Interviuri alocate</value>
+    <value>Sarcini</value>
   </data>
   <data name="Average" xml:space="preserve">
     <value>Medie</value>
@@ -227,5 +227,8 @@
   </data>
   <data name="WithErrors" xml:space="preserve">
     <value>Cu erori</value>
+  </data>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Nu a fost aprobat de către RINS</value>
   </data>
 </root>

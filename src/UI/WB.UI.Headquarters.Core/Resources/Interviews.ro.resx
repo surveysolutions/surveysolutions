@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-      <value>{{count}} interviuri vor fi aprobate.</value>
+      <value>{{count}} interviu va fi aprobat.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
       <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi aprobate.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți aproba doar interviuri cu următorul status: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aproba doar interviuri cu următoarea stare: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri selectate pentru realocare.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți aloca doar interviuri cu următoarele statusuri: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (numai către un alt anchetator)&lt;/i&gt; și &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aloca doar interviuri cu următoarele stări: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (numai către un alt anchetator)&lt;/i&gt; și &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Interviuri alocate</value>
@@ -136,7 +136,7 @@
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi alocate.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Numai interviurile care nu au statusul &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt; pot fi realocate.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Numai interviurile care nu au stareul &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt; pot fi realocate.</value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
     <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un controlor sau anchetator responsabil.</value>
@@ -218,6 +218,12 @@
       <value>Notă!</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
-      <value>Puteți aproba doar interviuri cu următoarele statusuri: {{status1}}, {{status2}}, {{status3}}.</value>
+      <value>Puteți aproba doar interviuri cu următoarele stări: {{status1}}, {{status2}}, {{status3}}.</value>
+  </data>
+  <data name="ApproveConfirmMessage_plural" xml:space="preserve">
+    <value>{{count}} interviuri vor fi aprobate.</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Anchetatorii responsabili la momentul actual nu vor fi informați cu privire la realocarea chestionarului până la următoarea sincronizare. Dacă au început deja să lucreze la interviu, toate datele pe care le-au introdus înainte de următoarea sincronizare vor fi ȘTERSE!</value>
   </data>
 </root>

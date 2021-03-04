@@ -142,10 +142,10 @@
     <value>SUB 100MB SPAȚIU LIBER</value>
   </data>
   <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
-    <value>Niciodata sincronizat</value>
+    <value>NICIODATĂ SINCRONIZAT</value>
   </data>
   <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
-    <value>Niciodata incarcat </value>
+    <value>NICIODATĂ ÎNCĂRCAT</value>
   </data>
   <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
     <value>FĂRĂ INTERVIURI ALOCATE</value>

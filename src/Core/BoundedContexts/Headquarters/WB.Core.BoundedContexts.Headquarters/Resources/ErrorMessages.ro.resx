@@ -121,7 +121,7 @@
     <value>Utilizator sau parolă incorecte</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Vă rugăm să completați câmpul</value>
+    <value>Vă rugăm să completați câmpul CAPTCHA</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
     <value>Chestionarul '{0}' are erori. Vă rugăm corectați-le în Designer. </value>
@@ -140,5 +140,14 @@
   </data>
   <data name="TemplateNotFound" xml:space="preserve">
     <value>Chestionarul '{0}' nu poate fi găsit. Actualizați lista de chestionare.</value>
+  </data>
+  <data name="InvalidAuthenticatorCode" xml:space="preserve">
+    <value>Cod de autentificare eronat.</value>
+  </data>
+  <data name="InvalidRecoveryCode" xml:space="preserve">
+    <value>A fost introdus un cod de recuperare eronat.</value>
+  </data>
+  <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+    <value>În momentul de față se importă un alt chestionar</value>
   </data>
 </root>

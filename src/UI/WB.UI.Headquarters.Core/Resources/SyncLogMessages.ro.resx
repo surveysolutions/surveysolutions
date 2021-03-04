@@ -127,10 +127,10 @@
     <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
   </data>
   <data name="CheckObsoleteInterviews" xml:space="preserve">
-    <value>Verificați interviurile vechi. Este necesar: &lt;pre&gt; {0} &lt;/ pre&gt;</value>
+    <value>Verificați anchetele vechi. Este necesar: &lt;pre&gt; {0} &lt;/ pre&gt;</value>
   </data>
   <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt; Ștergeți interviul: &lt;a href='{3}'&gt; {0} &lt;/a&gt;, Pachetul: {1}, Indexul de sortare: {2} &lt;/ li&gt;</value>
+    <value>&lt;li&gt;Ștergeți ancheta: &lt;a href='{3}'&gt;{0}&lt;/a&gt;, Pachetul: {1}, Indexul de sortare: {2}&lt;/ li&gt;</value>
   </data>
   <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
     <value>Dispozitivul poate fi alocat anchetatorului</value>
@@ -239,5 +239,11 @@
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt; Actualizare interviu: &lt;a href='{3}'&gt; {0} &lt;/a&gt;, Pachet: {1}, Index de sortare: {2} &lt;/ li&gt;</value>
+  </data>
+  <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Sarcina &lt;b&gt;{0}&lt;/b&gt; primită și stocată de dispozitiv</value>
+  </data>
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Verificați anchetele vechi: &lt;pre&gt; {0} &lt;/ pre&gt;</value>
   </data>
 </root>

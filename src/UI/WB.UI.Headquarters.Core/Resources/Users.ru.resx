@@ -305,21 +305,4 @@
       <value>Пароль для пользователя {0} изменен</value>
       <comment>Пароль для пользователя {0} изменен</comment>
   </data>
-
-  <data name="Filter_AllUsers" xml:space="preserve">
-    <value>Все пользователи</value>
-  </data>
-  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
-    <value>Без рабочей области</value>
-  </data>
-  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
-    <value>Только с выключенными рабочими областями</value>
-  </data>
-  <data name="Filter_Locked" xml:space="preserve">
-    <value>Заблокированные</value>
-  </data>
-  <data name="Filter_Archived" xml:space="preserve">
-    <value>Архивированные</value>
-  </data>
-  
 </root>

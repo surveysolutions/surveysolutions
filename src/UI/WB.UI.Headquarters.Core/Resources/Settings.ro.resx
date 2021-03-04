@@ -186,4 +186,28 @@
   <data name="Settings_Title" xml:space="preserve">
     <value>Setări</value>
   </data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+    <value>Editarea profilului enumeratorului</value>
+  </data>
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>Permiteți enumeratorilor să își actualizeze informațiile de contact din profil</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>Notificări prin e-mail prin interviu web</value>
+  </data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Permiteți respondenților Interviului Web să trimită e-mailuri (numai dacă a fost configurat furnizorul de e-mail)</value>
+  </data>
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>Dacă este bifată, numai ultima versiune a aplicației Anchetator / Controlor se poate sincroniza cu RINS</value>
+  </data>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Activați notificările pe dispozitiv</value>
+  </data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>Când sunt activate, dispozitivele vor informa proprietarii despre modificările și acțiunile care trebuie întreprinse</value>
+  </data>
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Adresa poștală a expeditorului</value>
+  </data>
 </root>

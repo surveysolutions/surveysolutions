@@ -133,7 +133,7 @@
     <value>Toți responsabilii</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
-    <value>Toate statusurile</value>
+    <value>Toate stările</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
     <value>Toți controlorii</value>
@@ -306,5 +306,8 @@
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Selectează chestionarul</value>
       <comment>Selectează chestionarul</comment>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Toate versiunile</value>
   </data>
 </root>

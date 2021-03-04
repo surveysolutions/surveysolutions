@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Contul dvs. Este blocat. Contactați supervizorul.</value>
+    <value>Contul dvs. este blocat. Contactați controlorul.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>Contul dvs nu are rol de anchetator.</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Contul dvs. nu a fost aprobat. Contactați supervizorul.</value>
+    <value>Contul dvs. nu a fost aprobat. Contactați controlorul.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Aplicația nu este compatibilă cu serverul. Actualizați aplicația Interviewer.</value>
@@ -166,7 +166,7 @@
     <value>De colectat: nelimitat</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
-    <value>Chetionar unic</value>
+    <value>Chestionar unic</value>
   </data>
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
     <value>Creare Nou</value>
@@ -733,5 +733,11 @@ pentru instrucțiuni suplimentare</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Atenționare</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Sincronizarea sarcinilor</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Atribuie</value>
   </data>
 </root>

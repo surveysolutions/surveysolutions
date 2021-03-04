@@ -117,5 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Aplicația Anchetator nu poate determina starea Bluetooth (de exemplu, pornit / oprit, conectat / deconectat). Mai întâi, reporniți atât dispozitivele Anchetator, cât și dispozitivele Controlor. Apoi încercați din nou sincronizarea.</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Verificați dacă dispozitivul controlorului este activat WiFi și Bluetooth și vă aflați în imediata apropiere a acestuia</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Asigurați-vă că ambele dispozitive sunt în imediata apropiere; WIFI și Bluetooth ar trebui să fie activate pe ambele dispozitive; Cererea de controlor trebuie deschisă pe dispozitivul controlorului</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Conectat la dispozitivul controlorului</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Se așteaptă aprobarea conexiunii de la controlor</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Dispozitivul controlorului a fost găsit. Se solicită conexiunea</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Căutați dispozitivul controlorului</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Mutarea tuturor interviurilor finalizate pe dispozitivul controlorului</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Mutarea tuturor interviurilor finalizate în „{0}”</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Notă: Această acțiune va dura mai mult decât de obicei, nu închideți acest dispozitiv</value>
+  </data>
 </root>

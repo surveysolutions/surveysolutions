@@ -315,7 +315,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Health check monitor</value>
   </data>
-    <data name="HideFilter" xml:space="preserve">
+  <data name="HideFilter" xml:space="preserve">
     <value>Ascundeți filtrul</value>
   </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
@@ -1203,5 +1203,14 @@
   </data>
   <data name="YesNoQuestion_Yes" xml:space="preserve">
     <value>Da</value>
+  </data>
+  <data name="AccountManage_AuthenticatorApp" xml:space="preserve">
+    <value>Aplicație de autentificare</value>
+  </data>
+  <data name="AccountManage_Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="AccountManage_Status2fa" xml:space="preserve">
+    <value>Autentificare cu doi factori este</value>
   </data>
 </root>

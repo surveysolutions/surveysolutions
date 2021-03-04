@@ -255,4 +255,16 @@
   <data name="ZipFile" xml:space="preserve">
     <value>Fișier Zip</value>
   </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Adaugă la coadă</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>toate stările</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Stare: aprobat de RINS</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Stare: aprobat de controlor</value>
+  </data>
 </root>

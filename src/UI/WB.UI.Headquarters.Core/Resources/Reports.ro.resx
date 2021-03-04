@@ -324,4 +324,7 @@
   <data name="WithInterviewers" xml:space="preserve">
     <value>Membrii echipei</value>
   </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Toate datele</value>
+  </data>
 </root>

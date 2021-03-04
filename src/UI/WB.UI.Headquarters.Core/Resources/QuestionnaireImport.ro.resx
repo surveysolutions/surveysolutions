@@ -180,4 +180,7 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Actualizare interviuri alocate</value>
   </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Se importă {{percent}}%</value>
+  </data>
 </root>

@@ -121,16 +121,16 @@
     <value>Arhivele protejate cu parolă nu sunt suportate</value>
   </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A</value>
+    <value>[PL0002] N/A Contactați echipa de suport la support@mysurvey.solutions</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>Coloana nu poate fi reprodusă pentru orice întrebare din chestionar.</value>
   </data>
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
-    <value>Fișierul nu poate fi reprodus pentru orice Listă din chestionar.</value>
+    <value>Fișierul nu poate fi reprodus pentru orice listă din chestionar.</value>
   </data>
   <data name="PL0006_IdDublication" xml:space="preserve">
-    <value>Au fost găsite id-uri duplicate.</value>
+    <value>Au fost găsite id-uri dublate.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
     <value>Lipsesc una sau mai multe coduri de identificare ale coloanei pentru nivelul ierarhic superior</value>
@@ -142,7 +142,7 @@
     <value>Id-ul Listei nu corespunde dimensiunii Listei.</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>Răspuns inadmisibil</value>
+    <value>Răspunsul nu este permis</value>
   </data>
   <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Valoarea introdusă nu este de tip dată.</value>

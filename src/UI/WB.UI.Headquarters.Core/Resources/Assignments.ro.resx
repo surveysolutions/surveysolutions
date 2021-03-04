@@ -264,4 +264,34 @@
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Actualizarea interviurilor alocate de la {{from}} la {{to}}</value>
   </data>
+  <data name="Action" xml:space="preserve">
+    <value>Acțiune</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Arhivat</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Înregistrarea audio s-a schimbat</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Înregistrarea audio este dezactivată</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Înregistrarea audio este activată</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Creat</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Comentariu: {{comentariu}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Atribuit către {{responsable}}</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Șters</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Dimensiunea s-a schimbat</value>
+  </data>
 </root>

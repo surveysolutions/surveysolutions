@@ -216,4 +216,7 @@
   <data name="Users" xml:space="preserve">
     <value>Utilizatori</value>
   </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administrare</value>
+  </data>
 </root>

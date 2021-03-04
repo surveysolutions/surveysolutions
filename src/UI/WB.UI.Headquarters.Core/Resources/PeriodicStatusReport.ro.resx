@@ -237,4 +237,7 @@
   <data name="Week" xml:space="preserve">
     <value>Săptămâni</value>
   </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Durata medie în care interviul a fost activ pe ecranul tabletei controlorului înainte de finalizare</value>
+  </data>
 </root>
