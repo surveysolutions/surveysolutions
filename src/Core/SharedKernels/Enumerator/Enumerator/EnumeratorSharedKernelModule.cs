@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -58,7 +59,9 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IInterviewsRemover, Implementation.Services.Synchronization.Steps.InterviewsRemover>();
             registry.Bind<ICompanyLogoSynchronizer, CompanyLogoSynchronizer>();
             registry.Bind<IAttachmentsCleanupService, AttachmentsCleanupService>();
-            
+            registry.BindAsSingleton<IWorkspaceService, WorkspaceService>();
+            registry.BindAsSingleton<IWorkspaceAccessor, WorkspaceAccessor>();
+
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
 

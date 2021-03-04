@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly IAuditLogService auditLogService;
         private readonly IDeviceInformationService deviceInformationService;
+        private readonly IWorkspaceService workspaceService;
         private const string StateKey = "identity";
         private readonly IQRBarcodeScanService qrBarcodeScanService;
         private readonly ISerializer serializer;
@@ -43,7 +45,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ISerializer serializer,
             IUserInteractionService userInteractionService,
             IAuditLogService auditLogService,
-            IDeviceInformationService deviceInformationService) 
+            IDeviceInformationService deviceInformationService,
+            IWorkspaceService workspaceService) 
                 :base(principal, viewModelNavigationService, false)
         {
             this.deviceSettings = deviceSettings;
@@ -52,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.userInteractionService = userInteractionService;
             this.auditLogService = auditLogService;
             this.deviceInformationService = deviceInformationService;
+            this.workspaceService = workspaceService;
 
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.serializer = serializer;
@@ -121,9 +125,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Endpoint =  this.deviceSettings.Endpoint;
 
 #if DEBUG
-            this.Endpoint = "http://10.0.2.2:5001";
-            this.UserName = "int";
-            this.Password = "1";
+            this.Endpoint = "http://192.168.50.213:5001";
+            this.UserName = "in1sv3";
+            this.Password = "Qwerty1234";
 #endif
         }
 
@@ -212,6 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
 
+                SaveWorkspaces(workspaces);
                 await this.SaveUserToLocalStorageAsync(restCredentials, cancellationTokenSource.Token);
 
                 this.Principal.SignIn(restCredentials.Login, this.Password, true);
@@ -263,6 +268,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.IsInProgress = false;
                 cancellationTokenSource = null;
             }
+        }
+
+        private void SaveWorkspaces(List<WorkspaceApiView> workspaces)
+        {
+            workspaceService.Save(workspaces.Select(w => new WorkspaceView()
+            {
+                Name = w.Name,
+                DisplayName = w.DisplayName,
+                Disabled = w.Disabled,
+            }).ToArray());
         }
 
         public string PasswordError

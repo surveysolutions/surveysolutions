@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 Token = credentials.Token,
                 SecurityStamp = interviewer.SecurityStamp,
                 TenantId = tenantId,
-                Workspace = interviewer.Workspaces.First().Name
+                Workspace = interviewer.Workspaces.First().Name,
             };
             return interviewerIdentity;
         }

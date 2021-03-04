@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -30,11 +32,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public SqlitePlainStorage(ILogger logger,
             IFileSystemAccessor fileSystemAccessor,
-            SqliteSettings settings)
+            SqliteSettings settings,
+            IWorkspaceAccessor workspaceAccessor)
         {
             var entityName = typeof(TEntity).Name;
+            var pathToDatabase = settings.PathToDatabaseDirectory;
+            
+            var workspaces = typeof(TEntity).GetCustomAttribute(typeof(WorkspacesAttribute));
+            if (workspaces != null)
+            {
+                var workspaceName = workspaceAccessor.GetCurrent().Name;
+                pathToDatabase = fileSystemAccessor.CombinePath(pathToDatabase, workspaceName);
+            }
 
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
+            pathToDatabase = fileSystemAccessor.CombinePath(pathToDatabase, entityName + "-data.sqlite3");
 
             var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex, true);
