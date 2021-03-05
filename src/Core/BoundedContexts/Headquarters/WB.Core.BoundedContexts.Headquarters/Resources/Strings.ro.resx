@@ -145,7 +145,7 @@
     <value>Eroare la analizarea răspunsului</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>Status definit de echipa de suport Survey Solutions</value>
+    <value>stare definit de echipa de suport Survey Solutions</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Zile</value>
@@ -223,7 +223,7 @@
     <value>Eroare</value>
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
-    <value>Acțiune nevalidă</value>
+    <value>Acțiune incorectă</value>
   </data>
   <data name="WithErrors" xml:space="preserve">
     <value>Cu erori</value>

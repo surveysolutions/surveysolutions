@@ -166,13 +166,13 @@
     <value>Sincronizare finalizată:</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>{0} interviuri noi alocate descărcate</value>
+    <value>{0} sarcini noi descărcate</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
-    <value>{0} interviuri alocate eliminate</value>
+    <value>{0} sarcini eliminate</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
-    <value>{0} interviuri noi descărcate</value>
+    <value>{0} interviu(ri) noi descărcate</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
     <value>{0} interviu(ri) respins(e)</value>

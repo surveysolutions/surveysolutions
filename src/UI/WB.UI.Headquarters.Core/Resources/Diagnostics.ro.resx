@@ -157,7 +157,7 @@
     <value>Serviciul de export la {0} a răspuns cu starea {1}</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Starea de sănătate: {{ status }}</value>
+    <value>Starea de sănătate: {{status}}</value>
   </data>
   <data name="hq_baseurl_check" xml:space="preserve">
     <value>Verificare configurare BaseUrl</value>

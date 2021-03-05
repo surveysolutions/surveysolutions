@@ -181,13 +181,13 @@
     <value>Început</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Durată status</value>
+    <value>Durată stare</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Controlori</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Anchete și statusuri</value>
+    <value>Anchete și stări</value>
   </data>
   <data name="SurveySetup" xml:space="preserve">
     <value>Setarea anchetei</value>
@@ -199,13 +199,13 @@
     <value>Echipa și rolurile</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Membrii echipei și statusurile</value>
+    <value>Membrii echipei și stările</value>
   </data>
   <data name="TeamsAndRoles" xml:space="preserve">
     <value>Echipe și roluri</value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Echipe și statusuri</value>
+    <value>Echipe și stări</value>
   </data>
   <data name="Troubleshooting" xml:space="preserve">
     <value>Rezolvarea problemelor</value>

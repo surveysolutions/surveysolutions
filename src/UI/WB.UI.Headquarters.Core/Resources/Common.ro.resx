@@ -226,7 +226,7 @@
     <value>Nu a fost nimic selectat</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Deschide</value>
@@ -274,13 +274,13 @@
     <value>Arată datele de identificare</value>
   </data>
   <data name="ShowStatusHistory" xml:space="preserve">
-    <value>Arată istoricul statusurilor</value>
+    <value>Arată istoricul stărilor</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Intrare în cont</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>

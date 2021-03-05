@@ -158,18 +158,18 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi șterse.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți șterge interviurile care nu au fost primite de către anchetator cu următoarele statusuri doar: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți șterge interviurile care nu au fost primite de către anchetator cu următoarele stări doar: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Erori</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi respinse.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarele statusuri: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarele stări: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi respinse.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următorul status: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarea stare: &lt;i&gt;{{status1}}&lt;/i&gt; și &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID de alocare. Faceți click pentru a introduce ID-ul complet.</value>
@@ -181,13 +181,13 @@
     <value>Utilizator responsabil. Faceți click în câmp pentru a alege un nume de utilizator fie prin selectarea directă, fie tastând pentru a filtra în continuare lista de nume de utilizator.</value>
   </data>
   <data name="Tooltip_Filter_Status" xml:space="preserve">
-    <value>Statusul interviului. Selectați un status pentru a vedea toate interviurile cu acel status. Selectați 'Toate statusurile' pentru a vedea interviuri cu orice status.</value>
+    <value>stareul interviului. Selectați un stare pentru a vedea toate interviurile cu acel stare. Selectați 'Toate stările' pentru a vedea interviuri cu orice stare.</value>
   </data>
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
     <value>Identificator pentru alocarea de care aparține acest interviu. Faceți click pe pictograma de sortare pentru a sorta după numărul de alocare.</value>
   </data>
   <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
-    <value>Afișează numărul total de întrebări nevalide și texte statice în interviu. Condițiile de validare eșuate de mai multe ori pentru aceeași entitate sunt numărate ca 1.</value>
+    <value>Afișează numărul total de întrebări incorecte și texte statice în interviu. Condițiile de validare eșuate de mai multe ori pentru aceeași entitate sunt numărate ca 1.</value>
   </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
     <value>Faceți click aici pentru a ascunde sau pentru a afișa întrebările de identificare. Ascunderea întrebărilor de identificare poate oferi mai mult spațiu pentru alte informații. Afișarea întrebărilor de identificare poate oferi detalii pentru diferențierea interviurilor.</value>
@@ -208,11 +208,11 @@
     <value>Utilizatorul responsabil cu alocarea. Dați click pe pictograma sortare pentru a sorta numele de utilizator.</value>
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
-    <value>Starea interviului în fluxul anchetei. Faceți click pe pictograma de sortare pentru a sorta după status.</value>
+    <value>Starea interviului în fluxul anchetei. Faceți click pe pictograma de sortare pentru a sorta după stare.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; interviuri vor fi dezaprobate.&lt;/h3&gt;
-&lt;b&gt;Notă!&lt;/b&gt; Puteți dezaproba doar interviurile cu următorul status: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
+&lt;b&gt;Notă!&lt;/b&gt; Puteți dezaproba doar interviurile cu următoarea stare: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
   <data name="Note" xml:space="preserve">
       <value>Notă!</value>

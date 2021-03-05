@@ -178,7 +178,7 @@
     <value>Finalizate ({0})</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Chetionarele finalizate vor fi încărcate în timpul următoarei sincronizări</value>
+    <value>Chestionarele finalizate vor fi încărcate în timpul următoarei sincronizări</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Creare chestionar nou utilizând șabloane</value>
@@ -202,13 +202,13 @@
     <value>Sincronizare</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Sincronizați pentru sarcini noi sau contactați supervizorul pentru instrucțiuni</value>
+    <value>Sincronizați pentru sarcini noi sau contactați controlorul pentru instrucțiuni</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
     <value>Nu aveți sarcini noi</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
-    <value>Niciun item nou</value>
+    <value>Niciun element nou</value>
   </data>
   <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
     <value>Nimic găsit</value>
@@ -229,7 +229,7 @@
     <value>Respins ({0})</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Interviuri care au fost respinse de către supervizor
+    <value>Interviuri care au fost respinse de către controlor
 Trebuie să rezolvați problemele menționate pe copertă</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
@@ -264,7 +264,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Începere chestionar nou</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} sarcini pentru {1}</value>
+    <value>{0} chestionare pentru {1}</value>
   </data>
   <data name="Dashboard_ViewIssues" xml:space="preserve">
     <value>Vizualizare Probleme</value>
@@ -396,7 +396,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Încărcare... {0}%</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Site-ul de supervizor este incorect. Verificați dacă adresa URL introdusă este corectă</value>
+    <value>Site-ul de controlor este incorect. Verificați dacă adresa URL introdusă este corectă</value>
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>Aceasta este prima autentificare pe această tabletă. Utilizatorul și domeniul nu sunt setate.&lt;br /&gt;Aveți nevoie de conexiune la internet pentru a continua</value>
@@ -405,7 +405,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Puteți încerca să vă autentificați online dacă ați uitat parola sau a fost resetată</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Problemă de autentificare pe server. Contactați supervizorul.</value>
+    <value>Problemă de autentificare pe server. Contactați controlorul.</value>
   </data>
   <data name="Login_WrongPassword" xml:space="preserve">
     <value>Parolă incorectă</value>
@@ -428,7 +428,7 @@ Descărcat {3}%</value>
   </data>
   <data name="Maps_NoMapsText" xml:space="preserve">
     <value>Sincronizați pentru a obține hărți
-sau contactați supervizorul
+sau contactați controlorul
 pentru instrucțiuni suplimentare</value>
   </data>
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
@@ -477,7 +477,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Versiune aplicație:</value>
   </data>
   <data name="Prefs_BufferSizeSummary" xml:space="preserve">
-    <value>Numărul de biți ale datelor primite/transmise de la/către supervizor</value>
+    <value>Numărul de biți ale datelor primite/transmise de la/către controlor</value>
   </data>
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Dimensiunea pachetului de comunicare</value>
@@ -489,7 +489,7 @@ pentru instrucțiuni suplimentare</value>
     <value>ID dispozitiv:</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
-    <value>Adresa URL a supervizorului</value>
+    <value>Adresa URL a controlorului</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
     <value>Câte sarcini de lucru pot fi citite într-o singură interogare</value>
@@ -573,7 +573,7 @@ pentru instrucțiuni suplimentare</value>
     <value>{0} din {1} chestionare noi descărcate</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} din {1} chestionare respinse și returnate de către supervizor</value>
+    <value>{0} din {1} chestionare respinse și returnate de către controlor</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} din {1} chestionare finalizare încarcate</value>
@@ -606,7 +606,7 @@ pentru instrucțiuni suplimentare</value>
     <value>{0} chestionare noi descărcate</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} chestionare respinse și returnate de către supervizor</value>
+    <value>{0} chestionare respinse și returnate de către controlor</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} chestionare finalizate și încărcate</value>
@@ -642,7 +642,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Contul dvs. a fost realocat pe o altă tabletă</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați supervizorul</value>
+    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați controlorul</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Creare copie de siguranță</value>

@@ -253,7 +253,7 @@
     <value>Filtre</value>
   </data>
   <data name="Forbidden_Title" xml:space="preserve">
-    <value>Nepermis</value>
+    <value>Interzis</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
     <value>Suportul ESRI Map este o caracteristică experimentală. Utilizați-l numai dacă aveți nevoie de funcționalitatea avansată ESRI GIS. Includerea acestei funcționalități va mări semnificativ dimensiunea aplicației și timpul de descărcare.</value>
@@ -313,7 +313,7 @@
     <value>longitudine</value>
   </data>
   <data name="HealthCheck_Header" xml:space="preserve">
-    <value>Health check monitor</value>
+    <value>Monitorizarea integrității</value>
   </data>
   <data name="HideFilter" xml:space="preserve">
     <value>Ascundeți filtrul</value>
@@ -322,22 +322,22 @@
     <value>Alocat către</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
-    <value>După</value>
+    <value>De către</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>Comentariu</value>
   </data>
   <data name="HistoryOfStatuses_Interview" xml:space="preserve">
-    <value>Interviu</value>
+    <value>Anchetă/Interviu</value>
   </data>
   <data name="HistoryOfStatuses_On" xml:space="preserve">
     <value>Modificat pe data de</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
-    <value>Istoricul statusurilor interviurilor</value>
+    <value>Istoricul stărilor interviurilor</value>
   </data>
   <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
     <value>Vizualizați interviul</value>
@@ -355,7 +355,7 @@
     <value>Starea stabilită de echipa de asistență Survey Solutions</value>
   </data>
   <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
-    <value>Repetarea ultimului status a fost nereușită.</value>
+    <value>Repetarea ultimului stare a fost nereușită.</value>
   </data>
   <data name="InterviewController_RevalidationFailed" xml:space="preserve">
     <value>Revalidarea nu a reușit.</value>
@@ -388,7 +388,7 @@
     <value>Ascundeți grupurile</value>
   </data>
   <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
-    <value>Nevalid</value>
+    <value>incorect</value>
   </data>
   <data name="InterviewDetails_MoreDetails" xml:space="preserve">
     <value>Detalii</value>
@@ -406,7 +406,7 @@
     <value>Afișați grupuri</value>
   </data>
   <data name="InterviewDetails_StatusLabel" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
     <value>a controlorului</value>
@@ -430,7 +430,7 @@
     <value>Contul anchetatorului a fost creat cu succes</value>
   </data>
   <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
-    <value>Nu s-a putut actualiza informațiile despre utilizator, deoarece utilizatorul curent nu există</value>
+    <value>Nu s-au putut actualiza informațiile despre utilizator, deoarece utilizatorul curent nu există</value>
   </data>
   <data name="InterviewerCreate_CreateIn" xml:space="preserve">
     <value>Creați contul anchetatorului în</value>
@@ -541,7 +541,7 @@
     <value>Numărul de serie al dispozitivului</value>
   </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
-    <value>Chestionare primite de anchetator</value>
+    <value>Chestionare primite de Anchetator</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
       <value>E-mail: {{email}}</value>
@@ -562,7 +562,7 @@
     <value>Anchetatori</value>
   </data>
   <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
-    <value>Ultimele date actualizate ale Survey Solutions</value>
+    <value>Ultima dată a actualiării Survey Solutions</value>
   </data>
   <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
     <value>La zi</value>
@@ -694,10 +694,10 @@
     <value>Niciodată conectat</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-      <value>Anchetatorul(i) {{interviewers}} va fi mutat într-o echipă a supraveghetorului {{supervisor}}.</value>
+      <value>Anchetatorul(i) {{interviewers}} va fi mutat într-o echipă a controlorului {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-      <value>Anchetatorul(i) {{interviewers}} se află în echipa supraveghetorului {{supervisor}} și nu se vor efectua acțiuni.</value>
+      <value>Anchetatorul(i) {{interviewers}} se află în echipa controlorului {{supervisor}} și nu se vor efectua acțiuni.</value>
   </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Versiunea aplicației</value>
@@ -706,7 +706,7 @@
     <value>Versiunea aplicației Interviewer raportată în timpul ultimei sincronizări a tabletei sale cu serverul</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-      <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa supraveghetorului {{supervisor}}.</value>
+      <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa controlorului {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
       <value>Selectați o echipă unde să mutați {{names}}</value>
@@ -766,7 +766,7 @@
     <value>Istoricul interviului</value>
   </data>
   <data name="Interviews_Selected" xml:space="preserve">
-    <value>interviu(ri) selectat(e)</value>
+    <value>Anchete selectate</value>
   </data>
   <data name="Layout_Filter" xml:space="preserve">
     <value>Filtru</value>
@@ -814,7 +814,7 @@
     <value>Sigur doriți să ștergeți harta?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="Map_Uploaded" xml:space="preserve">
     <value>Fișierul a fost încărcat. Prelucrare.</value>
@@ -877,7 +877,7 @@
     <value>Încărcați fișierul .tab cu mapări de fișiere</value>
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
-    <value>Numele și numele de utilizator nevalide vor fi ignorate.</value>
+    <value>Numele și numele de utilizator incorecte vor fi ignorate.</value>
   </data>
   <data name="MapList_DeleteMap" xml:space="preserve">
     <value>Ștergeți harta</value>
@@ -1027,10 +1027,10 @@
     <value>Afișați filtrul</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
-    <value>Durata statusului</value>
+    <value>Durata stareului</value>
   </data>
   <data name="StatusDurationDescription" xml:space="preserve">
     <value>Numărul de zile în care unitățile de anchetat și interviurile au rămas în starea lor actuală</value>
@@ -1091,19 +1091,19 @@
     <value>Anchetatori și Anchete</value>
   </data>
   <data name="Survey_Status_Title" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="Survey_StatusTitle" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>{0} interviuri</value>
+    <value>{0} anchete</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
     <value>Anchetator (echipă)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Anchete și Statusuri</value>
+    <value>Anchete și stări</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
     <value>Controlor (echipe)</value>
@@ -1136,7 +1136,7 @@
     <value>Membrii echipei</value>
   </data>
   <data name="SurveysStatuses_Title" xml:space="preserve">
-    <value>Anchete și Statusuri</value>
+    <value>Anchete și stări</value>
   </data>
   <data name="SurveysStatuses_Total" xml:space="preserve">
     <value>Total</value>
@@ -1145,7 +1145,7 @@
     <value>Membru al echipei</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Membrii echipei și Statusuri</value>
+    <value>Membrii echipei și stări</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Şablon</value>

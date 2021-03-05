@@ -142,7 +142,7 @@
     <value>&lt;font color='red'&gt;Actualizare necesară. Versiunea aplicației Interviewer - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[EMPTY DEVICE]&lt;/b&gt;</value>
+    <value>&lt;b&gt;[DISPOZITIV GOL]&lt;/b&gt;</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
     <value>Este necesar un fișier nou al aplicației extinse</value>

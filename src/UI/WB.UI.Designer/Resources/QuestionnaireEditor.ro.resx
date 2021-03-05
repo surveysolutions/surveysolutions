@@ -394,7 +394,7 @@
     <value>Titlu</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
-    <value>Bună ziua, {currentUserName}</value>
+    <value>Bună ziua, {{currentUserName}}</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Ajutor</value>
@@ -654,7 +654,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>vă rugăm să asteaptați ...</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Previzualizați versiunea nr. {{Revizie}}</value>
+    <value>Previzualizați versiunea nr. {{revision}}</value>
   </data>
   <data name="PublicAccessSettings" xml:space="preserve">
     <value>Acces public</value>
@@ -729,7 +729,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Setări chestionar</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{listersCount}}R)</value>
+    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Sunt permise numere întregi între 1 și 50</value>
@@ -1008,10 +1008,10 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>atașament fără nume</value>
   </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{{count}} Fișier atașat ({{octeți}} în total)</value>
+    <value>{{count}} Fișier atașat ({{bytes}} în total)</value>
   </data>
   <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{{count}} Fișiere atașate ({{octeți}} în total)</value>
+    <value>{{count}} Fișiere atașate ({{bytes}} în total)</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
     <value>Utilizează această filă pentru a încărca fișiere multimedia la care se poate face referire în chestionar.</value>

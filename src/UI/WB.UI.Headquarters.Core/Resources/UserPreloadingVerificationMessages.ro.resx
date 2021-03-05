@@ -178,7 +178,7 @@
     <value>Numărul de telefon '{0}' este în format incorect</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value>Rol nevalid</value>
+    <value>Rol incorect</value>
   </data>
   <data name="PLU0009Description" xml:space="preserve">
     <value>Rolul '{0}' nu este valid</value>
@@ -217,10 +217,10 @@
     <value>Nu trebuie să conțină mai mult de 15 caractere</value>
   </data>
   <data name="PLU0014" xml:space="preserve">
-    <value>Numele complet are caractere nevalide</value>
+    <value>Numele complet are caractere incorecte</value>
   </data>
   <data name="PLU0014Description" xml:space="preserve">
-    <value>Numele '{0}' are caractere nevalide</value>
+    <value>Numele '{0}' are caractere incorecte</value>
   </data>
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Sunt permise doar litere, puncte, spații și apostrof</value>

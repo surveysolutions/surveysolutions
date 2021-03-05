@@ -163,10 +163,10 @@
     <value>Câmpul Mărime trebuie să fie de -1 sau mai mult.</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{{count}} Interviu alocat va fi schimbat</value>
+    <value>{{count}} sarcină va fi schimbată</value>
   </data>
   <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
-    <value>{{count}} Interviuri alocate vor fi schimbate</value>
+    <value>{{count}} sarcini vor fi schimbate</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Chestionar</value>
@@ -181,7 +181,7 @@
     <value>Selectați responsabil</value>
   </data>
   <data name="ShowArchived" xml:space="preserve">
-    <value>Status arhivat</value>
+    <value>Starea arhivării</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Mărime </value>
@@ -367,7 +367,7 @@
     <value>Această sarcină va fi utilizată în modul Web</value>
   </data>
   <data name="CreatingNewAssignment" xml:space="preserve">
-    <value>Creați o nouă sarcină pentru chestionarul {{chestionar}}</value>
+    <value>Creați o nouă sarcină pentru chestionarul {{questionnaire}}</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Data</value>
@@ -448,7 +448,7 @@
     <value>Este necesară desemnarea unui responsabil</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
-    <value>Dimensiunea sarcinii {{id}} selectate va fi modificată din {{quantity}} în {{colectat}} (numărul de interviuri colectate în prezent)</value>
+    <value>Dimensiunea sarcinii {{id}} selectate va fi modificată din {{quantity}} în {{collected}} (numărul de interviuri colectate în prezent)</value>
   </data>
   <data name="SizeForWebMode" xml:space="preserve">
     <value>Sarcina cu dimensiunea 1 pentru modul web ar trebui să conțină e-mail sau parolă</value>
@@ -482,5 +482,8 @@
   </data>
   <data name="WebModeReassignToNonInterviewer_plural" xml:space="preserve">
     <value>Reatribuiți sarcini web unui utilizator care nu este ANCHETATOR. Dacă ați trimis deja linkurile pentru aceste sarcini, respondenții nu vor putea răspunde la sondajul dvs. până când sarcinile nu vor fi returnate unui utilizator în rolul ANCHETATOR.</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Comentariu: {{comment}}</value>
   </data>
 </root>

@@ -187,7 +187,7 @@
     <value>Longitudinea trebuie să fie cuprinsă între -180° și 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
-    <value>Separator de zecimale nevalid. Simbolul "," nu este permis. Utilizați simbolul ".".</value>
+    <value>Separator de zecimale incorect. Simbolul "," nu este permis. Utilizați simbolul ".".</value>
   </data>
   <data name="PL0035_QuantityNotParsed" xml:space="preserve">
     <value>Sunt permise doar valori întregi. </value>

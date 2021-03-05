@@ -157,7 +157,7 @@
     <value>{{ count }} elemente găsite:</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status: {{ name }}</value>
+    <value>stare: {{ name }}</value>
   </data>
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
     <value>Arată detaliile chestionarului</value>

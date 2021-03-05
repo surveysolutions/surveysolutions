@@ -148,7 +148,7 @@
     <value>NICIODATĂ ÎNCĂRCAT</value>
   </data>
   <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
-    <value>FĂRĂ INTERVIURI ALOCATE</value>
+    <value>NICIODATĂ RECEPȚIONAT</value>
   </data>
   <data name="COLUMN_OLD_VERSION" xml:space="preserve">
     <value>VERSIUNE VECHE</value>

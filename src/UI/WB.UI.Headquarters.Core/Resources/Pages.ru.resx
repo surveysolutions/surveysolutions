@@ -840,6 +840,10 @@
     <value>Роль</value>
     <comment>Роль</comment>
   </data>
+  <data name="AccountManage_ShowUsers" xml:space="preserve">
+    <value>Отобразить пользователей</value>
+    <comment>Отобразить пользователей</comment>
+  </data>  
   <data name="AccountManage_Login" xml:space="preserve">
     <value>Логин</value>
     <comment>Логин</comment>
@@ -1618,6 +1622,9 @@
   <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
     <value>Все роли</value>
   </data>
+  <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+    <value>Все пользователи</value>
+  </data>  
   <data name="UserManagement_SubtitleAdd" xml:space="preserve">
       <value>Выберите к каким рабочим пронстранствам нужно добавить выбранных пользователей</value>
   </data>
@@ -1635,5 +1642,8 @@
   </data>
   <data name="UserManagement_UsersSelected" xml:space="preserve">
     <value>Выбранных пользователей</value>
+  </data>
+  <data name="Interviewer_CreateText" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя с правами интервьюера&lt;br&gt; Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{{link}}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
   </data>
 </root>

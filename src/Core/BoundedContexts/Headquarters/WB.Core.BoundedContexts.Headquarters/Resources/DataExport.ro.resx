@@ -148,7 +148,7 @@
     <value>DDI</value>
   </data>
   <data name="DDIDescription" xml:space="preserve">
-    <value>Data Documentation Initiative XML data</value>
+    <value>Date XML pentru inițiativa EU "Data Initiative Documentation"</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Descărcare</value>
@@ -172,7 +172,7 @@
     <value>Domeniul de export</value>
   </data>
   <data name="FileSizeTitle" xml:space="preserve">
-    <value>Mărimea fișierului</value>
+    <value>Mărime fișierului</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Format</value>
@@ -217,7 +217,7 @@
     <value>OneDrive</value>
   </data>
   <data name="ParaData" xml:space="preserve">
-    <value>Informații privind desfășurarea anchetei</value>
+    <value>Paradate: Informații privind desfășurarea anchetei</value>
   </data>
   <data name="ParadataDescription" xml:space="preserve">
     <value>Metadate privind desfașurarea interviului (evenimente si durată)</value>
@@ -226,7 +226,7 @@
     <value>În desfășurare</value>
   </data>
   <data name="QueuedTitle" xml:space="preserve">
-    <value>În așteptare</value>
+    <value>Traducere</value>
   </data>
   <data name="SaveBinaryDataTo" xml:space="preserve">
     <value>Salvați datele de tip binar pe:</value>

@@ -217,10 +217,10 @@
     <value>Variabile definite în Designer ca fiind de identificare.</value>
   </data>
   <data name="DownloadInvalidAssignments" xml:space="preserve">
-    <value>Descarcă interviurile alocate nevalide</value>
+    <value>Descarcă interviurile alocate incorecte</value>
   </data>
   <data name="DownloadInvalidInterviews" xml:space="preserve">
-    <value>Descarcă interviurile nevalide</value>
+    <value>Descarcă interviurile incorecte</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
     <value>template .tab.</value>
@@ -343,7 +343,7 @@
     <value>Importarea eșantionului</value>
   </data>
   <data name="ImportStatus" xml:space="preserve">
-    <value>Statusul importării</value>
+    <value>stareul importării</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>Nu au fost create interviuri</value>
@@ -355,7 +355,7 @@
     <value>este în proces de verificare, verificat</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>este nevalid. Vă rugăm rezolvați erorile de mai jos și încărcați din nou.</value>
+    <value>este incorect. Vă rugăm rezolvați erorile de mai jos și încărcați din nou.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Data ultimei încărcări</value>
@@ -481,7 +481,7 @@
     <value>1 interviu eșuat</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stare</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Trebuie selectat controlorul sau anchetatorul</value>

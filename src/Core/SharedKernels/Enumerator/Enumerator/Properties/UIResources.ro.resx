@@ -294,7 +294,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Finalizat</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>După ce terminați interviul, acesta va avea statusul 'Finalizat' și va fi trimis către controlor la următoarea sincronizare</value>
+    <value>După ce terminați interviul, acesta va avea stareul 'Finalizat' și va fi trimis către controlor la următoarea sincronizare</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
     <value>Entitățile cu erori:</value>
@@ -312,7 +312,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Comentariu pentru controlor</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
-    <value>Statusul întrebării</value>
+    <value>stareul întrebării</value>
   </data>
   <data name="Interview_Complete_Screen_Description" xml:space="preserve">
     <value>Sunteți pe punctul de a finaliza acest interviu</value>
@@ -381,10 +381,10 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Comentariul anchetatorului</value>
   </data>
   <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>Opțiunile vor fi disponibile după ce răspundeți la întrebarea de referință</value>
+    <value>Variantele de răspuns vor fi disponibile după ce răspundeți la întrebarea de referință</value>
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
-    <value>{0} din {1} opțiuni selectate</value>
+    <value>{0} din {1} variante de răspuns selectate</value>
   </data>
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Secțiunea următoare</value>
@@ -423,10 +423,10 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Apăsați pentru a înregistra timpul curent</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Răspunsul '{0}' nu corespunde niciunei opțiuni</value>
+    <value>Răspunsul '{0}' nu este permis la această întrebare </value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Răspunsul '{0}' nu corespunde niciunei opțiuni</value>
+    <value>Răspunsul '{0}' nu este permis la această întrebare </value>
   </data>
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Valorile necompletate nu pot fi salvate</value>
@@ -507,7 +507,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Nu</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Parolă</value>
@@ -540,7 +540,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Tableta vibrează când un răspuns nu satisface condiția de validare</value>
   </data>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
-    <value>Vibrează când este dat un răspuns nevalid</value>
+    <value>Vibrează când este dat un răspuns incorect</value>
   </data>
   <data name="RealQuestion_Hint" xml:space="preserve">
     <value>Apăsați pentru a introduce zecimale</value>
@@ -561,7 +561,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Apăsați pentru a introduce text ({0})</value>
   </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Răspunsul este nevalid</value>
+    <value>Răspunsul este incorect</value>
   </data>
   <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
     <value>Răspunsul nu a fost salvat</value>

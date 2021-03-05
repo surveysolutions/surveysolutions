@@ -193,7 +193,7 @@
     <value>Parola trebuie să aibă cel puțin {2} caractere</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>Numele persoanei are caractere nevalide. Numai litere, punct, spațiu și apostrof sunt permise</value>
+    <value>Numele persoanei are caractere incorecte. Numai litere, punct, spațiu și apostrof sunt permise</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>Numele persoanei nu poate conține mai mult de {1} caractere</value>
@@ -205,7 +205,7 @@
     <value>Numărul de telefon nu poate conține mai mult de {1} caractere</value>
   </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Număr de telefon nevalid</value>
+    <value>Număr de telefon incorect</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
     <value>Număr de telefon</value>
