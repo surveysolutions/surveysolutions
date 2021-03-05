@@ -147,4 +147,10 @@
   <data name="SurveyFormatText" xml:space="preserve">
     <value>Sondaj: „% QUESTIONNAIRE%”</value>
   </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Survey Solutions Sondaj web</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Bună ziua și Bine ați venit la Survey Solutions Web Survey</value>
+  </data>
 </root>

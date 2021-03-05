@@ -147,4 +147,32 @@
   <data name="SendToSupervisor_Note" xml:space="preserve">
     <value>Notă: Această acțiune va dura mai mult decât de obicei, nu închideți acest dispozitiv</value>
   </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Reîncercați</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Unele interviuri sunt acum pe un alt dispozitiv</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Transferul nu a fost început.
+Dispozitivul controlorului nu poate fi localizat</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Transferul a fost întrerupt pe al doilea dispozitiv.</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Transferul este terminat. Toate interviurile finalizate sunt acum pe un alt dispozitiv</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Transferul este terminat. {0} interviu (e) nu s-a sincronizat</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Transfer în curs</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Transferul a fost întrerupt</value>
+  </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Actualizați</value>
+  </data>
 </root>

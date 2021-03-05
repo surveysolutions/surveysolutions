@@ -249,4 +249,25 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Nume utilizator</value>
   </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin o cifră („0” - „9”).</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin o literă minusculă („a” - „z”).</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin un caracter non-alfanumeric.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+    <value>Parolele trebuie să utilizeze cel puțin {0} caractere diferite.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin o literă majusculă („A” - „Z”).</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>Parolele trebuie să aibă cel puțin {0} caractere.</value>
+  </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>CODUL DE VERIFICARE</value>
+  </data>
 </root>

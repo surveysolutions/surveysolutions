@@ -620,4 +620,136 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
     <value>A apărut o eroare la încărcare. Fișierul de tip shapefile nu poate fi deschis</value>
   </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Lungime: {0:0.00} m</value>
+  </data>
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Încărcați fișierul shapefile</value>
+  </data>
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Locatia nu poate fi stabilita. Pentru a depana, incercati urmatoarele: asigurati-va ca sunteti in aer liber, verificati daca GPS-ul este activat sau modificati setarea de expirare a timpului de cautare a GPS-ului</value>
+  </data>
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Harta încărcată se află în afara limitelor vizibile</value>
+  </data>
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>Perimetru: {0:0.00} m</value>
+  </data>
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>Puncte: {0}</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>Ale mele</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>Distribuite către mine</value>
+  </data>
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>Nu există permisiunea acordată aplicației de auto-actualizare. Activați opțiunea „Permiteți din această sursă” în meniul de setări „Informații despre aplicație”.</value>
+  </data>
+  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>Despre răspunsul anterior</value>
+  </data>
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>Rezolvă</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+    <value>Nu sunt comentarii de la Controlor</value>
+  </data>
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>S-a selectat numărul maxim de variante ({0}) în această întrebare</value>
+  </data>
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>Ascundeți-le pe cele rezolvate</value>
+  </data>
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>Arătați-le pe cele rezolvate</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>Sutneți sigur că dorți să ștergeți listele legate ?</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Sutneți sigur că dorți să ștergeți lista legată '{0}'?</value>
+  </data>
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Arată PDF-ul</value>
+  </data>
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>Lăsați un comentarui pentru responsabilul următor</value>
+  </data>
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>Toate chestionarele</value>
+  </data>
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>Sarcini</value>
+  </data>
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>sunt afișate numai elementele cu coordonate cunoscute</value>
+  </data>
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>Interviuri</value>
+  </data>
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Chestionar</value>
+  </data>
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Meniul de control</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a folosi microfonul pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul microfonului. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească microfonul.</value>
+  </data>
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a folosi spațiul de stocare pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul la spațiul de stocare. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească spațiul de stocare.</value>
+  </data>
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} notificări</value>
+  </data>
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Renunță</value>
+  </data>
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Înapoi la meniul de control</value>
+  </data>
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Acest dispozitiv nu este acceptat.</value>
+  </data>
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Serviciile Google Play trebuie să fie instalate.</value>
+  </data>
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Viteză: {0}, Timp rămas: {1}</value>
+  </data>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Reîncercați</value>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Sincronizarea sarcinilor și interviurilor</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>Descărcați actualizări pentru aplicația Anchetator</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>Dacă anchetatorii nu au acces la Internet, această funcționalitate ar trebui activată, deoarece face posibilă actualizarea aplicațiilor lor în timpul sincronizării offline cu aplicația Controlor</value>
+  </data>
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>A fost găsit dispozitivul pentru anchetator ({0})</value>
+  </data>
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>Acest interviu conține mai multe date decât permite sistemul. Dacă este posibil, ștergeți rândurile inutile din liste și / sau întrebările fără răspuns.</value>
+  </data>
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>Lista curentă nu mai există. Mergeți la următoarea secțiune sau listă disponibilă folosind meniul de navigare.</value>
+  </data>
 </root>

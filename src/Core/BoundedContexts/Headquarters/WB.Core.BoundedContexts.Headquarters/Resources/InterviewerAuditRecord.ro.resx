@@ -204,4 +204,16 @@
   <data name="FinishInstallation" xml:space="preserve">
     <value>Instalarea s-a încheiat</value>
   </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Interviul {0} a fost respins</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>{0} interviu(ri) actualizate de către RINS</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} interviu(ri) încărcate parțial</value>
+  </data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>{0} interviu(ri) au fost redeschise după ce au primit comentarii</value>
+  </data>
 </root>

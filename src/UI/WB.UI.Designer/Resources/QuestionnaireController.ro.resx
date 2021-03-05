@@ -147,4 +147,175 @@
   <data name="ChooseLanguage" xml:space="preserve">
     <value>Alegeți traducerea</value>
   </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Vă rugăm să alegeți traducerea</value>
+  </data>
+  <data name="Classifications" xml:space="preserve">
+    <value>Clasificări</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Închide</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>confirmare</value>
+  </data>
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Panou de control</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="CopyQuestionnaire" xml:space="preserve">
+    <value>Copiați chestionarul</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crea</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Creat de</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Creat in</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Creaza nou</value>
+  </data>
+  <data name="CreateNewQuestionnaire" xml:space="preserve">
+    <value>Creați un chestionar nou</value>
+  </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Creați un subdirector</value>
+  </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Crearea html pentru „{0}”</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="DeleteConfirmationText" xml:space="preserve">
+    <value>Doriți cu adevărat să ștergeți chestionarul „{0}”?</value>
+  </data>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>Sigur doriți să ștergeți dosarul {0}?</value>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Se șterge</value>
+  </data>
+  <data name="Designer" xml:space="preserve">
+    <value>Designer</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Descărcați PDF</value>
+  </data>
+  <data name="EmptyList" xml:space="preserve">
+    <value>Această listă nu conține nicio înregistrare</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>A apărut o eroare în timpul procesării cererii dumneavoastră</value>
+  </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Exportați ca HTML</value>
+  </data>
+  <data name="ExportAsPDF" xml:space="preserve">
+    <value>Exportați ca PDF</value>
+  </data>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>Puteți configura structura directoarelor pentru pagina chestionarelor publice. Pentru aceasta, faceți clic pe directorul cu butonul din dreapta și apoi utilizați una dintre operații:
+&lt;/br&gt; - "Creați subdirector" utilizați pentru crearea subfolderului
+&lt;/br&gt; - "Redenumiți" pentru a redenumi numele folderului
+&lt;/br&gt; - "Șterge" pentru a șterge folderul cu subfoldere</value>
+  </data>
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>Gestiune directoare</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Nu aveți permisiunea de a edita acest chestionar</value>
+  </data>
+  <data name="ForbiddenDelete" xml:space="preserve">
+    <value>Nu aveți permisiunea de a șterge acest chestionar.</value>
+  </data>
+  <data name="ForbiddenRevert" xml:space="preserve">
+    <value>Nu aveți permisiunea de a restabili operațiunea pentru acest chestionar.</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generați pdf</value>
+  </data>
+  <data name="GeneratingPdf" xml:space="preserve">
+    <value>Se generează pdf pentru „{0}”</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Exportați HTML</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Bună ziua, {0}</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Inițializare</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Modificat la data de</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Locație:</value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>Gestionare utilizatori</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>Chestionarele mele</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>Director nou</value>
+  </data>
+  <data name="NotSupportedBrowserUsed" xml:space="preserve">
+    <value>Browserul de Internet nu este acceptat. Vă rugăm să utilizați un alt browser.</value>
+  </data>
+  <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+    <value>Utilizați browserul Internet Explorer care nu este acceptat. Este posibil ca unele funcții să nu funcționeze corect.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+  <data name="PublicQuestionnaires" xml:space="preserve">
+    <value>Chestionare publice</value>
+  </data>
+  <data name="QuestionnaireTitle" xml:space="preserve">
+    <value>Titlul chestionarului</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Directoare</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Redenumiți</value>
+  </data>
+  <data name="RestoreQuestionnaire" xml:space="preserve">
+    <value>Restabiliți chestionarul</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Reîncercați exportul în format PDF</value>
+  </data>
+  <data name="SelectTabFile" xml:space="preserve">
+    <value>Alegeți fișierul cu valori separate de tabele pentru încărcare, vă rog</value>
+  </data>
+  <data name="SharedQuestionnaires" xml:space="preserve">
+    <value>Chestionare distribuite mie</value>
+  </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>Chestionarul „{0}” a fost șters</value>
+  </data>
+  <data name="TabFilesOnly" xml:space="preserve">
+    <value>Sunt acceptate doar fișierele cu valori separate prin TAB</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titlu</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Fără titlu</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>dumneata</value>
+  </data>
 </root>

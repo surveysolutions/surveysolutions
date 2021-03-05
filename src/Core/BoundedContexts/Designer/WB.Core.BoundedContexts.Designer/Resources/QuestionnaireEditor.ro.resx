@@ -147,4 +147,28 @@
   <data name="QuestionTypeDate" xml:space="preserve">
     <value>Dată</value>
   </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>Geografie</value>
+  </data>
+  <data name="QuestionTypeGPS" xml:space="preserve">
+    <value>GPS</value>
+  </data>
+  <data name="QuestionTypeList" xml:space="preserve">
+    <value>Listă</value>
+  </data>
+  <data name="QuestionTypeMultiSelect" xml:space="preserve">
+    <value>Categorie: selectie multipla (raspuns unic)</value>
+  </data>
+  <data name="QuestionTypeNumeric" xml:space="preserve">
+    <value>Numeric:</value>
+  </data>
+  <data name="QuestionTypePicture" xml:space="preserve">
+    <value>Imagine</value>
+  </data>
+  <data name="QuestionTypeSingleSelect" xml:space="preserve">
+    <value>Categorie: selectie unica (raspuns multiplu)</value>
+  </data>
+  <data name="QuestionTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
 </root>

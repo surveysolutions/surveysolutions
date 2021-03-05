@@ -226,4 +226,28 @@
   <data name="AssignReceivedWarning" xml:space="preserve">
     <value>Anchetatorii responsabili la momentul actual nu vor fi informați cu privire la realocarea chestionarului până la următoarea sincronizare. Dacă au început deja să lucreze la interviu, toate datele pe care le-au introdus înainte de următoarea sincronizare vor fi ȘTERSE!</value>
   </data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Alegeți întrebarea de identificare pe care o veți folosi în filtru</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtrare prin întrebări</value>
+  </data>
+  <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Nu s-a răspuns</value>
+  </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Filtrarea prin întrebări este disponibilă numai când a fost selecată o anumită versiune a chestionarului</value>
+  </data>
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Selectarea întrebărilor</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Respingeți și alegeți un nou responsabil</value>
+  </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Respingeți către responsabilul inițial</value>
+  </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Număr de întrebări fără răspuns. Include întrebări despre supervizor, identificare și anchetator. Poate conține valori nule pentru interviurile care au fost finalizate înainte de lansarea 20.09.</value>
+  </data>
 </root>

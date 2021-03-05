@@ -147,4 +147,73 @@
   <data name="InterviewStatisticsCommented" xml:space="preserve">
     <value>{0} întrebări cu comentarii</value>
   </data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve">
+    <value>{0} erori</value>
+  </data>
+  <data name="InterviewStatisticsSections" xml:space="preserve">
+    <value>{0} secțiuni</value>
+  </data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
+    <value>{0} nu a răspuns la întrebări</value>
+  </data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve">
+    <value>{0} avertismente</value>
+  </data>
+  <data name="InterviewTranscript" xml:space="preserve">
+    <value>Transcrierea interviului</value>
+  </data>
+  <data name="InterviewVolume" xml:space="preserve">
+    <value>Volumul interviului</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Fara raspuns</value>
+  </data>
+  <data name="PageOf" xml:space="preserve">
+    <value>  de</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Chestionar</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Interviul a început</value>
+  </data>
+  <data name="SurveySolutions" xml:space="preserve">
+    <value>Survey Solutions</value>
+  </data>
+  <data name="TableOfContent" xml:space="preserve">
+    <value>Cuprins</value>
+  </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>ApiUser</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>RINS</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Anchetator</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Responsabil DTS</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Controlor</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>versiunea {0}</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avertizare</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="YesNo" xml:space="preserve">
+    <value>Da / Nu</value>
+  </data>
 </root>

@@ -410,4 +410,79 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="Yes" xml:space="preserve">
     <value>Da</value>
   </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>La răspunsul anterior</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>Link de reluare prin e-mail</value>
+  </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>Introduceți adresa de e-mail</value>
+  </data>
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} este o adresă de e-mail incorectă</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>Vă vom trimite un mesaj cu linkul pentru a relua interviul dacă trebuie să continuați mai târziu.</value>
+  </data>
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>Introduceți adresa de email</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>Puteți anula acum și continua cu interviul. Și îl puteți trimite mai târziu făcând clic pe elementul „Trimiteți prin e-mail linkul de reluare” din meniul de sus.</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>introducere parolă</value>
+  </data>
+  <data name="HideResolved" xml:space="preserve">
+    <value>Ascundeți cele rezolvate</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Informație adițională pentru întrebare</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Sigur doriți să eliminați și lista asociată: „{{rosterTitle}}”?</value>
+  </data>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>S-a făcut numărul maxim de selecții ({{valoare}}) în această întrebare</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>Redarea multimedia nu este acceptată de browserul dvs. Dar puteți descărca multimedia, în schimb.</value>
+  </data>
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>Mu aveți acces la chestionar</value>
+  </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>Alegeți de pe hartă</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Rezolvă</value>
+  </data>
+  <data name="ResolveHint" xml:space="preserve">
+    <value>Comentariile rezolvate sunt ascunse în mod implicit, dar pot fi revizuite de toți participanții la interviu</value>
+  </data>
+  <data name="SaveScenario" xml:space="preserve">
+    <value>Salvare scenariu</value>
+  </data>
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Sesiunea aplicației Designer a expirat. Conectați-vă la aplicația Designer pentru a putea salva.</value>
+  </data>
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Deschide aplicația Designer</value>
+  </data>
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>Selectați scenariul de înlocuit</value>
+  </data>
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>Înlocuiți existent</value>
+  </data>
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>Salvați nou</value>
+  </data>
+  <data name="ShowResolved" xml:space="preserve">
+    <value>Arată rezolvatele</value>
+  </data>
 </root>

@@ -141,4 +141,118 @@
   <data name="CompletePage" xml:space="preserve">
     <value>Complet</value>
   </data>
+  <data name="CustomizeDisplayedText" xml:space="preserve">
+    <value>Personalizați textul afișat pentru respondenți</value>
+  </data>
+  <data name="CustomizeEmailsText" xml:space="preserve">
+    <value>Personalizați textul e-mailurilor</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descriere:</value>
+  </data>
+  <data name="DescriptionForPassword" xml:space="preserve">
+    <value>Descriere parolă:</value>
+  </data>
+  <data name="DoNotSend" xml:space="preserve">
+    <value>Nu trimite</value>
+  </data>
+  <data name="EmailMessage" xml:space="preserve">
+    <value>Mesaj:</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Subiect:</value>
+  </data>
+  <data name="EmailTemplateDescription" xml:space="preserve">
+    <value>Puteți utiliza șirul de caractere %SURVEYNAME% în locul numelui sondajului</value>
+  </data>
+  <data name="ExampleFinishPage" xml:space="preserve">
+    <value>Exemplu de pagină de finalizare</value>
+  </data>
+  <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+    <value>Exemplu de mesaj de e-mail de invitație</value>
+  </data>
+  <data name="ExampleRejectEmailMessage" xml:space="preserve">
+    <value>Exemplu de mesaj respingere e-mail</value>
+  </data>
+  <data name="ExampleReminderEmailMessage" xml:space="preserve">
+    <value>Exemplu de mesaj de e-mail pentru memento</value>
+  </data>
+  <data name="ExampleResumePage" xml:space="preserve">
+    <value>Exemplu de pagină Reluare</value>
+  </data>
+  <data name="ExampleWelcomePage" xml:space="preserve">
+    <value>Exemplu de pagină de bun venit</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Câmpul este obligatoriu.</value>
+  </data>
+  <data name="FinishPage" xml:space="preserve">
+    <value>Finalizați pagina</value>
+  </data>
+  <data name="Invitation" xml:space="preserve">
+    <value>Invitație</value>
+  </data>
+  <data name="InvitationEmailMessage" xml:space="preserve">
+    <value>Invitație</value>
+  </data>
+  <data name="MainText" xml:space="preserve">
+    <value>Textul principal:</value>
+  </data>
+  <data name="NoteToSupervisor" xml:space="preserve">
+    <value>Notă pentru supraveghetor</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="RejectEmailMessage" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="Reminder" xml:space="preserve">
+    <value>Aducere aminte</value>
+  </data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+    <value>Niciun raspuns</value>
+  </data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+    <value>Răspuns parțial</value>
+  </data>
+  <data name="ReminderSetting" xml:space="preserve">
+    <value>Setare memento</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Reluare</value>
+  </data>
+  <data name="ResumeEmailMessage" xml:space="preserve">
+    <value>Reluare</value>
+  </data>
+  <data name="ResumePage" xml:space="preserve">
+    <value>Reluați pagina</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="SendWithNoResponse" xml:space="preserve">
+    <value>Aduceți aminte persoanelor care nu au răspuns</value>
+  </data>
+  <data name="SendWithPartialResponse" xml:space="preserve">
+    <value>Aduceți aminte persoanelor care au dat un răspuns parțial</value>
+  </data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve">
+    <value>Afișat numai dacă este necesară și setată parola</value>
+  </data>
+  <data name="StartInterviewButton" xml:space="preserve">
+    <value>Butonul de începere a interviului</value>
+  </data>
+  <data name="StartNew" xml:space="preserve">
+    <value>Începeți un nou interviu</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titlu:</value>
+  </data>
+  <data name="WebInterviewSetupFor_Title" xml:space="preserve">
+    <value>Configurare interviu web pentru</value>
+  </data>
+  <data name="WelcomePage" xml:space="preserve">
+    <value>Pagina de bun venit</value>
+  </data>
 </root>

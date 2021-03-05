@@ -12,7 +12,404 @@
     
     Example:
     
+    ... ado.net/XML headers & schema ...<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
     ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApprovedByHQ" xml:space="preserve">
+    <value>Утверждено хедквотером</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено супервизором</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Дата завершения</value>
+  </data>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Накопительный График Интервью</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Накопительный График Интервью отображает изменение количества интервью по каждому статусу с течением времени</value>
+  </data>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Период</value>
+  </data>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>График интервью</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Интервьюеры</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Интервьюер назначен</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Отклонено хедквотером</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Отклонено супервизором</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Супервизор назначен</value>
+  </data>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Супервизоры и обследования</value>
+  </data>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Название обследования</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Обследования и статусы</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Команды и статусы</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают количество интервью в каждом статусе по интервьюеру</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают количество интервью в каждом статусе по командам</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Переменные</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="TemplateVersion" xml:space="preserve">
+    <value>Версия опросника</value>
+  </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Перезапущено</value>
+  </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Отчет по обследованиям и статусам интервью</value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Отчет по командам и статусам интервью</value>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Отчет по кол-ву выполненой работы интервьюеров</value>
+  </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Отчет по кол-ву дней в статусе интервью</value>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Отчет по устройствам интервьюеров</value>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Отчет по супервизорам и статусам интервью</value>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Отчет по скорости супервизоров</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Отчет по скорости интервьюеров при переводе из одного статуса интевью в другое</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Отчет по скорости супервизоров перевода из одного статуса интервью в другое</value>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Отчет по скорости работы интервьюеров</value>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Отчет по кол-ву выполненой работы супервизоров</value>
+  </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Средняя продолжительность интервью</value>
+  </data>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>Количество завершенных интервью</value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Длительность статусов</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Члены команды и статусы</value>
+  </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Средняя продолжительность назначений</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Среднее время обработки хедквотером</value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Среднее время обработки</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Среднее время обработки супервизором</value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Количество интервью утвержденных хедквотером</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Количество интервью обработанных хедквотером</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Количество интервью обработанных супервизором</value>
+  </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Шаблон импорта пользователей</value>
+    <comment>Шаблон импорта пользователей</comment>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Обновлено</value>
+    <comment>Обновлено</comment>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Количество дней интервью в Статусе</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Обновление в процессе</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Обновлено {0}</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Обновить сейчас</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Сводная таблица</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Вопрос</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>Опции просмотра</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Сумма</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Минимум</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Максимум</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Выберите уточняющий вопрос</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Выберите вопрос</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Уточняющий вопрос</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>По командам</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>По членам команд</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Среднее</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Текст вопроса</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Отфильтровать по числовому значению</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Тег вопроса</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Перцентиль 95%</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Перцентиль 50%</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Перцентиль 5%</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Медиана</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Супервизор</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Показать тепловую карту</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Радиус</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Данные карты загружаются</value>
+  </data>
+  <data name="ClusterInfo" xml:space="preserve">
+    <value>Эта область содержит</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Я понимаю что интервью уже получено планшетом</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Текущий интервьюер не будут уведомлен о смене ответственного. Данные, которые он начал собирать, будут удалены.</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Имеются проблемы совместимости между разными версиями опросника. Некоторые ответы в прошлых версиях опросника больше не присутствуют в последней версии опросника. Такие ответы были проигнорированы.</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Назад к опросникам</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Сохранить как картинку</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Эта неделя</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Последняя неделя</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Этот месяц</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Последний месяц</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Предыдущая неделя</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Предыдуший месяц</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Последние {{days}} дней</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Предустановленные периоды даты</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Периоды дат относительно данных</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Все данные</value>
+  </data>
+</root>
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
     <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>

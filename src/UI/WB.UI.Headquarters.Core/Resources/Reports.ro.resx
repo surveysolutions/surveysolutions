@@ -327,4 +327,61 @@
   <data name="AllData" xml:space="preserve">
     <value>Toate datele</value>
   </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Diagrama Cumulativă a Anchetelor arată evoluția numărului de anchete ăn diferitele lor stări pe parcurul timpului</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Afișază harta "heatmap"</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Raza "heatmap"</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Luna trecută</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Ultimele {{days}} zile</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Săptămâna trecută</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Se încarcă datele hărții</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Luna trecută</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Saptamana trecuta</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Există probleme de compatibilitate între versiunile chestionarului. Răspunsurile din versiunile anterioare ale chestionarului care nu mai există în ultima versiune a chestionarului au fost ignorate.</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Intervalele rapide de date</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Raza relativă la date</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Salvează ca imagine</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Controlor</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Raportul Echipe și stări arată numărul de anchete în fiecare stare defalcate pe echipe</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Raportul Echipe și stări arată numărul de anchete în fiecare stare defalcate pe anchetator</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Luna aceasta</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Săptămâna aceasta</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Înapi la chestionare</value>
+  </data>
 </root>

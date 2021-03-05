@@ -147,4 +147,46 @@
   <data name="HouseholdSurvey" xml:space="preserve">
     <value>Ancheta în gospodării</value>
   </data>
+  <data name="InformalSectorSurvey" xml:space="preserve">
+    <value>Ancheta sectorului informal</value>
+  </data>
+  <data name="IntegratedSurvey" xml:space="preserve">
+    <value>Ancheta integrată</value>
+  </data>
+  <data name="LaborForceSurvey" xml:space="preserve">
+    <value>Ancheta forței de muncă</value>
+  </data>
+  <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
+    <value>Ancheta măsurării nivelului de trai</value>
+  </data>
+  <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
+    <value>Ancheta pe grupuri de indicatori multipli (MICS)</value>
+  </data>
+  <data name="PopulationAndHousingCensus" xml:space="preserve">
+    <value>Recensământul populației și al locuințelor</value>
+  </data>
+  <data name="PriceSurvey" xml:space="preserve">
+    <value>Ancheta de prețuri</value>
+  </data>
+  <data name="PrioritySurvey" xml:space="preserve">
+    <value>Anchetă prioritară</value>
+  </data>
+  <data name="SampleFrame" xml:space="preserve">
+    <value>Baza de sondaj</value>
+  </data>
+  <data name="ServiceProvisionAssessments" xml:space="preserve">
+    <value>Evaluări privind furnizarea de servicii</value>
+  </data>
+  <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
+    <value>Anchetă socio-economică</value>
+  </data>
+  <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
+    <value>Program de monitorizare și informații statistice</value>
+  </data>
+  <data name="WorldFertilitySurvey" xml:space="preserve">
+    <value>Ancheta mondială de fertilitate</value>
+  </data>
+  <data name="WorldHealthSurvey" xml:space="preserve">
+    <value>Ancheta mondială de sănătate</value>
+  </data>
 </root>

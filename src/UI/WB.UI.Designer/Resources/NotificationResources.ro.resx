@@ -149,4 +149,31 @@ Pentru a finaliza procesul de înregistrare, faceți clic pe acest link: "</valu
   <data name="ResetPasswordEmail" xml:space="preserve">
     <value>Bună ziua {0}, &lt;/br&gt; &lt;/br&gt; Pentru a finaliza procesul de resetare a parolei, faceți clic pe acest link:</value>
   </data>
+  <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>Incheiați procedura de înregistrare</value>
+  </data>
+  <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>Notificare de distribuire a chestionarului dvs.</value>
+  </data>
+  <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Notificare de încheiere a distribuirii chestionarului dvs.</value>
+  </data>
+  <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>Notificare de distribuire a chestionarului.</value>
+  </data>
+  <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Notificare de încheiere a distribuirii chestionarului.</value>
+  </data>
+  <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>Încheiați procedura de resetare a parolei</value>
+  </data>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>Bună ziua {0}, &lt;br&gt; {1} v-a invitat la {2} următorul chestionar:</value>
+  </data>
+  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>Bună ziua {0}, &lt;br&gt; {1} a încetat să vă trimită chestionarul: {2}</value>
+  </data>
+  <data name="TranfserOwnershipNotification" xml:space="preserve">
+    <value>Bună ziua {0}, &lt;br&gt; {1} v-a transferat calitatea de proprietar al chestionarului {2}</value>
+  </data>
 </root>

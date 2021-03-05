@@ -310,4 +310,31 @@
   <data name="AllVersions" xml:space="preserve">
     <value>Toate versiunile</value>
   </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Furnizori de servicii email</value>
+  </data>
+  <data name="Equals" xml:space="preserve">
+    <value>Egal</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Nu este egal</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Deschide o sarcină</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Versiunea chestionarului</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Restabilire</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Selectează o opțiune</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Începe cu</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Necunoscut</value>
+  </data>
 </root>

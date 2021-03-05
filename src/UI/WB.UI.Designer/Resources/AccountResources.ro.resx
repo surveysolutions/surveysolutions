@@ -147,4 +147,151 @@
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirmă parola</value>
   </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Parola actuală</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Editează profilul</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>Conectarea externă a fost eliminată.</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Ați uitat parola?</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+    <value>forum</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Numele complet</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ajutor</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Adresa de e-mail furnizată nu este validă. Vă rugăm să verificați adresa și să încercați din nou.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Parola furnizată nu este corectă. Vă rugăm să introduceți o parolă corectă.</value>
+  </data>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>Link-ul dvs. de resetare a parolei este incorect sau expirat. Vă rugăm să încercați din nou</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>Răspunsul de recuperare a parolei nu este corect. Vă rugăm să verificați și să încercați din nou.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>Întrebarea de recuperare a parolei nu este corectă. Vă rugăm să verificați și să încercați din nou.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>Numele de utilizator nu este corect. Vă rugăm să verificați și să încercați din nou.</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Blocat</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Contul dvs. este blocat. Contactați administratorul pentru a vă debloca contul</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Autentificare</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Vă rugăm să vă conectați sau</value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Autentificare</value>
+  </data>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Autentificare sau e-mail</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Deconectează-te</value>
+  </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>V-ați deconectat cu succes de la aplicație.</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Gestionați contul</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>Furnizorul de autentificare a returnat o eroare. Vă rugăm să verificați ce ați introdus și să încercați din nou. Dacă problema persistă, vă rugăm să contactați administratorul de sistem.</value>
+  </data>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>Folosiți un browser de interent învechit</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Parola dvs. a fost schimbată.</value>
+  </data>
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Vă rugăm să verificați adresa de e-mail pentru a vă reseta parola.</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Resetare parola</value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Introduceți datele de conectare sau e-mailul și vă vom trimite un link pentru resetarea parolei</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Parola dvs. a fost setată.</value>
+  </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>Parolă nouă (min 10 simboluri, cifre ȘI litere)</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Inregistrează-te</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Eroare de înregistrare</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>A apărut o eroare la confirmarea e-mailului. Vă rugăm să încercați din nou.</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Repetă parola</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restaurare</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Arata parola</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Rămâneți conectat pentru o zi</value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Instalați Survey Solutions Questionnaire Tester pe o tabletă Android pentru a testa chestionarele pe care le dezvoltați pe Designer.</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Descarcă-l pe Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Mulțumesc</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>A apărut o eroare necunoscută. Vă rugăm să verificați ce ați introdus și să încercați din nou. Dacă problema persistă, vă rugăm să contactați administratorul de sistem.</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Vă rugăm să &lt;a href="http://browsehappy.com/"&gt; actualizați browserul &lt;/a&gt; pentru a utiliza aplicația de designer.</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>Solicitarea de creare a utilizatorului a fost anulată. Vă rugăm să verificați intrarea și să încercați din nou. Dacă problema persistă, vă rugăm să contactați administratorul de sistem.</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>Nume de utilizator deja existent. Vă rugăm să introduceți un alt nume de utilizator.</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>Există deja un nume de utilizator pentru acea adresă de e-mail. Vă rugăm să introduceți o altă adresă de e-mail.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bine ați venit la Survey Solutions</value>
+  </data>
 </root>

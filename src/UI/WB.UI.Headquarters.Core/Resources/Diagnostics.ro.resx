@@ -144,4 +144,37 @@
   <data name="export_service_check_Healthy" xml:space="preserve">
     <value>Serviciul de export la {0} a răspuns cu versiunea: v{1}</value>
   </data>
+  <data name="export_service_connectivity_check" xml:space="preserve">
+    <value>Verificare conectivitate la serviciul de export</value>
+  </data>
+  <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
+    <value>Nu există conexiune la serviciul de export la {0}</value>
+  </data>
+  <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
+    <value>Serviciul de export la {0} a răspuns cu starea {1}</value>
+  </data>
+  <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
+    <value>Serviciul de export la {0} a răspuns cu starea {1}</value>
+  </data>
+  <data name="HealthCheckStatus" xml:space="preserve">
+    <value>Starea de sănătate: {{ status }}</value>
+  </data>
+  <data name="hq_baseurl_check" xml:space="preserve">
+    <value>Verificare configurare BaseUrl</value>
+  </data>
+  <data name="hq_baseurl_check_Degraded" xml:space="preserve">
+    <value>Sediul central configurat cu Sediul RINS:BaseUrl: {0} este diferit de adresa URL actuală din bara de adrese a browserului. Acest lucru poate cauza probleme cu legăturile de e-mail și funcționalitatea Serviciului de export</value>
+  </data>
+  <data name="hq_baseurl_check_Healthy" xml:space="preserve">
+    <value>Sediul central configurat cu Sediul RINS:BaseUrl: {0} este același cu adresa URL actuală din bara de adrese a browserului.</value>
+  </data>
+  <data name="ServerMetrics" xml:space="preserve">
+    <value>Valori de server</value>
+  </data>
+  <data name="UnexpectedBrokenPackages" xml:space="preserve">
+    <value>Au fost detectate {0} pachete cu erori neașteptate</value>
+  </data>
+  <data name="WaitForHealthcheck" xml:space="preserve">
+    <value>Se așteaptă rezultatele verificărilor de integritate</value>
+  </data>
 </root>

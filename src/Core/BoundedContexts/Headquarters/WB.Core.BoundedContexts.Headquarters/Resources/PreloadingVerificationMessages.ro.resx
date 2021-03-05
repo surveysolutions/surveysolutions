@@ -222,4 +222,37 @@
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
     <value>Cod necorespunzător pentru lista numerică. Secvența codurilor trebuie să fie 0, 1, ... pentru a număra înregistrările din listă</value>
   </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>Utilizatorul nu are roluri de RINS, Controlor sau Anchetator pentru 1 sau mai multe observații</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>Cantitatea maximă nu trebuie să depășească {0}.</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>E-mailul nu este valid</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Parolă incorectă. Cel puțin 6 cifre și litere mari sau un singur simbol „?” pentru a genera parola</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Pentru sarcini cu e-mail furnizat cantitatea permisă este 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Modul Web trebuie să fie activat pentru sarcinile care au e-mail</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Modul Web trebuie să fie activat pentru sarcinile care au parolă</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Sarcina cu dimensiunea 1 pentru modul web ar trebui să conțină fie e-mail, fie parolă</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Parola nu este unică. Parola petru sarcina pentru modul web cu cantitatea 1 ar trebui să fie unică</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Toate sarcinile pentru interviurile web trebuie să fie transmise unui anchetator</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Răspunsul la întrebarea cu numele variabilei {0} nu poate fi preîncărcat, deoarece este de tip neacceptat. Pentru detalii despre ceea ce poate fi preîncărcat în versiunea curentă consultați următorul articol de asistență https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type.</value>
+  </data>
 </root>

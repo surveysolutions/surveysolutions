@@ -246,4 +246,16 @@
   <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
     <value>Verificați anchetele vechi: &lt;pre&gt; {0} &lt;/ pre&gt;</value>
   </data>
+  <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Se descarcă lista reutilizabilă {0}</value>
+  </data>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Descărcați modificările nachetei de la RINS: {0}</value>
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>A fost solicitat un nouă aplicație pentru Controlor</value>
+  </data>
+  <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>A fost solicitată o aducere la zi a versiunii {0} a aplicației pentru Controlor</value>
+  </data>
 </root>

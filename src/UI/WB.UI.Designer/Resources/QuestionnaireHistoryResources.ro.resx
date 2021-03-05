@@ -147,4 +147,211 @@
   <data name="Edit" xml:space="preserve">
     <value>Editați</value>
   </data>
+  <data name="ExtractAtRevision" xml:space="preserve">
+    <value>Extrageți revizuirea</value>
+  </data>
+  <data name="LeaveComment" xml:space="preserve">
+    <value>Lasă un comentariu</value>
+  </data>
+  <data name="LookupTable_Add" xml:space="preserve">
+    <value>A fost adăugat tabelul de căutare {0}</value>
+  </data>
+  <data name="LookupTable_Delete" xml:space="preserve">
+    <value>A fost șters tabelul de căutare {0}</value>
+  </data>
+  <data name="LookupTable_Update" xml:space="preserve">
+    <value>A fost actualizat tabelul de căutare {0}</value>
+  </data>
+  <data name="Macro_Add" xml:space="preserve">
+    <value>Macrocomanda {0} a fost adăugată</value>
+  </data>
+  <data name="Macro_Delete" xml:space="preserve">
+    <value>Macrocomanda {0} a fost ștearsă</value>
+  </data>
+  <data name="Macro_Update" xml:space="preserve">
+    <value>Macrocomanda {0} a fost actualizată</value>
+  </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>Metadatele chestionarului {0} au fost actualizate</value>
+  </data>
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>Pagină de copertă a fost generată</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>Fără titlu</value>
+  </data>
+  <data name="Person_Add" xml:space="preserve">
+    <value>Utilizatorul cu e-mail {0} a fost adăugat la persoanele partajate</value>
+  </data>
+  <data name="Person_Delete" xml:space="preserve">
+    <value>Utilizatorul cu e-mail {0} a fost eliminat din persoanele partajate</value>
+  </data>
+  <data name="Question_Add" xml:space="preserve">
+    <value>Întrebarea {0} a fost adăugată</value>
+  </data>
+  <data name="Question_Clone" xml:space="preserve">
+    <value>Întrebarea {0} clonată din întrebarea {1}</value>
+  </data>
+  <data name="Question_Delete" xml:space="preserve">
+    <value>Întrebarea {0} a fost ștearsă</value>
+  </data>
+  <data name="Question_Move_To_Roster" xml:space="preserve">
+    <value>Întrebarea {0} a fost mutată în lista {1}</value>
+  </data>
+  <data name="Question_Move_To_Section" xml:space="preserve">
+    <value>Întrebarea {0} a fost mutată în secțiunea {1}</value>
+  </data>
+  <data name="Question_Update" xml:space="preserve">
+    <value>Întrebarea {0} actualizată</value>
+  </data>
+  <data name="Questionnaire_Add" xml:space="preserve">
+    <value>Chestionarul {0} creat</value>
+  </data>
+  <data name="Questionnaire_Clone" xml:space="preserve">
+    <value>Chestionarul {0} clonat din chestionar {1}</value>
+  </data>
+  <data name="Questionnaire_Delete" xml:space="preserve">
+    <value>Chestionarul {0} a fost șters</value>
+  </data>
+  <data name="Questionnaire_Import" xml:space="preserve">
+    <value>Chestionarul {0} a fost importat</value>
+  </data>
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+    <value>Chestionarul importat la sediul central ({0}) ca {2} de către {1}</value>
+  </data>
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>Proprietatea chestionarului a fost transferată utilizatorului cu e-mailul {0}</value>
+  </data>
+  <data name="Questionnaire_Replace" xml:space="preserve">
+    <value>Chestionarul {0} a fost înlocuit</value>
+  </data>
+  <data name="Questionnaire_Update" xml:space="preserve">
+    <value>Chestionarul {0} actualizat</value>
+  </data>
+  <data name="QuestionnaireChangeHistory" xml:space="preserve">
+    <value>Istoricul modificărilor chestionarului</value>
+  </data>
+  <data name="ResetQuestionnaireToThis" xml:space="preserve">
+    <value>Resetați chestionarul la versiunea la {0}?</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>Revenire</value>
+  </data>
+  <data name="reverted" xml:space="preserve">
+    <value>Pentru chestionarul „{0}” s-a efectuat revenirea</value>
+  </data>
+  <data name="reverted_to" xml:space="preserve">
+    <value>Chestionarul „{0}” a revenit la versiunea din {1}</value>
+  </data>
+  <data name="RevertToThisVersion" xml:space="preserve">
+    <value>Reveniți la această versiune</value>
+  </data>
+  <data name="Roster_Add" xml:space="preserve">
+    <value>A fost adăugată lista {0}</value>
+  </data>
+  <data name="Roster_Clone" xml:space="preserve">
+    <value>Lista {0} clonată din lista {1}</value>
+  </data>
+  <data name="Roster_Delete" xml:space="preserve">
+    <value>Lista {0} a fost ștearsă</value>
+  </data>
+  <data name="Roster_Move_To_Roster" xml:space="preserve">
+    <value>Lista {0} a fost mutată în lista {1}</value>
+  </data>
+  <data name="Roster_Move_To_Section" xml:space="preserve">
+    <value>Lista {0} a fost mutată în secțiunea {1}</value>
+  </data>
+  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+    <value>Lista {0} a devenit o subsecțiune</value>
+  </data>
+  <data name="Roster_Update" xml:space="preserve">
+    <value>Lista {0} a fost actualizată</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="Section_Add" xml:space="preserve">
+    <value>S-a adăugat secțiunea {0}</value>
+  </data>
+  <data name="Section_Clone" xml:space="preserve">
+    <value>Secțiunea a fost {0} clonată din secțiunea {1}</value>
+  </data>
+  <data name="Section_Delete" xml:space="preserve">
+    <value>Secțiunea a fost {0} a fost ștearsă</value>
+  </data>
+  <data name="Section_GroupBecameARoster" xml:space="preserve">
+    <value>Subsecțiunea {0} a devenit o listă</value>
+  </data>
+  <data name="Section_Move_To_Roster" xml:space="preserve">
+    <value>Secțiunea {0} a fost mutată în lista {1}</value>
+  </data>
+  <data name="Section_Move_To_Section" xml:space="preserve">
+    <value>Secțiunea {0} a fost mutată în secțiunea {1}</value>
+  </data>
+  <data name="Section_Update" xml:space="preserve">
+    <value>Secțiunea {0}  a fost actualizată</value>
+  </data>
+  <data name="StaticText_Add" xml:space="preserve">
+    <value>A fost adăugat textul static {0}</value>
+  </data>
+  <data name="StaticText_Clone" xml:space="preserve">
+    <value>Textul static {0} a fost clonat din textul static {1}</value>
+  </data>
+  <data name="StaticText_Delete" xml:space="preserve">
+    <value>Textul static {0} a fost șters</value>
+  </data>
+  <data name="StaticText_Move_To_Roster" xml:space="preserve">
+    <value>Textul static {0} a fost mutat în listă {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Section" xml:space="preserve">
+    <value>Textul static {0} a fost mutat în secțiunea {1}</value>
+  </data>
+  <data name="StaticText_Update" xml:space="preserve">
+    <value>Textul static {0} a fost actualizat</value>
+  </data>
+  <data name="TextsReplaced" xml:space="preserve">
+    <value>Toate „{0}” au fost înlocuite cu „{1}”. {2} intrări afectate</value>
+  </data>
+  <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+    <value>Această listă nu conține nicio înregistrare</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>Marcajul de timp</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>Traducerea prestabilită este setată la {0}</value>
+  </data>
+  <data name="Translation_Delete" xml:space="preserve">
+    <value>Traducerea {0} a fost ștearsă</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Translation_Update" xml:space="preserve">
+    <value>Traducerea {0} a fost actualizată</value>
+  </data>
+  <data name="UnknownUserName" xml:space="preserve">
+    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Nume de utilizator</value>
+  </data>
+  <data name="Variable_Add" xml:space="preserve">
+    <value>Variabila {0} a fost adăugată</value>
+  </data>
+  <data name="Variable_Clone" xml:space="preserve">
+    <value>Variabila {0} a fost copiată din variabila {1}</value>
+  </data>
+  <data name="Variable_Delete" xml:space="preserve">
+    <value>Variabila {0} a fost ștearsă</value>
+  </data>
+  <data name="Variable_Move_To_Roster" xml:space="preserve">
+    <value>Variabila {0} a fost mutată în lista {1}</value>
+  </data>
+  <data name="Variable_Move_To_Section" xml:space="preserve">
+    <value>Variabila {0} a fost mutată în secțiunea {1}</value>
+  </data>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>Variabila {0} a fost actualizată</value>
+  </data>
 </root>

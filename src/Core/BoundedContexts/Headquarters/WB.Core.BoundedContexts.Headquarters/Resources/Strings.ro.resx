@@ -231,4 +231,52 @@
   <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
     <value>Nu a fost aprobat de către RINS</value>
   </data>
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Dezactivați autentificarea cu doi factori</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Configurați aplicația de autentificare</value>
+  </data>
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Resetați cheia de autentificare</value>
+  </data>
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Resetați codurile de recuperare</value>
+  </data>
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Coduri de recuperare</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>Autentificarea în doi factori este o caracteristică de securitate avansată care face mai greu pentru un hacker să se conecteze la contul dvs. cu o parolă furată.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Dezactivați autentificarea cu doi factori, lăsând contul protejat numai de parolă.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>dezactivat</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>activat</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Resetați la un nou cod secret dacă vreunul dintre dispozitivele dvs. utilizate pentru autentificarea cu doi factori este pierdut sau furat.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Invalidați orice coduri de recuperare neutilizate și generați 10 coduri noi.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Configurați un dispozitiv nou pentru autentificarea cu doi factori. Puteți configura mai multe dispozitive simultan.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Autentificare cu doi factori</value>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>Utilizatorul nu este autorizat să execute acțiunea aceasta</value>
+  </data>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Schimbă parola</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Echipe</value>
+  </data>
 </root>

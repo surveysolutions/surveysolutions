@@ -145,4 +145,13 @@ ID-ul dispozitivului dvs. este „{0}” "</value>
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
     <value>Încărcarea pachetelor de interviuri defecte</value>
   </data>
+  <data name="Synchronization_UploadExceptions" xml:space="preserve">
+    <value>Încărcarea mesajelor de eroare ale anchetatorului</value>
+  </data>
+  <data name="Synchronization_UploadStatistics" xml:space="preserve">
+    <value>Încărcarea statisticilor de sincronizare a anchetatorului</value>
+  </data>
+  <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+    <value>Încărcat {0} din {1}</value>
+  </data>
 </root>

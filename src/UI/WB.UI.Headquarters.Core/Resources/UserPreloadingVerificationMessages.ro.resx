@@ -225,4 +225,67 @@
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Sunt permise doar litere, puncte, spații și apostrof</value>
   </data>
+  <data name="PLU0015" xml:space="preserve">
+    <value>Parola prea scurta</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Parola „{0}” este prea scurtă</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Parola trebuie să aibă cel puțin 10 caractere</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține caractere non-alfanumerice</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin un caracter nealfanumeric</value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține cifre</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin o cifră („0” - „9”).</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține litere mici</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin o literă mică („a” - „z”).</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține LITERE MARI</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Adăugați cel puțin o literă mare („A” - „Z”).</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+    <value>Parolă simplă</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Parola „{0}” nu conține suficiente caractere unice</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+    <value>Adăugați diferite caractere.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+    <value>Parolă necesară</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Parola este necesara</value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Adăugați o parolă</value>
+  </data>
 </root>

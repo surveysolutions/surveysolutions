@@ -273,4 +273,19 @@
   <data name="UserName" xml:space="preserve">
     <value>Nume de utilizator</value>
   </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Creați cont de administrator</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Parola pentru utilizatorul {0} a fost schimbată</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Resetați parola</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Resetați parola utilizatorului</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Utilizatorul nu a fost găsit</value>
+  </data>
 </root>

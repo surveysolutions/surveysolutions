@@ -147,4 +147,79 @@
   <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
     <value>Descărcarea atașamentelor la chestionar - {0}%</value>
   </data>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Vă rugăm să introduceți datele de conectare corecte</value>
+  </data>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Aplicația Web Designer nu este accesibilă în acest moment. Verificați setarea conexiunii sau încercați din nou mai târziu</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Chestionare</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Limba</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Reîncărcați chestionarul</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Deconectare</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>Dezactivați validarea certificatului SSL</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>Acceptați toate certificatele SSL</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Setări de conectare</value>
+  </data>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>URL-ul care este utilizat pentru a comunica cu aplicația de proiectare</value>
+  </data>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>Adresa URL a designerului</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Numărul de secunde pentru a aștepta coordonatele</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Timp de recepție GPS</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Număr de secunde de așteptat până la răspunsul serverului</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Expirarea răspunsului serverului</value>
+  </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Afișați timpul scurs pentru fiecare răspuns</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Măsurează activarea, validarea și timpul de propagare a listei. Primirea datelor GPS sau a timpului de fotografiere nu este inclusă.</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Afișați variabilele</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Variabilele sunt prezentate în interviu cu valoare și descriere</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Variabilele sunt ascunse</value>
+  </data>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>Versiune: {0}</value>
+  </data>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>Versiunea aplicației</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Datele scenariului salvat nu pot fi aplicate unei noi versiuni a chestionarului. Se va deschide un chestionar gol</value>
+  </data>
 </root>
