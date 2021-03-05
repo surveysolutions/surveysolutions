@@ -630,7 +630,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Aplică</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Nu există variante de răspuns. Folosiți un fișier text cu separator "Tab". Fișierul poate conține maximum {0} variante de răspuns.</value>
+    <value>Nu există variante de răspuns. Folosiți un fișier text cu separator "Tab". Fișierul poate conține maximum {limit} variante de răspuns.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Valoare de la nivelul ierarhic superior</value>
