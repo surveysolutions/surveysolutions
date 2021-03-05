@@ -41,6 +41,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.CompleteButton,  WebInterviewResources.Complete},
                 { WebInterviewUserMessages.StartNewButton,  WebInterviewResources.StartNewInterview},
                 { WebInterviewUserMessages.ResumeButton,    WebInterviewResources.ResumeInterview},
+                { WebInterviewUserMessages.LinkWelcome,    WebInterviewResources.LinkWelcome},
+                { WebInterviewUserMessages.LinkInvitation,    WebInterviewResources.LinkInvitation},
+
             };
 
         public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }

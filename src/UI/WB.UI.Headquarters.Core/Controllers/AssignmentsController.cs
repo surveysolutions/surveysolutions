@@ -183,7 +183,8 @@ namespace WB.UI.Headquarters.Controllers
                         StartUtc1 = calendarEvent.Start.ToDateTimeUtc(),
                         StartTimezone1 = calendarEvent.Start.Zone.Id
                     } 
-                    : null
+                    : null,
+                LinkToWebInterviewExample = Url.Content($"~/webinterview/link/{assignment.Id}/{Guid.Empty}")
             });
         }
 

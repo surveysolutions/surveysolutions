@@ -21,7 +21,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                 var description =
                     WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{val}_Descr");
 
-                Assert.That(description, Is.Not.Null.Or.Empty, $"{typeof(WebInterviewSetup)} should contain description for {val}");
+                Assert.That(description, Is.Not.Null.Or.Empty, 
+                    $"{typeof(WebInterviewSetup)} should contain description for {val}: {nameof(WebInterviewUserMessages)}_{val}_Descr");
             }
            
         }
